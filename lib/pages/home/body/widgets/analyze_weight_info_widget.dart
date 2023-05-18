@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/%08segmented/default_segmented.dart';
+import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
