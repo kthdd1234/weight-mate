@@ -1,0 +1,43 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
+
+class BottomSubmitButton extends StatelessWidget {
+  const BottomSubmitButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    required this.isEnabled,
+  });
+
+  final VoidCallback onPressed;
+  final String text;
+  final bool isEnabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: pagePadding,
+        child: SizedBox(
+          height: submitButtonHeight,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              elevation: isEnabled ? 2.0 : 0.0,
+              backgroundColor: isEnabled
+                  ? buttonBackgroundColor
+                  : disabledButtonBackgroundColor,
+              foregroundColor:
+                  isEnabled ? buttonTextColor : disabledButtonTextColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              textStyle: Theme.of(context).textTheme.labelLarge,
+            ),
+            onPressed: onPressed,
+            child: Text(text),
+          ),
+        ),
+      ),
+    );
+  }
+}
