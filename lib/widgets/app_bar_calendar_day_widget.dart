@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/dialog/calendar_day_dialog.dart';
+import 'package:flutter_app_weight_management/components/dialog/calendar_custom_dialog.dart';
+import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -36,10 +37,39 @@ class _AppBarCalendarDayWidgetState extends State<AppBarCalendarDayWidget> {
       showDialog(
           context: context,
           builder: (BuildContext context) {
-            return CalendarDayDialog(
-              initDate: dateTimeToStr,
+            return CalendayCustomDialog(
+              initialDateTime: DateTime.now(),
               onSubmit: onSubmit,
               onCancel: onCancel,
+              titleWidgets: [
+                const Text('기록한 날'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ColorTextInfo(
+                      width: smallSpace,
+                      height: smallSpace,
+                      text: '체중',
+                      color: weightDotColor,
+                    ),
+                    SpaceWidth(width: 7.5),
+                    ColorTextInfo(
+                      width: smallSpace,
+                      height: smallSpace,
+                      text: '계획',
+                      color: planDotColor,
+                    ),
+                    SpaceWidth(width: 7.5),
+                    ColorTextInfo(
+                      width: smallSpace,
+                      height: smallSpace,
+                      text: '메모',
+                      color: memoDotColor,
+                    ),
+                  ],
+                )
+              ],
             );
           });
     }

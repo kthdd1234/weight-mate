@@ -139,7 +139,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           context.read<DietInfoProvider>().changeWeightText(resultText);
           break;
         case RecordSubTypes.enterBodyFat:
-          context.read<DietInfoProvider>().changeBodyFatText(resultText);
+          // context.read<DietInfoProvider>().changeBodyFatText(resultText);
           break;
 
         default:

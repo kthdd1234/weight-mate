@@ -9,12 +9,12 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 class CalendarMonthDialog extends StatefulWidget {
   CalendarMonthDialog({
     super.key,
-    required this.initDate,
+    required this.initialDateTime,
     required this.onSubmit,
     required this.onCancel,
   });
 
-  String initDate;
+  DateTime? initialDateTime;
   Function(DateTime dateTime) onSubmit;
   Function() onCancel;
 
@@ -28,10 +28,10 @@ class _CalendarMonthDialogState extends State<CalendarMonthDialog> {
 
   @override
   void initState() {
-    DateTime date = getStrToDateTime(widget.initDate);
-
-    _pickerController.selectedDate = date;
-    _pickerController.displayDate = date;
+    if (widget.initialDateTime != null) {
+      _pickerController.selectedDate = widget.initialDateTime;
+      _pickerController.displayDate = widget.initialDateTime;
+    }
 
     super.initState();
   }
@@ -64,10 +64,11 @@ class _CalendarMonthDialogState extends State<CalendarMonthDialog> {
               ),
               SpaceWidth(width: 8),
               ColorTextInfo(
-                  width: regularSapce,
-                  height: smallSpace,
-                  text: '선택한 달',
-                  color: buttonBackgroundColor),
+                width: regularSapce,
+                height: smallSpace,
+                text: '선택한 달',
+                color: buttonBackgroundColor,
+              ),
             ],
           )
         ],

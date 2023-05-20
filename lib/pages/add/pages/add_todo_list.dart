@@ -33,11 +33,11 @@ class _AddTodoListState extends State<AddTodoList> {
   ScrollController scrollController = ScrollController();
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
 
     dietPlanList = defaultDietPlanList;
-    userInfoBox = Hive.box<UserInfo>('userInfoBox');
+    // userInfoBox = Hive.box<UserInfo>('userInfoBox');
   }
 
   @override
@@ -53,7 +53,6 @@ class _AddTodoListState extends State<AddTodoList> {
 
       if (checkList.isNotEmpty) {
         readProvider.changeDietPlanList(checkList);
-
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/home-container',

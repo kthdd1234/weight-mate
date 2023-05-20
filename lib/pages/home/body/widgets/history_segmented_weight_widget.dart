@@ -14,14 +14,15 @@ class HistorySegmentedWeightWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String weightText = context.watch<DietInfoProvider>().getWeightText();
-    String bodyFatText = context.watch<DietInfoProvider>().getBodyFatText();
+    // String bodyFatText = context.watch<DietInfoProvider>().getBodyFatText();
+    // todo: hive 데이터 사용해야 함.
 
     setWeight() {
       return weightText != '' ? '$weightText kg' : '-';
     }
 
     setBodyFat() {
-      return bodyFatText != '' ? '$bodyFatText%' : '-';
+      return '' != '' ? '%' : '-';
     }
 
     onTapSuffixWidget(String id) {}

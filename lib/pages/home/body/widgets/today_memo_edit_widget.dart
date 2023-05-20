@@ -38,7 +38,7 @@ class _TodayMemoEditWidgetState extends State<TodayMemoEditWidget> {
   @override
   Widget build(BuildContext context) {
     onPressedOk() {
-      context.read<DietInfoProvider>().changeTodayMemoText(textController.text);
+      // context.read<DietInfoProvider>().changeTodayMemoText(textController.text);
       context
           .read<RecordSubTypeProvider>()
           .setSeletedRecordSubType(RecordSubTypes.none);

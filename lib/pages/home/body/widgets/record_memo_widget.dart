@@ -23,7 +23,8 @@ class RecordMemoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String todayMemoText = context.watch<DietInfoProvider>().getTodayMemoText();
+    // String todayMemoText = context.watch<DietInfoProvider>().getTodayMemoText();
+    // todo: hive 데이터 가져와야 한다.
 
     List<RecordSubTypeClass> subClassList = [
       RecordSubTypeClass(
@@ -50,8 +51,8 @@ class RecordMemoWidget extends StatelessWidget {
 
     Widget setRouteTodayOfMemoWidget() {
       if (RecordSubTypes.editNote == seletedRecordSubType) {
-        return TodayMemoEditWidget(todayMemoText: todayMemoText);
-      } else if (todayMemoText == '') {
+        return TodayMemoEditWidget(todayMemoText: '');
+      } else if ('' == '') {
         return EmptyTextArea(
             topHeight: regularSapce,
             downHeight: regularSapce,
@@ -62,7 +63,7 @@ class RecordMemoWidget extends StatelessWidget {
                 .setSeletedRecordSubType(RecordSubTypes.editNote));
       }
 
-      return TodayMemoWidget(text: todayMemoText);
+      return TodayMemoWidget(text: '');
     }
 
     return ContentsBox(

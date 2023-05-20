@@ -1,36 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
-class UserInfoList {
-  UserInfoList({required this.list});
+class RecordInfoListClass {
+  RecordInfoListClass({
+    required this.recordInfoList,
+  });
 
-  List<UserInfoClass> list;
+  List<RecordInfoClass> recordInfoList;
+}
+
+class RecordInfoClass {
+  RecordInfoClass({
+    required this.weight,
+    required this.bodyFat,
+    required this.dietPlanList,
+    required this.memo,
+  });
+
+  double weight;
+  double bodyFat;
+  List<DietPlanClass> dietPlanList;
+  String memo;
 }
 
 class UserInfoClass {
   UserInfoClass({
-    required this.recordDateTime,
     required this.tall,
-    required this.weight,
     required this.goalWeight,
     required this.startDietDateTime,
     required this.endDietDateTime,
-    required this.dietPlanList,
-    required this.bodyFat,
-    required this.memo,
+    required this.recordStartDateTime,
   });
 
-  DateTime recordDateTime;
   double tall;
-  double weight;
   double goalWeight;
-  double bodyFat;
   DateTime startDietDateTime;
-  DateTime endDietDateTime;
-  List<DietPlanClass> dietPlanList;
-  String memo;
+  DateTime? endDietDateTime;
+  DateTime recordStartDateTime;
 }
 
 class DietPlanClass {

@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
-class DateInput extends StatelessWidget {
-  DateInput({
+class DateTimeInput extends StatelessWidget {
+  DateTimeInput({
     super.key,
+    required this.hintText,
     required this.prefixIcon,
     required this.onTap,
     required this.text,
   });
 
   String text;
+  String hintText;
   IconData prefixIcon;
   Function() onTap;
 
@@ -23,6 +25,7 @@ class DateInput extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(prefixIcon),
         contentPadding: inputContentPadding,
+        hintText: text == '' ? hintText : null,
       ),
       onTap: onTap,
     );

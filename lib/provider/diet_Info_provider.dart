@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 
 class DietInfoProvider with ChangeNotifier {
-  DateTime recordDateTime = DateTime.now();
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
-  List<DateTime?> _startAndEndDateTime = [];
   List<DietPlanClass> _dietPlanList = [];
-  String _todayMemoText = '';
-  String _bodyFatText = '';
+  DateTime _startDietDateTime = DateTime.now();
+  DateTime? _endDietDateTime;
+  DateTime _recordStartDateTime = DateTime.now();
 
   UserInfoClass getUserInfo() {
     double convertDouble(String str) {
@@ -18,15 +16,11 @@ class DietInfoProvider with ChangeNotifier {
     }
 
     return UserInfoClass(
-      recordDateTime: recordDateTime,
       tall: convertDouble(_tallText),
-      weight: convertDouble(_weightText),
       goalWeight: convertDouble(_goalWeightText),
-      startDietDateTime: DateTime.now(),
-      endDietDateTime: DateTime.now(),
-      dietPlanList: _dietPlanList,
-      bodyFat: 0.0,
-      memo: '',
+      startDietDateTime: _startDietDateTime,
+      endDietDateTime: _endDietDateTime,
+      recordStartDateTime: _recordStartDateTime,
     );
   }
 
@@ -46,14 +40,6 @@ class DietInfoProvider with ChangeNotifier {
     return _dietPlanList;
   }
 
-  String getTodayMemoText() {
-    return _todayMemoText;
-  }
-
-  String getBodyFatText() {
-    return _bodyFatText;
-  }
-
   changeTallText(String text) {
     _tallText = text;
     notifyListeners();
@@ -64,8 +50,13 @@ class DietInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeStartAndEndDateTime(List<DateTime?> dateTimeList) {
-    _startAndEndDateTime = dateTimeList;
+  changeStartDietDateTime(DateTime dateTime) {
+    _startDietDateTime = dateTime;
+    notifyListeners();
+  }
+
+  changeEndDietDateTime(DateTime? dateTime) {
+    _endDietDateTime = dateTime;
     notifyListeners();
   }
 
@@ -79,13 +70,8 @@ class DietInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeTodayMemoText(String text) {
-    _todayMemoText = text;
-    notifyListeners();
-  }
-
-  changeBodyFatText(String text) {
-    _bodyFatText = text;
+  changeRecordStartDateTime(DateTime dateTime) {
+    _recordStartDateTime = dateTime;
     notifyListeners();
   }
 }

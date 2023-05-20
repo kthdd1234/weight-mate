@@ -49,28 +49,30 @@ class _CalenderRangeDialogState extends State<CalenderRangeDialog> {
             widget.labelText,
             style: const TextStyle(color: buttonBackgroundColor, fontSize: 17),
           ),
-          Row(children: [
-            ColorTextInfo(
-              width: smallSpace,
-              height: smallSpace,
-              text: '오늘',
-              color: buttonBackgroundColor,
-              isOutlined: true,
-            ),
-            SpaceWidth(width: 7.5),
-            ColorTextInfo(
+          Row(
+            children: [
+              ColorTextInfo(
                 width: smallSpace,
                 height: smallSpace,
-                text: '시작일',
-                color: buttonBackgroundColor),
-            SpaceWidth(width: 7.5),
-            ColorTextInfo(
-              width: smallSpace,
-              height: smallSpace,
-              text: '종료일',
-              color: Colors.red,
-            )
-          ])
+                text: '오늘',
+                color: buttonBackgroundColor,
+                isOutlined: true,
+              ),
+              SpaceWidth(width: 7.5),
+              ColorTextInfo(
+                  width: smallSpace,
+                  height: smallSpace,
+                  text: '시작일',
+                  color: buttonBackgroundColor),
+              SpaceWidth(width: 7.5),
+              ColorTextInfo(
+                width: smallSpace,
+                height: smallSpace,
+                text: '종료일',
+                color: Colors.red,
+              )
+            ],
+          )
         ],
       ),
       content: ContentsBox(

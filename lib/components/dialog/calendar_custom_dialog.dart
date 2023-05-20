@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/calendar_month_cell_widget.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class CalendarDayDialog extends StatefulWidget {
-  CalendarDayDialog({
+class CalendayCustomDialog extends StatefulWidget {
+  CalendayCustomDialog({
     super.key,
-    required this.initDate,
+    required this.initialDateTime,
     required this.onSubmit,
     required this.onCancel,
+    required this.titleWidgets,
   });
 
-  String initDate;
+  DateTime? initialDateTime;
   Function(DateTime dateTime) onSubmit;
   Function() onCancel;
+  List<Widget> titleWidgets;
 
   @override
-  State<CalendarDayDialog> createState() => _CalendarDayDialogState();
+  State<CalendayCustomDialog> createState() => _CalendayCustomDialogState();
 }
 
-class _CalendarDayDialogState extends State<CalendarDayDialog> {
+class _CalendayCustomDialogState extends State<CalendayCustomDialog> {
   final DateRangePickerController _pickerController =
       DateRangePickerController();
   String currentView = '';
@@ -31,10 +31,11 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
 
   @override
   void initState() {
-    DateTime date = getStrToDateTime(widget.initDate);
+    if (widget.initialDateTime != null) {
+      selectedDate = widget.initialDateTime!;
+      _pickerController.displayDate = widget.initialDateTime;
+    }
 
-    selectedDate = date;
-    _pickerController.displayDate = date;
     super.initState();
   }
 
@@ -77,34 +78,7 @@ class _CalendarDayDialogState extends State<CalendarDayDialog> {
       backgroundColor: dialogBackgroundColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('기록한 날'),
-          Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ColorTextInfo(
-                  width: smallSpace,
-                  height: smallSpace,
-                  text: '체중',
-                  color: weightDotColor,
-                ),
-                SpaceWidth(width: 7.5),
-                ColorTextInfo(
-                  width: smallSpace,
-                  height: smallSpace,
-                  text: '계획',
-                  color: planDotColor,
-                ),
-                SpaceWidth(width: 7.5),
-                ColorTextInfo(
-                  width: smallSpace,
-                  height: smallSpace,
-                  text: '메모',
-                  color: memoDotColor,
-                ),
-              ])
-        ],
+        children: widget.titleWidgets,
       ),
       content: Container(
         width: MediaQuery.of(context).size.width,

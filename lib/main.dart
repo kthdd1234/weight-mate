@@ -4,11 +4,12 @@ import 'package:flutter_app_weight_management/pages/common/alarm_setting_page.da
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'model/user_info_list/user_info_list.dart';
+import 'model/record_info_list/record_info_list.dart';
 import 'pages/add/pages/add_body_info.dart';
 import 'pages/add/pages/add_goal_weight.dart';
 import 'pages/add/pages/add_todo_list.dart';
@@ -36,9 +37,11 @@ void main() async {
 
 _initHive() async {
   await Hive.initFlutter();
-  await Hive.openBox<UserInfoList>('userInfoList');
+  await Hive.openBox<UserInfoClass>('userInfo');
+  await Hive.openBox<RecordInfoList>('recordInfoList');
 
-  // Hive.registerAdapter(); todo
+  // Hive.registerAdapter();
+  // Hive.registerAdapter();
 }
 
 class MyApp extends StatelessWidget {

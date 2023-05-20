@@ -8,6 +8,13 @@ getDateTimeToStr(DateTime dateTime) {
   return strDateTime;
 }
 
+getDateTimeToSlash(DateTime dateTime) {
+  DateFormat formatter = DateFormat('yyyy/MM/dd');
+  String strDateTime = formatter.format(dateTime);
+
+  return strDateTime;
+}
+
 getStrToDateTime(String str) {
   DateTime dateTime = DateFormat('yyyy년 MM월 dd일').parse(str);
   return dateTime;

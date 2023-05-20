@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/calendar_range_dialog.dart';
-import 'package:flutter_app_weight_management/components/input/date_input.dart';
+import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
+import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class AddGoalWeight extends StatefulWidget {
   const AddGoalWeight({super.key});
@@ -22,21 +23,14 @@ class AddGoalWeight extends StatefulWidget {
 }
 
 class _AddGoalWeightState extends State<AddGoalWeight> {
-  List<DateTime?> startAndEndDateTime = [null, null];
-  String startDietDay = '';
-  String endDietDay = '';
+  DateTime startDietDateTime = DateTime.now();
+  DateTime? endDietDateTime;
 
   @override
   void initState() {
     super.initState();
 
-    DateTime now = DateTime.now();
-    var strToday = getDateTimeToStr(now);
-
-    setState(() {
-      startAndEndDateTime = [now, null];
-      startDietDay = strToday;
-    });
+    startDietDateTime = DateTime.now();
   }
 
   @override
@@ -65,54 +59,60 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
         Navigator.pushNamed(context, '/add-todo-list');
         context
             .read<DietInfoProvider>()
-            .changeStartAndEndDateTime(startAndEndDateTime);
+            .changeStartDietDateTime(startDietDateTime);
+
+        context.read<DietInfoProvider>().changeEndDietDateTime(endDietDateTime);
       }
 
       return null;
     }
 
-    onSubmit(Object? object) {
-      if (object != null) {
-        setState(() {
-          if (object is PickerDateRange) {
-            DateTime? startDate = object.startDate ?? object.startDate;
-            DateTime? endDate = object.endDate ?? object.endDate;
+    onTitleWidget(String type) {
+      final String text = type == 'start' ? '시작일' : '종료일';
+      final Color color = type == 'start' ? buttonBackgroundColor : Colors.red;
 
-            startAndEndDateTime[0] = startDate;
-            startAndEndDateTime[1] = endDate;
-          }
-        });
-
-        closeDialog(context);
-      }
+      return [
+        Text(
+          '다이어트 $text',
+          style: const TextStyle(color: buttonBackgroundColor, fontSize: 17),
+        ),
+        Row(
+          children: [
+            ColorTextInfo(
+              width: smallSpace,
+              height: smallSpace,
+              text: text,
+              color: color,
+            ),
+          ],
+        )
+      ];
     }
 
-    onCancel() {
+    onSubmit({type, Object? object}) {
+      setState(() {
+        if (object is DateTime) {
+          type == 'start'
+              ? startDietDateTime = object
+              : endDietDateTime = object;
+        }
+      });
+
       closeDialog(context);
     }
 
-    onTap() {
+    onTapInput({type, DateTime? dateTime}) {
       showDialog(
         context: context,
-        builder: (BuildContext context) => CalenderRangeDialog(
-          labelText: '달력',
-          startAndEndDateTime: startAndEndDateTime,
+        builder: (BuildContext context) => CalendarDefaultDialog(
+          type: type,
+          titleWidgets: onTitleWidget(type),
+          initialDateTime: dateTime,
           onSubmit: onSubmit,
-          onCancel: onCancel,
+          onCancel: () => closeDialog(context),
+          minDate: type == 'end' ? startDietDateTime : null,
         ),
       );
-    }
-
-    onStartDietDayText() {
-      return startAndEndDateTime[0] != null
-          ? startDietDay = getDateTimeToStr(startAndEndDateTime[0]!)
-          : '시작일';
-    }
-
-    onEndDietDayText() {
-      return startAndEndDateTime[1] != null
-          ? endDietDay = getDateTimeToStr(startAndEndDateTime[1]!)
-          : '종료일 ';
     }
 
     return AddContainer(
@@ -131,10 +131,10 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
               children: [
                 ContentsTitleText(text: '다이어트 기간'),
                 SpaceHeight(height: smallSpace),
-                DateInput(
-                  prefixIcon: Icons.calendar_month_sharp,
-                  text: '${onStartDietDayText()} ~ ${onEndDietDayText()}',
-                  onTap: onTap,
+                DateTimeRangeInputWidget(
+                  startDietDateTime: startDietDateTime,
+                  endDietDateTime: endDietDateTime,
+                  onTapInput: onTapInput,
                 ),
                 SpaceHeight(height: largeSpace),
                 ContentsTitleText(text: '목표 체중'),

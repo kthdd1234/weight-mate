@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/history_segmented_empty_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/history_segmented_item_widget.dart';
-import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/widgets/history_edit_button_widget.dart';
 import 'package:flutter_app_weight_management/widgets/history_sub_text_widget.dart';
-import 'package:provider/provider.dart';
 
 class HistorySegmentedMemoWidget extends StatelessWidget {
   const HistorySegmentedMemoWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    String todayMemoText = context.watch<DietInfoProvider>().getTodayMemoText();
+    // String todayMemoText = context.watch<DietInfoProvider>().getTodayMemoText();
+    // hive box 를 통해 값을 가져오기
 
     setWidget() {
-      if (todayMemoText == '') {
+      if ('' == '') {
         return HistorySegmentedEmptyWidget(segmented: SegmentedTypes.memo);
       }
 
@@ -29,7 +28,7 @@ class HistorySegmentedMemoWidget extends StatelessWidget {
             icon: Icons.textsms,
             name: '메모',
             subWidget: HistorySubTextWidget(
-              text: todayMemoText,
+              text: '',
               color: buttonBackgroundColor,
             ),
             suffixWidget: HistoryEditButtonWidget(
@@ -41,8 +40,10 @@ class HistorySegmentedMemoWidget extends StatelessWidget {
             icon: Icons.photo,
             name: '눈바디',
             subWidget: ContentsBox(
-                contentsWidget:
-                    Image.asset('assets/images/Deep-Space-Travel.jpeg')),
+              contentsWidget: Image.asset(
+                'assets/images/Deep-Space-Travel.jpeg',
+              ),
+            ),
           ),
         ],
       );
