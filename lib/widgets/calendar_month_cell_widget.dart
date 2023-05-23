@@ -41,45 +41,52 @@ class CalendarMonthCellWidget extends StatelessWidget {
       return detailDateTime.day.toString();
     }
 
-    setRecordDots() {
-      if (isMaxDateResult || currentView != 'month') {
-        return EmptyArea();
-      }
+    colorWidget(String type) {
+      final colorData = {
+        'weight': weightDotColor,
+        'plan': planDotColor,
+        'memo': memoDotColor
+      };
 
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+      return Column(
         children: [
-          ColorDot(width: 7, height: 7, color: weightDotColor),
-          SpaceWidth(width: 2),
-          ColorDot(width: 7, height: 7, color: planDotColor),
-          SpaceWidth(width: 2),
-          ColorDot(width: 7, height: 7, color: memoDotColor)
+          ColorDot(width: 7, height: 7, color: colorData[type]!),
+          SpaceWidth(width: 2)
         ],
       );
     }
 
-    return Container(
-      child: Column(
-        children: [
-          SpaceHeight(height: smallSpace),
-          Container(
-            width: 33,
-            height: 33,
-            decoration: BoxDecoration(
-              color: isSelectedDay ? buttonBackgroundColor : null,
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                setCellText(),
-                style: TextStyle(fontFamily: '', color: setCellTextColor()),
-              ),
+    setRecordDots(Set<String> object) {
+      if (isMaxDateResult || currentView != 'month') {
+        return const EmptyArea();
+      }
+
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [], //
+      );
+    }
+
+    return Column(
+      children: [
+        SpaceHeight(height: smallSpace),
+        Container(
+          width: 33,
+          height: 33,
+          decoration: BoxDecoration(
+            color: isSelectedDay ? buttonBackgroundColor : null,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              setCellText(),
+              style: TextStyle(fontFamily: '', color: setCellTextColor()),
             ),
           ),
-          SpaceHeight(height: 3),
-          setRecordDots(),
-        ],
-      ),
+        ),
+        SpaceHeight(height: 3),
+        setRecordDots({}),
+      ],
     );
   }
 }

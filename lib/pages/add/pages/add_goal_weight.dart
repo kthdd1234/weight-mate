@@ -73,7 +73,7 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
 
       return [
         Text(
-          '다이어트 $text',
+          '$text 설정',
           style: const TextStyle(color: buttonBackgroundColor, fontSize: 17),
         ),
         Row(
@@ -120,23 +120,13 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
         children: [
           SimpleStepper(currentStep: 2),
           SpaceHeight(height: regularSapce),
-          HeadlineText(text: '다이어트 기간과 목표 체중을'),
-          SpaceHeight(height: tinySpace),
-          HeadlineText(text: '입력해주세요.'),
+          HeadlineText(text: '목표 체중과 기간을 입력해주세요.'),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             height: null,
             contentsWidget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ContentsTitleText(text: '다이어트 기간'),
-                SpaceHeight(height: smallSpace),
-                DateTimeRangeInputWidget(
-                  startDietDateTime: startDietDateTime,
-                  endDietDateTime: endDietDateTime,
-                  onTapInput: onTapInput,
-                ),
-                SpaceHeight(height: largeSpace),
                 ContentsTitleText(text: '목표 체중'),
                 TextInput(
                   maxLength: 4,
@@ -147,6 +137,15 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
                   counterText: '(예: 59, 63.5)',
                   onChanged: onChangeGoalWeightText,
                 ),
+                SpaceHeight(height: regularSapce),
+                ContentsTitleText(text: '기간'),
+                SpaceHeight(height: smallSpace),
+                DateTimeRangeInputWidget(
+                  startDietDateTime: startDietDateTime,
+                  endDietDateTime: endDietDateTime,
+                  onTapInput: onTapInput,
+                ),
+                SpaceHeight(height: smallSpace),
               ],
             ),
           )

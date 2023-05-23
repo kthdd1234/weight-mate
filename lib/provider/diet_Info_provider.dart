@@ -10,18 +10,33 @@ class DietInfoProvider with ChangeNotifier {
   DateTime? _endDietDateTime;
   DateTime _recordStartDateTime = DateTime.now();
 
-  UserInfoClass getUserInfo() {
-    double convertDouble(String str) {
-      return double.parse(str);
-    }
+  double convertToDouble(String str) {
+    return double.parse(str);
+  }
 
+  UserInfoClass getUserInfo() {
     return UserInfoClass(
-      tall: convertDouble(_tallText),
-      goalWeight: convertDouble(_goalWeightText),
+      tall: convertToDouble(_tallText),
+      goalWeight: convertToDouble(_goalWeightText),
       startDietDateTime: _startDietDateTime,
       endDietDateTime: _endDietDateTime,
       recordStartDateTime: _recordStartDateTime,
     );
+  }
+
+  Map<String, dynamic> getRecordInfoData() {
+    return {
+      'recordDateTime': DateTime.now(),
+      'weight': convertToDouble(_weightText),
+      'bodyFat': 0.0,
+      'dietPlanList': getDietPlanListData(),
+      'memo': '',
+    };
+  }
+
+  List<Map<String, dynamic>> getDietPlanListData() {
+    final dataList = _dietPlanList.map((obj) => obj.getMapData()).toList();
+    return dataList;
   }
 
   String getTallText() {

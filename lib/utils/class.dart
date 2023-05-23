@@ -12,17 +12,37 @@ class RecordInfoListClass {
 
 class RecordInfoClass {
   RecordInfoClass({
+    required this.recordDateTime,
     required this.weight,
     required this.bodyFat,
     required this.dietPlanList,
     required this.memo,
   });
 
+  DateTime recordDateTime;
   double weight;
   double bodyFat;
   List<DietPlanClass> dietPlanList;
   String memo;
+
+  RecordInfoClass getRecordInfoClass() {
+    return RecordInfoClass(
+      recordDateTime: recordDateTime,
+      weight: weight,
+      bodyFat: bodyFat,
+      dietPlanList: dietPlanList,
+      memo: memo,
+    );
+  }
 }
+
+// {
+//       'recordDateTime': recordDateTime,
+//       'weight': weight,
+//       'bodyFat': bodyFat,
+//       'dietPlanList': dietPlanList,
+//       'memo': memo
+//     };
 
 class UserInfoClass {
   UserInfoClass({
@@ -58,6 +78,16 @@ class DietPlanClass {
   @override
   String toString() {
     return '{ $id, $plan, $isChecked $isAction }';
+  }
+
+  Map<String, dynamic> getMapData() {
+    return {
+      'id': id,
+      'iconCodePoint': icon.codePoint,
+      'plan': plan,
+      'isChecked': isChecked,
+      'isAction': isAction
+    };
   }
 }
 

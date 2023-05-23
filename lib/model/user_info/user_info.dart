@@ -4,43 +4,31 @@ import 'package:hive/hive.dart';
 part 'user_info.g.dart';
 
 @HiveType(typeId: 1)
-class UserInfo {
-  UserInfo({
-    required this.recordDateTime,
+class UserInfoBox {
+  UserInfoBox({
     required this.tall,
-    required this.weight,
     required this.goalWeight,
     required this.startDietDateTime,
     required this.endDietDateTime,
-    required this.dietPlanList,
-    required this.bodyFat,
-    required this.memo,
+    required this.recordStartDateTime,
+    this.recordInfoList,
   });
 
   @HiveField(0)
-  DateTime recordDateTime;
-
-  @HiveField(1)
   double tall;
 
-  @HiveField(2)
-  double weight;
-
-  @HiveField(3)
+  @HiveField(1)
   double goalWeight;
 
-  @HiveField(4)
-  double bodyFat;
-
-  @HiveField(5)
+  @HiveField(2)
   DateTime startDietDateTime;
 
-  @HiveField(6)
-  DateTime endDietDateTime;
+  @HiveField(3)
+  DateTime? endDietDateTime;
 
-  @HiveField(7)
-  List<DietPlanClass> dietPlanList;
+  @HiveField(4)
+  DateTime recordStartDateTime;
 
-  @HiveField(8)
-  String memo;
+  @HiveField(5)
+  List<Map<String, dynamic>>? recordInfoList;
 }

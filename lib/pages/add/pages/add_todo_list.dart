@@ -10,6 +10,7 @@ import 'package:flutter_app_weight_management/components/text/sub_text.dart';
 import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -26,7 +27,7 @@ class AddTodoList extends StatefulWidget {
 }
 
 class _AddTodoListState extends State<AddTodoList> {
-  late Box<UserInfo> userInfoBox;
+  late Box<UserInfoBox> userInfoBox;
 
   List<DietPlanClass> dietPlanList = [];
   bool showTouchArea = true;
@@ -37,7 +38,7 @@ class _AddTodoListState extends State<AddTodoList> {
     super.initState();
 
     dietPlanList = defaultDietPlanList;
-    // userInfoBox = Hive.box<UserInfo>('userInfoBox');
+    userInfoBox = Hive.box<UserInfoBox>('userInfoBox');
   }
 
   @override
@@ -48,30 +49,35 @@ class _AddTodoListState extends State<AddTodoList> {
 
     onPressedBottomNavigationButton() {
       final checkList = getCheckList();
-      final readProvider = context.read<DietInfoProvider>();
-      final userInfo = readProvider.getUserInfo();
 
       if (checkList.isNotEmpty) {
-        readProvider.changeDietPlanList(checkList);
+        context.read<DietInfoProvider>().changeDietPlanList(checkList);
+
+        final provider = context.read<DietInfoProvider>();
+        final userInfoState = provider.getUserInfo();
+        final recordInfoData = provider.getRecordInfoData();
+
+        userInfoBox.put(
+          'userInfo',
+          UserInfoBox(
+            tall: userInfoState.tall,
+            goalWeight: userInfoState.goalWeight,
+            startDietDateTime: userInfoState.startDietDateTime,
+            endDietDateTime: userInfoState.endDietDateTime,
+            recordStartDateTime: DateTime.now(),
+            recordInfoList: [recordInfoData],
+          ),
+        );
+
+        context
+            .read<RecordSelectedDateTimeProvider>()
+            .setSelectedDateTime(DateTime.now());
+
         Navigator.pushNamedAndRemoveUntil(
           context,
           '/home-container',
           (_) => false,
         );
-
-        // userInfoBox.add(
-        //   UserInfo(
-        //     recordDateTime: DateTime.now(),
-        //     tall: userInfo.tall,
-        //     weight: userInfo.weight,
-        //     goalWeight: userInfo.goalWeight,
-        //     startDietDateTime: userInfo.startDietDateTime,
-        //     endDietDateTime: userInfo.endDietDateTime,
-        //     dietPlanList: checkList,
-        //     bodyFat: 0.0,
-        //     memo: '',
-        //   ),
-        // );
       }
     }
 
@@ -132,7 +138,9 @@ class _AddTodoListState extends State<AddTodoList> {
         child: Column(children: [
           SimpleStepper(currentStep: 3),
           SpaceHeight(height: regularSapce),
-          HeadlineText(text: '오늘의 다이어트 계획을 구성해보세요.'),
+          HeadlineText(text: '목표 체중을 달성하기 위한'),
+          SpaceHeight(height: tinySpace),
+          HeadlineText(text: '나만의 계획을 구성해보세요.'),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             height: 345,
@@ -140,7 +148,7 @@ class _AddTodoListState extends State<AddTodoList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ContentsTitleText(
-                  text: '오늘의 다이어트 계획',
+                  text: '나만의 계획',
                   sub: [
                     SubText(
                       text: '체크',

@@ -4,6 +4,7 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_mem
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_plan_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_weight_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_wise_saying_widget.dart';
+import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -21,13 +22,18 @@ class _RecordBodyState extends State<RecordBody> {
   Widget build(BuildContext context) {
     RecordSubTypes seletedRecordSubType =
         context.watch<RecordSubTypeProvider>().getSeletedRecordSubType();
+    final recordSelectedDateTime =
+        context.watch<RecordSelectedDateTimeProvider>().getSelectedDateTime();
 
     return SingleChildScrollView(
       child: Column(
         children: [
           const TodayWiseSayingWidget(),
           SpaceHeight(height: regularSapce),
-          RecordWeightWidget(seletedRecordSubType: seletedRecordSubType),
+          RecordWeightWidget(
+            seletedRecordSubType: seletedRecordSubType,
+            recordSelectedDateTime: recordSelectedDateTime,
+          ),
           SpaceHeight(height: regularSapce),
           RecordPlanWidget(seletedRecordSubType: seletedRecordSubType),
           SpaceHeight(height: regularSapce),

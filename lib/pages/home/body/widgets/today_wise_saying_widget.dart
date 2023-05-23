@@ -45,7 +45,7 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ContentsTitleText(text: '오늘의 다이어트 명언'),
+                      ContentsTitleText(text: '오늘의 명언'),
                       SpaceHeight(height: smallSpace),
                       WiseSayingAnimateWidget()
                     ],

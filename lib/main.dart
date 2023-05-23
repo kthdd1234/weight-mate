@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
 import 'package:flutter_app_weight_management/pages/common/alarm_setting_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'model/record_info_list/record_info_list.dart';
 import 'pages/add/pages/add_body_info.dart';
 import 'pages/add/pages/add_goal_weight.dart';
 import 'pages/add/pages/add_todo_list.dart';
@@ -29,6 +29,9 @@ void main() async {
         ChangeNotifierProvider<RecordSubTypeProvider>(
           create: (_) => RecordSubTypeProvider(),
         ),
+        ChangeNotifierProvider<RecordSelectedDateTimeProvider>(
+          create: (_) => RecordSelectedDateTimeProvider(),
+        )
       ],
       child: const MyApp(),
     ),
@@ -37,11 +40,9 @@ void main() async {
 
 _initHive() async {
   await Hive.initFlutter();
-  await Hive.openBox<UserInfoClass>('userInfo');
-  await Hive.openBox<RecordInfoList>('recordInfoList');
 
-  // Hive.registerAdapter();
-  // Hive.registerAdapter();
+  Hive.registerAdapter(UserInfoBoxAdapter());
+  await Hive.openBox<UserInfoBox>('userInfoBox');
 }
 
 class MyApp extends StatelessWidget {
