@@ -5,7 +5,6 @@ import 'package:flutter_app_weight_management/components/info/color_text_info.da
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
@@ -120,13 +119,21 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
         children: [
           SimpleStepper(currentStep: 2),
           SpaceHeight(height: regularSapce),
-          HeadlineText(text: '목표 체중과 기간을 입력해주세요.'),
+          HeadlineText(text: '기간과 목표 체중을 입력해주세요.'),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             height: null,
             contentsWidget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                ContentsTitleText(text: '기간'),
+                SpaceHeight(height: smallSpace),
+                DateTimeRangeInputWidget(
+                  startDietDateTime: startDietDateTime,
+                  endDietDateTime: endDietDateTime,
+                  onTapInput: onTapInput,
+                ),
+                SpaceHeight(height: largeSpace),
                 ContentsTitleText(text: '목표 체중'),
                 TextInput(
                   maxLength: 4,
@@ -137,15 +144,6 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
                   counterText: '(예: 59, 63.5)',
                   onChanged: onChangeGoalWeightText,
                 ),
-                SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '기간'),
-                SpaceHeight(height: smallSpace),
-                DateTimeRangeInputWidget(
-                  startDietDateTime: startDietDateTime,
-                  endDietDateTime: endDietDateTime,
-                  onTapInput: onTapInput,
-                ),
-                SpaceHeight(height: smallSpace),
               ],
             ),
           )

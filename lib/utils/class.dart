@@ -14,22 +14,20 @@ class RecordInfoClass {
   RecordInfoClass({
     required this.recordDateTime,
     required this.weight,
-    required this.bodyFat,
     required this.dietPlanList,
     required this.memo,
   });
 
-  DateTime recordDateTime;
-  double weight;
-  double bodyFat;
-  List<DietPlanClass> dietPlanList;
-  String memo;
+  DateTime? recordDateTime;
+  double? weight;
+  double? bodyFat;
+  List<DietPlanClass>? dietPlanList;
+  String? memo;
 
   RecordInfoClass getRecordInfoClass() {
     return RecordInfoClass(
       recordDateTime: recordDateTime,
       weight: weight,
-      bodyFat: bodyFat,
       dietPlanList: dietPlanList,
       memo: memo,
     );

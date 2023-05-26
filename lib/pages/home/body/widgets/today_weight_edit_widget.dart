@@ -14,11 +14,10 @@ class TodayWeightEditWidget extends StatefulWidget {
     super.key,
     required this.seletedRecordSubType,
     required this.weightText,
-    required this.bodyFatText,
   });
 
   RecordSubTypes seletedRecordSubType = RecordSubTypes.none;
-  String weightText, bodyFatText;
+  String weightText;
 
   @override
   State<TodayWeightEditWidget> createState() => _TodayWeightEditWidgetState();
@@ -30,18 +29,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
   bool isEnabledOnPressed = true;
 
   setInputText() {
-    switch (widget.seletedRecordSubType) {
-      case RecordSubTypes.weightReRecood:
-        textInputController.text = widget.weightText;
-
-        break;
-
-      case RecordSubTypes.enterBodyFat:
-        textInputController.text = widget.bodyFatText;
-        break;
-
-      default:
-    }
+    textInputController.text = widget.weightText;
 
     checkEmptyText();
   }
@@ -80,17 +68,6 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           min: weightMin,
           max: weightMax,
           errMsg: weightErrMsg,
-        ),
-      ),
-      RecordSubTypes.enterBodyFat: TextInputClass(
-        maxLength: bodyFatMaxLength,
-        prefixIcon: bodyFatPrefixIcon,
-        suffixText: '%',
-        hintText: bodyFatHintText,
-        inputTextErr: InputTextErrorClass(
-          min: bodyFatMin,
-          max: bodyFatMax,
-          errMsg: bodyFatErrMsg,
         ),
       ),
     };
@@ -138,7 +115,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
         case RecordSubTypes.weightReRecood:
           context.read<DietInfoProvider>().changeWeightText(resultText);
           break;
-        case RecordSubTypes.enterBodyFat:
+          // case RecordSubTypes.enterBodyFat:
           // context.read<DietInfoProvider>().changeBodyFatText(resultText);
           break;
 
@@ -181,3 +158,15 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     );
   }
 }
+
+//  RecordSubTypes.enterBodyFat: TextInputClass(
+//         maxLength: bodyFatMaxLength,
+//         prefixIcon: bodyFatPrefixIcon,
+//         suffixText: '%',
+//         hintText: bodyFatHintText,
+//         inputTextErr: InputTextErrorClass(
+//           min: bodyFatMin,
+//           max: bodyFatMax,
+//           errMsg: bodyFatErrMsg,
+//         ),
+//       ),

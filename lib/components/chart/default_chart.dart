@@ -30,16 +30,6 @@ class DefaultChart extends StatelessWidget {
       ChartData('22일', 71.2),
     ];
 
-    final List<ChartData> columnSeriesData = [
-      ChartData('16일', 35),
-      ChartData('17일', 23),
-      ChartData('18일', 34),
-      ChartData('19일', 25),
-      ChartData('20일', 70),
-      ChartData('21일', 40),
-      ChartData('22일', 10),
-    ];
-
     final series = {
       SegmentedTypes.weight: LineSeries(
         dataSource: lineSeriesData,
@@ -48,11 +38,6 @@ class DefaultChart extends StatelessWidget {
         markerSettings: const MarkerSettings(isVisible: true),
         dataLabelSettings: const DataLabelSettings(isVisible: true),
       ),
-      SegmentedTypes.bodyFat: ColumnSeries(
-          dataSource: columnSeriesData,
-          color: Colors.orange,
-          xValueMapper: (ChartData data, _) => data.x,
-          yValueMapper: (ChartData data, _) => data.y),
     };
 
     return ContentsBox(

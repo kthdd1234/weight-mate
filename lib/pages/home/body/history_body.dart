@@ -13,7 +13,7 @@ import 'widgets/history_segmented_weight_widget.dart';
 
 Map<SegmentedTypes, Color> dotColors = <SegmentedTypes, Color>{
   SegmentedTypes.weight: weightDotColor,
-  SegmentedTypes.actPlan: planDotColor,
+  SegmentedTypes.actPlan: actionDotColor,
   SegmentedTypes.memo: memoDotColor,
 };
 

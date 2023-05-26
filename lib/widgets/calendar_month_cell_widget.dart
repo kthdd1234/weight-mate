@@ -10,11 +10,13 @@ class CalendarMonthCellWidget extends StatelessWidget {
   CalendarMonthCellWidget({
     super.key,
     required this.detailDateTime,
+    required this.recordObject,
     required this.isSelectedDay,
     required this.currentView,
   });
 
   DateTime detailDateTime;
+  Set<String> recordObject;
   bool isSelectedDay;
   String currentView;
 
@@ -44,26 +46,28 @@ class CalendarMonthCellWidget extends StatelessWidget {
     colorWidget(String type) {
       final colorData = {
         'weight': weightDotColor,
-        'plan': planDotColor,
-        'memo': memoDotColor
+        'action': actionDotColor,
+        'memo': memoDotColor,
       };
 
       return Column(
         children: [
           ColorDot(width: 7, height: 7, color: colorData[type]!),
-          SpaceWidth(width: 2)
+          SpaceWidth(width: 10)
         ],
       );
     }
 
     setRecordDots(Set<String> object) {
-      if (isMaxDateResult || currentView != 'month') {
+      final children = object.map((element) => colorWidget(element)).toList();
+
+      if (isMaxDateResult || currentView != 'month' || children.isEmpty) {
         return const EmptyArea();
       }
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [], //
+        children: children,
       );
     }
 
@@ -85,7 +89,7 @@ class CalendarMonthCellWidget extends StatelessWidget {
           ),
         ),
         SpaceHeight(height: 3),
-        setRecordDots({}),
+        setRecordDots(recordObject),
       ],
     );
   }

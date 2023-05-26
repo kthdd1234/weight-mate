@@ -49,7 +49,7 @@ class HistorySegmentedWidget extends StatelessWidget {
         ),
         SegmentedTypes.actPlan: segmentedWidget(
           name: '계획 실천',
-          dotColor: planDotColor,
+          dotColor: actionDotColor,
         ),
         SegmentedTypes.memo: segmentedWidget(
           name: '메모',

@@ -135,8 +135,8 @@ const dialogBackgroundColor = Color(0xffF3F4F9);
 /// weightDotColor
 const weightDotColor = Colors.green;
 
-/// planDotColor
-const planDotColor = Colors.blue;
+/// actionDotColor
+const actionDotColor = Colors.blue;
 
 /// memoDotColor
 const memoDotColor = Colors.orange;

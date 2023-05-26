@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
@@ -8,7 +9,11 @@ getDateTimeToStr(DateTime dateTime) {
   return strDateTime;
 }
 
-getDateTimeToSlash(DateTime dateTime) {
+getDateTimeToSlash(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+
   DateFormat formatter = DateFormat('yyyy/MM/dd');
   String strDateTime = formatter.format(dateTime);
 
@@ -65,4 +70,61 @@ handleCheckErrorText({
   }
 
   return null;
+}
+
+RecordInfoClass? getRecordInfoClass({
+  required DateTime recordSelectedDateTime,
+  required List<Map<String, dynamic>>? recordInfoList,
+}) {
+  if (recordInfoList == null) return null;
+
+  final listObjToClass = recordInfoList.map(
+    (item) => RecordInfoClass(
+      recordDateTime: item['recordDateTime'],
+      weight: item['weight'],
+      dietPlanList: getDietPlanClassList(item['dietPlanList']),
+      memo: item['memo'],
+    ),
+  );
+
+  RecordInfoClass? recordInfoClass = listObjToClass.firstWhere(
+    (element) =>
+        getDateTimeToSlash(element.recordDateTime) ==
+        getDateTimeToSlash(recordSelectedDateTime),
+  );
+
+  return recordInfoClass;
+}
+
+List<DietPlanClass> getDietPlanClassList(
+  List<Map<String, dynamic>> dietPlanList,
+) {
+  return dietPlanList
+      .map(
+        (element) => DietPlanClass(
+          id: element['id'],
+          icon: IconData(
+            element['iconCodePoint'],
+            fontFamily: 'MaterialIcons',
+          ),
+          plan: element['plan'],
+          isChecked: element['isChecked'],
+          isAction: element['isAction'],
+        ),
+      )
+      .toList();
+  ;
+}
+
+int getRecordIndex({
+  required DateTime dateTime,
+  required List<Map<String, dynamic>> recordInfoList,
+}) {
+  return recordInfoList.indexWhere(
+    (info) =>
+        getDateTimeToSlash(dateTime) ==
+        getDateTimeToSlash(
+          info['recordDateTime'],
+        ),
+  );
 }

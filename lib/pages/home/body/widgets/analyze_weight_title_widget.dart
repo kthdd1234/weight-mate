@@ -22,15 +22,6 @@ class AnalyzeWeightTitleWidget extends StatelessWidget {
               textColor: disEnabledTypeColor,
               textSize: 13,
             ),
-            SpaceWidth(width: 7.5),
-            IconText(
-              icon: Icons.bar_chart,
-              iconColor: Colors.orange,
-              iconSize: 17,
-              text: '체지방률(%)',
-              textColor: disEnabledTypeColor,
-              textSize: 13,
-            )
           ],
         )
       ],

@@ -1,7 +1,6 @@
 enum RecordSubTypes {
   none,
   weightReRecood,
-  enterBodyFat,
   resetWeight,
   actDietPlan,
   addDietPlan,
@@ -15,7 +14,6 @@ enum eBottomNavigationBarItem { record, history, analyze, setting }
 
 enum SegmentedTypes {
   weight,
-  bodyFat,
   actPlan,
   memo,
   week,
