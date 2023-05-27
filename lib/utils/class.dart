@@ -12,35 +12,21 @@ class RecordInfoListClass {
 
 class RecordInfoClass {
   RecordInfoClass({
-    required this.recordDateTime,
-    required this.weight,
-    required this.dietPlanList,
-    required this.memo,
+    this.recordDateTime,
+    this.weight,
+    this.dietPlanList,
+    this.memo,
+    required this.wiseSaying,
   });
 
   DateTime? recordDateTime;
+
   double? weight;
   double? bodyFat;
-  List<DietPlanClass>? dietPlanList;
+  List<Map<String, dynamic>>? dietPlanList;
   String? memo;
-
-  RecordInfoClass getRecordInfoClass() {
-    return RecordInfoClass(
-      recordDateTime: recordDateTime,
-      weight: weight,
-      dietPlanList: dietPlanList,
-      memo: memo,
-    );
-  }
+  Map<String, String> wiseSaying;
 }
-
-// {
-//       'recordDateTime': recordDateTime,
-//       'weight': weight,
-//       'bodyFat': bodyFat,
-//       'dietPlanList': dietPlanList,
-//       'memo': memo
-//     };
 
 class UserInfoClass {
   UserInfoClass({

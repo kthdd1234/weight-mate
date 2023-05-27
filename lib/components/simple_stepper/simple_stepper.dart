@@ -24,6 +24,12 @@ class SimpleStepper extends StatelessWidget {
           color: buttonBackgroundColor,
         ),
         SimpleSteop(step: 3, currentStep: currentStep),
+        const Icon(
+          Icons.remove,
+          size: 10,
+          color: buttonBackgroundColor,
+        ),
+        SimpleSteop(step: 4, currentStep: currentStep),
       ],
     );
   }

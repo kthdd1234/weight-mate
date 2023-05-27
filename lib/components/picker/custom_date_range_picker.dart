@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
 import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/calendar_month_cell_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -31,9 +30,19 @@ class CustomDateRangePicker extends StatefulWidget {
 }
 
 class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
+  late Box<UserInfoBox> userInfoBox;
+  late Box<RecordInfoBox> recordInfoBox;
+
   DateRangePickerController controller = DateRangePickerController();
   String currentView = 'month';
-  Box<UserInfoBox> userInfoBox = Hive.box<UserInfoBox>('userInfoBox');
+
+  @override
+  void initState() {
+    userInfoBox = Hive.box<UserInfoBox>('userInfoBox');
+    recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,32 +50,23 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       BuildContext context,
       DateRangePickerCellDetails details,
     ) {
-      final set = <String>{};
-      final dateTimeSlash = getDateTimeToSlash(details.date);
-      final recordInfoList = userInfoBox.get('userInfo')!.recordInfoList;
+      Set<String> object = <String>{};
+      int dateTimeToInt = getDateTimeToInt(details.date);
+      RecordInfoBox? recordInfo = recordInfoBox.get(dateTimeToInt);
 
-      if (recordInfoList == null) {
-        return const EmptyArea();
-      }
-
-      final recordInfo = recordInfoList.firstWhere((obj) {
-        return dateTimeSlash == getDateTimeToSlash(obj['recordDateTime']);
-      }, orElse: () => {});
-
-      if (recordInfo.isNotEmpty) {
-        double? weight = recordInfo['weight'];
-        List<Map<String, dynamic>> dietPlanList = recordInfo['dietPlanList'];
-        String? memo = recordInfo['memo'];
-
-        if (weight != null) set.add('weight');
-        if (memo != null) set.add('memo');
-        if (dietPlanList.every((element) => element['isAction'])) {
-          set.add('action');
+      if (recordInfo != null) {
+        if (recordInfo.weight != null) object.add('weight');
+        if (recordInfo.memo != null) object.add('memo');
+        if (recordInfo.dietPlanList != null) {
+          if (recordInfo.dietPlanList!
+              .every((element) => element['isAction'])) {
+            object.add('action');
+          }
         }
       }
 
       return CalendarMonthCellWidget(
-        recordObject: set,
+        recordObject: object,
         currentView: currentView,
         detailDateTime: details.date,
         isSelectedDay: isSelectedDate(
@@ -85,7 +85,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     }
 
     return ValueListenableBuilder(
-      valueListenable: userInfoBox.listenable(),
+      valueListenable: recordInfoBox.listenable(),
       builder: (context, box, boxWidget) {
         return SfDateRangePicker(
           controller: controller,

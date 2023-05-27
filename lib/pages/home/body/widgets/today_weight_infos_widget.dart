@@ -8,7 +8,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 class TodayWeightInfosWidget extends StatelessWidget {
   TodayWeightInfosWidget({
     super.key,
-    required this.weight,
+    this.weight,
     required this.goalWeight,
     required this.tall,
     this.beforeWeight,
@@ -28,7 +28,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
       final operator = goalWeight == weight!
           ? ''
           : goalWeight > weight!
-              ? '+ '
+              ? '+'
               : '';
 
       return '$operator$toTheGoal kg';
@@ -55,7 +55,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
       final operator = beforeWeight == weight!
           ? ''
           : beforeWeight! > weight!
-              ? '+ '
+              ? '+'
               : '';
 
       return '$operator$resultWeight kg';

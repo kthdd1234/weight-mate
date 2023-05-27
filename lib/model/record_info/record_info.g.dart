@@ -17,27 +17,26 @@ class RecordInfoBoxAdapter extends TypeAdapter<RecordInfoBox> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return RecordInfoBox(
-      recordDateTime: fields[0] as DateTime,
-      weight: fields[1] as double,
-      bodyFat: fields[2] as double,
-      dietPlanList: (fields[3] as List).cast<DietPlanClass>(),
-      memo: fields[4] as String,
+      recordDateTime: fields[0] as DateTime?,
+      weight: fields[1] as double?,
+      dietPlanList: (fields[2] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
+          .toList(),
+      memo: fields[3] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordInfoBox obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.recordDateTime)
       ..writeByte(1)
       ..write(obj.weight)
       ..writeByte(2)
-      ..write(obj.bodyFat)
-      ..writeByte(3)
       ..write(obj.dietPlanList)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.memo);
   }
 

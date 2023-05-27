@@ -20,6 +20,17 @@ getDateTimeToSlash(DateTime? dateTime) {
   return strDateTime;
 }
 
+int getDateTimeToInt(DateTime? dateTime) {
+  if (dateTime == null) {
+    return 0;
+  }
+
+  DateFormat formatter = DateFormat('yyyyMMdd');
+  String strDateTime = formatter.format(dateTime);
+
+  return int.parse(strDateTime);
+}
+
 getStrToDateTime(String str) {
   DateTime dateTime = DateFormat('yyyy년 MM월 dd일').parse(str);
   return dateTime;
@@ -72,30 +83,6 @@ handleCheckErrorText({
   return null;
 }
 
-RecordInfoClass? getRecordInfoClass({
-  required DateTime recordSelectedDateTime,
-  required List<Map<String, dynamic>>? recordInfoList,
-}) {
-  if (recordInfoList == null) return null;
-
-  final listObjToClass = recordInfoList.map(
-    (item) => RecordInfoClass(
-      recordDateTime: item['recordDateTime'],
-      weight: item['weight'],
-      dietPlanList: getDietPlanClassList(item['dietPlanList']),
-      memo: item['memo'],
-    ),
-  );
-
-  RecordInfoClass? recordInfoClass = listObjToClass.firstWhere(
-    (element) =>
-        getDateTimeToSlash(element.recordDateTime) ==
-        getDateTimeToSlash(recordSelectedDateTime),
-  );
-
-  return recordInfoClass;
-}
-
 List<DietPlanClass> getDietPlanClassList(
   List<Map<String, dynamic>> dietPlanList,
 ) {
@@ -114,17 +101,4 @@ List<DietPlanClass> getDietPlanClassList(
       )
       .toList();
   ;
-}
-
-int getRecordIndex({
-  required DateTime dateTime,
-  required List<Map<String, dynamic>> recordInfoList,
-}) {
-  return recordInfoList.indexWhere(
-    (info) =>
-        getDateTimeToSlash(dateTime) ==
-        getDateTimeToSlash(
-          info['recordDateTime'],
-        ),
-  );
 }

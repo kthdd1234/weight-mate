@@ -24,6 +24,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
   Widget build(BuildContext context) {
     final tallText = context.watch<DietInfoProvider>().getTallText();
     final weightText = context.watch<DietInfoProvider>().getWeightText();
+    final goalWeightText =
+        context.watch<DietInfoProvider>().getGoalWeightText();
 
     onChangedTallText(value) {
       context.read<DietInfoProvider>().changeTallText(value);
@@ -31,6 +33,10 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
     onChangedWeightText(value) {
       context.read<DietInfoProvider>().changeWeightText(value);
+    }
+
+    onChangedGoalWeightText(value) {
+      context.read<DietInfoProvider>().changeGoalWeightText(value);
     }
 
     setErrorTextTall() {
@@ -51,16 +57,27 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       );
     }
 
+    setErrorTextGoalWeight() {
+      return handleCheckErrorText(
+        text: goalWeightText,
+        min: weightMin,
+        max: weightMax,
+        errMsg: weightErrMsg,
+      );
+    }
+
     onCheckedButtonEnabled() {
       return tallText != '' &&
           weightText != '' &&
+          goalWeightText != '' &&
           setErrorTextTall() == null &&
-          setErrorTextWeight() == null;
+          setErrorTextWeight() == null &&
+          setErrorTextGoalWeight() == null;
     }
 
     onPressedBottomNavigationButton() {
       if (onCheckedButtonEnabled()) {
-        Navigator.pushNamed(context, '/add-goal-weight');
+        // Navigator.pushNamed(context, '/add-goal-weight');
       }
 
       return null;
@@ -71,7 +88,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         children: [
           SimpleStepper(currentStep: 1),
           SpaceHeight(height: regularSapce),
-          HeadlineText(text: '키와 몸무게를 입력해주세요.'),
+          HeadlineText(text: '프로필 정보를 입력해주세요.'),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             height: null,
@@ -89,15 +106,26 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                   onChanged: onChangedTallText,
                 ),
                 SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '몸무게'),
+                ContentsTitleText(text: '체중'),
                 TextInput(
                   maxLength: 4,
                   prefixIcon: Icons.monitor_weight,
                   suffixText: 'kg',
                   counterText: '(예: 59, 63.5)',
-                  hintText: '몸무게를 입력해주세요.',
+                  hintText: '체중을 입력해주세요.',
                   errorText: setErrorTextWeight(),
                   onChanged: onChangedWeightText,
+                ),
+                SpaceHeight(height: regularSapce),
+                ContentsTitleText(text: '목표 체중'),
+                TextInput(
+                  maxLength: 4,
+                  prefixIcon: Icons.flag,
+                  suffixText: 'kg',
+                  counterText: '(예: 50, 70.5)',
+                  hintText: '목표 체중을 입력해주세요.',
+                  errorText: setErrorTextGoalWeight(),
+                  onChanged: onChangedGoalWeightText,
                 ),
               ],
             ),

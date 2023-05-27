@@ -8,7 +8,7 @@ part of 'record_info_list.dart';
 
 class RecordInfoListBoxAdapter extends TypeAdapter<RecordInfoListBox> {
   @override
-  final int typeId = 2;
+  final int typeId = 4;
 
   @override
   RecordInfoListBox read(BinaryReader reader) {

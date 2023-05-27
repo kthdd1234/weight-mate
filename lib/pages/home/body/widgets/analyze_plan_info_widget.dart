@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
-import 'package:flutter_app_weight_management/components/chart/default_chart.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/icon_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/widgets/analyze_plan_chart_widget.dart';
-import 'package:flutter_app_weight_management/widgets/analyze_plan_data_widget.dart';
 
 class AnalyzePlanInfoWidget extends StatefulWidget {
   const AnalyzePlanInfoWidget({super.key});

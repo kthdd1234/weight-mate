@@ -24,19 +24,18 @@ class DietInfoProvider with ChangeNotifier {
     );
   }
 
-  List<Map<String, dynamic>> getDietPlanListData() {
-    final list = _dietPlanList.map((obj) => obj.getMapData()).toList();
-    return list;
+  RecordInfoClass getRecordInfo() {
+    return RecordInfoClass(
+      recordDateTime: _recordStartDateTime,
+      weight: convertToDouble(_weightText),
+      dietPlanList: getDietPlanListData(),
+      memo: null,
+      wiseSaying: {},
+    );
   }
 
-  Map<String, dynamic> getRecordInfoData() {
-    return {
-      'recordDateTime': DateTime.now(),
-      'weight': convertToDouble(_weightText),
-      'bodyFat': null,
-      'dietPlanList': getDietPlanListData(),
-      'memo': null,
-    };
+  List<Map<String, dynamic>> getDietPlanListData() {
+    return _dietPlanList.map((obj) => obj.getMapData()).toList();
   }
 
   String getTallText() {

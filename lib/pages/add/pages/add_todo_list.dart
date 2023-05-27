@@ -7,12 +7,14 @@ import 'package:flutter_app_weight_management/components/check/add_diet_plan_che
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/components/text/sub_text.dart';
+import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
 import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/touch_and_check_input_widget.dart';
 import 'package:hive/hive.dart';
@@ -28,6 +30,7 @@ class AddTodoList extends StatefulWidget {
 
 class _AddTodoListState extends State<AddTodoList> {
   late Box<UserInfoBox> userInfoBox;
+  late Box<RecordInfoBox> recordInfoBox;
 
   List<DietPlanClass> dietPlanList = [];
   bool showTouchArea = true;
@@ -37,8 +40,10 @@ class _AddTodoListState extends State<AddTodoList> {
   void initState() {
     super.initState();
 
-    dietPlanList = defaultDietPlanList;
     userInfoBox = Hive.box<UserInfoBox>('userInfoBox');
+    recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
+
+    dietPlanList = defaultDietPlanList;
   }
 
   @override
@@ -48,14 +53,16 @@ class _AddTodoListState extends State<AddTodoList> {
     }
 
     onPressedBottomNavigationButton() {
-      final checkList = getCheckList();
+      List<DietPlanClass> list = getCheckList();
 
-      if (checkList.isNotEmpty) {
-        context.read<DietInfoProvider>().changeDietPlanList(checkList);
+      if (list.isNotEmpty) {
+        DateTime now = DateTime.now();
+
+        context.read<DietInfoProvider>().changeDietPlanList(list);
 
         final provider = context.read<DietInfoProvider>();
         final userInfoState = provider.getUserInfo();
-        final recordInfoData = provider.getRecordInfoData();
+        final recordInfoState = provider.getRecordInfo();
 
         userInfoBox.put(
           'userInfo',
@@ -64,10 +71,74 @@ class _AddTodoListState extends State<AddTodoList> {
             goalWeight: userInfoState.goalWeight,
             startDietDateTime: userInfoState.startDietDateTime,
             endDietDateTime: userInfoState.endDietDateTime,
-            recordStartDateTime: DateTime.now(),
-            recordInfoList: [recordInfoData],
+            recordStartDateTime: now,
           ),
         );
+
+        recordInfoBox.put(
+          getDateTimeToInt(now),
+          RecordInfoBox(
+            recordDateTime: now,
+            weight: recordInfoState.weight,
+            dietPlanList: recordInfoState.dietPlanList,
+            memo: getDateTimeToSlash(now),
+          ),
+        );
+
+        // recordInfoBox.put(
+        //   20230520,
+        //   RecordInfoBox(
+        //     recordDateTime: null,
+        //     weight: null,
+        //     dietPlanList: null,
+        //     memo: '2023/05/20',
+        //     wiseSaying: wiseSayingInfo,
+        //   ),
+        // );
+
+        // recordInfoBox.put(
+        //   20230420,
+        //   RecordInfoBox(
+        //     recordDateTime: null,
+        //     weight: 40.0,
+        //     dietPlanList: null,
+        //     memo: '2023/04/20',
+        //     wiseSaying: wiseSayingInfo,
+        //   ),
+        // );
+
+        // recordInfoBox.put(
+        //   20230522,
+        //   RecordInfoBox(
+        //     recordDateTime: null,
+        //     weight: 39.6,
+        //     dietPlanList: null,
+        //     memo: '2023/05/22',
+        //     wiseSaying: wiseSayingInfo,
+        //   ),
+        // );
+
+        // recordInfoBox.put(
+        //   20230524,
+        //   RecordInfoBox(
+        //     recordDateTime: null,
+        //     weight: null,
+        //     dietPlanList: recordInfoState.dietPlanList,
+        //     memo: '2023/05/24',
+        //     wiseSaying: wiseSayingInfo,
+        //   ),
+        // );
+
+        // recordInfoBox.put(
+        //   20230525,
+        //   RecordInfoBox(
+        //     recordDateTime: null,
+        //     weight: 66,
+        //     dietPlanList: recordInfoState.dietPlanList,
+        //     memo: '2023/05/25',
+        //     wiseSaying: wiseSayingInfo,
+        //   ),
+        // );
 
         context
             .read<RecordSelectedDateTimeProvider>()

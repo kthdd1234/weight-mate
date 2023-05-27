@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'record_info_list.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: 4)
 class RecordInfoListBox {
   RecordInfoListBox({required this.list});
 

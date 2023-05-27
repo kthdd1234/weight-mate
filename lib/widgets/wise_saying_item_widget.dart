@@ -22,7 +22,7 @@ class WiseSayingItemWidget extends StatelessWidget {
       children: [
         Text(wiseSaying),
         SpaceHeight(height: smallSpace),
-        BodySmallText(text: '- $name -')
+        BodySmallText(text: name)
       ],
     );
   }

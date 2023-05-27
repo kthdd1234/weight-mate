@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
 import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
-import 'package:flutter_app_weight_management/model/wise_saying/wise_saying.dart';
 import 'package:flutter_app_weight_management/pages/common/alarm_setting_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
@@ -43,10 +43,10 @@ _initHive() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(UserInfoBoxAdapter());
-  // Hive.resetAdapters();
+  Hive.registerAdapter(RecordInfoBoxAdapter());
 
   await Hive.openBox<UserInfoBox>('userInfoBox');
-  await Hive.openBox<WiseSayingBox>('wiseSayingBox');
+  await Hive.openBox<RecordInfoBox>('recordInfoBox');
 }
 
 class MyApp extends StatelessWidget {
