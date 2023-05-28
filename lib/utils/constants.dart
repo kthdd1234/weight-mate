@@ -45,7 +45,7 @@ const typeBackgroundColor = Color(0xffF9FAFB);
 ///
 
 /// enabledTypeColor
-const enabledTypeColor = Color(0xff6C7B97);
+const enabledTypeColor = Colors.grey;
 
 /// disEnabledTypeColor
 const disEnabledTypeColor = Color(0xff9A9EAA);

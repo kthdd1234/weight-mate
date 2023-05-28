@@ -46,3 +46,10 @@ enum MoreSeeItem {
 }
 
 enum MoreSeeWidgetTypes { none, arrow, switching }
+
+enum ActTypeEnum {
+  none,
+  diet,
+  exercise,
+  lifestyle,
+}

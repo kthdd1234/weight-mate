@@ -249,7 +249,6 @@ class _AddTodoListState extends State<AddTodoList> {
       bottomSubmitButtonText: '완료',
       buttonEnabled: onButtonEnabled(),
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
-      actions: [],
     );
   }
 }

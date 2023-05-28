@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 
 class DietInfoProvider with ChangeNotifier {
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
+  ActTypeEnum _actType = ActTypeEnum.none;
+  String _subActType = '';
   List<DietPlanClass> _dietPlanList = [];
   DateTime _startDietDateTime = DateTime.now();
   DateTime? _endDietDateTime;
@@ -50,6 +53,14 @@ class DietInfoProvider with ChangeNotifier {
     return _goalWeightText;
   }
 
+  ActTypeEnum getActType() {
+    return _actType;
+  }
+
+  String getSubActType() {
+    return _subActType;
+  }
+
   List<DietPlanClass> getDietPlanList() {
     return _dietPlanList;
   }
@@ -87,5 +98,13 @@ class DietInfoProvider with ChangeNotifier {
   changeRecordStartDateTime(DateTime dateTime) {
     _recordStartDateTime = dateTime;
     notifyListeners();
+  }
+
+  changeActType(ActTypeEnum type) {
+    _actType = type;
+  }
+
+  changeSubActType(String type) {
+    _subActType = type;
   }
 }

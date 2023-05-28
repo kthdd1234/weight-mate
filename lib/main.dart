@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
 import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_act_names.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_act_setting.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_act_type.dart';
 import 'package:flutter_app_weight_management/pages/common/alarm_setting_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
@@ -68,8 +71,11 @@ class MyApp extends StatelessWidget {
       theme: AppThemes.lightTheme,
       routes: {
         '/add-body-info': (context) => AddBodyInfo(),
-        '/add-goal-weight': (context) => AddGoalWeight(),
-        '/add-todo-list': (context) => AddTodoList(),
+        '/add-act-type': (context) => AddActType(),
+        '/add-act-names': (context) => AddActNames(),
+        '/add-act-setting': (context) => AddActSetting(),
+        // '/add-goal-weight': (context) => AddGoalWeight(),
+        // '/add-todo-list': (context) => AddTodoList(),
         '/home-container': (context) => HomeContainer(),
         '/screen-lock': (context) => ScreenLockPage(),
         '/alarm-setting': (context) => AlarmSettingPage(),

@@ -152,7 +152,6 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
       bottomSubmitButtonText: '다음',
       buttonEnabled: onCheckedButtonEnabled(),
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
-      actions: [],
     );
   }
 }

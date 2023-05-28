@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:uuid/uuid.dart';
 
+import 'enum.dart';
+
 var defaultDietPlanList = [
   DietPlanClass(
       id: const Uuid().v4(),
@@ -76,4 +78,148 @@ var todayOfWiseSayingList = [
   WiseSayingClass(wiseSaying: '먹고 싶은 걸 다 먹되 아주 조금만 먹는다.', name: 'AOA 설현'),
   WiseSayingClass(wiseSaying: '죽을 만큼 운동하고 죽지 않을 만큼 먹었어요.', name: '제시카'),
   WiseSayingClass(wiseSaying: '먹는거요? 귀찮아요.', name: '김민희'),
+];
+
+var actTitles = {
+  ActTypeEnum.diet: '다이어트',
+  ActTypeEnum.exercise: '운동',
+  ActTypeEnum.lifestyle: '생활 습관'
+};
+
+var actSubs = {
+  ActTypeEnum.diet: '를',
+  ActTypeEnum.exercise: '을',
+  ActTypeEnum.lifestyle: '을'
+};
+
+var mainItemTypeClassList = [
+  ItemTypeClass(
+    id: ActTypeEnum.diet,
+    title: '다이어트',
+    desc: '간헐적 단식, 저탄고지 다이어트 등',
+    icon: Icons.monitor_weight,
+  ),
+  ItemTypeClass(
+    id: ActTypeEnum.exercise,
+    title: '운동',
+    desc: '헬스, 러닝, 산책, 필라테스 등',
+    icon: Icons.directions_run_outlined,
+  ),
+  ItemTypeClass(
+    id: ActTypeEnum.lifestyle,
+    title: '생활습관',
+    desc: '아침에 체중 기록하기, 야식 금지 등',
+    icon: Icons.accessibility_new_sharp,
+  )
+];
+
+var subItemTypeClassList = {
+  ActTypeEnum.diet: dietItemTypeClassList,
+  ActTypeEnum.exercise: exerciseItemTypeClassList,
+  ActTypeEnum.lifestyle: lifeStyleItemTypeClassList,
+};
+
+var initItemType = {
+  ActTypeEnum.diet: 'intermittentFasting',
+  ActTypeEnum.exercise: 'health',
+  ActTypeEnum.lifestyle: 'weightRecord',
+};
+
+var dietItemTypeClassList = [
+  ItemTypeClass(
+    id: 'intermittentFasting',
+    title: '간헐적 단식',
+    desc: '특정 시간 동안 공복을 유지하는 식이요법',
+    icon: Icons.alarm_outlined,
+  ),
+  ItemTypeClass(
+    id: 'ketogenic',
+    title: '키토제닉 다이어트',
+    desc: '저탄수화물 고지방 식이요법',
+    icon: Icons.savings_outlined,
+  ),
+  ItemTypeClass(
+    id: 'oneFood',
+    title: '원푸드 다이어트',
+    desc: '특정한 음식을 집중적으로 먹는 식이요법',
+    icon: Icons.food_bank_outlined,
+  ),
+  ItemTypeClass(
+    id: 'denmark',
+    title: '덴마크 다이어트',
+    desc: '고단백 저열량 식이요법',
+    icon: Icons.egg_alt_outlined,
+  ),
+  ItemTypeClass(
+    id: 'custom',
+    title: '사용자 정의',
+    desc: '다이어트 종류 직접 추가하기',
+    icon: Icons.add_circle_outline,
+  ),
+];
+
+var exerciseItemTypeClassList = [
+  ItemTypeClass(
+    id: 'health',
+    title: '헬스',
+    desc: '러닝 머신, 덤벨, 벤치 프레스 등 기구 운동',
+    icon: Icons.fitness_center_outlined,
+  ),
+  ItemTypeClass(
+    id: 'walk',
+    title: '걷기',
+    desc: '산책, 속보, 하루 만보 등 유산소 운동',
+    icon: Icons.directions_walk_outlined,
+  ),
+  ItemTypeClass(
+    id: 'pilates',
+    title: '필라테스',
+    desc: '재활과 자세 교정에 특화된 운동',
+    icon: Icons.nordic_walking_outlined,
+  ),
+  ItemTypeClass(
+    id: 'yoga',
+    title: '요가',
+    desc: '명상과 호흡, 스트레칭 등이 결합된 심신 수련 운동',
+    icon: Icons.self_improvement_outlined,
+  ),
+  ItemTypeClass(
+    id: 'custom',
+    title: '사용자 정의',
+    desc: '운동 종류 직접 추가하기',
+    icon: Icons.add_circle_outline,
+  ),
+];
+
+var lifeStyleItemTypeClassList = [
+  ItemTypeClass(
+    id: 'weightRecord',
+    title: '체중 기록',
+    desc: '아침에 잊지 않고 체중 기록하기',
+    icon: Icons.av_timer_outlined,
+  ),
+  ItemTypeClass(
+    id: 'noMidnightSnack',
+    title: '야식 금지',
+    desc: '밤에 야식 먹지 않기',
+    icon: Icons.nights_stay_outlined,
+  ),
+  ItemTypeClass(
+    id: 'zeroDrink',
+    title: '제로 칼로리 음료',
+    desc: '일반음료 대신 제로 칼로리 음료 마시기',
+    icon: Icons.local_drink_outlined,
+  ),
+  ItemTypeClass(
+    id: 'noFastFood',
+    title: '패스트 푸드 금지',
+    desc: '햄버거, 피자, 라면 등 살찌는 음식 안먹기',
+    icon: Icons.no_food_outlined,
+  ),
+  ItemTypeClass(
+    id: 'custom',
+    title: '사용자 정의',
+    desc: '생활습관 직접 추가하기',
+    icon: Icons.add_circle_outline,
+  ),
 ];

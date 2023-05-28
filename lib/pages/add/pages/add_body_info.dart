@@ -66,7 +66,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       );
     }
 
-    onCheckedButtonEnabled() {
+    buttonEnabled() {
       return tallText != '' &&
           weightText != '' &&
           goalWeightText != '' &&
@@ -76,8 +76,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     }
 
     onPressedBottomNavigationButton() {
-      if (onCheckedButtonEnabled()) {
-        // Navigator.pushNamed(context, '/add-goal-weight');
+      if (buttonEnabled()) {
+        Navigator.pushNamed(context, '/add-act-type');
       }
 
       return null;
@@ -135,9 +135,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         ],
       ),
       bottomSubmitButtonText: '다음',
-      buttonEnabled: onCheckedButtonEnabled(),
+      buttonEnabled: buttonEnabled(),
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
-      actions: [],
     );
   }
 }

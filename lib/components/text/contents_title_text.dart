@@ -27,7 +27,7 @@ class ContentsTitleText extends StatelessWidget {
             const SizedBox(width: 3),
             Icon(
               icon,
-              size: 15,
+              size: 18,
               color: buttonBackgroundColor,
             )
           ],

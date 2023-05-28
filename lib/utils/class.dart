@@ -171,3 +171,17 @@ class MoreSeeItemClass {
   String? bottomWidget;
   String? dateTimeStr;
 }
+
+class ItemTypeClass {
+  ItemTypeClass({
+    required this.id,
+    required this.title,
+    required this.desc,
+    required this.icon,
+  });
+
+  dynamic id;
+  String title;
+  String desc;
+  IconData icon;
+}

@@ -7,19 +7,26 @@ class BottomSubmitButton extends StatelessWidget {
     required this.onPressed,
     required this.text,
     required this.isEnabled,
+    this.padding,
+    this.width,
+    this.height,
   });
 
   final VoidCallback onPressed;
   final String text;
   final bool isEnabled;
+  final EdgeInsetsGeometry? padding;
+  final double? width;
+  final double? height;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: pagePadding,
+        padding: padding ?? pagePadding,
         child: SizedBox(
-          height: submitButtonHeight,
+          width: width,
+          height: height ?? submitButtonHeight,
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               elevation: isEnabled ? 2.0 : 0.0,

@@ -10,14 +10,12 @@ class AddContainer extends StatelessWidget {
     required this.buttonEnabled,
     required this.bottomSubmitButtonText,
     required this.onPressedBottomNavigationButton,
-    required this.actions,
   });
 
   final Widget body;
   final bool buttonEnabled;
   final String bottomSubmitButtonText;
   final VoidCallback onPressedBottomNavigationButton;
-  final List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +28,11 @@ class AddContainer extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             centerTitle: false,
-            actions: actions,
             foregroundColor: buttonBackgroundColor,
           ),
           body: Padding(
             padding: pagePadding,
-            child: SafeArea(child: body),
+            child: SafeArea(child: SingleChildScrollView(child: body)),
           ),
           bottomNavigationBar: BottomSubmitButton(
             isEnabled: buttonEnabled,
