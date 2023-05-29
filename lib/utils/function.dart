@@ -20,6 +20,21 @@ getDateTimeToSlash(DateTime? dateTime) {
   return strDateTime;
 }
 
+getDateTimeToSlashYY(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+
+  DateFormat formatter = DateFormat('yy/MM/dd');
+  String strDateTime = formatter.format(dateTime);
+
+  return strDateTime;
+}
+
+timeToString(DateTime dateTime) {
+  return DateFormat('a hh:mm').format(dateTime);
+}
+
 int getDateTimeToInt(DateTime? dateTime) {
   if (dateTime == null) {
     return 0;

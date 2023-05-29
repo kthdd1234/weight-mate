@@ -96,6 +96,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ContentsTitleText(text: '키'),
+                SpaceHeight(height: smallSpace),
                 TextInput(
                   maxLength: 5,
                   prefixIcon: Icons.accessibility_new_sharp,
@@ -107,6 +108,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                 ),
                 SpaceHeight(height: regularSapce),
                 ContentsTitleText(text: '체중'),
+                SpaceHeight(height: smallSpace),
                 TextInput(
                   maxLength: 4,
                   prefixIcon: Icons.monitor_weight,
@@ -118,6 +120,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                 ),
                 SpaceHeight(height: regularSapce),
                 ContentsTitleText(text: '목표 체중'),
+                SpaceHeight(height: smallSpace),
                 TextInput(
                   maxLength: 4,
                   prefixIcon: Icons.flag,

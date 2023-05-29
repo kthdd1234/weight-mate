@@ -21,28 +21,27 @@ class BottomSubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: padding ?? pagePadding,
-        child: SizedBox(
-          width: width,
-          height: height ?? submitButtonHeight,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: isEnabled ? 2.0 : 0.0,
-              backgroundColor: isEnabled
-                  ? buttonBackgroundColor
-                  : disabledButtonBackgroundColor,
-              foregroundColor:
-                  isEnabled ? buttonTextColor : disabledButtonTextColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              textStyle: Theme.of(context).textTheme.labelLarge,
+    return Padding(
+      padding:
+          padding ?? const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      child: SizedBox(
+        width: width,
+        height: height ?? submitButtonHeight,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            elevation: isEnabled ? 2.0 : 0.0,
+            backgroundColor: isEnabled
+                ? buttonBackgroundColor
+                : disabledButtonBackgroundColor,
+            foregroundColor:
+                isEnabled ? buttonTextColor : disabledButtonTextColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
             ),
-            onPressed: onPressed,
-            child: Text(text),
+            textStyle: Theme.of(context).textTheme.labelLarge,
           ),
+          onPressed: onPressed,
+          child: Text(text),
         ),
       ),
     );

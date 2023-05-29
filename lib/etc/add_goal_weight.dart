@@ -129,8 +129,8 @@ class _AddGoalWeightState extends State<AddGoalWeight> {
                 ContentsTitleText(text: '기간'),
                 SpaceHeight(height: smallSpace),
                 DateTimeRangeInputWidget(
-                  startDietDateTime: startDietDateTime,
-                  endDietDateTime: endDietDateTime,
+                  startActDateTime: startDietDateTime,
+                  endActDateTime: endDietDateTime,
                   onTapInput: onTapInput,
                 ),
                 SpaceHeight(height: largeSpace),

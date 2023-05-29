@@ -8,7 +8,6 @@ import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/act_name_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/act_type_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +20,7 @@ class AddActNames extends StatefulWidget {
 
 class _AddActNamesState extends State<AddActNames> {
   ScrollController scrollController = ScrollController();
-  dynamic selectedType;
+  dynamic selectedSubType;
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +30,16 @@ class _AddActNamesState extends State<AddActNames> {
     final title = '${actTitles[actType]}${actSubs[actType]}';
 
     onTapItemType(dynamic type) {
-      setState(() => selectedType = type);
+      setState(() => selectedSubType = type);
     }
 
     buttonEnabled() {
-      return selectedType != '';
+      return selectedSubType != '';
     }
 
     onPressedBottomNavigationButton() {
       if (buttonEnabled()) {
-        if (selectedType == 'custom') {
-          return showModalBottomSheet(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            context: context,
-            builder: (context) => ActNameBottomSheet(),
-          );
-        }
-
+        context.read<DietInfoProvider>().changeSubActType(selectedSubType);
         return Navigator.pushNamed(context, '/add-act-setting');
       }
 
@@ -59,11 +49,12 @@ class _AddActNamesState extends State<AddActNames> {
     setIsEnabled(item) {
       if (subActType == item.id) {
         context.watch<DietInfoProvider>().changeSubActType('none');
-        selectedType = subActType;
+        selectedSubType = subActType;
+
         return true;
       }
 
-      return selectedType == item.id;
+      return selectedSubType == item.id;
     }
 
     List<ActTypeWidget> itemTypeListView = itemTypeClassList
@@ -106,3 +97,13 @@ class _AddActNamesState extends State<AddActNames> {
     );
   }
 }
+
+//  if (selectedType == 'custom') {
+//           return showModalBottomSheet(
+//             shape: RoundedRectangleBorder(
+//               borderRadius: BorderRadius.circular(10.0),
+//             ),
+//             context: context,
+//             builder: (context) => ActNameBottomSheet(),
+//           );
+//         }

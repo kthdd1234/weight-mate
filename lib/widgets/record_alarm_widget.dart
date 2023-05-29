@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/components/text/contents_title_tex
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/more_see_item_widget.dart';
 
 class RecordAlarmWidget extends StatefulWidget {
@@ -35,10 +36,28 @@ class _RecordAlarmWidgetState extends State<RecordAlarmWidget> {
       });
     }
 
+    onDateTimeChanged(DateTime value) {
+      print('object => $value');
+    }
+
+    onSubmitAlarm() {}
+
     onTapDateTime(id, dateTimeStr) {
-      showCupertinoModalPopup(
+      showModalBottomSheet(
         context: context,
-        builder: (context) => DefaultDateTimePicker(),
+        builder: (context) => DefaultBottomSheet(
+          title: '알림 시간',
+          widgets: [
+            CupertinoDatePicker(
+              initialDateTime: DateTime.now(),
+              mode: CupertinoDatePickerMode.time,
+              onDateTimeChanged: onDateTimeChanged,
+            )
+          ],
+          isEnabled: true,
+          submitText: '완료',
+          onSubmit: onSubmitAlarm,
+        ),
       );
     }
 

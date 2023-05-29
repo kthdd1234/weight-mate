@@ -1,23 +1,33 @@
 import 'package:flutter/cupertino.dart';
 
-class DefaultDateTimePicker extends StatelessWidget {
-  const DefaultDateTimePicker({super.key});
+class DefaultTimePicker extends StatelessWidget {
+  DefaultTimePicker({
+    super.key,
+    required this.initialDateTime,
+    required this.onDateTimeChanged,
+  });
+
+  DateTime initialDateTime;
+  Function(DateTime time) onDateTimeChanged;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 250,
+      height: 200,
       padding: const EdgeInsets.only(top: 10.0),
+      decoration: BoxDecoration(
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
       margin: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      color: CupertinoColors.systemBackground.resolveFrom(context),
       child: SafeArea(
         top: false,
         child: CupertinoDatePicker(
-          initialDateTime: DateTime.now(),
+          initialDateTime: initialDateTime,
           mode: CupertinoDatePickerMode.time,
-          onDateTimeChanged: (DateTime value) {},
+          onDateTimeChanged: onDateTimeChanged,
         ),
       ),
     );

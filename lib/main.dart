@@ -15,8 +15,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'pages/add/pages/add_body_info.dart';
-import 'pages/add/pages/add_goal_weight.dart';
-import 'pages/add/pages/add_todo_list.dart';
 import 'pages/common/screen_lock_page.dart';
 
 void main() async {
@@ -74,8 +72,6 @@ class MyApp extends StatelessWidget {
         '/add-act-type': (context) => AddActType(),
         '/add-act-names': (context) => AddActNames(),
         '/add-act-setting': (context) => AddActSetting(),
-        // '/add-goal-weight': (context) => AddGoalWeight(),
-        // '/add-todo-list': (context) => AddTodoList(),
         '/home-container': (context) => HomeContainer(),
         '/screen-lock': (context) => ScreenLockPage(),
         '/alarm-setting': (context) => AlarmSettingPage(),

@@ -34,10 +34,12 @@ class AddContainer extends StatelessWidget {
             padding: pagePadding,
             child: SafeArea(child: SingleChildScrollView(child: body)),
           ),
-          bottomNavigationBar: BottomSubmitButton(
-            isEnabled: buttonEnabled,
-            text: bottomSubmitButtonText,
-            onPressed: onPressedBottomNavigationButton,
+          bottomNavigationBar: SafeArea(
+            child: BottomSubmitButton(
+              isEnabled: buttonEnabled,
+              text: bottomSubmitButtonText,
+              onPressed: onPressedBottomNavigationButton,
+            ),
           ),
         ),
       ),
