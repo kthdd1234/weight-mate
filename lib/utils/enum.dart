@@ -1,7 +1,9 @@
-enum RecordSubTypes {
+enum RecordIconTypes {
   none,
-  weightReRecood,
-  resetWeight,
+  addWeight,
+  editWeight,
+  removeWeight,
+  editGoalWeight,
   actDietPlan,
   addDietPlan,
   removeDietPlan,
@@ -10,7 +12,7 @@ enum RecordSubTypes {
   resetNote,
 }
 
-enum eBottomNavigationBarItem { record, history, analyze, setting }
+enum eBottomNavigationBarItem { record, calendar, analyze, setting }
 
 enum SegmentedTypes {
   weight,
@@ -47,7 +49,7 @@ enum MoreSeeItem {
 
 enum MoreSeeWidgetTypes { none, arrow, switching }
 
-enum ActTypeEnum {
+enum MainActTypes {
   none,
   diet,
   exercise,

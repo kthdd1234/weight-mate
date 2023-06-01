@@ -2,34 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class TodayWeightEditWidget extends StatefulWidget {
   TodayWeightEditWidget({
     super.key,
-    required this.seletedRecordSubType,
+    required this.importDateTime,
+    required this.seletedRecordIconType,
     required this.weightText,
+    required this.goalWeightText,
   });
 
-  RecordSubTypes seletedRecordSubType = RecordSubTypes.none;
+  RecordIconTypes seletedRecordIconType = RecordIconTypes.none;
   String weightText;
+  String goalWeightText;
+  DateTime importDateTime;
 
   @override
   State<TodayWeightEditWidget> createState() => _TodayWeightEditWidgetState();
 }
 
 class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
-  final TextEditingController textInputController = TextEditingController();
+  late Box<UserBox> userBox;
+  late Box<RecordBox> recordBox;
+
+  TextEditingController textInputController = TextEditingController();
   dynamic errorText;
   bool isEnabledOnPressed = true;
 
   setInputText() {
-    textInputController.text = widget.weightText;
+    switch (widget.seletedRecordIconType) {
+      case RecordIconTypes.addWeight:
+      case RecordIconTypes.editWeight:
+        textInputController.text = widget.weightText;
+        break;
+
+      case RecordIconTypes.editGoalWeight:
+        textInputController.text = widget.goalWeightText;
+        break;
+
+      default:
+    }
 
     checkEmptyText();
   }
@@ -40,8 +61,12 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
 
   @override
   void initState() {
-    setInputText();
     super.initState();
+
+    setInputText();
+
+    userBox = Hive.box<UserBox>('userBox');
+    recordBox = Hive.box<RecordBox>('recordBox');
   }
 
   @override
@@ -58,12 +83,34 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Map<RecordSubTypes, TextInputClass> textInputDatas = {
-      RecordSubTypes.weightReRecood: TextInputClass(
-        maxLength: tallMaxLength,
+    Map<RecordIconTypes, TextInputClass> textInputDatas = {
+      RecordIconTypes.addWeight: TextInputClass(
+        maxLength: weightMaxLength,
         prefixIcon: weightPrefixIcon,
         suffixText: 'kg',
-        hintText: tallHintText,
+        hintText: weightHintText,
+        inputTextErr: InputTextErrorClass(
+          min: weightMin,
+          max: weightMax,
+          errMsg: weightErrMsg,
+        ),
+      ),
+      RecordIconTypes.editWeight: TextInputClass(
+        maxLength: weightMaxLength,
+        prefixIcon: weightPrefixIcon,
+        suffixText: 'kg',
+        hintText: weightHintText,
+        inputTextErr: InputTextErrorClass(
+          min: weightMin,
+          max: weightMax,
+          errMsg: weightErrMsg,
+        ),
+      ),
+      RecordIconTypes.editGoalWeight: TextInputClass(
+        maxLength: weightMaxLength,
+        prefixIcon: goalWeightPrefixIcon,
+        suffixText: 'kg',
+        hintText: goalWeightHintText,
         inputTextErr: InputTextErrorClass(
           min: weightMin,
           max: weightMax,
@@ -72,25 +119,11 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       ),
     };
 
-    setMaxLength() {
-      return textInputDatas[widget.seletedRecordSubType]!.maxLength;
-    }
-
-    setPrefixIcon() {
-      return textInputDatas[widget.seletedRecordSubType]!.prefixIcon;
-    }
-
-    setSuffixText() {
-      return textInputDatas[widget.seletedRecordSubType]!.suffixText;
-    }
-
-    setHintText() {
-      return textInputDatas[widget.seletedRecordSubType]!.hintText;
-    }
+    TextInputClass inputDatas = textInputDatas[widget.seletedRecordIconType]!;
 
     setErrorText() {
-      var inputData = textInputDatas[widget.seletedRecordSubType]!;
-      var inputTextErr = inputData.inputTextErr;
+      TextInputClass inputData = textInputDatas[widget.seletedRecordIconType]!;
+      InputTextErrorClass inputTextErr = inputData.inputTextErr;
 
       return inputData.getErrorText(
         text: textInputController.text,
@@ -109,14 +142,40 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     }
 
     onPressedResister() {
-      var resultText = textInputController.text;
+      int importDateTimeInt = getDateTimeToInt(widget.importDateTime);
+      UserBox? userInfo = userBox.get('userBox');
+      RecordBox? recordInfo = recordBox.get(importDateTimeInt);
+      String text = textInputController.text;
+      DateTime now = DateTime.now();
 
-      switch (widget.seletedRecordSubType) {
-        case RecordSubTypes.weightReRecood:
-          context.read<DietInfoProvider>().changeWeightText(resultText);
+      print(widget.seletedRecordIconType);
+
+      switch (widget.seletedRecordIconType) {
+        case RecordIconTypes.addWeight:
+        case RecordIconTypes.editWeight:
+          if (recordInfo == null) {
+            recordBox.put(
+              importDateTimeInt,
+              RecordBox(
+                recordDateTime: now,
+                weight: stringToDouble(text),
+              ),
+            );
+
+            break;
+          }
+
+          recordInfo.recordDateTime = now;
+          recordInfo.weight = stringToDouble(text);
+          recordBox.put(importDateTimeInt, recordInfo);
+
           break;
-          // case RecordSubTypes.enterBodyFat:
-          // context.read<DietInfoProvider>().changeBodyFatText(resultText);
+
+        case RecordIconTypes.editGoalWeight:
+          if (userInfo == null) return null;
+
+          userInfo.goalWeight = stringToDouble(text);
+          userBox.put('userBox', userInfo);
           break;
 
         default:
@@ -124,24 +183,24 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       }
 
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.none);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
     onPressedCancel() {
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.none);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
     return Column(
       children: [
         SpaceHeight(height: tinySpace),
         TextInput(
-          maxLength: setMaxLength(),
-          prefixIcon: setPrefixIcon(),
-          suffixText: setSuffixText(),
-          hintText: setHintText(),
+          maxLength: inputDatas.maxLength,
+          prefixIcon: inputDatas.prefixIcon,
+          suffixText: inputDatas.suffixText,
+          hintText: inputDatas.hintText,
           errorText: errorText,
           onChanged: setOnChanged,
           counterText: '',
@@ -158,15 +217,3 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     );
   }
 }
-
-//  RecordSubTypes.enterBodyFat: TextInputClass(
-//         maxLength: bodyFatMaxLength,
-//         prefixIcon: bodyFatPrefixIcon,
-//         suffixText: '%',
-//         hintText: bodyFatHintText,
-//         inputTextErr: InputTextErrorClass(
-//           min: bodyFatMin,
-//           max: bodyFatMax,
-//           errMsg: bodyFatErrMsg,
-//         ),
-//       ),

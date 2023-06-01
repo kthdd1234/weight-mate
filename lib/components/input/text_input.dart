@@ -14,6 +14,7 @@ class TextInput extends StatefulWidget {
     required this.errorText,
     this.autofocus,
     this.controller,
+    this.keyboardType,
   });
 
   int maxLength;
@@ -25,6 +26,7 @@ class TextInput extends StatefulWidget {
   Function(String value) onChanged;
   bool? autofocus;
   TextEditingController? controller;
+  TextInputType? keyboardType;
 
   @override
   State<TextInput> createState() => _TextInputState();
@@ -37,7 +39,7 @@ class _TextInputState extends State<TextInput> {
       controller: widget.controller,
       style: Theme.of(context).textTheme.bodyLarge,
       autofocus: widget.autofocus != null,
-      keyboardType: inputKeyboardType,
+      keyboardType: widget.keyboardType ?? inputKeyboardType,
       textInputAction: TextInputAction.next,
       maxLength: widget.maxLength,
       decoration: InputDecoration(

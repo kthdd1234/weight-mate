@@ -9,25 +9,24 @@ class TodayWeightInfosWidget extends StatelessWidget {
   TodayWeightInfosWidget({
     super.key,
     this.weight,
-    required this.goalWeight,
-    required this.tall,
+    this.goalWeight,
+    this.tall,
     this.beforeWeight,
   });
 
-  double? weight, beforeWeight;
-  double goalWeight, tall;
+  double? weight, beforeWeight, goalWeight, tall;
 
   @override
   Widget build(BuildContext context) {
     setCalculatedGoalWeight() {
-      if (weight == null) {
+      if (weight == null || goalWeight == null) {
         return '- kg';
       }
 
-      final toTheGoal = goalWeight - weight!;
+      final toTheGoal = goalWeight! - weight!;
       final operator = goalWeight == weight!
           ? ''
-          : goalWeight > weight!
+          : goalWeight! > weight!
               ? '+'
               : '';
 
@@ -35,11 +34,11 @@ class TodayWeightInfosWidget extends StatelessWidget {
     }
 
     setCalculatedBMI() {
-      if (weight == null) {
+      if (weight == null || tall == null) {
         return '0.00';
       }
 
-      final cmToM = tall / 100;
+      final cmToM = tall! / 100;
       final bmi = weight! / (cmToM * cmToM);
       final bmiToFixed = bmi.toStringAsFixed(1);
 
@@ -63,7 +62,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
 
     return Column(
       children: [
-        SpaceHeight(height: regularSapce),
+        SpaceHeight(height: smallSpace),
         ContentsBox(
           backgroundColor: dialogBackgroundColor,
           contentsWidget: Row(

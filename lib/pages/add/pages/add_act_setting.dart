@@ -9,8 +9,13 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
+import 'package:flutter_app_weight_management/model/act_box/act_box.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -18,26 +23,33 @@ import 'package:flutter_app_weight_management/widgets/act_alarm.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_tap_widget.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
+import 'package:uuid/uuid.dart';
 import '../../../components/area/empty_area.dart';
 import '../../../components/picker/default_date_time_picker.dart';
 
 class AddActSetting extends StatefulWidget {
-  const AddActSetting({super.key});
+  AddActSetting({
+    super.key,
+    required this.actInfo,
+  });
+
+  ActInfoClass actInfo;
 
   @override
   State<AddActSetting> createState() => _AddActSettingState();
 }
 
 class _AddActSettingState extends State<AddActSetting> {
-  DateTime startActDateTime = DateTime.now();
-  DateTime? endActDateTime;
+  late Box<UserBox> userBox;
+  late Box<RecordBox> recordBox;
+  late Box<ActBox> actBox;
 
   TextEditingController nameController = TextEditingController();
-  TextEditingController memoController = TextEditingController();
-
-  bool isEnabledAlarm = true;
+  DateTime startActDateTime = DateTime.now();
+  DateTime? endActDateTime;
+  bool isAlarm = true;
   late DateTime alarmTime;
   late DateTime timeValue;
 
@@ -45,27 +57,76 @@ class _AddActSettingState extends State<AddActSetting> {
   void initState() {
     super.initState();
 
-    final now = DateTime.now();
-
+    DateTime now = DateTime.now();
+    nameController.text = widget.actInfo.subActTitle;
     alarmTime = DateTime(now.year, now.month, now.day, 10, 30);
     startActDateTime = DateTime.now();
+
+    userBox = Hive.box<UserBox>('userBox');
+    recordBox = Hive.box<RecordBox>('recordBox');
+    actBox = Hive.box<ActBox>('actBox');
   }
 
   @override
   Widget build(BuildContext context) {
-    final actType = context.watch<DietInfoProvider>().getActType();
-    final subActType = context.watch<DietInfoProvider>().getSubActType();
-
-    print(actType);
-    print(subActType);
-
     buttonEnabled() {
-      return false;
+      return nameController.text != '';
+    }
+
+    onChangedText(_) {
+      setState(() {});
     }
 
     onPressedBottomNavigationButton() {
-      print(nameController.text);
-      print(memoController.text);
+      final provider = context.read<DietInfoProvider>();
+      final userInfoState = provider.getUserInfo();
+      final recordInfoState = provider.getRecordInfo();
+      final now = DateTime.now();
+
+      if (buttonEnabled()) {
+        context.read<ImportDateTimeProvider>().setImportDateTime(now);
+
+        userBox.put(
+          'userBox',
+          UserBox(
+            userId: const Uuid().v1(),
+            tall: userInfoState.tall,
+            goalWeight: userInfoState.goalWeight,
+            recordStartDateTime: now,
+          ),
+        );
+
+        recordBox.put(
+          getDateTimeToInt(now),
+          RecordBox(
+            recordDateTime: now,
+            weight: recordInfoState.weight,
+            actList: [widget.actInfo.id],
+            memo: null,
+          ),
+        );
+
+        actBox.put(
+          widget.actInfo.id,
+          ActBox(
+            id: widget.actInfo.id,
+            mainActType: widget.actInfo.mainActType.toString(),
+            mainActTitle: widget.actInfo.mainActTitle,
+            subActType: widget.actInfo.subActType,
+            subActTitle: widget.actInfo.subActTitle,
+            startActDateTime: startActDateTime,
+            isAlarm: isAlarm,
+          ),
+        );
+
+        return Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/home-container',
+          (_) => false,
+        );
+      }
+
+      return null;
     }
 
     titleWidgets(String type) {
@@ -74,7 +135,7 @@ class _AddActSettingState extends State<AddActSetting> {
 
       return [
         Text(
-          '$text 설정',
+          '$text을 선택해주세요.',
           style: const TextStyle(color: buttonBackgroundColor, fontSize: 17),
         ),
         Row(
@@ -127,10 +188,11 @@ class _AddActSettingState extends State<AddActSetting> {
       showCupertinoModalPopup(
         context: context,
         builder: (context) => DefaultBottomSheet(
-          title: '${actTitles[actType]} 실천 알림',
+          title: '알림 시간 설정',
           widgets: [
             DefaultTimePicker(
               initialDateTime: alarmTime,
+              mode: CupertinoDatePickerMode.time,
               onDateTimeChanged: onDateTimeChanged,
             )
           ],
@@ -142,7 +204,15 @@ class _AddActSettingState extends State<AddActSetting> {
     }
 
     onChangedSwitch(bool newValue) {
-      setState(() => isEnabledAlarm = newValue);
+      setState(() => isAlarm = newValue);
+    }
+
+    onCounterText() {
+      if (widget.actInfo.subActType == 'custom') {
+        return mainActTypeCounterText[widget.actInfo.mainActType]!;
+      }
+
+      return '* 종류 이름은 언제든지 수정이 가능해요.';
     }
 
     return AddContainer(
@@ -150,7 +220,7 @@ class _AddActSettingState extends State<AddActSetting> {
         children: [
           SimpleStepper(currentStep: 4),
           SpaceHeight(height: regularSapce),
-          HeadlineText(text: '${actTitles[actType]} 실천 계획을 세워보세요.'),
+          HeadlineText(text: '${widget.actInfo.mainActTitle} 실천 계획을 세워보세요.'),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             contentsWidget: Column(
@@ -164,9 +234,10 @@ class _AddActSettingState extends State<AddActSetting> {
                   prefixIcon: Icons.edit,
                   suffixText: '',
                   hintText: '종류를 입력해주세요.',
-                  counterText: '(예: )',
-                  onChanged: (_) {},
+                  counterText: onCounterText(),
+                  onChanged: onChangedText,
                   errorText: null,
+                  keyboardType: TextInputType.text,
                 ),
                 SpaceHeight(height: regularSapce),
                 ContentsTitleText(text: '기간'),
@@ -180,12 +251,12 @@ class _AddActSettingState extends State<AddActSetting> {
                 ContentsTitleText(text: '알림'),
                 SpaceHeight(height: regularSapce),
                 ActAlarm(
-                  isEnabledAlarm: isEnabledAlarm,
-                  actType: actType,
+                  isEnabledAlarm: isAlarm,
+                  actInfo: widget.actInfo,
                   onChanged: onChangedSwitch,
                 ),
                 SpaceHeight(height: smallSpace),
-                isEnabledAlarm
+                isAlarm
                     ? TimeChipWidget(
                         id: 'dietAlarm',
                         time: alarmTime,

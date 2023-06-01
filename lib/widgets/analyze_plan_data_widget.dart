@@ -52,14 +52,14 @@ class AnalyzePlanDataWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CircularIcon(
-                  widthAndHeight: 30,
+                  size: 30,
                   borderRadius: 30,
                   icon: Icons.arrow_back_ios_outlined,
                   backgroundColor: typeBackgroundColor,
                 ),
                 SpaceWidth(width: regularSapce),
                 CircularIcon(
-                  widthAndHeight: 30,
+                  size: 30,
                   borderRadius: 30,
                   icon: Icons.arrow_forward_ios_outlined,
                   backgroundColor: typeBackgroundColor,

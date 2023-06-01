@@ -4,7 +4,7 @@ import 'package:flutter_app_weight_management/components/check/delete_diet_plan_
 import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -49,16 +49,16 @@ class _TodayDietPlanDeleteWdigetState extends State<TodayDietPlanDeleteWdiget> {
           .where((DietPlanClass dietPlan) =>
               deleteIds.contains(dietPlan.id) == false)
           .toList();
-      context.read<DietInfoProvider>().changeDietPlanList(filterList);
+      // context.read<DietInfoProvider>().changeDietPlanList(filterList);
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.none);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
     onPressedCancel() {
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.none);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
     List<DeleteDietPlanCheck> todayDietPlanList = widget.dietPlanList

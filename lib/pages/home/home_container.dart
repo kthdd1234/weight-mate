@@ -20,7 +20,7 @@ class _HomeContainerState extends State<HomeContainer> {
 
   List<eBottomNavigationBarItem> idList = [
     eBottomNavigationBarItem.record,
-    eBottomNavigationBarItem.history,
+    eBottomNavigationBarItem.calendar,
     eBottomNavigationBarItem.analyze,
     eBottomNavigationBarItem.setting
   ];
@@ -33,7 +33,7 @@ class _HomeContainerState extends State<HomeContainer> {
 
   List<BottomNavigationBarItem> items = const [
     BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
-    BottomNavigationBarItem(icon: Icon(Icons.article_outlined), label: '히스토리'),
+    BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '달력'),
     BottomNavigationBarItem(icon: Icon(Icons.equalizer), label: '분석'),
     BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
   ];

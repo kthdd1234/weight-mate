@@ -4,7 +4,7 @@ import 'package:flutter_app_weight_management/components/divider/width_divider.d
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -32,10 +32,10 @@ class _TodayDietPlanListWidgetState extends State<TodayDietPlanListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    RecordSubTypes seletedRecordSubType =
-        context.watch<RecordSubTypeProvider>().seletedRecordSubType;
+    RecordIconTypes seletedRecordSubType =
+        context.watch<RecordIconTypeProvider>().seletedRecordIconType;
 
-    if (seletedRecordSubType == RecordSubTypes.addDietPlan) {
+    if (seletedRecordSubType == RecordIconTypes.addDietPlan) {
       setState(() => showEmptyTouchArea = false);
     }
 
@@ -54,12 +54,12 @@ class _TodayDietPlanListWidgetState extends State<TodayDietPlanListWidget> {
         );
         showEmptyTouchArea = true;
         widget.dietPlanList.add(newDietPlan);
+        // context
+        //     .read<DietInfoProvider>()
+        //     .changeDietPlanList(widget.dietPlanList);
         context
-            .read<DietInfoProvider>()
-            .changeDietPlanList(widget.dietPlanList);
-        context
-            .read<RecordSubTypeProvider>()
-            .setSeletedRecordSubType(RecordSubTypes.none);
+            .read<RecordIconTypeProvider>()
+            .setSeletedRecordIconType(RecordIconTypes.none);
       });
     }
 
@@ -67,15 +67,15 @@ class _TodayDietPlanListWidgetState extends State<TodayDietPlanListWidget> {
       setState(() {
         showEmptyTouchArea = true;
         context
-            .read<RecordSubTypeProvider>()
-            .setSeletedRecordSubType(RecordSubTypes.none);
+            .read<RecordIconTypeProvider>()
+            .setSeletedRecordIconType(RecordIconTypes.none);
       });
     }
 
     onTapTodayDietPlanList() {
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.actDietPlan);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.actDietPlan);
     }
 
     List<TodayDietPlanItemWidget> todayDietPlanList = widget.dietPlanList

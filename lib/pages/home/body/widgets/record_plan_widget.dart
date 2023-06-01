@@ -7,7 +7,7 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diet
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diet_plan_delete_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diet_plan_list_widget.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -19,25 +19,25 @@ class RecordPlanWidget extends StatelessWidget {
     required this.seletedRecordSubType,
   });
 
-  RecordSubTypes seletedRecordSubType;
+  RecordIconTypes seletedRecordSubType;
 
   @override
   Widget build(BuildContext context) {
-    var dietPlanList = context.watch<DietInfoProvider>().getDietPlanList();
+    // var dietPlanList = context.watch<DietInfoProvider>().getDietPlanList();
     var seletedRecordSubType =
-        context.watch<RecordSubTypeProvider>().getSeletedRecordSubType();
+        context.watch<RecordIconTypeProvider>().getSeletedRecordIconType();
 
-    List<RecordSubTypeClass> subClassList = [
-      RecordSubTypeClass(
-        enumId: RecordSubTypes.addDietPlan,
+    List<RecordIconClass> subClassList = [
+      RecordIconClass(
+        enumId: RecordIconTypes.addDietPlan,
         icon: Icons.add,
       ),
-      RecordSubTypeClass(
-        enumId: RecordSubTypes.actDietPlan,
+      RecordIconClass(
+        enumId: RecordIconTypes.actDietPlan,
         icon: Icons.check,
       ),
-      RecordSubTypeClass(
-        enumId: RecordSubTypes.removeDietPlan,
+      RecordIconClass(
+        enumId: RecordIconTypes.removeDietPlan,
         icon: Icons.delete,
       )
     ];
@@ -50,15 +50,15 @@ class RecordPlanWidget extends StatelessWidget {
             ))
         .toList();
 
-    Widget setRouteTodayOfDietPlanWidget() {
-      if (RecordSubTypes.actDietPlan == seletedRecordSubType) {
-        return TodayDietPlanActionWidget(dietPlanList: dietPlanList);
-      } else if (RecordSubTypes.removeDietPlan == seletedRecordSubType) {
-        return TodayDietPlanDeleteWdiget(dietPlanList: dietPlanList);
-      }
+    // Widget setRouteTodayOfDietPlanWidget() {
+    //   if (RecordIconTypes.actDietPlan == seletedRecordSubType) {
+    //     return TodayDietPlanActionWidget(dietPlanList: dietPlanList);
+    //   } else if (RecordIconTypes.removeDietPlan == seletedRecordSubType) {
+    //     return TodayDietPlanDeleteWdiget(dietPlanList: dietPlanList);
+    //   }
 
-      return TodayDietPlanListWidget(dietPlanList: dietPlanList);
-    }
+    //   return TodayDietPlanListWidget(dietPlanList: dietPlanList);
+    // }
 
     return ContentsBox(
       contentsWidget: Column(
@@ -69,7 +69,7 @@ class RecordPlanWidget extends StatelessWidget {
             sub: subWidgets,
           ),
           SpaceHeight(height: regularSapce),
-          setRouteTodayOfDietPlanWidget()
+          // setRouteTodayOfDietPlanWidget()
         ],
       ),
     );

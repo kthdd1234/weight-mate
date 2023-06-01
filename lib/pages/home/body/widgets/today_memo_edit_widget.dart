@@ -3,7 +3,7 @@ import 'package:flutter_app_weight_management/components/button/ok_and_cancel_bu
 import 'package:flutter_app_weight_management/components/input/multi_line_text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:provider/provider.dart';
@@ -40,14 +40,14 @@ class _TodayMemoEditWidgetState extends State<TodayMemoEditWidget> {
     onPressedOk() {
       // context.read<DietInfoProvider>().changeTodayMemoText(textController.text);
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.none);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
     onPressedCancel() {
       context
-          .read<RecordSubTypeProvider>()
-          .setSeletedRecordSubType(RecordSubTypes.none);
+          .read<RecordIconTypeProvider>()
+          .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
     onChanged(String value) {

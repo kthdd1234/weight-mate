@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
@@ -33,6 +34,12 @@ getDateTimeToSlashYY(DateTime? dateTime) {
 
 timeToString(DateTime dateTime) {
   return DateFormat('a hh:mm').format(dateTime);
+}
+
+stringToDouble(String? str) {
+  if (str == null) return null;
+
+  return double.parse(str);
 }
 
 int getDateTimeToInt(DateTime? dateTime) {
@@ -115,5 +122,28 @@ List<DietPlanClass> getDietPlanClassList(
         ),
       )
       .toList();
-  ;
+}
+
+showSnackBar({required BuildContext context, required String text}) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      action: SnackBarAction(
+        textColor: buttonBackgroundColor,
+        label: '확인',
+        onPressed: () {
+          // Code to execute.
+        },
+      ),
+      content: Text(text),
+      duration: const Duration(milliseconds: 1500),
+      width: 270.0,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+      ),
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+    ),
+  );
 }

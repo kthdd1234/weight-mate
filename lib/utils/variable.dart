@@ -80,49 +80,49 @@ var todayOfWiseSayingList = [
   WiseSayingClass(wiseSaying: '먹는거요? 귀찮아요.', name: '김민희'),
 ];
 
-var actTitles = {
-  ActTypeEnum.diet: '다이어트',
-  ActTypeEnum.exercise: '운동',
-  ActTypeEnum.lifestyle: '생활 습관'
+var mainActEtc = {
+  MainActTypes.diet: '를',
+  MainActTypes.exercise: '을',
+  MainActTypes.lifestyle: '을'
 };
 
-var actSubs = {
-  ActTypeEnum.diet: '를',
-  ActTypeEnum.exercise: '을',
-  ActTypeEnum.lifestyle: '을'
-};
-
-var mainItemTypeClassList = [
+var mainAcyTypeClassList = [
   ItemTypeClass(
-    id: ActTypeEnum.diet,
+    id: MainActTypes.diet,
     title: '다이어트',
     desc: '간헐적 단식, 저탄고지 다이어트 등',
     icon: Icons.monitor_weight,
   ),
   ItemTypeClass(
-    id: ActTypeEnum.exercise,
+    id: MainActTypes.exercise,
     title: '운동',
     desc: '헬스, 러닝, 산책, 필라테스 등',
     icon: Icons.directions_run_outlined,
   ),
   ItemTypeClass(
-    id: ActTypeEnum.lifestyle,
+    id: MainActTypes.lifestyle,
     title: '생활습관',
     desc: '아침에 체중 기록하기, 야식 금지 등',
     icon: Icons.accessibility_new_sharp,
   )
 ];
 
-var subItemTypeClassList = {
-  ActTypeEnum.diet: dietItemTypeClassList,
-  ActTypeEnum.exercise: exerciseItemTypeClassList,
-  ActTypeEnum.lifestyle: lifeStyleItemTypeClassList,
+var subActTypeClassList = {
+  MainActTypes.diet: dietItemTypeClassList,
+  MainActTypes.exercise: exerciseItemTypeClassList,
+  MainActTypes.lifestyle: lifeStyleItemTypeClassList,
 };
 
 var initItemType = {
-  ActTypeEnum.diet: 'intermittentFasting',
-  ActTypeEnum.exercise: 'health',
-  ActTypeEnum.lifestyle: 'weightRecord',
+  MainActTypes.diet: 'intermittentFasting',
+  MainActTypes.exercise: 'health',
+  MainActTypes.lifestyle: 'weightRecord',
+};
+
+var mainActTypeCounterText = {
+  MainActTypes.diet: '(예: 황제 다이어트, 반공기 다이어트 등)',
+  MainActTypes.exercise: '(예: 등산, 수영, 테니스 등)',
+  MainActTypes.lifestyle: '(예: 저녁에 샐러드 먹기, 다이어트 기간 중 술 안먹기 등)',
 };
 
 var dietItemTypeClassList = [
@@ -223,3 +223,22 @@ var lifeStyleItemTypeClassList = [
     icon: Icons.add_circle_outline,
   ),
 ];
+
+Map<RecordIconTypes, Map<String, dynamic>> weightContentsTitles = {
+  RecordIconTypes.none: {
+    'icon': Icons.align_vertical_bottom_rounded,
+    'title': '오늘의 체중',
+  },
+  RecordIconTypes.addWeight: {
+    'icon': Icons.add_circle_outline,
+    'title': '오늘의 체중',
+  },
+  RecordIconTypes.editWeight: {
+    'icon': Icons.edit,
+    'title': '오늘의 체중',
+  },
+  RecordIconTypes.editGoalWeight: {
+    'icon': Icons.flag,
+    'title': '목표 체중',
+  },
+};

@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
+import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 
 class DefaultBottomSheet extends StatelessWidget {
   DefaultBottomSheet({
@@ -24,8 +26,11 @@ class DefaultBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onCloseButton(String id) {
-      //
+    onCloseIcon(Color color) {
+      return GestureDetector(
+        onTap: () => closeDialog(context),
+        child: Icon(Icons.close, color: color),
+      );
     }
 
     return Container(
@@ -43,8 +48,12 @@ class DefaultBottomSheet extends StatelessWidget {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [ContentsTitleText(text: title)],
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                onCloseIcon(Colors.transparent),
+                ContentsTitleText(text: title),
+                onCloseIcon(buttonBackgroundColor),
+              ],
             ),
             SpaceHeight(height: regularSapce),
             Column(children: widgets),

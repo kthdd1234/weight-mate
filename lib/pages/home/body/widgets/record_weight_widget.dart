@@ -1,37 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
+import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
+import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
-import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
-import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_infos_widget.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-List<RecordSubTypeClass> subClassList = [
-  RecordSubTypeClass(
-    enumId: RecordSubTypes.weightReRecood,
+List<RecordIconClass> recordIconClassList = [
+  RecordIconClass(
+    enumId: RecordIconTypes.editWeight,
     icon: Icons.edit,
   ),
-  RecordSubTypeClass(
-    enumId: RecordSubTypes.resetWeight,
-    icon: Icons.replay,
-  )
+  RecordIconClass(
+    enumId: RecordIconTypes.editGoalWeight,
+    icon: Icons.flag,
+  ),
+  RecordIconClass(
+    enumId: RecordIconTypes.removeWeight,
+    icon: Icons.delete,
+  ),
 ];
 
 class RecordWeightWidget extends StatefulWidget {
   RecordWeightWidget({
     super.key,
-    required this.seletedRecordSubType,
+    required this.seletedRecordIconType,
     required this.recordSelectedDateTime,
   });
 
-  RecordSubTypes seletedRecordSubType;
+  RecordIconTypes seletedRecordIconType;
   DateTime recordSelectedDateTime;
 
   @override
@@ -39,46 +50,114 @@ class RecordWeightWidget extends StatefulWidget {
 }
 
 class _RecordWeightWidgetState extends State<RecordWeightWidget> {
-  late Box<UserInfoBox> userInfoBox;
-  late Box<RecordInfoBox> recordInfoBox;
+  late Box<UserBox> userBox;
+  late Box<RecordBox> recordBox;
 
   @override
   void initState() {
-    userInfoBox = Hive.box<UserInfoBox>('userInfoBox');
-    recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
+    userBox = Hive.box<UserBox>('userBox');
+    recordBox = Hive.box<RecordBox>('recordBox');
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final DateTime selectedDateTime =
-        context.watch<RecordSelectedDateTimeProvider>().getSelectedDateTime();
+    final DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+
+    setIconType(enumId) {
+      context.read<RecordIconTypeProvider>().setSeletedRecordIconType(enumId);
+    }
+
+    onTapIcon(enumId) {
+      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
+
+      if (recordInfo?.weight == null) {
+        return showSnackBar(context: context, text: '오늘의 체중을 입력해주세요.');
+      }
+
+      setIconType(enumId);
+    }
 
     setIconWidgets() {
-      return subClassList
-          .map((element) => DefaultIcon(
-                id: element.enumId,
-                icon: element.icon,
-                onTap: (id) {},
-              ))
+      return recordIconClassList
+          .map(
+            (element) => Row(
+              children: [
+                SpaceWidth(width: tinySpace),
+                CircularIcon(
+                  size: 30,
+                  borderRadius: 5,
+                  icon: element.icon,
+                  backgroundColor: typeBackgroundColor,
+                  adjustSize: 12,
+                  id: element.enumId,
+                  onTap: onTapIcon,
+                ),
+              ],
+            ),
+          )
           .toList();
     }
 
-    setMainWidgets({
+    onTapEmptyRecordArea() {
+      setIconType(RecordIconTypes.addWeight);
+    }
+
+    contentsWidgets({
       double? weight,
-      required double tall,
-      required double goalWeight,
+      double? tall,
+      double? goalWeight,
       double? beforeWeight,
     }) {
-      List<RecordSubTypes> enumIds = [
-        RecordSubTypes.weightReRecood,
+      List<RecordIconTypes> editEnumIds = [
+        RecordIconTypes.addWeight,
+        RecordIconTypes.editWeight,
+        RecordIconTypes.editGoalWeight
       ];
 
-      if (enumIds.contains(widget.seletedRecordSubType)) {
+      if (editEnumIds.contains(widget.seletedRecordIconType)) {
+        final isAddWeight =
+            widget.seletedRecordIconType == RecordIconTypes.addWeight;
+
         return TodayWeightEditWidget(
-          seletedRecordSubType: widget.seletedRecordSubType,
-          weightText: weight.toString(),
+          importDateTime: importDateTime,
+          seletedRecordIconType: widget.seletedRecordIconType,
+          weightText: isAddWeight ? '' : weight.toString(),
+          goalWeightText: goalWeight.toString(),
+        );
+      } else if (widget.seletedRecordIconType == RecordIconTypes.removeWeight) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (timeStamp) {
+            showDialog(
+              context: context,
+              builder: (context) => ConfirmDialog(
+                width: 230,
+                titleText: '데이터 삭제',
+                contentIcon: Icons.delete_forever,
+                contentText1: '오늘의 체중 데이터를',
+                contentText2: '삭제하시겠습니까?',
+                onPressedOk: ,
+              ),
+            );
+            setIconType(RecordIconTypes.none);
+          },
+        );
+      }
+
+      if (weight == null) {
+        return Column(
+          children: [
+            SpaceHeight(height: smallSpace),
+            EmptyTextArea(
+              text: '오늘의 체중을 입력해보세요.',
+              icon: Icons.add,
+              topHeight: 10,
+              downHeight: 10,
+              onTap: onTapEmptyRecordArea,
+            ),
+          ],
         );
       }
 
@@ -91,53 +170,70 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
     }
 
     setTall() {
-      UserInfoBox? userInfo = userInfoBox.get('userInfo');
-      return userInfo!.tall;
+      UserBox? userInfo = userBox.get('userBox');
+
+      if (userInfo == null) return null;
+      return userInfo.tall;
     }
 
     setWeight() {
-      final recordInfo = recordInfoBox.get(getDateTimeToInt(selectedDateTime));
-
-      if (recordInfo == null) return null;
-
-      return recordInfo.weight;
+      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
+      return recordInfo?.weight;
     }
 
     setGoalWeight() {
-      UserInfoBox? userInfo = userInfoBox.get('userInfo');
-      return userInfo!.goalWeight;
+      UserBox? userInfo = userBox.get('userBox');
+      return userInfo?.goalWeight;
     }
 
     double? setBeforeWeight() {
-      List<RecordInfoBox> values = recordInfoBox.values.toList();
+      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
 
-      if (values.length < 2) {
-        return 0.0;
-      }
+      if (recordInfo == null) return null;
 
-      int firstIndex = values.indexWhere(
+      List<RecordBox> recordBoxValues = recordBox.values.toList();
+
+      int index = recordBoxValues.indexWhere(
         (element) =>
             getDateTimeToInt(element.recordDateTime) ==
-            getDateTimeToInt(selectedDateTime),
+            getDateTimeToInt(importDateTime),
       );
-      List<RecordInfoBox> sublist = values.sublist(0, firstIndex).toList();
-      List<RecordInfoBox> reverseList = List.from(sublist.reversed);
 
-      RecordInfoBox result =
+      if (index == 0) return 0.0;
+
+      List<RecordBox> sublist = recordBoxValues.sublist(0, index).toList();
+      List<RecordBox> reverseList = List.from(sublist.reversed);
+      RecordBox result =
           reverseList.firstWhere((element) => element.weight != null);
 
       return result.weight;
+    }
+
+    setContetnsTitle() {
+      Map<String, dynamic>? contentsTitleInfo =
+          weightContentsTitles[widget.seletedRecordIconType];
+
+      if (contentsTitleInfo == null) return '오늘의 체중';
+      return contentsTitleInfo['title'];
+    }
+
+    setContetnsIcon() {
+      Map<String, dynamic>? contentsTitleInfo =
+          weightContentsTitles[widget.seletedRecordIconType];
+
+      if (contentsTitleInfo == null) return Icons.align_vertical_bottom_rounded;
+      return contentsTitleInfo['icon'];
     }
 
     return ContentsBox(
       contentsWidget: Column(
         children: [
           ContentsTitleText(
-            text: '오늘의 체중',
+            text: setContetnsTitle(),
             sub: setIconWidgets(),
-            icon: Icons.align_vertical_bottom_rounded,
+            icon: setContetnsIcon(),
           ),
-          setMainWidgets(
+          contentsWidgets(
             tall: setTall(),
             weight: setWeight(),
             goalWeight: setGoalWeight(),

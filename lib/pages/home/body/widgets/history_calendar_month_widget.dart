@@ -31,6 +31,7 @@ class _HistoryCalendarMonthWidgetState
       showDialog(
         context: context,
         builder: (BuildContext context) => ConfirmDialog(
+          width: 200,
           titleText: '초기화',
           contentIcon: Icons.replay_rounded,
           contentText1: '${getDateTimeToStr(widget.selectedDateTime)}',

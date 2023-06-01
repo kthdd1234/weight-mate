@@ -7,7 +7,7 @@ import 'package:flutter_app_weight_management/components/text/contents_title_tex
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_widget.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -19,24 +19,24 @@ class RecordMemoWidget extends StatelessWidget {
     required this.seletedRecordSubType,
   });
 
-  RecordSubTypes seletedRecordSubType;
+  RecordIconTypes seletedRecordSubType;
 
   @override
   Widget build(BuildContext context) {
     // String todayMemoText = context.watch<DietInfoProvider>().getTodayMemoText();
     // todo: hive 데이터 가져와야 한다.
 
-    List<RecordSubTypeClass> subClassList = [
-      RecordSubTypeClass(
-        enumId: RecordSubTypes.editNote,
+    List<RecordIconClass> subClassList = [
+      RecordIconClass(
+        enumId: RecordIconTypes.editNote,
         icon: Icons.edit,
       ),
-      RecordSubTypeClass(
-        enumId: RecordSubTypes.addEyeBody,
+      RecordIconClass(
+        enumId: RecordIconTypes.addEyeBody,
         icon: Icons.add_photo_alternate,
       ),
-      RecordSubTypeClass(
-        enumId: RecordSubTypes.resetNote,
+      RecordIconClass(
+        enumId: RecordIconTypes.resetNote,
         icon: Icons.replay,
       )
     ];
@@ -50,7 +50,7 @@ class RecordMemoWidget extends StatelessWidget {
         .toList();
 
     Widget setRouteTodayOfMemoWidget() {
-      if (RecordSubTypes.editNote == seletedRecordSubType) {
+      if (RecordIconTypes.editNote == seletedRecordSubType) {
         return TodayMemoEditWidget(todayMemoText: '');
       } else if ('' == '') {
         return EmptyTextArea(
@@ -59,8 +59,8 @@ class RecordMemoWidget extends StatelessWidget {
             text: '오늘의 메모를 추가해보세요.',
             icon: Icons.add,
             onTap: () => context
-                .read<RecordSubTypeProvider>()
-                .setSeletedRecordSubType(RecordSubTypes.editNote));
+                .read<RecordIconTypeProvider>()
+                .setSeletedRecordIconType(RecordIconTypes.editNote));
       }
 
       return TodayMemoWidget(text: '');

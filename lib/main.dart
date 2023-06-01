@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
-import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
+import 'package:flutter_app_weight_management/model/act_box/act_box.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_act_names.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_act_setting.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_act_type.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_app_weight_management/pages/common/alarm_setting_page.da
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_sub_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -28,11 +29,11 @@ void main() async {
         ChangeNotifierProvider<DietInfoProvider>(
           create: (_) => DietInfoProvider(),
         ),
-        ChangeNotifierProvider<RecordSubTypeProvider>(
-          create: (_) => RecordSubTypeProvider(),
+        ChangeNotifierProvider<RecordIconTypeProvider>(
+          create: (_) => RecordIconTypeProvider(),
         ),
-        ChangeNotifierProvider<RecordSelectedDateTimeProvider>(
-          create: (_) => RecordSelectedDateTimeProvider(),
+        ChangeNotifierProvider<ImportDateTimeProvider>(
+          create: (_) => ImportDateTimeProvider(),
         )
       ],
       child: const MyApp(),
@@ -43,11 +44,13 @@ void main() async {
 _initHive() async {
   await Hive.initFlutter();
 
-  Hive.registerAdapter(UserInfoBoxAdapter());
-  Hive.registerAdapter(RecordInfoBoxAdapter());
+  Hive.registerAdapter(UserBoxAdapter());
+  Hive.registerAdapter(RecordBoxAdapter());
+  Hive.registerAdapter(ActBoxAdapter());
 
-  await Hive.openBox<UserInfoBox>('userInfoBox');
-  await Hive.openBox<RecordInfoBox>('recordInfoBox');
+  await Hive.openBox<UserBox>('userBox');
+  await Hive.openBox<RecordBox>('recordBox');
+  await Hive.openBox<ActBox>('actBox');
 }
 
 class MyApp extends StatelessWidget {
@@ -55,6 +58,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actInfo = context.watch<DietInfoProvider>().getActInfo();
+
     return MaterialApp(
       title: 'Flutter Demo',
       localizationsDelegates: const [
@@ -68,13 +73,13 @@ class MyApp extends StatelessWidget {
       ],
       theme: AppThemes.lightTheme,
       routes: {
-        '/add-body-info': (context) => AddBodyInfo(),
-        '/add-act-type': (context) => AddActType(),
-        '/add-act-names': (context) => AddActNames(),
-        '/add-act-setting': (context) => AddActSetting(),
-        '/home-container': (context) => HomeContainer(),
-        '/screen-lock': (context) => ScreenLockPage(),
-        '/alarm-setting': (context) => AlarmSettingPage(),
+        '/add-body-info': (context) => const AddBodyInfo(),
+        '/add-act-type': (context) => AddActType(actInfo: actInfo),
+        '/add-act-names': (context) => AddActNames(actInfo: actInfo),
+        '/add-act-setting': (context) => AddActSetting(actInfo: actInfo),
+        '/home-container': (context) => const HomeContainer(),
+        '/screen-lock': (context) => const ScreenLockPage(),
+        '/alarm-setting': (context) => const AlarmSettingPage(),
       },
       home: AppFramework(widget: const AddBodyInfo()),
     );

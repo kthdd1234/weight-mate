@@ -30,7 +30,7 @@ class TodayDietPlanItemWidget extends StatelessWidget {
             Row(
               children: [
                 CircularIcon(
-                  widthAndHeight: 40,
+                  size: 40,
                   borderRadius: 10,
                   icon: icon,
                   backgroundColor: typeBackgroundColor,

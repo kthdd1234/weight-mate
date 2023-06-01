@@ -13,7 +13,7 @@ class AnalyzeWeightChangeDatetimeWdiget extends StatelessWidget {
     };
 
     return CircularIcon(
-      widthAndHeight: 30,
+      size: 30,
       borderRadius: 30,
       icon: arrowInfo[arrow]!,
       backgroundColor: typeBackgroundColor,

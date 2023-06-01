@@ -48,7 +48,7 @@ class _RecordAlarmWidgetState extends State<RecordAlarmWidget> {
         builder: (context) => DefaultBottomSheet(
           title: '알림 시간',
           widgets: [
-            CupertinoDatePicker(
+            DefaultTimePicker(
               initialDateTime: DateTime.now(),
               mode: CupertinoDatePickerMode.time,
               onDateTimeChanged: onDateTimeChanged,

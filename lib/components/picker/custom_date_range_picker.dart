@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_app_weight_management/model/record_info/record_info.dart';
-import 'package:flutter_app_weight_management/model/user_info/user_info.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/calendar_month_cell_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -30,16 +30,16 @@ class CustomDateRangePicker extends StatefulWidget {
 }
 
 class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
-  late Box<UserInfoBox> userInfoBox;
-  late Box<RecordInfoBox> recordInfoBox;
+  late Box<UserBox> userBox;
+  late Box<RecordBox> recordBox;
 
   DateRangePickerController controller = DateRangePickerController();
   String currentView = 'month';
 
   @override
   void initState() {
-    userInfoBox = Hive.box<UserInfoBox>('userInfoBox');
-    recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
+    userBox = Hive.box<UserBox>('userBox');
+    recordBox = Hive.box<RecordBox>('recordBox');
 
     super.initState();
   }
@@ -52,17 +52,11 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     ) {
       Set<String> object = <String>{};
       int dateTimeToInt = getDateTimeToInt(details.date);
-      RecordInfoBox? recordInfo = recordInfoBox.get(dateTimeToInt);
+      RecordBox? recordInfo = recordBox.get(dateTimeToInt);
 
       if (recordInfo != null) {
         if (recordInfo.weight != null) object.add('weight');
         if (recordInfo.memo != null) object.add('memo');
-        if (recordInfo.dietPlanList != null) {
-          if (recordInfo.dietPlanList!
-              .every((element) => element['isAction'])) {
-            object.add('action');
-          }
-        }
       }
 
       return CalendarMonthCellWidget(
@@ -85,7 +79,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
     }
 
     return ValueListenableBuilder(
-      valueListenable: recordInfoBox.listenable(),
+      valueListenable: recordBox.listenable(),
       builder: (context, box, boxWidget) {
         return SfDateRangePicker(
           controller: controller,

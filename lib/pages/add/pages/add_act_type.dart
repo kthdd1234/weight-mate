@@ -3,6 +3,7 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/act_type_widget.dart';
@@ -14,27 +15,40 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class AddActType extends StatefulWidget {
-  const AddActType({super.key});
+  AddActType({
+    super.key,
+    required this.actInfo,
+  });
+
+  ActInfoClass actInfo;
 
   @override
   State<AddActType> createState() => _AddActTypeState();
 }
 
 class _AddActTypeState extends State<AddActType> {
-  ActTypeEnum selectedType = ActTypeEnum.diet;
+  MainActTypes mainActType = MainActTypes.diet;
 
   @override
   Widget build(BuildContext context) {
     buttonEnabled() {
-      return selectedType != ActTypeEnum.none;
+      return mainActType != MainActTypes.none;
     }
 
     onPressedBottomNavigationButton() {
       if (buttonEnabled()) {
-        context.read<DietInfoProvider>().changeActType(selectedType);
-        context
-            .read<DietInfoProvider>()
-            .changeSubActType(initItemType[selectedType]!);
+        Map<MainActTypes, String> mainActTitles = {
+          MainActTypes.none: '',
+          MainActTypes.diet: '다이어트',
+          MainActTypes.exercise: '운동',
+          MainActTypes.lifestyle: '생활습관'
+        };
+
+        widget.actInfo.mainActType = mainActType;
+        widget.actInfo.mainActTitle = mainActTitles[mainActType]!;
+
+        context.read<DietInfoProvider>().changeActInfo(widget.actInfo);
+
         Navigator.pushNamed(context, '/add-act-names');
       }
 
@@ -42,16 +56,16 @@ class _AddActTypeState extends State<AddActType> {
     }
 
     onTap(dynamic type) {
-      setState(() => selectedType = type);
+      setState(() => mainActType = type);
     }
 
-    List<ActTypeWidget> itemTypeWidgets = mainItemTypeClassList
+    List<ActTypeWidget> itemTypeWidgets = mainAcyTypeClassList
         .map((item) => ActTypeWidget(
               id: item.id,
               title: item.title,
               desc: item.desc,
               icon: item.icon,
-              isEnabled: selectedType == item.id,
+              isEnabled: mainActType == item.id,
               onTap: onTap,
             ))
         .toList();

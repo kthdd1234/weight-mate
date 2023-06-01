@@ -46,7 +46,7 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CircularIcon(
-                  widthAndHeight: 40,
+                  size: 40,
                   borderRadius: 30,
                   icon: Icons.auto_awesome_outlined,
                   backgroundColor: dialogBackgroundColor,

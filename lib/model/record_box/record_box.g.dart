@@ -1,33 +1,31 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'record_info.dart';
+part of 'record_box.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class RecordInfoBoxAdapter extends TypeAdapter<RecordInfoBox> {
+class RecordBoxAdapter extends TypeAdapter<RecordBox> {
   @override
-  final int typeId = 3;
+  final int typeId = 2;
 
   @override
-  RecordInfoBox read(BinaryReader reader) {
+  RecordBox read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return RecordInfoBox(
-      recordDateTime: fields[0] as DateTime?,
+    return RecordBox(
+      recordDateTime: fields[0] as DateTime,
       weight: fields[1] as double?,
-      dietPlanList: (fields[2] as List?)
-          ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
-          .toList(),
+      actList: (fields[2] as List?)?.cast<String>(),
       memo: fields[3] as String?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, RecordInfoBox obj) {
+  void write(BinaryWriter writer, RecordBox obj) {
     writer
       ..writeByte(4)
       ..writeByte(0)
@@ -35,7 +33,7 @@ class RecordInfoBoxAdapter extends TypeAdapter<RecordInfoBox> {
       ..writeByte(1)
       ..write(obj.weight)
       ..writeByte(2)
-      ..write(obj.dietPlanList)
+      ..write(obj.actList)
       ..writeByte(3)
       ..write(obj.memo);
   }
@@ -46,7 +44,7 @@ class RecordInfoBoxAdapter extends TypeAdapter<RecordInfoBox> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is RecordInfoBoxAdapter &&
+      other is RecordBoxAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

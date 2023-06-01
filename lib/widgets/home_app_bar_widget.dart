@@ -21,7 +21,7 @@ class HomeAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
-  List<String> titleList = ['기록', '히스토리', '분석', '더보기'];
+  List<String> titleList = ['기록', '달력', '분석', '더보기'];
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
   Widget build(BuildContext context) {
     setAppBarCalendarTextWidget() {
       if (eBottomNavigationBarItem.record == widget.id) {
-        return AppBarCalendarDayWidget();
+        return const ImportDateTimeTitleWidget();
       }
 
       return Text(titleList[widget.id.index]);

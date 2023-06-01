@@ -7,19 +7,20 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
 
 class ConfirmDialog extends StatelessWidget {
-  ConfirmDialog({
-    super.key,
-    required this.titleText,
-    required this.contentIcon,
-    required this.contentText1,
-    required this.contentText2,
-    required this.onPressedOk,
-  });
+  ConfirmDialog(
+      {super.key,
+      required this.titleText,
+      required this.contentIcon,
+      required this.contentText1,
+      required this.contentText2,
+      required this.onPressedOk,
+      required this.width});
 
   String titleText;
   IconData contentIcon;
   String contentText1;
   String contentText2;
+  double width;
   Function() onPressedOk;
 
   @override
@@ -46,6 +47,7 @@ class ConfirmDialog extends StatelessWidget {
           child: Column(
             children: [
               ContentsBox(
+                width: width,
                 height: 123,
                 contentsWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.center,

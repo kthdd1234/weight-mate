@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class RecordSelectedDateTimeProvider with ChangeNotifier {
-  late DateTime selectedDateTime;
+class ImportDateTimeProvider with ChangeNotifier {
+  late DateTime importDateTime;
 
-  DateTime getSelectedDateTime() {
-    return selectedDateTime;
+  DateTime getImportDateTime() {
+    return importDateTime;
   }
 
-  setSelectedDateTime(DateTime dataTime) {
-    selectedDateTime = dataTime;
+  setImportDateTime(DateTime dataTime) {
+    importDateTime = dataTime;
     notifyListeners();
   }
 }

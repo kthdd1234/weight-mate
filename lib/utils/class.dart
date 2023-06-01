@@ -2,46 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
-class RecordInfoListClass {
-  RecordInfoListClass({
-    required this.recordInfoList,
+class UserInfoClass {
+  UserInfoClass({
+    required this.userId,
+    required this.tall,
+    required this.goalWeight,
+    required this.recordStartDateTime,
   });
 
-  List<RecordInfoClass> recordInfoList;
+  String userId;
+  double tall;
+  double goalWeight;
+  DateTime recordStartDateTime;
 }
 
 class RecordInfoClass {
   RecordInfoClass({
-    this.recordDateTime,
+    required this.recordDateTime,
     this.weight,
-    this.dietPlanList,
+    this.actList,
     this.memo,
-    required this.wiseSaying,
   });
 
-  DateTime? recordDateTime;
-
+  DateTime recordDateTime;
   double? weight;
-  double? bodyFat;
-  List<Map<String, dynamic>>? dietPlanList;
+  List<String>? actList;
   String? memo;
-  Map<String, String> wiseSaying;
 }
 
-class UserInfoClass {
-  UserInfoClass({
-    required this.tall,
-    required this.goalWeight,
-    required this.startDietDateTime,
-    required this.endDietDateTime,
-    required this.recordStartDateTime,
+class ActInfoClass {
+  ActInfoClass({
+    required this.id,
+    required this.mainActType,
+    required this.mainActTitle,
+    required this.subActType,
+    required this.subActTitle,
+    required this.startActDateTime,
+    this.endActDateTime,
+    required this.isAlarm,
+    this.alarmTime,
   });
 
-  double tall;
-  double goalWeight;
-  DateTime startDietDateTime;
-  DateTime? endDietDateTime;
-  DateTime recordStartDateTime;
+  String id;
+  MainActTypes mainActType;
+  String mainActTitle;
+  String subActType;
+  String subActTitle;
+  DateTime startActDateTime;
+  DateTime? endActDateTime;
+  bool isAlarm;
+  DateTime? alarmTime;
 }
 
 class DietPlanClass {
@@ -136,13 +146,13 @@ class ProgressStatusItemClass {
   String sub;
 }
 
-class RecordSubTypeClass {
-  RecordSubTypeClass({
+class RecordIconClass {
+  RecordIconClass({
     required this.enumId,
     required this.icon,
   });
 
-  RecordSubTypes enumId;
+  RecordIconTypes enumId;
   IconData icon;
 }
 

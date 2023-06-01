@@ -4,11 +4,13 @@ class DefaultTimePicker extends StatelessWidget {
   DefaultTimePicker({
     super.key,
     required this.initialDateTime,
+    required this.mode,
     required this.onDateTimeChanged,
   });
 
   DateTime initialDateTime;
   Function(DateTime time) onDateTimeChanged;
+  CupertinoDatePickerMode mode;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,8 @@ class DefaultTimePicker extends StatelessWidget {
         top: false,
         child: CupertinoDatePicker(
           initialDateTime: initialDateTime,
-          mode: CupertinoDatePickerMode.time,
+          mode: mode,
+          maximumDate: DateTime.now(),
           onDateTimeChanged: onDateTimeChanged,
         ),
       ),

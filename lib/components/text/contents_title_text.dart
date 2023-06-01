@@ -23,7 +23,10 @@ class ContentsTitleText extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(text, style: Theme.of(context).textTheme.labelLarge),
+            Text(
+              text,
+              style: Theme.of(context).textTheme.labelLarge,
+            ),
             const SizedBox(width: 3),
             Icon(
               icon,

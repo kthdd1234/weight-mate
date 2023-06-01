@@ -23,9 +23,7 @@ class _CalendarCellCustomDialogState extends State<CalendarCellCustomDialog> {
   Widget build(BuildContext context) {
     onSubmit(Object? object) {
       if (object is DateTime) {
-        context
-            .read<RecordSelectedDateTimeProvider>()
-            .setSelectedDateTime(object);
+        context.read<ImportDateTimeProvider>().setImportDateTime(object);
         closeDialog(context);
       }
     }

@@ -28,7 +28,7 @@ class AnalyzeProgressItemWidget extends StatelessWidget {
         Expanded(
           flex: 0,
           child: CircularIcon(
-            widthAndHeight: 45,
+            size: 45,
             borderRadius: 10,
             icon: icon,
             backgroundColor: typeBackgroundColor,

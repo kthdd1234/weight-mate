@@ -35,7 +35,7 @@ class AnalyzePlanOrderWidget extends StatelessWidget {
             ),
             SpaceWidth(width: smallSpace),
             CircularIcon(
-              widthAndHeight: 40,
+              size: 40,
               borderRadius: 40,
               icon: icon,
               backgroundColor: typeBackgroundColor,

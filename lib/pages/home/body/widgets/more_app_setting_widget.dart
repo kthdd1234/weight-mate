@@ -27,6 +27,7 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
           showDialog(
             context: context,
             builder: (context) => ConfirmDialog(
+              width: 300,
               titleText: '화면 잠금 경고',
               contentIcon: Icons.lock,
               contentText1: '암호를 분실했을 경우',
@@ -47,6 +48,7 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
           showDialog(
             context: context,
             builder: (builder) => ConfirmDialog(
+              width: 300,
               titleText: '초기화 경고',
               contentIcon: Icons.settings_backup_restore,
               contentText1: '앱 내의 모든 데이터가 초기화되며',

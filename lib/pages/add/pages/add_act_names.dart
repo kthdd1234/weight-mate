@@ -6,13 +6,19 @@ import 'package:flutter_app_weight_management/components/text/contents_title_tex
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/act_type_widget.dart';
 import 'package:provider/provider.dart';
 
 class AddActNames extends StatefulWidget {
-  const AddActNames({super.key});
+  AddActNames({
+    super.key,
+    required this.actInfo,
+  });
+
+  ActInfoClass actInfo;
 
   @override
   State<AddActNames> createState() => _AddActNamesState();
@@ -20,17 +26,33 @@ class AddActNames extends StatefulWidget {
 
 class _AddActNamesState extends State<AddActNames> {
   ScrollController scrollController = ScrollController();
-  dynamic selectedSubType;
+  late dynamic selectedSubType;
+  String selectedSubTitle = '';
+
+  @override
+  void initState() {
+    final mainActType = widget.actInfo.mainActType;
+
+    selectedSubType = subActTypeClassList[mainActType]![0].id;
+    selectedSubTitle = subActTypeClassList[mainActType]![0].title;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final actType = context.watch<DietInfoProvider>().getActType();
-    final subActType = context.watch<DietInfoProvider>().getSubActType();
-    final itemTypeClassList = subItemTypeClassList[actType]!;
-    final title = '${actTitles[actType]}${actSubs[actType]}';
+    final mainActType = widget.actInfo.mainActType;
+    final classList = subActTypeClassList[mainActType]!;
 
-    onTapItemType(dynamic type) {
-      setState(() => selectedSubType = type);
+    onTapActType(dynamic id) {
+      final itemType = classList.firstWhere((element) => element.id == id);
+
+      setState(() {
+        selectedSubType = id;
+
+        id == 'custom'
+            ? selectedSubTitle = ''
+            : selectedSubTitle = itemType.title;
+      });
     }
 
     buttonEnabled() {
@@ -39,32 +61,24 @@ class _AddActNamesState extends State<AddActNames> {
 
     onPressedBottomNavigationButton() {
       if (buttonEnabled()) {
-        context.read<DietInfoProvider>().changeSubActType(selectedSubType);
+        widget.actInfo.subActType = selectedSubType;
+        widget.actInfo.subActTitle = selectedSubTitle;
+
+        context.read<DietInfoProvider>().changeActInfo(widget.actInfo);
         return Navigator.pushNamed(context, '/add-act-setting');
       }
 
       return null;
     }
 
-    setIsEnabled(item) {
-      if (subActType == item.id) {
-        context.watch<DietInfoProvider>().changeSubActType('none');
-        selectedSubType = subActType;
-
-        return true;
-      }
-
-      return selectedSubType == item.id;
-    }
-
-    List<ActTypeWidget> itemTypeListView = itemTypeClassList
+    List<ActTypeWidget> itemTypeListView = classList
         .map((item) => ActTypeWidget(
               id: item.id,
               title: item.title,
               desc: item.desc,
               icon: item.icon,
-              isEnabled: setIsEnabled(item),
-              onTap: onTapItemType,
+              isEnabled: selectedSubType == item.id,
+              onTap: onTapActType,
             ))
         .toList();
 
@@ -74,14 +88,14 @@ class _AddActNamesState extends State<AddActNames> {
           SimpleStepper(currentStep: 3),
           SpaceHeight(height: regularSapce),
           HeadlineText(
-            text: '어떤 종류의 $title 하나요?',
+            text: '${widget.actInfo.mainActTitle} 종류를 선택해주세요.',
           ),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             contentsWidget: Column(
               children: [
                 ContentsTitleText(
-                  text: '${actTitles[actType]} 종류',
+                  text: '${widget.actInfo.mainActTitle} 종류',
                   icon: Icons.task_alt,
                 ),
                 SpaceHeight(height: regularSapce),
@@ -97,13 +111,3 @@ class _AddActNamesState extends State<AddActNames> {
     );
   }
 }
-
-//  if (selectedType == 'custom') {
-//           return showModalBottomSheet(
-//             shape: RoundedRectangleBorder(
-//               borderRadius: BorderRadius.circular(10.0),
-//             ),
-//             context: context,
-//             builder: (context) => ActNameBottomSheet(),
-//           );
-//         }
