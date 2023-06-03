@@ -41,6 +41,7 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
     return isClose
         ? const SizedBox.shrink()
         : ContentsBox(
+            imgUrl: 'assets/images/t-4.png',
             isBoxShadow: true,
             contentsWidget: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,9 +50,9 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
                   size: 40,
                   borderRadius: 30,
                   icon: Icons.auto_awesome_outlined,
-                  backgroundColor: dialogBackgroundColor,
+                  backgroundColor: typeBackgroundColor,
                 ),
-                SpaceWidth(width: smallSpace + tinySpace),
+                SpaceWidth(width: regularSapce),
                 Expanded(
                   flex: 5,
                   child: Column(

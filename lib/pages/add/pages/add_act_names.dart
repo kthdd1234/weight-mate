@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
@@ -91,18 +92,9 @@ class _AddActNamesState extends State<AddActNames> {
             text: '${widget.actInfo.mainActTitle} 종류를 선택해주세요.',
           ),
           SpaceHeight(height: regularSapce),
-          ContentsBox(
-            contentsWidget: Column(
-              children: [
-                ContentsTitleText(
-                  text: '${widget.actInfo.mainActTitle} 종류',
-                  icon: Icons.task_alt,
-                ),
-                SpaceHeight(height: regularSapce),
-                Column(children: itemTypeListView)
-              ],
-            ),
-          ),
+          Column(children: itemTypeListView),
+          SpaceHeight(height: smallSpace),
+          BottomText(bottomText: '문구 넣어야 함')
         ],
       ),
       buttonEnabled: buttonEnabled(),

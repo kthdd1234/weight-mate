@@ -44,7 +44,6 @@ class _HomeAppBarWidgetState extends State<HomeAppBarWidget> {
       elevation: 0.0,
       centerTitle: false,
       foregroundColor: buttonBackgroundColor,
-      actions: [],
     );
   }
 }

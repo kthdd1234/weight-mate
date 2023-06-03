@@ -124,7 +124,11 @@ List<DietPlanClass> getDietPlanClassList(
       .toList();
 }
 
-showSnackBar({required BuildContext context, required String text}) {
+showSnackBar({
+  required BuildContext context,
+  required String text,
+  required double width,
+}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       action: SnackBarAction(
@@ -136,7 +140,7 @@ showSnackBar({required BuildContext context, required String text}) {
       ),
       content: Text(text),
       duration: const Duration(milliseconds: 1500),
-      width: 270.0,
+      width: width,
       padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),

@@ -4,12 +4,12 @@ enum RecordIconTypes {
   editWeight,
   removeWeight,
   editGoalWeight,
-  actDietPlan,
-  addDietPlan,
-  removeDietPlan,
+  alarmWeight,
+  addPlan,
+  alarmPlan,
+  removePlan,
   editNote,
-  addEyeBody,
-  resetNote,
+  removeNote,
 }
 
 enum eBottomNavigationBarItem { record, calendar, analyze, setting }
@@ -23,7 +23,9 @@ enum SegmentedTypes {
   threeMonth,
   sixMonth,
   oneYear,
-  custom
+  custom,
+  planList,
+  planAct
 }
 
 enum MoreSeeItem {

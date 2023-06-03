@@ -9,20 +9,21 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
 class DefaultBottomSheet extends StatelessWidget {
-  DefaultBottomSheet({
-    super.key,
-    required this.title,
-    required this.widgets,
-    required this.isEnabled,
-    required this.submitText,
-    required this.onSubmit,
-  });
+  DefaultBottomSheet(
+      {super.key,
+      required this.title,
+      required this.widgets,
+      required this.isEnabled,
+      required this.submitText,
+      required this.onSubmit,
+      this.titleLeftWidget});
 
   String title;
   List<Widget> widgets;
   String submitText;
   bool isEnabled;
   Function() onSubmit;
+  Widget? titleLeftWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,7 @@ class DefaultBottomSheet extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                onCloseIcon(Colors.transparent),
+                titleLeftWidget ?? onCloseIcon(Colors.transparent),
                 ContentsTitleText(text: title),
                 onCloseIcon(buttonBackgroundColor),
               ],

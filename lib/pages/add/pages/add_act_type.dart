@@ -77,19 +77,8 @@ class _AddActTypeState extends State<AddActType> {
           SpaceHeight(height: regularSapce),
           HeadlineText(text: '어떤 방법으로 시작할까요?'),
           SpaceHeight(height: regularSapce),
-          ContentsBox(
-            contentsWidget: Column(
-              children: [
-                ContentsTitleText(
-                  text: '나의 방법',
-                  icon: Icons.domain_verification_rounded,
-                ),
-                SpaceHeight(height: regularSapce),
-                Column(children: itemTypeWidgets)
-              ],
-            ),
-          ),
-          SpaceHeight(height: regularSapce),
+          Column(children: itemTypeWidgets),
+          SpaceHeight(height: smallSpace),
           BottomText(bottomText: '다이어트, 운동, 생활 습관은 목표 체중에 달성하기 위한 방법입니다.')
         ],
       ),

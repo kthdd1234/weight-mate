@@ -35,9 +35,7 @@ class _ActTypeWidgetState extends State<ActTypeWidget> {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: widget.isEnabled
-                  ? buttonBackgroundColor
-                  : typeBackgroundColor,
+              color: widget.isEnabled ? buttonBackgroundColor : Colors.white,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Padding(
@@ -71,7 +69,7 @@ class _ActTypeWidgetState extends State<ActTypeWidget> {
                     ],
                   ),
                   CircleAvatar(
-                    backgroundColor: const Color(0xffffffff),
+                    backgroundColor: typeBackgroundColor,
                     child: Icon(widget.icon),
                   )
                 ],

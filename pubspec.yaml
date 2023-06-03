@@ -50,6 +50,7 @@ dependencies:
   intl: ^0.18.1
   path_provider_foundation: ^2.2.3
   multi_value_listenable_builder: ^0.0.2
+  syncfusion_flutter_gauges: ^20.4.54
 
 dev_dependencies:
   flutter_test:
@@ -77,6 +78,15 @@ flutter:
   assets:
     - assets/images/Cloudy_Apple.png
     - assets/images/Deep-Space-Travel.jpeg
+    - assets/images/t-1.png
+    - assets/images/t-4.png
+    - assets/images/t-5.png
+    - assets/images/t-6.png
+    - assets/images/t-7.png
+    - assets/images/t-8.png
+    - assets/images/t-9.png
+    - assets/images/t-10.png
+    - assets/images/t-11.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

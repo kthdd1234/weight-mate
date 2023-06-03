@@ -12,7 +12,7 @@ class DefaultSegmented extends StatelessWidget {
 
   SegmentedTypes selectedSegment;
   Map<SegmentedTypes, Widget> children;
-  Function(SegmentedTypes?) onSegmentedChanged;
+  Function(SegmentedTypes? type) onSegmentedChanged;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
@@ -21,7 +22,7 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final importDateTime =
+    DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
     onDateTimeChanged(DateTime dateTime) {
@@ -29,12 +30,27 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
     }
 
     onTapArrow(String? name) {
-      print(name);
+      DateTime now = DateTime.now();
+      Duration duration = const Duration(days: 1);
+      DateTime resultDateTime = name == 'yesterday'
+          ? importDateTime.subtract(duration)
+          : importDateTime.add(duration);
+
+      if (getDateTimeToInt(now) < getDateTimeToInt(resultDateTime)) {
+        return showSnackBar(
+            context: context, text: '미래의 날짜를 불러올 순 없어요.', width: 300);
+      }
+
+      context.read<ImportDateTimeProvider>().setImportDateTime(resultDateTime);
     }
 
     setImportDateTime() {
       context.read<ImportDateTimeProvider>().setImportDateTime(changedDateTime);
       closeDialog(context);
+    }
+
+    onTapCalendarIcon() {
+      // todo: 달력 UI로 전환하기
     }
 
     onTapTitle() {
@@ -49,6 +65,13 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
               onDateTimeChanged: onDateTimeChanged,
             )
           ],
+          titleLeftWidget: GestureDetector(
+            onTap: onTapCalendarIcon,
+            child: const Icon(
+              Icons.calendar_month,
+              color: buttonBackgroundColor,
+            ),
+          ),
           isEnabled: true,
           submitText: '불러오기',
           onSubmit: setImportDateTime,
@@ -56,9 +79,9 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
       );
     }
 
-    arrowIcon({String? name, required IconData icon}) {
+    arrowIcon({required String name, required IconData icon}) {
       return InkWell(
-        onTap: () => onTapArrow(name),
+        onTap: () => name == 'circle_down' ? onTapTitle() : onTapArrow(name),
         child: Icon(icon, size: 20, color: buttonBackgroundColor),
       );
     }
@@ -75,7 +98,10 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
                 style: const TextStyle(fontSize: 18),
               ),
               SpaceWidth(width: tinySpace),
-              arrowIcon(icon: Icons.expand_circle_down_outlined),
+              arrowIcon(
+                name: 'circle_down',
+                icon: Icons.expand_circle_down_outlined,
+              ),
             ],
           ),
         ),
@@ -85,9 +111,9 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        arrowIcon(name: 'left', icon: Icons.arrow_back_ios_new),
+        arrowIcon(name: 'yesterday', icon: Icons.arrow_back_ios_new),
         importTitle(),
-        arrowIcon(name: 'right', icon: Icons.arrow_forward_ios),
+        arrowIcon(name: 'next', icon: Icons.arrow_forward_ios),
       ],
     );
   }

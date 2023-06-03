@@ -4,6 +4,7 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_widget.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
@@ -32,17 +33,13 @@ class RecordMemoWidget extends StatelessWidget {
         icon: Icons.edit,
       ),
       RecordIconClass(
-        enumId: RecordIconTypes.addEyeBody,
-        icon: Icons.add_photo_alternate,
-      ),
-      RecordIconClass(
-        enumId: RecordIconTypes.resetNote,
-        icon: Icons.replay,
+        enumId: RecordIconTypes.removeNote,
+        icon: Icons.delete,
       )
     ];
 
-    List<DefaultIcon> subWidgets = subClassList
-        .map((element) => DefaultIcon(
+    List<RecordContentsTitleIcon> subWidgets = subClassList
+        .map((element) => RecordContentsTitleIcon(
               id: element.enumId,
               icon: element.icon,
               onTap: (id) {},
@@ -68,14 +65,13 @@ class RecordMemoWidget extends StatelessWidget {
 
     return ContentsBox(
       contentsWidget: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ContentsTitleText(
             text: '오늘의 메모',
             icon: Icons.textsms_outlined,
             sub: subWidgets,
           ),
-          SpaceHeight(height: regularSapce),
+          SpaceHeight(height: smallSpace),
           setRouteTodayOfMemoWidget(),
         ],
       ),

@@ -91,7 +91,7 @@ var mainAcyTypeClassList = [
     id: MainActTypes.diet,
     title: '다이어트',
     desc: '간헐적 단식, 저탄고지 다이어트 등',
-    icon: Icons.monitor_weight,
+    icon: Icons.av_timer,
   ),
   ItemTypeClass(
     id: MainActTypes.exercise,
@@ -103,7 +103,7 @@ var mainAcyTypeClassList = [
     id: MainActTypes.lifestyle,
     title: '생활습관',
     desc: '아침에 체중 기록하기, 야식 금지 등',
-    icon: Icons.accessibility_new_sharp,
+    icon: Icons.self_improvement,
   )
 ];
 
@@ -226,7 +226,7 @@ var lifeStyleItemTypeClassList = [
 
 Map<RecordIconTypes, Map<String, dynamic>> weightContentsTitles = {
   RecordIconTypes.none: {
-    'icon': Icons.align_vertical_bottom_rounded,
+    'icon': Icons.bar_chart,
     'title': '오늘의 체중',
   },
   RecordIconTypes.addWeight: {

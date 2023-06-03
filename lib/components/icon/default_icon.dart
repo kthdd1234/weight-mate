@@ -13,7 +13,7 @@ class DefaultIcon extends StatelessWidget {
 
   dynamic id;
   IconData icon;
-  Function(String id) onTap;
+  Function(dynamic id) onTap;
   Color? color;
 
   @override

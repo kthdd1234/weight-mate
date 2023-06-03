@@ -10,6 +10,7 @@ class ContentsBox extends StatelessWidget {
     this.padding,
     this.width,
     this.height,
+    this.imgUrl,
   });
 
   Widget contentsWidget;
@@ -18,6 +19,7 @@ class ContentsBox extends StatelessWidget {
   double? width;
   double? height;
   bool? isBoxShadow;
+  String? imgUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,9 @@ class ContentsBox extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
+        image: imgUrl != null
+            ? DecorationImage(image: AssetImage(imgUrl!), fit: BoxFit.cover)
+            : null,
         color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: isBoxShadow != null

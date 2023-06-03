@@ -17,7 +17,26 @@ class RecordBody extends StatefulWidget {
   State<RecordBody> createState() => _RecordBodyState();
 }
 
-class _RecordBodyState extends State<RecordBody> {
+class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      context.read<ImportDateTimeProvider>().setImportDateTime(DateTime.now());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     RecordIconTypes seletedRecordIconType =
@@ -25,34 +44,33 @@ class _RecordBodyState extends State<RecordBody> {
     final recordSelectedDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
-    onPressed() {
-      // final recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
-      // recordInfoBox.clear();
-
-      // print(recordInfoBox.values.toList());
-    }
-
     return SingleChildScrollView(
       child: Column(
         children: [
           TodayWiseSayingWidget(
             recordSelectedDateTime: recordSelectedDateTime,
           ),
-          SpaceHeight(height: regularSapce),
+          SpaceHeight(height: largeSpace),
           RecordWeightWidget(
             seletedRecordIconType: seletedRecordIconType,
             recordSelectedDateTime: recordSelectedDateTime,
           ),
-          SpaceHeight(height: regularSapce),
-          RecordPlanWidget(seletedRecordSubType: seletedRecordIconType),
-          SpaceHeight(height: regularSapce),
+          SpaceHeight(height: largeSpace),
+          RecordPlanWidget(seletedRecordIconType: seletedRecordIconType),
+          SpaceHeight(height: largeSpace),
           RecordMemoWidget(seletedRecordSubType: seletedRecordIconType),
-          // ElevatedButton(
-          //   onPressed: onPressed,
-          //   child: const Text('hive 데이터 초기화'),
-          // )
         ],
       ),
     );
   }
 }
+    // ElevatedButton(
+          //   onPressed: onPressed,
+          //   child: const Text('hive 데이터 초기화'),
+          // )
+  //onPressed() {
+      // final recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
+      // recordInfoBox.clear();
+
+      // print(recordInfoBox.values.toList());
+   // }

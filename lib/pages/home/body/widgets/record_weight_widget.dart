@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
+import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_infos_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
@@ -19,21 +22,6 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-
-List<RecordIconClass> recordIconClassList = [
-  RecordIconClass(
-    enumId: RecordIconTypes.editWeight,
-    icon: Icons.edit,
-  ),
-  RecordIconClass(
-    enumId: RecordIconTypes.editGoalWeight,
-    icon: Icons.flag,
-  ),
-  RecordIconClass(
-    enumId: RecordIconTypes.removeWeight,
-    icon: Icons.delete,
-  ),
-];
 
 class RecordWeightWidget extends StatefulWidget {
   RecordWeightWidget({
@@ -53,6 +41,21 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
 
+  List<RecordIconClass> recordIconClassList = [
+    RecordIconClass(
+      enumId: RecordIconTypes.editWeight,
+      icon: Icons.edit,
+    ),
+    RecordIconClass(
+      enumId: RecordIconTypes.alarmWeight,
+      icon: Icons.notifications,
+    ),
+    RecordIconClass(
+      enumId: RecordIconTypes.removeWeight,
+      icon: Icons.delete,
+    ),
+  ];
+
   @override
   void initState() {
     userBox = Hive.box<UserBox>('userBox');
@@ -65,16 +68,19 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
   Widget build(BuildContext context) {
     final DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
+    RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
 
     setIconType(enumId) {
       context.read<RecordIconTypeProvider>().setSeletedRecordIconType(enumId);
     }
 
     onTapIcon(enumId) {
-      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
-
       if (recordInfo?.weight == null) {
-        return showSnackBar(context: context, text: '오늘의 체중을 입력해주세요.');
+        return showSnackBar(
+          context: context,
+          text: '오늘의 체중을 입력해주세요.',
+          width: 270,
+        );
       }
 
       setIconType(enumId);
@@ -83,19 +89,10 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
     setIconWidgets() {
       return recordIconClassList
           .map(
-            (element) => Row(
-              children: [
-                SpaceWidth(width: tinySpace),
-                CircularIcon(
-                  size: 30,
-                  borderRadius: 5,
-                  icon: element.icon,
-                  backgroundColor: typeBackgroundColor,
-                  adjustSize: 12,
-                  id: element.enumId,
-                  onTap: onTapIcon,
-                ),
-              ],
+            (element) => RecordContentsTitleIcon(
+              id: element.enumId,
+              icon: element.icon,
+              onTap: onTapIcon,
             ),
           )
           .toList();
@@ -103,6 +100,13 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
 
     onTapEmptyRecordArea() {
       setIconType(RecordIconTypes.addWeight);
+    }
+
+    onPressedWeightDelete() {
+      if (recordInfo == null) return null;
+
+      recordInfo.weight = null;
+      recordBox.put(getDateTimeToInt(importDateTime), recordInfo);
     }
 
     contentsWidgets({
@@ -138,7 +142,7 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
                 contentIcon: Icons.delete_forever,
                 contentText1: '오늘의 체중 데이터를',
                 contentText2: '삭제하시겠습니까?',
-                onPressedOk: ,
+                onPressedOk: onPressedWeightDelete,
               ),
             );
             setIconType(RecordIconTypes.none);
@@ -147,17 +151,12 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
       }
 
       if (weight == null) {
-        return Column(
-          children: [
-            SpaceHeight(height: smallSpace),
-            EmptyTextArea(
-              text: '오늘의 체중을 입력해보세요.',
-              icon: Icons.add,
-              topHeight: 10,
-              downHeight: 10,
-              onTap: onTapEmptyRecordArea,
-            ),
-          ],
+        return EmptyTextArea(
+          text: '오늘의 체중을 입력해보세요.',
+          icon: Icons.add,
+          topHeight: regularSapce,
+          downHeight: regularSapce,
+          onTap: onTapEmptyRecordArea,
         );
       }
 
@@ -199,7 +198,7 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
             getDateTimeToInt(importDateTime),
       );
 
-      if (index == 0) return 0.0;
+      if (index <= 0) return 0.0;
 
       List<RecordBox> sublist = recordBoxValues.sublist(0, index).toList();
       List<RecordBox> reverseList = List.from(sublist.reversed);
@@ -221,25 +220,29 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
       Map<String, dynamic>? contentsTitleInfo =
           weightContentsTitles[widget.seletedRecordIconType];
 
-      if (contentsTitleInfo == null) return Icons.align_vertical_bottom_rounded;
+      if (contentsTitleInfo == null) return Icons.bar_chart;
       return contentsTitleInfo['icon'];
     }
 
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          ContentsTitleText(
-            text: setContetnsTitle(),
-            sub: setIconWidgets(),
-            icon: setContetnsIcon(),
-          ),
-          contentsWidgets(
-            tall: setTall(),
-            weight: setWeight(),
-            goalWeight: setGoalWeight(),
-            beforeWeight: setBeforeWeight(),
-          ),
-        ],
+    return ValueListenableBuilder(
+      valueListenable: recordBox.listenable(),
+      builder: (context, box, widget) => ContentsBox(
+        contentsWidget: Column(
+          children: [
+            ContentsTitleText(
+              text: setContetnsTitle(),
+              sub: setIconWidgets(),
+              icon: setContetnsIcon(),
+            ),
+            SpaceHeight(height: smallSpace),
+            contentsWidgets(
+              tall: setTall(),
+              weight: setWeight(),
+              goalWeight: setGoalWeight(),
+              beforeWeight: setBeforeWeight(),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -148,8 +149,6 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       String text = textInputController.text;
       DateTime now = DateTime.now();
 
-      print(widget.seletedRecordIconType);
-
       switch (widget.seletedRecordIconType) {
         case RecordIconTypes.addWeight:
         case RecordIconTypes.editWeight:
@@ -193,27 +192,30 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
-    return Column(
-      children: [
-        SpaceHeight(height: tinySpace),
-        TextInput(
-          maxLength: inputDatas.maxLength,
-          prefixIcon: inputDatas.prefixIcon,
-          suffixText: inputDatas.suffixText,
-          hintText: inputDatas.hintText,
-          errorText: errorText,
-          onChanged: setOnChanged,
-          counterText: '',
-          controller: textInputController,
-        ),
-        SpaceHeight(height: smallSpace),
-        OkAndCancelButton(
-          okText: '등록',
-          cancelText: '취소',
-          onPressedOk: isEnabledOnPressed ? onPressedResister : null,
-          onPressedCancel: onPressedCancel,
-        )
-      ],
+    return ContentsBox(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      backgroundColor: Colors.white,
+      contentsWidget: Column(
+        children: [
+          TextInput(
+            maxLength: inputDatas.maxLength,
+            prefixIcon: inputDatas.prefixIcon,
+            suffixText: inputDatas.suffixText,
+            hintText: inputDatas.hintText,
+            errorText: errorText,
+            onChanged: setOnChanged,
+            counterText: '',
+            controller: textInputController,
+          ),
+          SpaceHeight(height: smallSpace),
+          OkAndCancelButton(
+            okText: '등록',
+            cancelText: '취소',
+            onPressedOk: isEnabledOnPressed ? onPressedResister : null,
+            onPressedCancel: onPressedCancel,
+          )
+        ],
+      ),
     );
   }
 }

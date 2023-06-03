@@ -195,3 +195,18 @@ class ItemTypeClass {
   String desc;
   IconData icon;
 }
+
+class WeightInfoClass {
+  WeightInfoClass({
+    required this.id,
+    required this.title,
+    required this.value,
+    required this.icon,
+    required this.more,
+    required this.tooltipMsg,
+  });
+
+  String id, title, value;
+  IconData icon, more;
+  String tooltipMsg;
+}

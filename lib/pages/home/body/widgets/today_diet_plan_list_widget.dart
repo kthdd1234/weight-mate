@@ -35,7 +35,7 @@ class _TodayDietPlanListWidgetState extends State<TodayDietPlanListWidget> {
     RecordIconTypes seletedRecordSubType =
         context.watch<RecordIconTypeProvider>().seletedRecordIconType;
 
-    if (seletedRecordSubType == RecordIconTypes.addDietPlan) {
+    if (seletedRecordSubType == RecordIconTypes.addPlan) {
       setState(() => showEmptyTouchArea = false);
     }
 
@@ -73,9 +73,9 @@ class _TodayDietPlanListWidgetState extends State<TodayDietPlanListWidget> {
     }
 
     onTapTodayDietPlanList() {
-      context
-          .read<RecordIconTypeProvider>()
-          .setSeletedRecordIconType(RecordIconTypes.actDietPlan);
+      // context
+      //     .read<RecordIconTypeProvider>()
+      //     .setSeletedRecordIconType(RecordIconTypes.actDietPlan);
     }
 
     List<TodayDietPlanItemWidget> todayDietPlanList = widget.dietPlanList
