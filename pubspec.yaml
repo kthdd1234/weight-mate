@@ -51,6 +51,7 @@ dependencies:
   path_provider_foundation: ^2.2.3
   multi_value_listenable_builder: ^0.0.2
   syncfusion_flutter_gauges: ^20.4.54
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +80,8 @@ flutter:
     - assets/images/Cloudy_Apple.png
     - assets/images/Deep-Space-Travel.jpeg
     - assets/images/t-1.png
+    - assets/images/t-2.png
+    - assets/images/t-3.png
     - assets/images/t-4.png
     - assets/images/t-5.png
     - assets/images/t-6.png

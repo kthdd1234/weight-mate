@@ -130,6 +130,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                   errorText: setErrorTextGoalWeight(),
                   onChanged: onChangedGoalWeightText,
                 ),
+                SpaceHeight(height: smallSpace),
+                Text('체중 입력 알림 UI')
               ],
             ),
           ),

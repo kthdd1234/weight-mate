@@ -198,6 +198,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       contentsWidget: Column(
         children: [
           TextInput(
+            autofocus: true,
             maxLength: inputDatas.maxLength,
             prefixIcon: inputDatas.prefixIcon,
             suffixText: inputDatas.suffixText,

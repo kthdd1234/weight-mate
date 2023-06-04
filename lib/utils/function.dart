@@ -33,7 +33,13 @@ getDateTimeToSlashYY(DateTime? dateTime) {
 }
 
 timeToString(DateTime dateTime) {
-  return DateFormat('a hh:mm').format(dateTime);
+  String dateTimeToStr = DateFormat('a hh:mm').format(dateTime);
+
+  if (dateTimeToStr.contains('AM')) {
+    return dateTimeToStr.replaceFirst(RegExp(r'AM'), '오전');
+  }
+
+  return dateTimeToStr.replaceFirst(RegExp(r'PM'), '오후');
 }
 
 stringToDouble(String? str) {

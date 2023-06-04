@@ -17,16 +17,6 @@ class TimeChipWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    setTimeText(DateTime time) {
-      String text = timeToString(time);
-
-      if (text.contains('AM')) {
-        return text.replaceFirst(RegExp(r'AM'), '오전');
-      }
-
-      return text.replaceFirst(RegExp(r'PM'), '오후');
-    }
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -43,7 +33,7 @@ class TimeChipWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Text(
-                    setTimeText(time),
+                    timeToString(time),
                     style: const TextStyle(
                       color: buttonBackgroundColor,
                       fontWeight: FontWeight.bold,

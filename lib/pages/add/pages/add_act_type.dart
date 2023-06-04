@@ -39,7 +39,7 @@ class _AddActTypeState extends State<AddActType> {
       if (buttonEnabled()) {
         Map<MainActTypes, String> mainActTitles = {
           MainActTypes.none: '',
-          MainActTypes.diet: '다이어트',
+          MainActTypes.diet: '식이요법',
           MainActTypes.exercise: '운동',
           MainActTypes.lifestyle: '생활습관'
         };

@@ -1,71 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
-import 'package:uuid/uuid.dart';
-
 import 'enum.dart';
-
-var defaultDietPlanList = [
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.monitor_weight_outlined,
-      plan: '잊지 않고 체중 기록하기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.nights_stay_outlined,
-      plan: '밤 10시 이후에는 음식 먹지 않기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.local_drink_outlined,
-      plan: '하루에 물 1리터 이상 마시기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.no_food_outlined,
-      plan: '후식과 간식을 먹지 않기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.self_improvement_outlined,
-      plan: '16:8 간헐적 단식 실천하기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.light_mode_outlined,
-      plan: '아침식사 거르지 않고 꼭 챙겨먹기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.rice_bowl_outlined,
-      plan: '반공기 다이어트 실천하기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.rice_bowl_outlined,
-      plan: '백미 대신 현미밥 먹기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.food_bank_outlined,
-      plan: '저녁으로 샐러드 먹기',
-      isChecked: false,
-      isAction: false),
-  DietPlanClass(
-      id: const Uuid().v4(),
-      icon: Icons.ramen_dining_outlined,
-      plan: '라면 먹지 않기',
-      isChecked: false,
-      isAction: false),
-];
 
 var todayOfWiseSayingList = [
   WiseSayingClass(wiseSaying: '나를 배부르게 하는 것들이 나를 파괴한다.', name: '안젤리나 졸리'),
@@ -83,14 +18,14 @@ var todayOfWiseSayingList = [
 var mainActEtc = {
   MainActTypes.diet: '를',
   MainActTypes.exercise: '을',
-  MainActTypes.lifestyle: '을'
+  MainActTypes.lifestyle: '을',
 };
 
 var mainAcyTypeClassList = [
   ItemTypeClass(
     id: MainActTypes.diet,
-    title: '다이어트',
-    desc: '간헐적 단식, 저탄고지 다이어트 등',
+    title: '식이요법',
+    desc: '간헐적 단식, 밥 반공기만 먹기 등',
     icon: Icons.av_timer,
   ),
   ItemTypeClass(
@@ -104,7 +39,7 @@ var mainAcyTypeClassList = [
     title: '생활습관',
     desc: '아침에 체중 기록하기, 야식 금지 등',
     icon: Icons.self_improvement,
-  )
+  ),
 ];
 
 var subActTypeClassList = {
@@ -133,27 +68,27 @@ var dietItemTypeClassList = [
     icon: Icons.alarm_outlined,
   ),
   ItemTypeClass(
+    id: 'halfRice',
+    title: '밥 반공기만 먹기',
+    desc: '매 끼니마다 밥은 반공기만 먹기',
+    icon: Icons.rice_bowl_outlined,
+  ),
+  ItemTypeClass(
     id: 'ketogenic',
-    title: '키토제닉 다이어트',
+    title: '저탄고지 다이어트',
     desc: '저탄수화물 고지방 식이요법',
     icon: Icons.savings_outlined,
   ),
   ItemTypeClass(
-    id: 'oneFood',
-    title: '원푸드 다이어트',
-    desc: '특정한 음식을 집중적으로 먹는 식이요법',
-    icon: Icons.food_bank_outlined,
-  ),
-  ItemTypeClass(
-    id: 'denmark',
-    title: '덴마크 다이어트',
-    desc: '고단백 저열량 식이요법',
-    icon: Icons.egg_alt_outlined,
+    id: 'EveningSaled',
+    title: '저녁에 샐러드 먹기',
+    desc: '연어 샐러드, 치킨 샐러드, 쉬림프 샐러드 등',
+    icon: Icons.grass,
   ),
   ItemTypeClass(
     id: 'custom',
     title: '사용자 정의',
-    desc: '다이어트 종류 직접 추가하기',
+    desc: '식이요법 종류 직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];
@@ -242,3 +177,67 @@ Map<RecordIconTypes, Map<String, dynamic>> weightContentsTitles = {
     'title': '목표 체중',
   },
 };
+
+
+// var defaultDietPlanList = [
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.monitor_weight_outlined,
+//       plan: '잊지 않고 체중 기록하기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.nights_stay_outlined,
+//       plan: '밤 10시 이후에는 음식 먹지 않기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.local_drink_outlined,
+//       plan: '하루에 물 1리터 이상 마시기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.no_food_outlined,
+//       plan: '후식과 간식을 먹지 않기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.self_improvement_outlined,
+//       plan: '16:8 간헐적 단식 실천하기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.light_mode_outlined,
+//       plan: '아침식사 거르지 않고 꼭 챙겨먹기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.rice_bowl_outlined,
+//       plan: '반공기 다이어트 실천하기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.rice_bowl_outlined,
+//       plan: '백미 대신 현미밥 먹기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.food_bank_outlined,
+//       plan: '저녁으로 샐러드 먹기',
+//       isChecked: false,
+//       isAction: false),
+//   DietPlanClass(
+//       id: const Uuid().v4(),
+//       icon: Icons.ramen_dining_outlined,
+//       plan: '라면 먹지 않기',
+//       isChecked: false,
+//       isAction: false),
+// ];

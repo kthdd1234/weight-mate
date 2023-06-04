@@ -6,20 +6,24 @@ class CircularIcon extends StatelessWidget {
     super.key,
     required this.size,
     required this.borderRadius,
-    required this.icon,
+    this.icon,
     required this.backgroundColor,
     this.adjustSize,
     this.id,
     this.onTap,
+    this.iconColor,
+    this.borderColor,
   });
 
   double size;
   double borderRadius;
-  IconData icon;
+  IconData? icon;
   Color backgroundColor;
   double? adjustSize;
   dynamic id;
   Function(dynamic id)? onTap;
+  Color? iconColor;
+  Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +34,13 @@ class CircularIcon extends StatelessWidget {
         height: size,
         decoration: BoxDecoration(
           color: backgroundColor,
+          border: borderColor != null ? Border.all(color: borderColor!) : null,
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Icon(
           icon,
           size: size - (adjustSize ?? 20),
-          color: buttonBackgroundColor,
+          color: iconColor ?? buttonBackgroundColor,
         ),
       ),
     );

@@ -140,3 +140,9 @@ const actionDotColor = Colors.blue;
 
 /// memoDotColor
 const memoDotColor = Colors.orange;
+
+/// enableTextColor
+const enableTextColor = Color(0xff6237E2);
+
+/// enableBackgroundColor
+const enableBackgroundColor = Color(0xffEDE8FF);

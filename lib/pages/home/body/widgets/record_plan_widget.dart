@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
-import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/plan_item_info.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/plan_check_item.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/plan_group_item.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diet_plan_action_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diet_plan_delete_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diet_plan_list_widget.dart';
-import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class RecordPlanWidget extends StatefulWidget {
   RecordPlanWidget({
@@ -33,7 +24,7 @@ class RecordPlanWidget extends StatefulWidget {
 }
 
 class _RecordPlanWidgetState extends State<RecordPlanWidget> {
-  SegmentedTypes selectedSegment = SegmentedTypes.planList;
+  SegmentedTypes selectedSegment = SegmentedTypes.groupList;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +44,15 @@ class _RecordPlanWidgetState extends State<RecordPlanWidget> {
     ];
 
     onTapIcon(enumId) {
-      //
+      switch (enumId) {
+        case RecordIconTypes.addPlan:
+          break;
+        case RecordIconTypes.alarmPlan:
+          break;
+        case RecordIconTypes.removePlan:
+          break;
+        default:
+      }
     }
 
     List<Widget> subWidgets = recordIconClassList
@@ -66,57 +65,114 @@ class _RecordPlanWidgetState extends State<RecordPlanWidget> {
         )
         .toList();
 
-    onTapTextArea() {
-      //
-    }
-
-    type_1() {
-      return Row(
-        children: [
-          // SfRadialGauge(
-          //   title: GaugeTitle(
-          //     text: 'Speedometer',
-          //     textStyle: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-          //   ),
-          // )
-        ],
-      );
-    }
-
     onSegmentedChanged(SegmentedTypes? type) {
       setState(() => selectedSegment = type!);
     }
 
     segmentedWidget({required String text, required IconData icon}) {
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(
-                fontSize: 13,
-                color: buttonBackgroundColor,
-              ),
-            ),
-            SpaceWidth(width: tinySpace),
-            Text('4'),
-          ],
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Text(
+          '$text 4',
+          style: const TextStyle(fontSize: 12, color: buttonBackgroundColor),
         ),
       );
     }
 
     Map<SegmentedTypes, Widget> segmentedTypes = {
-      SegmentedTypes.planList: segmentedWidget(
-        text: '전체 리스트',
+      SegmentedTypes.groupList: segmentedWidget(
+        text: '그룹 목록',
         icon: Icons.format_list_bulleted_outlined,
+      ),
+      SegmentedTypes.myPlan: segmentedWidget(
+        text: '나의 계획',
+        icon: Icons.abc,
       ),
       SegmentedTypes.planAct: segmentedWidget(
         text: '실천 체크',
         icon: Icons.check_outlined,
       )
     };
+
+    onTapPlanItem(String id) {
+      print(id);
+    }
+
+    onTapCheckItem(String id) {
+      print(id);
+    }
+
+    setSegmentedWidget() {
+      final segmentedInfo = {
+        SegmentedTypes.groupList: Column(
+          children: [
+            PlanGroupItem(
+              icon: Icons.self_improvement,
+              title: '식이요법',
+              planList: ['1', '2', '3'],
+            )
+          ],
+        ),
+        SegmentedTypes.myPlan: Column(
+          children: [
+            Column(
+              children: [
+                PlanItemInfo(
+                  id: 'plan-1',
+                  groupName: '식이요법',
+                  icon: Icons.self_improvement,
+                  itemName: '간헐적 단식 16:8',
+                  startDateTime: DateTime.now(),
+                  endDateTime: DateTime.now(),
+                  isAct: false,
+                  onTap: onTapPlanItem,
+                ),
+                PlanItemInfo(
+                  id: 'plan-2',
+                  groupName: '운동',
+                  icon: Icons.pool,
+                  itemName: '수영 강습 받기',
+                  startDateTime: DateTime.now(),
+                  endDateTime: DateTime.now(),
+                  isAct: true,
+                  onTap: onTapPlanItem,
+                ),
+              ],
+            )
+          ],
+        ),
+        SegmentedTypes.planAct: Column(
+          children: [
+            PlanCheckItem(
+              id: 'item-1',
+              icon: Icons.alarm,
+              groupName: '생활습관',
+              itemName: '아침에 체중 기록하기',
+              isChecked: true,
+              onTap: onTapCheckItem,
+            ),
+            PlanCheckItem(
+              id: 'item-2',
+              icon: Icons.no_food,
+              groupName: '식이요법',
+              itemName: '간헐적 단식 16:8',
+              isChecked: true,
+              onTap: onTapCheckItem,
+            ),
+            PlanCheckItem(
+              id: 'item-3',
+              icon: Icons.pool,
+              groupName: '운동',
+              itemName: '수영 강습 받기',
+              isChecked: false,
+              onTap: onTapCheckItem,
+            ),
+          ],
+        ),
+      };
+
+      return segmentedInfo[selectedSegment]!;
+    }
 
     return ContentsBox(
       contentsWidget: Column(
@@ -133,33 +189,9 @@ class _RecordPlanWidgetState extends State<RecordPlanWidget> {
             onSegmentedChanged: onSegmentedChanged,
           ),
           SpaceHeight(height: smallSpace),
-          ContentsBox(
-            backgroundColor: dialogBackgroundColor,
-            contentsWidget: Row(
-              children: [type_1()],
-            ),
-          ),
+          setSegmentedWidget()
         ],
       ),
     );
   }
 }
-
-//  CircularIcon(
-//             size: 40,
-//             borderRadius: 10,
-//             icon: Icons.alarm_on_rounded,
-//             backgroundColor: typeBackgroundColor,
-//           ),
-//           SpaceWidth(width: regularSapce),
-//           Column(
-//             crossAxisAlignment: CrossAxisAlignment.start,
-//             children: [
-//               Text(
-//                 '잊지않고 체중 기록하기',
-//                 style: TextStyle(color: buttonBackgroundColor),
-//               ),
-//               SpaceHeight(height: tinySpace),
-//               BodySmallText(text: '2023.04.31 ~ 2023.06.31'),
-//             ],
-//           )

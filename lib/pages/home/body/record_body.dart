@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_memo_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_plan_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_weight_widget.dart';
@@ -8,6 +9,8 @@ import 'package:flutter_app_weight_management/provider/record_selected_dateTime_
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
 class RecordBody extends StatefulWidget {
@@ -18,9 +21,13 @@ class RecordBody extends StatefulWidget {
 }
 
 class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
+  late Box<RecordBox> recordBox;
+
   @override
   void initState() {
     super.initState();
+
+    recordBox = Hive.box<RecordBox>('recordBox');
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -33,6 +40,14 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
+
+      if (recordInfo == null || recordInfo.weight == null) {
+        context
+            .read<RecordIconTypeProvider>()
+            .setSeletedRecordIconType(RecordIconTypes.addWeight);
+      }
+
       context.read<ImportDateTimeProvider>().setImportDateTime(DateTime.now());
     }
   }
