@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
@@ -43,13 +44,21 @@ class _RecordPlanWidgetState extends State<RecordPlanWidget> {
       ),
     ];
 
+    onSubmitAlarm() {}
+
     onTapIcon(enumId) {
       switch (enumId) {
         case RecordIconTypes.addPlan:
+          Navigator.pushNamed(context, '/add-act-type',
+              arguments: screenPointEnum.record);
           break;
+
         case RecordIconTypes.alarmPlan:
+          Navigator.pushNamed(context, '/common-alarm');
           break;
+
         case RecordIconTypes.removePlan:
+          // todo
           break;
         default:
       }

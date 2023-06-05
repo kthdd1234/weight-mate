@@ -6,7 +6,7 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_act_names.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_act_setting.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_act_type.dart';
-import 'package:flutter_app_weight_management/pages/common/alarm_setting_page.dart';
+import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
@@ -79,7 +79,7 @@ class MyApp extends StatelessWidget {
         '/add-act-setting': (context) => AddActSetting(actInfo: actInfo),
         '/home-container': (context) => const HomeContainer(),
         '/screen-lock': (context) => const ScreenLockPage(),
-        '/alarm-setting': (context) => const AlarmSettingPage(),
+        '/common-alarm': (context) => const CommonAlarmPage()
       },
       home: AppFramework(widget: const AddBodyInfo()),
     );

@@ -58,6 +58,7 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
         context: context,
         builder: (context) => DefaultBottomSheet(
           title: '날짜 불러오기',
+          height: 380,
           widgets: [
             DefaultTimePicker(
               initialDateTime: importDateTime,

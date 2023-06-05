@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
@@ -156,4 +157,12 @@ showSnackBar({
       ),
     ),
   );
+}
+
+setStep({required screenPointEnum screenPoint, required int step}) {
+  return screenPoint == screenPointEnum.start ? step : step - 1;
+}
+
+setRange({required screenPointEnum screenPoint}) {
+  return screenPoint == screenPointEnum.start ? 4 : 3;
 }

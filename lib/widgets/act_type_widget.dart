@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
-class ActTypeWidget extends StatefulWidget {
+class ActTypeWidget extends StatelessWidget {
   ActTypeWidget({
     super.key,
     required this.id,
@@ -13,7 +13,6 @@ class ActTypeWidget extends StatefulWidget {
     required this.onTap,
   });
 
-  dynamic initId;
   dynamic id;
   String title;
   String desc;
@@ -22,20 +21,15 @@ class ActTypeWidget extends StatefulWidget {
   Function(dynamic id) onTap;
 
   @override
-  State<ActTypeWidget> createState() => _ActTypeWidgetState();
-}
-
-class _ActTypeWidgetState extends State<ActTypeWidget> {
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         InkWell(
-          onTap: () => widget.onTap(widget.id),
+          onTap: () => onTap(id),
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: widget.isEnabled ? buttonBackgroundColor : Colors.white,
+              color: isEnabled ? buttonBackgroundColor : typeBackgroundColor,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Padding(
@@ -47,21 +41,20 @@ class _ActTypeWidgetState extends State<ActTypeWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.title,
+                        title,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
-                          color:
-                              widget.isEnabled ? buttonTextColor : primaryColor,
+                          color: isEnabled ? buttonTextColor : primaryColor,
                         ),
                       ),
                       SpaceHeight(height: tinySpace),
                       Text(
-                        widget.desc,
+                        desc,
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
-                          color: widget.isEnabled
+                          color: isEnabled
                               ? enabledTypeColor
                               : disEnabledTypeColor,
                         ),
@@ -69,8 +62,8 @@ class _ActTypeWidgetState extends State<ActTypeWidget> {
                     ],
                   ),
                   CircleAvatar(
-                    backgroundColor: typeBackgroundColor,
-                    child: Icon(widget.icon),
+                    backgroundColor: dialogBackgroundColor,
+                    child: Icon(icon),
                   )
                 ],
               ),

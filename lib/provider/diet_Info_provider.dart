@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:uuid/uuid.dart';
 
 class DietInfoProvider with ChangeNotifier {
   String userId = '';
@@ -9,7 +8,6 @@ class DietInfoProvider with ChangeNotifier {
   String _weightText = '';
   String _goalWeightText = '';
   ActInfoClass _actInfo = ActInfoClass(
-    id: const Uuid().v4(),
     mainActType: MainActTypes.none,
     mainActTitle: '',
     subActType: '',

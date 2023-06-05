@@ -4,18 +4,20 @@ import 'package:flutter_app_weight_management/components/framework/app_framework
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class AddContainer extends StatelessWidget {
-  const AddContainer({
+  AddContainer({
     super.key,
     required this.body,
     required this.buttonEnabled,
     required this.bottomSubmitButtonText,
     required this.onPressedBottomNavigationButton,
+    this.title,
   });
 
   final Widget body;
   final bool buttonEnabled;
   final String bottomSubmitButtonText;
   final VoidCallback onPressedBottomNavigationButton;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +27,10 @@ class AddContainer extends StatelessWidget {
         widget: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            title: title != null ? Text(title!) : null,
             backgroundColor: Colors.transparent,
             elevation: 0.0,
-            centerTitle: false,
+            centerTitle: true,
             foregroundColor: buttonBackgroundColor,
           ),
           body: Padding(

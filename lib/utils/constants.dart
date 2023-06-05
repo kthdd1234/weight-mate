@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
-import 'package:intl/intl.dart';
 
 /// 5.0
 const double tinySpace = 5.0;

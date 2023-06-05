@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
-import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/act_type_widget.dart';
+import 'package:flutter_app_weight_management/widgets/act_item_widget.dart';
 import 'package:provider/provider.dart';
 
 class AddActNames extends StatefulWidget {
@@ -42,10 +41,12 @@ class _AddActNamesState extends State<AddActNames> {
   @override
   Widget build(BuildContext context) {
     final mainActType = widget.actInfo.mainActType;
-    final classList = subActTypeClassList[mainActType]!;
+    final itemClassList = subActTypeClassList[mainActType]!;
+    final screenPoint =
+        ModalRoute.of(context)!.settings.arguments as screenPointEnum;
 
-    onTapActType(dynamic id) {
-      final itemType = classList.firstWhere((element) => element.id == id);
+    onTapActItem(dynamic id) {
+      final itemType = itemClassList.firstWhere((element) => element.id == id);
 
       setState(() {
         selectedSubType = id;
@@ -66,35 +67,55 @@ class _AddActNamesState extends State<AddActNames> {
         widget.actInfo.subActTitle = selectedSubTitle;
 
         context.read<DietInfoProvider>().changeActInfo(widget.actInfo);
-        return Navigator.pushNamed(context, '/add-act-setting');
+        return Navigator.pushNamed(
+          context,
+          '/add-act-setting',
+          arguments: screenPoint,
+        );
       }
 
       return null;
     }
 
-    List<ActTypeWidget> itemTypeListView = classList
-        .map((item) => ActTypeWidget(
-              id: item.id,
-              title: item.title,
-              desc: item.desc,
-              icon: item.icon,
-              isEnabled: selectedSubType == item.id,
-              onTap: onTapActType,
-            ))
-        .toList();
+    setGridView() {
+      return GridView.builder(
+        shrinkWrap: true,
+        itemCount: itemClassList.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisExtent: 150,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
+        itemBuilder: (context, index) {
+          final item = itemClassList[index];
+
+          return ActItemWidget(
+            id: item.id,
+            title: item.title,
+            desc1: item.desc1,
+            desc2: item.desc2,
+            icon: item.icon,
+            isEnabled: selectedSubType == item.id,
+            onTap: onTapActItem,
+          );
+        },
+      );
+    }
 
     return AddContainer(
       body: Column(
         children: [
-          SimpleStepper(currentStep: 3),
-          SpaceHeight(height: regularSapce),
-          HeadlineText(
-            text: '${widget.actInfo.mainActTitle} 종류를 선택해주세요.',
+          SimpleStepper(
+            step: setStep(screenPoint: screenPoint, step: 3),
+            range: setRange(screenPoint: screenPoint),
           ),
           SpaceHeight(height: regularSapce),
-          Column(children: itemTypeListView),
-          SpaceHeight(height: smallSpace),
-          BottomText(bottomText: '문구 넣어야 함')
+          HeadlineText(
+            text: '어떤 ${widget.actInfo.mainActTitle}으로 진행하나요?',
+          ),
+          SpaceHeight(height: regularSapce),
+          setGridView()
         ],
       ),
       buttonEnabled: buttonEnabled(),

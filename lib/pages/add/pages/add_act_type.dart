@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
-import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/act_type_widget.dart';
 import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
@@ -31,6 +30,9 @@ class _AddActTypeState extends State<AddActType> {
 
   @override
   Widget build(BuildContext context) {
+    final screenPoint =
+        ModalRoute.of(context)!.settings.arguments as screenPointEnum;
+
     buttonEnabled() {
       return mainActType != MainActTypes.none;
     }
@@ -48,8 +50,11 @@ class _AddActTypeState extends State<AddActType> {
         widget.actInfo.mainActTitle = mainActTitles[mainActType]!;
 
         context.read<DietInfoProvider>().changeActInfo(widget.actInfo);
-
-        Navigator.pushNamed(context, '/add-act-names');
+        Navigator.pushNamed(
+          context,
+          '/add-act-names',
+          arguments: screenPoint,
+        );
       }
 
       return null;
@@ -73,13 +78,16 @@ class _AddActTypeState extends State<AddActType> {
     return AddContainer(
       body: Column(
         children: [
-          SimpleStepper(currentStep: 2),
+          SimpleStepper(
+            step: setStep(screenPoint: screenPoint, step: 2),
+            range: setRange(screenPoint: screenPoint),
+          ),
           SpaceHeight(height: regularSapce),
           HeadlineText(text: '어떤 방법으로 시작할까요?'),
           SpaceHeight(height: regularSapce),
           Column(children: itemTypeWidgets),
           SpaceHeight(height: smallSpace),
-          BottomText(bottomText: '다이어트, 운동, 생활 습관은 목표 체중에 달성하기 위한 방법입니다.')
+          BottomText(bottomText: '식이요법, 운동, 생활 습관은 목표 체중에 달성하기 위한 방법입니다.')
         ],
       ),
       buttonEnabled: buttonEnabled(),

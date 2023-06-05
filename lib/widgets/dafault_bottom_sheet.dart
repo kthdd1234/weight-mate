@@ -9,16 +9,19 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
 class DefaultBottomSheet extends StatelessWidget {
-  DefaultBottomSheet(
-      {super.key,
-      required this.title,
-      required this.widgets,
-      required this.isEnabled,
-      required this.submitText,
-      required this.onSubmit,
-      this.titleLeftWidget});
+  DefaultBottomSheet({
+    super.key,
+    required this.title,
+    required this.height,
+    required this.widgets,
+    required this.isEnabled,
+    required this.submitText,
+    required this.onSubmit,
+    this.titleLeftWidget,
+  });
 
   String title;
+  double height;
   List<Widget> widgets;
   String submitText;
   bool isEnabled;
@@ -35,7 +38,7 @@ class DefaultBottomSheet extends StatelessWidget {
     }
 
     return Container(
-      height: 380,
+      height: height,
       decoration: BoxDecoration(
         color: Colors.transparent,
         borderRadius: BorderRadius.circular(10.0),

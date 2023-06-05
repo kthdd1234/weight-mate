@@ -53,3 +53,5 @@ enum MoreSeeItem {
 enum MoreSeeWidgetTypes { none, arrow, switching }
 
 enum MainActTypes { none, diet, exercise, lifestyle, custom }
+
+enum screenPointEnum { none, start, record }

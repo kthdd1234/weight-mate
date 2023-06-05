@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/components/text/headline_text.dart
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:provider/provider.dart';
 
@@ -77,7 +78,11 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
     onPressedBottomNavigationButton() {
       if (buttonEnabled()) {
-        Navigator.pushNamed(context, '/add-act-type');
+        Navigator.pushNamed(
+          context,
+          '/add-act-type',
+          arguments: screenPointEnum.start,
+        );
       }
 
       return null;
@@ -86,7 +91,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     return AddContainer(
       body: Column(
         children: [
-          SimpleStepper(currentStep: 1),
+          SimpleStepper(step: 1, range: 4),
           SpaceHeight(height: regularSapce),
           HeadlineText(text: '프로필 정보를 입력해주세요.'),
           SpaceHeight(height: regularSapce),
@@ -131,7 +136,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                   onChanged: onChangedGoalWeightText,
                 ),
                 SpaceHeight(height: smallSpace),
-                Text('체중 입력 알림 UI')
               ],
             ),
           ),

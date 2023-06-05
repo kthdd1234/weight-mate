@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
-import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
-import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -81,6 +77,10 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
           text: '오늘의 체중을 입력해주세요.',
           width: 270,
         );
+      }
+
+      if (enumId == RecordIconTypes.alarmWeight) {
+        Navigator.pushNamed(context, '/common-alarm');
       }
 
       setIconType(enumId);

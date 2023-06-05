@@ -57,18 +57,11 @@ class _CustomAlarmWidgetState extends State<CustomAlarmWidget> {
       children: [
         ContentsTitleText(
           text: '맞춤 알림',
-          icon: Icons.notifications_active_outlined,
+          icon: Icons.notifications_active,
         ),
         SpaceHeight(height: regularSapce),
         setAlarmWidgetList(),
         SpaceHeight(height: smallSpace),
-        EmptyTextArea(
-          text: '맞춤 알림을 추가해보세요.',
-          icon: Icons.add,
-          topHeight: 5,
-          downHeight: 5,
-          onTap: onTapAddAlarm,
-        ),
       ],
     );
   }

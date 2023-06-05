@@ -43,22 +43,22 @@ class _RecordAlarmWidgetState extends State<RecordAlarmWidget> {
     onSubmitAlarm() {}
 
     onTapDateTime(id, dateTimeStr) {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => DefaultBottomSheet(
-          title: '알림 시간',
-          widgets: [
-            DefaultTimePicker(
-              initialDateTime: DateTime.now(),
-              mode: CupertinoDatePickerMode.time,
-              onDateTimeChanged: onDateTimeChanged,
-            )
-          ],
-          isEnabled: true,
-          submitText: '완료',
-          onSubmit: onSubmitAlarm,
-        ),
-      );
+      // showModalBottomSheet(
+      //   context: context,
+      //   builder: (context) => DefaultBottomSheet(
+      //     title: '알림 시간',
+      //     widgets: [
+      //       DefaultTimePicker(
+      //         initialDateTime: DateTime.now(),
+      //         mode: CupertinoDatePickerMode.time,
+      //         onDateTimeChanged: onDateTimeChanged,
+      //       )
+      //     ],
+      //     isEnabled: true,
+      //     submitText: '완료',
+      //     onSubmit: onSubmitAlarm,
+      //   ),
+      // );
     }
 
     List<MoreSeeItemClass> moreSeeAlarmItems = [

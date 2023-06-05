@@ -17,9 +17,10 @@ import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/act_alarm.dart';
+import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_tap_widget.dart';
@@ -69,6 +70,9 @@ class _AddActSettingState extends State<AddActSetting> {
 
   @override
   Widget build(BuildContext context) {
+    final screenPoint =
+        ModalRoute.of(context)!.settings.arguments as screenPointEnum;
+
     buttonEnabled() {
       return nameController.text != '';
     }
@@ -82,34 +86,38 @@ class _AddActSettingState extends State<AddActSetting> {
       final userInfoState = provider.getUserInfo();
       final recordInfoState = provider.getRecordInfo();
       final now = DateTime.now();
+      final uuidV1 = const Uuid().v1();
+      final uuidV4 = const Uuid().v4();
 
       if (buttonEnabled()) {
         context.read<ImportDateTimeProvider>().setImportDateTime(now);
 
-        userBox.put(
-          'userBox',
-          UserBox(
-            userId: const Uuid().v1(),
-            tall: userInfoState.tall,
-            goalWeight: userInfoState.goalWeight,
-            recordStartDateTime: now,
-          ),
-        );
+        if (screenPoint == screenPointEnum.start) {
+          userBox.put(
+            'userBox',
+            UserBox(
+              userId: uuidV1,
+              tall: userInfoState.tall,
+              goalWeight: userInfoState.goalWeight,
+              recordStartDateTime: now,
+            ),
+          );
 
-        recordBox.put(
-          getDateTimeToInt(now),
-          RecordBox(
-            recordDateTime: now,
-            weight: recordInfoState.weight,
-            actList: [widget.actInfo.id],
-            memo: null,
-          ),
-        );
+          recordBox.put(
+            getDateTimeToInt(now),
+            RecordBox(
+              recordDateTime: now,
+              weight: recordInfoState.weight,
+              actList: null,
+              memo: null,
+            ),
+          );
+        }
 
         actBox.put(
-          widget.actInfo.id,
+          uuidV4,
           ActBox(
-            id: widget.actInfo.id,
+            id: uuidV4,
             mainActType: widget.actInfo.mainActType.toString(),
             mainActTitle: widget.actInfo.mainActTitle,
             subActType: widget.actInfo.subActType,
@@ -189,6 +197,7 @@ class _AddActSettingState extends State<AddActSetting> {
         context: context,
         builder: (context) => DefaultBottomSheet(
           title: '알림 시간 설정',
+          height: 380,
           widgets: [
             DefaultTimePicker(
               initialDateTime: alarmTime,
@@ -212,20 +221,27 @@ class _AddActSettingState extends State<AddActSetting> {
         return mainActTypeCounterText[widget.actInfo.mainActType]!;
       }
 
-      return '* 종류 이름은 언제든지 수정이 가능해요.';
+      return '* 이름은 언제든지 수정이 가능해요.';
+    }
+
+    onTapIcon(String id) {
+      print(id);
     }
 
     return AddContainer(
       body: Column(
         children: [
-          SimpleStepper(currentStep: 4),
+          SimpleStepper(
+            step: setStep(screenPoint: screenPoint, step: 4),
+            range: setRange(screenPoint: screenPoint),
+          ),
           SpaceHeight(height: regularSapce),
-          HeadlineText(text: '${widget.actInfo.mainActTitle} 실천 계획을 세워보세요.'),
+          HeadlineText(text: '나만의 ${widget.actInfo.mainActTitle} 계획을 세워보세요.'),
           SpaceHeight(height: regularSapce),
           ContentsBox(
             contentsWidget: Column(
               children: [
-                ContentsTitleText(text: '종류'),
+                ContentsTitleText(text: '이름'),
                 SpaceHeight(height: smallSpace),
                 TextInput(
                   controller: nameController,
@@ -233,7 +249,7 @@ class _AddActSettingState extends State<AddActSetting> {
                   maxLength: 12,
                   prefixIcon: Icons.edit,
                   suffixText: '',
-                  hintText: '종류를 입력해주세요.',
+                  hintText: '이름을 입력해주세요.',
                   counterText: onCounterText(),
                   onChanged: onChangedText,
                   errorText: null,
@@ -250,19 +266,17 @@ class _AddActSettingState extends State<AddActSetting> {
                 SpaceHeight(height: regularSapce + smallSpace),
                 ContentsTitleText(text: '알림'),
                 SpaceHeight(height: regularSapce),
-                ActAlarm(
-                  isEnabledAlarm: isAlarm,
-                  actInfo: widget.actInfo,
+                AlarmItemWidget(
+                  id: 'alarm-setting',
+                  title: '${widget.actInfo.mainActTitle} 실천 알림',
+                  desc: '설정한 시간에 실천 알림을 보내드려요.',
+                  isEnabled: isAlarm,
+                  alarmTime: alarmTime,
+                  onTap: onTapAlarm,
                   onChanged: onChangedSwitch,
-                ),
-                SpaceHeight(height: smallSpace),
-                isAlarm
-                    ? TimeChipWidget(
-                        id: 'dietAlarm',
-                        time: alarmTime,
-                        onTap: onTapAlarm,
-                      )
-                    : const EmptyArea()
+                  chipBackgroundColor: dialogBackgroundColor,
+                  iconBackgroundColor: dialogBackgroundColor,
+                )
               ],
             ),
           ),

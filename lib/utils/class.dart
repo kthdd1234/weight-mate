@@ -32,7 +32,6 @@ class RecordInfoClass {
 
 class ActInfoClass {
   ActInfoClass({
-    required this.id,
     required this.mainActType,
     required this.mainActTitle,
     required this.subActType,
@@ -43,7 +42,6 @@ class ActInfoClass {
     this.alarmTime,
   });
 
-  String id;
   MainActTypes mainActType;
   String mainActTitle;
   String subActType;
@@ -182,8 +180,8 @@ class MoreSeeItemClass {
   String? dateTimeStr;
 }
 
-class ItemTypeClass {
-  ItemTypeClass({
+class ActTypeClass {
+  ActTypeClass({
     required this.id,
     required this.title,
     required this.desc,
@@ -193,6 +191,21 @@ class ItemTypeClass {
   dynamic id;
   String title;
   String desc;
+  IconData icon;
+}
+
+class ActItemClass {
+  ActItemClass({
+    required this.id,
+    required this.title,
+    required this.desc1,
+    required this.desc2,
+    required this.icon,
+  });
+
+  dynamic id;
+  String title;
+  String desc1, desc2;
   IconData icon;
 }
 
@@ -209,4 +222,16 @@ class WeightInfoClass {
   String id, title, value;
   IconData icon, more;
   String tooltipMsg;
+}
+
+class GridIconClass {
+  GridIconClass({
+    required this.id,
+    required this.icon,
+    required this.isEnabled,
+  });
+
+  String id;
+  IconData icon;
+  bool isEnabled;
 }
