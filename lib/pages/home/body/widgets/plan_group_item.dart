@@ -12,19 +12,17 @@ class PlanGroupItem extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
-    required this.planList,
+    required this.length,
+    required this.percent,
   });
 
   IconData icon;
   String title;
-  List<dynamic> planList;
+  int length;
+  double percent;
 
   @override
   Widget build(BuildContext context) {
-    setPercentValue() {
-      return "70.3%";
-    }
-
     return ContentsBox(
       backgroundColor: dialogBackgroundColor,
       contentsWidget: Row(
@@ -47,7 +45,7 @@ class PlanGroupItem extends StatelessWidget {
                     style: const TextStyle(fontSize: 15),
                   ),
                   SpaceHeight(height: tinySpace),
-                  BodySmallText(text: '총 ${planList.length}개의 계획')
+                  BodySmallText(text: '총 $length개의 계획')
                 ],
               )
             ],
@@ -56,9 +54,9 @@ class PlanGroupItem extends StatelessWidget {
             radius: 30.0,
             lineWidth: 5.0,
             animation: true,
-            percent: 0.7,
+            percent: 0.703,
             center: Text(
-              setPercentValue(),
+              '$percent%',
               style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 10.0,

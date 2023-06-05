@@ -112,25 +112,6 @@ handleCheckErrorText({
   return null;
 }
 
-List<DietPlanClass> getDietPlanClassList(
-  List<Map<String, dynamic>> dietPlanList,
-) {
-  return dietPlanList
-      .map(
-        (element) => DietPlanClass(
-          id: element['id'],
-          icon: IconData(
-            element['iconCodePoint'],
-            fontFamily: 'MaterialIcons',
-          ),
-          plan: element['plan'],
-          isChecked: element['isChecked'],
-          isAction: element['isAction'],
-        ),
-      )
-      .toList();
-}
-
 showSnackBar({
   required BuildContext context,
   required String text,
@@ -159,10 +140,22 @@ showSnackBar({
   );
 }
 
-setStep({required screenPointEnum screenPoint, required int step}) {
-  return screenPoint == screenPointEnum.start ? step : step - 1;
+setStep({required argmentsTypeEnum argmentsType, required int step}) {
+  return argmentsType == argmentsTypeEnum.start ? step : step - 1;
 }
 
-setRange({required screenPointEnum screenPoint}) {
-  return screenPoint == screenPointEnum.start ? 4 : 3;
+setRange({required argmentsTypeEnum argmentsType}) {
+  return argmentsType == argmentsTypeEnum.start ? 4 : 3;
+}
+
+PlanTypeEnum planTypeEnumToString(String str) {
+  final map = {
+    'PlanTypeEnum.diet': PlanTypeEnum.diet,
+    'PlanTypeEnum.exercise': PlanTypeEnum.exercise,
+    'PlanTypeEnum.lifestyle': PlanTypeEnum.lifestyle
+  };
+  final result = map[str];
+
+  if (result == null) return PlanTypeEnum.none;
+  return result;
 }

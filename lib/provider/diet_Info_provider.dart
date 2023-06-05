@@ -7,13 +7,13 @@ class DietInfoProvider with ChangeNotifier {
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
-  ActInfoClass _actInfo = ActInfoClass(
-    mainActType: MainActTypes.none,
-    mainActTitle: '',
-    subActType: '',
-    subActTitle: '',
-    startActDateTime: DateTime.now(),
-    endActDateTime: null,
+  PlanInfoClass _planInfo = PlanInfoClass(
+    type: PlanTypeEnum.none,
+    title: '',
+    id: '',
+    name: '',
+    startDateTime: DateTime.now(),
+    endDateTime: null,
     isAlarm: true,
     alarmTime: DateTime.now(),
   );
@@ -36,7 +36,7 @@ class DietInfoProvider with ChangeNotifier {
     return RecordInfoClass(
       recordDateTime: _recordStartDateTime,
       weight: convertToDouble(_weightText),
-      actList: [],
+      actions: {},
       memo: null,
     );
   }
@@ -53,8 +53,8 @@ class DietInfoProvider with ChangeNotifier {
     return _goalWeightText;
   }
 
-  ActInfoClass getActInfo() {
-    return _actInfo;
+  PlanInfoClass getPlanInfo() {
+    return _planInfo;
   }
 
   changeTallText(String text) {
@@ -77,8 +77,8 @@ class DietInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeActInfo(ActInfoClass info) {
-    _actInfo = info;
+  changePlanInfo(PlanInfoClass info) {
+    _planInfo = info;
     notifyListeners();
   }
 }

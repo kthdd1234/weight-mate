@@ -24,9 +24,9 @@ enum SegmentedTypes {
   sixMonth,
   oneYear,
   custom,
-  groupList,
-  myPlan,
-  planAct
+  planTypes,
+  planItems,
+  planCheck
 }
 
 enum MoreSeeItem {
@@ -52,6 +52,6 @@ enum MoreSeeItem {
 
 enum MoreSeeWidgetTypes { none, arrow, switching }
 
-enum MainActTypes { none, diet, exercise, lifestyle, custom }
+enum PlanTypeEnum { none, diet, exercise, lifestyle, custom }
 
-enum screenPointEnum { none, start, record }
+enum argmentsTypeEnum { none, start, record, edit }

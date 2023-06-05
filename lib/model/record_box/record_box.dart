@@ -7,7 +7,7 @@ class RecordBox {
   RecordBox({
     required this.recordDateTime,
     this.weight,
-    this.actList,
+    this.actions,
     this.memo,
   });
 
@@ -18,7 +18,7 @@ class RecordBox {
   double? weight;
 
   @HiveField(2)
-  List<String>? actList;
+  Set<String>? actions;
 
   @HiveField(3)
   String? memo;

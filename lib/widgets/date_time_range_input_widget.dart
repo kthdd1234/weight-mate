@@ -9,13 +9,13 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 class DateTimeRangeInputWidget extends StatelessWidget {
   DateTimeRangeInputWidget({
     super.key,
-    required this.startActDateTime,
-    required this.endActDateTime,
+    required this.startDateTime,
+    required this.endDateTime,
     required this.onTapInput,
   });
 
-  DateTime startActDateTime;
-  DateTime? endActDateTime;
+  DateTime startDateTime;
+  DateTime? endDateTime;
   Function({String type, DateTime? dateTime}) onTapInput;
 
   @override
@@ -26,8 +26,8 @@ class DateTimeRangeInputWidget extends StatelessWidget {
           child: DateTimeInput(
             prefixIcon: Icons.hourglass_top_rounded,
             hintText: '시작일',
-            text: getDateTimeToSlash(startActDateTime),
-            onTap: () => onTapInput(type: 'start', dateTime: startActDateTime),
+            text: getDateTimeToSlash(startDateTime),
+            onTap: () => onTapInput(type: 'start', dateTime: startDateTime),
           ),
         ),
         SpaceWidth(width: smallSpace),
@@ -37,10 +37,8 @@ class DateTimeRangeInputWidget extends StatelessWidget {
           child: DateTimeInput(
             prefixIcon: Icons.hourglass_bottom_rounded,
             hintText: '종료일',
-            text: endActDateTime != null
-                ? getDateTimeToSlash(endActDateTime!)
-                : '',
-            onTap: () => onTapInput(type: 'end', dateTime: endActDateTime),
+            text: endDateTime != null ? getDateTimeToSlash(endDateTime!) : '',
+            onTap: () => onTapInput(type: 'end', dateTime: endDateTime),
           ),
         ),
       ],

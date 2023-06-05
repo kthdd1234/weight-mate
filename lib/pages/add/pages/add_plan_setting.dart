@@ -4,12 +4,10 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
-import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
-import 'package:flutter_app_weight_management/components/text/headline_text.dart';
-import 'package:flutter_app_weight_management/model/act_box/act_box.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
@@ -20,35 +18,34 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
-import 'package:flutter_app_weight_management/widgets/date_time_tap_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-import '../../../components/area/empty_area.dart';
 import '../../../components/picker/default_date_time_picker.dart';
 
-class AddActSetting extends StatefulWidget {
-  AddActSetting({
+class AddPlanSetting extends StatefulWidget {
+  AddPlanSetting({
     super.key,
-    required this.actInfo,
+    required this.planInfo,
   });
 
-  ActInfoClass actInfo;
+  PlanInfoClass planInfo;
 
   @override
-  State<AddActSetting> createState() => _AddActSettingState();
+  State<AddPlanSetting> createState() => _AddPlanSettingState();
 }
 
-class _AddActSettingState extends State<AddActSetting> {
+class _AddPlanSettingState extends State<AddPlanSetting> {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
-  late Box<ActBox> actBox;
+  late Box<PlanBox> planBox;
 
   TextEditingController nameController = TextEditingController();
-  DateTime startActDateTime = DateTime.now();
+  DateTime startDateTime = DateTime.now();
   DateTime? endActDateTime;
   bool isAlarm = true;
   late DateTime alarmTime;
@@ -59,19 +56,19 @@ class _AddActSettingState extends State<AddActSetting> {
     super.initState();
 
     DateTime now = DateTime.now();
-    nameController.text = widget.actInfo.subActTitle;
+    nameController.text = widget.planInfo.name;
     alarmTime = DateTime(now.year, now.month, now.day, 10, 30);
-    startActDateTime = DateTime.now();
+    startDateTime = DateTime.now();
 
     userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
-    actBox = Hive.box<ActBox>('actBox');
+    planBox = Hive.box<PlanBox>('planBox');
   }
 
   @override
   Widget build(BuildContext context) {
     final screenPoint =
-        ModalRoute.of(context)!.settings.arguments as screenPointEnum;
+        ModalRoute.of(context)!.settings.arguments as argmentsTypeEnum;
 
     buttonEnabled() {
       return nameController.text != '';
@@ -92,7 +89,7 @@ class _AddActSettingState extends State<AddActSetting> {
       if (buttonEnabled()) {
         context.read<ImportDateTimeProvider>().setImportDateTime(now);
 
-        if (screenPoint == screenPointEnum.start) {
+        if (screenPoint == argmentsTypeEnum.start) {
           userBox.put(
             'userBox',
             UserBox(
@@ -108,21 +105,19 @@ class _AddActSettingState extends State<AddActSetting> {
             RecordBox(
               recordDateTime: now,
               weight: recordInfoState.weight,
-              actList: null,
-              memo: null,
             ),
           );
         }
 
-        actBox.put(
+        planBox.put(
           uuidV4,
-          ActBox(
+          PlanBox(
             id: uuidV4,
-            mainActType: widget.actInfo.mainActType.toString(),
-            mainActTitle: widget.actInfo.mainActTitle,
-            subActType: widget.actInfo.subActType,
-            subActTitle: widget.actInfo.subActTitle,
-            startActDateTime: startActDateTime,
+            type: widget.planInfo.type.toString(),
+            title: widget.planInfo.title,
+            name: widget.planInfo.name,
+            startDateTime: startDateTime,
+            endDateTime: endActDateTime,
             isAlarm: isAlarm,
           ),
         );
@@ -162,7 +157,7 @@ class _AddActSettingState extends State<AddActSetting> {
     onSubmitDialog({type, Object? object}) {
       setState(() {
         if (object is DateTime) {
-          type == 'start' ? startActDateTime = object : endActDateTime = object;
+          type == 'start' ? startDateTime = object : endActDateTime = object;
         }
       });
 
@@ -178,7 +173,7 @@ class _AddActSettingState extends State<AddActSetting> {
           initialDateTime: dateTime,
           onSubmit: onSubmitDialog,
           onCancel: () => closeDialog(context),
-          minDate: type == 'end' ? startActDateTime : null,
+          minDate: type == 'end' ? startDateTime : null,
         ),
       );
     }
@@ -217,27 +212,21 @@ class _AddActSettingState extends State<AddActSetting> {
     }
 
     onCounterText() {
-      if (widget.actInfo.subActType == 'custom') {
-        return mainActTypeCounterText[widget.actInfo.mainActType]!;
+      if (widget.planInfo.id == 'custom') {
+        return planTypeDetailInfo[widget.planInfo.type]!.counterText;
       }
 
       return '* 이름은 언제든지 수정이 가능해요.';
     }
 
-    onTapIcon(String id) {
-      print(id);
-    }
-
     return AddContainer(
       body: Column(
         children: [
-          SimpleStepper(
-            step: setStep(screenPoint: screenPoint, step: 4),
-            range: setRange(screenPoint: screenPoint),
+          AddTitleWidget(
+            argmentsType: screenPoint,
+            step: 4,
+            title: '나만의 ${widget.planInfo.title} 계획을 세워보세요.',
           ),
-          SpaceHeight(height: regularSapce),
-          HeadlineText(text: '나만의 ${widget.actInfo.mainActTitle} 계획을 세워보세요.'),
-          SpaceHeight(height: regularSapce),
           ContentsBox(
             contentsWidget: Column(
               children: [
@@ -259,8 +248,8 @@ class _AddActSettingState extends State<AddActSetting> {
                 ContentsTitleText(text: '기간'),
                 SpaceHeight(height: smallSpace),
                 DateTimeRangeInputWidget(
-                  startActDateTime: startActDateTime,
-                  endActDateTime: endActDateTime,
+                  startDateTime: startDateTime,
+                  endDateTime: endActDateTime,
                   onTapInput: onTapInput,
                 ),
                 SpaceHeight(height: regularSapce + smallSpace),
@@ -268,7 +257,7 @@ class _AddActSettingState extends State<AddActSetting> {
                 SpaceHeight(height: regularSapce),
                 AlarmItemWidget(
                   id: 'alarm-setting',
-                  title: '${widget.actInfo.mainActTitle} 실천 알림',
+                  title: '${widget.planInfo.title} 실천 알림',
                   desc: '설정한 시간에 실천 알림을 보내드려요.',
                   isEnabled: isAlarm,
                   alarmTime: alarmTime,

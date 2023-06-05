@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/record_memo_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/record_plan_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/record_weight_widget.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_widget.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_widget.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_wise_saying_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
@@ -56,24 +56,25 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     RecordIconTypes seletedRecordIconType =
         context.watch<RecordIconTypeProvider>().getSeletedRecordIconType();
-    final recordSelectedDateTime =
+    DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
     return SingleChildScrollView(
       child: Column(
         children: [
-          TodayWiseSayingWidget(
-            recordSelectedDateTime: recordSelectedDateTime,
-          ),
+          const TodayWiseSayingWidget(),
           SpaceHeight(height: largeSpace),
-          RecordWeightWidget(
+          TodayWeightWidget(
             seletedRecordIconType: seletedRecordIconType,
-            recordSelectedDateTime: recordSelectedDateTime,
+            importDateTime: importDateTime,
           ),
           SpaceHeight(height: largeSpace),
-          RecordPlanWidget(seletedRecordIconType: seletedRecordIconType),
+          TodayPlanWidget(
+            seletedRecordIconType: seletedRecordIconType,
+            importDateTime: importDateTime,
+          ),
           SpaceHeight(height: largeSpace),
-          RecordMemoWidget(seletedRecordSubType: seletedRecordIconType),
+          TodayMemoWidget(seletedRecordSubType: seletedRecordIconType),
         ],
       ),
     );

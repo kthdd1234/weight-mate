@@ -19,21 +19,21 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
-class RecordWeightWidget extends StatefulWidget {
-  RecordWeightWidget({
+class TodayWeightWidget extends StatefulWidget {
+  TodayWeightWidget({
     super.key,
     required this.seletedRecordIconType,
-    required this.recordSelectedDateTime,
+    required this.importDateTime,
   });
 
   RecordIconTypes seletedRecordIconType;
-  DateTime recordSelectedDateTime;
+  DateTime importDateTime;
 
   @override
-  State<RecordWeightWidget> createState() => _RecordWeightWidgetState();
+  State<TodayWeightWidget> createState() => _TodayWeightWidgetState();
 }
 
-class _RecordWeightWidgetState extends State<RecordWeightWidget> {
+class _TodayWeightWidgetState extends State<TodayWeightWidget> {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
 
@@ -62,9 +62,8 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-    RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
+    RecordBox? recordInfo =
+        recordBox.get(getDateTimeToInt(widget.importDateTime));
 
     setIconType(enumId) {
       context.read<RecordIconTypeProvider>().setSeletedRecordIconType(enumId);
@@ -106,7 +105,7 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
       if (recordInfo == null) return null;
 
       recordInfo.weight = null;
-      recordBox.put(getDateTimeToInt(importDateTime), recordInfo);
+      recordBox.put(getDateTimeToInt(widget.importDateTime), recordInfo);
     }
 
     contentsWidgets({
@@ -126,7 +125,7 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
             widget.seletedRecordIconType == RecordIconTypes.addWeight;
 
         return TodayWeightEditWidget(
-          importDateTime: importDateTime,
+          importDateTime: widget.importDateTime,
           seletedRecordIconType: widget.seletedRecordIconType,
           weightText: isAddWeight ? '' : weight.toString(),
           goalWeightText: goalWeight.toString(),
@@ -176,7 +175,8 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
     }
 
     setWeight() {
-      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
+      RecordBox? recordInfo =
+          recordBox.get(getDateTimeToInt(widget.importDateTime));
       return recordInfo?.weight;
     }
 
@@ -186,7 +186,8 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
     }
 
     double? setBeforeWeight() {
-      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
+      RecordBox? recordInfo =
+          recordBox.get(getDateTimeToInt(widget.importDateTime));
 
       if (recordInfo == null) return null;
 
@@ -195,7 +196,7 @@ class _RecordWeightWidgetState extends State<RecordWeightWidget> {
       int index = recordBoxValues.indexWhere(
         (element) =>
             getDateTimeToInt(element.recordDateTime) ==
-            getDateTimeToInt(importDateTime),
+            getDateTimeToInt(widget.importDateTime),
       );
 
       if (index <= 0) return 0.0;

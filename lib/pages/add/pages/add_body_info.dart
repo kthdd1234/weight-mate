@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
-import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
-import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:provider/provider.dart';
 
 class AddBodyInfo extends StatefulWidget {
@@ -80,8 +79,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       if (buttonEnabled()) {
         Navigator.pushNamed(
           context,
-          '/add-act-type',
-          arguments: screenPointEnum.start,
+          '/add-plan-type',
+          arguments: argmentsTypeEnum.start,
         );
       }
 
@@ -91,10 +90,11 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     return AddContainer(
       body: Column(
         children: [
-          SimpleStepper(step: 1, range: 4),
-          SpaceHeight(height: regularSapce),
-          HeadlineText(text: '프로필 정보를 입력해주세요.'),
-          SpaceHeight(height: regularSapce),
+          AddTitleWidget(
+            argmentsType: argmentsTypeEnum.start,
+            step: 1,
+            title: '프로필 정보를 입력해주세요.',
+          ),
           ContentsBox(
             height: null,
             contentsWidget: Column(

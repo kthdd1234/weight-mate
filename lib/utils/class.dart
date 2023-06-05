@@ -20,67 +20,36 @@ class RecordInfoClass {
   RecordInfoClass({
     required this.recordDateTime,
     this.weight,
-    this.actList,
+    this.actions,
     this.memo,
   });
 
   DateTime recordDateTime;
   double? weight;
-  List<String>? actList;
+  Set<String>? actions;
   String? memo;
 }
 
-class ActInfoClass {
-  ActInfoClass({
-    required this.mainActType,
-    required this.mainActTitle,
-    required this.subActType,
-    required this.subActTitle,
-    required this.startActDateTime,
-    this.endActDateTime,
+class PlanInfoClass {
+  PlanInfoClass({
+    required this.type,
+    required this.title,
+    required this.id,
+    required this.name,
+    required this.startDateTime,
+    this.endDateTime,
     required this.isAlarm,
     this.alarmTime,
   });
 
-  MainActTypes mainActType;
-  String mainActTitle;
-  String subActType;
-  String subActTitle;
-  DateTime startActDateTime;
-  DateTime? endActDateTime;
+  PlanTypeEnum type;
+  String title;
+  String id;
+  String name;
+  DateTime startDateTime;
+  DateTime? endDateTime;
   bool isAlarm;
   DateTime? alarmTime;
-}
-
-class DietPlanClass {
-  DietPlanClass({
-    required this.id,
-    required this.icon,
-    required this.plan,
-    required this.isChecked,
-    required this.isAction,
-  });
-
-  String id;
-  IconData icon;
-  String plan;
-  bool isChecked;
-  bool isAction;
-
-  @override
-  String toString() {
-    return '{ $id, $plan, $isChecked $isAction }';
-  }
-
-  Map<String, dynamic> getMapData() {
-    return {
-      'id': id,
-      'iconCodePoint': icon.codePoint,
-      'plan': plan,
-      'isChecked': isChecked,
-      'isAction': isAction
-    };
-  }
 }
 
 class TextInputClass {
@@ -180,8 +149,8 @@ class MoreSeeItemClass {
   String? dateTimeStr;
 }
 
-class ActTypeClass {
-  ActTypeClass({
+class PlanTypeClass {
+  PlanTypeClass({
     required this.id,
     required this.title,
     required this.desc,
@@ -194,17 +163,17 @@ class ActTypeClass {
   IconData icon;
 }
 
-class ActItemClass {
-  ActItemClass({
+class PlanItemClass {
+  PlanItemClass({
     required this.id,
-    required this.title,
+    required this.name,
     required this.desc1,
     required this.desc2,
     required this.icon,
   });
 
   dynamic id;
-  String title;
+  String name;
   String desc1, desc2;
   IconData icon;
 }
@@ -234,4 +203,33 @@ class GridIconClass {
   String id;
   IconData icon;
   bool isEnabled;
+}
+
+class RemovePlanClass {
+  RemovePlanClass({
+    required this.id,
+    required this.planName,
+    required this.groupName,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.isChecked,
+  });
+
+  String id, planName, groupName;
+  DateTime startDateTime, endDateTime;
+  bool isChecked;
+}
+
+class PlanTypeDetailClass {
+  PlanTypeDetailClass({
+    required this.classList,
+    required this.initId,
+    required this.subText,
+    required this.counterText,
+    required this.icon,
+  });
+
+  List<PlanItemClass> classList;
+  String initId, subText, counterText;
+  IconData icon;
 }

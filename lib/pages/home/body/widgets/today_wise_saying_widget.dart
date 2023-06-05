@@ -11,9 +11,7 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/wise_saying_item_widget.dart';
 
 class TodayWiseSayingWidget extends StatefulWidget {
-  TodayWiseSayingWidget({super.key, required this.recordSelectedDateTime});
-
-  DateTime recordSelectedDateTime;
+  const TodayWiseSayingWidget({super.key});
 
   @override
   State<TodayWiseSayingWidget> createState() => _TodayWiseSayingWidgetState();

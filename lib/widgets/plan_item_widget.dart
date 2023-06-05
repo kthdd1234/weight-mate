@@ -5,11 +5,11 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
-class ActItemWidget extends StatelessWidget {
-  ActItemWidget({
+class PlanItemWidget extends StatelessWidget {
+  PlanItemWidget({
     super.key,
     required this.id,
-    required this.title,
+    required this.name,
     required this.desc1,
     required this.desc2,
     required this.icon,
@@ -18,7 +18,7 @@ class ActItemWidget extends StatelessWidget {
   });
 
   dynamic id;
-  String title;
+  String name;
   String desc1;
   String desc2;
   IconData icon;
@@ -47,7 +47,7 @@ class ActItemWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              name,
               style: TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,

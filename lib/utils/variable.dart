@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'enum.dart';
 
 var todayOfWiseSayingList = [
@@ -17,180 +15,201 @@ var todayOfWiseSayingList = [
   WiseSayingClass(wiseSaying: '먹는거요? 귀찮아요.', name: '김민희'),
 ];
 
-var mainActEtc = {
-  MainActTypes.diet: '를',
-  MainActTypes.exercise: '을',
-  MainActTypes.lifestyle: '을',
+var planTypeDetailInfo = {
+  PlanTypeEnum.diet: PlanTypeDetailClass(
+      classList: dietPlanClassList,
+      initId: 'intermittentFasting',
+      subText: '를',
+      counterText: '(예: 덴마크 다이어트, 다이어트 도시락 등)',
+      icon: Icons.dining_outlined),
+  PlanTypeEnum.exercise: PlanTypeDetailClass(
+      classList: exercisePlanClassList,
+      initId: 'health',
+      subText: '을',
+      counterText: '(예: 등산, 수영, 테니스 등)',
+      icon: Icons.fitness_center),
+  PlanTypeEnum.lifestyle: PlanTypeDetailClass(
+      classList: lifeStylePlanClassList,
+      initId: 'weightRecord',
+      subText: '을',
+      counterText: '(예: 저녁에 샐러드 먹기, 금주 선언 등)',
+      icon: Icons.home),
 };
 
-var mainAcyTypeClassList = [
-  ActTypeClass(
-    id: MainActTypes.diet,
+// var planTitleSub = {
+//   PlanTypeEnum.diet: '를',
+//   PlanTypeEnum.exercise: '을',
+//   PlanTypeEnum.lifestyle: '을',
+// };
+
+// var planItemClassList = {
+//   PlanTypeEnum.diet: dietPlanClassList,
+//   PlanTypeEnum.exercise: exercisePlanClassList,
+//   PlanTypeEnum.lifestyle: lifeStylePlanClassList,
+// };
+
+// var initItemType = {
+//   PlanTypeEnum.diet: 'intermittentFasting',
+//   PlanTypeEnum.exercise: 'health',
+//   PlanTypeEnum.lifestyle: 'weightRecord',
+// };
+
+// var planTypeCounterText = {
+//   PlanTypeEnum.diet: '(예: 황제 다이어트, 반공기 다이어트 등)',
+//   PlanTypeEnum.exercise: '(예: 등산, 수영, 테니스 등)',
+//   PlanTypeEnum.lifestyle: '(예: 저녁에 샐러드 먹기, 금주 선언 등)',
+// };
+
+var planTypeClassList = [
+  PlanTypeClass(
+    id: PlanTypeEnum.diet,
     title: '식이요법',
     desc: '간헐적 단식, 밥 반공기만 먹기 등',
     icon: Icons.dining_outlined,
   ),
-  ActTypeClass(
-    id: MainActTypes.exercise,
+  PlanTypeClass(
+    id: PlanTypeEnum.exercise,
     title: '운동',
     desc: '헬스, 러닝, 산책, 필라테스 등',
     icon: Icons.fitness_center,
   ),
-  ActTypeClass(
-    id: MainActTypes.lifestyle,
+  PlanTypeClass(
+    id: PlanTypeEnum.lifestyle,
     title: '생활습관',
     desc: '아침에 체중 기록하기, 야식 금지 등',
     icon: Icons.home,
   ),
 ];
 
-var subActTypeClassList = {
-  MainActTypes.diet: dietItemTypeClassList,
-  MainActTypes.exercise: exerciseItemTypeClassList,
-  MainActTypes.lifestyle: lifeStyleItemTypeClassList,
-};
-
-var initItemType = {
-  MainActTypes.diet: 'intermittentFasting',
-  MainActTypes.exercise: 'health',
-  MainActTypes.lifestyle: 'weightRecord',
-};
-
-var mainActTypeCounterText = {
-  MainActTypes.diet: '(예: 황제 다이어트, 반공기 다이어트 등)',
-  MainActTypes.exercise: '(예: 등산, 수영, 테니스 등)',
-  MainActTypes.lifestyle: '(예: 저녁에 샐러드 먹기, 다이어트 기간 중 술 안먹기 등)',
-};
-
-var dietItemTypeClassList = [
-  ActItemClass(
+var dietPlanClassList = [
+  PlanItemClass(
     id: 'intermittentFasting',
-    title: '간헐적 단식',
+    name: '간헐적 단식',
     desc1: '공복을 유지하는',
     desc2: '식이요법',
     icon: Icons.alarm_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'halfRice',
-    title: '밥 반공기만 먹기',
+    name: '밥 반공기만 먹기',
     desc1: '매 끼니마다',
     desc2: '밥은 반만 먹기',
     icon: Icons.rice_bowl_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'ketogenic',
-    title: '저탄고지 다이어트',
+    name: '저탄고지 다이어트',
     desc1: '저탄수화물 고지방',
     desc2: '식이요법',
     icon: Icons.savings_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'EveningSaled',
-    title: '저녁 식사 샐러드',
+    name: '저녁 식사 샐러드',
     desc1: '연어 샐러드, 치킨 샐러드',
     desc2: '쉬림프 샐러드 등',
     icon: Icons.grass,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'oneFood',
-    title: '원푸드 다이어트',
+    name: '원푸드 다이어트',
     desc1: '특정 음식만 먹는',
     desc2: '다이어트',
     icon: Icons.local_dining,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'custom',
-    title: '사용자 정의',
+    name: '사용자 정의',
     desc1: '나만의 식이요법',
     desc2: '직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];
 
-var exerciseItemTypeClassList = [
-  ActItemClass(
+var exercisePlanClassList = [
+  PlanItemClass(
     id: 'health',
-    title: '헬스',
+    name: '헬스',
     desc1: '러닝 머신, 덤벨, 바벨 등',
     desc2: '기구 운동',
     icon: Icons.fitness_center_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'walk',
-    title: '걷기',
+    name: '걷기',
     desc1: '산책, 속보, 하루 만보 등',
     desc2: '유산소 운동',
     icon: Icons.directions_walk_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'pilates',
-    title: '필라테스',
+    name: '필라테스',
     desc1: '자세 교정에 특화된',
     desc2: '근력 운동',
     icon: Icons.nordic_walking_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'yoga',
-    title: '요가',
+    name: '요가',
     desc1: '명상, 호흡, 스트레칭 등',
     desc2: '심신 수련 운동',
     icon: Icons.self_improvement_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'running',
-    title: '러닝',
+    name: '러닝',
     desc1: '달리기, 조깅, 스프린트 등',
     desc2: '유산소 운동',
     icon: Icons.self_improvement_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'custom',
-    title: '사용자 정의',
+    name: '사용자 정의',
     desc1: '나만의 운동',
     desc2: '직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];
 
-var lifeStyleItemTypeClassList = [
-  ActItemClass(
+var lifeStylePlanClassList = [
+  PlanItemClass(
     id: 'weightRecord',
-    title: '체중 기록',
+    name: '체중 기록',
     desc1: '아침에 잊지 않고',
     desc2: '체중 기록하기',
     icon: Icons.monitor_weight_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'noMidnightSnack',
-    title: '야식 금지',
+    name: '야식 금지',
     desc1: '밤 10시 이후로',
     desc2: '음식 안먹기',
     icon: Icons.nights_stay_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'zeroDrink',
-    title: '제로 칼로리 음료',
+    name: '제로 칼로리 음료',
     desc1: '일반음료 대신',
     desc2: '제로음료 마시기',
     icon: Icons.local_drink_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'noFastFood',
-    title: '패스트 푸드 금지',
+    name: '패스트 푸드 금지',
     desc1: '햄버거, 피자, 라면 등',
     desc2: '살찌는 음식 안먹기',
     icon: Icons.no_food_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'water',
-    title: '물 1L 마시기',
+    name: '물 1L 마시기',
     desc1: '하루에 물 1L 이상',
     desc2: '마시기',
     icon: Icons.local_drink_outlined,
   ),
-  ActItemClass(
+  PlanItemClass(
     id: 'custom',
-    title: '사용자 정의',
+    name: '사용자 정의',
     desc1: '나만의 생활습관',
     desc2: '직접 추가하기',
     icon: Icons.add_circle_outline,
@@ -215,8 +234,6 @@ Map<RecordIconTypes, Map<String, dynamic>> weightContentsTitles = {
     'title': '목표 체중',
   },
 };
-
-
 
 // var defaultDietPlanList = [
 //   DietPlanClass(

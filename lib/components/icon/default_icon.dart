@@ -9,12 +9,14 @@ class DefaultIcon extends StatelessWidget {
     required this.icon,
     required this.onTap,
     this.color,
+    this.iconSize,
   });
 
   dynamic id;
   IconData icon;
   Function(dynamic id) onTap;
   Color? color;
+  double? iconSize;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class DefaultIcon extends StatelessWidget {
           onTap: () => onTap(id),
           child: Icon(
             icon,
-            size: 21,
+            size: iconSize ?? 21,
             color: color ?? buttonBackgroundColor,
           ),
         ),
