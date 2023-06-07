@@ -225,25 +225,22 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       return contentsTitleInfo['icon'];
     }
 
-    return ValueListenableBuilder(
-      valueListenable: recordBox.listenable(),
-      builder: (context, box, widget) => ContentsBox(
-        contentsWidget: Column(
-          children: [
-            ContentsTitleText(
-              text: setContetnsTitle(),
-              sub: setIconWidgets(),
-              icon: setContetnsIcon(),
-            ),
-            SpaceHeight(height: smallSpace),
-            contentsWidgets(
-              tall: setTall(),
-              weight: setWeight(),
-              goalWeight: setGoalWeight(),
-              beforeWeight: setBeforeWeight(),
-            ),
-          ],
-        ),
+    return ContentsBox(
+      contentsWidget: Column(
+        children: [
+          ContentsTitleText(
+            text: setContetnsTitle(),
+            sub: setIconWidgets(),
+            icon: setContetnsIcon(),
+          ),
+          SpaceHeight(height: smallSpace),
+          contentsWidgets(
+            tall: setTall(),
+            weight: setWeight(),
+            goalWeight: setGoalWeight(),
+            beforeWeight: setBeforeWeight(),
+          ),
+        ],
       ),
     );
   }

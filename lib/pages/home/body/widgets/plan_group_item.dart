@@ -54,7 +54,7 @@ class PlanGroupItem extends StatelessWidget {
             radius: 30.0,
             lineWidth: 5.0,
             animation: true,
-            percent: 0.703,
+            percent: percent * 0.01,
             center: Text(
               '$percent%',
               style: const TextStyle(

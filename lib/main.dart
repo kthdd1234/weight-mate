@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-type': (context) => AddPlanType(planInfo: planInfo),
         '/add-plan-item': (context) => AddPlanItem(planInfo: planInfo),
-        '/add-plan-setting': (context) => AddPlanSetting(planInfo: planInfo),
+        '/add-plan-setting': (context) => const AddPlanSetting(),
         '/home-container': (context) => const HomeContainer(),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/common-alarm': (context) => const CommonAlarmPage()

@@ -15,7 +15,7 @@ class AlarmItemWidget extends StatelessWidget {
     required this.isEnabled,
     required this.title,
     required this.desc,
-    required this.alarmTime,
+    this.alarmTime,
     required this.onChanged,
     required this.onTap,
     required this.iconBackgroundColor,
@@ -24,7 +24,7 @@ class AlarmItemWidget extends StatelessWidget {
 
   String id, title, desc;
   bool isEnabled;
-  DateTime alarmTime;
+  DateTime? alarmTime;
   Function(bool newValue) onChanged;
   Function(String id) onTap;
   Color iconBackgroundColor, chipBackgroundColor;
@@ -65,10 +65,10 @@ class AlarmItemWidget extends StatelessWidget {
             ),
           ],
         ),
-        isEnabled
+        isEnabled && alarmTime != null
             ? TimeChipWidget(
                 id: id,
-                time: alarmTime,
+                time: alarmTime!,
                 backgroundColor: chipBackgroundColor,
                 onTap: onTap,
               )

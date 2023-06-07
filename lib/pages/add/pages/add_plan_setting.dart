@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
@@ -22,18 +23,14 @@ import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
+import 'package:flutter_app_weight_management/widgets/name_text_input.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import '../../../components/picker/default_date_time_picker.dart';
 
 class AddPlanSetting extends StatefulWidget {
-  AddPlanSetting({
-    super.key,
-    required this.planInfo,
-  });
-
-  PlanInfoClass planInfo;
+  const AddPlanSetting({super.key});
 
   @override
   State<AddPlanSetting> createState() => _AddPlanSettingState();
@@ -43,22 +40,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
-
-  TextEditingController nameController = TextEditingController();
-  DateTime startDateTime = DateTime.now();
-  DateTime? endActDateTime;
-  bool isAlarm = true;
-  late DateTime alarmTime;
   late DateTime timeValue;
 
   @override
   void initState() {
     super.initState();
-
-    DateTime now = DateTime.now();
-    nameController.text = widget.planInfo.name;
-    alarmTime = DateTime(now.year, now.month, now.day, 10, 30);
-    startDateTime = DateTime.now();
 
     userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
@@ -67,29 +53,35 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final screenPoint =
+    final provider = context.read<DietInfoProvider>();
+    final planInfo = provider.getPlanInfo();
+    final now = DateTime.now();
+    final argmentsType =
         ModalRoute.of(context)!.settings.arguments as argmentsTypeEnum;
 
     buttonEnabled() {
-      return nameController.text != '';
+      return planInfo.name != '';
     }
 
-    onChangedText(_) {
+    onChanged(String str) {
+      planInfo.name = str;
+
       setState(() {});
     }
 
     onPressedBottomNavigationButton() {
-      final provider = context.read<DietInfoProvider>();
       final userInfoState = provider.getUserInfo();
       final recordInfoState = provider.getRecordInfo();
       final now = DateTime.now();
       final uuidV1 = const Uuid().v1();
       final uuidV4 = const Uuid().v4();
+      final setId =
+          argmentsType == argmentsTypeEnum.edit ? planInfo.id : uuidV4;
 
       if (buttonEnabled()) {
         context.read<ImportDateTimeProvider>().setImportDateTime(now);
 
-        if (screenPoint == argmentsTypeEnum.start) {
+        if (argmentsType == argmentsTypeEnum.start) {
           userBox.put(
             'userBox',
             UserBox(
@@ -110,17 +102,20 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         }
 
         planBox.put(
-          uuidV4,
+          setId,
           PlanBox(
-            id: uuidV4,
-            type: widget.planInfo.type.toString(),
-            title: widget.planInfo.title,
-            name: widget.planInfo.name,
-            startDateTime: startDateTime,
-            endDateTime: endActDateTime,
-            isAlarm: isAlarm,
+            id: setId,
+            type: planInfo.type.toString(),
+            title: planInfo.title,
+            name: planInfo.name,
+            startDateTime: planInfo.startDateTime,
+            endDateTime: planInfo.endDateTime,
+            isAlarm: planInfo.isAlarm,
+            alarmTime: planInfo.alarmTime,
           ),
         );
+
+        provider.initDietInfoProvider();
 
         return Navigator.pushNamedAndRemoveUntil(
           context,
@@ -155,11 +150,13 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     }
 
     onSubmitDialog({type, Object? object}) {
-      setState(() {
-        if (object is DateTime) {
-          type == 'start' ? startDateTime = object : endActDateTime = object;
-        }
-      });
+      if (object is DateTime) {
+        type == 'start'
+            ? planInfo.startDateTime = object
+            : planInfo.endDateTime = object;
+
+        setState(() {});
+      }
 
       closeDialog(context);
     }
@@ -173,7 +170,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           initialDateTime: dateTime,
           onSubmit: onSubmitDialog,
           onCancel: () => closeDialog(context),
-          minDate: type == 'end' ? startDateTime : null,
+          minDate: type == 'end' ? planInfo.startDateTime : null,
         ),
       );
     }
@@ -182,8 +179,9 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() => timeValue = value);
     }
 
-    onTapButton() {
-      setState(() => alarmTime = timeValue);
+    onTapDialogButton() {
+      planInfo.alarmTime = timeValue;
+      setState(() {});
       closeDialog(context);
     }
 
@@ -195,61 +193,84 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           height: 380,
           widgets: [
             DefaultTimePicker(
-              initialDateTime: alarmTime,
+              initialDateTime: planInfo.alarmTime!,
               mode: CupertinoDatePickerMode.time,
               onDateTimeChanged: onDateTimeChanged,
             )
           ],
           isEnabled: true,
           submitText: '완료',
-          onSubmit: onTapButton,
+          onSubmit: onTapDialogButton,
         ),
       );
     }
 
     onChangedSwitch(bool newValue) {
-      setState(() => isAlarm = newValue);
+      planInfo.isAlarm = newValue;
+
+      newValue
+          ? planInfo.alarmTime = DateTime(now.year, now.month, now.day, 10, 30)
+          : planInfo.alarmTime = null;
+
+      setState(() {});
     }
 
     onCounterText() {
-      if (widget.planInfo.id == 'custom') {
-        return planTypeDetailInfo[widget.planInfo.type]!.counterText;
+      if (planInfo.id == 'custom') {
+        return planTypeDetailInfo[planInfo.type]!.counterText;
       }
 
       return '* 이름은 언제든지 수정이 가능해요.';
     }
 
+    setPageTitle() {
+      return argmentsType == argmentsTypeEnum.edit ? '계획 편집' : null;
+    }
+
+    setAppTitleWidget() {
+      return argmentsType == argmentsTypeEnum.edit
+          ? const EmptyArea()
+          : AddTitleWidget(
+              argmentsType: argmentsType,
+              step: 4,
+              title: '나만의 ${planInfo.title} 계획을 세워보세요.',
+            );
+    }
+
+    setBottomWidget() {
+      return argmentsType == argmentsTypeEnum.edit
+          ? const EmptyArea()
+          : Column(
+              children: [
+                SpaceHeight(height: regularSapce),
+                BottomText(bottomText: '기록 페이지에서 여러개의 계획을 추가할 수 있어요.')
+              ],
+            );
+    }
+
+    setBottomButtonText() {
+      return argmentsType == argmentsTypeEnum.edit ? '수정하기' : '완료';
+    }
+
     return AddContainer(
+      title: setPageTitle(),
       body: Column(
         children: [
-          AddTitleWidget(
-            argmentsType: screenPoint,
-            step: 4,
-            title: '나만의 ${widget.planInfo.title} 계획을 세워보세요.',
-          ),
+          setAppTitleWidget(),
           ContentsBox(
             contentsWidget: Column(
               children: [
-                ContentsTitleText(text: '이름'),
-                SpaceHeight(height: smallSpace),
-                TextInput(
-                  controller: nameController,
-                  autofocus: true,
-                  maxLength: 12,
-                  prefixIcon: Icons.edit,
-                  suffixText: '',
-                  hintText: '이름을 입력해주세요.',
-                  counterText: onCounterText(),
-                  onChanged: onChangedText,
-                  errorText: null,
-                  keyboardType: TextInputType.text,
+                nameTextInput(
+                  name: planInfo.name,
+                  onCounterText: onCounterText,
+                  onChanged: onChanged,
                 ),
                 SpaceHeight(height: regularSapce),
                 ContentsTitleText(text: '기간'),
                 SpaceHeight(height: smallSpace),
                 DateTimeRangeInputWidget(
-                  startDateTime: startDateTime,
-                  endDateTime: endActDateTime,
+                  startDateTime: planInfo.startDateTime,
+                  endDateTime: planInfo.endDateTime,
                   onTapInput: onTapInput,
                 ),
                 SpaceHeight(height: regularSapce + smallSpace),
@@ -257,11 +278,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                 SpaceHeight(height: regularSapce),
                 AlarmItemWidget(
                   id: 'alarm-setting',
-                  title: '${widget.planInfo.title} 실천 알림',
+                  title: '${planInfo.title} 실천 알림',
                   desc: '설정한 시간에 실천 알림을 보내드려요.',
-                  isEnabled: isAlarm,
-                  alarmTime: alarmTime,
-                  onTap: onTapAlarm,
+                  isEnabled: planInfo.isAlarm,
+                  alarmTime: planInfo.alarmTime,
+                  onTap: planInfo.alarmTime != null ? onTapAlarm : (_) {},
                   onChanged: onChangedSwitch,
                   chipBackgroundColor: dialogBackgroundColor,
                   iconBackgroundColor: dialogBackgroundColor,
@@ -269,12 +290,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
               ],
             ),
           ),
-          SpaceHeight(height: regularSapce),
-          BottomText(bottomText: '기록 페이지에서 여러개의 계획을 추가할 수 있어요.')
+          setBottomWidget()
         ],
       ),
       buttonEnabled: buttonEnabled(),
-      bottomSubmitButtonText: '완료',
+      bottomSubmitButtonText: setBottomButtonText(),
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
     );
   }

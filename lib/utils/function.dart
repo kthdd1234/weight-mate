@@ -33,7 +33,22 @@ getDateTimeToSlashYY(DateTime? dateTime) {
   return strDateTime;
 }
 
-timeToString(DateTime dateTime) {
+dateTimeToDotYY(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+
+  DateFormat formatter = DateFormat('yy.MM.dd');
+  String strDateTime = formatter.format(dateTime);
+
+  return strDateTime;
+}
+
+timeToString(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+
   String dateTimeToStr = DateFormat('a hh:mm').format(dateTime);
 
   if (dateTimeToStr.contains('AM')) {

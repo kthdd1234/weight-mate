@@ -65,7 +65,8 @@ class TodayPlanTypes extends StatelessWidget {
         itemCount: groupItemList.length,
         itemBuilder: (context, index) {
           final groupItem = groupItemList[index];
-          final percent = ; // todo
+          final percent = (groupItem.actionLength / groupItem.planLength) * 100;
+          final toFixed = double.parse(percent.toStringAsFixed(1));
 
           return Column(
             children: [
@@ -73,7 +74,7 @@ class TodayPlanTypes extends StatelessWidget {
                 icon: groupItem.icon,
                 title: groupItem.title,
                 length: groupItem.planLength,
-                percent: percent,
+                percent: toFixed,
               ),
               SpaceHeight(height: smallSpace)
             ],

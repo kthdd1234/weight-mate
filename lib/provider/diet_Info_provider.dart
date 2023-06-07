@@ -14,8 +14,8 @@ class DietInfoProvider with ChangeNotifier {
     name: '',
     startDateTime: DateTime.now(),
     endDateTime: null,
-    isAlarm: true,
-    alarmTime: DateTime.now(),
+    isAlarm: false,
+    alarmTime: null,
   );
   DateTime _recordStartDateTime = DateTime.now();
 
@@ -55,6 +55,21 @@ class DietInfoProvider with ChangeNotifier {
 
   PlanInfoClass getPlanInfo() {
     return _planInfo;
+  }
+
+  initDietInfoProvider() {
+    _planInfo = PlanInfoClass(
+      type: PlanTypeEnum.none,
+      title: '',
+      id: '',
+      name: '',
+      startDateTime: DateTime.now(),
+      endDateTime: null,
+      isAlarm: true,
+      alarmTime: null,
+    );
+
+    notifyListeners();
   }
 
   changeTallText(String text) {

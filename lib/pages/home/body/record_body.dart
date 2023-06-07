@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_widget.dart';
@@ -11,6 +13,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 
 class RecordBody extends StatefulWidget {
@@ -59,34 +62,47 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
+    onPressed() {
+      final recordBox = Hive.box<RecordBox>('recordBox');
+      final planBox = Hive.box<PlanBox>('planBox');
+      recordBox.clear();
+      planBox.clear();
+
+      print(recordBox.values.toList());
+      print(planBox.values.toList());
+    }
+
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          const TodayWiseSayingWidget(),
-          SpaceHeight(height: largeSpace),
-          TodayWeightWidget(
-            seletedRecordIconType: seletedRecordIconType,
-            importDateTime: importDateTime,
-          ),
-          SpaceHeight(height: largeSpace),
-          TodayPlanWidget(
-            seletedRecordIconType: seletedRecordIconType,
-            importDateTime: importDateTime,
-          ),
-          SpaceHeight(height: largeSpace),
-          TodayMemoWidget(seletedRecordSubType: seletedRecordIconType),
+      child: MultiValueListenableBuilder(
+        valueListenables: [
+          Hive.box<UserBox>('userBox').listenable(),
+          Hive.box<RecordBox>('recordBox').listenable(),
+          Hive.box<PlanBox>('planBox').listenable(),
         ],
+        builder: (context, values, child) {
+          return Column(
+            children: [
+              const TodayWiseSayingWidget(),
+              SpaceHeight(height: largeSpace),
+              TodayWeightWidget(
+                seletedRecordIconType: seletedRecordIconType,
+                importDateTime: importDateTime,
+              ),
+              SpaceHeight(height: largeSpace),
+              TodayPlanWidget(
+                seletedRecordIconType: seletedRecordIconType,
+                importDateTime: importDateTime,
+              ),
+              SpaceHeight(height: largeSpace),
+              TodayMemoWidget(seletedRecordSubType: seletedRecordIconType),
+              ElevatedButton(
+                onPressed: onPressed,
+                child: const Text('hive 데이터 초기화'),
+              )
+            ],
+          );
+        },
       ),
     );
   }
 }
-    // ElevatedButton(
-          //   onPressed: onPressed,
-          //   child: const Text('hive 데이터 초기화'),
-          // )
-  //onPressed() {
-      // final recordInfoBox = Hive.box<RecordInfoBox>('recordInfoBox');
-      // recordInfoBox.clear();
-
-      // print(recordInfoBox.values.toList());
-   // }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
@@ -12,102 +13,103 @@ class PlanItemInfo extends StatelessWidget {
   PlanItemInfo({
     super.key,
     required this.id,
-    required this.groupName,
+    required this.title,
     required this.icon,
-    required this.itemName,
+    required this.name,
     required this.startDateTime,
-    required this.endDateTime,
-    required this.isAct,
+    this.endDateTime,
     required this.onTap,
+    required this.isAlarm,
+    required this.alarmTime,
   });
 
-  String id, groupName, itemName;
+  String id, title, name;
   IconData icon;
-  DateTime startDateTime, endDateTime;
-  bool isAct;
+  DateTime startDateTime;
+  DateTime? endDateTime, alarmTime;
   Function(String id) onTap;
+  bool isAlarm;
 
   @override
   Widget build(BuildContext context) {
-    iconTextWidget({required IconData icon, required String text}) {
+    iconText({required IconData icon, required String text}) {
       return Row(
         children: [
-          Icon(
-            icon,
-            size: 18,
-            color: buttonBackgroundColor,
-          ),
+          Icon(icon, size: 18, color: buttonBackgroundColor),
           SpaceWidth(width: tinySpace),
           Text(
             text,
-            style: TextStyle(
-              color: buttonBackgroundColor,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: buttonBackgroundColor, fontSize: 12),
           )
         ],
       );
     }
 
-    return Column(
-      children: [
-        InkWell(
-          onTap: () => onTap(id),
-          child: ContentsBox(
-            backgroundColor: dialogBackgroundColor,
-            contentsWidget: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return InkWell(
+      onTap: () => onTap(id),
+      child: ContentsBox(
+        backgroundColor: dialogBackgroundColor,
+        contentsWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    BodySmallText(text: groupName),
-                    SpaceHeight(height: smallSpace),
-                    Text(
-                      itemName,
-                      style: const TextStyle(
-                        color: buttonBackgroundColor,
-                      ),
-                    ),
-                    SpaceHeight(height: smallSpace),
-                    iconTextWidget(
-                      icon: Icons.calendar_month,
-                      text: '23.04.31 ~ 23.06.31',
-                    )
-                  ],
+                BodySmallText(text: title),
+                SpaceHeight(height: smallSpace),
+                Text(
+                  name,
+                  style: const TextStyle(color: buttonBackgroundColor),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    CircularIcon(
-                      size: 35,
-                      borderRadius: 10,
-                      icon: icon,
-                      backgroundColor: typeBackgroundColor,
-                      adjustSize: 15,
-                    ),
-                    SpaceHeight(height: regularSapce),
-                    TextIcon(
-                      backgroundColor:
-                          isAct ? enableBackgroundColor : Color(0xffF5F6F7),
-                      text: isAct ? '실천 완료!' : '미실천',
-                      borderRadius: 10,
-                      textColor: isAct ? enableTextColor : Color(0xff9A9EAA),
-                      fontSize: 10,
-                    )
-                  ],
+                SpaceHeight(height: smallSpace),
+                iconText(
+                  icon: Icons.calendar_month,
+                  text:
+                      '${dateTimeToDotYY(startDateTime)} ~ ${dateTimeToDotYY(endDateTime)}',
                 )
               ],
             ),
-          ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                CircularIcon(
+                  size: 35,
+                  borderRadius: 10,
+                  icon: icon,
+                  backgroundColor: typeBackgroundColor,
+                  adjustSize: 15,
+                ),
+                SpaceHeight(height: regularSapce),
+                isAlarm
+                    ? TextIcon(
+                        backgroundColor: enableBackgroundColor,
+                        text: timeToString(alarmTime),
+                        borderRadius: 10,
+                        textColor: enableTextColor,
+                        fontSize: 10,
+                        icon: Icons.notifications_active,
+                        iconSize: 13,
+                        iconColor: enableTextColor,
+                      )
+                    : TextIcon(
+                        backgroundColor: disabledButtonBackgroundColor,
+                        text: '알림 OFF',
+                        borderRadius: 10,
+                        textColor: disEnabledTypeColor,
+                        fontSize: 10,
+                        iconSize: 13,
+                        iconColor: disEnabledTypeColor,
+                      )
+              ],
+            )
+          ],
         ),
-        SpaceHeight(height: smallSpace)
-      ],
+      ),
     );
   }
 }
  // SpaceHeight(height: tinySpace),
-                        // iconTextWidget(
+                        // iconText(
                         //   icon: Icons.notifications_active_outlined,
                         //   text: timeToString(alarmDateTime),
                         // ),

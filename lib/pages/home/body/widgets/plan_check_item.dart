@@ -8,85 +8,78 @@ import 'package:flutter_app_weight_management/components/text/body_small_text.da
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class PlanCheckItem extends StatelessWidget {
-  PlanCheckItem(
-      {super.key,
-      required this.id,
-      required this.icon,
-      required this.groupName,
-      required this.itemName,
-      required this.isChecked,
-      required this.onTap});
+  PlanCheckItem({
+    super.key,
+    required this.id,
+    required this.icon,
+    required this.groupName,
+    required this.itemName,
+    required this.isChecked,
+    required this.onTap,
+  });
 
   String id, groupName, itemName;
   IconData icon;
   bool isChecked;
-  Function(String id) onTap;
+  Function({required String id, required bool checked}) onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () => onTap(id),
-          child: ContentsBox(
-            padding: const EdgeInsets.fromLTRB(1, 20, 20, 20),
-            backgroundColor:
-                isChecked ? dialogBackgroundColor : typeBackgroundColor,
-            contentsWidget: Row(
-              children: [
-                HeightDivider(
-                  width: 3,
-                  height: 40,
-                  color: isChecked
-                      ? Colors.purple[100]
-                      : disabledButtonBackgroundColor,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                SpaceWidth(width: regularSapce),
-                CircularIcon(
-                  size: 40,
-                  borderRadius: 40,
-                  icon: icon,
-                  backgroundColor:
-                      isChecked ? typeBackgroundColor : Colors.white,
-                  iconColor: isChecked ? enableTextColor : disEnabledTypeColor,
-                ),
-                SpaceWidth(width: regularSapce),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BodySmallText(text: groupName),
-                      SpaceHeight(height: tinySpace),
-                      Text(
-                        itemName,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: isChecked
-                              ? buttonBackgroundColor
-                              : enabledTypeColor,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                CircularIcon(
-                  size: 35,
-                  borderRadius: 35,
-                  adjustSize: 15,
-                  icon: isChecked ? Icons.check : null,
-                  iconColor: enableTextColor,
-                  backgroundColor: typeBackgroundColor,
-                  borderColor: isChecked
-                      ? enableBackgroundColor
-                      : disabledButtonBackgroundColor,
-                ),
-              ],
+    return InkWell(
+      onTap: () => onTap(id: id, checked: !isChecked),
+      child: ContentsBox(
+        padding: const EdgeInsets.fromLTRB(1, 20, 20, 20),
+        backgroundColor:
+            isChecked ? dialogBackgroundColor : typeBackgroundColor,
+        contentsWidget: Row(
+          children: [
+            HeightDivider(
+              width: 3,
+              height: 40,
+              color: isChecked
+                  ? Colors.purple[100]
+                  : disabledButtonBackgroundColor,
+              borderRadius: BorderRadius.circular(20),
             ),
-          ),
+            SpaceWidth(width: regularSapce),
+            CircularIcon(
+              size: 40,
+              borderRadius: 40,
+              icon: icon,
+              backgroundColor: isChecked ? typeBackgroundColor : Colors.white,
+              iconColor: isChecked ? enableTextColor : disEnabledTypeColor,
+            ),
+            SpaceWidth(width: regularSapce),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BodySmallText(text: groupName),
+                  SpaceHeight(height: tinySpace),
+                  Text(
+                    itemName,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color:
+                          isChecked ? buttonBackgroundColor : enabledTypeColor,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            CircularIcon(
+              size: 35,
+              borderRadius: 35,
+              adjustSize: 15,
+              icon: isChecked ? Icons.check : null,
+              iconColor: enableTextColor,
+              backgroundColor: typeBackgroundColor,
+              borderColor: isChecked ? enableBackgroundColor : Colors.grey[300],
+              onTap: (_) => onTap(id: id, checked: !isChecked),
+            ),
+          ],
         ),
-        SpaceHeight(height: smallSpace)
-      ],
+      ),
     );
   }
 }

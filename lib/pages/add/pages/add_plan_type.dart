@@ -48,6 +48,7 @@ class _AddPlanTypeState extends State<AddPlanType> {
         widget.planInfo.title = planTitle[planType]!;
 
         context.read<DietInfoProvider>().changePlanInfo(widget.planInfo);
+
         Navigator.pushNamed(
           context,
           '/add-plan-item',

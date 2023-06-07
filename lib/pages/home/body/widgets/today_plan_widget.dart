@@ -17,6 +17,7 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
 List<RecordIconClass> recordIconClassList = [
   RecordIconClass(
@@ -34,10 +35,11 @@ List<RecordIconClass> recordIconClassList = [
 ];
 
 class TodayPlanWidget extends StatefulWidget {
-  TodayPlanWidget(
-      {super.key,
-      required this.seletedRecordIconType,
-      required this.importDateTime});
+  TodayPlanWidget({
+    super.key,
+    required this.seletedRecordIconType,
+    required this.importDateTime,
+  });
 
   RecordIconTypes seletedRecordIconType;
   DateTime importDateTime;
@@ -47,33 +49,38 @@ class TodayPlanWidget extends StatefulWidget {
 }
 
 class _TodayPlanWidgetState extends State<TodayPlanWidget> {
-  late Set<String>? actions;
-  late List<PlanInfoClass> planInfoList;
+  late Box<RecordBox> recordBox;
+  late Box<PlanBox> planBox;
 
   SegmentedTypes selectedSegment = SegmentedTypes.planTypes;
 
   @override
   void initState() {
-    actions =
-        Hive.box<RecordBox>('recordBox').get(widget.importDateTime)?.actions;
-    planInfoList = Hive.box<PlanBox>('planBox')
-        .values
-        .map((item) => PlanInfoClass(
-            type: planTypeEnumToString(item.type),
-            title: item.title,
-            id: item.id,
-            name: item.name,
-            startDateTime: item.startDateTime,
-            endDateTime: item.endDateTime,
-            isAlarm: item.isAlarm,
-            alarmTime: item.alarmTime))
-        .toList();
+    recordBox = Hive.box<RecordBox>('recordBox');
+    planBox = Hive.box<PlanBox>('planBox');
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final recordInfo = Hive.box<RecordBox>('recordBox')
+        .get(getDateTimeToInt(widget.importDateTime));
+    final actions = recordInfo?.actions;
+    final planInfoList = Hive.box<PlanBox>('planBox')
+        .values
+        .map((item) => PlanInfoClass(
+              type: planTypeEnumToString(item.type),
+              title: item.title,
+              id: item.id,
+              name: item.name,
+              startDateTime: item.startDateTime,
+              endDateTime: item.endDateTime,
+              isAlarm: item.isAlarm,
+              alarmTime: item.alarmTime,
+            ))
+        .toList();
+
     onTapIcon(enumId) {
       switch (enumId) {
         case RecordIconTypes.addPlan:
@@ -162,12 +169,15 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
     setSegmentedWidget() {
       Map<SegmentedTypes, StatelessWidget> segmentedInfo = {
-        SegmentedTypes.planTypes: TodayPlanTypes(
-          actions: actions,
+        SegmentedTypes.planTypes:
+            TodayPlanTypes(actions: actions, planInfoList: planInfoList),
+        SegmentedTypes.planItems: TodayPlanItems(planInfoList: planInfoList),
+        SegmentedTypes.planCheck: TodayPlanCheck(
+          recordBox: recordBox,
+          recordInfo: recordInfo,
+          importDateTime: widget.importDateTime,
           planInfoList: planInfoList,
         ),
-        SegmentedTypes.planItems: const TodayPlanItems(),
-        SegmentedTypes.planCheck: const TodayPlanCheck(),
       };
 
       return segmentedInfo[selectedSegment]!;
@@ -181,7 +191,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       ),
       SegmentedTypes.planItems: segmentedItem(
         type: SegmentedTypes.planItems,
-        text: '나의 계획',
+        text: '전체 계획',
         icon: Icons.abc,
       ),
       SegmentedTypes.planCheck: segmentedItem(

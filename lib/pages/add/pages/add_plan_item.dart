@@ -55,10 +55,19 @@ class _AddPlanItemState extends State<AddPlanItem> {
 
     onPressedBottomNavigationButton() {
       if (buttonEnabled()) {
+        final now = DateTime.now();
+
         widget.planInfo.id = selectedPlanId;
         widget.planInfo.name = selectedPlanName;
+        widget.planInfo.startDateTime = now;
+        widget.planInfo.endDateTime = null;
+        widget.planInfo.alarmTime =
+            DateTime(now.year, now.month, now.day, 10, 30);
+
+        widget.planInfo.isAlarm = true;
 
         context.read<DietInfoProvider>().changePlanInfo(widget.planInfo);
+
         return Navigator.pushNamed(
           context,
           '/add-plan-setting',
