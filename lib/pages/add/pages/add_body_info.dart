@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
+import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:provider/provider.dart';
 
 class AddBodyInfo extends StatefulWidget {
@@ -20,12 +23,26 @@ class AddBodyInfo extends StatefulWidget {
 }
 
 class _AddBodyInfoState extends State<AddBodyInfo> {
+  late DateTime timeValue;
+
+  @override
+  void initState() {
+    DateTime now = DateTime.now();
+    timeValue = DateTime(now.year, now.month, now.day, 10, 30);
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final tallText = context.watch<DietInfoProvider>().getTallText();
-    final weightText = context.watch<DietInfoProvider>().getWeightText();
-    final goalWeightText =
-        context.watch<DietInfoProvider>().getGoalWeightText();
+    final watchProvider = context.watch<DietInfoProvider>();
+    final readProvider = context.read<DietInfoProvider>();
+
+    final tallText = watchProvider.getTallText();
+    final weightText = watchProvider.getWeightText();
+    final goalWeightText = watchProvider.getGoalWeightText();
+    final isAlarm = watchProvider.getIsWeightAlarm();
+    final weightAlarmTime = watchProvider.getWeightAlarmTime();
 
     onChangedTallText(value) {
       context.read<DietInfoProvider>().changeTallText(value);
@@ -87,6 +104,84 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       return null;
     }
 
+    bodyInputWidget({
+      required String title,
+      required int maxLength,
+      required IconData? prefixIcon,
+      required String suffixText,
+      required String counterText,
+      required String hintText,
+      required dynamic errorText,
+      required Function(String) onChanged,
+    }) {
+      return Column(
+        children: [
+          ContentsTitleText(text: title),
+          SpaceHeight(height: smallSpace),
+          TextInput(
+            maxLength: maxLength,
+            prefixIcon: prefixIcon,
+            suffixText: suffixText,
+            counterText: counterText,
+            hintText: hintText,
+            errorText: errorText,
+            onChanged: onChanged,
+          )
+        ],
+      );
+    }
+
+    onChanged(bool newValue) {
+      readProvider.changeIsWeightAlarm(newValue);
+      newValue
+          ? readProvider.changeWeightAlarmTime(timeValue)
+          : readProvider.changeWeightAlarmTime(null);
+    }
+
+    onDateTimeChanged(DateTime value) {
+      setState(() => timeValue = value);
+    }
+
+    onSubmit() {
+      NotificationService().showNotification(
+        title: '테스트 title',
+        body: '테스트 body',
+      );
+
+      readProvider.changeWeightAlarmTime(timeValue);
+      closeDialog(context);
+    }
+
+    onTap(String id) {
+      showAlarmBottomSheet(
+        context: context,
+        initialDateTime: weightAlarmTime!,
+        onDateTimeChanged: onDateTimeChanged,
+        onSubmit: onSubmit,
+      );
+    }
+
+    bodyAlarmWidget() {
+      return Column(
+        children: [
+          ContentsTitleText(text: '알림 설정'),
+          SpaceHeight(height: regularSapce),
+          AlarmItemWidget(
+            id: 'weight-alarm',
+            title: '체중 기록',
+            desc: '기록 누락 방지를 위해 알림을 보내드려요.',
+            isEnabled: isAlarm,
+            alarmTime: weightAlarmTime,
+            icon: Icons.notifications_active,
+            iconBackgroundColor: typeBackgroundColor,
+            chipBackgroundColor: typeBackgroundColor,
+            onChanged: onChanged,
+            onTap: onTap,
+          ),
+        ],
+      );
+    }
+
     return AddContainer(
       body: Column(
         children: [
@@ -96,45 +191,51 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             title: '프로필 정보를 입력해주세요.',
           ),
           ContentsBox(
-            height: null,
             contentsWidget: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ContentsTitleText(text: '키'),
-                SpaceHeight(height: smallSpace),
-                TextInput(
-                  maxLength: 5,
-                  prefixIcon: Icons.accessibility_new_sharp,
-                  suffixText: 'cm',
-                  counterText: '(예: 165, 173.2)',
-                  hintText: '키를 입력해주세요.',
-                  errorText: setErrorTextTall(),
-                  onChanged: onChangedTallText,
+                Row(
+                  children: [
+                    Expanded(
+                      child: bodyInputWidget(
+                        title: '키',
+                        maxLength: 5,
+                        prefixIcon: Icons.accessibility_new_sharp,
+                        suffixText: 'cm',
+                        counterText: '(예: 164)',
+                        hintText: '키',
+                        errorText: setErrorTextTall(),
+                        onChanged: onChangedTallText,
+                      ),
+                    ),
+                    SpaceWidth(width: smallSpace),
+                    Expanded(
+                      child: bodyInputWidget(
+                        title: '체중',
+                        maxLength: 4,
+                        prefixIcon: Icons.monitor_weight,
+                        suffixText: 'kg',
+                        counterText: "(예: 63.2)",
+                        hintText: '체중',
+                        errorText: setErrorTextWeight(),
+                        onChanged: onChangedWeightText,
+                      ),
+                    ),
+                  ],
                 ),
                 SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '체중'),
-                SpaceHeight(height: smallSpace),
-                TextInput(
-                  maxLength: 4,
-                  prefixIcon: Icons.monitor_weight,
-                  suffixText: 'kg',
-                  counterText: '(예: 59, 63.5)',
-                  hintText: '체중을 입력해주세요.',
-                  errorText: setErrorTextWeight(),
-                  onChanged: onChangedWeightText,
-                ),
-                SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '목표 체중'),
-                SpaceHeight(height: smallSpace),
-                TextInput(
+                bodyInputWidget(
+                  title: '목표 체중',
                   maxLength: 4,
                   prefixIcon: Icons.flag,
                   suffixText: 'kg',
-                  counterText: '(예: 50, 70.5)',
-                  hintText: '목표 체중을 입력해주세요.',
+                  counterText: '(예: 51, 67.2)',
+                  hintText: '목표 체중',
                   errorText: setErrorTextGoalWeight(),
                   onChanged: onChangedGoalWeightText,
                 ),
+                SpaceHeight(height: regularSapce),
+                bodyAlarmWidget(),
                 SpaceHeight(height: smallSpace),
               ],
             ),

@@ -29,10 +29,10 @@ class TodayPlanCheck extends StatelessWidget {
         if (recordInfo == null) {
           recordInfo = RecordBox(
             recordDateTime: DateTime.now(),
-            actions: {id},
+            actions: [id],
           );
         } else if (recordInfo!.actions == null) {
-          recordInfo!.actions = {id};
+          recordInfo!.actions = [id];
         } else {
           recordInfo!.actions!.add(id);
         }

@@ -67,10 +67,10 @@ const bodyFatMin = 0.0;
 const bodyFatMax = 100.0;
 
 /// tallErrMsg
-const tallErrMsg = '120 에서 220 사이의 값을 입력해주세요.';
+const tallErrMsg = '120 ~ 220 사이의 값';
 
 /// weightErrMsg
-const weightErrMsg = '20 에서 200 사이의 값을 입력해주세요.';
+const weightErrMsg = '20 ~ 200 사이의 값';
 
 /// bodyFatErrMsg
 const bodyFatErrMsg = '0 에서 100 사이의 값을 입력해주세요.';

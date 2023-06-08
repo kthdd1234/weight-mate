@@ -7,6 +7,8 @@ class DietInfoProvider with ChangeNotifier {
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
+  bool _isWeightAlarm = false;
+  DateTime? _weightAlarmTime;
   PlanInfoClass _planInfo = PlanInfoClass(
     type: PlanTypeEnum.none,
     title: '',
@@ -36,7 +38,7 @@ class DietInfoProvider with ChangeNotifier {
     return RecordInfoClass(
       recordDateTime: _recordStartDateTime,
       weight: convertToDouble(_weightText),
-      actions: {},
+      actions: [],
       memo: null,
     );
   }
@@ -55,6 +57,14 @@ class DietInfoProvider with ChangeNotifier {
 
   PlanInfoClass getPlanInfo() {
     return _planInfo;
+  }
+
+  bool getIsWeightAlarm() {
+    return _isWeightAlarm;
+  }
+
+  DateTime? getWeightAlarmTime() {
+    return _weightAlarmTime;
   }
 
   initDietInfoProvider() {
@@ -94,6 +104,16 @@ class DietInfoProvider with ChangeNotifier {
 
   changePlanInfo(PlanInfoClass info) {
     _planInfo = info;
+    notifyListeners();
+  }
+
+  changeIsWeightAlarm(bool value) {
+    _isWeightAlarm = value;
+    notifyListeners();
+  }
+
+  changeWeightAlarmTime(DateTime? time) {
+    _weightAlarmTime = time;
     notifyListeners();
   }
 }

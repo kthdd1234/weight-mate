@@ -11,6 +11,7 @@ import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
+import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -20,6 +21,7 @@ import 'pages/common/screen_lock_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  NotificationService().initNotification();
 
   await _initHive();
 

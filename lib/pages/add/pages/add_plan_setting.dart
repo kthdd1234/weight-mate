@@ -179,29 +179,18 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() => timeValue = value);
     }
 
-    onTapDialogButton() {
+    onSubmit() {
       planInfo.alarmTime = timeValue;
       setState(() {});
       closeDialog(context);
     }
 
     onTapAlarm(String id) {
-      showCupertinoModalPopup(
+      showAlarmBottomSheet(
         context: context,
-        builder: (context) => DefaultBottomSheet(
-          title: '알림 시간 설정',
-          height: 380,
-          widgets: [
-            DefaultTimePicker(
-              initialDateTime: planInfo.alarmTime!,
-              mode: CupertinoDatePickerMode.time,
-              onDateTimeChanged: onDateTimeChanged,
-            )
-          ],
-          isEnabled: true,
-          submitText: '완료',
-          onSubmit: onTapDialogButton,
-        ),
+        initialDateTime: planInfo.alarmTime!,
+        onDateTimeChanged: onDateTimeChanged,
+        onSubmit: onSubmit,
       );
     }
 
@@ -280,6 +269,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                   id: 'alarm-setting',
                   title: '${planInfo.title} 실천 알림',
                   desc: '설정한 시간에 실천 알림을 보내드려요.',
+                  icon: Icons.notifications_active,
                   isEnabled: planInfo.isAlarm,
                   alarmTime: planInfo.alarmTime,
                   onTap: planInfo.alarmTime != null ? onTapAlarm : (_) {},

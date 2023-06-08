@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class UserInfoClass {
   UserInfoClass({
@@ -26,7 +27,7 @@ class RecordInfoClass {
 
   DateTime recordDateTime;
   double? weight;
-  Set<String>? actions;
+  List<String>? actions;
   String? memo;
 }
 
@@ -205,20 +206,17 @@ class GridIconClass {
   bool isEnabled;
 }
 
-class RemovePlanClass {
-  RemovePlanClass({
-    required this.id,
-    required this.planName,
-    required this.groupName,
-    required this.startDateTime,
-    required this.endDateTime,
-    required this.isChecked,
-  });
+// class RemovePlanClass {
+//   RemovePlanClass({
+//     required this.id,
+//     required this.name,
+//     required this.title,
+//     required this.isRemove,
+//   });
 
-  String id, planName, groupName;
-  DateTime startDateTime, endDateTime;
-  bool isChecked;
-}
+//   String id, name, title;
+//   bool isRemove;
+// }
 
 class PlanTypeDetailClass {
   PlanTypeDetailClass({

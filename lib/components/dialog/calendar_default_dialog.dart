@@ -34,6 +34,8 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
   @override
   void initState() {
     _pickerController.selectedDate = widget.initialDateTime;
+    _pickerController.displayDate = widget.initialDateTime;
+
     super.initState();
   }
 

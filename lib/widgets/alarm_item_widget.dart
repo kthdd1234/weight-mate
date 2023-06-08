@@ -20,14 +20,16 @@ class AlarmItemWidget extends StatelessWidget {
     required this.onTap,
     required this.iconBackgroundColor,
     required this.chipBackgroundColor,
+    required this.icon,
   });
 
   String id, title, desc;
   bool isEnabled;
   DateTime? alarmTime;
+  Color iconBackgroundColor, chipBackgroundColor;
+  IconData icon;
   Function(bool newValue) onChanged;
   Function(String id) onTap;
-  Color iconBackgroundColor, chipBackgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +43,16 @@ class AlarmItemWidget extends StatelessWidget {
                 CircularIcon(
                   size: 40,
                   borderRadius: 10,
-                  icon: Icons.notifications_active,
+                  icon: icon,
                   backgroundColor: iconBackgroundColor,
                 ),
                 SpaceWidth(width: regularSapce),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: const TextStyle(fontSize: 15),
-                    ),
+                    Text(title, style: const TextStyle(fontSize: 15)),
                     SpaceHeight(height: tinySpace),
-                    BodySmallText(text: desc)
+                    BodySmallText(text: desc),
                   ],
                 ),
               ],

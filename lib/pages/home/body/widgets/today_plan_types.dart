@@ -4,6 +4,7 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/plan_group
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class GroupItemClass {
@@ -31,7 +32,7 @@ class TodayPlanTypes extends StatelessWidget {
     required this.planInfoList,
   });
 
-  Set<String>? actions;
+  List<String>? actions;
   List<PlanInfoClass> planInfoList;
 
   @override
@@ -58,15 +59,13 @@ class TodayPlanTypes extends StatelessWidget {
         }
       }
 
-      final groupItemList = map.values.toList();
+      List<GroupItemClass> groupItemList = map.values.toList();
 
       return ListView.builder(
         shrinkWrap: true,
         itemCount: groupItemList.length,
         itemBuilder: (context, index) {
           final groupItem = groupItemList[index];
-          final percent = (groupItem.actionLength / groupItem.planLength) * 100;
-          final toFixed = double.parse(percent.toStringAsFixed(1));
 
           return Column(
             children: [
@@ -74,7 +73,10 @@ class TodayPlanTypes extends StatelessWidget {
                 icon: groupItem.icon,
                 title: groupItem.title,
                 length: groupItem.planLength,
-                percent: toFixed,
+                percent: planToActionPercent(
+                  a: groupItem.actionLength,
+                  b: groupItem.planLength,
+                ),
               ),
               SpaceHeight(height: smallSpace)
             ],

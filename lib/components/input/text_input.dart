@@ -18,7 +18,7 @@ class TextInput extends StatefulWidget {
   });
 
   int maxLength;
-  IconData prefixIcon;
+  IconData? prefixIcon;
   String suffixText;
   String hintText;
   String counterText;
@@ -43,7 +43,7 @@ class _TextInputState extends State<TextInput> {
       textInputAction: TextInputAction.next,
       maxLength: widget.maxLength,
       decoration: InputDecoration(
-        prefixIcon: Icon(widget.prefixIcon),
+        prefixIcon: widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
         suffixText: widget.suffixText,
         errorText: widget.errorText,
         counterText: widget.counterText,

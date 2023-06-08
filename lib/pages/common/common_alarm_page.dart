@@ -7,7 +7,6 @@ import 'package:flutter_app_weight_management/components/text/contents_title_tex
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
-import 'package:flutter_app_weight_management/widgets/custom_alarm_widget.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 
 class CommonAlarmPage extends StatelessWidget {
@@ -49,6 +48,7 @@ class CommonAlarmPage extends StatelessWidget {
       required String desc,
       required DateTime alarmTime,
       required bool isEnabled,
+      required IconData icon,
     }) {
       return ContentsBox(
         backgroundColor: dialogBackgroundColor,
@@ -56,6 +56,7 @@ class CommonAlarmPage extends StatelessWidget {
           id: id,
           title: title,
           desc: desc,
+          icon: icon,
           alarmTime: alarmTime,
           isEnabled: isEnabled,
           onChanged: onChangedSwitch,
@@ -78,7 +79,8 @@ class CommonAlarmPage extends StatelessWidget {
                 alarmContentsBox(
                   id: 'test-1',
                   title: '체중 기록',
-                  desc: '기록 누락 방지용 알림',
+                  icon: Icons.edit,
+                  desc: '기록 누락 방지',
                   alarmTime: DateTime.now(),
                   isEnabled: true,
                 ),
@@ -94,6 +96,7 @@ class CommonAlarmPage extends StatelessWidget {
                 alarmContentsBox(
                   id: 'test-2',
                   title: '간헐적 단식 16:8',
+                  icon: Icons.abc,
                   desc: '식이요법',
                   alarmTime: DateTime.now(),
                   isEnabled: true,
@@ -102,6 +105,7 @@ class CommonAlarmPage extends StatelessWidget {
                 alarmContentsBox(
                   id: 'test-3',
                   title: '저녁에 샐러드 먹기',
+                  icon: Icons.abc,
                   desc: '식이요법',
                   alarmTime: DateTime.now(),
                   isEnabled: true,

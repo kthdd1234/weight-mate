@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'user_box.g.dart';
 
 @HiveType(typeId: 1)
-class UserBox {
+class UserBox extends HiveObject {
   UserBox({
     required this.userId,
     required this.tall,

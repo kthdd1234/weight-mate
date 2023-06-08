@@ -19,7 +19,7 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
     return RecordBox(
       recordDateTime: fields[0] as DateTime,
       weight: fields[1] as double?,
-      actions: (fields[2] as Set?)?.cast<String>(),
+      actions: (fields[2] as List?)?.cast<String>(),
       memo: fields[3] as String?,
     );
   }
@@ -33,7 +33,7 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(1)
       ..write(obj.weight)
       ..writeByte(2)
-      ..write(obj.actions?.toList())
+      ..write(obj.actions)
       ..writeByte(3)
       ..write(obj.memo);
   }

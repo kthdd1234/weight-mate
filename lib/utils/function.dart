@@ -1,7 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
@@ -163,7 +165,7 @@ setRange({required argmentsTypeEnum argmentsType}) {
   return argmentsType == argmentsTypeEnum.start ? 4 : 3;
 }
 
-PlanTypeEnum planTypeEnumToString(String str) {
+planTypeEnumToString(String str) {
   final map = {
     'PlanTypeEnum.diet': PlanTypeEnum.diet,
     'PlanTypeEnum.exercise': PlanTypeEnum.exercise,
@@ -173,4 +175,36 @@ PlanTypeEnum planTypeEnumToString(String str) {
 
   if (result == null) return PlanTypeEnum.none;
   return result;
+}
+
+planToActionPercent({required int a, required int b}) {
+  final result = (a / b) * 100;
+  final toFixed = double.parse(result.toStringAsFixed(1));
+
+  return toFixed;
+}
+
+showAlarmBottomSheet({
+  required BuildContext context,
+  required DateTime initialDateTime,
+  required Function(DateTime) onDateTimeChanged,
+  required Function() onSubmit,
+}) {
+  showCupertinoModalPopup(
+    context: context,
+    builder: (context) => DefaultBottomSheet(
+      title: '알림 시간 설정',
+      height: 380,
+      widgets: [
+        DefaultTimePicker(
+          initialDateTime: initialDateTime,
+          mode: CupertinoDatePickerMode.time,
+          onDateTimeChanged: onDateTimeChanged,
+        )
+      ],
+      isEnabled: true,
+      submitText: '완료',
+      onSubmit: onSubmit,
+    ),
+  );
 }

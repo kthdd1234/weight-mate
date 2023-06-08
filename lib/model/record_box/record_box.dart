@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'record_box.g.dart';
 
 @HiveType(typeId: 2)
-class RecordBox {
+class RecordBox extends HiveObject {
   RecordBox({
     required this.recordDateTime,
     this.weight,
@@ -18,7 +18,7 @@ class RecordBox {
   double? weight;
 
   @HiveField(2)
-  Set<String>? actions;
+  List<String>? actions;
 
   @HiveField(3)
   String? memo;

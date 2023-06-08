@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/plan_remove_contents.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/remove_plan_contents_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_check.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_types.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_items.dart';
@@ -64,11 +64,8 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final recordInfo = Hive.box<RecordBox>('recordBox')
-        .get(getDateTimeToInt(widget.importDateTime));
-    final actions = recordInfo?.actions;
-    final planInfoList = Hive.box<PlanBox>('planBox')
-        .values
+    final recordBoxList = recordBox.values.toList();
+    final planInfoList = planBox.values
         .map((item) => PlanInfoClass(
               type: planTypeEnumToString(item.type),
               title: item.title,
@@ -81,44 +78,52 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             ))
         .toList();
 
+    final recordInfo = recordBox.get(getDateTimeToInt(widget.importDateTime));
+
+    navigateToPage() {
+      Navigator.pushNamed(
+        context,
+        '/add-plan-type',
+        arguments: argmentsTypeEnum.record,
+      );
+    }
+
     onTapIcon(enumId) {
       switch (enumId) {
         case RecordIconTypes.addPlan:
-          Navigator.pushNamed(
-            context,
-            '/add-plan-type',
-            arguments: argmentsTypeEnum.record,
-          );
+          navigateToPage();
           break;
 
         case RecordIconTypes.alarmPlan:
+          if (planInfoList.isEmpty) {
+            return showSnackBar(
+              context: context,
+              text: '알림을 드릴 계획이 없어요.',
+              width: 250,
+            );
+          }
+
           Navigator.pushNamed(context, '/common-alarm');
           break;
 
         case RecordIconTypes.removePlan:
-          setRemoveSubmit() {
-            //
-          }
-
-          setRemoveBtnEnabled() {
-            return false;
-          }
-
-          setRemoveSubmitText() {
-            return '삭제';
+          if (planInfoList.isEmpty) {
+            return showSnackBar(
+              context: context,
+              text: '삭제할 계획이 없어요.',
+              width: 230,
+            );
           }
 
           showModalBottomSheet(
               backgroundColor: Colors.transparent,
               context: context,
               builder: (context) {
-                return DefaultBottomSheet(
-                  title: '계획 삭제',
-                  height: 380,
-                  widgets: const [Scrollbar(child: RemovePlanContentsBox())],
-                  isEnabled: false,
-                  submitText: setRemoveSubmitText(),
-                  onSubmit: setRemoveSubmit,
+                return PlanRemoveContents(
+                  recordBox: recordBox,
+                  planBox: planBox,
+                  recordBoxList: recordBoxList,
+                  planInfoList: planInfoList,
                 );
               });
           break;
@@ -153,7 +158,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           break;
 
         case SegmentedTypes.planCheck:
-          if (actions != null) count = actions!.length;
+          if (recordInfo?.actions != null) count = recordInfo!.actions!.length;
           break;
         default:
       }
@@ -167,10 +172,10 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       );
     }
 
-    setSegmentedWidget() {
+    setSegmenteItem() {
       Map<SegmentedTypes, StatelessWidget> segmentedInfo = {
-        SegmentedTypes.planTypes:
-            TodayPlanTypes(actions: actions, planInfoList: planInfoList),
+        SegmentedTypes.planTypes: TodayPlanTypes(
+            actions: recordInfo?.actions, planInfoList: planInfoList),
         SegmentedTypes.planItems: TodayPlanItems(planInfoList: planInfoList),
         SegmentedTypes.planCheck: TodayPlanCheck(
           recordBox: recordBox,
@@ -202,14 +207,40 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     };
 
     List<Widget> iconWidgets = recordIconClassList
-        .map(
-          (element) => RecordContentsTitleIcon(
-            id: element.enumId,
-            icon: element.icon,
-            onTap: onTapIcon,
-          ),
-        )
+        .map((element) => RecordContentsTitleIcon(
+              id: element.enumId,
+              icon: element.icon,
+              onTap: onTapIcon,
+            ))
         .toList();
+
+    setBodyWidgets() {
+      return planInfoList.isEmpty
+          ? Column(
+              children: [
+                SpaceHeight(height: smallSpace),
+                EmptyTextArea(
+                  text: '오늘의 계획을 추가해보세요.',
+                  icon: Icons.add,
+                  topHeight: 30,
+                  downHeight: 30,
+                  onTap: navigateToPage,
+                ),
+              ],
+            )
+          : Column(
+              children: [
+                SpaceHeight(height: regularSapce),
+                DefaultSegmented(
+                  selectedSegment: selectedSegment,
+                  children: segmentedTypes,
+                  onSegmentedChanged: onSegmentedChanged,
+                ),
+                SpaceHeight(height: smallSpace),
+                setSegmenteItem(),
+              ],
+            );
+    }
 
     return ContentsBox(
       contentsWidget: Column(
@@ -219,14 +250,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             icon: Icons.task_alt,
             sub: iconWidgets,
           ),
-          SpaceHeight(height: regularSapce),
-          DefaultSegmented(
-            selectedSegment: selectedSegment,
-            children: segmentedTypes,
-            onSegmentedChanged: onSegmentedChanged,
-          ),
-          SpaceHeight(height: smallSpace),
-          setSegmentedWidget()
+          setBodyWidgets()
         ],
       ),
     );

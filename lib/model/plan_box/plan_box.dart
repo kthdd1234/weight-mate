@@ -3,7 +3,7 @@ import 'package:hive/hive.dart';
 part 'plan_box.g.dart';
 
 @HiveType(typeId: 3)
-class PlanBox {
+class PlanBox extends HiveObject {
   PlanBox({
     required this.id,
     required this.type,
