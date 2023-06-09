@@ -63,13 +63,13 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
     onPressed() {
+      final userBox = Hive.box<UserBox>('userBox');
       final recordBox = Hive.box<RecordBox>('recordBox');
       final planBox = Hive.box<PlanBox>('planBox');
+
+      userBox.clear();
       recordBox.clear();
       planBox.clear();
-
-      print(recordBox.values.toList());
-      print(planBox.values.toList());
     }
 
     return SingleChildScrollView(

@@ -13,6 +13,7 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class AddBodyInfo extends StatefulWidget {
@@ -27,6 +28,16 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
   @override
   void initState() {
+    setPermission() async {
+      bool isPermission = await NotificationService().permissionNotification;
+
+      if (isPermission == false) {
+        await NotificationService().requestPermission();
+      }
+    }
+
+    setPermission();
+
     DateTime now = DateTime.now();
     timeValue = DateTime(now.year, now.month, now.day, 10, 30);
 
@@ -131,11 +142,23 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       );
     }
 
-    onChanged(bool newValue) {
+    onChanged(bool newValue) async {
+      if (newValue) {
+        final isPermission = await NotificationService().permissionNotification;
+
+        if (isPermission == false) {
+          // ignore: use_build_context_synchronously
+          showSnackBar(
+            context: context,
+            width: 270,
+            text: '알림 권한이 없어요.',
+            buttonName: '설정창으로 이동',
+            onPressed: openAppSettings,
+          );
+        }
+      }
+
       readProvider.changeIsWeightAlarm(newValue);
-      newValue
-          ? readProvider.changeWeightAlarmTime(timeValue)
-          : readProvider.changeWeightAlarmTime(null);
     }
 
     onDateTimeChanged(DateTime value) {
@@ -143,11 +166,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     }
 
     onSubmit() {
-      NotificationService().showNotification(
-        title: '테스트 title',
-        body: '테스트 body',
-      );
-
       readProvider.changeWeightAlarmTime(timeValue);
       closeDialog(context);
     }
@@ -168,13 +186,13 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           SpaceHeight(height: regularSapce),
           AlarmItemWidget(
             id: 'weight-alarm',
-            title: '체중 기록',
-            desc: '기록 누락 방지를 위해 알림을 보내드려요.',
+            title: '체중 기록 알림',
+            desc: '정해진 시간에 알림을 보내드려요.',
             isEnabled: isAlarm,
             alarmTime: weightAlarmTime,
             icon: Icons.notifications_active,
-            iconBackgroundColor: typeBackgroundColor,
-            chipBackgroundColor: typeBackgroundColor,
+            iconBackgroundColor: dialogBackgroundColor,
+            chipBackgroundColor: dialogBackgroundColor,
             onChanged: onChanged,
             onTap: onTap,
           ),
@@ -202,7 +220,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                         maxLength: 5,
                         prefixIcon: Icons.accessibility_new_sharp,
                         suffixText: 'cm',
-                        counterText: '(예: 164)',
+                        counterText: ' ',
                         hintText: '키',
                         errorText: setErrorTextTall(),
                         onChanged: onChangedTallText,
@@ -215,7 +233,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                         maxLength: 4,
                         prefixIcon: Icons.monitor_weight,
                         suffixText: 'kg',
-                        counterText: "(예: 63.2)",
+                        counterText: ' ',
                         hintText: '체중',
                         errorText: setErrorTextWeight(),
                         onChanged: onChangedWeightText,
@@ -229,7 +247,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                   maxLength: 4,
                   prefixIcon: Icons.flag,
                   suffixText: 'kg',
-                  counterText: '(예: 51, 67.2)',
+                  counterText: ' ',
                   hintText: '목표 체중',
                   errorText: setErrorTextGoalWeight(),
                   onChanged: onChangedGoalWeightText,

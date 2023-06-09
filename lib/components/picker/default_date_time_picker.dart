@@ -29,7 +29,6 @@ class DefaultTimePicker extends StatelessWidget {
         child: CupertinoDatePicker(
           initialDateTime: initialDateTime,
           mode: mode,
-          maximumDate: DateTime.now(),
           onDateTimeChanged: onDateTimeChanged,
         ),
       ),

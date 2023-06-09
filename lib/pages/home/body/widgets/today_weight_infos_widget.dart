@@ -92,7 +92,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
         value: setCalculatedBeforeRecord(),
         icon: Icons.insights,
         more: Icons.error_outline,
-        tooltipMsg: '(현재 체중) - (이전에 기록한 체중) 결과 값입니다.',
+        tooltipMsg: '(현재 체중) - (이전의 체중) 결과 값입니다.',
       ),
       WeightInfoClass(
         id: 'bmi',

@@ -38,7 +38,10 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
 
       if (getDateTimeToInt(now) < getDateTimeToInt(resultDateTime)) {
         return showSnackBar(
-            context: context, text: '미래의 날짜를 불러올 순 없어요.', width: 300);
+          context: context,
+          text: '미래의 날짜를 불러올 순 없어요.',
+          buttonName: '확인',
+        );
       }
 
       context.read<ImportDateTimeProvider>().setImportDateTime(resultDateTime);

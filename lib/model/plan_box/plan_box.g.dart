@@ -25,13 +25,14 @@ class PlanBoxAdapter extends TypeAdapter<PlanBox> {
       endDateTime: fields[6] as DateTime?,
       isAlarm: fields[7] as bool,
       alarmTime: fields[8] as DateTime?,
+      alarmId: fields[9] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, PlanBox obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class PlanBoxAdapter extends TypeAdapter<PlanBox> {
       ..writeByte(7)
       ..write(obj.isAlarm)
       ..writeByte(8)
-      ..write(obj.alarmTime);
+      ..write(obj.alarmTime)
+      ..writeByte(9)
+      ..write(obj.alarmId);
   }
 
   @override

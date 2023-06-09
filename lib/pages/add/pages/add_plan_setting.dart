@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
-import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
@@ -14,20 +12,19 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
 import 'package:flutter_app_weight_management/widgets/name_text_input.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
-import '../../../components/picker/default_date_time_picker.dart';
 
 class AddPlanSetting extends StatefulWidget {
   const AddPlanSetting({super.key});
@@ -55,7 +52,6 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
   Widget build(BuildContext context) {
     final provider = context.read<DietInfoProvider>();
     final planInfo = provider.getPlanInfo();
-    final now = DateTime.now();
     final argmentsType =
         ModalRoute.of(context)!.settings.arguments as argmentsTypeEnum;
 
@@ -78,6 +74,9 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       final setId =
           argmentsType == argmentsTypeEnum.edit ? planInfo.id : uuidV4;
 
+      final notifyWeightUid = UniqueKey().hashCode;
+      final notifyPlanUid = UniqueKey().hashCode;
+
       if (buttonEnabled()) {
         context.read<ImportDateTimeProvider>().setImportDateTime(now);
 
@@ -89,6 +88,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
               tall: userInfoState.tall,
               goalWeight: userInfoState.goalWeight,
               recordStartDateTime: now,
+              isWeightAlarm: userInfoState.isWeightAlarm,
+              weightAlarmTime: userInfoState.isWeightAlarm
+                  ? userInfoState.weightAlarmTime
+                  : null,
+              alarmId: userInfoState.isWeightAlarm ? notifyWeightUid : null,
             ),
           );
 
@@ -99,6 +103,16 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
               weight: recordInfoState.weight,
             ),
           );
+
+          // todo: userInfoState.isWeightAlarm 이 true 라면 알람 추가
+          if (userInfoState.isWeightAlarm) {
+            NotificationService().addNotification(
+              id: notifyWeightUid,
+              alarmTime: userInfoState.weightAlarmTime!,
+              title: '체중 기록 알림',
+              body: '오늘의 체중을 입력 할 시간이에요.',
+            );
+          }
         }
 
         planBox.put(
@@ -111,9 +125,22 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
             startDateTime: planInfo.startDateTime,
             endDateTime: planInfo.endDateTime,
             isAlarm: planInfo.isAlarm,
-            alarmTime: planInfo.alarmTime,
+            alarmTime: planInfo.isAlarm ? planInfo.alarmTime : null,
           ),
         );
+
+        if (planInfo.isAlarm) {
+          NotificationService().addNotification(
+            id: notifyPlanUid,
+            alarmTime: planInfo.alarmTime!,
+            title: '계획 실천 알림',
+            body: '오늘의 계획을 실천해보세요.',
+          );
+        } else {
+          if (argmentsType == argmentsTypeEnum.edit) {
+            // todo:
+          }
+        }
 
         provider.initDietInfoProvider();
 
@@ -194,13 +221,23 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       );
     }
 
-    onChangedSwitch(bool newValue) {
+    onChangedSwitch(bool newValue) async {
+      if (newValue) {
+        final isPermission = await NotificationService().permissionNotification;
+
+        if (isPermission == false) {
+          // ignore: use_build_context_synchronously
+          showSnackBar(
+            context: context,
+            width: 270,
+            text: '알림 권한이 없어요.',
+            buttonName: '설정창으로 이동',
+            onPressed: openAppSettings,
+          );
+        }
+      }
+
       planInfo.isAlarm = newValue;
-
-      newValue
-          ? planInfo.alarmTime = DateTime(now.year, now.month, now.day, 10, 30)
-          : planInfo.alarmTime = null;
-
       setState(() {});
     }
 

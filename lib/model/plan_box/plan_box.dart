@@ -13,6 +13,7 @@ class PlanBox extends HiveObject {
     this.endDateTime,
     required this.isAlarm,
     this.alarmTime,
+    this.alarmId,
   });
 
   @HiveField(0)
@@ -38,4 +39,7 @@ class PlanBox extends HiveObject {
 
   @HiveField(8)
   DateTime? alarmTime;
+
+  @HiveField(9)
+  int? alarmId;
 }

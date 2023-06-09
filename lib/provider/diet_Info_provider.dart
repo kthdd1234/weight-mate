@@ -7,8 +7,14 @@ class DietInfoProvider with ChangeNotifier {
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
-  bool _isWeightAlarm = false;
-  DateTime? _weightAlarmTime;
+  bool _isWeightAlarm = true;
+  DateTime? _weightAlarmTime = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+    10,
+    30,
+  );
   PlanInfoClass _planInfo = PlanInfoClass(
     type: PlanTypeEnum.none,
     title: '',
@@ -16,8 +22,14 @@ class DietInfoProvider with ChangeNotifier {
     name: '',
     startDateTime: DateTime.now(),
     endDateTime: null,
-    isAlarm: false,
-    alarmTime: null,
+    isAlarm: true,
+    alarmTime: DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      10,
+      30,
+    ),
   );
   DateTime _recordStartDateTime = DateTime.now();
 
@@ -31,6 +43,8 @@ class DietInfoProvider with ChangeNotifier {
       tall: convertToDouble(_tallText),
       goalWeight: convertToDouble(_goalWeightText),
       recordStartDateTime: _recordStartDateTime,
+      isWeightAlarm: _isWeightAlarm,
+      weightAlarmTime: _weightAlarmTime,
     );
   }
 

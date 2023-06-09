@@ -10,7 +10,6 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_con
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_infos_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -69,13 +68,22 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       context.read<RecordIconTypeProvider>().setSeletedRecordIconType(enumId);
     }
 
+    onTapEmptyRecordArea() {
+      setIconType(RecordIconTypes.addWeight);
+    }
+
     onTapIcon(enumId) {
       if (recordInfo?.weight == null) {
-        return showSnackBar(
-          context: context,
-          text: '오늘의 체중을 입력해주세요.',
-          width: 270,
-        );
+        if (enumId == RecordIconTypes.editWeight) {
+          return onTapEmptyRecordArea();
+        } else if (enumId == RecordIconTypes.removeWeight) {
+          return showSnackBar(
+            context: context,
+            width: 250,
+            text: '삭제할 체중 기록이 없어요.',
+            buttonName: '확인',
+          );
+        }
       }
 
       if (enumId == RecordIconTypes.alarmWeight) {
@@ -95,10 +103,6 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
             ),
           )
           .toList();
-    }
-
-    onTapEmptyRecordArea() {
-      setIconType(RecordIconTypes.addWeight);
     }
 
     onPressedWeightDelete() {
@@ -203,10 +207,14 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
 
       List<RecordBox> sublist = recordBoxValues.sublist(0, index).toList();
       List<RecordBox> reverseList = List.from(sublist.reversed);
-      RecordBox result =
-          reverseList.firstWhere((element) => element.weight != null);
 
-      return result.weight;
+      for (var i = 0; i < reverseList.length; i++) {
+        if (reverseList[i].weight != null) {
+          return reverseList[i].weight;
+        }
+      }
+
+      return 0.0;
     }
 
     setContetnsTitle() {

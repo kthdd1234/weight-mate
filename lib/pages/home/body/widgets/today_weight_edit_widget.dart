@@ -147,7 +147,6 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       UserBox? userInfo = userBox.get('userBox');
       RecordBox? recordInfo = recordBox.get(importDateTimeInt);
       String text = textInputController.text;
-      DateTime now = DateTime.now();
 
       switch (widget.seletedRecordIconType) {
         case RecordIconTypes.addWeight:
@@ -156,7 +155,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
             recordBox.put(
               importDateTimeInt,
               RecordBox(
-                recordDateTime: now,
+                recordDateTime: widget.importDateTime,
                 weight: stringToDouble(text),
               ),
             );
@@ -164,7 +163,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
             break;
           }
 
-          recordInfo.recordDateTime = now;
+          recordInfo.recordDateTime = widget.importDateTime;
           recordInfo.weight = stringToDouble(text);
           recordBox.put(importDateTimeInt, recordInfo);
 
@@ -193,7 +192,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     }
 
     return ContentsBox(
-      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
       backgroundColor: Colors.white,
       contentsWidget: Column(
         children: [

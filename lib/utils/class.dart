@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class UserInfoClass {
   UserInfoClass({
@@ -9,12 +8,16 @@ class UserInfoClass {
     required this.tall,
     required this.goalWeight,
     required this.recordStartDateTime,
+    required this.isWeightAlarm,
+    this.weightAlarmTime,
   });
 
   String userId;
   double tall;
   double goalWeight;
   DateTime recordStartDateTime;
+  bool isWeightAlarm;
+  DateTime? weightAlarmTime;
 }
 
 class RecordInfoClass {

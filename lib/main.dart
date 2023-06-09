@@ -22,6 +22,7 @@ import 'pages/common/screen_lock_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationService().initNotification();
+  NotificationService().initializeTimeZone();
 
   await _initHive();
 

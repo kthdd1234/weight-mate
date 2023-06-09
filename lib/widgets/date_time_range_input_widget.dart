@@ -26,7 +26,7 @@ class DateTimeRangeInputWidget extends StatelessWidget {
           child: DateTimeInput(
             prefixIcon: Icons.hourglass_top_rounded,
             hintText: '시작일',
-            text: getDateTimeToSlash(startDateTime),
+            text: getDateTimeToSlashYY(startDateTime),
             onTap: () => onTapInput(type: 'start', dateTime: startDateTime),
           ),
         ),
@@ -37,7 +37,7 @@ class DateTimeRangeInputWidget extends StatelessWidget {
           child: DateTimeInput(
             prefixIcon: Icons.hourglass_bottom_rounded,
             hintText: '종료일',
-            text: endDateTime != null ? getDateTimeToSlash(endDateTime!) : '',
+            text: endDateTime != null ? getDateTimeToSlashYY(endDateTime!) : '',
             onTap: () => onTapInput(type: 'end', dateTime: endDateTime),
           ),
         ),

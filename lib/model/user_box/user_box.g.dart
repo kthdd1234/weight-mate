@@ -21,13 +21,16 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       tall: fields[1] as double,
       goalWeight: fields[2] as double,
       recordStartDateTime: fields[3] as DateTime,
+      isWeightAlarm: fields[4] as bool?,
+      weightAlarmTime: fields[5] as DateTime?,
+      alarmId: fields[6] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -35,7 +38,13 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(2)
       ..write(obj.goalWeight)
       ..writeByte(3)
-      ..write(obj.recordStartDateTime);
+      ..write(obj.recordStartDateTime)
+      ..writeByte(4)
+      ..write(obj.isWeightAlarm)
+      ..writeByte(5)
+      ..write(obj.weightAlarmTime)
+      ..writeByte(6)
+      ..write(obj.alarmId);
   }
 
   @override

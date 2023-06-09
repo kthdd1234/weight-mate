@@ -132,19 +132,26 @@ handleCheckErrorText({
 showSnackBar({
   required BuildContext context,
   required String text,
-  required double width,
+  required String buttonName,
+  Function()? onPressed,
+  double? width,
 }) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      action: SnackBarAction(
-        textColor: buttonBackgroundColor,
-        label: '확인',
-        onPressed: () {
-          // Code to execute.
-        },
+      content: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(text),
+          TextButton(
+              onPressed: onPressed,
+              child: Text(
+                buttonName,
+                style: TextStyle(
+                  color: Colors.grey,
+                ),
+              ))
+        ],
       ),
-      content: Text(text),
-      duration: const Duration(milliseconds: 1500),
       width: width,
       padding: const EdgeInsets.symmetric(
         horizontal: 10,

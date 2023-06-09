@@ -99,7 +99,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             return showSnackBar(
               context: context,
               text: '알림을 드릴 계획이 없어요.',
-              width: 250,
+              buttonName: '확인',
             );
           }
 
@@ -109,10 +109,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         case RecordIconTypes.removePlan:
           if (planInfoList.isEmpty) {
             return showSnackBar(
-              context: context,
-              text: '삭제할 계획이 없어요.',
-              width: 230,
-            );
+                context: context, text: '삭제할 계획이 없어요.', buttonName: '확인');
           }
 
           showModalBottomSheet(
