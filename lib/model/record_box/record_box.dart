@@ -7,8 +7,8 @@ class RecordBox extends HiveObject {
   RecordBox({
     required this.recordDateTime,
     this.weight,
-    this.actions,
-    this.memo,
+    required this.actions,
+    required this.diary,
   });
 
   @HiveField(0)
@@ -18,8 +18,8 @@ class RecordBox extends HiveObject {
   double? weight;
 
   @HiveField(2)
-  List<String>? actions;
+  List<String> actions;
 
   @HiveField(3)
-  String? memo;
+  Map<String, dynamic> diary;
 }

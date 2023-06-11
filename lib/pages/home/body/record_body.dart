@@ -3,7 +3,7 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_memo_widget.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_wise_saying_widget.dart';
@@ -24,13 +24,18 @@ class RecordBody extends StatefulWidget {
 }
 
 class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
+  late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
+  late Box<PlanBox> planBox;
 
   @override
   void initState() {
     super.initState();
 
+    userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
+    planBox = Hive.box<PlanBox>('planBox');
+
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -63,10 +68,6 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
     onPressed() {
-      final userBox = Hive.box<UserBox>('userBox');
-      final recordBox = Hive.box<RecordBox>('recordBox');
-      final planBox = Hive.box<PlanBox>('planBox');
-
       userBox.clear();
       recordBox.clear();
       planBox.clear();
@@ -75,15 +76,15 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
     return SingleChildScrollView(
       child: MultiValueListenableBuilder(
         valueListenables: [
-          Hive.box<UserBox>('userBox').listenable(),
-          Hive.box<RecordBox>('recordBox').listenable(),
-          Hive.box<PlanBox>('planBox').listenable(),
+          userBox.listenable(),
+          recordBox.listenable(),
+          planBox.listenable(),
         ],
         builder: (context, values, child) {
           return Column(
             children: [
               const TodayWiseSayingWidget(),
-              SpaceHeight(height: largeSpace),
+              SpaceHeight(height: regularSapce),
               TodayWeightWidget(
                 seletedRecordIconType: seletedRecordIconType,
                 importDateTime: importDateTime,
@@ -94,7 +95,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 importDateTime: importDateTime,
               ),
               SpaceHeight(height: largeSpace),
-              TodayMemoWidget(seletedRecordSubType: seletedRecordIconType),
+              TodayDiaryWidget(seletedRecordSubType: seletedRecordIconType),
               ElevatedButton(
                 onPressed: onPressed,
                 child: const Text('hive 데이터 초기화'),

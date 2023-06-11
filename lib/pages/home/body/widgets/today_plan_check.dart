@@ -28,16 +28,18 @@ class TodayPlanCheck extends StatelessWidget {
       if (checked) {
         if (recordInfo == null) {
           recordInfo = RecordBox(
-            recordDateTime: DateTime.now(),
+            recordDateTime: importDateTime,
             actions: [id],
+            diary: {
+              'pickedImageList': [null, null],
+              'whiteText': null
+            },
           );
-        } else if (recordInfo!.actions == null) {
-          recordInfo!.actions = [id];
         } else {
-          recordInfo!.actions!.add(id);
+          recordInfo!.actions.add(id);
         }
       } else {
-        recordInfo!.actions!.remove(id);
+        recordInfo!.actions.remove(id);
       }
 
       recordBox.put(getDateTimeToInt(importDateTime), recordInfo!);

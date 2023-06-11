@@ -2,56 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 
+final initAlarmDateTime = DateTime(
+  DateTime.now().year,
+  DateTime.now().month,
+  DateTime.now().day,
+  10,
+  30,
+);
+
+final initPlanInfo = PlanInfoClass(
+  type: PlanTypeEnum.none,
+  title: '',
+  id: '',
+  name: '',
+  startDateTime: DateTime.now(),
+  endDateTime: null,
+  isAlarm: true,
+  alarmTime: initAlarmDateTime,
+  alarmId: null,
+);
+
 class DietInfoProvider with ChangeNotifier {
   String userId = '';
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
-  bool _isWeightAlarm = true;
-  DateTime? _weightAlarmTime = DateTime(
-    DateTime.now().year,
-    DateTime.now().month,
-    DateTime.now().day,
-    10,
-    30,
-  );
-  PlanInfoClass _planInfo = PlanInfoClass(
-    type: PlanTypeEnum.none,
-    title: '',
-    id: '',
-    name: '',
-    startDateTime: DateTime.now(),
-    endDateTime: null,
-    isAlarm: true,
-    alarmTime: DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      10,
-      30,
-    ),
-  );
+  bool _isAlarm = true;
+  DateTime? _alarmTime = initAlarmDateTime;
+  PlanInfoClass _planInfo = initPlanInfo;
   DateTime _recordStartDateTime = DateTime.now();
-
-  double convertToDouble(String str) {
-    return double.parse(str);
-  }
 
   UserInfoClass getUserInfo() {
     return UserInfoClass(
       userId: userId,
-      tall: convertToDouble(_tallText),
-      goalWeight: convertToDouble(_goalWeightText),
+      tall: double.parse(_tallText),
+      goalWeight: double.parse(_goalWeightText),
       recordStartDateTime: _recordStartDateTime,
-      isWeightAlarm: _isWeightAlarm,
-      weightAlarmTime: _weightAlarmTime,
+      isAlarm: _isAlarm,
+      alarmTime: _alarmTime,
+      alarmId: -1,
     );
   }
 
   RecordInfoClass getRecordInfo() {
     return RecordInfoClass(
       recordDateTime: _recordStartDateTime,
-      weight: convertToDouble(_weightText),
+      weight: double.parse(_weightText),
       actions: [],
       memo: null,
     );
@@ -73,26 +69,16 @@ class DietInfoProvider with ChangeNotifier {
     return _planInfo;
   }
 
-  bool getIsWeightAlarm() {
-    return _isWeightAlarm;
+  bool getIsAlarm() {
+    return _isAlarm;
   }
 
-  DateTime? getWeightAlarmTime() {
-    return _weightAlarmTime;
+  DateTime? getAlarmTime() {
+    return _alarmTime;
   }
 
-  initDietInfoProvider() {
-    _planInfo = PlanInfoClass(
-      type: PlanTypeEnum.none,
-      title: '',
-      id: '',
-      name: '',
-      startDateTime: DateTime.now(),
-      endDateTime: null,
-      isAlarm: true,
-      alarmTime: null,
-    );
-
+  setInitPlanInfo() {
+    _planInfo = initPlanInfo;
     notifyListeners();
   }
 
@@ -121,13 +107,13 @@ class DietInfoProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  changeIsWeightAlarm(bool value) {
-    _isWeightAlarm = value;
+  changeIsAlarm(bool value) {
+    _isAlarm = value;
     notifyListeners();
   }
 
-  changeWeightAlarmTime(DateTime? time) {
-    _weightAlarmTime = time;
+  changeAlarmTime(DateTime? time) {
+    _alarmTime = time;
     notifyListeners();
   }
 }

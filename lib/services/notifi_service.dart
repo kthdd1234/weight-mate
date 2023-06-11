@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
@@ -116,5 +117,22 @@ class NotificationService {
     }
 
     return false;
+  }
+
+  Future<void> deleteMultipleAlarm(List<String> alarmIds) async {
+    print('[before delete notification list] ${await pendingNotificationIds}');
+
+    for (var alarmId in alarmIds) {
+      final id = int.parse(alarmId);
+      await notification.cancel(id);
+    }
+    print('[after delete notification list] ${await pendingNotificationIds}');
+  }
+
+  Future<List<int>> get pendingNotificationIds {
+    final list = notification
+        .pendingNotificationRequests()
+        .then((value) => value.map((e) => e.id).toList());
+    return list;
   }
 }

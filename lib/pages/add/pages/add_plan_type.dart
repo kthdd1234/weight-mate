@@ -29,7 +29,7 @@ class _AddPlanTypeState extends State<AddPlanType> {
   @override
   Widget build(BuildContext context) {
     final argmentsType =
-        ModalRoute.of(context)!.settings.arguments as argmentsTypeEnum;
+        ModalRoute.of(context)!.settings.arguments as ArgmentsTypeEnum;
 
     buttonEnabled() {
       return planType != PlanTypeEnum.none;

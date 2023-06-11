@@ -14,7 +14,7 @@ class AddTitleWidget extends StatelessWidget {
     required this.title,
   });
 
-  argmentsTypeEnum argmentsType;
+  ArgmentsTypeEnum argmentsType;
   int step;
   String title;
 

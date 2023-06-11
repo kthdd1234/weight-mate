@@ -35,7 +35,7 @@ class TimeChipWidget extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     timeToString(time),
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: buttonBackgroundColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,

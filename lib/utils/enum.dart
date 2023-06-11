@@ -10,6 +10,8 @@ enum RecordIconTypes {
   removePlan,
   editNote,
   removeNote,
+  editEyeBody,
+  removeEyeBody
 }
 
 enum eBottomNavigationBarItem { record, calendar, analyze, setting }
@@ -54,4 +56,6 @@ enum MoreSeeWidgetTypes { none, arrow, switching }
 
 enum PlanTypeEnum { none, diet, exercise, lifestyle, custom }
 
-enum argmentsTypeEnum { none, start, record, edit }
+enum ArgmentsTypeEnum { none, start, add, edit }
+
+enum alarmTypeEnum { none, weight, plan }

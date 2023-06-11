@@ -164,12 +164,12 @@ showSnackBar({
   );
 }
 
-setStep({required argmentsTypeEnum argmentsType, required int step}) {
-  return argmentsType == argmentsTypeEnum.start ? step : step - 1;
+setStep({required ArgmentsTypeEnum argmentsType, required int step}) {
+  return argmentsType == ArgmentsTypeEnum.start ? step : step - 1;
 }
 
-setRange({required argmentsTypeEnum argmentsType}) {
-  return argmentsType == argmentsTypeEnum.start ? 4 : 3;
+setRange({required ArgmentsTypeEnum argmentsType}) {
+  return argmentsType == ArgmentsTypeEnum.start ? 4 : 3;
 }
 
 planTypeEnumToString(String str) {
@@ -202,13 +202,11 @@ showAlarmBottomSheet({
     builder: (context) => DefaultBottomSheet(
       title: '알림 시간 설정',
       height: 380,
-      widgets: [
-        DefaultTimePicker(
-          initialDateTime: initialDateTime,
-          mode: CupertinoDatePickerMode.time,
-          onDateTimeChanged: onDateTimeChanged,
-        )
-      ],
+      contents: DefaultTimePicker(
+        initialDateTime: initialDateTime,
+        mode: CupertinoDatePickerMode.time,
+        onDateTimeChanged: onDateTimeChanged,
+      ),
       isEnabled: true,
       submitText: '완료',
       onSubmit: onSubmit,

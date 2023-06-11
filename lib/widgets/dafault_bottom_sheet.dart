@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
@@ -13,18 +14,18 @@ class DefaultBottomSheet extends StatelessWidget {
     super.key,
     required this.title,
     required this.height,
-    required this.widgets,
-    required this.isEnabled,
+    required this.contents,
     required this.submitText,
     required this.onSubmit,
+    this.isEnabled,
     this.titleLeftWidget,
   });
 
   String title;
   double height;
-  List<Widget> widgets;
+  Widget contents;
   String submitText;
-  bool isEnabled;
+  bool? isEnabled;
   Function() onSubmit;
   Widget? titleLeftWidget;
 
@@ -60,15 +61,18 @@ class DefaultBottomSheet extends StatelessWidget {
               ],
             ),
             SpaceHeight(height: regularSapce),
-            Column(children: widgets),
+            contents,
             SpaceHeight(height: regularSapce),
-            BottomSubmitButton(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              width: MediaQuery.of(context).size.width,
-              text: submitText,
-              onPressed: onSubmit,
-              isEnabled: isEnabled,
-            )
+            isEnabled != null
+                ? BottomSubmitButton(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                    width: MediaQuery.of(context).size.width,
+                    text: submitText,
+                    onPressed: onSubmit,
+                    isEnabled: isEnabled!,
+                  )
+                : const EmptyArea()
           ],
         ),
       ),

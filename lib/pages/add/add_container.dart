@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -9,15 +10,15 @@ class AddContainer extends StatelessWidget {
     required this.body,
     required this.buttonEnabled,
     required this.bottomSubmitButtonText,
-    required this.onPressedBottomNavigationButton,
+    this.onPressedBottomNavigationButton,
     this.title,
   });
 
-  final Widget body;
-  final bool buttonEnabled;
-  final String bottomSubmitButtonText;
-  final VoidCallback onPressedBottomNavigationButton;
-  final String? title;
+  Widget body;
+  bool buttonEnabled;
+  String bottomSubmitButtonText;
+  VoidCallback? onPressedBottomNavigationButton;
+  String? title;
 
   @override
   Widget build(BuildContext context) {
@@ -37,13 +38,15 @@ class AddContainer extends StatelessWidget {
             padding: pagePadding,
             child: SafeArea(child: SingleChildScrollView(child: body)),
           ),
-          bottomNavigationBar: SafeArea(
-            child: BottomSubmitButton(
-              isEnabled: buttonEnabled,
-              text: bottomSubmitButtonText,
-              onPressed: onPressedBottomNavigationButton,
-            ),
-          ),
+          bottomNavigationBar: onPressedBottomNavigationButton != null
+              ? SafeArea(
+                  child: BottomSubmitButton(
+                    isEnabled: buttonEnabled,
+                    text: bottomSubmitButtonText,
+                    onPressed: onPressedBottomNavigationButton!,
+                  ),
+                )
+              : const EmptyArea(),
         ),
       ),
     );

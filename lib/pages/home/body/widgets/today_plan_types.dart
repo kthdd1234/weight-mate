@@ -42,6 +42,7 @@ class TodayPlanTypes extends StatelessWidget {
 
       for (var info in planInfoList) {
         if (map.containsKey(info.type) == false) {
+          // ??
           map[info.type] = GroupItemClass(
             type: info.type,
             icon: planTypeDetailInfo[info.type]!.icon,

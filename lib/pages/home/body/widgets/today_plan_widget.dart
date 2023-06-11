@@ -15,9 +15,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
 List<RecordIconClass> recordIconClassList = [
   RecordIconClass(
@@ -75,6 +73,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               endDateTime: item.endDateTime,
               isAlarm: item.isAlarm,
               alarmTime: item.alarmTime,
+              alarmId: item.alarmId,
             ))
         .toList();
 
@@ -84,7 +83,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       Navigator.pushNamed(
         context,
         '/add-plan-type',
-        arguments: argmentsTypeEnum.record,
+        arguments: ArgmentsTypeEnum.add,
       );
     }
 
@@ -161,7 +160,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       }
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
         child: Text(
           '$text $count',
           style: const TextStyle(fontSize: 12, color: buttonBackgroundColor),
@@ -188,27 +187,29 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     Map<SegmentedTypes, Widget> segmentedTypes = {
       SegmentedTypes.planTypes: segmentedItem(
         type: SegmentedTypes.planTypes,
-        text: '그룹 목록',
+        text: '그룹',
         icon: Icons.format_list_bulleted_outlined,
       ),
       SegmentedTypes.planItems: segmentedItem(
         type: SegmentedTypes.planItems,
-        text: '전체 계획',
+        text: '계획',
         icon: Icons.abc,
       ),
       SegmentedTypes.planCheck: segmentedItem(
         type: SegmentedTypes.planCheck,
-        text: '실천 체크',
+        text: '실천',
         icon: Icons.check_outlined,
       )
     };
 
     List<Widget> iconWidgets = recordIconClassList
-        .map((element) => RecordContentsTitleIcon(
-              id: element.enumId,
-              icon: element.icon,
-              onTap: onTapIcon,
-            ))
+        .map(
+          (element) => RecordContentsTitleIcon(
+            id: element.enumId,
+            icon: element.icon,
+            onTap: onTapIcon,
+          ),
+        )
         .toList();
 
     setBodyWidgets() {
@@ -227,7 +228,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             )
           : Column(
               children: [
-                SpaceHeight(height: regularSapce),
+                SpaceHeight(height: smallSpace),
                 DefaultSegmented(
                   selectedSegment: selectedSegment,
                   children: segmentedTypes,

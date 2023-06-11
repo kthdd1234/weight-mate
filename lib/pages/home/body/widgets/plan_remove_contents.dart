@@ -69,72 +69,70 @@ class _PlanRemoveContentsState extends State<PlanRemoveContents> {
     return DefaultBottomSheet(
       title: '계획 삭제',
       height: 380,
-      widgets: [
-        ContentsBox(
-          height: 200,
-          contentsWidget: ListView.builder(
-              itemCount: widget.planInfoList.length,
-              itemBuilder: (context, index) {
-                final item = widget.planInfoList[index];
-                int count = 0;
+      contents: ContentsBox(
+        height: 200,
+        contentsWidget: ListView.builder(
+            itemCount: widget.planInfoList.length,
+            itemBuilder: (context, index) {
+              final item = widget.planInfoList[index];
+              int count = 0;
 
-                for (var i = 0; i < widget.recordBoxList.length; i++) {
-                  final recordInfo = widget.recordBoxList[i];
+              for (var i = 0; i < widget.recordBoxList.length; i++) {
+                final recordInfo = widget.recordBoxList[i];
 
-                  if (recordInfo.actions != null) {
-                    if (recordInfo.actions!.contains(item.id)) {
-                      count += 1;
-                    }
+                if (recordInfo.actions != null) {
+                  if (recordInfo.actions!.contains(item.id)) {
+                    count += 1;
                   }
                 }
+              }
 
-                return Column(
-                  children: [
-                    InkWell(
-                      onTap: () => onTap(item.id),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 5,
-                            child: Row(
-                              children: [
-                                DefaultIcon(
-                                  id: item.id,
-                                  iconSize: 25,
-                                  icon: removeIds.contains(item.id)
-                                      ? Icons.check_box
-                                      : Icons.check_box_outline_blank,
-                                  color: buttonBackgroundColor,
-                                  onTap: (_) => onTap(item.id),
-                                ),
-                                SpaceWidth(width: regularSapce),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    BodySmallText(text: item.title),
-                                    SpaceHeight(height: tinySpace),
-                                    Text(item.name),
-                                  ],
-                                )
-                              ],
-                            ),
+              return Column(
+                children: [
+                  InkWell(
+                    onTap: () => onTap(item.id),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 5,
+                          child: Row(
+                            children: [
+                              DefaultIcon(
+                                id: item.id,
+                                iconSize: 25,
+                                icon: removeIds.contains(item.id)
+                                    ? Icons.check_box
+                                    : Icons.check_box_outline_blank,
+                                color: buttonBackgroundColor,
+                                onTap: (_) => onTap(item.id),
+                              ),
+                              SpaceWidth(width: regularSapce),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  BodySmallText(text: item.title),
+                                  SpaceHeight(height: tinySpace),
+                                  Text(item.name),
+                                ],
+                              )
+                            ],
                           ),
-                          TextIcon(
-                            backgroundColor: dialogBackgroundColor,
-                            text: '실천 $count회',
-                            borderRadius: 10,
-                            textColor: Colors.grey,
-                            fontSize: 9,
-                          )
-                        ],
-                      ),
+                        ),
+                        TextIcon(
+                          backgroundColor: dialogBackgroundColor,
+                          text: '실천 $count회',
+                          borderRadius: 10,
+                          textColor: Colors.grey,
+                          fontSize: 9,
+                        )
+                      ],
                     ),
-                    SpaceHeight(height: regularSapce),
-                  ],
-                );
-              }),
-        )
-      ],
+                  ),
+                  SpaceHeight(height: regularSapce),
+                ],
+              );
+            }),
+      ),
       isEnabled: removeIds.isNotEmpty,
       submitText: '삭제 ${removeIds.length}',
       onSubmit: onSubmit,

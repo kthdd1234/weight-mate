@@ -52,8 +52,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     final tallText = watchProvider.getTallText();
     final weightText = watchProvider.getWeightText();
     final goalWeightText = watchProvider.getGoalWeightText();
-    final isAlarm = watchProvider.getIsWeightAlarm();
-    final weightAlarmTime = watchProvider.getWeightAlarmTime();
+    final isAlarm = watchProvider.getIsAlarm();
+    final alarmTime = watchProvider.getAlarmTime();
 
     onChangedTallText(value) {
       context.read<DietInfoProvider>().changeTallText(value);
@@ -108,7 +108,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         Navigator.pushNamed(
           context,
           '/add-plan-type',
-          arguments: argmentsTypeEnum.start,
+          arguments: ArgmentsTypeEnum.start,
         );
       }
 
@@ -158,7 +158,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         }
       }
 
-      readProvider.changeIsWeightAlarm(newValue);
+      readProvider.changeIsAlarm(newValue);
     }
 
     onDateTimeChanged(DateTime value) {
@@ -166,14 +166,14 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     }
 
     onSubmit() {
-      readProvider.changeWeightAlarmTime(timeValue);
+      readProvider.changeAlarmTime(timeValue);
       closeDialog(context);
     }
 
-    onTap(String id) {
+    onTap(dynamic id) {
       showAlarmBottomSheet(
         context: context,
-        initialDateTime: weightAlarmTime!,
+        initialDateTime: alarmTime!,
         onDateTimeChanged: onDateTimeChanged,
         onSubmit: onSubmit,
       );
@@ -187,9 +187,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           AlarmItemWidget(
             id: 'weight-alarm',
             title: '체중 기록 알림',
-            desc: '정해진 시간에 알림을 보내드려요.',
+            desc: '정해진 시간에 알림을 드려요.',
             isEnabled: isAlarm,
-            alarmTime: weightAlarmTime,
+            alarmTime: alarmTime,
             icon: Icons.notifications_active,
             iconBackgroundColor: dialogBackgroundColor,
             chipBackgroundColor: dialogBackgroundColor,
@@ -204,7 +204,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       body: Column(
         children: [
           AddTitleWidget(
-            argmentsType: argmentsTypeEnum.start,
+            argmentsType: ArgmentsTypeEnum.start,
             step: 1,
             title: '프로필 정보를 입력해주세요.',
           ),

@@ -8,16 +8,18 @@ class UserInfoClass {
     required this.tall,
     required this.goalWeight,
     required this.recordStartDateTime,
-    required this.isWeightAlarm,
-    this.weightAlarmTime,
+    required this.isAlarm,
+    this.alarmTime,
+    this.alarmId,
   });
 
   String userId;
   double tall;
   double goalWeight;
   DateTime recordStartDateTime;
-  bool isWeightAlarm;
-  DateTime? weightAlarmTime;
+  bool isAlarm;
+  DateTime? alarmTime;
+  int? alarmId;
 }
 
 class RecordInfoClass {
@@ -35,16 +37,16 @@ class RecordInfoClass {
 }
 
 class PlanInfoClass {
-  PlanInfoClass({
-    required this.type,
-    required this.title,
-    required this.id,
-    required this.name,
-    required this.startDateTime,
-    this.endDateTime,
-    required this.isAlarm,
-    this.alarmTime,
-  });
+  PlanInfoClass(
+      {required this.type,
+      required this.title,
+      required this.id,
+      required this.name,
+      required this.startDateTime,
+      this.endDateTime,
+      required this.isAlarm,
+      this.alarmTime,
+      this.alarmId});
 
   PlanTypeEnum type;
   String title;
@@ -54,6 +56,7 @@ class PlanInfoClass {
   DateTime? endDateTime;
   bool isAlarm;
   DateTime? alarmTime;
+  int? alarmId;
 }
 
 class TextInputClass {

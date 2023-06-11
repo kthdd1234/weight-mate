@@ -2,34 +2,35 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/input/multi_line_text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:provider/provider.dart';
 
-class TodayMemoEditWidget extends StatefulWidget {
-  TodayMemoEditWidget({
+class TodayDiaryEditWidget extends StatefulWidget {
+  TodayDiaryEditWidget({
     super.key,
-    required this.todayMemoText,
+    required this.text,
+    required this.onPressedOk,
   });
 
-  String todayMemoText;
+  String text;
+  Function(String text) onPressedOk;
 
   @override
-  State<TodayMemoEditWidget> createState() => _TodayMemoEditWidgetState();
+  State<TodayDiaryEditWidget> createState() => _TodayDiaryEditWidgetState();
 }
 
-class _TodayMemoEditWidgetState extends State<TodayMemoEditWidget> {
+class _TodayDiaryEditWidgetState extends State<TodayDiaryEditWidget> {
   final TextEditingController textController = TextEditingController();
   final int textMaxLength = 200;
   bool isEnabledOnPressed = false;
 
   @override
   void initState() {
-    textController.text = widget.todayMemoText;
-    final bool isResult = widget.todayMemoText != '' &&
-        widget.todayMemoText.length != textMaxLength;
+    textController.text = widget.text;
+    final bool isResult =
+        widget.text != '' && widget.text.length != textMaxLength;
     isEnabledOnPressed = isResult;
 
     super.initState();
@@ -38,7 +39,7 @@ class _TodayMemoEditWidgetState extends State<TodayMemoEditWidget> {
   @override
   Widget build(BuildContext context) {
     onPressedOk() {
-      // context.read<DietInfoProvider>().changeTodayMemoText(textController.text);
+      widget.onPressedOk(textController.text);
       context
           .read<RecordIconTypeProvider>()
           .setSeletedRecordIconType(RecordIconTypes.none);
@@ -61,7 +62,7 @@ class _TodayMemoEditWidgetState extends State<TodayMemoEditWidget> {
       children: [
         SpaceHeight(height: tinySpace),
         MultiLineTextInput(
-          hintText: '메모를 입력해주세요. (기분, 컨디션, 몸 상태 등등)',
+          hintText: '일기를 작성해주세요.',
           controller: textController,
           maxLength: textMaxLength,
           onChanged: onChanged,

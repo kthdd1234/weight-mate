@@ -62,13 +62,11 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
         builder: (context) => DefaultBottomSheet(
           title: '날짜 불러오기',
           height: 380,
-          widgets: [
-            DefaultTimePicker(
-              initialDateTime: importDateTime,
-              mode: CupertinoDatePickerMode.date,
-              onDateTimeChanged: onDateTimeChanged,
-            )
-          ],
+          contents: DefaultTimePicker(
+            initialDateTime: importDateTime,
+            mode: CupertinoDatePickerMode.date,
+            onDateTimeChanged: onDateTimeChanged,
+          ),
           titleLeftWidget: GestureDetector(
             onTap: onTapCalendarIcon,
             child: const Icon(

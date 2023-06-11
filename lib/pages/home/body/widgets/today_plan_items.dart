@@ -30,18 +30,18 @@ class TodayPlanItems extends StatelessWidget {
               endDateTime: item.endDateTime,
               isAlarm: item.isAlarm,
               alarmTime: item.alarmTime,
+              alarmId: item.alarmId,
             ),
           );
 
       Navigator.pushNamed(
         context,
         '/add-plan-setting',
-        arguments: argmentsTypeEnum.edit,
+        arguments: ArgmentsTypeEnum.edit,
       );
     }
 
     setPlanListView() {
-      // return EmptyArea();
       return ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,

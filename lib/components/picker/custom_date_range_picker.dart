@@ -56,7 +56,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
       if (recordInfo != null) {
         if (recordInfo.weight != null) object.add('weight');
-        if (recordInfo.memo != null) object.add('memo');
+        if (recordInfo.diary != null) object.add('memo');
       }
 
       return CalendarMonthCellWidget(

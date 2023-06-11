@@ -46,14 +46,20 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
+
+    timeValue = initAlarmDateTime;
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = context.read<DietInfoProvider>();
-    final planInfo = provider.getPlanInfo();
+    final now = DateTime.now();
+    final importProvider = context.read<ImportDateTimeProvider>();
+    final infoProvider = context.read<DietInfoProvider>();
+    final planInfo = infoProvider.getPlanInfo();
+    final notifyWeightUid = UniqueKey().hashCode;
+    final notifyPlanUid = UniqueKey().hashCode;
     final argmentsType =
-        ModalRoute.of(context)!.settings.arguments as argmentsTypeEnum;
+        ModalRoute.of(context)!.settings.arguments as ArgmentsTypeEnum;
 
     buttonEnabled() {
       return planInfo.name != '';
@@ -65,60 +71,101 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() {});
     }
 
-    onPressedBottomNavigationButton() {
-      final userInfoState = provider.getUserInfo();
-      final recordInfoState = provider.getRecordInfo();
-      final now = DateTime.now();
-      final uuidV1 = const Uuid().v1();
-      final uuidV4 = const Uuid().v4();
-      final setId =
-          argmentsType == argmentsTypeEnum.edit ? planInfo.id : uuidV4;
+    addPlanNotification({int? planId}) {
+      NotificationService().addNotification(
+        id: planId ?? notifyPlanUid,
+        alarmTime: planInfo.alarmTime!,
+        title: '계획 실천 알림',
+        body: '${planInfo.name} 실천해보세요.',
+      );
+    }
 
-      final notifyWeightUid = UniqueKey().hashCode;
-      final notifyPlanUid = UniqueKey().hashCode;
+    setStartPage() {
+      final userInfoState = infoProvider.getUserInfo();
+      final recordInfoState = infoProvider.getRecordInfo();
+      final uuidV1 = const Uuid().v1();
+
+      notification.cancelAll();
+
+      userBox.put(
+        'userProfile',
+        UserBox(
+          userId: uuidV1,
+          tall: userInfoState.tall,
+          goalWeight: userInfoState.goalWeight,
+          recordStartDateTime: now,
+          isAlarm: userInfoState.isAlarm,
+          alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
+          alarmId: userInfoState.isAlarm ? notifyWeightUid : null,
+        ),
+      );
+
+      recordBox.put(
+        getDateTimeToInt(now),
+        RecordBox(
+          recordDateTime: now,
+          weight: recordInfoState.weight,
+          actions: [],
+          diary: {
+            'pickedImageList': [null, null],
+            'whiteText': null
+          },
+        ),
+      );
+
+      if (userInfoState.isAlarm) {
+        NotificationService().addNotification(
+          id: notifyWeightUid,
+          alarmTime: userInfoState.alarmTime!,
+          title: '체중 기록 알림',
+          body: '오늘의 체중을 입력 할 시간이에요.',
+        );
+      }
+
+      if (planInfo.isAlarm) {
+        addPlanNotification();
+      }
+
+      importProvider.setImportDateTime(now);
+    }
+
+    setAddPage() {
+      if (planInfo.isAlarm) {
+        addPlanNotification();
+      }
+    }
+
+    setEditPage() async {
+      final notificationIds =
+          await NotificationService().pendingNotificationIds;
+
+      if (planInfo.isAlarm) {
+        bool isContainId = notificationIds.contains(planInfo.alarmId);
+        addPlanNotification(planId: isContainId ? planInfo.alarmId : null);
+      } else {
+        NotificationService().deleteMultipleAlarm([
+          planInfo.alarmId.toString(),
+        ]);
+      }
+    }
+
+    onPressedBottomNavigationButton() async {
+      final planInfoId = argmentsType == ArgmentsTypeEnum.edit
+          ? planInfo.id
+          : const Uuid().v4();
+      final argmentsTypeMaps = {
+        ArgmentsTypeEnum.start: setStartPage,
+        ArgmentsTypeEnum.add: setAddPage,
+        ArgmentsTypeEnum.edit: setEditPage
+      };
 
       if (buttonEnabled()) {
-        context.read<ImportDateTimeProvider>().setImportDateTime(now);
-
-        if (argmentsType == argmentsTypeEnum.start) {
-          userBox.put(
-            'userBox',
-            UserBox(
-              userId: uuidV1,
-              tall: userInfoState.tall,
-              goalWeight: userInfoState.goalWeight,
-              recordStartDateTime: now,
-              isWeightAlarm: userInfoState.isWeightAlarm,
-              weightAlarmTime: userInfoState.isWeightAlarm
-                  ? userInfoState.weightAlarmTime
-                  : null,
-              alarmId: userInfoState.isWeightAlarm ? notifyWeightUid : null,
-            ),
-          );
-
-          recordBox.put(
-            getDateTimeToInt(now),
-            RecordBox(
-              recordDateTime: now,
-              weight: recordInfoState.weight,
-            ),
-          );
-
-          // todo: userInfoState.isWeightAlarm 이 true 라면 알람 추가
-          if (userInfoState.isWeightAlarm) {
-            NotificationService().addNotification(
-              id: notifyWeightUid,
-              alarmTime: userInfoState.weightAlarmTime!,
-              title: '체중 기록 알림',
-              body: '오늘의 체중을 입력 할 시간이에요.',
-            );
-          }
-        }
+        argmentsTypeMaps[argmentsType]!();
 
         planBox.put(
-          setId,
+          planInfoId,
           PlanBox(
-            id: setId,
+            id: planInfoId,
             type: planInfo.type.toString(),
             title: planInfo.title,
             name: planInfo.name,
@@ -126,25 +173,13 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
             endDateTime: planInfo.endDateTime,
             isAlarm: planInfo.isAlarm,
             alarmTime: planInfo.isAlarm ? planInfo.alarmTime : null,
+            alarmId: planInfo.isAlarm ? notifyPlanUid : null,
           ),
         );
 
-        if (planInfo.isAlarm) {
-          NotificationService().addNotification(
-            id: notifyPlanUid,
-            alarmTime: planInfo.alarmTime!,
-            title: '계획 실천 알림',
-            body: '오늘의 계획을 실천해보세요.',
-          );
-        } else {
-          if (argmentsType == argmentsTypeEnum.edit) {
-            // todo:
-          }
-        }
+        infoProvider.setInitPlanInfo();
 
-        provider.initDietInfoProvider();
-
-        return Navigator.pushNamedAndRemoveUntil(
+        Navigator.pushNamedAndRemoveUntil(
           context,
           '/home-container',
           (_) => false,
@@ -212,7 +247,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       closeDialog(context);
     }
 
-    onTapAlarm(String id) {
+    onTapAlarm(dynamic id) {
       showAlarmBottomSheet(
         context: context,
         initialDateTime: planInfo.alarmTime!,
@@ -235,6 +270,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
             onPressed: openAppSettings,
           );
         }
+
+        planInfo.alarmTime ??= initAlarmDateTime;
       }
 
       planInfo.isAlarm = newValue;
@@ -250,11 +287,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     }
 
     setPageTitle() {
-      return argmentsType == argmentsTypeEnum.edit ? '계획 편집' : null;
+      return argmentsType == ArgmentsTypeEnum.edit ? '계획 편집' : null;
     }
 
     setAppTitleWidget() {
-      return argmentsType == argmentsTypeEnum.edit
+      return argmentsType == ArgmentsTypeEnum.edit
           ? const EmptyArea()
           : AddTitleWidget(
               argmentsType: argmentsType,
@@ -264,18 +301,18 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     }
 
     setBottomWidget() {
-      return argmentsType == argmentsTypeEnum.edit
+      return argmentsType == ArgmentsTypeEnum.edit
           ? const EmptyArea()
           : Column(
               children: [
                 SpaceHeight(height: regularSapce),
-                BottomText(bottomText: '기록 페이지에서 여러개의 계획을 추가할 수 있어요.')
+                BottomText(bottomText: '기록 화면에서 여러 계획을 추가할 수 있어요.')
               ],
             );
     }
 
     setBottomButtonText() {
-      return argmentsType == argmentsTypeEnum.edit ? '수정하기' : '완료';
+      return argmentsType == ArgmentsTypeEnum.edit ? '수정하기' : '완료';
     }
 
     return AddContainer(
@@ -305,7 +342,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                 AlarmItemWidget(
                   id: 'alarm-setting',
                   title: '${planInfo.title} 실천 알림',
-                  desc: '설정한 시간에 실천 알림을 보내드려요.',
+                  desc: '매일 실천 알림을 드려요.',
                   icon: Icons.notifications_active,
                   isEnabled: planInfo.isAlarm,
                   alarmTime: planInfo.alarmTime,
@@ -327,17 +364,42 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
   }
 }
 
-// ContentsTitleText(text: '메모'),
-// SpaceHeight(height: smallSpace),
-// TextInput(
-//   controller: memoController,
-//   autofocus: true,
-//   maxLength: 12,
-//   prefixIcon: Icons.sms,
-//   suffixText: '',
-//   hintText: '메모를 입력해주세요.',
-//   counterText: '(예: )',
-//   onChanged: (_) {},
-//   errorText: null,
-// ),
-// SpaceHeight(height: largeSpace),
+      // final userInfoState = provider.getUserInfo();
+      // final recordInfoState = provider.getRecordInfo();
+      // final now = DateTime.now();
+      // final uuidV1 = const Uuid().v1();
+
+        // if (argmentsType == argmentsTypeEnum.start) {
+        //   userBox.put(
+        //     'userBox',
+        //     UserBox(
+        //       userId: uuidV1,
+        //       tall: userInfoState.tall,
+        //       goalWeight: userInfoState.goalWeight,
+        //       recordStartDateTime: now,
+        //       isWeightAlarm: userInfoState.isWeightAlarm,
+        //       weightAlarmTime: userInfoState.isWeightAlarm
+        //           ? userInfoState.weightAlarmTime
+        //           : null,
+        //       alarmId: userInfoState.isWeightAlarm ? notifyWeightUid : null,
+        //     ),
+        //   );
+
+        //   recordBox.put(
+        //     getDateTimeToInt(now),
+        //     RecordBox(
+        //       recordDateTime: now,
+        //       weight: recordInfoState.weight,
+        //     ),
+        //   );
+
+        //   if (userInfoState.isWeightAlarm) {
+        //     NotificationService().addNotification(
+        //       id: notifyWeightUid,
+        //       alarmTime: userInfoState.weightAlarmTime!,
+        //       title: '체중 기록 알림',
+        //       body: '오늘의 체중을 입력 할 시간이에요.',
+        //     );
+        //   }
+        // }
+

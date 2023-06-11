@@ -38,7 +38,7 @@ class _AddPlanItemState extends State<AddPlanItem> {
     final planType = widget.planInfo.type;
     final itemClassList = planTypeDetailInfo[planType]!.classList;
     final argmentsType =
-        ModalRoute.of(context)!.settings.arguments as argmentsTypeEnum;
+        ModalRoute.of(context)!.settings.arguments as ArgmentsTypeEnum;
 
     onTap(dynamic id) {
       final itemType = itemClassList.firstWhere((element) => element.id == id);

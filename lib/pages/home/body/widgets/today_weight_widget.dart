@@ -172,7 +172,7 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
     }
 
     setTall() {
-      UserBox? userInfo = userBox.get('userBox');
+      UserBox? userInfo = userBox.get('userProfile');
 
       if (userInfo == null) return null;
       return userInfo.tall;
@@ -185,7 +185,7 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
     }
 
     setGoalWeight() {
-      UserBox? userInfo = userBox.get('userBox');
+      UserBox? userInfo = userBox.get('userProfile');
       return userInfo?.goalWeight;
     }
 

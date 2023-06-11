@@ -21,6 +21,7 @@ import 'pages/common/screen_lock_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   NotificationService().initNotification();
   NotificationService().initializeTimeZone();
 
@@ -53,7 +54,7 @@ _initHive() async {
 
   await Hive.openBox<UserBox>('userBox');
   await Hive.openBox<RecordBox>('recordBox');
-  await Hive.openBox<PlanBox>('PlanBox');
+  await Hive.openBox<PlanBox>('planBox');
 }
 
 class MyApp extends StatelessWidget {
