@@ -30,10 +30,6 @@ class TodayPlanCheck extends StatelessWidget {
           recordInfo = RecordBox(
             recordDateTime: importDateTime,
             actions: [id],
-            diary: {
-              'pickedImageList': [null, null],
-              'whiteText': null
-            },
           );
         } else {
           recordInfo!.actions.add(id);

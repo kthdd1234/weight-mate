@@ -11,7 +11,7 @@ class TodayDiaryDataWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ContentsBox(
       width: MediaQuery.of(context).size.width,
-      backgroundColor: dialogBackgroundColor,
+      backgroundColor: typeBackgroundColor,
       contentsWidget: Text(text),
     );
   }

@@ -20,14 +20,16 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       recordDateTime: fields[0] as DateTime,
       weight: fields[1] as double?,
       actions: (fields[2] as List).cast<String>(),
-      diary: (fields[3] as Map).cast<String, dynamic>(),
+      leftEyeBodyFilePath: fields[3] as String?,
+      rightEyeBodyFilePath: fields[4] as String?,
+      whiteText: fields[5] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordBox obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.recordDateTime)
       ..writeByte(1)
@@ -35,7 +37,11 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(2)
       ..write(obj.actions)
       ..writeByte(3)
-      ..write(obj.diary);
+      ..write(obj.leftEyeBodyFilePath)
+      ..writeByte(4)
+      ..write(obj.rightEyeBodyFilePath)
+      ..writeByte(5)
+      ..write(obj.whiteText);
   }
 
   @override

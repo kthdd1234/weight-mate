@@ -3,15 +3,15 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'enum.dart';
 
 var todayOfWiseSayingList = [
-  WiseSayingClass(wiseSaying: '나를 배부르게 하는 것들이 나를 파괴한다.', name: '안젤리나 졸리'),
-  WiseSayingClass(wiseSaying: '태어나서 한번도 야식을 먹어본 적이 없어요.', name: '김연아'),
-  WiseSayingClass(wiseSaying: '인생은 살이 쪘을 때와 안 졌을 때로 나뉜다.', name: '이소라'),
-  WiseSayingClass(wiseSaying: '하얀 음식은 절대 안먹어요. 그건 독이니까요.', name: '미란다 커'),
-  WiseSayingClass(wiseSaying: '운동이 끝나고 먹는 거기까지가 운동이다.', name: '김종국'),
-  WiseSayingClass(wiseSaying: '먹어봤자 내가 아는 그 맛이다.', name: '옥주현'),
+  WiseSayingClass(wiseSaying: '나를 배부르게 하는것들이\n나를 파괴한다.', name: '안젤리나 졸리'),
+  WiseSayingClass(wiseSaying: '태어나서 한번도 야식을\n먹어본 적이 없어요.', name: '김연아'),
+  WiseSayingClass(wiseSaying: '인생은 살이 쪘을 때와\n안 졌을 때로 나뉜다.', name: '이소라'),
+  WiseSayingClass(wiseSaying: '하얀 음식은 절대 안먹어요.\n그건 독이니까요.', name: '미란다 커'),
+  WiseSayingClass(wiseSaying: '운동이 끝나고 먹는\n거기까지가 운동이다.', name: '김종국'),
+  WiseSayingClass(wiseSaying: '먹어봤자 내가 아는\n그 맛이다.', name: '옥주현'),
   WiseSayingClass(wiseSaying: '세끼 다 먹으면 살쪄요.', name: '김사랑'),
-  WiseSayingClass(wiseSaying: '먹고 싶은 걸 다 먹되 아주 조금만 먹는다.', name: 'AOA 설현'),
-  WiseSayingClass(wiseSaying: '죽을 만큼 운동하고 죽지 않을 만큼 먹었어요.', name: '제시카'),
+  WiseSayingClass(wiseSaying: '먹고 싶은 걸 다 먹되\n아주 조금만 먹는다.', name: 'AOA 설현'),
+  WiseSayingClass(wiseSaying: '죽을 만큼 운동하고\n죽지 않을 만큼 먹었어요.', name: '제시카'),
   WiseSayingClass(wiseSaying: '먹는거요? 귀찮아요.', name: '김민희'),
 ];
 

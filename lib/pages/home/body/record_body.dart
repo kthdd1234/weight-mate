@@ -28,6 +28,8 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
 
+  bool isCameraActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -48,15 +50,20 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
+      if (isCameraActive == false) {
+        RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
 
-      if (recordInfo == null || recordInfo.weight == null) {
+        if (recordInfo == null || recordInfo.weight == null) {
+          context
+              .read<RecordIconTypeProvider>()
+              .setSeletedRecordIconType(RecordIconTypes.addWeight);
+        }
+
         context
-            .read<RecordIconTypeProvider>()
-            .setSeletedRecordIconType(RecordIconTypes.addWeight);
+            .read<ImportDateTimeProvider>()
+            .setImportDateTime(DateTime.now());
       }
-
-      context.read<ImportDateTimeProvider>().setImportDateTime(DateTime.now());
+      setState(() => isCameraActive = false);
     }
   }
 
@@ -73,6 +80,10 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
       planBox.clear();
     }
 
+    setCameraActive(bool newValue) {
+      setState(() => isCameraActive = newValue);
+    }
+
     return SingleChildScrollView(
       child: MultiValueListenableBuilder(
         valueListenables: [
@@ -84,7 +95,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
           return Column(
             children: [
               const TodayWiseSayingWidget(),
-              SpaceHeight(height: regularSapce),
+              SpaceHeight(height: largeSpace),
               TodayWeightWidget(
                 seletedRecordIconType: seletedRecordIconType,
                 importDateTime: importDateTime,
@@ -95,11 +106,14 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 importDateTime: importDateTime,
               ),
               SpaceHeight(height: largeSpace),
-              TodayDiaryWidget(seletedRecordSubType: seletedRecordIconType),
-              ElevatedButton(
-                onPressed: onPressed,
-                child: const Text('hive 데이터 초기화'),
-              )
+              TodayDiaryWidget(
+                seletedRecordSubType: seletedRecordIconType,
+                setCameraActive: setCameraActive,
+              ),
+              // ElevatedButton(
+              //   onPressed: onPressed,
+              //   child: const Text('hive 데이터 초기화'),
+              // )
             ],
           );
         },

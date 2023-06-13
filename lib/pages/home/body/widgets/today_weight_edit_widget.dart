@@ -155,13 +155,10 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
             recordBox.put(
               importDateTimeInt,
               RecordBox(
-                  recordDateTime: widget.importDateTime,
-                  weight: stringToDouble(text),
-                  actions: [],
-                  diary: {
-                    'pickedImageList': [null, null],
-                    'whiteText': null
-                  }),
+                recordDateTime: widget.importDateTime,
+                weight: stringToDouble(text),
+                actions: [],
+              ),
             );
 
             break;

@@ -8,7 +8,9 @@ class RecordBox extends HiveObject {
     required this.recordDateTime,
     this.weight,
     required this.actions,
-    required this.diary,
+    this.leftEyeBodyFilePath,
+    this.rightEyeBodyFilePath,
+    this.whiteText,
   });
 
   @HiveField(0)
@@ -21,5 +23,11 @@ class RecordBox extends HiveObject {
   List<String> actions;
 
   @HiveField(3)
-  Map<String, dynamic> diary;
+  String? leftEyeBodyFilePath;
+
+  @HiveField(4)
+  String? rightEyeBodyFilePath;
+
+  @HiveField(5)
+  String? whiteText;
 }

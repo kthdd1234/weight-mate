@@ -20,7 +20,10 @@ class WiseSayingItemWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(wiseSaying),
+        Text(
+          wiseSaying,
+          style: const TextStyle(height: 1.5),
+        ),
         SpaceHeight(height: smallSpace),
         BodySmallText(text: name)
       ],

@@ -28,23 +28,17 @@ class CalendarMonthCellWidget extends StatelessWidget {
     );
 
     setCellTextColor() {
-      if (isMaxDateResult) {
-        return Colors.grey[300];
-      }
-
+      if (isMaxDateResult) return Colors.grey;
       return isSelectedDay ? Colors.white : Colors.black;
     }
 
     setCellText() {
-      if (currentView != 'month') {
-        return '';
-      }
-
+      if (currentView != 'month') return '';
       return detailDateTime.day.toString();
     }
 
     colorWidget(String type) {
-      final colorData = {
+      final dotColors = {
         'weight': weightDotColor,
         'action': actionDotColor,
         'memo': memoDotColor,
@@ -52,7 +46,7 @@ class CalendarMonthCellWidget extends StatelessWidget {
 
       return Column(
         children: [
-          ColorDot(width: 7, height: 7, color: colorData[type]!),
+          ColorDot(width: 7, height: 7, color: dotColors[type]!),
           SpaceWidth(width: 10)
         ],
       );

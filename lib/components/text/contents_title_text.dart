@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class ContentsTitleText extends StatelessWidget {
@@ -26,12 +28,18 @@ class ContentsTitleText extends StatelessWidget {
               text,
               style: Theme.of(context).textTheme.labelLarge,
             ),
-            const SizedBox(width: 3),
-            Icon(
-              icon,
-              size: 18,
-              color: buttonBackgroundColor,
-            )
+            icon != null
+                ? Row(
+                    children: [
+                      SpaceWidth(width: 3),
+                      Icon(
+                        icon,
+                        size: 18,
+                        color: buttonBackgroundColor,
+                      ),
+                    ],
+                  )
+                : const EmptyArea()
           ],
         ),
         Row(children: sub ?? []),

@@ -24,6 +24,7 @@ class ColorTextInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        SpaceWidth(width: smallSpace),
         ColorDot(
           width: width,
           height: height,

@@ -241,7 +241,7 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
             sub: setIconWidgets(),
             icon: setContetnsIcon(),
           ),
-          SpaceHeight(height: smallSpace),
+          SpaceHeight(height: smallSpace + 5),
           contentsWidgets(
             tall: setTall(),
             weight: setWeight(),

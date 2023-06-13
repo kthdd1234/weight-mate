@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/calendar_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/more_see_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record_body.dart';
@@ -26,7 +26,7 @@ class _HomeContainerState extends State<HomeContainer> {
   ];
   List<Widget> bodyList = const [
     RecordBody(),
-    HistoryBody(),
+    CalendarBody(),
     AnalyzeBody(),
     MoreSeeBody()
   ];

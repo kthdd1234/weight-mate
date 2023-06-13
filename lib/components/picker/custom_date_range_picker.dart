@@ -56,7 +56,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
 
       if (recordInfo != null) {
         if (recordInfo.weight != null) object.add('weight');
-        if (recordInfo.diary != null) object.add('memo');
+        if (recordInfo.whiteText != null) object.add('memo');
       }
 
       return CalendarMonthCellWidget(
@@ -82,6 +82,7 @@ class _CustomDateRangePickerState extends State<CustomDateRangePicker> {
       valueListenable: recordBox.listenable(),
       builder: (context, box, boxWidget) {
         return SfDateRangePicker(
+          backgroundColor: Colors.transparent,
           controller: controller,
           showNavigationArrow: true,
           view: DateRangePickerView.month,

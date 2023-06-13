@@ -154,13 +154,13 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           break;
 
         case SegmentedTypes.planCheck:
-          if (recordInfo?.actions != null) count = recordInfo!.actions!.length;
+          if (recordInfo?.actions != null) count = recordInfo!.actions.length;
           break;
         default:
       }
 
       return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
         child: Text(
           '$text $count',
           style: const TextStyle(fontSize: 12, color: buttonBackgroundColor),
@@ -171,8 +171,12 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     setSegmenteItem() {
       Map<SegmentedTypes, StatelessWidget> segmentedInfo = {
         SegmentedTypes.planTypes: TodayPlanTypes(
-            actions: recordInfo?.actions, planInfoList: planInfoList),
-        SegmentedTypes.planItems: TodayPlanItems(planInfoList: planInfoList),
+          actions: recordInfo?.actions,
+          planInfoList: planInfoList,
+        ),
+        SegmentedTypes.planItems: TodayPlanItems(
+          planInfoList: planInfoList,
+        ),
         SegmentedTypes.planCheck: TodayPlanCheck(
           recordBox: recordBox,
           recordInfo: recordInfo,
@@ -187,17 +191,17 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     Map<SegmentedTypes, Widget> segmentedTypes = {
       SegmentedTypes.planTypes: segmentedItem(
         type: SegmentedTypes.planTypes,
-        text: '그룹',
+        text: '그룹 목록',
         icon: Icons.format_list_bulleted_outlined,
       ),
       SegmentedTypes.planItems: segmentedItem(
         type: SegmentedTypes.planItems,
-        text: '계획',
+        text: '나의 계획',
         icon: Icons.abc,
       ),
       SegmentedTypes.planCheck: segmentedItem(
         type: SegmentedTypes.planCheck,
-        text: '실천',
+        text: '실천 체크',
         icon: Icons.check_outlined,
       )
     };
@@ -216,7 +220,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       return planInfoList.isEmpty
           ? Column(
               children: [
-                SpaceHeight(height: smallSpace),
+                SpaceHeight(height: smallSpace + 5),
                 EmptyTextArea(
                   text: '오늘의 계획을 추가해보세요.',
                   icon: Icons.add,
@@ -228,7 +232,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             )
           : Column(
               children: [
-                SpaceHeight(height: smallSpace),
+                SpaceHeight(height: smallSpace + 5),
                 DefaultSegmented(
                   selectedSegment: selectedSegment,
                   children: segmentedTypes,
@@ -248,7 +252,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             icon: Icons.task_alt,
             sub: iconWidgets,
           ),
-          setBodyWidgets()
+          setBodyWidgets(),
         ],
       ),
     );

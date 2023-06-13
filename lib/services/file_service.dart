@@ -10,7 +10,7 @@ Future<String> saveImageToLocalDirectory(File image) async {
   await Directory(folderPath).create(recursive: true);
 
   final newFile = File(filePath);
-  newFile.writeAsStringSync(image.readAsStringSync());
+  newFile.writeAsBytesSync(image.readAsBytesSync());
 
   return filePath;
 }
