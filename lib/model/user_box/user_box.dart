@@ -8,7 +8,7 @@ class UserBox extends HiveObject {
     required this.userId,
     required this.tall,
     required this.goalWeight,
-    required this.recordStartDateTime,
+    required this.createDateTime,
     required this.isAlarm,
     this.alarmTime,
     this.alarmId,
@@ -24,7 +24,7 @@ class UserBox extends HiveObject {
   double goalWeight;
 
   @HiveField(3)
-  DateTime recordStartDateTime;
+  DateTime createDateTime;
 
   @HiveField(4)
   bool isAlarm;

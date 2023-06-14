@@ -17,30 +17,39 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return RecordBox(
-      recordDateTime: fields[0] as DateTime,
-      weight: fields[1] as double?,
-      actions: (fields[2] as List).cast<String>(),
-      leftEyeBodyFilePath: fields[3] as String?,
-      rightEyeBodyFilePath: fields[4] as String?,
-      whiteText: fields[5] as String?,
+      createDateTime: fields[0] as DateTime,
+      weightDateTime: fields[1] as DateTime?,
+      actionDateTime: fields[2] as DateTime?,
+      diaryDateTime: fields[3] as DateTime?,
+      weight: fields[4] as double?,
+      actions: (fields[5] as List?)?.cast<String>(),
+      leftEyeBodyFilePath: fields[6] as String?,
+      rightEyeBodyFilePath: fields[7] as String?,
+      whiteText: fields[8] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordBox obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
-      ..write(obj.recordDateTime)
+      ..write(obj.createDateTime)
       ..writeByte(1)
-      ..write(obj.weight)
+      ..write(obj.weightDateTime)
       ..writeByte(2)
-      ..write(obj.actions)
+      ..write(obj.actionDateTime)
       ..writeByte(3)
-      ..write(obj.leftEyeBodyFilePath)
+      ..write(obj.diaryDateTime)
       ..writeByte(4)
-      ..write(obj.rightEyeBodyFilePath)
+      ..write(obj.weight)
       ..writeByte(5)
+      ..write(obj.actions)
+      ..writeByte(6)
+      ..write(obj.leftEyeBodyFilePath)
+      ..writeByte(7)
+      ..write(obj.rightEyeBodyFilePath)
+      ..writeByte(8)
       ..write(obj.whiteText);
   }
 

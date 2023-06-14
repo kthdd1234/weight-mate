@@ -72,6 +72,7 @@ class _PlanRemoveContentsState extends State<PlanRemoveContents> {
       contents: ContentsBox(
         height: 200,
         contentsWidget: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.planInfoList.length,
             itemBuilder: (context, index) {
               final item = widget.planInfoList[index];

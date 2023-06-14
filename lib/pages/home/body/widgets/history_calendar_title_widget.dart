@@ -17,7 +17,7 @@ class HistoryCalendarTitleWidget extends StatelessWidget {
         //   width: smallSpace,
         //   height: smallSpace,
         //   text: '체중',
-        //   color: weightDotColor,
+        //   color: weightColor,
         // ),
         // SpaceWidth(width: 7.5),
         // ColorTextInfo(

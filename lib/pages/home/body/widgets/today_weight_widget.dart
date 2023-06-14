@@ -199,7 +199,7 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
 
       int index = recordBoxValues.indexWhere(
         (element) =>
-            getDateTimeToInt(element.recordDateTime) ==
+            getDateTimeToInt(element.createDateTime) ==
             getDateTimeToInt(widget.importDateTime),
       );
 

@@ -39,9 +39,9 @@ class CalendarMonthCellWidget extends StatelessWidget {
 
     colorWidget(String type) {
       final dotColors = {
-        'weight': weightDotColor,
-        'action': actionDotColor,
-        'memo': memoDotColor,
+        'weight': weightColor,
+        'action': actionColor,
+        'memo': diaryColor,
       };
 
       return Column(

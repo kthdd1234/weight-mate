@@ -127,14 +127,17 @@ const inputKeyboardType = TextInputType.numberWithOptions(decimal: true);
 /// dialogBackgroundColor
 const dialogBackgroundColor = Color(0xffF3F4F9);
 
-/// weightDotColor
-const weightDotColor = Colors.green;
+/// weightColor
+const weightColor = Colors.green;
 
-/// actionDotColor
-const actionDotColor = Colors.blue;
+/// actionColor
+const actionColor = Colors.purple;
 
-/// memoDotColor
-const memoDotColor = Colors.orange;
+// eyeBodyColor
+const eyeBodyColor = Colors.pink;
+
+/// diaryColor
+const diaryColor = Colors.orange;
 
 /// enableTextColor
 const enableTextColor = Color(0xff6237E2);

@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/pages/add/pages/add_plan_item.dart
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_type.dart';
 import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
+import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
@@ -83,7 +84,8 @@ class MyApp extends StatelessWidget {
         '/add-plan-setting': (context) => const AddPlanSetting(),
         '/home-container': (context) => const HomeContainer(),
         '/screen-lock': (context) => const ScreenLockPage(),
-        '/common-alarm': (context) => const CommonAlarmPage()
+        '/common-alarm': (context) => const CommonAlarmPage(),
+        '/record-info-page': (context) => const RecordInfoPage(),
       },
       home: AppFramework(widget: const AddBodyInfo()),
     );

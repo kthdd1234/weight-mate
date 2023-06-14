@@ -5,29 +5,41 @@ part 'record_box.g.dart';
 @HiveType(typeId: 2)
 class RecordBox extends HiveObject {
   RecordBox({
-    required this.recordDateTime,
+    required this.createDateTime,
+    this.weightDateTime,
+    this.actionDateTime,
+    this.diaryDateTime,
     this.weight,
-    required this.actions,
+    this.actions,
     this.leftEyeBodyFilePath,
     this.rightEyeBodyFilePath,
     this.whiteText,
   });
 
   @HiveField(0)
-  DateTime recordDateTime;
+  DateTime createDateTime;
 
   @HiveField(1)
-  double? weight;
+  DateTime? weightDateTime;
 
   @HiveField(2)
-  List<String> actions;
+  DateTime? actionDateTime;
 
   @HiveField(3)
-  String? leftEyeBodyFilePath;
+  DateTime? diaryDateTime;
 
   @HiveField(4)
-  String? rightEyeBodyFilePath;
+  double? weight;
 
   @HiveField(5)
+  List<String>? actions;
+
+  @HiveField(6)
+  String? leftEyeBodyFilePath;
+
+  @HiveField(7)
+  String? rightEyeBodyFilePath;
+
+  @HiveField(8)
   String? whiteText;
 }

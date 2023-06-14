@@ -36,30 +36,6 @@ var planTypeDetailInfo = {
       icon: Icons.home),
 };
 
-// var planTitleSub = {
-//   PlanTypeEnum.diet: '를',
-//   PlanTypeEnum.exercise: '을',
-//   PlanTypeEnum.lifestyle: '을',
-// };
-
-// var planItemClassList = {
-//   PlanTypeEnum.diet: dietPlanClassList,
-//   PlanTypeEnum.exercise: exercisePlanClassList,
-//   PlanTypeEnum.lifestyle: lifeStylePlanClassList,
-// };
-
-// var initItemType = {
-//   PlanTypeEnum.diet: 'intermittentFasting',
-//   PlanTypeEnum.exercise: 'health',
-//   PlanTypeEnum.lifestyle: 'weightRecord',
-// };
-
-// var planTypeCounterText = {
-//   PlanTypeEnum.diet: '(예: 황제 다이어트, 반공기 다이어트 등)',
-//   PlanTypeEnum.exercise: '(예: 등산, 수영, 테니스 등)',
-//   PlanTypeEnum.lifestyle: '(예: 저녁에 샐러드 먹기, 금주 선언 등)',
-// };
-
 var planTypeClassList = [
   PlanTypeClass(
     id: PlanTypeEnum.diet,
@@ -233,6 +209,16 @@ Map<RecordIconTypes, Map<String, dynamic>> weightContentsTitles = {
     'icon': Icons.flag,
     'title': '목표 체중',
   },
+};
+
+var dayOfWeek = {
+  'Mon': '월',
+  'Tue': '화',
+  'Wed': '수',
+  'Thu': '목',
+  'Fri': '금',
+  'Sat': '토',
+  'Sun': '일'
 };
 
 // var defaultDietPlanList = [

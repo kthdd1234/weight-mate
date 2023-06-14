@@ -27,18 +27,26 @@ class TodayPlanCheck extends StatelessWidget {
     onTap({required String id, required bool checked}) {
       if (checked) {
         if (recordInfo == null) {
-          recordInfo = RecordBox(
-            recordDateTime: importDateTime,
-            actions: [id],
+          recordBox.put(
+            getDateTimeToInt(importDateTime),
+            RecordBox(createDateTime: importDateTime, actions: [id]),
           );
         } else {
-          recordInfo!.actions.add(id);
+          recordInfo!.actions == null
+              ? recordInfo!.actions = [id]
+              : recordInfo!.actions!.add(id);
+
+          recordInfo!.save();
         }
       } else {
-        recordInfo!.actions.remove(id);
-      }
+        recordInfo!.actions!.remove(id);
 
-      recordBox.put(getDateTimeToInt(importDateTime), recordInfo!);
+        if (recordInfo!.actions!.isEmpty) {
+          recordInfo!.actions = null;
+        }
+
+        recordInfo!.save();
+      }
     }
 
     setListView() {
@@ -51,7 +59,6 @@ class TodayPlanCheck extends StatelessWidget {
 
             setIsChecked() {
               if (recordInfo?.actions == null) return false;
-
               return recordInfo!.actions!.contains(item.id);
             }
 

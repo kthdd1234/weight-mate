@@ -18,8 +18,8 @@ enum eBottomNavigationBarItem { record, calendar, analyze, setting }
 
 enum SegmentedTypes {
   weight,
-  actPlan,
-  memo,
+  action,
+  diary,
   week,
   month,
   threeMonth,

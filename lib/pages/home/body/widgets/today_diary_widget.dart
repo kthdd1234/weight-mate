@@ -140,13 +140,14 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             recordBox.put(
               getDateTimeToInt(importDateTime),
               RecordBox(
-                recordDateTime: importDateTime,
+                createDateTime: importDateTime,
+                diaryDateTime: DateTime.now(),
                 leftEyeBodyFilePath: pos == 'left' ? filePath : null,
                 rightEyeBodyFilePath: pos == 'right' ? filePath : null,
-                actions: [],
               ),
             );
           } else {
+            recordInfo.diaryDateTime = DateTime.now();
             pos == 'left'
                 ? recordInfo.leftEyeBodyFilePath = filePath
                 : recordInfo.rightEyeBodyFilePath = filePath;
@@ -306,13 +307,14 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         return recordBox.put(
           getDateTimeToInt(importDateTime),
           RecordBox(
-            recordDateTime: importDateTime,
-            actions: [],
+            createDateTime: importDateTime,
+            diaryDateTime: importDateTime,
             whiteText: text,
           ),
         );
       } else {
         recordInfo.whiteText = text;
+        recordInfo.diaryDateTime = DateTime.now();
         recordInfo.save();
       }
     }

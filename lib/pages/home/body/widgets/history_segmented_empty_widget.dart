@@ -18,8 +18,8 @@ class HistorySegmentedEmptyWidget extends StatelessWidget {
     setIcon() {
       final icons = {
         SegmentedTypes.weight: Icons.monitor_weight,
-        SegmentedTypes.actPlan: Icons.task_alt,
-        SegmentedTypes.memo: Icons.textsms
+        SegmentedTypes.action: Icons.task_alt,
+        SegmentedTypes.diary: Icons.textsms
       };
 
       return icons[segmented];
@@ -28,8 +28,8 @@ class HistorySegmentedEmptyWidget extends StatelessWidget {
     setTitle() {
       final titles = {
         SegmentedTypes.weight: '기록된 체중 정보가 없어요.',
-        SegmentedTypes.actPlan: '실천한 계획이 없어요.',
-        SegmentedTypes.memo: '기록한 메모가 없어요.'
+        SegmentedTypes.action: '실천한 계획이 없어요.',
+        SegmentedTypes.diary: '기록한 메모가 없어요.'
       };
 
       return titles[segmented];

@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record_body.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/widgets/home_app_bar_widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeContainer extends StatefulWidget {
   const HomeContainer({super.key});
@@ -31,13 +32,6 @@ class _HomeContainerState extends State<HomeContainer> {
     MoreSeeBody()
   ];
 
-  List<BottomNavigationBarItem> items = const [
-    BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
-    BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '달력'),
-    BottomNavigationBarItem(icon: Icon(Icons.equalizer), label: '분석'),
-    BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
-  ];
-
   @override
   void initState() {
     selectedId = eBottomNavigationBarItem.record;
@@ -53,6 +47,18 @@ class _HomeContainerState extends State<HomeContainer> {
     onTapGestureDetector() {
       FocusScope.of(context).unfocus();
     }
+
+    List<BottomNavigationBarItem> items = const [
+      BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
+      BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '달력'),
+      BottomNavigationBarItem(
+          icon: Padding(
+            padding: EdgeInsets.only(bottom: 3),
+            child: Icon(FontAwesomeIcons.chartLine, size: 17),
+          ),
+          label: '그래프'),
+      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
+    ];
 
     return GestureDetector(
         onTap: onTapGestureDetector,

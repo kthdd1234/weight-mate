@@ -17,7 +17,7 @@ class HistorySegmentedMemoWidget extends StatelessWidget {
 
     setWidget() {
       if ('' == '') {
-        return HistorySegmentedEmptyWidget(segmented: SegmentedTypes.memo);
+        return HistorySegmentedEmptyWidget(segmented: SegmentedTypes.diary);
       }
 
       onTapSuffixWidget(String id) {}

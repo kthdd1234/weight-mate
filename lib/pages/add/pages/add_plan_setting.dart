@@ -93,7 +93,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           userId: uuidV1,
           tall: userInfoState.tall,
           goalWeight: userInfoState.goalWeight,
-          recordStartDateTime: now,
+          createDateTime: now,
           isAlarm: userInfoState.isAlarm,
           alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
           alarmId: userInfoState.isAlarm ? notifyWeightUid : null,
@@ -103,9 +103,9 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       recordBox.put(
         getDateTimeToInt(now),
         RecordBox(
-          recordDateTime: now,
+          createDateTime: now,
+          weightDateTime: now,
           weight: recordInfoState.weight,
-          actions: [],
         ),
       );
 

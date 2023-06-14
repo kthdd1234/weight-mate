@@ -63,6 +63,7 @@ class TodayPlanTypes extends StatelessWidget {
       List<GroupItemClass> groupItemList = map.values.toList();
 
       return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: groupItemList.length,
         itemBuilder: (context, index) {

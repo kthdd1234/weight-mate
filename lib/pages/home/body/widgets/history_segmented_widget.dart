@@ -45,15 +45,15 @@ class HistorySegmentedWidget extends StatelessWidget {
       children: <SegmentedTypes, Widget>{
         SegmentedTypes.weight: segmentedWidget(
           name: '체중 정보',
-          dotColor: weightDotColor,
+          dotColor: weightColor,
         ),
-        SegmentedTypes.actPlan: segmentedWidget(
+        SegmentedTypes.action: segmentedWidget(
           name: '계획 실천',
-          dotColor: actionDotColor,
+          dotColor: actionColor,
         ),
-        SegmentedTypes.memo: segmentedWidget(
-          name: '메모',
-          dotColor: memoDotColor,
+        SegmentedTypes.diary: segmentedWidget(
+          name: '',
+          dotColor: diaryColor,
         )
       },
       onSegmentedChanged: onSegmentedChanged,

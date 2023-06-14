@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:intl/intl.dart';
 
@@ -60,6 +60,20 @@ timeToString(DateTime? dateTime) {
   return dateTimeToStr.replaceFirst(RegExp(r'PM'), '오후');
 }
 
+timeToStringDetail(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+
+  String dateTimeToStr = DateFormat('MM월 dd일 a hh시 mm분').format(dateTime);
+
+  if (dateTimeToStr.contains('AM')) {
+    return dateTimeToStr.replaceFirst(RegExp(r'AM'), '오전');
+  }
+
+  return dateTimeToStr.replaceFirst(RegExp(r'PM'), '오후');
+}
+
 stringToDouble(String? str) {
   if (str == null) return null;
 
@@ -87,6 +101,16 @@ getDateTimeToMonthStr(DateTime dateTime) {
   String strDateTimeMonth = formatter.format(dateTime);
 
   return strDateTimeMonth;
+}
+
+dateTimeToMMDDEE(DateTime dateTime) {
+  DateFormat formatter = DateFormat('MM월 dd일 EE');
+  String strDateTime = formatter.format(dateTime);
+  List<String> split = strDateTime.split(' ');
+  split[2] = dayOfWeek[split[2]]!;
+  String join = split.join(' ');
+
+  return '$join요일';
 }
 
 closeDialog(BuildContext context) {

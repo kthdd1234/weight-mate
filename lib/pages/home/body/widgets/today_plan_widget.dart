@@ -154,7 +154,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           break;
 
         case SegmentedTypes.planCheck:
-          if (recordInfo?.actions != null) count = recordInfo!.actions.length;
+          if (recordInfo?.actions != null) count = recordInfo!.actions!.length;
           break;
         default:
       }

@@ -32,14 +32,15 @@ class AnalyzeWeightChartWidget extends StatelessWidget {
 
     final plotBandList = <PlotBand>[
       PlotBand(
-          borderWidth: 1.0,
-          borderColor: disabledButtonTextColor,
-          isVisible: true,
-          text: '목표 체중: 69.5kg',
-          textStyle: const TextStyle(color: disabledButtonTextColor),
-          start: 70.5,
-          end: 70.5,
-          dashArray: const <double>[4, 5])
+        borderWidth: 1.0,
+        borderColor: disabledButtonTextColor,
+        isVisible: true,
+        text: '목표 체중: 69.5kg',
+        textStyle: const TextStyle(color: disabledButtonTextColor),
+        start: 70.5,
+        end: 70.5,
+        dashArray: const <double>[4, 5],
+      )
     ];
 
     final series = {
@@ -55,15 +56,14 @@ class AnalyzeWeightChartWidget extends StatelessWidget {
 
     final plotBands =
         selectedBodyInfoSegment == SegmentedTypes.weight ? plotBandList : null;
-
     final minimum =
         selectedBodyInfoSegment == SegmentedTypes.weight ? 70.0 : bodyFatMin;
     final maximum =
         selectedBodyInfoSegment == SegmentedTypes.weight ? 73.0 : bodyFatMax;
 
-    return ContentsBox(
-      backgroundColor: dialogBackgroundColor,
-      contentsWidget: SfCartesianChart(
+    return SizedBox(
+      height: MediaQuery.of(context).size.height - 330,
+      child: SfCartesianChart(
         tooltipBehavior: TooltipBehavior(enable: true),
         primaryXAxis: CategoryAxis(),
         primaryYAxis: NumericAxis(
