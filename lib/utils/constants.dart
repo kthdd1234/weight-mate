@@ -128,13 +128,13 @@ const inputKeyboardType = TextInputType.numberWithOptions(decimal: true);
 const dialogBackgroundColor = Color(0xffF3F4F9);
 
 /// weightColor
-const weightColor = Colors.green;
+const weightColor = Colors.blueGrey;
 
 /// actionColor
 const actionColor = Colors.purple;
 
 // eyeBodyColor
-const eyeBodyColor = Colors.pink;
+const eyeBodyColor = Colors.green;
 
 /// diaryColor
 const diaryColor = Colors.orange;

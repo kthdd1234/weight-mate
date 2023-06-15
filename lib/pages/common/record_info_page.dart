@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
-import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
@@ -70,7 +69,7 @@ class RecordInfoPage extends StatelessWidget {
                   whiteText: whiteText,
                   leftEyeBodyFilePath: leftEyeBodyFilePath,
                   rightEyeBodyFilePath: rightEyeBodyFilePath,
-                  diaryDateTime: recordInfo!.diaryDateTime,
+                  diaryDateTime: recordInfo.diaryDateTime,
                 )
               : const EmptyArea(),
         ],

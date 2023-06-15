@@ -25,7 +25,6 @@ enum SegmentedTypes {
   threeMonth,
   sixMonth,
   oneYear,
-  custom,
   planTypes,
   planItems,
   planCheck

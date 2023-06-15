@@ -39,7 +39,7 @@ class _AnalyzeWeightInfoWidgetState extends State<AnalyzeWeightInfoWidget> {
       SegmentedTypes.month: segmentedWidget(title: '한달', horizontal: 10),
       SegmentedTypes.threeMonth: segmentedWidget(title: '3개월', horizontal: 10),
       SegmentedTypes.sixMonth: segmentedWidget(title: '6개월', horizontal: 10),
-      SegmentedTypes.custom: segmentedWidget(title: '커스텀', horizontal: 10),
+      // SegmentedTypes.custom: segmentedWidget(title: '커스텀', horizontal: 10),
     };
 
     onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
@@ -57,9 +57,9 @@ class _AnalyzeWeightInfoWidgetState extends State<AnalyzeWeightInfoWidget> {
             onSegmentedChanged: onSegmentedDateTimeChanged,
           ),
           SpaceHeight(height: smallSpace),
-          AnalyzeWeightChartWidget(
-            selectedBodyInfoSegment: selectedBodyInfoSegment,
-          ),
+          // AnalyzeWeightChartWidget(
+          //   selectedBodyInfoSegment: selectedBodyInfoSegment,
+          // ),
         ],
       ),
     );

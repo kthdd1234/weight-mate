@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
-import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
@@ -15,9 +12,6 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/calendar_action_info.dart';
-import 'package:flutter_app_weight_management/widgets/calendar_diary_info.dart';
-import 'package:flutter_app_weight_management/widgets/calendar_weight_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -173,7 +167,7 @@ class CalendarBodyState extends State<CalendarBody> {
             backgroundColor: Colors.transparent,
             padding: const EdgeInsets.all(0),
             contentsWidget: TableCalendar(
-              rowHeight: MediaQuery.of(context).size.height - 765,
+              rowHeight: 80,
               currentDay: currentDay,
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, day, events) {

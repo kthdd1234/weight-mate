@@ -52,11 +52,12 @@ class _HomeContainerState extends State<HomeContainer> {
       BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
       BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '달력'),
       BottomNavigationBarItem(
-          icon: Padding(
-            padding: EdgeInsets.only(bottom: 3),
-            child: Icon(FontAwesomeIcons.chartLine, size: 17),
-          ),
-          label: '그래프'),
+        icon: Padding(
+          padding: EdgeInsets.only(bottom: 3),
+          child: Icon(FontAwesomeIcons.chartLine, size: 17),
+        ),
+        label: '그래프',
+      ),
       BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
     ];
 
