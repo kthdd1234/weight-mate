@@ -237,3 +237,29 @@ showAlarmBottomSheet({
     ),
   );
 }
+
+dateTimeFormatter({required String format, required DateTime dateTime}) {
+  DateFormat formatter = DateFormat(format);
+  String strDateTime = formatter.format(dateTime);
+
+  return strDateTime;
+}
+
+jumpDayDateTime({
+  required jumpDayTypeEnum type,
+  required DateTime dateTime,
+  required int days,
+}) {
+  Duration duration = Duration(days: days);
+
+  return jumpDayTypeEnum.subtract == type
+      ? dateTime.subtract(duration)
+      : dateTime.add(duration);
+}
+
+daysBetween({
+  required DateTime startDateTime,
+  required DateTime endDateTime,
+}) {
+  return endDateTime.difference(startDateTime).inDays;
+}

@@ -50,7 +50,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
 
-  SegmentedTypes selectedSegment = SegmentedTypes.planTypes;
+  SegmentedTypes selectedSegment = SegmentedTypes.planCheck;
 
   @override
   void initState() {
@@ -108,7 +108,10 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         case RecordIconTypes.removePlan:
           if (planInfoList.isEmpty) {
             return showSnackBar(
-                context: context, text: '삭제할 계획이 없어요.', buttonName: '확인');
+              context: context,
+              text: '삭제할 계획이 없어요.',
+              buttonName: '확인',
+            );
           }
 
           showModalBottomSheet(
@@ -170,17 +173,17 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
     setSegmenteItem() {
       Map<SegmentedTypes, StatelessWidget> segmentedInfo = {
-        SegmentedTypes.planTypes: TodayPlanTypes(
-          actions: recordInfo?.actions,
+        SegmentedTypes.planCheck: TodayPlanCheck(
+          recordBox: recordBox,
+          recordInfo: recordInfo,
+          importDateTime: widget.importDateTime,
           planInfoList: planInfoList,
         ),
         SegmentedTypes.planItems: TodayPlanItems(
           planInfoList: planInfoList,
         ),
-        SegmentedTypes.planCheck: TodayPlanCheck(
-          recordBox: recordBox,
-          recordInfo: recordInfo,
-          importDateTime: widget.importDateTime,
+        SegmentedTypes.planTypes: TodayPlanTypes(
+          actions: recordInfo?.actions,
           planInfoList: planInfoList,
         ),
       };
@@ -189,21 +192,21 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     }
 
     Map<SegmentedTypes, Widget> segmentedTypes = {
-      SegmentedTypes.planTypes: segmentedItem(
-        type: SegmentedTypes.planTypes,
-        text: '그룹 목록',
-        icon: Icons.format_list_bulleted_outlined,
+      SegmentedTypes.planCheck: segmentedItem(
+        type: SegmentedTypes.planCheck,
+        text: '실천 체크',
+        icon: Icons.check_outlined,
       ),
       SegmentedTypes.planItems: segmentedItem(
         type: SegmentedTypes.planItems,
         text: '나의 계획',
         icon: Icons.abc,
       ),
-      SegmentedTypes.planCheck: segmentedItem(
-        type: SegmentedTypes.planCheck,
-        text: '실천 체크',
-        icon: Icons.check_outlined,
-      )
+      SegmentedTypes.planTypes: segmentedItem(
+        type: SegmentedTypes.planTypes,
+        text: '그룹 목록',
+        icon: Icons.format_list_bulleted_outlined,
+      ),
     };
 
     List<Widget> iconWidgets = recordIconClassList

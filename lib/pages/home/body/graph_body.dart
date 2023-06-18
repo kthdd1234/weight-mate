@@ -4,18 +4,19 @@ import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:flutter_app_weight_management/widgets/analyze_weight_chart_widget.dart';
+import 'package:flutter_app_weight_management/widgets/graph_chart.dart';
 
-class AnalyzeBody extends StatefulWidget {
-  const AnalyzeBody({super.key});
+class GraphBody extends StatefulWidget {
+  const GraphBody({super.key});
 
   @override
-  State<AnalyzeBody> createState() => _AnalyzeBodyState();
+  State<GraphBody> createState() => _GraphBodyState();
 }
 
-class _AnalyzeBodyState extends State<AnalyzeBody> {
+class _GraphBodyState extends State<GraphBody> {
   SegmentedTypes selectedRecordTypeSegment = SegmentedTypes.weight;
   SegmentedTypes selectedDateTimeSegment = SegmentedTypes.week;
 
@@ -52,7 +53,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
       SegmentedTypes.weight:
           segmentedWidget(title: '체중 변화', color: weightColor),
       SegmentedTypes.action:
-          segmentedWidget(title: ' 계획 실천', color: actionColor),
+          segmentedWidget(title: ' 실천 횟수', color: actionColor),
     };
 
     Map<SegmentedTypes, Widget> dateTimeChildren = {
@@ -60,7 +61,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
       SegmentedTypes.month: segmentedWidget(title: '한달'),
       SegmentedTypes.threeMonth: segmentedWidget(title: '3개월'),
       SegmentedTypes.sixMonth: segmentedWidget(title: '6개월'),
-      SegmentedTypes.oneYear: segmentedWidget(title: '1년'),
+      SegmentedTypes.custom: segmentedWidget(title: '커스텀'),
     };
 
     onSegmentedRecordTypeChanged(SegmentedTypes? segmented) {
@@ -69,6 +70,26 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
 
     onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
       setState(() => selectedDateTimeSegment = segmented!);
+    }
+
+    setInfoText() {
+      if (selectedDateTimeSegment == SegmentedTypes.custom) {
+        return const EmptyArea();
+      }
+
+      return Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const Icon(Icons.swipe, size: 15, color: Colors.grey),
+              SpaceWidth(width: tinySpace),
+              BodySmallText(text: '좌우로 움직여 날짜를 변경 해보세요.'),
+            ],
+          ),
+          SpaceHeight(height: smallSpace + tinySpace),
+        ],
+      );
     }
 
     return Column(
@@ -81,34 +102,34 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
           onSegmentedChanged: onSegmentedRecordTypeChanged,
         ),
         SpaceHeight(height: smallSpace),
-        AnalyzeWeightChartWidget(
+        GraphChart(
           selectedRecordTypeSegment: selectedRecordTypeSegment,
+          selectedDateTimeSegment: selectedDateTimeSegment,
         ),
-        SpaceHeight(height: smallSpace),
+        setInfoText(),
         DefaultSegmented(
           selectedSegment: selectedDateTimeSegment,
           children: dateTimeChildren,
-          backgroundColor: dialogBackgroundColor,
+          backgroundColor: typeBackgroundColor,
           thumbColor: dialogBackgroundColor,
           onSegmentedChanged: onSegmentedDateTimeChanged,
         ),
-        SpaceHeight(height: regularSapce),
       ],
     );
   }
 }
- // const AnalyzeWeightInfoWidget(),
-          // SpaceHeight(height: regularSapce),
-          // const AnalyzePlanInfoWidget(),
-          // SpaceHeight(height: regularSapce),
-          // ContentsBox(
-          //     contentsWidget: Column(
-          //   children: [
-          //     ContentsTitleText(text: '실천 순위'),
-          //     SpaceHeight(height: regularSapce),
-          //     AnalyzePlanDataWidget(),
-          //   ],
-          // )),
-          // SpaceHeight(height: regularSapce),
-          // const AnalyzeDietStatusWidget(),
-          // SpaceHeight(height: regularSapce),
+// const AnalyzeWeightInfoWidget(),
+// SpaceHeight(height: regularSapce),
+// const AnalyzePlanInfoWidget(),
+// SpaceHeight(height: regularSapce),
+// ContentsBox(
+//     contentsWidget: Column(
+//   children: [
+//     ContentsTitleText(text: '실천 순위'),
+//     SpaceHeight(height: regularSapce),
+//     AnalyzePlanDataWidget(),
+//   ],
+// )),
+// SpaceHeight(height: regularSapce),
+// const AnalyzeDietStatusWidget(),
+// SpaceHeight(height: regularSapce),

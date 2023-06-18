@@ -5,7 +5,7 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/pages/home/body/widgets/analyze_weight_title_widget.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:flutter_app_weight_management/widgets/analyze_weight_chart_widget.dart';
+import 'package:flutter_app_weight_management/widgets/graph_chart.dart';
 
 class AnalyzeWeightInfoWidget extends StatefulWidget {
   const AnalyzeWeightInfoWidget({super.key});

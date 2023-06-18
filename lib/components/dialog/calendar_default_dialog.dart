@@ -16,7 +16,7 @@ class CalendarDefaultDialog extends StatefulWidget {
   });
 
   String type;
-  List<Widget> titleWidgets;
+  Widget titleWidgets;
   DateTime? initialDateTime;
   Function({String type, Object? object}) onSubmit;
   Function() onCancel;
@@ -46,7 +46,7 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
       backgroundColor: dialogBackgroundColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: widget.titleWidgets,
+        children: [widget.titleWidgets],
       ),
       content: ContentsBox(
         width: MediaQuery.of(context).size.width,
