@@ -172,14 +172,14 @@ class CalendarBodyState extends State<CalendarBody> {
       widget.onBottomNavigation(0);
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ContentsBox(
+    return Column(
+      children: [
+        Expanded(
+          child: ContentsBox(
             backgroundColor: Colors.transparent,
             padding: const EdgeInsets.all(0),
             contentsWidget: TableCalendar(
-              rowHeight: 80,
+              shouldFillViewport: true,
               currentDay: currentDay,
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, day, events) {
@@ -252,66 +252,52 @@ class CalendarBodyState extends State<CalendarBody> {
               headerStyle: const HeaderStyle(
                 headerMargin: EdgeInsets.only(bottom: 10),
                 titleCentered: true,
+                formatButtonVisible: false,
               ),
               onFormatChanged: onFormatChanged,
             ),
           ),
-          SpaceHeight(height: regularSapce),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              setColorTextInfo(text: '체중 기록', color: weightColor),
-              setColorTextInfo(text: '계획 실천', color: actionColor),
-              setColorTextInfo(text: '사진 등록', color: eyeBodyColor),
-              setColorTextInfo(text: '일기 작성', color: diaryColor),
-            ],
-          ),
-          SpaceHeight(height: regularSapce),
-          Row(
-            children: [
-              setBottomButton(
-                imgUrl: 'assets/images/t-9.png',
-                icon: Icons.search,
-                text: '자세히 보기',
-                onTap: onTapMoreInfo,
-              ),
-              SpaceWidth(width: smallSpace),
-              setBottomButton(
-                imgUrl: 'assets/images/t-14.png',
-                icon: Icons.delete_outline,
-                text: '기록 삭제하기',
-                onTap: onTapDeleteRecord,
-              ),
-            ],
-          ),
-          SpaceHeight(height: smallSpace),
-          Row(
-            children: [
-              setBottomButton(
-                imgUrl: 'assets/images/t-15.png',
-                icon: Icons.edit,
-                text: '기록 수정하기',
-                onTap: onTapModifyRecord,
-              )
-            ],
-          ),
-        ],
-      ),
+        ),
+        SpaceHeight(height: regularSapce),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            setColorTextInfo(text: '체중 기록', color: weightColor),
+            setColorTextInfo(text: '계획 실천', color: actionColor),
+            setColorTextInfo(text: '사진 등록', color: eyeBodyColor),
+            setColorTextInfo(text: '일기 작성', color: diaryColor),
+          ],
+        ),
+        SpaceHeight(height: regularSapce),
+        Row(
+          children: [
+            setBottomButton(
+              imgUrl: 'assets/images/t-9.png',
+              icon: Icons.search,
+              text: '자세히 보기',
+              onTap: onTapMoreInfo,
+            ),
+            SpaceWidth(width: smallSpace),
+            setBottomButton(
+              imgUrl: 'assets/images/t-14.png',
+              icon: Icons.delete_outline,
+              text: '기록 삭제하기',
+              onTap: onTapDeleteRecord,
+            ),
+          ],
+        ),
+        SpaceHeight(height: smallSpace),
+        Row(
+          children: [
+            setBottomButton(
+              imgUrl: 'assets/images/t-15.png',
+              icon: Icons.edit,
+              text: '기록 수정하기',
+              onTap: onTapModifyRecord,
+            )
+          ],
+        ),
+      ],
     );
   }
 }
-
-
-                    // addColorDot(dynamic target, Color color, String? text) {
-                    //   if (target != null) {
-                    //     if (color == weightColor) {
-                    //       weightDot = createColorDot(color: color, text: text);
-                    //     } else {
-                    //       colorDotList
-                    //           .add(createColorDot(color: color, text: text));
-                    //     }
-                    //   } else {
-                    //     colorDotList
-                    //         .add(createColorDot(color: Colors.transparent));
-                    //   }
-                    // }

@@ -57,6 +57,7 @@ class _GraphChartState extends State<GraphChart> {
   late DateTime startDateTime, endDateTime;
 
   double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
+  List<RecordBox?> recordInfoList = [];
 
   @override
   void initState() {
@@ -103,6 +104,15 @@ class _GraphChartState extends State<GraphChart> {
         dashArray: const <double>[4, 5],
       )
     ];
+
+    String dietToString = PlanTypeEnum.diet.toString();
+    String exerciseToString = PlanTypeEnum.exercise.toString();
+    String lifeStyleToString = PlanTypeEnum.lifestyle.toString();
+    Map<String, int> planIndexInfo = {
+      dietToString: 0,
+      exerciseToString: 1,
+      lifeStyleToString: 2
+    };
 
     getRecordInfo(DateTime datatime) {
       return recordBox.get(getDateTimeToInt(datatime));
@@ -189,15 +199,9 @@ class _GraphChartState extends State<GraphChart> {
     }) {
       List<ColumnData> columnSeriesData = [];
       List<PlanBox> planInfoList = planBox.values.toList();
-      String dietToString = PlanTypeEnum.diet.toString();
-      String exerciseToString = PlanTypeEnum.exercise.toString();
-      String lifeStyleToString = PlanTypeEnum.lifestyle.toString();
-      Map<String, int> planIndexInfo = {
-        dietToString: 0,
-        exerciseToString: 1,
-        lifeStyleToString: 2
-      };
+
       List<int> planTypeList = [0, 0, 0];
+      List<RecordBox?> infoList = [];
 
       for (var i = 0; i < planInfoList.length; i++) {
         PlanBox planBox = planInfoList[i];
@@ -214,8 +218,11 @@ class _GraphChartState extends State<GraphChart> {
         RecordBox? recordInfo = getRecordInfo(subtractDateTime);
         String formatterDay =
             dateTimeFormatter(format: format, dateTime: subtractDateTime);
+
         List<String?>? titleList =
             recordInfo?.actions?.map((e) => planBox.get(e)?.type).toList();
+
+        infoList.add(recordInfo);
 
         if (titleList != null) {
           titleList.forEach(
@@ -225,7 +232,6 @@ class _GraphChartState extends State<GraphChart> {
         setState(() {
           actionMaximum = (planTypeList.reduce(max) + 2).floorToDouble();
           actionMinimum = 0;
-          // print(actionMaximum);
         });
 
         ColumnData columnData = ColumnData(
@@ -238,6 +244,7 @@ class _GraphChartState extends State<GraphChart> {
         columnSeriesData.add(columnData);
       }
 
+      setState(() => recordInfoList = infoList.reversed.toList());
       return columnSeriesData.reversed.toList();
     }
 
@@ -253,8 +260,10 @@ class _GraphChartState extends State<GraphChart> {
     setStackedLineSeries({
       required String yValue,
       required String lValue,
+      required Color color,
     }) {
       return ColumnSeries(
+        color: color,
         name: lValue,
         legendItemText: lValue,
         dataSource: setStackedLineSeriesData(),
@@ -338,19 +347,66 @@ class _GraphChartState extends State<GraphChart> {
       return widget.selectedRecordTypeSegment == SegmentedTypes.weight
           ? [setLineSeries()]
           : [
-              setStackedLineSeries(yValue: 'y1', lValue: '식이요법'),
-              setStackedLineSeries(yValue: 'y2', lValue: '운동'),
-              setStackedLineSeries(yValue: 'y3', lValue: '생활습관'),
+              setStackedLineSeries(
+                yValue: 'y1',
+                lValue: '식이요법',
+                color: dietColor,
+              ),
+              setStackedLineSeries(
+                yValue: 'y2',
+                lValue: '운동',
+                color: exerciseColor,
+              ),
+              setStackedLineSeries(
+                yValue: 'y3',
+                lValue: '생활습관',
+                color: lifeStyleColor,
+              ),
             ];
     }
 
     onTooltipRender(TooltipArgs tooltipArgs) {
       WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          showDialog(
-            context: context,
-            builder: (context) => ActionDialog(title: '6월 21일 실천'),
-          );
+          if (widget.selectedRecordTypeSegment == SegmentedTypes.action) {
+            List<Map<String, dynamic>> typeInfos = [
+              {'type': dietToString, 'color': dietColor},
+              {'type': exerciseToString, 'color': exerciseColor},
+              {'type': lifeStyleToString, 'color': lifeStyleColor},
+            ];
+            int typeIndex = tooltipArgs.seriesIndex;
+            num pointIndex = tooltipArgs.pointIndex ?? -1;
+            RecordBox? recordInfo = recordInfoList[pointIndex.toInt()];
+            String type = typeInfos[typeIndex]['type'];
+            Color color = typeInfos[typeIndex]['color'];
+
+            if (recordInfo != null) {
+              List<String>? actions = recordInfo.actions;
+              List<String> names = [];
+
+              if (actions != null) {
+                for (var i = 0; i < actions.length; i++) {
+                  PlanBox? planInfo = planBox.get(actions[i]);
+
+                  if (planInfo != null && planInfo.type == type) {
+                    names.add(planInfo.name);
+                  }
+                }
+              }
+
+              showDialog(
+                context: context,
+                builder: (context) => ActionDialog(
+                  dayTitle:
+                      '${dateTimeFormatter(format: 'MM월 dd일', dateTime: recordInfo.createDateTime)} 실천',
+                  contentsTitle: tooltipArgs.header!,
+                  names: names,
+                  color: color,
+                  count: names.length,
+                ),
+              );
+            }
+          }
         },
       );
     }
@@ -394,6 +450,9 @@ class _GraphChartState extends State<GraphChart> {
               textStyle: const TextStyle(fontSize: 10),
             ),
             tooltipBehavior: TooltipBehavior(
+              opacity: widget.selectedRecordTypeSegment == SegmentedTypes.weight
+                  ? 1
+                  : 0,
               enable: true,
               format: 'point.y$tooltipText',
             ),

@@ -139,6 +139,15 @@ const eyeBodyColor = Colors.green;
 /// diaryColor
 const diaryColor = Colors.orange;
 
+/// dietColor
+const dietColor = Colors.teal;
+
+/// exerciseColor
+const exerciseColor = Colors.blue;
+
+/// lifeStyleColor
+const lifeStyleColor = Colors.brown;
+
 /// enableTextColor
 const enableTextColor = Color(0xff6237E2);
 

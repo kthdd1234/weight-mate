@@ -84,7 +84,7 @@ class _AddPlanItemState extends State<AddPlanItem> {
         itemCount: itemClassList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisExtent: 150,
+          mainAxisExtent: 160,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
         ),

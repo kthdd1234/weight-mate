@@ -58,7 +58,7 @@ class PlanItemWidget extends StatelessWidget {
             setDesc(desc1),
             SpaceHeight(height: tinySpace),
             setDesc(desc2),
-            SpaceHeight(height: tinySpace - 1),
+            SpaceHeight(height: tinySpace),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [

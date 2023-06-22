@@ -121,7 +121,6 @@
 				7F7BE04CD1B910C72452E747 /* Pods-Runner.release.xcconfig */,
 				DEA70773F39B29053D89E615 /* Pods-Runner.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -364,7 +363,8 @@
 				DEVELOPMENT_TEAM = 7Z88LT5T53;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = kthdd;
+				INFOPLIST_KEY_CFBundleDisplayName = "체중 메이트";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -497,7 +497,8 @@
 				DEVELOPMENT_TEAM = 7Z88LT5T53;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = kthdd;
+				INFOPLIST_KEY_CFBundleDisplayName = "체중 메이트";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -524,7 +525,8 @@
 				DEVELOPMENT_TEAM = 7Z88LT5T53;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = kthdd;
+				INFOPLIST_KEY_CFBundleDisplayName = "체중 메이트";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
