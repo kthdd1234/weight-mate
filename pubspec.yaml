@@ -61,6 +61,11 @@ dependencies:
   path_provider: ^2.0.15
   table_calendar: ^3.0.9
   jiffy: ^6.2.1
+  share_plus: ^7.0.2
+  flutter_email_sender: ^6.0.0
+  device_info_plus: ^9.0.2
+  ios_utsname_ext: ^2.2.0
+  package_info_plus: ^4.0.2
 
 dev_dependencies:
   flutter_test:
@@ -102,6 +107,14 @@ flutter:
     - assets/images/t-12.png
     - assets/images/t-13.png
     - assets/images/t-14.png
+    - assets/images/t-15.png
+    - assets/images/t-17.png
+    - assets/images/t-18.png
+    - assets/images/t-19.png
+    - assets/images/t-20.png
+    - assets/images/t-21.png
+    - assets/images/t-22.png
+    - assets/images/t-23.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

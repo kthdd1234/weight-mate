@@ -8,11 +8,13 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
+import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 Map<SegmentedTypes, Color> dotColors = <SegmentedTypes, Color>{
@@ -22,7 +24,12 @@ Map<SegmentedTypes, Color> dotColors = <SegmentedTypes, Color>{
 };
 
 class CalendarBody extends StatefulWidget {
-  const CalendarBody({super.key});
+  CalendarBody({
+    super.key,
+    required this.onBottomNavigation,
+  });
+
+  Function(int index) onBottomNavigation;
 
   @override
   State<CalendarBody> createState() => CalendarBodyState();
@@ -75,6 +82,7 @@ class CalendarBodyState extends State<CalendarBody> {
         context: context,
         builder: (context) {
           return ConfirmDialog(
+            width: 230,
             titleText: '기록 삭제',
             contentIcon: Icons.delete_forever,
             contentText1: '${getDateTimeToStr(currentDay)}',
@@ -83,7 +91,6 @@ class CalendarBodyState extends State<CalendarBody> {
               currentRecordInfo?.delete();
               setState(() {});
             },
-            width: 230,
           );
         },
       );
@@ -160,6 +167,11 @@ class CalendarBodyState extends State<CalendarBody> {
       );
     }
 
+    onTapModifyRecord() {
+      context.read<ImportDateTimeProvider>().setImportDateTime(currentDay);
+      widget.onBottomNavigation(0);
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -171,7 +183,7 @@ class CalendarBodyState extends State<CalendarBody> {
               currentDay: currentDay,
               calendarBuilders: CalendarBuilders(
                 markerBuilder: (context, day, events) {
-                  Widget? weightDot;
+                  String? weightText;
                   List<Widget> colorDotList = [];
 
                   for (var i = 0; i < recordValues.length; i++) {
@@ -185,32 +197,38 @@ class CalendarBodyState extends State<CalendarBody> {
                         recordInfo.rightEyeBodyFilePath;
                     final whiteText = recordInfo.whiteText;
 
-                    addColorDot(dynamic target, Color color, String? text) {
+                    addColorDot(dynamic target, Color color) {
                       if (target != null) {
-                        if (color == weightColor) {
-                          weightDot = createColorDot(color: color, text: text);
-                        } else {
-                          colorDotList
-                              .add(createColorDot(color: color, text: text));
-                        }
+                        colorDotList.add(createColorDot(color: color));
                       } else {
                         colorDotList
                             .add(createColorDot(color: Colors.transparent));
                       }
                     }
 
+                    addWeightText(double? value) {
+                      if (value != null) {
+                        weightText = value.toString();
+                      }
+                    }
+
                     if (createDateTimeInt == builerDayInt) {
-                      addColorDot(weight, weightColor, '$weight kg');
-                      addColorDot(actions, actionColor, null);
-                      addColorDot(imageFilePath, eyeBodyColor, null);
-                      addColorDot(whiteText, diaryColor, null);
+                      addWeightText(weight);
+                      addColorDot(weight, weightColor);
+                      addColorDot(actions, actionColor);
+                      addColorDot(imageFilePath, eyeBodyColor);
+                      addColorDot(whiteText, diaryColor);
                     }
                   }
 
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      weightDot ?? const EmptyArea(),
+                      weightText != null
+                          ? Text('$weightText kg',
+                              style: const TextStyle(fontSize: 7))
+                          : const EmptyArea(),
+                      SpaceHeight(height: 3),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: colorDotList,
@@ -220,6 +238,7 @@ class CalendarBodyState extends State<CalendarBody> {
                 },
               ),
               onDaySelected: onDaySelected,
+              availableGestures: AvailableGestures.horizontalSwipe,
               availableCalendarFormats: const {
                 CalendarFormat.month: '1개월',
                 CalendarFormat.twoWeeks: '2주일',
@@ -263,6 +282,17 @@ class CalendarBodyState extends State<CalendarBody> {
                 text: '기록 삭제하기',
                 onTap: onTapDeleteRecord,
               ),
+            ],
+          ),
+          SpaceHeight(height: smallSpace),
+          Row(
+            children: [
+              setBottomButton(
+                imgUrl: 'assets/images/t-15.png',
+                icon: Icons.edit,
+                text: '기록 수정하기',
+                onTap: onTapModifyRecord,
+              )
             ],
           ),
         ],

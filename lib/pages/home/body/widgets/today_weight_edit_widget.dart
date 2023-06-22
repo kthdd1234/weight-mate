@@ -53,10 +53,10 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       default:
     }
 
-    checkEmptyText();
+    checkText();
   }
 
-  checkEmptyText() {
+  checkText() {
     isEnabledOnPressed = textInputController.text != '';
   }
 
@@ -135,6 +135,10 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     }
 
     setOnChanged(String value) {
+      if (double.tryParse(textInputController.text) == null) {
+        textInputController.text = '';
+      }
+
       setState(() {
         errorText = setErrorText();
         isEnabledOnPressed =
@@ -143,7 +147,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     }
 
     onPressedResister() {
-      UserBox? userInfo = userBox.get('userBox');
+      UserBox? userProfile = userBox.get('userProfile');
       int importDateTimeInt = getDateTimeToInt(widget.importDateTime);
       RecordBox? recordInfo = recordBox.get(importDateTimeInt);
       String text = textInputController.text;
@@ -171,10 +175,10 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           break;
 
         case RecordIconTypes.editGoalWeight:
-          if (userInfo == null) return null;
+          if (userProfile == null) return null;
 
-          userInfo.goalWeight = stringToDouble(text);
-          userBox.put('userBox', userInfo);
+          userProfile.goalWeight = stringToDouble(text);
+          userProfile.save();
           break;
 
         default:
@@ -192,31 +196,27 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
-    return ContentsBox(
-      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      backgroundColor: Colors.white,
-      contentsWidget: Column(
-        children: [
-          TextInput(
-            autofocus: true,
-            maxLength: inputDatas.maxLength,
-            prefixIcon: inputDatas.prefixIcon,
-            suffixText: inputDatas.suffixText,
-            hintText: inputDatas.hintText,
-            errorText: errorText,
-            onChanged: setOnChanged,
-            counterText: '',
-            controller: textInputController,
-          ),
-          SpaceHeight(height: smallSpace),
-          OkAndCancelButton(
-            okText: '등록',
-            cancelText: '취소',
-            onPressedOk: isEnabledOnPressed ? onPressedResister : null,
-            onPressedCancel: onPressedCancel,
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        TextInput(
+          controller: textInputController,
+          autofocus: true,
+          maxLength: inputDatas.maxLength,
+          prefixIcon: inputDatas.prefixIcon,
+          suffixText: inputDatas.suffixText,
+          hintText: inputDatas.hintText,
+          errorText: errorText,
+          onChanged: setOnChanged,
+          counterText: '',
+        ),
+        SpaceHeight(height: smallSpace),
+        OkAndCancelButton(
+          okText: '등록',
+          cancelText: '취소',
+          onPressedOk: isEnabledOnPressed ? onPressedResister : null,
+          onPressedCancel: onPressedCancel,
+        )
+      ],
     );
   }
 }

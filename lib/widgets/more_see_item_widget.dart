@@ -60,7 +60,7 @@ class MoreSeeItemWidget extends StatelessWidget {
           return Transform.scale(
             scale: 0.8,
             child: CupertinoSwitch(
-              activeColor: buttonBackgroundColor,
+              activeColor: enableTextColor,
               value: value,
               onChanged: onTapSwitch != null
                   ? (bool value) => onTapSwitch!(id, value)
@@ -115,7 +115,7 @@ class MoreSeeItemWidget extends StatelessWidget {
         children: [
           index != 0
               ? SpaceHeight(height: switchSpace)
-              : SpaceHeight(height: tinySpace),
+              : SpaceHeight(height: smallSpace),
           Row(
             children: [
               Icon(icon, color: buttonBackgroundColor),
@@ -123,7 +123,8 @@ class MoreSeeItemWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(color: buttonBackgroundColor),
+                  style: const TextStyle(
+                      color: buttonBackgroundColor, fontSize: 15),
                 ),
               ),
               setWidget(),
@@ -132,8 +133,8 @@ class MoreSeeItemWidget extends StatelessWidget {
           setBottomWidget(),
           SpaceHeight(height: switchSpace),
           WidthDivider(
-            width: MediaQuery.of(context).size.width - 165,
-            color: Colors.grey[300],
+            width: MediaQuery.of(context).size.width,
+            color: Colors.grey.shade300,
           )
         ],
       ),

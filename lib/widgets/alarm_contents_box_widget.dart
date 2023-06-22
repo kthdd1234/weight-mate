@@ -6,12 +6,10 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AlarmContentsBoxWidget extends StatefulWidget {
@@ -164,7 +162,6 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
     return Column(
       children: [
         ContentsBox(
-          backgroundColor: dialogBackgroundColor,
           contentsWidget: AlarmItemWidget(
             id: widget.alarmId.toString(),
             title: widget.title,
@@ -173,8 +170,8 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
             isEnabled: widget.isAlarm,
             onChanged: onChanged,
             onTap: onTap,
-            iconBackgroundColor: typeBackgroundColor,
-            chipBackgroundColor: typeBackgroundColor,
+            iconBackgroundColor: dialogBackgroundColor,
+            chipBackgroundColor: dialogBackgroundColor,
           ),
         ),
         SpaceHeight(height: smallSpace),

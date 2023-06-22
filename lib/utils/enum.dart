@@ -33,9 +33,7 @@ enum SegmentedTypes {
 enum MoreSeeItem {
   none,
   tall,
-  currentWeight,
-  dietStartDay,
-  dietEndDay,
+  weight,
   goalWeight,
   appLock,
   appReset,

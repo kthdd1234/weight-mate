@@ -48,7 +48,7 @@ class PlanItemInfo extends StatelessWidget {
     return InkWell(
       onTap: () => onTap(id),
       child: ContentsBox(
-        backgroundColor: dialogBackgroundColor,
+        backgroundColor: Colors.white,
         contentsWidget: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

@@ -28,7 +28,7 @@ class PlanCheckItem extends StatelessWidget {
     return InkWell(
       onTap: () => onTap(id: id, checked: !isChecked),
       child: ContentsBox(
-        padding: const EdgeInsets.fromLTRB(1, 20, 20, 20),
+        padding: const EdgeInsets.fromLTRB(1, 25, 25, 25),
         backgroundColor:
             isChecked ? dialogBackgroundColor : typeBackgroundColor,
         contentsWidget: Row(

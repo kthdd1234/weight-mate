@@ -69,26 +69,24 @@ class _CommonAlarmPageState extends State<CommonAlarmPage> {
       builder: (context, boxs, widget) {
         return AddContainer(
           title: '알림 설정',
-          body: ContentsBox(
-            contentsWidget: Column(
-              children: [
-                ContentsTitleText(text: '기록 알림'),
-                SpaceHeight(height: smallSpace),
-                AlarmContentsBoxWidget(
-                  boxType: 'weight',
-                  alarmId: userProfile?.alarmId,
-                  title: '체중 기록',
-                  desc: '매일 정해진 시간에 알림을 드려요.',
-                  isAlarm: userProfile!.isAlarm,
-                  alarmTime: userProfile!.alarmTime,
-                  userBox: userProfile,
-                ),
-                SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '실천 알림'),
-                SpaceHeight(height: regularSapce),
-                setPlanListView()
-              ],
-            ),
+          body: Column(
+            children: [
+              ContentsTitleText(text: '기록 알림'),
+              SpaceHeight(height: smallSpace),
+              AlarmContentsBoxWidget(
+                boxType: 'weight',
+                alarmId: userProfile?.alarmId,
+                title: '체중 기록',
+                desc: '매일 정해진 시간에 알림을 드려요.',
+                isAlarm: userProfile!.isAlarm,
+                alarmTime: userProfile!.alarmTime,
+                userBox: userProfile,
+              ),
+              SpaceHeight(height: largeSpace),
+              ContentsTitleText(text: '실천 알림'),
+              SpaceHeight(height: regularSapce),
+              setPlanListView()
+            ],
           ),
           buttonEnabled: true,
           bottomSubmitButtonText: '닫기',

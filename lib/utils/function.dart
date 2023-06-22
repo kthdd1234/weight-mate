@@ -209,6 +209,8 @@ planTypeEnumToString(String str) {
 }
 
 planToActionPercent({required int a, required int b}) {
+  if (b == 0) return 0.0;
+
   final result = (a / b) * 100;
   final toFixed = double.parse(result.toStringAsFixed(1));
 
@@ -262,4 +264,10 @@ daysBetween({
   required DateTime endDateTime,
 }) {
   return endDateTime.difference(startDateTime).inDays;
+}
+
+checkStringFirstDot(String value) {
+  if (value == '' || value[0] == '.') {
+    return true;
+  }
 }

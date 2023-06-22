@@ -115,7 +115,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
     }) {
       return Expanded(
         child: ContentsBox(
-          backgroundColor: dialogBackgroundColor,
+          backgroundColor: Colors.white,
           contentsWidget: InkWell(
             onTap: () => onTap != null ? onTap(id) : null,
             child: Column(
@@ -173,55 +173,52 @@ class TodayWeightInfosWidget extends StatelessWidget {
           : setIconType(RecordIconTypes.editGoalWeight);
     }
 
-    return ContentsBox(
-      padding: const EdgeInsets.all(0),
-      contentsWidget: Column(
-        children: [
-          Row(
-            children: [
-              contentsWidget(
-                  id: weightInfoClassList[0].id,
-                  title: weightInfoClassList[0].title,
-                  value: weightInfoClassList[0].value,
-                  icon: weightInfoClassList[0].icon,
-                  more: weightInfoClassList[0].more,
-                  tooltipMsg: weightInfoClassList[0].tooltipMsg,
-                  onTap: onTap),
-              SpaceWidth(width: smallSpace),
-              contentsWidget(
-                  id: weightInfoClassList[1].id,
-                  title: weightInfoClassList[1].title,
-                  value: weightInfoClassList[1].value,
-                  icon: weightInfoClassList[1].icon,
-                  more: weightInfoClassList[1].more,
-                  tooltipMsg: weightInfoClassList[1].tooltipMsg,
-                  onTap: onTap),
-            ],
-          ),
-          SpaceHeight(height: smallSpace),
-          Row(
-            children: [
-              contentsWidget(
-                id: weightInfoClassList[2].id,
-                title: weightInfoClassList[2].title,
-                value: weightInfoClassList[2].value,
-                icon: weightInfoClassList[2].icon,
-                more: weightInfoClassList[2].more,
-                tooltipMsg: weightInfoClassList[2].tooltipMsg,
-              ),
-              SpaceWidth(width: smallSpace),
-              contentsWidget(
-                id: weightInfoClassList[3].id,
-                title: weightInfoClassList[3].title,
-                value: weightInfoClassList[3].value,
-                icon: weightInfoClassList[3].icon,
-                more: weightInfoClassList[3].more,
-                tooltipMsg: weightInfoClassList[3].tooltipMsg,
-              ),
-            ],
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        Row(
+          children: [
+            contentsWidget(
+                id: weightInfoClassList[0].id,
+                title: weightInfoClassList[0].title,
+                value: weightInfoClassList[0].value,
+                icon: weightInfoClassList[0].icon,
+                more: weightInfoClassList[0].more,
+                tooltipMsg: weightInfoClassList[0].tooltipMsg,
+                onTap: onTap),
+            SpaceWidth(width: tinySpace),
+            contentsWidget(
+                id: weightInfoClassList[1].id,
+                title: weightInfoClassList[1].title,
+                value: weightInfoClassList[1].value,
+                icon: weightInfoClassList[1].icon,
+                more: weightInfoClassList[1].more,
+                tooltipMsg: weightInfoClassList[1].tooltipMsg,
+                onTap: onTap),
+          ],
+        ),
+        SpaceHeight(height: tinySpace),
+        Row(
+          children: [
+            contentsWidget(
+              id: weightInfoClassList[2].id,
+              title: weightInfoClassList[2].title,
+              value: weightInfoClassList[2].value,
+              icon: weightInfoClassList[2].icon,
+              more: weightInfoClassList[2].more,
+              tooltipMsg: weightInfoClassList[2].tooltipMsg,
+            ),
+            SpaceWidth(width: tinySpace),
+            contentsWidget(
+              id: weightInfoClassList[3].id,
+              title: weightInfoClassList[3].title,
+              value: weightInfoClassList[3].value,
+              icon: weightInfoClassList[3].icon,
+              more: weightInfoClassList[3].more,
+              tooltipMsg: weightInfoClassList[3].tooltipMsg,
+            ),
+          ],
+        )
+      ],
     );
   }
 }

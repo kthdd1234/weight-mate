@@ -22,16 +22,16 @@ class RecordContentsTitleIcon extends StatelessWidget {
     return Row(
       children: [
         SpaceWidth(width: tinySpace),
-        // DefaultIcon(id: id, icon: icon, onTap: onTap)
-        CircularIcon(
-          id: id,
-          size: 30,
-          borderRadius: 5,
-          icon: icon,
-          backgroundColor: typeBackgroundColor,
-          adjustSize: 12,
-          onTap: onTap,
-        ),
+        DefaultIcon(id: id, icon: icon, onTap: onTap)
+        // CircularIcon(
+        //   id: id,
+        //   size: 30,
+        //   borderRadius: 5,
+        //   icon: icon,
+        //   backgroundColor: typeBackgroundColor,
+        //   adjustSize: 12,
+        //   onTap: onTap,
+        // ),
       ],
     );
   }

@@ -7,12 +7,14 @@ import 'package:flutter_app_weight_management/pages/add/pages/add_plan_item.dart
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_type.dart';
 import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
+import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -58,12 +60,26 @@ _initHive() async {
   await Hive.openBox<PlanBox>('planBox');
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late Box<UserBox> userBox;
+
+  @override
+  void initState() {
+    userBox = Hive.box('userBox');
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final planInfo = context.watch<DietInfoProvider>().getPlanInfo();
+    UserBox? userProfile = userBox.get('userProfile');
+    PlanInfoClass planInfo = context.watch<DietInfoProvider>().getPlanInfo();
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -77,6 +93,7 @@ class MyApp extends StatelessWidget {
         Locale('ko', ''),
       ],
       theme: AppThemes.lightTheme,
+      initialRoute: userProfile == null ? '/add-body-info' : '/home-container',
       routes: {
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-type': (context) => AddPlanType(planInfo: planInfo),
@@ -86,8 +103,8 @@ class MyApp extends StatelessWidget {
         '/screen-lock': (context) => const ScreenLockPage(),
         '/common-alarm': (context) => const CommonAlarmPage(),
         '/record-info-page': (context) => const RecordInfoPage(),
+        '/enter-screen-lock': (context) => const EnterScreenLockPage()
       },
-      home: AppFramework(widget: const AddBodyInfo()),
     );
   }
 }

@@ -5,19 +5,20 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import '../space/spaceWidth.dart';
 
 class EmptyTextArea extends StatelessWidget {
-  EmptyTextArea({
-    super.key,
-    required this.text,
-    required this.icon,
-    required this.topHeight,
-    required this.downHeight,
-    required this.onTap,
-  });
+  EmptyTextArea(
+      {super.key,
+      required this.text,
+      required this.icon,
+      required this.topHeight,
+      required this.downHeight,
+      required this.onTap,
+      this.backgroundColor});
 
   String text;
   IconData icon;
   double topHeight;
   double downHeight;
+  Color? backgroundColor;
   Function() onTap;
 
   @override
@@ -26,7 +27,7 @@ class EmptyTextArea extends StatelessWidget {
       onTap: onTap,
       child: ContentsBox(
         width: MediaQuery.of(context).size.width,
-        backgroundColor: dialogBackgroundColor,
+        backgroundColor: backgroundColor ?? dialogBackgroundColor,
         contentsWidget: Column(
           children: [
             SpaceHeight(height: topHeight),

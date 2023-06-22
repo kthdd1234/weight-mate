@@ -72,7 +72,7 @@ class TodayPlanCheck extends StatelessWidget {
                   isChecked: setIsChecked(),
                   onTap: onTap,
                 ),
-                SpaceHeight(height: smallSpace)
+                SpaceHeight(height: tinySpace)
               ],
             );
           });

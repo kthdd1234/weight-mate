@@ -12,6 +12,7 @@ class UserBox extends HiveObject {
     required this.isAlarm,
     this.alarmTime,
     this.alarmId,
+    this.screenLockPasswords,
   });
 
   @HiveField(0)
@@ -34,4 +35,7 @@ class UserBox extends HiveObject {
 
   @HiveField(6)
   int? alarmId;
+
+  @HiveField(7)
+  String? screenLockPasswords;
 }

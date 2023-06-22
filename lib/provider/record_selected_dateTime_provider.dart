@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ImportDateTimeProvider with ChangeNotifier {
-  late DateTime importDateTime;
+  DateTime importDateTime = DateTime.now();
 
   DateTime getImportDateTime() {
     return importDateTime;

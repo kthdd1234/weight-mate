@@ -34,27 +34,26 @@ class TextIcon extends StatelessWidget {
       ),
       child: Padding(
         padding: const EdgeInsets.all(smallSpace),
-        child: Center(
-          child: Row(
-            children: [
-              icon != null
-                  ? Row(
-                      children: [
-                        Icon(icon, size: iconSize, color: iconColor),
-                        SpaceWidth(width: tinySpace),
-                      ],
-                    )
-                  : const EmptyArea(),
-              Text(
-                text,
-                style: TextStyle(
-                  color: textColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: fontSize,
-                ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            icon != null
+                ? Row(
+                    children: [
+                      Icon(icon, size: iconSize, color: iconColor),
+                      SpaceWidth(width: tinySpace),
+                    ],
+                  )
+                : const EmptyArea(),
+            Text(
+              text,
+              style: TextStyle(
+                color: textColor,
+                fontWeight: FontWeight.bold,
+                fontSize: fontSize,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

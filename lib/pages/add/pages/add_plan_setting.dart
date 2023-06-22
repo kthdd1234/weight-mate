@@ -54,7 +54,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
   @override
   Widget build(BuildContext context) {
     final now = DateTime.now();
-    final importProvider = context.read<ImportDateTimeProvider>();
+
     final infoProvider = context.read<DietInfoProvider>();
     final planInfo = infoProvider.getPlanInfo();
     final notifyWeightUid = UniqueKey().hashCode;
@@ -123,7 +123,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         addPlanNotification();
       }
 
-      importProvider.setImportDateTime(now);
+      // importProvider.setImportDateTime(now);
     }
 
     setAddPage() {

@@ -237,6 +237,8 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               children: [
                 SpaceHeight(height: smallSpace + 5),
                 DefaultSegmented(
+                  backgroundColor: Colors.white,
+                  thumbColor: dialogBackgroundColor,
                   selectedSegment: selectedSegment,
                   children: segmentedTypes,
                   onSegmentedChanged: onSegmentedChanged,
@@ -247,17 +249,15 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             );
     }
 
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          ContentsTitleText(
-            text: '오늘의 계획',
-            icon: Icons.task_alt,
-            sub: iconWidgets,
-          ),
-          setBodyWidgets(),
-        ],
-      ),
+    return Column(
+      children: [
+        ContentsTitleText(
+          text: '오늘의 계획',
+          icon: Icons.task_alt,
+          sub: iconWidgets,
+        ),
+        setBodyWidgets(),
+      ],
     );
   }
 }

@@ -62,7 +62,7 @@ class TodayPlanItems extends StatelessWidget {
                   isAlarm: item.isAlarm,
                   alarmTime: item.alarmTime,
                 ),
-                SpaceHeight(height: smallSpace)
+                SpaceHeight(height: tinySpace)
               ],
             );
           });

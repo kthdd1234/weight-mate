@@ -24,6 +24,10 @@ class AddBodyInfo extends StatefulWidget {
 }
 
 class _AddBodyInfoState extends State<AddBodyInfo> {
+  TextEditingController tallContoller = TextEditingController(),
+      weightContoller = TextEditingController(),
+      goalWeightContoller = TextEditingController();
+
   late DateTime timeValue;
 
   @override
@@ -48,28 +52,20 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
   Widget build(BuildContext context) {
     final watchProvider = context.watch<DietInfoProvider>();
     final readProvider = context.read<DietInfoProvider>();
-
-    final tallText = watchProvider.getTallText();
-    final weightText = watchProvider.getWeightText();
-    final goalWeightText = watchProvider.getGoalWeightText();
     final isAlarm = watchProvider.getIsAlarm();
     final alarmTime = watchProvider.getAlarmTime();
 
-    onChangedTallText(value) {
-      context.read<DietInfoProvider>().changeTallText(value);
-    }
+    onChangedValue(TextEditingController controller) {
+      if (double.tryParse(controller.text) == null) {
+        controller.text = '';
+      }
 
-    onChangedWeightText(value) {
-      context.read<DietInfoProvider>().changeWeightText(value);
-    }
-
-    onChangedGoalWeightText(value) {
-      context.read<DietInfoProvider>().changeGoalWeightText(value);
+      setState(() {});
     }
 
     setErrorTextTall() {
       return handleCheckErrorText(
-        text: tallText,
+        text: tallContoller.text == '.' ? '' : tallContoller.text,
         min: tallMin,
         max: tallMax,
         errMsg: tallErrMsg,
@@ -78,7 +74,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
     setErrorTextWeight() {
       return handleCheckErrorText(
-        text: weightText,
+        text: weightContoller.text == '.' ? '' : weightContoller.text,
         min: weightMin,
         max: weightMax,
         errMsg: weightErrMsg,
@@ -87,7 +83,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
     setErrorTextGoalWeight() {
       return handleCheckErrorText(
-        text: goalWeightText,
+        text: goalWeightContoller.text == '.' ? '' : goalWeightContoller.text,
         min: weightMin,
         max: weightMax,
         errMsg: weightErrMsg,
@@ -95,9 +91,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     }
 
     buttonEnabled() {
-      return tallText != '' &&
-          weightText != '' &&
-          goalWeightText != '' &&
+      return tallContoller.text != '' &&
+          weightContoller.text != '' &&
+          goalWeightContoller.text != '' &&
           setErrorTextTall() == null &&
           setErrorTextWeight() == null &&
           setErrorTextGoalWeight() == null;
@@ -105,6 +101,10 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
     onPressedBottomNavigationButton() {
       if (buttonEnabled()) {
+        readProvider.changeTallText(tallContoller.text);
+        readProvider.changeWeightText(weightContoller.text);
+        readProvider.changeGoalWeightText(goalWeightContoller.text);
+
         Navigator.pushNamed(
           context,
           '/add-plan-type',
@@ -116,6 +116,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     }
 
     bodyInputWidget({
+      required TextEditingController controller,
       required String title,
       required int maxLength,
       required IconData? prefixIcon,
@@ -130,6 +131,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           ContentsTitleText(text: title),
           SpaceHeight(height: smallSpace),
           TextInput(
+            controller: controller,
             maxLength: maxLength,
             prefixIcon: prefixIcon,
             suffixText: suffixText,
@@ -142,9 +144,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       );
     }
 
-    onChanged(bool newValue) async {
+    onChangedAlarm(bool newValue) async {
       if (newValue) {
-        final isPermission = await NotificationService().permissionNotification;
+        bool isPermission = await NotificationService().permissionNotification;
 
         if (isPermission == false) {
           // ignore: use_build_context_synchronously
@@ -193,7 +195,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             icon: Icons.notifications_active,
             iconBackgroundColor: dialogBackgroundColor,
             chipBackgroundColor: dialogBackgroundColor,
-            onChanged: onChanged,
+            onChanged: onChangedAlarm,
             onTap: onTap,
           ),
         ],
@@ -216,6 +218,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                   children: [
                     Expanded(
                       child: bodyInputWidget(
+                        controller: tallContoller,
                         title: '키',
                         maxLength: 5,
                         prefixIcon: Icons.accessibility_new_sharp,
@@ -223,12 +226,13 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                         counterText: ' ',
                         hintText: '키',
                         errorText: setErrorTextTall(),
-                        onChanged: onChangedTallText,
+                        onChanged: (_) => onChangedValue(tallContoller),
                       ),
                     ),
                     SpaceWidth(width: smallSpace),
                     Expanded(
                       child: bodyInputWidget(
+                        controller: weightContoller,
                         title: '체중',
                         maxLength: 4,
                         prefixIcon: Icons.monitor_weight,
@@ -236,13 +240,14 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                         counterText: ' ',
                         hintText: '체중',
                         errorText: setErrorTextWeight(),
-                        onChanged: onChangedWeightText,
+                        onChanged: (_) => onChangedValue(weightContoller),
                       ),
                     ),
                   ],
                 ),
                 SpaceHeight(height: regularSapce),
                 bodyInputWidget(
+                  controller: goalWeightContoller,
                   title: '목표 체중',
                   maxLength: 4,
                   prefixIcon: Icons.flag,
@@ -250,7 +255,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                   counterText: ' ',
                   hintText: '목표 체중',
                   errorText: setErrorTextGoalWeight(),
-                  onChanged: onChangedGoalWeightText,
+                  onChanged: (_) => onChangedValue(goalWeightContoller),
                 ),
                 SpaceHeight(height: regularSapce),
                 bodyAlarmWidget(),

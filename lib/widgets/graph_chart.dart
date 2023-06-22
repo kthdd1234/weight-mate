@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/components/dialog/action_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -15,11 +13,20 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math';
 import '../components/area/empty_area.dart';
 
-class ChartData {
-  ChartData(this.x, this.y);
+class GraphData {
+  GraphData(this.x, this.y);
 
   final String x;
   final double? y;
+}
+
+class ColumnData {
+  ColumnData(this.x, this.y1, this.y2, this.y3);
+
+  final String x;
+  final int? y1;
+  final int? y2;
+  final int? y3;
 }
 
 final countInfo = {
@@ -37,7 +44,7 @@ class GraphChart extends StatefulWidget {
     required this.selectedDateTimeSegment,
   });
 
-  SegmentedTypes selectedRecordTypeSegment, selectedDateTimeSegment;
+  SegmentedTypes selectedDateTimeSegment, selectedRecordTypeSegment;
 
   @override
   State<GraphChart> createState() => _GraphChartState();
@@ -49,7 +56,7 @@ class _GraphChartState extends State<GraphChart> {
   late Box<PlanBox> planBox;
   late DateTime startDateTime, endDateTime;
 
-  double? minimum, maximum;
+  double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
 
   @override
   void initState() {
@@ -96,19 +103,16 @@ class _GraphChartState extends State<GraphChart> {
         dashArray: const <double>[4, 5],
       )
     ];
-    final plotBands = widget.selectedRecordTypeSegment == SegmentedTypes.weight
-        ? plotBandList
-        : null;
 
     getRecordInfo(DateTime datatime) {
       return recordBox.get(getDateTimeToInt(datatime));
     }
 
-    List<ChartData> setDayDateTime({
+    List<GraphData> setLineSeriesDateTime({
       required int count,
       required String format,
     }) {
-      List<ChartData> lineSeriesData = [];
+      List<GraphData> lineSeriesData = [];
       List<double> weightList = [];
 
       for (var i = 0; i <= count; i++) {
@@ -120,7 +124,7 @@ class _GraphChartState extends State<GraphChart> {
         RecordBox? recordInfo = getRecordInfo(subtractDateTime);
         String formatterDay =
             dateTimeFormatter(format: format, dateTime: subtractDateTime);
-        ChartData chartData = ChartData(formatterDay, recordInfo?.weight);
+        GraphData chartData = GraphData(formatterDay, recordInfo?.weight);
 
         if (recordInfo?.weight != null) {
           weightList.add(recordInfo!.weight!);
@@ -131,11 +135,11 @@ class _GraphChartState extends State<GraphChart> {
 
       setState(() {
         if (weightList.isEmpty) {
-          minimum = 0.0;
-          maximum = 100.0;
+          weightMinimum = 0.0;
+          weightMaximum = 100.0;
         } else {
-          minimum = (weightList.reduce(min) - 1).floorToDouble();
-          maximum = (weightList.reduce(max) + 1).floorToDouble();
+          weightMinimum = (weightList.reduce(min) - 1).floorToDouble();
+          weightMaximum = (weightList.reduce(max) + 1).floorToDouble();
         }
       });
 
@@ -153,8 +157,8 @@ class _GraphChartState extends State<GraphChart> {
       return countInfo[widget.selectedDateTimeSegment];
     }
 
-    List<ChartData> setLineSeriesData() {
-      return setDayDateTime(
+    List<GraphData> setLineSeriesData() {
+      return setLineSeriesDateTime(
         count: setCount()!,
         format: widget.selectedDateTimeSegment == SegmentedTypes.week
             ? 'dd일'
@@ -162,22 +166,8 @@ class _GraphChartState extends State<GraphChart> {
       );
     }
 
-    List<ChartData> setColumnSeriesData() {
-      return [];
-    }
-
-    // final List<ChartData> columnSeriesData = [
-    //   ChartData('16일', 70),
-    //   ChartData('17일', 30),
-    //   ChartData('18일', 50),
-    //   ChartData('19일', 44),
-    //   ChartData('20일', 72.3),
-    //   ChartData('21일', 91.9),
-    //   ChartData('22일', 22.3),
-    // ];
-
-    final series = {
-      SegmentedTypes.weight: LineSeries(
+    setLineSeries() {
+      return LineSeries(
         emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
         dataSource: setLineSeriesData(),
         color: weightColor,
@@ -190,15 +180,95 @@ class _GraphChartState extends State<GraphChart> {
         dataLabelSettings: DataLabelSettings(
           isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
         ),
-      ),
-      SegmentedTypes.action: ColumnSeries(
-        dataSource: setColumnSeriesData(),
-        color: actionColor,
+      );
+    }
+
+    setStackedLineSeriesDateTime({
+      required int count,
+      required String format,
+    }) {
+      List<ColumnData> columnSeriesData = [];
+      List<PlanBox> planInfoList = planBox.values.toList();
+      String dietToString = PlanTypeEnum.diet.toString();
+      String exerciseToString = PlanTypeEnum.exercise.toString();
+      String lifeStyleToString = PlanTypeEnum.lifestyle.toString();
+      Map<String, int> planIndexInfo = {
+        dietToString: 0,
+        exerciseToString: 1,
+        lifeStyleToString: 2
+      };
+      List<int> planTypeList = [0, 0, 0];
+
+      for (var i = 0; i < planInfoList.length; i++) {
+        PlanBox planBox = planInfoList[i];
+        planTypeList[planIndexInfo[planBox.type]!] += 1;
+      }
+
+      for (var i = 0; i <= count; i++) {
+        List<int> actionCountList = [0, 0, 0];
+        DateTime subtractDateTime = jumpDayDateTime(
+          type: jumpDayTypeEnum.subtract,
+          dateTime: endDateTime,
+          days: i,
+        );
+        RecordBox? recordInfo = getRecordInfo(subtractDateTime);
+        String formatterDay =
+            dateTimeFormatter(format: format, dateTime: subtractDateTime);
+        List<String?>? titleList =
+            recordInfo?.actions?.map((e) => planBox.get(e)?.type).toList();
+
+        if (titleList != null) {
+          titleList.forEach(
+              (element) => actionCountList[planIndexInfo[element]!] += 1);
+        }
+
+        setState(() {
+          actionMaximum = (planTypeList.reduce(max) + 2).floorToDouble();
+          actionMinimum = 0;
+          // print(actionMaximum);
+        });
+
+        ColumnData columnData = ColumnData(
+          formatterDay,
+          actionCountList[0],
+          actionCountList[1],
+          actionCountList[2],
+        );
+
+        columnSeriesData.add(columnData);
+      }
+
+      return columnSeriesData.reversed.toList();
+    }
+
+    setStackedLineSeriesData() {
+      return setStackedLineSeriesDateTime(
+        count: setCount()!,
+        format: widget.selectedDateTimeSegment == SegmentedTypes.week
+            ? 'dd일'
+            : 'MM월\ndd일',
+      );
+    }
+
+    setStackedLineSeries({
+      required String yValue,
+      required String lValue,
+    }) {
+      return ColumnSeries(
+        name: lValue,
+        legendItemText: lValue,
+        dataSource: setStackedLineSeriesData(),
         xValueMapper: (data, _) => data.x,
-        yValueMapper: (data, _) => data.y,
-        dataLabelSettings: const DataLabelSettings(isVisible: true),
-      ),
-    };
+        yValueMapper: (data, _) => yValue == 'y1'
+            ? data.y1
+            : yValue == 'y2'
+                ? data.y2
+                : data.y3,
+      );
+    }
+
+    setLineSeriesData();
+    setStackedLineSeriesData();
 
     setChartSwipeDirectionStart() {
       if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
@@ -264,41 +334,76 @@ class _GraphChartState extends State<GraphChart> {
       closeDialog(context);
     }
 
-    setMinimum() {
+    setSeries() {
       return widget.selectedRecordTypeSegment == SegmentedTypes.weight
-          ? minimum
-          : 0.0;
+          ? [setLineSeries()]
+          : [
+              setStackedLineSeries(yValue: 'y1', lValue: '식이요법'),
+              setStackedLineSeries(yValue: 'y2', lValue: '운동'),
+              setStackedLineSeries(yValue: 'y3', lValue: '생활습관'),
+            ];
     }
 
-    setMaximum() {
-      return widget.selectedRecordTypeSegment == SegmentedTypes.weight
-          ? maximum
-          : 100.0;
+    onTooltipRender(TooltipArgs tooltipArgs) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          showDialog(
+            context: context,
+            builder: (context) => ActionDialog(title: '6월 21일 실천'),
+          );
+        },
+      );
     }
 
+    List<PlotBand>? plotBands =
+        widget.selectedRecordTypeSegment == SegmentedTypes.weight
+            ? plotBandList
+            : null;
+    double? setMinimum =
+        widget.selectedRecordTypeSegment == SegmentedTypes.weight
+            ? weightMinimum
+            : actionMinimum;
+    double? setMaximum =
+        widget.selectedRecordTypeSegment == SegmentedTypes.weight
+            ? weightMaximum
+            : actionMaximum;
+    bool setLegendVisible =
+        widget.selectedRecordTypeSegment == SegmentedTypes.action;
     String titleDateTime =
         '${dateTimeFormatter(dateTime: startDateTime, format: 'MM월 dd일')} ~ ${dateTimeFormatter(dateTime: endDateTime, format: 'MM월 dd일')}';
+
+    String tooltipText =
+        widget.selectedRecordTypeSegment == SegmentedTypes.weight
+            ? ' kg'
+            : '회 실천';
 
     return Column(
       children: [
         SizedBox(
           height: setSizeBoxHeight(),
           child: SfCartesianChart(
+            onTooltipRender: onTooltipRender,
+            legend: Legend(
+              isVisible: setLegendVisible,
+              position: LegendPosition.top,
+              alignment: ChartAlignment.center,
+            ),
             title: ChartTitle(
               text: titleDateTime,
               alignment: ChartAlignment.far,
               textStyle: const TextStyle(fontSize: 10),
             ),
-            tooltipBehavior: TooltipBehavior(enable: true),
+            tooltipBehavior: TooltipBehavior(
+              enable: true,
+              format: 'point.y$tooltipText',
+            ),
             primaryXAxis: CategoryAxis(),
             primaryYAxis: NumericAxis(
-              minimum: setMinimum(),
-              maximum: setMaximum(),
+              minimum: setMinimum,
+              maximum: setMaximum,
               plotBands: plotBands,
             ),
-            series: [
-              series[widget.selectedRecordTypeSegment]!,
-            ],
+            series: setSeries(),
             onPlotAreaSwipe: onPlotAreaSwipe,
           ),
         ),

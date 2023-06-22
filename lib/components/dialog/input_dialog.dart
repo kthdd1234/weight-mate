@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
@@ -22,7 +21,7 @@ Map<MoreSeeItem, TextInputClass> textInputData = {
     prefixIcon: tallPrefixIcon,
     suffixText: tallSuffixText,
   ),
-  MoreSeeItem.currentWeight: TextInputClass(
+  MoreSeeItem.weight: TextInputClass(
     maxLength: weightMaxLength,
     hintText: weightHintText,
     inputTextErr: InputTextErrorClass(
@@ -49,14 +48,16 @@ Map<MoreSeeItem, TextInputClass> textInputData = {
 class InputDialog extends StatefulWidget {
   InputDialog({
     super.key,
+    required this.id,
     required this.title,
-    required this.selectedMoreSeeItem,
     required this.selectedText,
+    required this.onPressedOk,
   });
 
+  MoreSeeItem id;
   String title;
-  MoreSeeItem selectedMoreSeeItem;
-  String selectedText;
+  String? selectedText;
+  Function(MoreSeeItem id, String text) onPressedOk;
 
   @override
   State<InputDialog> createState() => _InputDialogState();
@@ -69,24 +70,29 @@ class _InputDialogState extends State<InputDialog> {
 
   @override
   void initState() {
-    textInputController.text = widget.selectedText;
+    textInputController.text = widget.selectedText!;
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    setErrorText() {
-      TextInputClass data = textInputData[widget.selectedMoreSeeItem]!;
+    TextInputClass? item = textInputData[widget.id]!;
 
-      return data.getErrorText(
+    setErrorText() {
+      return item.getErrorText(
         text: textInputController.text,
-        min: data.inputTextErr.min,
-        max: data.inputTextErr.max,
-        errMsg: data.inputTextErr.errMsg,
+        min: item.inputTextErr.min,
+        max: item.inputTextErr.max,
+        errMsg: item.inputTextErr.errMsg,
       );
     }
 
     onChanged(String value) {
+      if (double.tryParse(textInputController.text) == null) {
+        textInputController.text = '';
+      }
+
       setState(() {
         errorText = setErrorText();
         isPress = textInputController.text != '' && setErrorText() == null;
@@ -97,15 +103,9 @@ class _InputDialogState extends State<InputDialog> {
       closeDialog(context);
     }
 
-    onPressedOk() {
-      //
-    }
-
     onPressedCancel() {
       closeDialog(context);
     }
-
-    TextInputClass? item = textInputData[widget.selectedMoreSeeItem];
 
     return AlertDialog(
       shape: containerBorderRadious,
@@ -116,23 +116,26 @@ class _InputDialogState extends State<InputDialog> {
         height: errorText == null ? 156 : 180,
         contentsWidget: Column(
           children: [
-            item != null
-                ? TextInput(
-                    maxLength: item.maxLength,
-                    prefixIcon: item.prefixIcon,
-                    suffixText: item.suffixText,
-                    hintText: item.hintText,
-                    counterText: '',
-                    errorText: errorText,
-                    onChanged: onChanged,
-                    controller: textInputController,
-                  )
-                : const EmptyArea(),
+            TextInput(
+              maxLength: item.maxLength,
+              prefixIcon: item.prefixIcon,
+              suffixText: item.suffixText,
+              hintText: item.hintText,
+              counterText: '',
+              errorText: errorText,
+              onChanged: onChanged,
+              controller: textInputController,
+            ),
             SpaceHeight(height: regularSapce),
             OkAndCancelButton(
               okText: '확인',
               cancelText: '취소',
-              onPressedOk: onPressedOk,
+              onPressedOk: errorText == null
+                  ? () => widget.onPressedOk(
+                        widget.id,
+                        textInputController.text,
+                      )
+                  : null,
               onPressedCancel: onPressedCancel,
             )
           ],

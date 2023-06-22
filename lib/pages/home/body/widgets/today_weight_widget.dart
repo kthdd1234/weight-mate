@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
@@ -155,6 +154,7 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
 
       if (weight == null) {
         return EmptyTextArea(
+          backgroundColor: Colors.white,
           text: '오늘의 체중을 입력해보세요.',
           icon: Icons.add,
           topHeight: regularSapce,
@@ -233,23 +233,21 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       return contentsTitleInfo['icon'];
     }
 
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          ContentsTitleText(
-            text: setContetnsTitle(),
-            sub: setIconWidgets(),
-            icon: setContetnsIcon(),
-          ),
-          SpaceHeight(height: smallSpace + 5),
-          contentsWidgets(
-            tall: setTall(),
-            weight: setWeight(),
-            goalWeight: setGoalWeight(),
-            beforeWeight: setBeforeWeight(),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        ContentsTitleText(
+          text: setContetnsTitle(),
+          sub: setIconWidgets(),
+          icon: setContetnsIcon(),
+        ),
+        SpaceHeight(height: smallSpace + 5),
+        contentsWidgets(
+          tall: setTall(),
+          weight: setWeight(),
+          goalWeight: setGoalWeight(),
+          beforeWeight: setBeforeWeight(),
+        ),
+      ],
     );
   }
 }

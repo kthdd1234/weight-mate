@@ -3,13 +3,24 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_app_weight_management/widgets/more_see_item_widget.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class MoreAppSettingWidget extends StatefulWidget {
-  const MoreAppSettingWidget({super.key});
+  MoreAppSettingWidget({
+    super.key,
+    required this.userProfile,
+    required this.planBox,
+  });
+
+  UserBox? userProfile;
+  Box<PlanBox> planBox;
 
   @override
   State<MoreAppSettingWidget> createState() => _MoreAppSettingWidgetState();
@@ -31,19 +42,44 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
               titleText: '화면 잠금 경고',
               contentIcon: Icons.lock,
               contentText1: '암호를 분실했을 경우',
-              contentText2: '앱을 삭제하고 재설치 해야 합니다.',
+              contentText2: '앱 삭제 후 재설치 해야 합니다.',
               onPressedOk: () => Navigator.pushNamed(context, '/screen-lock'),
             ),
           );
-          return;
+        } else {
+          widget.userProfile?.screenLockPasswords = null;
+          widget.userProfile?.save();
         }
-
-        return setState(() => isLockScreen = value);
       }
     }
 
     onTapArrow(MoreSeeItem id) {
       switch (id) {
+        case MoreSeeItem.appAlarm:
+          Navigator.pushNamed(context, '/common-alarm');
+          break;
+
+        case MoreSeeItem.appLang:
+          showModalBottomSheet(
+            backgroundColor: Colors.transparent,
+            context: context,
+            builder: (context) => DefaultBottomSheet(
+              title: '언어 선택',
+              height: 500,
+              contents: Column(children: [
+                ContentsBox(
+                  contentsWidget: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [Text('한국어'), Icon(Icons.task_alt)],
+                  ),
+                )
+              ]),
+              submitText: '완료',
+              onSubmit: () {},
+            ),
+          );
+          break;
+
         case MoreSeeItem.appReset:
           showDialog(
             context: context,
@@ -60,11 +96,26 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
             ),
           );
           break;
-        case MoreSeeItem.appAlarm:
-          Navigator.pushNamed(context, '/alarm-setting');
-          break;
+
         default:
       }
+    }
+
+    setAlarmValue() {
+      int count = 0;
+
+      if (widget.userProfile!.isAlarm) {
+        count += 1;
+      }
+
+      // ignore: avoid_function_literals_in_foreach_calls
+      widget.planBox.values.forEach((element) {
+        if (element.isAlarm) {
+          count += 1;
+        }
+      });
+
+      return count;
     }
 
     List<MoreSeeItemClass> moreSeeAppSettingItems = [
@@ -73,7 +124,7 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
         id: MoreSeeItem.appLock,
         icon: Icons.lock_outline_rounded,
         title: '화면 잠금',
-        value: isLockScreen,
+        value: widget.userProfile?.screenLockPasswords != null,
         widgetType: MoreSeeWidgetTypes.switching,
         onTapSwitch: onTapSwitch,
       ),
@@ -82,7 +133,7 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
         id: MoreSeeItem.appAlarm,
         icon: Icons.notifications_active_outlined,
         title: '알림',
-        value: '0개의 알림',
+        value: '${setAlarmValue()}개의 알림',
         widgetType: MoreSeeWidgetTypes.arrow,
         onTapArrow: onTapArrow,
       ),
@@ -95,15 +146,15 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
         widgetType: MoreSeeWidgetTypes.arrow,
         onTapArrow: onTapArrow,
       ),
-      MoreSeeItemClass(
-        index: 3,
-        id: MoreSeeItem.appReset,
-        icon: Icons.settings_backup_restore,
-        title: '앱 초기화',
-        value: '',
-        widgetType: MoreSeeWidgetTypes.arrow,
-        onTapArrow: onTapArrow,
-      ),
+      // MoreSeeItemClass(
+      //   index: 3,
+      //   id: MoreSeeItem.appReset,
+      //   icon: Icons.settings_backup_restore,
+      //   title: '앱 초기화',
+      //   value: '',
+      //   widgetType: MoreSeeWidgetTypes.arrow,
+      //   onTapArrow: onTapArrow,
+      // ),
     ];
 
     List<MoreSeeItemWidget> widgetList = moreSeeAppSettingItems
@@ -119,17 +170,12 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
             ))
         .toList();
 
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          ContentsTitleText(text: '설정'),
-          SpaceHeight(height: regularSapce),
-          ContentsBox(
-            backgroundColor: dialogBackgroundColor,
-            contentsWidget: Column(children: widgetList),
-          )
-        ],
-      ),
+    return Column(
+      children: [
+        ContentsTitleText(text: '설정'),
+        SpaceHeight(height: regularSapce),
+        Column(children: widgetList),
+      ],
     );
   }
 }

@@ -255,7 +255,11 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             radius: const Radius.circular(30),
             color: Colors.transparent,
             strokeWidth: 1,
-            child: EmptyTextVerticalArea(icon: Icons.add, title: '사진 추가'),
+            child: EmptyTextVerticalArea(
+              icon: Icons.add,
+              title: '사진 추가',
+              backgroundColor: Colors.white,
+            ),
           ),
         ),
       );
@@ -329,6 +333,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         );
       } else if (whiteText == null) {
         return EmptyTextArea(
+          backgroundColor: Colors.white,
           topHeight: largeSpace,
           downHeight: largeSpace,
           text: '오늘의 일기를 작성해보세요.',
@@ -341,20 +346,18 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       return TodayDiaryDataWidget(text: whiteText);
     }
 
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          ContentsTitleText(
-            text: '오늘의 일기',
-            icon: Icons.menu_book,
-            sub: icons,
-          ),
-          SpaceHeight(height: smallSpace + 5),
-          setEyeBodyWidgets(),
-          SpaceHeight(height: smallSpace),
-          setDiaryWidget(),
-        ],
-      ),
+    return Column(
+      children: [
+        ContentsTitleText(
+          text: '오늘의 일기',
+          icon: Icons.menu_book,
+          sub: icons,
+        ),
+        SpaceHeight(height: smallSpace + 5),
+        setEyeBodyWidgets(),
+        SpaceHeight(height: tinySpace),
+        setDiaryWidget(),
+      ],
     );
   }
 }
