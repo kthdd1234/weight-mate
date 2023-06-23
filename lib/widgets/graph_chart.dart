@@ -262,7 +262,7 @@ class _GraphChartState extends State<GraphChart> {
       required String lValue,
       required Color color,
     }) {
-      return ColumnSeries(
+      return StackedColumnSeries(
         color: color,
         name: lValue,
         legendItemText: lValue,

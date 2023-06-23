@@ -59,7 +59,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
               BodySmallText(text: '좌우로 움직여 날짜를 변경 해보세요.'),
             ],
           ),
-          SpaceHeight(height: smallSpace + tinySpace),
+          SpaceHeight(height: smallSpace),
         ],
       );
     }

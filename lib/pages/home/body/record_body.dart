@@ -17,7 +17,12 @@ import 'package:multi_value_listenable_builder/multi_value_listenable_builder.da
 import 'package:provider/provider.dart';
 
 class RecordBody extends StatefulWidget {
-  const RecordBody({super.key});
+  RecordBody({
+    super.key,
+    required this.setActiveCamera,
+  });
+
+  Function(bool isActive) setActiveCamera;
 
   @override
   State<RecordBody> createState() => _RecordBodyState();
@@ -27,8 +32,6 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
-
-  bool isCameraActive = false;
 
   @override
   void initState() {
@@ -48,26 +51,6 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      if (isCameraActive == false) {
-        RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
-
-        if (recordInfo == null || recordInfo.weight == null) {
-          context
-              .read<RecordIconTypeProvider>()
-              .setSeletedRecordIconType(RecordIconTypes.addWeight);
-        }
-
-        context
-            .read<ImportDateTimeProvider>()
-            .setImportDateTime(DateTime.now());
-      }
-      setState(() => isCameraActive = false);
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     RecordIconTypes seletedRecordIconType =
         context.watch<RecordIconTypeProvider>().getSeletedRecordIconType();
@@ -78,10 +61,6 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
       userBox.clear();
       recordBox.clear();
       planBox.clear();
-    }
-
-    setCameraActive(bool newValue) {
-      setState(() => isCameraActive = newValue);
     }
 
     return SingleChildScrollView(
@@ -108,7 +87,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
               SpaceHeight(height: largeSpace),
               TodayDiaryWidget(
                 seletedRecordSubType: seletedRecordIconType,
-                setCameraActive: setCameraActive,
+                setActiveCamera: widget.setActiveCamera,
               ),
               // ElevatedButton(
               //   onPressed: onPressed,

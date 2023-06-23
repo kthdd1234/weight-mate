@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -41,7 +40,7 @@ void main() async {
         ),
         ChangeNotifierProvider<ImportDateTimeProvider>(
           create: (_) => ImportDateTimeProvider(),
-        )
+        ),
       ],
       child: const MyApp(),
     ),
@@ -94,12 +93,16 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: AppThemes.lightTheme,
       initialRoute: userProfile == null ? '/add-body-info' : '/home-container',
+      onGenerateRoute: (settings) {
+        print('발생?');
+      },
       routes: {
+        '/splash-page': (context) => Container(),
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-type': (context) => AddPlanType(planInfo: planInfo),
         '/add-plan-item': (context) => AddPlanItem(planInfo: planInfo),
         '/add-plan-setting': (context) => const AddPlanSetting(),
-        '/home-container': (context) => const HomeContainer(),
+        '/home-container': (context) => HomeContainer(),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/common-alarm': (context) => const CommonAlarmPage(),
         '/record-info-page': (context) => const RecordInfoPage(),

@@ -32,11 +32,11 @@ class TodayDiaryWidget extends StatefulWidget {
   TodayDiaryWidget({
     super.key,
     required this.seletedRecordSubType,
-    required this.setCameraActive,
+    required this.setActiveCamera,
   });
 
   RecordIconTypes seletedRecordSubType;
-  Function(bool newValue) setCameraActive;
+  Function(bool isActive) setActiveCamera;
 
   @override
   State<TodayDiaryWidget> createState() => _TodayDiaryWidgetState();
@@ -127,7 +127,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     }) {
       // 뺑글뺑글 시작
       closeDialog(context);
-      widget.setCameraActive(true);
+
+      widget.setActiveCamera(true);
 
       ImagePicker().pickImage(source: source).then(
         (xFile) async {
@@ -153,6 +154,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                 : recordInfo.rightEyeBodyFilePath = filePath;
             recordInfo.save();
           }
+          // widget.setActiveCamera(false);
+
           // 뺑글뺑글 종료
         },
       ).catchError(
