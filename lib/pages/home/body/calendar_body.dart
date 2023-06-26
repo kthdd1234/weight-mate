@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
@@ -134,39 +135,6 @@ class CalendarBodyState extends State<CalendarBody> {
       );
     }
 
-    setBottomButton({
-      String? imgUrl,
-      Color? color,
-      required IconData icon,
-      required String text,
-      required Function() onTap,
-    }) {
-      return Expanded(
-        child: InkWell(
-          onTap: onTap,
-          child: ContentsBox(
-            imgUrl: imgUrl,
-            backgroundColor: color,
-            contentsWidget: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(icon, color: Colors.white, size: 18),
-                SpaceWidth(width: tinySpace),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     onTapModifyRecord() {
       context.read<ImportDateTimeProvider>().setImportDateTime(currentDay);
       widget.onBottomNavigation(0);
@@ -271,14 +239,14 @@ class CalendarBodyState extends State<CalendarBody> {
         SpaceHeight(height: regularSapce),
         Row(
           children: [
-            setBottomButton(
+            ExpandedButton(
               imgUrl: 'assets/images/t-9.png',
               icon: Icons.search,
               text: '자세히 보기',
               onTap: onTapMoreInfo,
             ),
             SpaceWidth(width: smallSpace),
-            setBottomButton(
+            ExpandedButton(
               imgUrl: 'assets/images/t-14.png',
               icon: Icons.delete_outline,
               text: '기록 삭제하기',
@@ -289,7 +257,7 @@ class CalendarBodyState extends State<CalendarBody> {
         SpaceHeight(height: smallSpace),
         Row(
           children: [
-            setBottomButton(
+            ExpandedButton(
               imgUrl: 'assets/images/t-15.png',
               icon: Icons.edit,
               text: '기록 수정하기',

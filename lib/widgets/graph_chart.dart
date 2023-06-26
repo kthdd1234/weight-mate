@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/dialog/action_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -20,15 +19,6 @@ class GraphData {
   final double? y;
 }
 
-class ColumnData {
-  ColumnData(this.x, this.y1, this.y2, this.y3);
-
-  final String x;
-  final int? y1;
-  final int? y2;
-  final int? y3;
-}
-
 final countInfo = {
   SegmentedTypes.week: 6,
   SegmentedTypes.month: 29,
@@ -40,20 +30,20 @@ final countInfo = {
 class GraphChart extends StatefulWidget {
   GraphChart({
     super.key,
-    required this.selectedRecordTypeSegment,
     required this.selectedDateTimeSegment,
+    required this.recordBox,
+    required this.userBox,
   });
 
-  SegmentedTypes selectedDateTimeSegment, selectedRecordTypeSegment;
+  SegmentedTypes selectedDateTimeSegment;
+  Box<RecordBox> recordBox;
+  Box<UserBox> userBox;
 
   @override
   State<GraphChart> createState() => _GraphChartState();
 }
 
 class _GraphChartState extends State<GraphChart> {
-  late Box<UserBox> userBox;
-  late Box<RecordBox> recordBox;
-  late Box<PlanBox> planBox;
   late DateTime startDateTime, endDateTime;
 
   double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
@@ -61,10 +51,6 @@ class _GraphChartState extends State<GraphChart> {
 
   @override
   void initState() {
-    userBox = Hive.box('userBox');
-    recordBox = Hive.box('recordBox');
-    planBox = Hive.box('planbox');
-
     DateTime now = DateTime.now();
 
     startDateTime = jumpDayDateTime(
@@ -91,7 +77,7 @@ class _GraphChartState extends State<GraphChart> {
 
   @override
   Widget build(BuildContext context) {
-    final userProfile = userBox.get('userProfile');
+    final userProfile = widget.userBox.get('userProfile');
     final plotBandList = <PlotBand>[
       PlotBand(
         borderWidth: 1.0,
@@ -105,17 +91,8 @@ class _GraphChartState extends State<GraphChart> {
       )
     ];
 
-    String dietToString = PlanTypeEnum.diet.toString();
-    String exerciseToString = PlanTypeEnum.exercise.toString();
-    String lifeStyleToString = PlanTypeEnum.lifestyle.toString();
-    Map<String, int> planIndexInfo = {
-      dietToString: 0,
-      exerciseToString: 1,
-      lifeStyleToString: 2
-    };
-
     getRecordInfo(DateTime datatime) {
-      return recordBox.get(getDateTimeToInt(datatime));
+      return widget.recordBox.get(getDateTimeToInt(datatime));
     }
 
     List<GraphData> setLineSeriesDateTime({
@@ -193,91 +170,8 @@ class _GraphChartState extends State<GraphChart> {
       );
     }
 
-    setStackedLineSeriesDateTime({
-      required int count,
-      required String format,
-    }) {
-      List<ColumnData> columnSeriesData = [];
-      List<PlanBox> planInfoList = planBox.values.toList();
-
-      List<int> planTypeList = [0, 0, 0];
-      List<RecordBox?> infoList = [];
-
-      for (var i = 0; i < planInfoList.length; i++) {
-        PlanBox planBox = planInfoList[i];
-        planTypeList[planIndexInfo[planBox.type]!] += 1;
-      }
-
-      for (var i = 0; i <= count; i++) {
-        List<int> actionCountList = [0, 0, 0];
-        DateTime subtractDateTime = jumpDayDateTime(
-          type: jumpDayTypeEnum.subtract,
-          dateTime: endDateTime,
-          days: i,
-        );
-        RecordBox? recordInfo = getRecordInfo(subtractDateTime);
-        String formatterDay =
-            dateTimeFormatter(format: format, dateTime: subtractDateTime);
-
-        List<String?>? titleList =
-            recordInfo?.actions?.map((e) => planBox.get(e)?.type).toList();
-
-        infoList.add(recordInfo);
-
-        if (titleList != null) {
-          titleList.forEach(
-              (element) => actionCountList[planIndexInfo[element]!] += 1);
-        }
-
-        setState(() {
-          actionMaximum = (planTypeList.reduce(max) + 2).floorToDouble();
-          actionMinimum = 0;
-        });
-
-        ColumnData columnData = ColumnData(
-          formatterDay,
-          actionCountList[0],
-          actionCountList[1],
-          actionCountList[2],
-        );
-
-        columnSeriesData.add(columnData);
-      }
-
-      setState(() => recordInfoList = infoList.reversed.toList());
-      return columnSeriesData.reversed.toList();
-    }
-
-    setStackedLineSeriesData() {
-      return setStackedLineSeriesDateTime(
-        count: setCount()!,
-        format: widget.selectedDateTimeSegment == SegmentedTypes.week
-            ? 'dd일'
-            : 'MM월\ndd일',
-      );
-    }
-
-    setStackedLineSeries({
-      required String yValue,
-      required String lValue,
-      required Color color,
-    }) {
-      return StackedColumnSeries(
-        color: color,
-        name: lValue,
-        legendItemText: lValue,
-        dataSource: setStackedLineSeriesData(),
-        xValueMapper: (data, _) => data.x,
-        yValueMapper: (data, _) => yValue == 'y1'
-            ? data.y1
-            : yValue == 'y2'
-                ? data.y2
-                : data.y3,
-      );
-    }
-
     setLineSeriesData();
-    setStackedLineSeriesData();
+    // setStackedLineSeriesData();
 
     setChartSwipeDirectionStart() {
       if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
@@ -343,104 +237,15 @@ class _GraphChartState extends State<GraphChart> {
       closeDialog(context);
     }
 
-    setSeries() {
-      return widget.selectedRecordTypeSegment == SegmentedTypes.weight
-          ? [setLineSeries()]
-          : [
-              setStackedLineSeries(
-                yValue: 'y1',
-                lValue: '식이요법',
-                color: dietColor,
-              ),
-              setStackedLineSeries(
-                yValue: 'y2',
-                lValue: '운동',
-                color: exerciseColor,
-              ),
-              setStackedLineSeries(
-                yValue: 'y3',
-                lValue: '생활습관',
-                color: lifeStyleColor,
-              ),
-            ];
-    }
-
-    onTooltipRender(TooltipArgs tooltipArgs) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (timeStamp) {
-          if (widget.selectedRecordTypeSegment == SegmentedTypes.action) {
-            List<Map<String, dynamic>> typeInfos = [
-              {'type': dietToString, 'color': dietColor},
-              {'type': exerciseToString, 'color': exerciseColor},
-              {'type': lifeStyleToString, 'color': lifeStyleColor},
-            ];
-            int typeIndex = tooltipArgs.seriesIndex;
-            num pointIndex = tooltipArgs.pointIndex ?? -1;
-            RecordBox? recordInfo = recordInfoList[pointIndex.toInt()];
-            String type = typeInfos[typeIndex]['type'];
-            Color color = typeInfos[typeIndex]['color'];
-
-            if (recordInfo != null) {
-              List<String>? actions = recordInfo.actions;
-              List<String> names = [];
-
-              if (actions != null) {
-                for (var i = 0; i < actions.length; i++) {
-                  PlanBox? planInfo = planBox.get(actions[i]);
-
-                  if (planInfo != null && planInfo.type == type) {
-                    names.add(planInfo.name);
-                  }
-                }
-              }
-
-              showDialog(
-                context: context,
-                builder: (context) => ActionDialog(
-                  dayTitle:
-                      '${dateTimeFormatter(format: 'MM월 dd일', dateTime: recordInfo.createDateTime)} 실천',
-                  contentsTitle: tooltipArgs.header!,
-                  names: names,
-                  color: color,
-                  count: names.length,
-                ),
-              );
-            }
-          }
-        },
-      );
-    }
-
-    List<PlotBand>? plotBands =
-        widget.selectedRecordTypeSegment == SegmentedTypes.weight
-            ? plotBandList
-            : null;
-    double? setMinimum =
-        widget.selectedRecordTypeSegment == SegmentedTypes.weight
-            ? weightMinimum
-            : actionMinimum;
-    double? setMaximum =
-        widget.selectedRecordTypeSegment == SegmentedTypes.weight
-            ? weightMaximum
-            : actionMaximum;
-    bool setLegendVisible =
-        widget.selectedRecordTypeSegment == SegmentedTypes.action;
     String titleDateTime =
         '${dateTimeFormatter(dateTime: startDateTime, format: 'MM월 dd일')} ~ ${dateTimeFormatter(dateTime: endDateTime, format: 'MM월 dd일')}';
-
-    String tooltipText =
-        widget.selectedRecordTypeSegment == SegmentedTypes.weight
-            ? ' kg'
-            : '회 실천';
 
     return Column(
       children: [
         SizedBox(
           height: setSizeBoxHeight(),
           child: SfCartesianChart(
-            onTooltipRender: onTooltipRender,
             legend: Legend(
-              isVisible: setLegendVisible,
               position: LegendPosition.top,
               alignment: ChartAlignment.center,
             ),
@@ -450,19 +255,16 @@ class _GraphChartState extends State<GraphChart> {
               textStyle: const TextStyle(fontSize: 10),
             ),
             tooltipBehavior: TooltipBehavior(
-              opacity: widget.selectedRecordTypeSegment == SegmentedTypes.weight
-                  ? 1
-                  : 0,
               enable: true,
-              format: 'point.y$tooltipText',
+              format: 'point.y kg',
             ),
             primaryXAxis: CategoryAxis(),
             primaryYAxis: NumericAxis(
-              minimum: setMinimum,
-              maximum: setMaximum,
-              plotBands: plotBands,
+              minimum: weightMinimum,
+              maximum: weightMaximum,
+              plotBands: plotBandList,
             ),
-            series: setSeries(),
+            series: [setLineSeries()],
             onPlotAreaSwipe: onPlotAreaSwipe,
           ),
         ),
@@ -478,3 +280,184 @@ class _GraphChartState extends State<GraphChart> {
     );
   }
 }
+
+    // String dietToString = PlanTypeEnum.diet.toString();
+    // String exerciseToString = PlanTypeEnum.exercise.toString();
+    // String lifeStyleToString = PlanTypeEnum.lifestyle.toString();
+    // Map<String, int> planIndexInfo = {
+    //   dietToString: 0,
+    //   exerciseToString: 1,
+    //   lifeStyleToString: 2
+    // };
+    //     onTooltipRender(TooltipArgs tooltipArgs) {
+    //   WidgetsBinding.instance.addPostFrameCallback(
+    //     (timeStamp) {
+    //       if (widget.selectedRecordTypeSegment == SegmentedTypes.action) {
+    //         List<Map<String, dynamic>> typeInfos = [
+    //           {'type': dietToString, 'color': dietColor},
+    //           {'type': exerciseToString, 'color': exerciseColor},
+    //           {'type': lifeStyleToString, 'color': lifeStyleColor},
+    //         ];
+    //         int typeIndex = tooltipArgs.seriesIndex;
+    //         num pointIndex = tooltipArgs.pointIndex ?? -1;
+    //         RecordBox? recordInfo = recordInfoList[pointIndex.toInt()];
+    //         String type = typeInfos[typeIndex]['type'];
+    //         Color color = typeInfos[typeIndex]['color'];
+
+    //         if (recordInfo != null) {
+    //           List<String>? actions = recordInfo.actions;
+    //           List<String> names = [];
+
+    //           if (actions != null) {
+    //             for (var i = 0; i < actions.length; i++) {
+    //               PlanBox? planInfo = planBox.get(actions[i]);
+
+    //               if (planInfo != null && planInfo.type == type) {
+    //                 names.add(planInfo.name);
+    //               }
+    //             }
+    //           }
+
+    //           showDialog(
+    //             context: context,
+    //             builder: (context) => ActionDialog(
+    //               dayTitle:
+    //                   '${dateTimeFormatter(format: 'MM월 dd일', dateTime: recordInfo.createDateTime)} 실천',
+    //               contentsTitle: tooltipArgs.header!,
+    //               names: names,
+    //               color: color,
+    //               count: names.length,
+    //             ),
+    //           );
+    //         }
+    //       }
+    //     },
+    //   );
+    // }
+    //     double? setMinimum =
+    //     widget.selectedRecordTypeSegment == SegmentedTypes.weight
+    //         ? weightMinimum
+    //         : actionMinimum;
+    // double? setMaximum =
+    //     widget.selectedRecordTypeSegment == SegmentedTypes.weight
+    //         ? weightMaximum
+    //         : actionMaximum;
+
+        // String tooltipText =
+        // widget.selectedRecordTypeSegment == SegmentedTypes.weight
+        //     ? ' kg'
+        //     : '회 실천';
+
+
+    // setStackedLineSeriesDateTime({
+    //   required int count,
+    //   required String format,
+    // }) {
+    //   List<ColumnData> columnSeriesData = [];
+    //   List<PlanBox> planInfoList = planBox.values.toList();
+
+    //   List<int> planTypeList = [0, 0, 0];
+    //   List<RecordBox?> infoList = [];
+
+    //   for (var i = 0; i < planInfoList.length; i++) {
+    //     PlanBox planBox = planInfoList[i];
+    //     planTypeList[planIndexInfo[planBox.type]!] += 1;
+    //   }
+
+    //   for (var i = 0; i <= count; i++) {
+    //     List<int> actionCountList = [0, 0, 0];
+    //     DateTime subtractDateTime = jumpDayDateTime(
+    //       type: jumpDayTypeEnum.subtract,
+    //       dateTime: endDateTime,
+    //       days: i,
+    //     );
+    //     RecordBox? recordInfo = getRecordInfo(subtractDateTime);
+    //     String formatterDay =
+    //         dateTimeFormatter(format: format, dateTime: subtractDateTime);
+
+    //     List<String?>? titleList =
+    //         recordInfo?.actions?.map((e) => planBox.get(e)?.type).toList();
+
+    //     infoList.add(recordInfo);
+
+    //     if (titleList != null) {
+    //       titleList.forEach(
+    //           (element) => actionCountList[planIndexInfo[element]!] += 1);
+    //     }
+
+    //     setState(() {
+    //       actionMaximum = (planTypeList.reduce(max) + 2).floorToDouble();
+    //       actionMinimum = 0;
+    //     });
+
+    //     ColumnData columnData = ColumnData(
+    //       formatterDay,
+    //       actionCountList[0],
+    //       actionCountList[1],
+    //       actionCountList[2],
+    //     );
+
+    //     columnSeriesData.add(columnData);
+    //   }
+
+    //   setState(() => recordInfoList = infoList.reversed.toList());
+    //   return columnSeriesData.reversed.toList();
+    // }
+
+    // setStackedLineSeriesData() {
+    //   return setStackedLineSeriesDateTime(
+    //     count: setCount()!,
+    //     format: widget.selectedDateTimeSegment == SegmentedTypes.week
+    //         ? 'dd일'
+    //         : 'MM월\ndd일',
+    //   );
+    // }
+
+    // setStackedLineSeries({
+    //   required String yValue,
+    //   required String lValue,
+    //   required Color color,
+    // }) {
+    //   return StackedColumnSeries(
+    //     color: color,
+    //     name: lValue,
+    //     legendItemText: lValue,
+    //     dataSource: setStackedLineSeriesData(),
+    //     xValueMapper: (data, _) => data.x,
+    //     yValueMapper: (data, _) => yValue == 'y1'
+    //         ? data.y1
+    //         : yValue == 'y2'
+    //             ? data.y2
+    //             : data.y3,
+    //   );
+    // }
+    //    setSeries() {
+    //   return widget.selectedRecordTypeSegment == SegmentedTypes.weight
+    //       ? [setLineSeries()]
+    //       : [
+    //           setStackedLineSeries(
+    //             yValue: 'y1',
+    //             lValue: '식이요법',
+    //             color: dietColor,
+    //           ),
+    //           setStackedLineSeries(
+    //             yValue: 'y2',
+    //             lValue: '운동',
+    //             color: exerciseColor,
+    //           ),
+    //           setStackedLineSeries(
+    //             yValue: 'y3',
+    //             lValue: '생활습관',
+    //             color: lifeStyleColor,
+    //           ),
+    //         ];
+    // }
+
+// class ColumnData {
+//   ColumnData(this.x, this.y1, this.y2, this.y3);
+
+//   final String x;
+//   final int? y1;
+//   final int? y2;
+//   final int? y3;
+// }

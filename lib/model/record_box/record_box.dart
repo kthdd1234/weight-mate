@@ -32,7 +32,7 @@ class RecordBox extends HiveObject {
   double? weight;
 
   @HiveField(5)
-  List<String>? actions;
+  List<Map<String, dynamic>>? actions;
 
   @HiveField(6)
   String? leftEyeBodyFilePath;

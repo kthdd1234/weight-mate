@@ -32,7 +32,7 @@ class TodayPlanTypes extends StatelessWidget {
     required this.planInfoList,
   });
 
-  List<String>? actions;
+  List<Map<String, dynamic>>? actions;
   List<PlanInfoClass> planInfoList;
 
   @override
@@ -54,8 +54,13 @@ class TodayPlanTypes extends StatelessWidget {
           map[info.type]!.planLength += 1;
         }
 
-        if (actions != null && actions!.contains(info.id)) {
-          map[info.type]!.actionLength += 1;
+        if (actions != null) {
+          final isAction =
+              actions!.every((element) => element['id'] == info.id);
+
+          if (isAction) {
+            map[info.type]!.actionLength += 1;
+          }
         }
       }
 

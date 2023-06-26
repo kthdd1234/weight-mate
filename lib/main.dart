@@ -93,9 +93,6 @@ class _MyAppState extends State<MyApp> {
       ],
       theme: AppThemes.lightTheme,
       initialRoute: userProfile == null ? '/add-body-info' : '/home-container',
-      onGenerateRoute: (settings) {
-        print('발생?');
-      },
       routes: {
         '/splash-page': (context) => Container(),
         '/add-body-info': (context) => const AddBodyInfo(),

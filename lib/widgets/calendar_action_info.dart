@@ -18,7 +18,7 @@ class CalendarActionInfo extends StatelessWidget {
   });
 
   Box<PlanBox> planBox;
-  List<String> actions;
+  List<Map<String, dynamic>> actions;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class CalendarActionInfo extends StatelessWidget {
       shrinkWrap: true,
       itemCount: actions.length,
       itemBuilder: (context, index) {
-        final planId = actions[index];
+        final planId = actions[index]['id'];
         final planInfo = planBox.get(planId);
 
         return setRowWidgets(

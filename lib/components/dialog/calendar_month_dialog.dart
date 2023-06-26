@@ -4,6 +4,7 @@ import 'package:flutter_app_weight_management/components/info/color_text_info.da
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CalendarMonthDialog extends StatefulWidget {
@@ -47,32 +48,8 @@ class _CalendarMonthDialogState extends State<CalendarMonthDialog> {
     return AlertDialog(
       shape: containerBorderRadious,
       backgroundColor: dialogBackgroundColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          const Text('달력'),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ColorTextInfo(
-                width: regularSapce,
-                height: smallSpace,
-                text: '이번 달',
-                color: buttonBackgroundColor,
-                isOutlined: true,
-              ),
-              SpaceWidth(width: 8),
-              ColorTextInfo(
-                width: regularSapce,
-                height: smallSpace,
-                text: '선택한 달',
-                color: buttonBackgroundColor,
-              ),
-            ],
-          )
-        ],
-      ),
+      title:
+          AlertDialogTitleWidget(text: '달력', onTap: () => closeDialog(context)),
       content: Container(
         width: MediaQuery.of(context).size.width,
         height: 400,

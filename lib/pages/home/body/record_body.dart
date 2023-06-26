@@ -11,7 +11,6 @@ import 'package:flutter_app_weight_management/provider/record_selected_dateTime_
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
@@ -89,10 +88,10 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 seletedRecordSubType: seletedRecordIconType,
                 setActiveCamera: widget.setActiveCamera,
               ),
-              // ElevatedButton(
-              //   onPressed: onPressed,
-              //   child: const Text('hive 데이터 초기화'),
-              // )
+              ElevatedButton(
+                onPressed: onPressed,
+                child: const Text('hive 데이터 초기화'),
+              )
             ],
           );
         },

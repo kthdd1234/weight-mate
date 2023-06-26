@@ -25,21 +25,26 @@ class TodayPlanCheck extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onTap({required String id, required bool checked}) {
+      DateTime now = DateTime.now();
+      DateTime actionDateTime = DateTime(importDateTime.year,
+          importDateTime.month, importDateTime.day, now.hour, now.minute);
+      Map<String, dynamic> actionItem = {'id': id, 'DateTime': actionDateTime};
+
       if (checked) {
         if (recordInfo == null) {
           recordBox.put(
             getDateTimeToInt(importDateTime),
-            RecordBox(createDateTime: importDateTime, actions: [id]),
+            RecordBox(createDateTime: importDateTime, actions: [actionItem]),
           );
         } else {
           recordInfo!.actions == null
-              ? recordInfo!.actions = [id]
-              : recordInfo!.actions!.add(id);
+              ? recordInfo!.actions = [actionItem]
+              : recordInfo!.actions!.add(actionItem);
 
           recordInfo!.save();
         }
       } else {
-        recordInfo!.actions!.remove(id);
+        recordInfo!.actions!.removeWhere((element) => element['id'] == id);
 
         if (recordInfo!.actions!.isEmpty) {
           recordInfo!.actions = null;
@@ -59,7 +64,12 @@ class TodayPlanCheck extends StatelessWidget {
 
             setIsChecked() {
               if (recordInfo?.actions == null) return false;
-              return recordInfo!.actions!.contains(item.id);
+
+              int index = recordInfo!.actions!.indexWhere(
+                (element) => element['id'] == item.id,
+              );
+
+              return index != -1;
             }
 
             return Column(

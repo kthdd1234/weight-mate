@@ -22,7 +22,9 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       actionDateTime: fields[2] as DateTime?,
       diaryDateTime: fields[3] as DateTime?,
       weight: fields[4] as double?,
-      actions: (fields[5] as List?)?.cast<String>(),
+      actions: (fields[5] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
+          .toList(),
       leftEyeBodyFilePath: fields[6] as String?,
       rightEyeBodyFilePath: fields[7] as String?,
       whiteText: fields[8] as String?,
