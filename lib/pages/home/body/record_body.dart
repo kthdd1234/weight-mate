@@ -88,10 +88,10 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 seletedRecordSubType: seletedRecordIconType,
                 setActiveCamera: widget.setActiveCamera,
               ),
-              ElevatedButton(
-                onPressed: onPressed,
-                child: const Text('hive 데이터 초기화'),
-              )
+              // ElevatedButton(
+              //   onPressed: onPressed,
+              //   child: const Text('hive 데이터 초기화'),
+              // )
             ],
           );
         },

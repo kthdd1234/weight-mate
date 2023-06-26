@@ -241,7 +241,7 @@ showAlarmBottomSheet({
 }
 
 dateTimeFormatter({required String format, required DateTime dateTime}) {
-  DateFormat formatter = DateFormat(format);
+  DateFormat formatter = DateFormat(format, 'ko');
   String strDateTime = formatter.format(dateTime);
 
   return strDateTime;

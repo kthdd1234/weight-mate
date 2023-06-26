@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dar
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
+import 'package:flutter_app_weight_management/pages/splash/splash.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
@@ -89,12 +90,13 @@ class _MyAppState extends State<MyApp> {
       ],
       supportedLocales: const [
         Locale('en', ''),
-        Locale('ko', ''),
+        Locale('ko', 'KR'),
       ],
       theme: AppThemes.lightTheme,
-      initialRoute: userProfile == null ? '/add-body-info' : '/home-container',
+      // initialRoute: userProfile == null ? '/splash-page' : '/home-container',
+      initialRoute: '/splash-screen',
       routes: {
-        '/splash-page': (context) => Container(),
+        '/splash-screen': (context) => const SplashScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-type': (context) => AddPlanType(planInfo: planInfo),
         '/add-plan-item': (context) => AddPlanItem(planInfo: planInfo),

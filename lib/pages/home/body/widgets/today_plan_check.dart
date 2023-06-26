@@ -28,9 +28,11 @@ class TodayPlanCheck extends StatelessWidget {
       DateTime now = DateTime.now();
       DateTime actionDateTime = DateTime(importDateTime.year,
           importDateTime.month, importDateTime.day, now.hour, now.minute);
-      Map<String, dynamic> actionItem = {'id': id, 'DateTime': actionDateTime};
+      Map<String, dynamic> actionItem = {'id': id, 'time': actionDateTime};
 
       if (checked) {
+        Vibration.vibrate();
+
         if (recordInfo == null) {
           recordBox.put(
             getDateTimeToInt(importDateTime),

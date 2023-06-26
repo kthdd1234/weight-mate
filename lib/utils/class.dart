@@ -212,18 +212,6 @@ class GridIconClass {
   bool isEnabled;
 }
 
-// class RemovePlanClass {
-//   RemovePlanClass({
-//     required this.id,
-//     required this.name,
-//     required this.title,
-//     required this.isRemove,
-//   });
-
-//   String id, name, title;
-//   bool isRemove;
-// }
-
 class PlanTypeDetailClass {
   PlanTypeDetailClass({
     required this.classList,

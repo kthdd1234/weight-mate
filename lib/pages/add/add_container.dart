@@ -12,6 +12,7 @@ class AddContainer extends StatelessWidget {
     required this.bottomSubmitButtonText,
     this.onPressedBottomNavigationButton,
     this.title,
+    this.isCenter,
   });
 
   Widget body;
@@ -19,6 +20,7 @@ class AddContainer extends StatelessWidget {
   String bottomSubmitButtonText;
   VoidCallback? onPressedBottomNavigationButton;
   String? title;
+  bool? isCenter;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,11 @@ class AddContainer extends StatelessWidget {
           ),
           body: Padding(
             padding: pagePadding,
-            child: SafeArea(child: SingleChildScrollView(child: body)),
+            child: SafeArea(
+              child: isCenter == true
+                  ? Center(child: SingleChildScrollView(child: body))
+                  : SingleChildScrollView(child: body),
+            ),
           ),
           bottomNavigationBar: onPressedBottomNavigationButton != null
               ? SafeArea(

@@ -58,3 +58,5 @@ enum ArgmentsTypeEnum { none, start, add, edit }
 enum alarmTypeEnum { none, weight, plan }
 
 enum jumpDayTypeEnum { none, subtract, add }
+
+enum ActionSortEnum { none, recent, past }

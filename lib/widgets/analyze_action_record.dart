@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
+import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_month_dialog.dart';
 import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
@@ -10,7 +12,9 @@ import 'package:flutter_app_weight_management/components/text/icon_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
 
 class AnalyzeActionRecord extends StatefulWidget {
@@ -29,10 +33,14 @@ class AnalyzeActionRecord extends StatefulWidget {
 
 class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
   late DateTime seletedDateTime;
+  late ActionSortEnum actionSortType;
+  ScrollController listViewScrollController = ScrollController();
 
   @override
   void initState() {
     seletedDateTime = DateTime.now();
+    actionSortType = ActionSortEnum.recent;
+
     super.initState();
   }
 
@@ -59,18 +67,21 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
 
     timeLineWidget({
       required DateTime dateTime,
-      required String dateTimeFormat,
+      String? dateTimeFormat,
       required Color circleColor,
       required String title,
       required String name,
-      required DateTime timeValue,
+      required DateTime time,
     }) {
       return Row(
         children: [
           Expanded(
             flex: 1,
             child: Text(
-              dateTimeFormatter(format: dateTimeFormat, dateTime: dateTime),
+              dateTimeFormat != null
+                  ? dateTimeFormatter(
+                      format: dateTimeFormat, dateTime: dateTime)
+                  : '',
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 12,
@@ -98,7 +109,7 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -123,7 +134,7 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
                         icon: Icons.check_circle,
                         iconColor: Colors.grey,
                         iconSize: 0,
-                        text: timeToString(timeValue),
+                        text: timeToString(time),
                         textColor: Colors.grey,
                         textSize: 11,
                       )
@@ -153,10 +164,69 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
       );
     }
 
-    onTapRecordSort() {}
+    onTapRecordSort() {
+      listViewScrollController.animateTo(
+        listViewScrollController.position.minScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 500),
+      );
+
+      setState(
+        () => actionSortType = ActionSortEnum.recent == actionSortType
+            ? ActionSortEnum.past
+            : ActionSortEnum.recent,
+      );
+    }
 
     setListView() {
-      // todo
+      List<RecordBox> recordBoxList = widget.recordBox.values.toList();
+      List<RecordBox> settingList = actionSortType == ActionSortEnum.recent
+          ? recordBoxList.reversed.toList()
+          : recordBoxList;
+      String selectedDateTimeFormatter =
+          dateTimeFormatter(format: 'yyyyMM', dateTime: seletedDateTime);
+      List<Widget> actionHistoryList = [];
+
+      for (var i = 0; i < settingList.length; i++) {
+        RecordBox recordBox = settingList[i];
+
+        final recordBoxDateTimeFormatter = dateTimeFormatter(
+            format: 'yyyyMM', dateTime: recordBox.createDateTime);
+
+        if (recordBoxDateTimeFormatter == selectedDateTimeFormatter) {
+          if (recordBox.actions != null) {
+            for (var i = 0; i < recordBox.actions!.length; i++) {
+              String id = recordBox.actions![i]['id'];
+              DateTime time = recordBox.actions![i]['time'];
+
+              PlanBox? planInfo = widget.planBox.get(id);
+
+              actionHistoryList.add(
+                timeLineWidget(
+                  dateTime: recordBox.createDateTime,
+                  title: planInfo!.title,
+                  dateTimeFormat: i == 0 ? 'yyyy\nMM.dd E' : null,
+                  circleColor: planTypeColors[planInfo.type]!,
+                  name: planInfo.name,
+                  time: time,
+                ),
+              );
+            }
+          }
+        }
+      }
+
+      return actionHistoryList;
+    }
+
+    setSortImgUrl() {
+      return ActionSortEnum.recent == actionSortType
+          ? 'assets/images/t-23.png'
+          : 'assets/images/t-1.png';
+    }
+
+    setSortName() {
+      return ActionSortEnum.recent == actionSortType ? '최신 기록순' : '과거 기록순';
     }
 
     return Expanded(
@@ -169,7 +239,6 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
               Text(
                   '${dateTimeFormatter(format: 'MM월', dateTime: seletedDateTime)} 실천 기록'),
               BodySmallText(text: titleDateTime),
-              // Text(titleDateTime, style: TextStyle(fontSize: 12)),
             ],
           ),
           SpaceHeight(height: smallSpace),
@@ -179,18 +248,16 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
           ),
           Expanded(
             flex: 8,
-            child: ListView(
-              children: [
-                timeLineWidget(
-                  dateTime: DateTime.now(),
-                  dateTimeFormat: 'yyyy\nMM.dd 월',
-                  circleColor: dietColor,
-                  title: '식이요법',
-                  name: '간헐적 단식 16:8',
-                  timeValue: DateTime.now(),
-                ),
-              ],
-            ),
+            child: setListView().isNotEmpty
+                ? ListView(
+                    controller: listViewScrollController,
+                    children: setListView(),
+                  )
+                : EmptyTextVerticalArea(
+                    icon: Icons.history_edu,
+                    title: '실천 기록이 없어요.',
+                    backgroundColor: Colors.transparent,
+                  ),
           ),
           WidthDivider(
             width: MediaQuery.of(context).size.width,
@@ -227,9 +294,9 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
               ),
               SpaceWidth(width: smallSpace),
               ExpandedButton(
-                imgUrl: 'assets/images/t-23.png',
+                imgUrl: setSortImgUrl(),
                 icon: Icons.swap_vert_outlined,
-                text: '최신 기록순',
+                text: setSortName(),
                 onTap: onTapRecordSort,
               ),
             ],

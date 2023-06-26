@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'enum.dart';
 
 var todayOfWiseSayingList = [
@@ -219,6 +220,12 @@ var dayOfWeek = {
   'Fri': '금',
   'Sat': '토',
   'Sun': '일'
+};
+
+var planTypeColors = {
+  PlanTypeEnum.diet.toString(): dietColor,
+  PlanTypeEnum.exercise.toString(): exerciseColor,
+  PlanTypeEnum.lifestyle.toString(): lifeStyleColor,
 };
 
 // var defaultDietPlanList = [

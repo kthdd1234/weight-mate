@@ -1,8 +1,8 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/calendar_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/more_see_body.dart';
@@ -28,7 +28,6 @@ class _HomeContainerState extends State<HomeContainer>
     with WidgetsBindingObserver {
   late Box<RecordBox> recordBox;
   late Box<UserBox> userBox;
-  late CameraController controller;
 
   bool isActiveCamera = false;
 
@@ -66,13 +65,15 @@ class _HomeContainerState extends State<HomeContainer>
       context.read<ImportDateTimeProvider>().setImportDateTime(DateTime.now());
     }
 
-    print(isActiveCamera);
-    print(state);
-
     if (state == AppLifecycleState.resumed) {
       if (isActiveCamera == false) {
         if (userProfile != null && userProfile.screenLockPasswords != null) {
-          await Navigator.pushNamed(context, '/enter-screen-lock');
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => const EnterScreenLockPage(),
+              fullscreenDialog: true,
+            ),
+          );
           setGenerateRecordInfo();
         }
       } else {

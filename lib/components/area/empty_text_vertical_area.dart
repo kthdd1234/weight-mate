@@ -31,7 +31,8 @@ class EmptyTextVerticalArea extends StatelessWidget {
           SpaceHeight(height: smallSpace),
           Text(
             title,
-            style: const TextStyle(color: disEnabledTypeColor),
+            style: const TextStyle(color: disEnabledTypeColor, height: 1.5),
+            textAlign: TextAlign.center,
           )
         ],
       ),
