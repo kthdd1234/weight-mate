@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/icon/default_icon.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
@@ -82,10 +81,13 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
     }
 
     arrowIcon({required String name, required IconData icon}) {
-      return InkWell(
-        onTap: () => name == 'circle_down' ? onTapTitle() : onTapArrow(name),
-        child: Icon(icon, size: 20, color: buttonBackgroundColor),
-      );
+      return IconButton(
+          onPressed: () => onTapArrow(name),
+          icon: Icon(
+            icon,
+            size: 20,
+            color: buttonBackgroundColor,
+          ));
     }
 
     importTitle() {
@@ -100,9 +102,10 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
                 style: const TextStyle(fontSize: 18),
               ),
               SpaceWidth(width: tinySpace),
-              arrowIcon(
-                name: 'circle_down',
-                icon: Icons.expand_circle_down_outlined,
+              InkWell(
+                onTap: onTapTitle,
+                child: const Icon(Icons.expand_circle_down_outlined,
+                    size: 20, color: buttonBackgroundColor),
               ),
             ],
           ),

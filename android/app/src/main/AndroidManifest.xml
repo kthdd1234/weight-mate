@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.flutter_app_weight_management">
+    package="com.kthdd.weightMate">
    <application
         android:label="체중 메이트"
         android:name="${applicationName}"
@@ -22,6 +22,7 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <uses-permission android:name="android.permission.VIBRATE"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -32,5 +33,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+ 
     </application>
 </manifest>

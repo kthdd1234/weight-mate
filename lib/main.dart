@@ -93,7 +93,6 @@ class _MyAppState extends State<MyApp> {
         Locale('ko', 'KR'),
       ],
       theme: AppThemes.lightTheme,
-      // initialRoute: userProfile == null ? '/splash-page' : '/home-container',
       initialRoute: '/splash-screen',
       routes: {
         '/splash-screen': (context) => const SplashScreen(),

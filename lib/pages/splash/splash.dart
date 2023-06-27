@@ -18,7 +18,7 @@ class SplashScreen extends StatelessWidget {
         children: [
           Image.asset(
             'assets/images/MATE.png',
-            width: 200,
+            width: 150,
           ),
           SpaceHeight(height: regularSapce),
           const Text(

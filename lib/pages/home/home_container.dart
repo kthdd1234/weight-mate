@@ -38,6 +38,7 @@ class _HomeContainerState extends State<HomeContainer>
     userBox = Hive.box('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
     selectedId = eBottomNavigationBarItem.record;
+
     WidgetsBinding.instance.addObserver(this);
 
     super.initState();

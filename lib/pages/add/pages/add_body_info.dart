@@ -36,7 +36,15 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       bool isPermission = await NotificationService().permissionNotification;
 
       if (isPermission == false) {
-        await NotificationService().requestPermission();
+        bool? isResult = await NotificationService().requestPermission();
+
+        if (isResult == false) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            DietInfoProvider readProvider = context.read<DietInfoProvider>();
+
+            readProvider.changeIsAlarm(false);
+          });
+        }
       }
     }
 
@@ -157,10 +165,12 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             buttonName: '설정창으로 이동',
             onPressed: openAppSettings,
           );
+        } else {
+          readProvider.changeIsAlarm(newValue);
         }
+      } else {
+        readProvider.changeIsAlarm(newValue);
       }
-
-      readProvider.changeIsAlarm(newValue);
     }
 
     onDateTimeChanged(DateTime value) {

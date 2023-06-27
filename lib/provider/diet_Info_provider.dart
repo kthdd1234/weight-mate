@@ -17,7 +17,7 @@ final initPlanInfo = PlanInfoClass(
   name: '',
   startDateTime: DateTime.now(),
   endDateTime: null,
-  isAlarm: true,
+  isAlarm: false,
   alarmTime: initAlarmDateTime,
   alarmId: null,
 );
@@ -114,6 +114,11 @@ class DietInfoProvider with ChangeNotifier {
 
   changeAlarmTime(DateTime? time) {
     _alarmTime = time;
+    notifyListeners();
+  }
+
+  changeIsPlanAlarm(bool value) {
+    _planInfo.isAlarm = value;
     notifyListeners();
   }
 }

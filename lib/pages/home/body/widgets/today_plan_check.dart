@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:vibration/vibration.dart';
 
 class TodayPlanCheck extends StatelessWidget {
   TodayPlanCheck({
@@ -24,14 +25,16 @@ class TodayPlanCheck extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onTap({required String id, required bool checked}) {
+    onTap({required String id, required bool checked}) async {
       DateTime now = DateTime.now();
       DateTime actionDateTime = DateTime(importDateTime.year,
           importDateTime.month, importDateTime.day, now.hour, now.minute);
       Map<String, dynamic> actionItem = {'id': id, 'time': actionDateTime};
 
       if (checked) {
-        Vibration.vibrate();
+        if (await Vibration.hasVibrator() != null) {
+          Vibration.vibrate();
+        }
 
         if (recordInfo == null) {
           recordBox.put(

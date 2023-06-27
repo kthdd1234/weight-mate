@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/wise_saying_item_widget.dart';
 

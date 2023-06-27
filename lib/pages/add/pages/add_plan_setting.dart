@@ -46,6 +46,24 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
 
+    setPermission() async {
+      DietInfoProvider readProvider = context.read<DietInfoProvider>();
+      bool isPermission = await NotificationService().permissionNotification;
+
+      if (isPermission == false) {
+        bool? isResult = await NotificationService().requestPermission();
+
+        if (isResult == false) {
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            readProvider.changeIsPlanAlarm(false);
+          });
+        } else {
+          readProvider.changeIsPlanAlarm(true);
+        }
+      }
+    }
+
+    setPermission();
     timeValue = initAlarmDateTime;
   }
 
@@ -59,6 +77,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     final notifyPlanUid = UniqueKey().hashCode;
     final argmentsType =
         ModalRoute.of(context)!.settings.arguments as ArgmentsTypeEnum;
+
+    print(planInfo.isAlarm);
 
     buttonEnabled() {
       return planInfo.name != '';
@@ -233,6 +253,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       if (newValue) {
         final isPermission = await NotificationService().permissionNotification;
 
+        print('isPermission $isPermission');
+
         if (isPermission == false) {
           // ignore: use_build_context_synchronously
           showSnackBar(
@@ -242,12 +264,15 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
             buttonName: '설정창으로 이동',
             onPressed: openAppSettings,
           );
+        } else {
+          infoProvider.changeIsPlanAlarm(newValue);
         }
 
         planInfo.alarmTime ??= initAlarmDateTime;
+      } else {
+        infoProvider.changeIsPlanAlarm(newValue);
       }
 
-      planInfo.isAlarm = newValue;
       setState(() {});
     }
 

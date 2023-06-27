@@ -55,10 +55,12 @@ class TodayPlanTypes extends StatelessWidget {
         }
 
         if (actions != null) {
-          final isAction =
-              actions!.every((element) => element['id'] == info.id);
+          final data = actions!.firstWhere(
+            (element) => element['id'] == info.id,
+            orElse: () => {'id': null, 'time': null},
+          );
 
-          if (isAction) {
+          if (data['id'] != null) {
             map[info.type]!.actionLength += 1;
           }
         }
