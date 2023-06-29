@@ -14,6 +14,7 @@ class TextIcon extends StatelessWidget {
     this.icon,
     this.iconSize,
     this.iconColor,
+    this.padding,
   });
 
   Color backgroundColor;
@@ -24,6 +25,7 @@ class TextIcon extends StatelessWidget {
   IconData? icon;
   double? iconSize;
   Color? iconColor;
+  double? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +35,7 @@ class TextIcon extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(smallSpace),
+        padding: EdgeInsets.all(padding ?? smallSpace),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

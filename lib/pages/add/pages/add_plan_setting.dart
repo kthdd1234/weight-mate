@@ -78,8 +78,6 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     final argmentsType =
         ModalRoute.of(context)!.settings.arguments as ArgmentsTypeEnum;
 
-    print(planInfo.isAlarm);
-
     buttonEnabled() {
       return planInfo.name != '';
     }
@@ -165,9 +163,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     }
 
     onPressedBottomNavigationButton() async {
-      final planInfoId = argmentsType == ArgmentsTypeEnum.edit
-          ? planInfo.id
-          : const Uuid().v4();
+      final planInfoId =
+          argmentsType == ArgmentsTypeEnum.edit ? planInfo.id : getUUID();
       final argmentsTypeMaps = {
         ArgmentsTypeEnum.start: setStartPage,
         ArgmentsTypeEnum.add: setAddPage,
@@ -252,8 +249,6 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     onChangedSwitch(bool newValue) async {
       if (newValue) {
         final isPermission = await NotificationService().permissionNotification;
-
-        print('isPermission $isPermission');
 
         if (isPermission == false) {
           // ignore: use_build_context_synchronously

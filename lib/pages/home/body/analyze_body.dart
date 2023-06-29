@@ -6,14 +6,24 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/analyze_action_record.dart';
 import 'package:flutter_app_weight_management/widgets/graph_chart.dart';
+import 'package:flutter_app_weight_management/widgets/graph_date_time_custom.dart';
 import 'package:flutter_app_weight_management/widgets/segmented_widget.dart';
 import 'package:hive/hive.dart';
 
 import '../../../model/plan_box/plan_box.dart';
 import '../../../model/record_box/record_box.dart';
 import '../../../model/user_box/user_box.dart';
+
+final countInfo = {
+  SegmentedTypes.week: 6,
+  SegmentedTypes.month: 29,
+  SegmentedTypes.threeMonth: 59,
+  SegmentedTypes.sixMonth: 89,
+  SegmentedTypes.custom: 0,
+};
 
 class AnalyzeBody extends StatefulWidget {
   const AnalyzeBody({super.key});
@@ -26,9 +36,21 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
+  late DateTime startDateTime, endDateTime;
 
   SegmentedTypes selectedRecordTypeSegment = SegmentedTypes.weight;
   SegmentedTypes selectedDateTimeSegment = SegmentedTypes.week;
+
+  setTitleDateTime() {
+    DateTime now = DateTime.now();
+
+    startDateTime = jumpDayDateTime(
+      type: jumpDayTypeEnum.subtract,
+      dateTime: now,
+      days: countInfo[selectedDateTimeSegment]!,
+    );
+    endDateTime = now;
+  }
 
   @override
   void initState() {
@@ -36,6 +58,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
     recordBox = Hive.box('recordBox');
     planBox = Hive.box('planbox');
 
+    setTitleDateTime();
     super.initState();
   }
 
@@ -63,6 +86,44 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
       });
     }
 
+    setChartSwipeDirectionStart() {
+      setState(() {
+        if (selectedDateTimeSegment == SegmentedTypes.custom) {
+          return;
+        }
+
+        endDateTime = startDateTime;
+        startDateTime = jumpDayDateTime(
+          type: jumpDayTypeEnum.subtract,
+          dateTime: endDateTime,
+          days: countInfo[selectedDateTimeSegment]!,
+        );
+      });
+    }
+
+    setChartSwipeDirectionEnd() {
+      setState(() {
+        if (selectedDateTimeSegment == SegmentedTypes.custom) {
+          return;
+        } else if (getDateTimeToInt(endDateTime) >=
+            getDateTimeToInt(DateTime.now())) {
+          // ignore: void_checks
+          return showSnackBar(
+            context: context,
+            text: '미래의 날짜를 불러올 순 없어요.',
+            buttonName: '확인',
+          );
+        }
+
+        startDateTime = endDateTime;
+        endDateTime = jumpDayDateTime(
+          type: jumpDayTypeEnum.add,
+          dateTime: startDateTime,
+          days: countInfo[selectedDateTimeSegment]!,
+        );
+      });
+    }
+
     setInfoText() {
       if (selectedDateTimeSegment == SegmentedTypes.custom) {
         return const EmptyArea();
@@ -84,18 +145,61 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
     }
 
     onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
-      setState(() => selectedDateTimeSegment = segmented!);
+      setState(() {
+        selectedDateTimeSegment = segmented!;
+        setTitleDateTime();
+      });
+    }
+
+    onSubmit({type, object}) {
+      setState(() {
+        type == 'start' ? startDateTime = object : endDateTime = object;
+      });
+
+      closeDialog(context);
     }
 
     setAnalyzeContents() {
       if (selectedRecordTypeSegment == SegmentedTypes.weight) {
+        return Expanded(
+          child: GraphChart(
+            startDateTime: startDateTime,
+            endDateTime: endDateTime,
+            recordBox: recordBox,
+            userBox: userBox,
+            selectedDateTimeSegment: selectedDateTimeSegment,
+            setChartSwipeDirectionStart: setChartSwipeDirectionStart,
+            setChartSwipeDirectionEnd: setChartSwipeDirectionEnd,
+          ),
+        );
+      }
+
+      return AnalyzeActionRecord(recordBox: recordBox, planBox: planBox);
+    }
+
+    setAnalyzeCustom() {
+      if (selectedDateTimeSegment == SegmentedTypes.custom) {
         return Column(
           children: [
-            GraphChart(
-              recordBox: recordBox,
-              userBox: userBox,
-              selectedDateTimeSegment: selectedDateTimeSegment,
-            ),
+            SpaceHeight(height: smallSpace),
+            GraphDateTimeCustom(
+              startDateTime: startDateTime,
+              endDateTime: endDateTime,
+              onSubmit: onSubmit,
+            )
+          ],
+        );
+      }
+
+      return const EmptyArea();
+    }
+
+    setAnalyzeBottom() {
+      if (selectedRecordTypeSegment == SegmentedTypes.weight) {
+        return Column(
+          children: [
+            setAnalyzeCustom(),
+            SpaceHeight(height: smallSpace),
             setInfoText(),
             DefaultSegmented(
               selectedSegment: selectedDateTimeSegment,
@@ -108,7 +212,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
         );
       }
 
-      return AnalyzeActionRecord(recordBox: recordBox, planBox: planBox);
+      return const EmptyArea();
     }
 
     return Column(
@@ -121,6 +225,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
           onSegmentedChanged: onSegmentedRecordTypeChanged,
         ),
         setAnalyzeContents(),
+        setAnalyzeBottom()
       ],
     );
   }

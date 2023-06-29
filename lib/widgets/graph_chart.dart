@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -18,61 +19,59 @@ class GraphData {
   final double? y;
 }
 
-final countInfo = {
-  SegmentedTypes.week: 6,
-  SegmentedTypes.month: 29,
-  SegmentedTypes.threeMonth: 59,
-  SegmentedTypes.sixMonth: 89,
-  SegmentedTypes.custom: 0,
-};
-
 class GraphChart extends StatefulWidget {
   GraphChart({
     super.key,
     required this.selectedDateTimeSegment,
     required this.recordBox,
     required this.userBox,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.setChartSwipeDirectionStart,
+    required this.setChartSwipeDirectionEnd,
   });
 
   SegmentedTypes selectedDateTimeSegment;
   Box<RecordBox> recordBox;
   Box<UserBox> userBox;
+  DateTime startDateTime, endDateTime;
+  Function() setChartSwipeDirectionStart, setChartSwipeDirectionEnd;
 
   @override
   State<GraphChart> createState() => _GraphChartState();
 }
 
 class _GraphChartState extends State<GraphChart> {
-  late DateTime startDateTime, endDateTime;
+  // late DateTime startDateTime, endDateTime;
 
   double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
   List<RecordBox?> recordInfoList = [];
 
-  @override
-  void initState() {
-    DateTime now = DateTime.now();
+  // @override
+  // void initState() {
+  //   DateTime now = DateTime.now();
 
-    startDateTime = jumpDayDateTime(
-      type: jumpDayTypeEnum.subtract,
-      dateTime: now,
-      days: countInfo[widget.selectedDateTimeSegment]!,
-    );
-    endDateTime = now;
-    super.initState();
-  }
+  //   startDateTime = jumpDayDateTime(
+  //     type: jumpDayTypeEnum.subtract,
+  //     dateTime: now,
+  //     days: countInfo[widget.selectedDateTimeSegment]!,
+  //   );
+  //   endDateTime = now;
+  //   super.initState();
+  // }
 
-  @override
-  void didUpdateWidget(covariant GraphChart oldWidget) {
-    final now = DateTime.now();
+  // @override
+  // void didUpdateWidget(covariant GraphChart oldWidget) {
+  //   final now = DateTime.now();
 
-    startDateTime = jumpDayDateTime(
-      type: jumpDayTypeEnum.subtract,
-      dateTime: now,
-      days: countInfo[widget.selectedDateTimeSegment]!,
-    );
-    endDateTime = now;
-    super.didUpdateWidget(oldWidget);
-  }
+  //   startDateTime = jumpDayDateTime(
+  //     type: jumpDayTypeEnum.subtract,
+  //     dateTime: now,
+  //     days: countInfo[widget.selectedDateTimeSegment]!,
+  //   );
+  //   endDateTime = now;
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +103,7 @@ class _GraphChartState extends State<GraphChart> {
       for (var i = 0; i <= count; i++) {
         DateTime subtractDateTime = jumpDayDateTime(
           type: jumpDayTypeEnum.subtract,
-          dateTime: endDateTime,
+          dateTime: widget.endDateTime,
           days: i,
         );
         RecordBox? recordInfo = getRecordInfo(subtractDateTime);
@@ -134,8 +133,10 @@ class _GraphChartState extends State<GraphChart> {
 
     setCount() {
       if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-        int days =
-            daysBetween(startDateTime: startDateTime, endDateTime: endDateTime);
+        int days = daysBetween(
+          startDateTime: widget.startDateTime,
+          endDateTime: widget.endDateTime,
+        );
 
         return days;
       }
@@ -172,48 +173,48 @@ class _GraphChartState extends State<GraphChart> {
     setLineSeriesData();
     // setStackedLineSeriesData();
 
-    setChartSwipeDirectionStart() {
-      if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-        return;
-      }
+    // setChartSwipeDirectionStart() {
+    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
+    //     return;
+    //   }
 
-      endDateTime = startDateTime;
-      startDateTime = jumpDayDateTime(
-        type: jumpDayTypeEnum.subtract,
-        dateTime: endDateTime,
-        days: countInfo[widget.selectedDateTimeSegment]!,
-      );
-    }
+    //   endDateTime = startDateTime;
+    //   startDateTime = jumpDayDateTime(
+    //     type: jumpDayTypeEnum.subtract,
+    //     dateTime: endDateTime,
+    //     days: countInfo[widget.selectedDateTimeSegment]!,
+    //   );
+    // }
 
-    setChartSwipeDirectionEnd() {
-      if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-        return;
-      } else if (getDateTimeToInt(endDateTime) >=
-          getDateTimeToInt(DateTime.now())) {
-        return showSnackBar(
-          context: context,
-          text: '미래의 날짜를 불러올 순 없어요.',
-          buttonName: '확인',
-        );
-      }
+    // setChartSwipeDirectionEnd() {
+    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
+    //     return;
+    //   } else if (getDateTimeToInt(endDateTime) >=
+    //       getDateTimeToInt(DateTime.now())) {
+    //     return showSnackBar(
+    //       context: context,
+    //       text: '미래의 날짜를 불러올 순 없어요.',
+    //       buttonName: '확인',
+    //     );
+    //   }
 
-      startDateTime = endDateTime;
-      endDateTime = jumpDayDateTime(
-        type: jumpDayTypeEnum.add,
-        dateTime: startDateTime,
-        days: countInfo[widget.selectedDateTimeSegment]!,
-      );
-    }
+    //   startDateTime = endDateTime;
+    //   endDateTime = jumpDayDateTime(
+    //     type: jumpDayTypeEnum.add,
+    //     dateTime: startDateTime,
+    //     days: countInfo[widget.selectedDateTimeSegment]!,
+    //   );
+    // }
 
     onPlotAreaSwipe(ChartSwipeDirection direction) {
       setState(() {
         switch (direction) {
           case ChartSwipeDirection.start:
-            setChartSwipeDirectionStart();
+            widget.setChartSwipeDirectionStart();
 
             break;
           case ChartSwipeDirection.end:
-            setChartSwipeDirectionEnd();
+            widget.setChartSwipeDirectionEnd();
 
             break;
           default:
@@ -221,64 +222,58 @@ class _GraphChartState extends State<GraphChart> {
       });
     }
 
-    setSizeBoxHeight() {
-      final height =
-          widget.selectedDateTimeSegment == SegmentedTypes.custom ? 410 : 347;
+    // setSizeBoxHeight() {
+    //   final height =
+    //       widget.selectedDateTimeSegment == SegmentedTypes.custom ? 410 : 347;
 
-      return MediaQuery.of(context).size.height - height;
-    }
+    //   return MediaQuery.of(context).size.height - height;
+    // }
 
-    onSubmit({type, object}) {
-      setState(() {
-        type == 'start' ? startDateTime = object : endDateTime = object;
-      });
+    // onSubmit({type, object}) {
+    //   setState(() {
+    //     type == 'start' ? startDateTime = object : endDateTime = object;
+    //   });
 
-      closeDialog(context);
-    }
+    //   closeDialog(context);
+    // }
 
     String titleDateTime =
-        '${dateTimeFormatter(dateTime: startDateTime, format: 'MM월 dd일')} ~ ${dateTimeFormatter(dateTime: endDateTime, format: 'MM월 dd일')}';
+        '${dateTimeFormatter(dateTime: widget.startDateTime, format: 'MM월 dd일')} ~ ${dateTimeFormatter(dateTime: widget.endDateTime, format: 'MM월 dd일')}';
 
-    return Column(
-      children: [
-        SizedBox(
-          height: setSizeBoxHeight(),
-          child: SfCartesianChart(
-            legend: Legend(
-              position: LegendPosition.top,
-              alignment: ChartAlignment.center,
-            ),
-            title: ChartTitle(
-              text: titleDateTime,
-              alignment: ChartAlignment.far,
-              textStyle: const TextStyle(fontSize: 10),
-            ),
-            tooltipBehavior: TooltipBehavior(
-              enable: true,
-              format: 'point.y kg',
-            ),
-            primaryXAxis: CategoryAxis(),
-            primaryYAxis: NumericAxis(
-              minimum: weightMinimum,
-              maximum: weightMaximum,
-              plotBands: plotBandList,
-            ),
-            series: [setLineSeries()],
-            onPlotAreaSwipe: onPlotAreaSwipe,
-          ),
-        ),
-        SpaceHeight(height: smallSpace),
-        widget.selectedDateTimeSegment == SegmentedTypes.custom
-            ? GraphDateTimeCustom(
-                startDateTime: startDateTime,
-                endDateTime: endDateTime,
-                onSubmit: onSubmit,
-              )
-            : const EmptyArea(),
-      ],
+    return SfCartesianChart(
+      legend: Legend(
+        position: LegendPosition.top,
+        alignment: ChartAlignment.center,
+      ),
+      title: ChartTitle(
+        text: titleDateTime,
+        alignment: ChartAlignment.far,
+        textStyle: const TextStyle(fontSize: 10),
+      ),
+      tooltipBehavior: TooltipBehavior(
+        enable: true,
+        format: 'point.y kg',
+      ),
+      primaryXAxis: CategoryAxis(),
+      primaryYAxis: NumericAxis(
+        minimum: weightMinimum,
+        maximum: weightMaximum,
+        plotBands: plotBandList,
+      ),
+      series: [setLineSeries()],
+      onPlotAreaSwipe: onPlotAreaSwipe,
     );
   }
 }
+
+  // SpaceHeight(height: smallSpace),
+  //       widget.selectedDateTimeSegment == SegmentedTypes.custom
+  //           ? GraphDateTimeCustom(
+  //               startDateTime: startDateTime,
+  //               endDateTime: endDateTime,
+  //               onSubmit: onSubmit,
+  //             )
+  //           : const EmptyArea(),
 
     // String dietToString = PlanTypeEnum.diet.toString();
     // String exerciseToString = PlanTypeEnum.exercise.toString();

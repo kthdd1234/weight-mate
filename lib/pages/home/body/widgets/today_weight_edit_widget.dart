@@ -66,6 +66,8 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
 
     setInputText();
 
+    print('요기');
+
     userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
   }
@@ -121,6 +123,9 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
     };
 
     TextInputClass inputDatas = textInputDatas[widget.seletedRecordIconType]!;
+
+    textInputController.selection = TextSelection.fromPosition(
+        TextPosition(offset: textInputController.text.length));
 
     setErrorText() {
       TextInputClass inputData = textInputDatas[widget.seletedRecordIconType]!;
@@ -196,27 +201,29 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           .setSeletedRecordIconType(RecordIconTypes.none);
     }
 
-    return Column(
-      children: [
-        TextInput(
-          controller: textInputController,
-          autofocus: true,
-          maxLength: inputDatas.maxLength,
-          prefixIcon: inputDatas.prefixIcon,
-          suffixText: inputDatas.suffixText,
-          hintText: inputDatas.hintText,
-          errorText: errorText,
-          onChanged: setOnChanged,
-          counterText: '',
-        ),
-        SpaceHeight(height: smallSpace),
-        OkAndCancelButton(
-          okText: '등록',
-          cancelText: '취소',
-          onPressedOk: isEnabledOnPressed ? onPressedResister : null,
-          onPressedCancel: onPressedCancel,
-        )
-      ],
+    return ContentsBox(
+      contentsWidget: Column(
+        children: [
+          TextInput(
+            controller: textInputController,
+            autofocus: true,
+            maxLength: inputDatas.maxLength,
+            prefixIcon: inputDatas.prefixIcon,
+            suffixText: inputDatas.suffixText,
+            hintText: inputDatas.hintText,
+            errorText: errorText,
+            onChanged: setOnChanged,
+            counterText: '',
+          ),
+          SpaceHeight(height: smallSpace),
+          OkAndCancelButton(
+            okText: '등록',
+            cancelText: '취소',
+            onPressedOk: isEnabledOnPressed ? onPressedResister : null,
+            onPressedCancel: onPressedCancel,
+          )
+        ],
+      ),
     );
   }
 }

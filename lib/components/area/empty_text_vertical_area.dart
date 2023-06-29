@@ -8,6 +8,7 @@ class EmptyTextVerticalArea extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
+    this.mainColor,
     this.height,
     this.backgroundColor,
   });
@@ -15,6 +16,7 @@ class EmptyTextVerticalArea extends StatelessWidget {
   IconData icon;
   String title;
   double? height;
+  Color? mainColor;
   Color? backgroundColor;
 
   @override
@@ -27,11 +29,18 @@ class EmptyTextVerticalArea extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(icon, color: disEnabledTypeColor, size: 30),
+          Icon(
+            icon,
+            color: mainColor ?? disEnabledTypeColor,
+            size: 30,
+          ),
           SpaceHeight(height: smallSpace),
           Text(
             title,
-            style: const TextStyle(color: disEnabledTypeColor, height: 1.5),
+            style: TextStyle(
+              color: mainColor ?? disEnabledTypeColor,
+              height: 1.5,
+            ),
             textAlign: TextAlign.center,
           )
         ],

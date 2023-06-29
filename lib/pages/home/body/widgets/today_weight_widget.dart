@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
@@ -153,13 +154,16 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       }
 
       if (weight == null) {
-        return EmptyTextArea(
-          backgroundColor: Colors.white,
-          text: '오늘의 체중을 입력해보세요.',
-          icon: Icons.add,
-          topHeight: regularSapce,
-          downHeight: regularSapce,
-          onTap: onTapEmptyRecordArea,
+        return ContentsBox(
+          padding: const EdgeInsets.all(10),
+          contentsWidget: EmptyTextArea(
+            backgroundColor: dialogBackgroundColor,
+            text: '오늘의 체중을 입력해보세요.',
+            icon: Icons.add,
+            topHeight: regularSapce,
+            downHeight: regularSapce,
+            onTap: onTapEmptyRecordArea,
+          ),
         );
       }
 

@@ -36,7 +36,11 @@ class EmptyTextArea extends StatelessWidget {
               children: [
                 Icon(icon, color: disEnabledTypeColor),
                 SpaceWidth(width: tinySpace),
-                Text(text, style: const TextStyle(color: disEnabledTypeColor))
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 3, 0, 0),
+                  child: Text(text,
+                      style: const TextStyle(color: disEnabledTypeColor)),
+                )
               ],
             ),
             SpaceHeight(height: downHeight),

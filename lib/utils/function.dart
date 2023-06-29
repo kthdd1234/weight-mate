@@ -271,3 +271,7 @@ checkStringFirstDot(String value) {
     return true;
   }
 }
+
+getUUID() {
+  return DateTime.now().microsecondsSinceEpoch.toString();
+}

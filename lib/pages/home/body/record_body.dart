@@ -7,7 +7,7 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diar
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_wise_saying_widget.dart';
-import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -31,6 +31,8 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
+
+  bool isGestureDetector = false;
 
   @override
   void initState() {
@@ -85,6 +87,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
               ),
               SpaceHeight(height: largeSpace),
               TodayDiaryWidget(
+                importDateTime: importDateTime,
                 seletedRecordSubType: seletedRecordIconType,
                 setActiveCamera: widget.setActiveCamera,
               ),

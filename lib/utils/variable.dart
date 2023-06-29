@@ -228,65 +228,8 @@ var planTypeColors = {
   PlanTypeEnum.lifestyle.toString(): lifeStyleColor,
 };
 
-// var defaultDietPlanList = [
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.monitor_weight_outlined,
-//       plan: '잊지 않고 체중 기록하기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.nights_stay_outlined,
-//       plan: '밤 10시 이후에는 음식 먹지 않기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.local_drink_outlined,
-//       plan: '하루에 물 1리터 이상 마시기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.no_food_outlined,
-//       plan: '후식과 간식을 먹지 않기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.self_improvement_outlined,
-//       plan: '16:8 간헐적 단식 실천하기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.light_mode_outlined,
-//       plan: '아침식사 거르지 않고 꼭 챙겨먹기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.rice_bowl_outlined,
-//       plan: '반공기 다이어트 실천하기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.rice_bowl_outlined,
-//       plan: '백미 대신 현미밥 먹기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.food_bank_outlined,
-//       plan: '저녁으로 샐러드 먹기',
-//       isChecked: false,
-//       isAction: false),
-//   DietPlanClass(
-//       id: const Uuid().v4(),
-//       icon: Icons.ramen_dining_outlined,
-//       plan: '라면 먹지 않기',
-//       isChecked: false,
-//       isAction: false),
-// ];
+var planType = {
+  PlanTypeEnum.diet.toString(): PlanTypeEnum.diet,
+  PlanTypeEnum.exercise.toString(): PlanTypeEnum.exercise,
+  PlanTypeEnum.lifestyle.toString(): PlanTypeEnum.lifestyle,
+};

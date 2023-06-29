@@ -72,12 +72,13 @@ class TodayWeightInfosWidget extends StatelessWidget {
 
     List<WeightInfoClass> weightInfoClassList = [
       WeightInfoClass(
-          id: 'weight',
-          title: '현재 체중',
-          value: setCalculatedWeight(),
-          icon: Icons.monitor_weight,
-          more: Icons.check_circle_outline_outlined,
-          tooltipMsg: '체중 기록 완료!'),
+        id: 'weight',
+        title: '현재 체중',
+        value: setCalculatedWeight(),
+        icon: Icons.monitor_weight,
+        more: Icons.check_circle_outline_outlined,
+        tooltipMsg: '체중 기록 완료!',
+      ),
       WeightInfoClass(
         id: 'goal',
         title: '목표 체중까지',
@@ -129,7 +130,8 @@ class TodayWeightInfosWidget extends StatelessWidget {
                       title,
                       style: const TextStyle(
                         fontSize: 13,
-                        color: Color.fromARGB(255, 131, 131, 131),
+                        color: buttonBackgroundColor,
+                        decoration: TextDecoration.underline,
                       ),
                     ),
                     Tooltip(
@@ -137,14 +139,21 @@ class TodayWeightInfosWidget extends StatelessWidget {
                         triggerMode: TooltipTriggerMode.tap,
                         preferBelow: false,
                         message: tooltipMsg,
-                        child:
-                            Icon(more, size: 15, color: buttonBackgroundColor))
+                        child: Icon(
+                          more,
+                          size: 15,
+                          color: buttonBackgroundColor,
+                        ))
                   ],
                 ),
                 SpaceHeight(height: smallSpace),
                 Text(
                   value,
-                  style: const TextStyle(fontSize: 15),
+                  style: const TextStyle(
+                    color: buttonBackgroundColor,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 SpaceHeight(height: regularSapce),
                 Row(
@@ -178,22 +187,24 @@ class TodayWeightInfosWidget extends StatelessWidget {
         Row(
           children: [
             contentsWidget(
-                id: weightInfoClassList[0].id,
-                title: weightInfoClassList[0].title,
-                value: weightInfoClassList[0].value,
-                icon: weightInfoClassList[0].icon,
-                more: weightInfoClassList[0].more,
-                tooltipMsg: weightInfoClassList[0].tooltipMsg,
-                onTap: onTap),
+              id: weightInfoClassList[0].id,
+              title: weightInfoClassList[0].title,
+              value: weightInfoClassList[0].value,
+              icon: weightInfoClassList[0].icon,
+              more: weightInfoClassList[0].more,
+              tooltipMsg: weightInfoClassList[0].tooltipMsg,
+              onTap: onTap,
+            ),
             SpaceWidth(width: tinySpace),
             contentsWidget(
-                id: weightInfoClassList[1].id,
-                title: weightInfoClassList[1].title,
-                value: weightInfoClassList[1].value,
-                icon: weightInfoClassList[1].icon,
-                more: weightInfoClassList[1].more,
-                tooltipMsg: weightInfoClassList[1].tooltipMsg,
-                onTap: onTap),
+              id: weightInfoClassList[1].id,
+              title: weightInfoClassList[1].title,
+              value: weightInfoClassList[1].value,
+              icon: weightInfoClassList[1].icon,
+              more: weightInfoClassList[1].more,
+              tooltipMsg: weightInfoClassList[1].tooltipMsg,
+              onTap: onTap,
+            ),
           ],
         ),
         SpaceHeight(height: tinySpace),

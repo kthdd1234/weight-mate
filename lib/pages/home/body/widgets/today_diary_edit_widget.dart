@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/multi_line_text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
@@ -58,23 +59,25 @@ class _TodayDiaryEditWidgetState extends State<TodayDiaryEditWidget> {
       setState(() => isEnabledOnPressed = isResult);
     }
 
-    return Column(
-      children: [
-        SpaceHeight(height: tinySpace),
-        MultiLineTextInput(
-          hintText: '일기를 작성해주세요.',
-          controller: textController,
-          maxLength: textMaxLength,
-          onChanged: onChanged,
-        ),
-        SpaceHeight(height: smallSpace),
-        OkAndCancelButton(
-          okText: '추가',
-          cancelText: '취소',
-          onPressedOk: isEnabledOnPressed ? onPressedOk : null,
-          onPressedCancel: onPressedCancel,
-        )
-      ],
+    return ContentsBox(
+      contentsWidget: Column(
+        children: [
+          SpaceHeight(height: tinySpace),
+          MultiLineTextInput(
+            hintText: '일기를 작성해주세요.',
+            controller: textController,
+            maxLength: textMaxLength,
+            onChanged: onChanged,
+          ),
+          SpaceHeight(height: smallSpace),
+          OkAndCancelButton(
+            okText: '추가',
+            cancelText: '취소',
+            onPressedOk: isEnabledOnPressed ? onPressedOk : null,
+            onPressedCancel: onPressedCancel,
+          )
+        ],
+      ),
     );
   }
 }

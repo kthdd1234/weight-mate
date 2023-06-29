@@ -139,6 +139,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           ContentsTitleText(text: title),
           SpaceHeight(height: smallSpace),
           TextInput(
+            autofocus: title == '키',
             controller: controller,
             maxLength: maxLength,
             prefixIcon: prefixIcon,

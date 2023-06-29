@@ -4,8 +4,8 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 
 import '../space/spaceWidth.dart';
 
-class ExpandedButton extends StatelessWidget {
-  ExpandedButton({
+class ExpandedButtonHori extends StatelessWidget {
+  ExpandedButtonHori({
     super.key,
     this.imgUrl,
     this.color,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
@@ -16,7 +17,7 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_con
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_data_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/file_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -29,13 +30,14 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class TodayDiaryWidget extends StatefulWidget {
-  TodayDiaryWidget({
-    super.key,
-    required this.seletedRecordSubType,
-    required this.setActiveCamera,
-  });
+  TodayDiaryWidget(
+      {super.key,
+      required this.seletedRecordSubType,
+      required this.setActiveCamera,
+      required this.importDateTime});
 
   RecordIconTypes seletedRecordSubType;
+  DateTime importDateTime;
   Function(bool isActive) setActiveCamera;
 
   @override
@@ -53,9 +55,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-    RecordBox? recordInfo = recordBox.get(getDateTimeToInt(importDateTime));
+    RecordBox? recordInfo =
+        recordBox.get(getDateTimeToInt(widget.importDateTime));
     String? leftEyeBodyFilePath = recordInfo?.leftEyeBodyFilePath;
     String? rightEyeBodyFilePath = recordInfo?.rightEyeBodyFilePath;
     Map<String, String?> filePathInfo = {
@@ -139,9 +140,9 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
 
           if (recordInfo == null) {
             recordBox.put(
-              getDateTimeToInt(importDateTime),
+              getDateTimeToInt(widget.importDateTime),
               RecordBox(
-                createDateTime: importDateTime,
+                createDateTime: widget.importDateTime,
                 diaryDateTime: DateTime.now(),
                 leftEyeBodyFilePath: pos == 'left' ? filePath : null,
                 rightEyeBodyFilePath: pos == 'right' ? filePath : null,
@@ -173,24 +174,6 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       );
     }
 
-    contentsItem({
-      required ImageSource source,
-      required IconData icon,
-      required String title,
-      required String pos,
-    }) {
-      return Expanded(
-        child: InkWell(
-          onTap: () => setImagePicker(source: source, pos: pos),
-          child: EmptyTextVerticalArea(
-            icon: icon,
-            title: title,
-            height: 100,
-          ),
-        ),
-      );
-    }
-
     onTapImage(String pos) {
       final isFilePath = filePathInfo[pos] != null;
 
@@ -205,31 +188,25 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
               isFilePath
                   ? Column(
                       children: [
-                        ContentsBox(
-                          backgroundColor: Colors.white,
-                          contentsWidget: DefaultImage(
-                            path: filePathInfo[pos]!,
-                            height: 220,
-                          ),
-                        ),
+                        DefaultImage(path: filePathInfo[pos]!, height: 280),
                         SpaceHeight(height: smallSpace)
                       ],
                     )
                   : const EmptyArea(),
               Row(
                 children: [
-                  contentsItem(
-                    source: ImageSource.camera,
+                  ExpandedButtonVerti(
                     icon: Icons.add_a_photo,
                     title: '사진 촬영',
-                    pos: pos,
+                    onTap: () =>
+                        setImagePicker(source: ImageSource.camera, pos: pos),
                   ),
                   SpaceWidth(width: tinySpace),
-                  contentsItem(
-                    source: ImageSource.gallery,
+                  ExpandedButtonVerti(
                     icon: Icons.collections,
                     title: '앨범 열기',
-                    pos: pos,
+                    onTap: () =>
+                        setImagePicker(source: ImageSource.gallery, pos: pos),
                   ),
                 ],
               ),
@@ -258,10 +235,13 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             radius: const Radius.circular(30),
             color: Colors.transparent,
             strokeWidth: 1,
-            child: EmptyTextVerticalArea(
-              icon: Icons.add,
-              title: '사진 추가',
-              backgroundColor: Colors.white,
+            child: ContentsBox(
+              padding: const EdgeInsets.all(10),
+              contentsWidget: EmptyTextVerticalArea(
+                icon: Icons.add,
+                title: '사진 추가',
+                backgroundColor: dialogBackgroundColor,
+              ),
             ),
           ),
         ),
@@ -274,7 +254,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
           children: [
             InkWell(
               onTap: () => onTapImage(pos),
-              child: DefaultImage(path: filePathInfo[pos]!, height: 150),
+              child: DefaultImage(path: filePathInfo[pos]!, height: 170),
             ),
             Positioned(
               right: 0,
@@ -312,10 +292,10 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     onPressedOk(String text) {
       if (recordInfo == null) {
         return recordBox.put(
-          getDateTimeToInt(importDateTime),
+          getDateTimeToInt(widget.importDateTime),
           RecordBox(
-            createDateTime: importDateTime,
-            diaryDateTime: importDateTime,
+            createDateTime: widget.importDateTime,
+            diaryDateTime: widget.importDateTime,
             whiteText: text,
           ),
         );
@@ -335,14 +315,17 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
           onPressedOk: onPressedOk,
         );
       } else if (whiteText == null) {
-        return EmptyTextArea(
-          backgroundColor: Colors.white,
-          topHeight: largeSpace,
-          downHeight: largeSpace,
-          text: '오늘의 일기를 작성해보세요.',
-          icon: Icons.add,
-          onTap: () =>
-              provider.setSeletedRecordIconType(RecordIconTypes.editNote),
+        return ContentsBox(
+          padding: const EdgeInsets.all(10),
+          contentsWidget: EmptyTextArea(
+            backgroundColor: dialogBackgroundColor,
+            topHeight: largeSpace,
+            downHeight: largeSpace,
+            text: '오늘의 일기를 작성해보세요.',
+            icon: Icons.add,
+            onTap: () =>
+                provider.setSeletedRecordIconType(RecordIconTypes.editNote),
+          ),
         );
       }
 

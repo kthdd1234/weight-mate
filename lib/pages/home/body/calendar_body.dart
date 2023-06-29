@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
-import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -239,14 +239,14 @@ class CalendarBodyState extends State<CalendarBody> {
         SpaceHeight(height: regularSapce),
         Row(
           children: [
-            ExpandedButton(
+            ExpandedButtonHori(
               imgUrl: 'assets/images/t-9.png',
               icon: Icons.search,
               text: '자세히 보기',
               onTap: onTapMoreInfo,
             ),
             SpaceWidth(width: smallSpace),
-            ExpandedButton(
+            ExpandedButtonHori(
               imgUrl: 'assets/images/t-14.png',
               icon: Icons.delete_outline,
               text: '기록 삭제하기',
@@ -257,7 +257,7 @@ class CalendarBodyState extends State<CalendarBody> {
         SpaceHeight(height: smallSpace),
         Row(
           children: [
-            ExpandedButton(
+            ExpandedButtonHori(
               imgUrl: 'assets/images/t-15.png',
               icon: Icons.edit,
               text: '기록 수정하기',

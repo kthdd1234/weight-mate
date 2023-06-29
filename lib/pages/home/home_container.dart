@@ -8,7 +8,7 @@ import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart'
 import 'package:flutter_app_weight_management/pages/home/body/more_see_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record_body.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_selected_dateTime_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -75,15 +75,11 @@ class _HomeContainerState extends State<HomeContainer>
               fullscreenDialog: true,
             ),
           );
-          setGenerateRecordInfo();
         }
-      } else {
-        setGenerateRecordInfo();
       }
 
-      setState(() {
-        isActiveCamera = false;
-      });
+      setGenerateRecordInfo();
+      setState(() => isActiveCamera = false);
     }
   }
 
@@ -102,10 +98,6 @@ class _HomeContainerState extends State<HomeContainer>
 
     onBottomNavigation(int index) {
       setState(() => selectedId = bottomIdList[index]);
-    }
-
-    onTapGestureDetector() {
-      FocusScope.of(context).unfocus();
     }
 
     List<BottomNavigationBarItem> items = const [
@@ -128,29 +120,27 @@ class _HomeContainerState extends State<HomeContainer>
       const MoreSeeBody()
     ];
 
-    return GestureDetector(
-        onTap: onTapGestureDetector,
-        child: AppFramework(
-          widget: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: HomeAppBarWidget(appBar: AppBar(), id: selectedId),
-            body: Padding(
-              padding: pagePadding,
-              child: SafeArea(child: bodyList[selectedId.index]),
-            ),
-            bottomNavigationBar: Theme(
-              data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-              child: BottomNavigationBar(
-                items: items,
-                elevation: 0,
-                currentIndex: selectedId.index,
-                selectedItemColor: buttonBackgroundColor,
-                unselectedItemColor: const Color(0xFF151515),
-                backgroundColor: Colors.red,
-                onTap: onBottomNavigation,
-              ),
-            ),
+    return AppFramework(
+      widget: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: HomeAppBarWidget(appBar: AppBar(), id: selectedId),
+        body: Padding(
+          padding: pagePadding,
+          child: SafeArea(child: bodyList[selectedId.index]),
+        ),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+          child: BottomNavigationBar(
+            items: items,
+            elevation: 0,
+            currentIndex: selectedId.index,
+            selectedItemColor: buttonBackgroundColor,
+            unselectedItemColor: const Color(0xFF151515),
+            backgroundColor: Colors.red,
+            onTap: onBottomNavigation,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_month_dialog.dart';
 import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
@@ -283,7 +283,7 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
           SpaceHeight(height: regularSapce),
           Row(
             children: [
-              ExpandedButton(
+              ExpandedButtonHori(
                 imgUrl: 'assets/images/t-22.png',
                 icon: Icons.calendar_month_outlined,
                 text: dateTimeFormatter(
@@ -293,7 +293,7 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
                 onTap: onTapCalendarMonth,
               ),
               SpaceWidth(width: smallSpace),
-              ExpandedButton(
+              ExpandedButtonHori(
                 imgUrl: setSortImgUrl(),
                 icon: Icons.swap_vert_outlined,
                 text: setSortName(),

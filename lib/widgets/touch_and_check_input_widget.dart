@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
-import 'package:flutter_app_weight_management/components/dialog/icon_list_dialog.dart';
 import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/material_icons.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 
 class TouchAndCheckInputWidget extends StatefulWidget {
   TouchAndCheckInputWidget({
     super.key,
+    required this.type,
+    required this.title,
     required this.checkBoxEnabledIcon,
     required this.checkBoxDisEnabledIcon,
     required this.showEmptyTouchArea,
     required this.onTapEmptyArea,
-    required this.onPressedOk,
-    required this.onPressedCancel,
+    required this.mainColor,
+    required this.onEditingComplete,
   });
 
+  PlanTypeEnum type;
+  String title;
   IconData checkBoxEnabledIcon;
   IconData checkBoxDisEnabledIcon;
   bool showEmptyTouchArea;
-  Function() onTapEmptyArea;
-  Function({String text, IconData iconData}) onPressedOk;
-  Function() onPressedCancel;
+  Function(PlanTypeEnum type) onTapEmptyArea;
   bool? isDisEnabledIconColor;
+  Color mainColor;
+  Function({
+    required String text,
+    required bool isAction,
+    required String title,
+    required PlanTypeEnum type,
+  }) onEditingComplete;
 
   @override
   State<TouchAndCheckInputWidget> createState() =>
@@ -33,49 +41,29 @@ class TouchAndCheckInputWidget extends StatefulWidget {
 
 class _TouchAndCheckInputWidgetState extends State<TouchAndCheckInputWidget> {
   final TextEditingController _textController = TextEditingController();
-  bool isEnabledOnPressedOk = false;
-  IconData selectedIcon = Icons.add_circle_outline_outlined;
+  bool isAction = false;
 
   @override
   Widget build(BuildContext context) {
-    setIcon(IconData iconData) {
-      setState(() => selectedIcon = iconData);
-    }
-
-    onTapIcon() async {
-      showDialog(
-        context: context,
-        builder: (context) => IconListDialog(setIcon: setIcon),
-      );
-    }
-
-    setEditingComplete() {
-      FocusScope.of(context).unfocus();
-    }
-
-    setPressedOk() {
-      widget.onPressedOk(
+    onTap() {
+      widget.onEditingComplete(
         text: _textController.text,
-        iconData: selectedIcon,
+        isAction: isAction,
+        title: widget.title,
+        type: widget.type,
       );
-      _textController.text = '';
-      isEnabledOnPressedOk = false;
-      selectedIcon = Icons.add_circle_outline_outlined;
-    }
 
-    onChanged(String value) {
-      setState(() {
-        isEnabledOnPressedOk = _textController.text != '';
-      });
+      _textController.text = '';
+      isAction = false;
     }
 
     return widget.showEmptyTouchArea
         ? EmptyTextArea(
-            text: '다이어트 계획을 추가해보세요.',
+            text: '${widget.title} 계획 추가하기',
             icon: Icons.add,
             topHeight: smallSpace,
             downHeight: smallSpace,
-            onTap: widget.onTapEmptyArea,
+            onTap: () => widget.onTapEmptyArea(widget.type),
           )
         : Column(
             children: [
@@ -91,31 +79,20 @@ class _TouchAndCheckInputWidgetState extends State<TouchAndCheckInputWidget> {
                   icon: Padding(
                     padding: const EdgeInsets.only(top: smallSpace + tinySpace),
                     child: InkWell(
-                      onTap: onTapIcon,
-                      child: Icon(selectedIcon),
+                      onTap: () => setState(() => isAction = !isAction),
+                      child: Icon(
+                        isAction
+                            ? widget.checkBoxEnabledIcon
+                            : widget.checkBoxDisEnabledIcon,
+                        color: isAction ? widget.mainColor : Colors.grey,
+                      ),
                     ),
                   ),
                 ),
-                onChanged: onChanged,
-                onEditingComplete: setEditingComplete,
+                onTapOutside: (_) => onTap(),
+                onEditingComplete: onTap,
               ),
-              SpaceHeight(height: smallSpace),
-              OkAndCancelButton(
-                okText: '추가',
-                cancelText: '취소',
-                onPressedOk: isEnabledOnPressedOk ? setPressedOk : null,
-                onPressedCancel: widget.onPressedCancel,
-              )
             ],
           );
   }
 }
-
-// isEnabled
-//                           ? Icon(widget.checkBoxEnabledIcon)
-//                           : Icon(
-//                               widget.checkBoxDisEnabledIcon,
-//                               color: widget.isDisEnabledIconColor == true
-//                                   ? disabledButtonBackgroundColor
-//                                   : null,
-//                             )
