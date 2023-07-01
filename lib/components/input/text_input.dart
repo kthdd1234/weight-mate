@@ -9,20 +9,22 @@ class TextInput extends StatefulWidget {
     required this.prefixIcon,
     required this.suffixText,
     required this.hintText,
-    required this.counterText,
+    this.counterText,
     required this.onChanged,
     required this.errorText,
     this.autofocus,
     this.controller,
     this.keyboardType,
+    this.helperText,
   });
 
   int maxLength;
   IconData? prefixIcon;
   String suffixText;
   String hintText;
-  String counterText;
+  String? counterText;
   String? errorText;
+  String? helperText;
   Function(String value) onChanged;
   bool? autofocus;
   TextEditingController? controller;
@@ -48,6 +50,7 @@ class _TextInputState extends State<TextInput> {
         errorText: widget.errorText,
         counterText: widget.counterText,
         hintText: widget.hintText,
+        helperText: widget.helperText,
         contentPadding: inputContentPadding,
       ),
       onChanged: widget.onChanged,

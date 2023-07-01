@@ -54,20 +54,20 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
 
     addWeightNotification(DateTime? time) {
       NotificationService().addNotification(
-        id: widget.alarmId ?? UniqueKey().hashCode,
-        alarmTime: time ?? initAlarmDateTime,
-        title: '체중 기록 알림',
-        body: '오늘의 체중을 입력 할 시간이에요.',
-      );
+          id: widget.alarmId ?? UniqueKey().hashCode,
+          alarmTime: time ?? initAlarmDateTime,
+          title: '체중 기록 알림',
+          body: '오늘의 체중을 입력 할 시간이에요.',
+          payload: 'weight');
     }
 
     addPlanNotification(DateTime? time) {
       NotificationService().addNotification(
-        id: widget.alarmId ?? UniqueKey().hashCode,
-        alarmTime: time ?? initAlarmDateTime,
-        title: '계획 실천 알림',
-        body: '${widget.name} 실천해보세요.',
-      );
+          id: widget.alarmId ?? UniqueKey().hashCode,
+          alarmTime: time ?? initAlarmDateTime,
+          title: '계획 실천 알림',
+          body: '${widget.name} 실천해보세요.',
+          payload: 'plan');
     }
 
     onSubmit() {

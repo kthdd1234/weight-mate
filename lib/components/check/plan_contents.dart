@@ -5,7 +5,9 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/components/text/icon_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class PlanContents extends StatelessWidget {
   PlanContents({
@@ -17,8 +19,7 @@ class PlanContents extends StatelessWidget {
     required this.onTapCheck,
     required this.onTapContents,
     required this.onTapMore,
-    required this.startDateTime,
-    this.endDateTime,
+    required this.priority,
     this.alarmTime,
     this.recordTime,
   });
@@ -27,11 +28,11 @@ class PlanContents extends StatelessWidget {
   String text;
   bool isAction;
   Color mainColor;
+  String priority;
   Function({required String id, required bool isSelected}) onTapCheck;
   Function(String id) onTapContents;
   Function(String id) onTapMore;
-  DateTime startDateTime;
-  DateTime? endDateTime, alarmTime, recordTime;
+  DateTime? alarmTime, recordTime;
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +63,10 @@ class PlanContents extends StatelessWidget {
                     Row(
                       children: [
                         IconText(
-                          icon: Icons.calendar_month,
+                          icon: planPrioritys[priority]!['icon'] as IconData,
                           iconColor: buttonBackgroundColor,
                           iconSize: 12,
-                          text:
-                              '${dateTimeFormatter(format: 'yy.MM.dd', dateTime: startDateTime)} ~ ${endDateTime != null ? dateTimeFormatter(format: 'yy.MM.dd', dateTime: endDateTime!) : ''}',
+                          text: planPrioritys[priority]!['name'] as String,
                           textColor: buttonBackgroundColor,
                           textSize: 11,
                         ),

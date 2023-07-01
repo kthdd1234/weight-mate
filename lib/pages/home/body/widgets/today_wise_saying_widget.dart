@@ -7,11 +7,14 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/wise_saying_item_widget.dart';
 
 class TodayWiseSayingWidget extends StatefulWidget {
-  const TodayWiseSayingWidget({super.key});
+  TodayWiseSayingWidget({super.key, required this.importDateTime});
+
+  DateTime importDateTime;
 
   @override
   State<TodayWiseSayingWidget> createState() => _TodayWiseSayingWidgetState();
@@ -56,7 +59,8 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      ContentsTitleText(text: '오늘의 명언'),
+                      ContentsTitleText(
+                          text: '${dateTimeToTitle(widget.importDateTime)} 명언'),
                       SpaceHeight(height: smallSpace),
                       WiseSayingItemWidget(
                         wiseSaying: wiseSaying.wiseSaying,

@@ -333,9 +333,10 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     }
 
     return Column(
+      // key: GlobalObjectKey('오늘의 일기 위젯'),
       children: [
         ContentsTitleText(
-          text: '오늘의 일기',
+          text: '${dateTimeToTitle(widget.importDateTime)} 일기',
           icon: Icons.menu_book,
           sub: icons,
         ),

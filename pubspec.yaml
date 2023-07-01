@@ -66,6 +66,7 @@ dependencies:
   ios_utsname_ext: ^2.2.0
   package_info_plus: ^4.0.2
   vibration: ^1.8.1
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

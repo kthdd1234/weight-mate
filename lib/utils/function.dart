@@ -275,3 +275,24 @@ checkStringFirstDot(String value) {
 getUUID() {
   return DateTime.now().microsecondsSinceEpoch.toString();
 }
+
+isBetweenInDay({
+  required DateTime importDateTime,
+  required DateTime startDateTime,
+  DateTime? endDateTime,
+}) {
+  bool isStart =
+      getDateTimeToInt(startDateTime) <= getDateTimeToInt(importDateTime);
+  bool isEnd = getDateTimeToInt(importDateTime) <=
+      (endDateTime != null ? getDateTimeToInt(endDateTime) : 99999999);
+
+  return isStart & isEnd;
+}
+
+dateTimeToTitle(DateTime dateTime) {
+  if (getDateTimeToInt(dateTime) == getDateTimeToInt(DateTime.now())) {
+    return '오늘의';
+  }
+
+  return dateTimeFormatter(format: 'MM월 dd일', dateTime: dateTime);
+}

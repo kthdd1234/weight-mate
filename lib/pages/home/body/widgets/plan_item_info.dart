@@ -16,8 +16,6 @@ class PlanItemInfo extends StatelessWidget {
     required this.title,
     required this.icon,
     required this.name,
-    required this.startDateTime,
-    this.endDateTime,
     required this.onTap,
     required this.isAlarm,
     required this.alarmTime,
@@ -25,8 +23,7 @@ class PlanItemInfo extends StatelessWidget {
 
   String id, title, name;
   IconData icon;
-  DateTime startDateTime;
-  DateTime? endDateTime, alarmTime;
+  DateTime? alarmTime;
   Function(String id) onTap;
   bool isAlarm;
 
@@ -62,11 +59,6 @@ class PlanItemInfo extends StatelessWidget {
                   style: const TextStyle(color: buttonBackgroundColor),
                 ),
                 SpaceHeight(height: smallSpace),
-                iconText(
-                  icon: Icons.calendar_month,
-                  text:
-                      '${dateTimeToDotYY(startDateTime)} ~ ${dateTimeToDotYY(endDateTime)}',
-                )
               ],
             ),
             Column(

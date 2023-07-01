@@ -21,11 +21,11 @@ class PlanBoxAdapter extends TypeAdapter<PlanBox> {
       type: fields[1] as String,
       title: fields[2] as String,
       name: fields[4] as String,
-      startDateTime: fields[5] as DateTime,
-      endDateTime: fields[6] as DateTime?,
-      isAlarm: fields[7] as bool,
-      alarmTime: fields[8] as DateTime?,
-      alarmId: fields[9] as int?,
+      priority: fields[3] as String,
+      isAlarm: fields[5] as bool,
+      alarmTime: fields[6] as DateTime?,
+      alarmId: fields[7] as int?,
+      createDateTime: fields[8] as DateTime,
     );
   }
 
@@ -39,18 +39,18 @@ class PlanBoxAdapter extends TypeAdapter<PlanBox> {
       ..write(obj.type)
       ..writeByte(2)
       ..write(obj.title)
+      ..writeByte(3)
+      ..write(obj.priority)
       ..writeByte(4)
       ..write(obj.name)
       ..writeByte(5)
-      ..write(obj.startDateTime)
-      ..writeByte(6)
-      ..write(obj.endDateTime)
-      ..writeByte(7)
       ..write(obj.isAlarm)
-      ..writeByte(8)
+      ..writeByte(6)
       ..write(obj.alarmTime)
-      ..writeByte(9)
-      ..write(obj.alarmId);
+      ..writeByte(7)
+      ..write(obj.alarmId)
+      ..writeByte(8)
+      ..write(obj.createDateTime);
   }
 
   @override

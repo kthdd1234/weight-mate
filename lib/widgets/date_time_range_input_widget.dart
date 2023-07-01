@@ -24,23 +24,26 @@ class DateTimeRangeInputWidget extends StatelessWidget {
       children: [
         Expanded(
           child: DateTimeInput(
-            prefixIcon: Icons.hourglass_top_rounded,
+            prefixIcon: Icons.calendar_month,
             hintText: '시작일',
-            text: getDateTimeToSlashYY(startDateTime),
+            text: dateTimeFormatter(
+              format: 'yyyy년 MM월 dd일 EEEE',
+              dateTime: startDateTime,
+            ),
             onTap: () => onTapInput(type: 'start', dateTime: startDateTime),
           ),
         ),
-        SpaceWidth(width: smallSpace),
-        SubText(text: '~', value: ''),
-        SpaceWidth(width: smallSpace),
-        Expanded(
-          child: DateTimeInput(
-            prefixIcon: Icons.hourglass_bottom_rounded,
-            hintText: '종료일',
-            text: endDateTime != null ? getDateTimeToSlashYY(endDateTime!) : '',
-            onTap: () => onTapInput(type: 'end', dateTime: endDateTime),
-          ),
-        ),
+        // SpaceWidth(width: smallSpace),
+        // SubText(text: '~', value: ''),
+        // SpaceWidth(width: smallSpace),
+        // Expanded(
+        //   child: DateTimeInput(
+        //     prefixIcon: Icons.hourglass_bottom_rounded,
+        //     hintText: '종료일',
+        //     text: endDateTime != null ? getDateTimeToSlashYY(endDateTime!) : '',
+        //     onTap: () => onTapInput(type: 'end', dateTime: endDateTime),
+        //   ),
+        // ),
       ],
     );
   }

@@ -59,8 +59,6 @@ class _AddPlanItemState extends State<AddPlanItem> {
 
         widget.planInfo.id = selectedPlanId;
         widget.planInfo.name = selectedPlanName;
-        widget.planInfo.startDateTime = now;
-        widget.planInfo.endDateTime = null;
         widget.planInfo.alarmTime =
             DateTime(now.year, now.month, now.day, 10, 30);
 
@@ -94,8 +92,7 @@ class _AddPlanItemState extends State<AddPlanItem> {
           return PlanItemWidget(
             id: item.id,
             name: item.name,
-            desc1: item.desc1,
-            desc2: item.desc2,
+            desc: item.desc,
             icon: item.icon,
             isEnabled: selectedPlanId == item.id,
             onTap: onTap,

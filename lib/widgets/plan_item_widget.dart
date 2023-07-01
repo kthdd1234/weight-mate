@@ -10,55 +10,57 @@ class PlanItemWidget extends StatelessWidget {
     super.key,
     required this.id,
     required this.name,
-    required this.desc1,
-    required this.desc2,
+    required this.desc,
     required this.icon,
     required this.isEnabled,
     required this.onTap,
+    this.width,
   });
 
   dynamic id;
   String name;
-  String desc1;
-  String desc2;
+  String desc;
   IconData icon;
   bool isEnabled;
   Function(dynamic id) onTap;
+  double? width;
 
   @override
   Widget build(BuildContext context) {
-    setDesc(desc) {
-      return Text(
-        desc,
-        style: TextStyle(
-          fontSize: 12,
-          fontWeight: FontWeight.w400,
-          color: isEnabled ? enabledTypeColor : disEnabledTypeColor,
-        ),
-      );
-    }
-
     return InkWell(
       onTap: () => onTap(id),
       child: ContentsBox(
+        width: width,
         backgroundColor:
             isEnabled ? buttonBackgroundColor : typeBackgroundColor,
         contentsWidget: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              name,
-              style: TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-                color: isEnabled ? buttonTextColor : primaryColor,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: isEnabled ? buttonTextColor : primaryColor,
+                    ),
+                  ),
+                  SpaceHeight(height: tinySpace),
+                  Text(
+                    desc,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: isEnabled ? enabledTypeColor : disEnabledTypeColor,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
               ),
             ),
-            SpaceHeight(height: tinySpace),
-            setDesc(desc1),
-            SpaceHeight(height: tinySpace),
-            setDesc(desc2),
-            SpaceHeight(height: tinySpace),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -67,6 +69,7 @@ class PlanItemWidget extends StatelessWidget {
                   size: 50,
                   borderRadius: 40,
                   backgroundColor: dialogBackgroundColor,
+                  onTap: (_) => onTap(id),
                 ),
               ],
             )

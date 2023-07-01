@@ -1,13 +1,16 @@
 import 'dart:io';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-FlutterLocalNotificationsPlugin notification =
-    FlutterLocalNotificationsPlugin();
+final onNotifications = BehaviorSubject<String?>();
 
 class NotificationService {
+  final FlutterLocalNotificationsPlugin notification =
+      FlutterLocalNotificationsPlugin();
+
   Future<void> initializeTimeZone() async {
     tz.initializeTimeZones();
     final timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
@@ -16,26 +19,31 @@ class NotificationService {
 
   Future<void> initNotification() async {
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('twitter_logo');
-    final DarwinInitializationSettings initializationSettingsDarwin =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      onDidReceiveLocalNotification:
-          (int id, String? title, String? body, String? payload) async {
-        print('onDidReceiveLocalNotification!!');
-      },
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
     );
     const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(defaultActionName: 'Open notification');
-    final InitializationSettings initializationSettings =
+    const InitializationSettings initializationSettings =
         InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsDarwin,
-            linux: initializationSettingsLinux);
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+      linux: initializationSettingsLinux,
+    );
+
     await notification.initialize(
       initializationSettings,
+      // onDidReceiveBackgroundNotificationResponse: (details) {
+      //   print('onDidReceiveBackgroundNotificationResponse@@');
+      // },
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
         print('onDidReceiveNotificationResponse@@');
+        onNotifications.add(notificationResponse.payload);
       },
     );
   }
@@ -45,6 +53,7 @@ class NotificationService {
     required DateTime alarmTime,
     required String title,
     required String body,
+    required String payload,
   }) async {
     if (!await permissionNotification) {
       /// show native setting page
@@ -73,11 +82,11 @@ class NotificationService {
         day,
         alarmTime.hour,
         alarmTime.minute,
-      ).add(const Duration(seconds: 5)),
+      ).add(const Duration(seconds: 3)),
       details,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time,
+      payload: payload,
     );
 
     return true;

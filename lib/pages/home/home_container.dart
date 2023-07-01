@@ -9,13 +9,22 @@ import 'package:flutter_app_weight_management/pages/home/body/more_see_body.dart
 import 'package:flutter_app_weight_management/pages/home/body/record_body.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/home_app_bar_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+
+List<eBottomNavigationBarItem> bottomIdList = [
+  eBottomNavigationBarItem.record,
+  eBottomNavigationBarItem.calendar,
+  eBottomNavigationBarItem.analyze,
+  eBottomNavigationBarItem.setting
+];
 
 class HomeContainer extends StatefulWidget {
   HomeContainer({super.key});
@@ -33,15 +42,23 @@ class _HomeContainerState extends State<HomeContainer>
 
   eBottomNavigationBarItem selectedId = eBottomNavigationBarItem.record;
 
+  setOnNotifications() {
+    onNotifications.stream.listen((String? payload) async {
+      selectedId = bottomIdList[0];
+      // Scrollable.ensureVisible(planKey.currentContext!); // todo: 자동 스크롤링 필요!
+    });
+  }
+
   @override
   void initState() {
+    super.initState();
     userBox = Hive.box('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
     selectedId = eBottomNavigationBarItem.record;
 
-    WidgetsBinding.instance.addObserver(this);
+    setOnNotifications();
 
-    super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -54,7 +71,7 @@ class _HomeContainerState extends State<HomeContainer>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     UserBox? userProfile = userBox.get('userProfile');
 
-    setGenerateRecordInfo() {
+    setGenerate() {
       RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
 
       if (recordInfo == null || recordInfo.weight == null) {
@@ -78,20 +95,13 @@ class _HomeContainerState extends State<HomeContainer>
         }
       }
 
-      setGenerateRecordInfo();
+      setGenerate();
       setState(() => isActiveCamera = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    List<eBottomNavigationBarItem> bottomIdList = [
-      eBottomNavigationBarItem.record,
-      eBottomNavigationBarItem.calendar,
-      eBottomNavigationBarItem.analyze,
-      eBottomNavigationBarItem.setting
-    ];
-
     setActiveCamera(bool newValue) {
       setState(() => isActiveCamera = newValue);
     }

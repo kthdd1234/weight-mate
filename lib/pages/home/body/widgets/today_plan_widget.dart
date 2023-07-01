@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/check/plan_contents.dart';
@@ -23,7 +22,6 @@ import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart'
 import 'package:flutter_app_weight_management/widgets/touch_and_check_input_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class TodayPlanWidget extends StatefulWidget {
   TodayPlanWidget({
@@ -56,8 +54,8 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
   @override
   Widget build(BuildContext context) {
-    RecordBox? recordInfo =
-        recordBox.get(getDateTimeToInt(widget.importDateTime));
+    int currentDateTimeInt = getDateTimeToInt(widget.importDateTime);
+    RecordBox? recordInfo = recordBox.get(currentDateTimeInt);
     List<PlanBox> planInfoList = planBox.values.toList();
     List<RecordIconClass> recordIconClassList = [
       RecordIconClass(
@@ -113,7 +111,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
         if (recordInfo == null) {
           recordBox.put(
-            getDateTimeToInt(widget.importDateTime),
+            currentDateTimeInt,
             RecordBox(
               createDateTime: widget.importDateTime,
               actions: [actionItem],
@@ -159,8 +157,9 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             type: type.toString(),
             title: title,
             name: text,
-            startDateTime: DateTime.now(),
+            priority: PlanPriorityEnum.medium.toString(),
             isAlarm: false,
+            createDateTime: DateTime.now(),
           ),
         );
 
@@ -180,8 +179,8 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               title: planInfo.title,
               id: planInfo.id,
               name: planInfo.name,
-              startDateTime: planInfo.startDateTime,
-              endDateTime: planInfo.endDateTime,
+              priority:
+                  planPrioritys[planInfo.priority]!['id'] as PlanPriorityEnum,
               isAlarm: planInfo.isAlarm,
               alarmTime: planInfo.alarmTime,
               alarmId: planInfo.alarmId,
@@ -222,7 +221,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               ExpandedButtonVerti(
                 mainColor: buttonBackgroundColor,
                 icon: Icons.edit_note,
-                title: '이름, 기간, 알림 설정',
+                title: '이름, 우선 순위, 알림 설정',
                 onTap: () => onTapEditPlan(planInfo),
               ),
               SpaceWidth(width: tinySpace),
@@ -267,27 +266,35 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         }
 
         if (planInfo.type == type.toString()) {
-          planContentsList.add(
-            PlanContents(
-              id: planInfo.id,
-              text: planInfo.name,
-              isAction: actionData()?['id'] != null,
-              mainColor: mainColor,
-              startDateTime: planInfo.startDateTime,
-              endDateTime: planInfo.endDateTime,
-              alarmTime: planInfo.alarmTime,
-              recordTime: actionData()?['time'],
-              onTapCheck: onTapCheck,
-              onTapContents: onTapContents,
-              onTapMore: onTapContents,
-            ),
-          );
+          if (getDateTimeToInt(planInfo.createDateTime) == currentDateTimeInt) {
+            planContentsList.add(
+              PlanContents(
+                id: planInfo.id,
+                text: planInfo.name,
+                isAction: actionData()?['id'] != null,
+                mainColor: mainColor,
+                alarmTime: planInfo.alarmTime,
+                priority: planInfo.priority,
+                recordTime: actionData()?['time'],
+                onTapCheck: onTapCheck,
+                onTapContents: onTapContents,
+                onTapMore: onTapContents,
+              ),
+            );
+          }
         }
       }
 
       setActionPercent() {
         return '실천율: 30%';
       }
+
+      planContentsList.sort((a, b) {
+        int orderA = planPrioritys[a.priority]!['order'] as int;
+        int orderB = planPrioritys[b.priority]!['order'] as int;
+
+        return orderA.compareTo(orderB);
+      });
 
       return Column(
         children: [
@@ -340,7 +347,10 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
     return Column(
       children: [
-        ContentsTitleText(text: '오늘의 계획', icon: Icons.list, sub: iconWidgets),
+        ContentsTitleText(
+            text: '${dateTimeToTitle(widget.importDateTime)} 계획',
+            icon: Icons.list,
+            sub: iconWidgets),
         setContentWidgets(
             type: PlanTypeEnum.diet,
             title: '식이요법',

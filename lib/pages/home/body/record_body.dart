@@ -74,7 +74,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
         builder: (context, values, child) {
           return Column(
             children: [
-              const TodayWiseSayingWidget(),
+              TodayWiseSayingWidget(importDateTime: importDateTime),
               SpaceHeight(height: largeSpace),
               TodayWeightWidget(
                 seletedRecordIconType: seletedRecordIconType,
@@ -91,10 +91,10 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 seletedRecordSubType: seletedRecordIconType,
                 setActiveCamera: widget.setActiveCamera,
               ),
-              // ElevatedButton(
-              //   onPressed: onPressed,
-              //   child: const Text('hive 데이터 초기화'),
-              // )
+              ElevatedButton(
+                onPressed: onPressed,
+                child: const Text('hive 데이터 초기화'),
+              )
             ],
           );
         },

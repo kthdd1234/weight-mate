@@ -3,6 +3,7 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/title_block.dart';
+import 'package:flutter_app_weight_management/components/input/date_time_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
@@ -20,6 +21,7 @@ import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
 import 'package:flutter_app_weight_management/widgets/name_text_input.dart';
+import 'package:flutter_app_weight_management/widgets/plan_item_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -94,6 +96,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         alarmTime: planInfo.alarmTime!,
         title: '계획 실천 알림',
         body: '${planInfo.name} 실천해보세요.',
+        payload: 'plan',
       );
     }
 
@@ -102,7 +105,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       final recordInfoState = infoProvider.getRecordInfo();
       final uuidV1 = const Uuid().v1();
 
-      notification.cancelAll();
+      NotificationService().notification.cancelAll();
 
       userBox.put(
         'userProfile',
@@ -132,14 +135,13 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           alarmTime: userInfoState.alarmTime!,
           title: '체중 기록 알림',
           body: '오늘의 체중을 입력 할 시간이에요.',
+          payload: 'weight',
         );
       }
 
       if (planInfo.isAlarm) {
         addPlanNotification();
       }
-
-      // importProvider.setImportDateTime(now);
     }
 
     setAddPage() {
@@ -181,11 +183,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
             type: planInfo.type.toString(),
             title: planInfo.title,
             name: planInfo.name,
-            startDateTime: planInfo.startDateTime,
-            endDateTime: planInfo.endDateTime,
+            priority: planInfo.priority.toString(),
             isAlarm: planInfo.isAlarm,
             alarmTime: planInfo.isAlarm ? planInfo.alarmTime : null,
             alarmId: planInfo.isAlarm ? notifyPlanUid : null,
+            createDateTime: DateTime.now(),
           ),
         );
 
@@ -199,32 +201,6 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       }
 
       return null;
-    }
-
-    onSubmitDialog({type, Object? object}) {
-      if (object is DateTime) {
-        type == 'start'
-            ? planInfo.startDateTime = object
-            : planInfo.endDateTime = object;
-
-        setState(() {});
-      }
-
-      closeDialog(context);
-    }
-
-    onTapInput({type, DateTime? dateTime}) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) => CalendarDefaultDialog(
-          type: type,
-          titleWidgets: TitleBlock(type: type),
-          initialDateTime: dateTime,
-          onSubmit: onSubmitDialog,
-          onCancel: () => closeDialog(context),
-          minDate: type == 'end' ? planInfo.startDateTime : null,
-        ),
-      );
     }
 
     onDateTimeChanged(DateTime value) {
@@ -289,7 +265,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           : AddTitleWidget(
               argmentsType: argmentsType,
               step: 4,
-              title: '나만의 ${planInfo.title} 계획을 세워보세요.',
+              title: '오늘의 ${planInfo.title} 계획을 세워보세요.',
             );
     }
 
@@ -308,6 +284,26 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       return argmentsType == ArgmentsTypeEnum.edit ? '수정하기' : '완료';
     }
 
+    onTapItem(enumId) {
+      setState(() => planInfo.priority = enumId);
+    }
+
+    planPriorityItemBuilder(context, index) {
+      final item = planPriorityInfos[index]!;
+
+      return Padding(
+        padding: const EdgeInsets.only(right: smallSpace),
+        child: PlanItemWidget(
+          id: item['id'] as PlanPriorityEnum,
+          name: item['name'] as String,
+          desc: item['desc'] as String,
+          icon: item['icon'] as IconData,
+          isEnabled: item['id'] == planInfo.priority,
+          onTap: onTapItem,
+        ),
+      );
+    }
+
     return AddContainer(
       title: setPageTitle(),
       body: Column(
@@ -322,20 +318,24 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                   onChanged: onChanged,
                 ),
                 SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '기간'),
+                ContentsTitleText(text: '우선 순위'),
                 SpaceHeight(height: smallSpace),
-                DateTimeRangeInputWidget(
-                  startDateTime: planInfo.startDateTime,
-                  endDateTime: planInfo.endDateTime,
-                  onTapInput: onTapInput,
+                SizedBox(
+                  height: 150,
+                  child: ListView.builder(
+                    itemExtent: 120,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 3,
+                    itemBuilder: planPriorityItemBuilder,
+                  ),
                 ),
                 SpaceHeight(height: regularSapce + smallSpace),
                 ContentsTitleText(text: '알림'),
                 SpaceHeight(height: regularSapce),
                 AlarmItemWidget(
                   id: 'alarm-setting',
-                  title: '${planInfo.title} 실천 알림',
-                  desc: '매일 실천 알림을 드려요.',
+                  title: '계획 실천 알림',
+                  desc: '정해진 시간에 실천 알림을 드려요.',
                   icon: Icons.notifications_active,
                   isEnabled: planInfo.isAlarm,
                   alarmTime: planInfo.alarmTime,
@@ -396,3 +396,50 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         //   }
         // }
 
+              // ),
+                // SizedBox(
+                //   height: 150,
+                //   child: Row(
+                //     children: [
+                //       PlanItemWidget(
+                //         id: PlanPriorityEnum.high,
+                //         name: '높음',
+                //         desc: 'High',
+                //         icon: Icons.filter_1,
+                //         isEnabled: seletedPlanPriority == PlanPriorityEnum.high,
+                //         onTap: onTapItem,
+                //       ),
+                //       PlanItemWidget(
+                //         id: PlanPriorityEnum.medium,
+                //         name: '중간',
+                //         desc: 'Medium',
+                //         icon: Icons.filter_2,
+                //         isEnabled:
+                //             seletedPlanPriority == PlanPriorityEnum.medium,
+                //         onTap: onTapItem,
+                //       ),
+                //       PlanItemWidget(
+                //         id: PlanPriorityEnum.low,
+                //         name: '낮음',
+                //         desc: 'Low',
+                //         icon: Icons.filter_3,
+                //         isEnabled: seletedPlanPriority == PlanPriorityEnum.low,
+                //         onTap: onTapItem,
+                //       ),
+                //     ],
+                //   ),
+                // ),
+
+    //                 onTapInput({type, DateTime? dateTime}) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) => CalendarDefaultDialog(
+    //       type: type,
+    //       titleWidgets: TitleBlock(type: type),
+    //       initialDateTime: dateTime,
+    //       onSubmit: onSubmitDialog,
+    //       onCancel: () => closeDialog(context),
+    //       maxDate: type == 'start' ? planInfo.endDateTime : null,
+    //     ),
+    //   );
+    // }

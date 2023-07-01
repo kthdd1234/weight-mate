@@ -9,11 +9,11 @@ class PlanBox extends HiveObject {
     required this.type,
     required this.title,
     required this.name,
-    required this.startDateTime,
-    this.endDateTime,
+    required this.priority,
     required this.isAlarm,
     this.alarmTime,
     this.alarmId,
+    required this.createDateTime,
   });
 
   @HiveField(0)
@@ -25,21 +25,21 @@ class PlanBox extends HiveObject {
   @HiveField(2)
   String title;
 
+  @HiveField(3)
+  String priority;
+
   @HiveField(4)
   String name;
 
   @HiveField(5)
-  DateTime startDateTime;
-
-  @HiveField(6)
-  DateTime? endDateTime;
-
-  @HiveField(7)
   bool isAlarm;
 
-  @HiveField(8)
+  @HiveField(6)
   DateTime? alarmTime;
 
-  @HiveField(9)
+  @HiveField(7)
   int? alarmId;
+
+  @HiveField(8)
+  DateTime createDateTime;
 }

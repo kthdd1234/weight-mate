@@ -60,3 +60,5 @@ enum alarmTypeEnum { none, weight, plan }
 enum jumpDayTypeEnum { none, subtract, add }
 
 enum ActionSortEnum { none, recent, past }
+
+enum PlanPriorityEnum { none, high, medium, low }

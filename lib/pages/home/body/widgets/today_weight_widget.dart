@@ -222,11 +222,11 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
     }
 
     setContetnsTitle() {
-      Map<String, dynamic>? contentsTitleInfo =
-          weightContentsTitles[widget.seletedRecordIconType];
+      if (widget.seletedRecordIconType == RecordIconTypes.editGoalWeight) {
+        return '목표 체중';
+      }
 
-      if (contentsTitleInfo == null) return '오늘의 체중';
-      return contentsTitleInfo['title'];
+      return '${dateTimeToTitle(widget.importDateTime)} 체중';
     }
 
     setContetnsIcon() {

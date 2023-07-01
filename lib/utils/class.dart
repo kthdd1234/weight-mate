@@ -37,23 +37,22 @@ class RecordInfoClass {
 }
 
 class PlanInfoClass {
-  PlanInfoClass(
-      {required this.type,
-      required this.title,
-      required this.id,
-      required this.name,
-      required this.startDateTime,
-      this.endDateTime,
-      required this.isAlarm,
-      this.alarmTime,
-      this.alarmId});
+  PlanInfoClass({
+    required this.type,
+    required this.title,
+    required this.id,
+    required this.name,
+    required this.priority,
+    required this.isAlarm,
+    this.alarmTime,
+    this.alarmId,
+  });
 
   PlanTypeEnum type;
   String title;
   String id;
   String name;
-  DateTime startDateTime;
-  DateTime? endDateTime;
+  PlanPriorityEnum priority;
   bool isAlarm;
   DateTime? alarmTime;
   int? alarmId;
@@ -174,14 +173,13 @@ class PlanItemClass {
   PlanItemClass({
     required this.id,
     required this.name,
-    required this.desc1,
-    required this.desc2,
+    required this.desc,
     required this.icon,
   });
 
   dynamic id;
   String name;
-  String desc1, desc2;
+  String desc;
   IconData icon;
 }
 
