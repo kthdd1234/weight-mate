@@ -55,9 +55,9 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
 
     onTapArrow(MoreSeeItem id) {
       switch (id) {
-        case MoreSeeItem.appAlarm:
-          Navigator.pushNamed(context, '/common-alarm');
-          break;
+        // case MoreSeeItem.appAlarm:
+        //   Navigator.pushNamed(context, '/common-alarm');
+        //   break;
 
         case MoreSeeItem.appLang:
           showModalBottomSheet(
@@ -128,15 +128,15 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
         widgetType: MoreSeeWidgetTypes.switching,
         onTapSwitch: onTapSwitch,
       ),
-      MoreSeeItemClass(
-        index: 1,
-        id: MoreSeeItem.appAlarm,
-        icon: Icons.notifications_active_outlined,
-        title: '알림',
-        value: '${setAlarmValue()}개의 알림',
-        widgetType: MoreSeeWidgetTypes.arrow,
-        onTapArrow: onTapArrow,
-      ),
+      // MoreSeeItemClass(
+      //   index: 1,
+      //   id: MoreSeeItem.appAlarm,
+      //   icon: Icons.notifications_active_outlined,
+      //   title: '알림',
+      //   value: '${setAlarmValue()}개의 알림',
+      //   widgetType: MoreSeeWidgetTypes.arrow,
+      //   onTapArrow: onTapArrow,
+      // ),
       MoreSeeItemClass(
         index: 2,
         id: MoreSeeItem.appLang,

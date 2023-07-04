@@ -4,6 +4,8 @@ import 'package:flutter_app_weight_management/components/area/empty_text_vertica
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/check/plan_contents.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/before_plan_list_dialog.dart';
+import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -78,13 +80,35 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
                   );
                 }
 
-                // showModalBottomSheet(
-                //   backgroundColor: Colors.transparent,
-                //   context: context,
-                //   builder: (context) {
-                //     return null;
-                //   },
-                // );
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return ConfirmDialog(
+                      width: 230,
+                      titleText: '계획 삭제',
+                      contentIcon: Icons.delete_forever,
+                      contentText1:
+                          '${dateTimeToTitle(widget.importDateTime)} 모든 계획을',
+                      contentText2: '삭제하시겠습니까?',
+                      onPressedOk: () {
+                        List<String> deleteIdList = [];
+
+                        for (var i = 0; i < planInfoList.length; i++) {
+                          PlanBox planInfo = planInfoList[i];
+
+                          if (getDateTimeToInt(planInfo.createDateTime) ==
+                              currentDateTimeInt) {
+                            deleteIdList.add(planInfo.id);
+                          }
+                        }
+
+                        if (deleteIdList.isNotEmpty) {
+                          planBox.deleteAll(deleteIdList);
+                        }
+                      },
+                    );
+                  },
+                );
               }
             },
           ),
@@ -96,6 +120,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     }
 
     onTapCheck({required String id, required bool isSelected}) async {
+      PlanBox? planInfo = planBox.get(id);
       DateTime now = DateTime.now();
       DateTime actionDateTime = DateTime(
         widget.importDateTime.year,
@@ -104,7 +129,18 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         now.hour,
         now.minute,
       );
-      Map<String, dynamic> actionItem = {'id': id, 'time': actionDateTime};
+
+      if (planInfo == null) return;
+
+      ActionItemClass actionItem = ActionItemClass(
+        id: id,
+        title: planInfo.title,
+        type: planInfo.type,
+        name: planInfo.name,
+        priority: planInfo.priority,
+        actionDateTime: actionDateTime,
+        createDateTime: planInfo.createDateTime,
+      );
 
       if (isSelected) {
         HapticFeedback.mediumImpact();
@@ -114,13 +150,13 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             currentDateTimeInt,
             RecordBox(
               createDateTime: widget.importDateTime,
-              actions: [actionItem],
+              actions: [actionItem.setObject()],
             ),
           );
         } else {
           recordInfo.actions == null
-              ? recordInfo.actions = [actionItem]
-              : recordInfo.actions!.add(actionItem);
+              ? recordInfo.actions = [actionItem.setObject()]
+              : recordInfo.actions!.add(actionItem.setObject());
 
           recordInfo.save();
         }
@@ -159,7 +195,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             name: text,
             priority: PlanPriorityEnum.medium.toString(),
             isAlarm: false,
-            createDateTime: DateTime.now(),
+            createDateTime: widget.importDateTime,
           ),
         );
 
@@ -175,16 +211,16 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     onTapEditPlan(PlanBox planInfo) async {
       context.read<DietInfoProvider>().changePlanInfo(
             PlanInfoClass(
-              type: planType[planInfo.type]!,
-              title: planInfo.title,
-              id: planInfo.id,
-              name: planInfo.name,
-              priority:
-                  planPrioritys[planInfo.priority]!['id'] as PlanPriorityEnum,
-              isAlarm: planInfo.isAlarm,
-              alarmTime: planInfo.alarmTime,
-              alarmId: planInfo.alarmId,
-            ),
+                type: planType[planInfo.type]!,
+                title: planInfo.title,
+                id: planInfo.id,
+                name: planInfo.name,
+                priority:
+                    planPrioritys[planInfo.priority]!['id'] as PlanPriorityEnum,
+                isAlarm: planInfo.isAlarm,
+                alarmTime: planInfo.alarmTime,
+                alarmId: planInfo.alarmId,
+                createDateTime: planInfo.createDateTime),
           );
 
       closeDialog(context);
@@ -199,8 +235,11 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       PlanBox? planInfo = planBox.get(id);
 
       planBox.delete(id); // 계획 삭제
-      NotificationService()
-          .deleteMultipleAlarm([planInfo!.alarmId.toString()]); // 알림 id 삭제
+
+      if (planInfo!.alarmId != null) {
+        NotificationService()
+            .deleteMultipleAlarm([planInfo.alarmId.toString()]);
+      }
 
       closeDialog(context);
     }
@@ -221,7 +260,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               ExpandedButtonVerti(
                 mainColor: buttonBackgroundColor,
                 icon: Icons.edit_note,
-                title: '이름, 우선 순위, 알림 설정',
+                title: '이름, 순위, 알림 설정',
                 onTap: () => onTapEditPlan(planInfo),
               ),
               SpaceWidth(width: tinySpace),
@@ -259,7 +298,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
           Map<String, dynamic> data = recordInfo.actions!.firstWhere(
             (element) => element['id'] == planInfo.id,
-            orElse: () => {'id': null, 'time': null},
+            orElse: () => {'id': null, 'actionDateTime': null},
           );
 
           return data;
@@ -271,11 +310,14 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               PlanContents(
                 id: planInfo.id,
                 text: planInfo.name,
-                isAction: actionData()?['id'] != null,
+                isChecked: actionData()?['id'] != null,
                 mainColor: mainColor,
                 alarmTime: planInfo.alarmTime,
                 priority: planInfo.priority,
-                recordTime: actionData()?['time'],
+                checkIcon: Icons.check_box,
+                notCheckIcon: Icons.check_box,
+                notCheckColor: Colors.grey.shade300,
+                recordTime: actionData()?['actionDateTime'],
                 onTapCheck: onTapCheck,
                 onTapContents: onTapContents,
                 onTapMore: onTapContents,
@@ -285,8 +327,72 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         }
       }
 
+      getWherePlanList() {
+        return planBox.values
+            .toList()
+            .where(
+              (element) =>
+                  element.type == type.toString() &&
+                  getDateTimeToInt(element.createDateTime) < currentDateTimeInt,
+            )
+            .toList();
+      }
+
       setActionPercent() {
-        return '실천율: 30%';
+        if (recordInfo == null || recordInfo.actions == null) {
+          return '0.0';
+        }
+
+        final typeActions = recordInfo.actions!.where((actionData) =>
+            actionData['type'] == type.toString() &&
+            getDateTimeToInt(actionData['createDateTime']) ==
+                currentDateTimeInt);
+
+        return planToActionPercent(
+            a: typeActions.length, b: planContentsList.length);
+      }
+
+      setBeforePlanList() {
+        return getWherePlanList().length;
+      }
+
+      onPressedOk(List<String> idList) {
+        for (var i = 0; i < idList.length; i++) {
+          PlanBox? planInfo = planBox.get(idList[i]);
+
+          if (planInfo != null) {
+            final uuid = getUUID();
+
+            planBox.put(
+              uuid,
+              PlanBox(
+                id: uuid,
+                type: planInfo.type,
+                title: planInfo.title,
+                name: planInfo.name,
+                priority: planInfo.priority,
+                isAlarm: planInfo.isAlarm,
+                createDateTime: widget.importDateTime,
+              ),
+            );
+          }
+        }
+
+        closeDialog(context);
+      }
+
+      onTapBeforePlanList() {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return BeforePlanListDialog(
+              title: title,
+              planList: getWherePlanList(),
+              onPressedOk: onPressedOk,
+              emptyIcon: planTypeDetailInfo[type]!.icon,
+            );
+          },
+        );
       }
 
       planContentsList.sort((a, b) {
@@ -306,13 +412,30 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
                   text: title,
                   sub: [
                     TextIcon(
+                      iconSize: 12,
+                      iconColor: mainColor,
                       backgroundColor: backgroundColor,
-                      text: setActionPercent(),
+                      text: '실천율: ${setActionPercent()}%',
                       borderRadius: 5,
                       textColor: mainColor,
                       fontSize: 10,
                       padding: 7,
-                    )
+                    ),
+                    SpaceWidth(width: tinySpace),
+                    InkWell(
+                      onTap: onTapBeforePlanList,
+                      child: TextIcon(
+                        iconSize: 12,
+                        iconColor: enableTextColor,
+                        backgroundColor: enableBackgroundColor,
+                        text: '이전 계획: ${setBeforePlanList()}개',
+                        borderRadius: 5,
+                        textColor: enableTextColor,
+                        fontSize: 10,
+                        padding: 7,
+                      ),
+                    ),
+                    //
                   ],
                 ),
                 SpaceHeight(height: smallSpace),
@@ -349,7 +472,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       children: [
         ContentsTitleText(
             text: '${dateTimeToTitle(widget.importDateTime)} 계획',
-            icon: Icons.list,
+            icon: Icons.playlist_add_check,
             sub: iconWidgets),
         setContentWidgets(
             type: PlanTypeEnum.diet,

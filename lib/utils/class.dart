@@ -46,6 +46,7 @@ class PlanInfoClass {
     required this.isAlarm,
     this.alarmTime,
     this.alarmId,
+    required this.createDateTime,
   });
 
   PlanTypeEnum type;
@@ -56,6 +57,7 @@ class PlanInfoClass {
   bool isAlarm;
   DateTime? alarmTime;
   int? alarmId;
+  DateTime createDateTime;
 }
 
 class TextInputClass {
@@ -191,11 +193,13 @@ class WeightInfoClass {
     required this.icon,
     required this.more,
     required this.tooltipMsg,
+    required this.iconColor,
   });
 
   String id, title, value;
   IconData icon, more;
   String tooltipMsg;
+  Color iconColor;
 }
 
 class GridIconClass {
@@ -222,4 +226,31 @@ class PlanTypeDetailClass {
   List<PlanItemClass> classList;
   String initId, subText, counterText;
   IconData icon;
+}
+
+class ActionItemClass {
+  ActionItemClass({
+    required this.id,
+    required this.title,
+    required this.type,
+    required this.name,
+    required this.priority,
+    required this.actionDateTime,
+    required this.createDateTime,
+  });
+
+  String id, title, type, name, priority;
+  DateTime actionDateTime, createDateTime;
+
+  setObject() {
+    return {
+      'id': id,
+      'title': title,
+      'type': type,
+      'name': name,
+      'priority': priority,
+      'actionDateTime': actionDateTime,
+      'createDateTime': createDateTime,
+    };
+  }
 }

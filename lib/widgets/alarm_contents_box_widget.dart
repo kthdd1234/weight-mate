@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -13,25 +12,24 @@ import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart'
 import 'package:permission_handler/permission_handler.dart';
 
 class AlarmContentsBoxWidget extends StatefulWidget {
-  AlarmContentsBoxWidget(
-      {super.key,
-      required this.boxType,
-      required this.alarmId,
-      required this.title,
-      required this.desc,
-      required this.isAlarm,
-      required this.alarmTime,
-      this.userBox,
-      this.planBox,
-      this.name});
+  AlarmContentsBoxWidget({
+    super.key,
+    required this.dateTime,
+    required this.alarmId,
+    required this.title,
+    required this.desc,
+    required this.isAlarm,
+    required this.alarmTime,
+    this.userBox,
+    this.name,
+  });
 
-  String boxType;
   String title, desc;
   bool isAlarm;
+  DateTime dateTime;
   int? alarmId;
   DateTime? alarmTime;
   UserBox? userBox;
-  PlanBox? planBox;
   String? name;
 
   @override
@@ -50,39 +48,23 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
   @override
   Widget build(BuildContext context) {
     UserBox? userBox = widget.userBox ?? widget.userBox;
-    PlanBox? planBox = widget.planBox ?? widget.planBox;
 
     addWeightNotification(DateTime? time) {
       NotificationService().addNotification(
-          id: widget.alarmId ?? UniqueKey().hashCode,
-          alarmTime: time ?? initAlarmDateTime,
-          title: '체중 기록 알림',
-          body: '오늘의 체중을 입력 할 시간이에요.',
-          payload: 'weight');
-    }
-
-    addPlanNotification(DateTime? time) {
-      NotificationService().addNotification(
-          id: widget.alarmId ?? UniqueKey().hashCode,
-          alarmTime: time ?? initAlarmDateTime,
-          title: '계획 실천 알림',
-          body: '${widget.name} 실천해보세요.',
-          payload: 'plan');
+        id: widget.alarmId ?? UniqueKey().hashCode,
+        alarmTime: time ?? initAlarmDateTime,
+        dateTime: widget.dateTime,
+        title: '체중 기록 알림',
+        body: '오늘의 체중을 입력 할 시간이에요.',
+        payload: 'weight',
+      );
     }
 
     onSubmit() {
-      if (widget.boxType == 'weight') {
-        userBox?.alarmTime = timeValue;
-        userBox?.save();
+      userBox?.alarmTime = timeValue;
+      userBox?.save();
 
-        addWeightNotification(timeValue);
-      } else if (widget.boxType == 'plan') {
-        planBox?.alarmTime = timeValue;
-        planBox?.save();
-
-        addPlanNotification(timeValue);
-      }
-
+      addWeightNotification(timeValue);
       closeDialog(context);
     }
 
@@ -122,20 +104,6 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
       userBox?.save();
     }
 
-    setPlanNotification(bool newValue) {
-      if (newValue) {
-        planBox?.alarmTime = widget.alarmTime ?? initAlarmDateTime;
-        addPlanNotification(timeValue);
-      } else {
-        NotificationService().deleteMultipleAlarm([
-          widget.alarmId.toString(),
-        ]);
-      }
-
-      planBox?.isAlarm = newValue;
-      planBox?.save();
-    }
-
     onChanged(bool newValue) async {
       if (newValue) {
         final isPermission = await NotificationService().permissionNotification;
@@ -152,11 +120,7 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
         }
       }
 
-      if (widget.boxType == 'weight') {
-        setWeightNotification(newValue);
-      } else if (widget.boxType == 'plan') {
-        setPlanNotification(newValue);
-      }
+      setWeightNotification(newValue);
     }
 
     return Column(

@@ -19,6 +19,7 @@ final initPlanInfo = PlanInfoClass(
   isAlarm: false,
   alarmTime: initAlarmDateTime,
   alarmId: null,
+  createDateTime: DateTime.now(),
 );
 
 class DietInfoProvider with ChangeNotifier {

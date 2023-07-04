@@ -22,15 +22,15 @@ class TodayPlanItems extends StatelessWidget {
     onTap(PlanInfoClass item) {
       context.read<DietInfoProvider>().changePlanInfo(
             PlanInfoClass(
-              type: item.type,
-              title: item.title,
-              id: item.id,
-              name: item.name,
-              priority: item.priority,
-              isAlarm: item.isAlarm,
-              alarmTime: item.alarmTime,
-              alarmId: item.alarmId,
-            ),
+                type: item.type,
+                title: item.title,
+                id: item.id,
+                name: item.name,
+                priority: item.priority,
+                isAlarm: item.isAlarm,
+                alarmTime: item.alarmTime,
+                alarmId: item.alarmId,
+                createDateTime: item.createDateTime),
           );
 
       Navigator.pushNamed(

@@ -3,8 +3,8 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
-class AddDietPlanCheck extends StatelessWidget {
-  AddDietPlanCheck({
+class PlanCheck extends StatelessWidget {
+  PlanCheck({
     super.key,
     required this.id,
     required this.text,

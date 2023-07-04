@@ -174,7 +174,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
         );
       }
 
-      return AnalyzeActionRecord(recordBox: recordBox, planBox: planBox);
+      return AnalyzeActionRecord(recordBox: recordBox);
     }
 
     setAnalyzeCustom() {

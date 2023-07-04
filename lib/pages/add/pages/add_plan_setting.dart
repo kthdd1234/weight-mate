@@ -90,9 +90,10 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() {});
     }
 
-    addPlanNotification({int? planId}) {
+    addPlanNotification({required int planId, required DateTime dateTime}) {
       NotificationService().addNotification(
-        id: planId ?? notifyPlanUid,
+        id: planId,
+        dateTime: dateTime,
         alarmTime: planInfo.alarmTime!,
         title: '계획 실천 알림',
         body: '${planInfo.name} 실천해보세요.',
@@ -133,18 +134,13 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         NotificationService().addNotification(
           id: notifyWeightUid,
           alarmTime: userInfoState.alarmTime!,
+          dateTime: DateTime.now(),
           title: '체중 기록 알림',
           body: '오늘의 체중을 입력 할 시간이에요.',
           payload: 'weight',
         );
       }
 
-      if (planInfo.isAlarm) {
-        addPlanNotification();
-      }
-    }
-
-    setAddPage() {
       if (planInfo.isAlarm) {
         addPlanNotification();
       }
@@ -169,9 +165,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           argmentsType == ArgmentsTypeEnum.edit ? planInfo.id : getUUID();
       final argmentsTypeMaps = {
         ArgmentsTypeEnum.start: setStartPage,
-        ArgmentsTypeEnum.add: setAddPage,
         ArgmentsTypeEnum.edit: setEditPage
       };
+      final createDateTime = argmentsType == ArgmentsTypeEnum.edit
+          ? planInfo.createDateTime
+          : DateTime.now();
 
       if (buttonEnabled()) {
         argmentsTypeMaps[argmentsType]!();
@@ -187,7 +185,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
             isAlarm: planInfo.isAlarm,
             alarmTime: planInfo.isAlarm ? planInfo.alarmTime : null,
             alarmId: planInfo.isAlarm ? notifyPlanUid : null,
-            createDateTime: DateTime.now(),
+            createDateTime: createDateTime,
           ),
         );
 
@@ -256,7 +254,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     }
 
     setPageTitle() {
-      return argmentsType == ArgmentsTypeEnum.edit ? '계획 편집' : null;
+      return argmentsType == ArgmentsTypeEnum.edit ? '계획 수정하기' : null;
     }
 
     setAppTitleWidget() {

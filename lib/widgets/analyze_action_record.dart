@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_month_dialog.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/components/text/icon_text.dart';
-import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -21,11 +19,9 @@ class AnalyzeActionRecord extends StatefulWidget {
   AnalyzeActionRecord({
     super.key,
     required this.recordBox,
-    required this.planBox,
   });
 
   Box<RecordBox> recordBox;
-  Box<PlanBox> planBox;
 
   @override
   State<AnalyzeActionRecord> createState() => _AnalyzeActionRecordState();
@@ -197,18 +193,19 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
           if (recordBox.actions != null) {
             for (var i = 0; i < recordBox.actions!.length; i++) {
               String id = recordBox.actions![i]['id'];
-              DateTime time = recordBox.actions![i]['time'];
-
-              PlanBox? planInfo = widget.planBox.get(id);
+              DateTime createDateTime = recordBox.actions![i]['createDateTime'];
+              String title = recordBox.actions![i]['title'];
+              String name = recordBox.actions![i]['name'];
+              Color color = planTypeColors[recordBox.actions![i]['type']]!;
 
               actionHistoryList.add(
                 timeLineWidget(
                   dateTime: recordBox.createDateTime,
-                  title: planInfo!.title,
+                  title: title,
                   dateTimeFormat: i == 0 ? 'yyyy\nMM.dd E' : null,
-                  circleColor: planTypeColors[planInfo.type]!,
-                  name: planInfo.name,
-                  time: time,
+                  circleColor: color,
+                  name: name,
+                  time: createDateTime,
                 ),
               );
             }

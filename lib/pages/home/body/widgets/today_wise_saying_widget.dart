@@ -47,20 +47,15 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
             contentsWidget: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircularIcon(
-                  size: 40,
-                  borderRadius: 30,
-                  icon: Icons.auto_awesome_outlined,
-                  backgroundColor: typeBackgroundColor,
-                ),
-                SpaceWidth(width: regularSapce),
                 Expanded(
                   flex: 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       ContentsTitleText(
-                          text: '${dateTimeToTitle(widget.importDateTime)} 명언'),
+                        text: '${dateTimeToTitle(widget.importDateTime)} 명언',
+                        icon: Icons.auto_awesome_outlined,
+                      ),
                       SpaceHeight(height: smallSpace),
                       WiseSayingItemWidget(
                         wiseSaying: wiseSaying.wiseSaying,

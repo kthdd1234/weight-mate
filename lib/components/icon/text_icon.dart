@@ -43,7 +43,7 @@ class TextIcon extends StatelessWidget {
                 ? Row(
                     children: [
                       Icon(icon, size: iconSize, color: iconColor),
-                      SpaceWidth(width: tinySpace),
+                      SpaceWidth(width: 3),
                     ],
                   )
                 : const EmptyArea(),

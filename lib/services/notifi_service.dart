@@ -50,6 +50,7 @@ class NotificationService {
 
   Future<bool> addNotification({
     required int id,
+    required DateTime dateTime,
     required DateTime alarmTime,
     required String title,
     required String body,
@@ -59,13 +60,6 @@ class NotificationService {
       /// show native setting page
       return false;
     }
-
-    ///exception
-    final now = tz.TZDateTime.now(tz.local); // ?
-    final day = (alarmTime.hour < now.hour ||
-            alarmTime.hour == now.hour && alarmTime.minute <= now.minute)
-        ? now.day + 1
-        : now.day;
 
     /// add schedule notification
     final details =
@@ -77,9 +71,9 @@ class NotificationService {
       body,
       tz.TZDateTime(
         tz.local,
-        now.year,
-        now.month,
-        day,
+        dateTime.year,
+        dateTime.month,
+        dateTime.day,
         alarmTime.hour,
         alarmTime.minute,
       ).add(const Duration(seconds: 3)),
@@ -87,6 +81,8 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload,
+      matchDateTimeComponents:
+          payload == 'weight' ? DateTimeComponents.time : null,
     );
 
     return true;
