@@ -16,10 +16,7 @@ class SplashScreen extends StatelessWidget {
       isCenter: true,
       body: Column(
         children: [
-          Image.asset(
-            'assets/images/MATE.png',
-            width: 150,
-          ),
+          Image.asset('assets/images/MATE.png', width: 150),
           SpaceHeight(height: regularSapce),
           const Text(
             '체중 메이트',
@@ -39,7 +36,7 @@ class SplashScreen extends StatelessWidget {
           ),
           SpaceHeight(height: tinySpace),
           const Text(
-            '목표 체중을 위해 실천해보세요!',
+            '다이어트 계획을 세워 실천해보세요!',
             style: TextStyle(
               color: buttonBackgroundColor,
               fontSize: 13,

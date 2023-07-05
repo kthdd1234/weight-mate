@@ -40,7 +40,7 @@ class _nameTextInputState extends State<nameTextInput> {
         TextInput(
           controller: nameController,
           autofocus: true,
-          maxLength: 20,
+          maxLength: 30,
           prefixIcon: Icons.edit,
           suffixText: '',
           hintText: '이름을 입력해주세요.',

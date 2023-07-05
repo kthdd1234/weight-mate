@@ -108,6 +108,7 @@ class PlanContents extends StatelessWidget {
             ),
             onTapMore != null
                 ? Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       InkWell(

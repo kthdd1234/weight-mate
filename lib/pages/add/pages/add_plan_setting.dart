@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
-import 'package:flutter_app_weight_management/components/dialog/title_block.dart';
-import 'package:flutter_app_weight_management/components/input/date_time_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
@@ -12,6 +10,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
-import 'package:flutter_app_weight_management/widgets/date_time_range_input_widget.dart';
 import 'package:flutter_app_weight_management/widgets/name_text_input.dart';
 import 'package:flutter_app_weight_management/widgets/plan_item_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -71,8 +69,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-
+    final importProvider = context.watch<ImportDateTimeProvider>();
     final infoProvider = context.read<DietInfoProvider>();
     final planInfo = infoProvider.getPlanInfo();
     final notifyWeightUid = UniqueKey().hashCode;
@@ -90,9 +87,9 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() {});
     }
 
-    addPlanNotification({required int planId, required DateTime dateTime}) {
+    addPlanNotification({required int alarmId, required DateTime dateTime}) {
       NotificationService().addNotification(
-        id: planId,
+        id: alarmId,
         dateTime: dateTime,
         alarmTime: planInfo.alarmTime!,
         title: '계획 실천 알림',
@@ -105,6 +102,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       final userInfoState = infoProvider.getUserInfo();
       final recordInfoState = infoProvider.getRecordInfo();
       final uuidV1 = const Uuid().v1();
+      final now = DateTime.now();
 
       NotificationService().notification.cancelAll();
 
@@ -134,7 +132,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         NotificationService().addNotification(
           id: notifyWeightUid,
           alarmTime: userInfoState.alarmTime!,
-          dateTime: DateTime.now(),
+          dateTime: now,
           title: '체중 기록 알림',
           body: '오늘의 체중을 입력 할 시간이에요.',
           payload: 'weight',
@@ -142,7 +140,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       }
 
       if (planInfo.isAlarm) {
-        addPlanNotification();
+        addPlanNotification(alarmId: notifyPlanUid, dateTime: now);
       }
     }
 
@@ -151,8 +149,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           await NotificationService().pendingNotificationIds;
 
       if (planInfo.isAlarm) {
-        bool isContainId = notificationIds.contains(planInfo.alarmId);
-        addPlanNotification(planId: isContainId ? planInfo.alarmId : null);
+        bool isAlarmId = notificationIds.contains(planInfo.alarmId);
+        addPlanNotification(
+          alarmId: isAlarmId ? planInfo.alarmId! : notifyPlanUid,
+          dateTime: importProvider.getImportDateTime(),
+        );
       } else {
         NotificationService().deleteMultipleAlarm([
           planInfo.alarmId.toString(),
@@ -286,11 +287,10 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() => planInfo.priority = enumId);
     }
 
-    planPriorityItemBuilder(context, index) {
+    setPlanPriority(int index) {
       final item = planPriorityInfos[index]!;
 
-      return Padding(
-        padding: const EdgeInsets.only(right: smallSpace),
+      return Expanded(
         child: PlanItemWidget(
           id: item['id'] as PlanPriorityEnum,
           name: item['name'] as String,
@@ -320,11 +320,14 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                 SpaceHeight(height: smallSpace),
                 SizedBox(
                   height: 150,
-                  child: ListView.builder(
-                    itemExtent: 120,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 3,
-                    itemBuilder: planPriorityItemBuilder,
+                  child: Row(
+                    children: [
+                      setPlanPriority(0),
+                      SpaceWidth(width: smallSpace),
+                      setPlanPriority(1),
+                      SpaceWidth(width: smallSpace),
+                      setPlanPriority(2),
+                    ],
                   ),
                 ),
                 SpaceHeight(height: regularSapce + smallSpace),
@@ -338,9 +341,9 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                   isEnabled: planInfo.isAlarm,
                   alarmTime: planInfo.alarmTime,
                   onTap: planInfo.alarmTime != null ? onTapAlarm : (_) {},
-                  onChanged: onChangedSwitch,
                   chipBackgroundColor: dialogBackgroundColor,
                   iconBackgroundColor: dialogBackgroundColor,
+                  onChanged: onChangedSwitch,
                 )
               ],
             ),
@@ -355,89 +358,89 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
   }
 }
 
-      // final userInfoState = provider.getUserInfo();
-      // final recordInfoState = provider.getRecordInfo();
-      // final now = DateTime.now();
-      // final uuidV1 = const Uuid().v1();
+// final userInfoState = provider.getUserInfo();
+// final recordInfoState = provider.getRecordInfo();
+// final now = DateTime.now();
+// final uuidV1 = const Uuid().v1();
 
-        // if (argmentsType == argmentsTypeEnum.start) {
-        //   userBox.put(
-        //     'userBox',
-        //     UserBox(
-        //       userId: uuidV1,
-        //       tall: userInfoState.tall,
-        //       goalWeight: userInfoState.goalWeight,
-        //       recordStartDateTime: now,
-        //       isWeightAlarm: userInfoState.isWeightAlarm,
-        //       weightAlarmTime: userInfoState.isWeightAlarm
-        //           ? userInfoState.weightAlarmTime
-        //           : null,
-        //       alarmId: userInfoState.isWeightAlarm ? notifyWeightUid : null,
-        //     ),
-        //   );
+// if (argmentsType == argmentsTypeEnum.start) {
+//   userBox.put(
+//     'userBox',
+//     UserBox(
+//       userId: uuidV1,
+//       tall: userInfoState.tall,
+//       goalWeight: userInfoState.goalWeight,
+//       recordStartDateTime: now,
+//       isWeightAlarm: userInfoState.isWeightAlarm,
+//       weightAlarmTime: userInfoState.isWeightAlarm
+//           ? userInfoState.weightAlarmTime
+//           : null,
+//       alarmId: userInfoState.isWeightAlarm ? notifyWeightUid : null,
+//     ),
+//   );
 
-        //   recordBox.put(
-        //     getDateTimeToInt(now),
-        //     RecordBox(
-        //       recordDateTime: now,
-        //       weight: recordInfoState.weight,
-        //     ),
-        //   );
+//   recordBox.put(
+//     getDateTimeToInt(now),
+//     RecordBox(
+//       recordDateTime: now,
+//       weight: recordInfoState.weight,
+//     ),
+//   );
 
-        //   if (userInfoState.isWeightAlarm) {
-        //     NotificationService().addNotification(
-        //       id: notifyWeightUid,
-        //       alarmTime: userInfoState.weightAlarmTime!,
-        //       title: '체중 기록 알림',
-        //       body: '오늘의 체중을 입력 할 시간이에요.',
-        //     );
-        //   }
-        // }
+//   if (userInfoState.isWeightAlarm) {
+//     NotificationService().addNotification(
+//       id: notifyWeightUid,
+//       alarmTime: userInfoState.weightAlarmTime!,
+//       title: '체중 기록 알림',
+//       body: '오늘의 체중을 입력 할 시간이에요.',
+//     );
+//   }
+// }
 
-              // ),
-                // SizedBox(
-                //   height: 150,
-                //   child: Row(
-                //     children: [
-                //       PlanItemWidget(
-                //         id: PlanPriorityEnum.high,
-                //         name: '높음',
-                //         desc: 'High',
-                //         icon: Icons.filter_1,
-                //         isEnabled: seletedPlanPriority == PlanPriorityEnum.high,
-                //         onTap: onTapItem,
-                //       ),
-                //       PlanItemWidget(
-                //         id: PlanPriorityEnum.medium,
-                //         name: '중간',
-                //         desc: 'Medium',
-                //         icon: Icons.filter_2,
-                //         isEnabled:
-                //             seletedPlanPriority == PlanPriorityEnum.medium,
-                //         onTap: onTapItem,
-                //       ),
-                //       PlanItemWidget(
-                //         id: PlanPriorityEnum.low,
-                //         name: '낮음',
-                //         desc: 'Low',
-                //         icon: Icons.filter_3,
-                //         isEnabled: seletedPlanPriority == PlanPriorityEnum.low,
-                //         onTap: onTapItem,
-                //       ),
-                //     ],
-                //   ),
-                // ),
+// ),
+// SizedBox(
+//   height: 150,
+//   child: Row(
+//     children: [
+//       PlanItemWidget(
+//         id: PlanPriorityEnum.high,
+//         name: '높음',
+//         desc: 'High',
+//         icon: Icons.filter_1,
+//         isEnabled: seletedPlanPriority == PlanPriorityEnum.high,
+//         onTap: onTapItem,
+//       ),
+//       PlanItemWidget(
+//         id: PlanPriorityEnum.medium,
+//         name: '중간',
+//         desc: 'Medium',
+//         icon: Icons.filter_2,
+//         isEnabled:
+//             seletedPlanPriority == PlanPriorityEnum.medium,
+//         onTap: onTapItem,
+//       ),
+//       PlanItemWidget(
+//         id: PlanPriorityEnum.low,
+//         name: '낮음',
+//         desc: 'Low',
+//         icon: Icons.filter_3,
+//         isEnabled: seletedPlanPriority == PlanPriorityEnum.low,
+//         onTap: onTapItem,
+//       ),
+//     ],
+//   ),
+// ),
 
-    //                 onTapInput({type, DateTime? dateTime}) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) => CalendarDefaultDialog(
-    //       type: type,
-    //       titleWidgets: TitleBlock(type: type),
-    //       initialDateTime: dateTime,
-    //       onSubmit: onSubmitDialog,
-    //       onCancel: () => closeDialog(context),
-    //       maxDate: type == 'start' ? planInfo.endDateTime : null,
-    //     ),
-    //   );
-    // }
+//                 onTapInput({type, DateTime? dateTime}) {
+//   showDialog(
+//     context: context,
+//     builder: (BuildContext context) => CalendarDefaultDialog(
+//       type: type,
+//       titleWidgets: TitleBlock(type: type),
+//       initialDateTime: dateTime,
+//       onSubmit: onSubmitDialog,
+//       onCancel: () => closeDialog(context),
+//       maxDate: type == 'start' ? planInfo.endDateTime : null,
+//     ),
+//   );
+// }

@@ -112,18 +112,13 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
                     children: [
                       BodySmallText(text: title),
                       SpaceHeight(height: tinySpace),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.check,
-                            size: 18,
-                            color: buttonBackgroundColor,
-                          ),
-                          SpaceWidth(width: tinySpace),
-                          Text(name, style: const TextStyle(fontSize: 13)),
-                          SpaceHeight(height: tinySpace),
-                        ],
+                      SizedBox(
+                        width: 150,
+                        child: Text(
+                          '✔︎ $name',
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(fontSize: 13, height: 1.5),
+                        ),
                       ),
                       SpaceHeight(height: tinySpace),
                       IconText(

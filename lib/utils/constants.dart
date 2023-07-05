@@ -153,3 +153,6 @@ const enableTextColor = Color(0xff6237E2);
 
 /// enableBackgroundColor
 const enableBackgroundColor = Color(0xffEDE8FF);
+
+/// appTextColor
+const appTextColor = Color(0xffE0B1F6);
