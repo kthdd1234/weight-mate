@@ -62,8 +62,6 @@ class _AddPlanItemState extends State<AddPlanItem> {
         widget.planInfo.alarmTime =
             DateTime(now.year, now.month, now.day, 10, 30);
 
-        widget.planInfo.isAlarm = true;
-
         context.read<DietInfoProvider>().changePlanInfo(widget.planInfo);
 
         return Navigator.pushNamed(

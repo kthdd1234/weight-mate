@@ -43,6 +43,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             DietInfoProvider readProvider = context.read<DietInfoProvider>();
 
             readProvider.changeIsAlarm(false);
+            readProvider.changeIsPlanAlarm(false);
           });
         }
       }

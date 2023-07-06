@@ -46,24 +46,6 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
 
-    setPermission() async {
-      DietInfoProvider readProvider = context.read<DietInfoProvider>();
-      bool isPermission = await NotificationService().permissionNotification;
-
-      if (isPermission == false) {
-        bool? isResult = await NotificationService().requestPermission();
-
-        if (isResult == false) {
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            readProvider.changeIsPlanAlarm(false);
-          });
-        } else {
-          readProvider.changeIsPlanAlarm(true);
-        }
-      }
-    }
-
-    setPermission();
     timeValue = initAlarmDateTime;
   }
 
@@ -92,8 +74,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         id: alarmId,
         dateTime: dateTime,
         alarmTime: planInfo.alarmTime!,
-        title: '계획 실천 알림',
-        body: '${planInfo.name} 실천해보세요.',
+        title: planNotifyTitle(),
+        body: planNotifyBody(title: planInfo.title, body: planInfo.name),
         payload: 'plan',
       );
     }
@@ -133,8 +115,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           id: notifyWeightUid,
           alarmTime: userInfoState.alarmTime!,
           dateTime: now,
-          title: '체중 기록 알림',
-          body: '오늘의 체중을 입력 할 시간이에요.',
+          title: weightNotifyTitle(),
+          body: weightNotifyBody(),
           payload: 'weight',
         );
       }
@@ -150,6 +132,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
 
       if (planInfo.isAlarm) {
         bool isAlarmId = notificationIds.contains(planInfo.alarmId);
+
         addPlanNotification(
           alarmId: isAlarmId ? planInfo.alarmId! : notifyPlanUid,
           dateTime: importProvider.getImportDateTime(),
@@ -357,90 +340,3 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     );
   }
 }
-
-// final userInfoState = provider.getUserInfo();
-// final recordInfoState = provider.getRecordInfo();
-// final now = DateTime.now();
-// final uuidV1 = const Uuid().v1();
-
-// if (argmentsType == argmentsTypeEnum.start) {
-//   userBox.put(
-//     'userBox',
-//     UserBox(
-//       userId: uuidV1,
-//       tall: userInfoState.tall,
-//       goalWeight: userInfoState.goalWeight,
-//       recordStartDateTime: now,
-//       isWeightAlarm: userInfoState.isWeightAlarm,
-//       weightAlarmTime: userInfoState.isWeightAlarm
-//           ? userInfoState.weightAlarmTime
-//           : null,
-//       alarmId: userInfoState.isWeightAlarm ? notifyWeightUid : null,
-//     ),
-//   );
-
-//   recordBox.put(
-//     getDateTimeToInt(now),
-//     RecordBox(
-//       recordDateTime: now,
-//       weight: recordInfoState.weight,
-//     ),
-//   );
-
-//   if (userInfoState.isWeightAlarm) {
-//     NotificationService().addNotification(
-//       id: notifyWeightUid,
-//       alarmTime: userInfoState.weightAlarmTime!,
-//       title: '체중 기록 알림',
-//       body: '오늘의 체중을 입력 할 시간이에요.',
-//     );
-//   }
-// }
-
-// ),
-// SizedBox(
-//   height: 150,
-//   child: Row(
-//     children: [
-//       PlanItemWidget(
-//         id: PlanPriorityEnum.high,
-//         name: '높음',
-//         desc: 'High',
-//         icon: Icons.filter_1,
-//         isEnabled: seletedPlanPriority == PlanPriorityEnum.high,
-//         onTap: onTapItem,
-//       ),
-//       PlanItemWidget(
-//         id: PlanPriorityEnum.medium,
-//         name: '중간',
-//         desc: 'Medium',
-//         icon: Icons.filter_2,
-//         isEnabled:
-//             seletedPlanPriority == PlanPriorityEnum.medium,
-//         onTap: onTapItem,
-//       ),
-//       PlanItemWidget(
-//         id: PlanPriorityEnum.low,
-//         name: '낮음',
-//         desc: 'Low',
-//         icon: Icons.filter_3,
-//         isEnabled: seletedPlanPriority == PlanPriorityEnum.low,
-//         onTap: onTapItem,
-//       ),
-//     ],
-//   ),
-// ),
-
-//                 onTapInput({type, DateTime? dateTime}) {
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) => CalendarDefaultDialog(
-//       type: type,
-//       titleWidgets: TitleBlock(type: type),
-//       initialDateTime: dateTime,
-//       onSubmit: onSubmitDialog,
-//       onCancel: () => closeDialog(context),
-//       maxDate: type == 'start' ? planInfo.endDateTime : null,
-//     ),
-//   );
-// }

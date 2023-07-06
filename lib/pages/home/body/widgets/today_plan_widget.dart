@@ -372,9 +372,22 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
                 name: planInfo.name,
                 priority: planInfo.priority,
                 isAlarm: planInfo.isAlarm,
+                alarmId: planInfo.alarmId,
+                alarmTime: planInfo.alarmTime,
                 createDateTime: widget.importDateTime,
               ),
             );
+
+            if (planInfo.isAlarm) {
+              NotificationService().addNotification(
+                id: planInfo.alarmId!,
+                dateTime: widget.importDateTime,
+                alarmTime: planInfo.alarmTime!,
+                title: planNotifyTitle(),
+                body: planNotifyBody(title: title, body: planInfo.name),
+                payload: 'plan',
+              );
+            }
           }
         }
 

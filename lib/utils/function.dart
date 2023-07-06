@@ -296,3 +296,19 @@ dateTimeToTitle(DateTime dateTime) {
 
   return dateTimeFormatter(format: 'MM월 dd일', dateTime: dateTime);
 }
+
+weightNotifyTitle() {
+  return '오늘의 체중 기록 알림 📝';
+}
+
+weightNotifyBody() {
+  return '지금 바로 체중을 기록해보세요!';
+}
+
+planNotifyTitle() {
+  return '오늘의 계획 실천 알림 ⏰';
+}
+
+planNotifyBody({required String title, required String body}) {
+  return '[$title: $body]\n지금 바로 실천해보세요!';
+}

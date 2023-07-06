@@ -216,7 +216,7 @@ class CalendarBodyState extends State<CalendarBody> {
               locale: 'ko-KR',
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.now(),
-              focusedDay: DateTime.now(),
+              focusedDay: currentDay,
               headerStyle: const HeaderStyle(
                 headerMargin: EdgeInsets.only(bottom: 10),
                 titleCentered: true,

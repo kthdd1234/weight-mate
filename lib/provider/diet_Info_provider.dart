@@ -16,7 +16,7 @@ final initPlanInfo = PlanInfoClass(
   id: '',
   name: '',
   priority: PlanPriorityEnum.medium,
-  isAlarm: false,
+  isAlarm: true,
   alarmTime: initAlarmDateTime,
   alarmId: null,
   createDateTime: DateTime.now(),

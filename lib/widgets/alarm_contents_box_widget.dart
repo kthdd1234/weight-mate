@@ -54,8 +54,8 @@ class _AlarmContentsBoxWidgetState extends State<AlarmContentsBoxWidget> {
         id: widget.alarmId ?? UniqueKey().hashCode,
         alarmTime: time ?? initAlarmDateTime,
         dateTime: widget.dateTime,
-        title: '체중 기록 알림',
-        body: '오늘의 체중을 입력 할 시간이에요.',
+        title: weightNotifyTitle(),
+        body: weightNotifyBody(),
         payload: 'weight',
       );
     }

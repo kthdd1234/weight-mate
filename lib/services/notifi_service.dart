@@ -64,19 +64,26 @@ class NotificationService {
     /// add schedule notification
     final details =
         notificationDetails(id: id.toString(), title: title, body: body);
+    final other = DateTime(
+      dateTime.year,
+      dateTime.month,
+      dateTime.day,
+      alarmTime.hour,
+      alarmTime.minute,
+    );
+
+    DateTime now = dateTime.add(const Duration(seconds: 5));
+    tz.TZDateTime scheduledDate = tz.TZDateTime.from(other, tz.local);
+
+    if (now.isAfter(other) && payload == 'plan') {
+      return false;
+    }
 
     notification.zonedSchedule(
       id,
       title,
       body,
-      tz.TZDateTime(
-        tz.local,
-        dateTime.year,
-        dateTime.month,
-        dateTime.day,
-        alarmTime.hour,
-        alarmTime.minute,
-      ).add(const Duration(seconds: 3)),
+      scheduledDate,
       details,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
