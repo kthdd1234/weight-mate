@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -63,10 +65,7 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
   @override
   void initState() {
     super.initState();
-
     setInputText();
-
-    print('요기');
 
     userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
@@ -176,6 +175,36 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           recordInfo.weightDateTime = DateTime.now();
           recordInfo.weight = stringToDouble(text);
           recordBox.put(importDateTimeInt, recordInfo);
+
+          setTitleText() {
+            List<RecordBox> valueList = recordBox.values.toList();
+            List<RecordBox> recordList =
+                valueList.where((e) => e.weight != null).toList();
+
+            return '👏🏻 ${recordList.length}일째 기록 했어요!';
+          }
+
+          showDialog(
+            context: context,
+            builder: (dialogContext) {
+              onClick(BottomNavigationEnum enumId) async {
+                closeDialog(dialogContext);
+                dialogContext
+                    .read<BottomNavigationProvider>()
+                    .setBottomNavigation(enumId: enumId);
+              }
+
+              return NativeAdDialog(
+                title: setTitleText(),
+                leftText: '달력 보기',
+                rightText: '체중 보기',
+                leftIcon: Icons.calendar_month,
+                rightIcon: Icons.auto_graph_rounded,
+                onLeftClick: () => onClick(BottomNavigationEnum.calendar),
+                onRightClick: () => onClick(BottomNavigationEnum.analyze),
+              );
+            },
+          );
 
           break;
 

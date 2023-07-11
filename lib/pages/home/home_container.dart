@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_app_weight_management/pages/home/body/calendar_body.dart
 import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/more_see_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record_body.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -18,15 +21,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
-List<eBottomNavigationBarItem> bottomIdList = [
-  eBottomNavigationBarItem.record,
-  eBottomNavigationBarItem.calendar,
-  eBottomNavigationBarItem.analyze,
-  eBottomNavigationBarItem.setting
+List<BottomNavigationEnum> bottomIdList = [
+  BottomNavigationEnum.record,
+  BottomNavigationEnum.calendar,
+  BottomNavigationEnum.analyze,
+  BottomNavigationEnum.setting
 ];
 
 class HomeContainer extends StatefulWidget {
-  HomeContainer({super.key});
+  const HomeContainer({super.key});
 
   @override
   State<HomeContainer> createState() => _HomeContainerState();
@@ -39,24 +42,22 @@ class _HomeContainerState extends State<HomeContainer>
 
   bool isActiveCamera = false;
 
-  eBottomNavigationBarItem selectedId = eBottomNavigationBarItem.record;
-
-  setOnNotifications() {
-    onNotifications.stream.listen((String? payload) async {
-      selectedId = bottomIdList[0];
-      // Scrollable.ensureVisible(planKey.currentContext!); // todo: 자동 스크롤링 필요!
-    });
-  }
-
   @override
   void initState() {
     super.initState();
+
     userBox = Hive.box('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
-    selectedId = eBottomNavigationBarItem.record;
 
-    setOnNotifications();
-
+    onNotifications.stream.listen(
+      (String? payload) => WidgetsBinding.instance.addPostFrameCallback(
+        (timeStamp) {
+          context
+              .read<BottomNavigationProvider>()
+              .setBottomNavigation(enumId: BottomNavigationEnum.record);
+        },
+      ),
+    );
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -101,14 +102,6 @@ class _HomeContainerState extends State<HomeContainer>
 
   @override
   Widget build(BuildContext context) {
-    setActiveCamera(bool newValue) {
-      setState(() => isActiveCamera = newValue);
-    }
-
-    onBottomNavigation(int index) {
-      setState(() => selectedId = bottomIdList[index]);
-    }
-
     List<BottomNavigationBarItem> items = const [
       BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
       BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '달력'),
@@ -123,26 +116,41 @@ class _HomeContainerState extends State<HomeContainer>
     ];
 
     List<Widget> bodyList = [
-      RecordBody(setActiveCamera: setActiveCamera),
-      CalendarBody(onBottomNavigation: onBottomNavigation),
+      RecordBody(
+        setActiveCamera: (bool newValue) =>
+            setState(() => isActiveCamera = newValue),
+      ),
+      CalendarBody(),
       const AnalyzeBody(),
       const MoreSeeBody()
     ];
 
+    BottomNavigationEnum bottomNavitionId =
+        context.watch<BottomNavigationProvider>().selectedEnumId;
+
+    onBottomNavigation(int index) {
+      List<BottomNavigationEnum> indexList =
+          BottomNavigationEnum.values.toList();
+
+      context
+          .read<BottomNavigationProvider>()
+          .setBottomNavigation(enumId: indexList[index]);
+    }
+
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.transparent,
-        appBar: HomeAppBarWidget(appBar: AppBar(), id: selectedId),
+        appBar: HomeAppBarWidget(appBar: AppBar(), id: bottomNavitionId),
         body: Padding(
           padding: pagePadding,
-          child: SafeArea(child: bodyList[selectedId.index]),
+          child: SafeArea(child: bodyList[bottomNavitionId.index]),
         ),
         bottomNavigationBar: Theme(
           data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
           child: BottomNavigationBar(
             items: items,
             elevation: 0,
-            currentIndex: selectedId.index,
+            currentIndex: bottomNavitionId.index,
             selectedItemColor: buttonBackgroundColor,
             unselectedItemColor: const Color(0xFF151515),
             backgroundColor: Colors.red,

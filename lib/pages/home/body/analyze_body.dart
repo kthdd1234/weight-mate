@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -217,6 +218,8 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
 
     return Column(
       children: [
+        BannerWidget(),
+        SpaceHeight(height: smallSpace),
         DefaultSegmented(
           selectedSegment: selectedRecordTypeSegment,
           children: recordTypeChildren,

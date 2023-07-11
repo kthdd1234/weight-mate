@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/plan_item_widget.dart';
@@ -76,6 +78,7 @@ class _AddPlanItemState extends State<AddPlanItem> {
 
     setGridView() {
       return GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: itemClassList.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -107,7 +110,8 @@ class _AddPlanItemState extends State<AddPlanItem> {
             step: 3,
             title: '어떤 ${widget.planInfo.title}으로 진행하나요?',
           ),
-          setGridView()
+          setGridView(),
+          SpaceHeight(height: regularSapce)
         ],
       ),
       buttonEnabled: buttonEnabled(),

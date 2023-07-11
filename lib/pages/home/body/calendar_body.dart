@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -25,12 +27,7 @@ Map<SegmentedTypes, Color> dotColors = <SegmentedTypes, Color>{
 };
 
 class CalendarBody extends StatefulWidget {
-  CalendarBody({
-    super.key,
-    required this.onBottomNavigation,
-  });
-
-  Function(int index) onBottomNavigation;
+  CalendarBody({super.key});
 
   @override
   State<CalendarBody> createState() => CalendarBodyState();
@@ -40,16 +37,15 @@ class CalendarBodyState extends State<CalendarBody> {
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
   late DateTime currentDay;
-
   CalendarFormat calendarFormat = CalendarFormat.month;
 
   @override
   void initState() {
+    super.initState();
+
     recordBox = Hive.box('recordBox');
     planBox = Hive.box('planbox');
     currentDay = DateTime.now();
-
-    super.initState();
   }
 
   @override
@@ -137,11 +133,66 @@ class CalendarBodyState extends State<CalendarBody> {
 
     onTapModifyRecord() {
       context.read<ImportDateTimeProvider>().setImportDateTime(currentDay);
-      widget.onBottomNavigation(0);
+      context
+          .read<BottomNavigationProvider>()
+          .setBottomNavigation(enumId: BottomNavigationEnum.record);
+    }
+
+    markerBuilder(context, day, events) {
+      String? weightText;
+      List<Widget> colorDotList = [];
+
+      for (var i = 0; i < recordValues.length; i++) {
+        final recordInfo = recordValues[i];
+        final createDateTimeInt = getDateTimeToInt(recordInfo.createDateTime);
+        final builerDayInt = getDateTimeToInt(day);
+        final weight = recordInfo.weight;
+        final actions = recordInfo.actions;
+        final imageFilePath =
+            recordInfo.leftEyeBodyFilePath ?? recordInfo.rightEyeBodyFilePath;
+        final whiteText = recordInfo.whiteText;
+
+        addColorDot(dynamic target, Color color) {
+          if (target != null) {
+            colorDotList.add(createColorDot(color: color));
+          } else {
+            colorDotList.add(createColorDot(color: Colors.transparent));
+          }
+        }
+
+        addWeightText(double? value) {
+          if (value != null) {
+            weightText = value.toString();
+          }
+        }
+
+        if (createDateTimeInt == builerDayInt) {
+          addWeightText(weight);
+          addColorDot(weight, weightColor);
+          addColorDot(actions, actionColor);
+          addColorDot(imageFilePath, eyeBodyColor);
+          addColorDot(whiteText, diaryColor);
+        }
+      }
+
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          weightText != null
+              ? Text('$weightText kg', style: const TextStyle(fontSize: 7))
+              : const EmptyArea(),
+          SpaceHeight(height: 3),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: colorDotList,
+          ),
+        ],
+      );
     }
 
     return Column(
       children: [
+        BannerWidget(),
         Expanded(
           child: ContentsBox(
             backgroundColor: Colors.transparent,
@@ -149,62 +200,7 @@ class CalendarBodyState extends State<CalendarBody> {
             contentsWidget: TableCalendar(
               shouldFillViewport: true,
               currentDay: currentDay,
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, day, events) {
-                  String? weightText;
-                  List<Widget> colorDotList = [];
-
-                  for (var i = 0; i < recordValues.length; i++) {
-                    final recordInfo = recordValues[i];
-                    final createDateTimeInt =
-                        getDateTimeToInt(recordInfo.createDateTime);
-                    final builerDayInt = getDateTimeToInt(day);
-                    final weight = recordInfo.weight;
-                    final actions = recordInfo.actions;
-                    final imageFilePath = recordInfo.leftEyeBodyFilePath ??
-                        recordInfo.rightEyeBodyFilePath;
-                    final whiteText = recordInfo.whiteText;
-
-                    addColorDot(dynamic target, Color color) {
-                      if (target != null) {
-                        colorDotList.add(createColorDot(color: color));
-                      } else {
-                        colorDotList
-                            .add(createColorDot(color: Colors.transparent));
-                      }
-                    }
-
-                    addWeightText(double? value) {
-                      if (value != null) {
-                        weightText = value.toString();
-                      }
-                    }
-
-                    if (createDateTimeInt == builerDayInt) {
-                      addWeightText(weight);
-                      addColorDot(weight, weightColor);
-                      addColorDot(actions, actionColor);
-                      addColorDot(imageFilePath, eyeBodyColor);
-                      addColorDot(whiteText, diaryColor);
-                    }
-                  }
-
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      weightText != null
-                          ? Text('$weightText kg',
-                              style: const TextStyle(fontSize: 7))
-                          : const EmptyArea(),
-                      SpaceHeight(height: 3),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: colorDotList,
-                      ),
-                    ],
-                  );
-                },
-              ),
+              calendarBuilders: CalendarBuilders(markerBuilder: markerBuilder),
               onDaySelected: onDaySelected,
               availableGestures: AvailableGestures.horizontalSwipe,
               availableCalendarFormats: const {
@@ -226,7 +222,7 @@ class CalendarBodyState extends State<CalendarBody> {
             ),
           ),
         ),
-        SpaceHeight(height: regularSapce),
+        SpaceHeight(height: smallSpace),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
@@ -245,7 +241,7 @@ class CalendarBodyState extends State<CalendarBody> {
               text: '자세히 보기',
               onTap: onTapMoreInfo,
             ),
-            SpaceWidth(width: smallSpace),
+            SpaceWidth(width: tinySpace),
             ExpandedButtonHori(
               imgUrl: 'assets/images/t-14.png',
               icon: Icons.delete_outline,
@@ -254,7 +250,7 @@ class CalendarBodyState extends State<CalendarBody> {
             ),
           ],
         ),
-        SpaceHeight(height: smallSpace),
+        SpaceHeight(height: tinySpace),
         Row(
           children: [
             ExpandedButtonHori(

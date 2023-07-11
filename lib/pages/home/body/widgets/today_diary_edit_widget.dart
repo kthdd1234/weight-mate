@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -25,38 +27,20 @@ class TodayDiaryEditWidget extends StatefulWidget {
 class _TodayDiaryEditWidgetState extends State<TodayDiaryEditWidget> {
   final TextEditingController textController = TextEditingController();
   final int textMaxLength = 200;
-  bool isEnabledOnPressed = false;
 
   @override
   void initState() {
     textController.text = widget.text;
-    final bool isResult =
-        widget.text != '' && widget.text.length != textMaxLength;
-    isEnabledOnPressed = isResult;
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    onPressedOk() {
+    onEditingComplete() {
       widget.onPressedOk(textController.text);
       context
           .read<RecordIconTypeProvider>()
           .setSeletedRecordIconType(RecordIconTypes.none);
-    }
-
-    onPressedCancel() {
-      context
-          .read<RecordIconTypeProvider>()
-          .setSeletedRecordIconType(RecordIconTypes.none);
-    }
-
-    onChanged(String value) {
-      final bool isResult = textController.text != '' &&
-          textController.text.length != textMaxLength;
-
-      setState(() => isEnabledOnPressed = isResult);
     }
 
     return ContentsBox(
@@ -67,15 +51,10 @@ class _TodayDiaryEditWidgetState extends State<TodayDiaryEditWidget> {
             hintText: '일기를 작성해주세요.',
             controller: textController,
             maxLength: textMaxLength,
-            onChanged: onChanged,
+            onEditingComplete: onEditingComplete,
+            onTapOutside: onEditingComplete,
           ),
           SpaceHeight(height: smallSpace),
-          OkAndCancelButton(
-            okText: '추가',
-            cancelText: '취소',
-            onPressedOk: isEnabledOnPressed ? onPressedOk : null,
-            onPressedCancel: onPressedCancel,
-          )
         ],
       ),
     );

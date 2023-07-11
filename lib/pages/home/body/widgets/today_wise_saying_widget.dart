@@ -1,9 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -47,6 +45,14 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
             contentsWidget: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // CircularIcon(
+                //   icon: Icons.interests,
+                //   size: 40,
+                //   borderRadius: 10,
+                //   backgroundColor: typeBackgroundColor,
+                //   iconColor: Colors.green.shade300,
+                // ),
+                // SpaceWidth(width: smallSpace),
                 Expanded(
                   flex: 5,
                   child: Column(
@@ -54,7 +60,7 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
                     children: [
                       ContentsTitleText(
                         text: '${dateTimeToTitle(widget.importDateTime)} 명언',
-                        icon: Icons.auto_awesome_outlined,
+                        // icon: Icons.auto_awesome_outlined,
                       ),
                       SpaceHeight(height: smallSpace),
                       WiseSayingItemWidget(
@@ -68,7 +74,11 @@ class _TodayWiseSayingWidgetState extends State<TodayWiseSayingWidget> {
                   flex: 0,
                   child: InkWell(
                     onTap: onTapClose,
-                    child: const Icon(Icons.close),
+                    child: const Icon(
+                      Icons.close,
+                      size: 18,
+                      color: buttonBackgroundColor,
+                    ),
                   ),
                 ),
               ],

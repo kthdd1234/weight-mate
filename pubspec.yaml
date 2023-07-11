@@ -66,6 +66,8 @@ dependencies:
   ios_utsname_ext: ^2.2.0
   package_info_plus: ^4.0.2
   rxdart: ^0.27.7
+  google_mobile_ads: ^3.0.0
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:
@@ -117,6 +119,7 @@ flutter:
     - assets/images/t-21.png
     - assets/images/t-22.png
     - assets/images/t-23.png
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

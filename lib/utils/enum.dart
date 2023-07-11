@@ -14,7 +14,7 @@ enum RecordIconTypes {
   removeEyeBody
 }
 
-enum eBottomNavigationBarItem { record, calendar, analyze, setting }
+enum BottomNavigationEnum { record, calendar, analyze, setting }
 
 enum SegmentedTypes {
   weight,

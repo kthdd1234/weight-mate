@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -7,19 +8,18 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diar
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_wise_saying_widget.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 
 class RecordBody extends StatefulWidget {
-  RecordBody({
-    super.key,
-    required this.setActiveCamera,
-  });
+  RecordBody({super.key, required this.setActiveCamera});
 
   Function(bool isActive) setActiveCamera;
 
@@ -33,6 +33,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
   late Box<PlanBox> planBox;
 
   bool isGestureDetector = false;
+  BannerAd? bannerAd;
 
   @override
   void initState() {
@@ -41,14 +42,25 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
     userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
-
-    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final adsState = Provider.of<AdsProvider>(context).adsState;
+
+    adsState.initialization.then(
+      (value) => {
+        setState(() {
+          bannerAd = BannerAd(
+            adUnitId: adsState.bannerAdUnitId,
+            size: AdSize.banner,
+            request: const AdRequest(),
+            listener: adsState.bannerAdListener,
+          )..load();
+        })
+      },
+    );
   }
 
   @override
@@ -74,6 +86,8 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
         builder: (context, values, child) {
           return Column(
             children: [
+              BannerWidget(),
+              SpaceHeight(height: smallSpace),
               TodayWiseSayingWidget(importDateTime: importDateTime),
               SpaceHeight(height: largeSpace),
               TodayWeightWidget(
@@ -91,10 +105,6 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 seletedRecordSubType: seletedRecordIconType,
                 setActiveCamera: widget.setActiveCamera,
               ),
-              // ElevatedButton(
-              //   onPressed: onPressed,
-              //   child: const Text('hive 데이터 초기화'),
-              // )
             ],
           );
         },
@@ -102,3 +112,11 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
     );
   }
 }
+
+
+
+              // ElevatedButton(
+              //   onPressed: onPressed,
+              //   child: const Text('hive 데이터 초기화'),
+              // )
+              

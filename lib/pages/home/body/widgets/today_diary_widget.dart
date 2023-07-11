@@ -17,7 +17,6 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_con
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_data_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
-import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/file_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -290,19 +289,40 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     }
 
     onPressedOk(String text) {
-      if (recordInfo == null) {
-        return recordBox.put(
-          getDateTimeToInt(widget.importDateTime),
-          RecordBox(
-            createDateTime: widget.importDateTime,
-            diaryDateTime: widget.importDateTime,
-            whiteText: text,
-          ),
+      int year = widget.importDateTime.year;
+      int month = widget.importDateTime.month;
+      int day = widget.importDateTime.day;
+      DateTime now = DateTime.now();
+
+      if (text == '') {
+        showSnackBar(
+          context: context,
+          text: '한 글자 이상 입력해주세요.',
+          buttonName: '확인',
+          width: 270,
         );
       } else {
-        recordInfo.whiteText = text;
-        recordInfo.diaryDateTime = DateTime.now();
-        recordInfo.save();
+        if (recordInfo == null) {
+          return recordBox.put(
+            getDateTimeToInt(widget.importDateTime),
+            RecordBox(
+              createDateTime: widget.importDateTime,
+              diaryDateTime: widget.importDateTime,
+              whiteText: text,
+            ),
+          );
+        } else {
+          recordInfo.whiteText = text;
+          recordInfo.diaryDateTime = DateTime(
+            year,
+            month,
+            day,
+            now.hour,
+            now.minute,
+            now.second,
+          );
+          recordInfo.save();
+        }
       }
     }
 
@@ -333,7 +353,6 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     }
 
     return Column(
-      // key: GlobalObjectKey('오늘의 일기 위젯'),
       children: [
         ContentsTitleText(
           text: '${dateTimeToTitle(widget.importDateTime)} 일기',

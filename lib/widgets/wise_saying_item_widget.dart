@@ -18,9 +18,7 @@ class WiseSayingItemWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          wiseSaying,
-        ),
+        Text(wiseSaying),
         SpaceHeight(height: smallSpace),
         BodySmallText(text: name)
       ],

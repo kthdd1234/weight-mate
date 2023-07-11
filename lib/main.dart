@@ -10,13 +10,18 @@ import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_pag
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/pages/splash/splash.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
+import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'pages/add/pages/add_body_info.dart';
@@ -24,6 +29,11 @@ import 'pages/common/screen_lock_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  final initMobileAds = MobileAds.instance.initialize();
+  final adsState = AdsService(initialization: initMobileAds);
+
+  await dotenv.load(fileName: ".env");
 
   NotificationService().initNotification();
   NotificationService().initializeTimeZone();
@@ -41,6 +51,12 @@ void main() async {
         ),
         ChangeNotifierProvider<ImportDateTimeProvider>(
           create: (_) => ImportDateTimeProvider(),
+        ),
+        ChangeNotifierProvider<AdsProvider>(
+          create: (_) => AdsProvider(adsState: adsState),
+        ),
+        ChangeNotifierProvider<BottomNavigationProvider>(
+          create: (_) => BottomNavigationProvider(),
         ),
       ],
       child: const MyApp(),
@@ -93,14 +109,15 @@ class _MyAppState extends State<MyApp> {
         Locale('ko', 'KR'),
       ],
       theme: AppThemes.lightTheme,
-      initialRoute: '/splash-screen',
+      initialRoute:
+          userProfile?.userId != null ? '/home-container' : '/splash-screen',
       routes: {
         '/splash-screen': (context) => const SplashScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-type': (context) => AddPlanType(planInfo: planInfo),
         '/add-plan-item': (context) => AddPlanItem(planInfo: planInfo),
         '/add-plan-setting': (context) => const AddPlanSetting(),
-        '/home-container': (context) => HomeContainer(),
+        '/home-container': (context) => const HomeContainer(),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/common-alarm': (context) => const CommonAlarmPage(),
         '/record-info-page': (context) => const RecordInfoPage(),
