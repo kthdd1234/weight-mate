@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -60,26 +63,18 @@ class _NativeWidgetState extends State<NativeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (nativeAdIsLoaded == false) {
-      return const SizedBox(height: 50);
-    }
+    if (nativeAdIsLoaded == false) return const EmptyArea();
 
-    return SizedBox(height: 300, child: AdWidget(ad: nativeAd!));
+    return Column(
+      children: [
+        ContentsBox(
+          padding: const EdgeInsets.all(10),
+          width: double.maxFinite,
+          height: 300,
+          contentsWidget: AdWidget(ad: nativeAd!),
+        ),
+        SpaceHeight(height: smallSpace),
+      ],
+    );
   }
 }
-
-   // primaryTextStyle: NativeTemplateTextStyle(
-              //   textColor: buttonBackgroundColor,
-              //   backgroundColor: Colors.transparent,
-              //   size: 13.0,
-              // ),
-              // secondaryTextStyle: NativeTemplateTextStyle(
-              //   textColor: buttonBackgroundColor,
-              //   backgroundColor: Colors.black,
-              //   size: 16.0,
-              // ),
-              // tertiaryTextStyle: NativeTemplateTextStyle(
-              //   textColor: buttonBackgroundColor,
-              //   backgroundColor: Colors.amber,
-              //   size: 16.0,
-              // ),

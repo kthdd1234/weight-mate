@@ -21,32 +21,32 @@ class AdsService {
     String? testId = dotenv.env['ANDROID_BANNER_TEST_ID'] ?? '';
     String? realId = dotenv.env['ANDROID_BANNER_REAL_ID'] ?? '';
 
-    return testId;
-    // return kDebugMode ? testId : realId;
+    // return testId;
+    return kDebugMode ? testId : realId;
   }
 
   String get iosBannerAdUnitId {
     String? testId = dotenv.env['IOS_BANNER_TEST_ID'] ?? '';
     String? realId = dotenv.env['IOS_BANNER_REAL_ID'] ?? '';
 
-    return testId;
-    // return kDebugMode ? testId : realId;
+    // return testId;
+    return kDebugMode ? testId : realId;
   }
 
   String get androidNativeAdUnitId {
     String? testId = dotenv.env['ANDROID_NATIVE_TEST_ID'] ?? '';
     String? realId = dotenv.env['ANDROID_NATIVE_REAL_ID'] ?? '';
 
-    return testId;
-    // return kDebugMode ? testId : realId;
+    // return testId;
+    return kDebugMode ? testId : realId;
   }
 
   String get iosNativeAdUnitId {
     String? testId = dotenv.env['IOS_NATIVE_TEST_ID'] ?? '';
     String? realId = dotenv.env['IOS_NATIVE_REAL_ID'] ?? '';
 
-    return testId;
-    // return kDebugMode ? testId : realId;
+    // return testId;
+    return kDebugMode ? testId : realId;
   }
 
   final BannerAdListener _bannerAdListener = BannerAdListener(

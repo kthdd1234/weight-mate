@@ -95,6 +95,8 @@ class _HomeContainerState extends State<HomeContainer>
         }
       }
 
+      log('$isActiveCamera');
+
       setGenerate();
       setState(() => isActiveCamera = false);
     }

@@ -21,6 +21,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ import 'pages/common/screen_lock_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
 

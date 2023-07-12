@@ -36,16 +36,10 @@ class NativeAdDialog extends StatelessWidget {
       ),
       content: SizedBox(
         width: double.maxFinite,
-        height: 370,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ContentsBox(
-              padding: const EdgeInsets.all(10),
-              width: double.maxFinite,
-              height: 300,
-              contentsWidget: NativeWidget(),
-            ),
-            SpaceHeight(height: smallSpace),
+            NativeWidget(),
             Row(
               children: [
                 ExpandedButtonHori(
