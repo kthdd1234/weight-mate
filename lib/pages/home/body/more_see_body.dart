@@ -42,7 +42,10 @@ class _MoreSeeBodyState extends State<MoreSeeBody> {
       builder: (context, list, widget) => SingleChildScrollView(
         child: Column(
           children: [
-            MoreMyInfoWidget(userBox: userBox, recordBox: recordBox),
+            MoreMyInfoWidget(
+              userBox: userBox,
+              recordBox: recordBox,
+            ),
             SpaceHeight(height: largeSpace),
             MoreAppSettingWidget(
               userProfile: userBox.get('userProfile'),

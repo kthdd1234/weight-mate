@@ -43,5 +43,8 @@ Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo info) {
 Future<Map<String, dynamic>> getAppInfo() async {
   PackageInfo info = await PackageInfo.fromPlatform();
 
-  return {"앱 버전": info.version};
+  return {
+    "앱 버전": info.version,
+    '앱 빌드 번호': info.buildNumber,
+  };
 }

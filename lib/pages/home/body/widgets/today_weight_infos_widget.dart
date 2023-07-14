@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TodayWeightInfosWidget extends StatelessWidget {
   TodayWeightInfosWidget({
@@ -158,8 +161,34 @@ class TodayWeightInfosWidget extends StatelessWidget {
                 ),
                 SpaceHeight(height: regularSapce),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    id == 'bmi'
+                        ? InkWell(
+                            onTap: () async {
+                              Uri url = Uri(
+                                scheme: 'https',
+                                host: 'ko.wikipedia.org',
+                                path:
+                                    'wiki/%EC%B2%B4%EC%A7%88%EB%9F%89_%EC%A7%80%EC%88%98',
+                              );
+                              if (await canLaunchUrl(url)) {
+                                await launchUrl(url);
+                              } else {
+                                throw 'Could not launch $url';
+                              }
+                            },
+                            child: Text(
+                              '출처: 위키백과',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.blueAccent.shade400,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          )
+                        : const EmptyArea(),
                     CircularIcon(
                       size: 40,
                       borderRadius: 50,

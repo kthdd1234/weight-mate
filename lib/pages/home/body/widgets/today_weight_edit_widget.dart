@@ -168,20 +168,10 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
                 weight: stringToDouble(text),
               ),
             );
-
-            break;
-          }
-
-          recordInfo.weightDateTime = DateTime.now();
-          recordInfo.weight = stringToDouble(text);
-          recordBox.put(importDateTimeInt, recordInfo);
-
-          setTitleText() {
-            List<RecordBox> valueList = recordBox.values.toList();
-            List<RecordBox> recordList =
-                valueList.where((e) => e.weight != null).toList();
-
-            return '👏🏻 ${recordList.length}일째 기록 했어요!';
+          } else {
+            recordInfo.weightDateTime = DateTime.now();
+            recordInfo.weight = stringToDouble(text);
+            recordBox.put(importDateTimeInt, recordInfo);
           }
 
           showDialog(
@@ -192,6 +182,14 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
                 dialogContext
                     .read<BottomNavigationProvider>()
                     .setBottomNavigation(enumId: enumId);
+              }
+
+              setTitleText() {
+                List<RecordBox> valueList = recordBox.values.toList();
+                List<RecordBox> recordList =
+                    valueList.where((e) => e.weight != null).toList();
+
+                return '👏🏻 ${recordList.length}일째 기록 했어요!';
               }
 
               return NativeAdDialog(

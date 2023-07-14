@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -94,8 +92,6 @@ class _HomeContainerState extends State<HomeContainer>
           );
         }
       }
-
-      log('$isActiveCamera');
 
       setGenerate();
       setState(() => isActiveCamera = false);

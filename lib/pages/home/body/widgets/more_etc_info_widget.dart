@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -8,35 +10,86 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/more_see_item_widget.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
 
-class MoreEtcInfoWidget extends StatelessWidget {
+class MoreEtcInfoWidget extends StatefulWidget {
   const MoreEtcInfoWidget({super.key});
+
+  @override
+  State<MoreEtcInfoWidget> createState() => _MoreEtcInfoWidgetState();
+}
+
+class _MoreEtcInfoWidgetState extends State<MoreEtcInfoWidget> {
+  Map<String, dynamic>? deviceInfo, appInfo;
+
+  @override
+  void initState() {
+    getInfo() async {
+      deviceInfo = await getDeviceInfo();
+      appInfo = await getAppInfo();
+
+      setState(() {});
+    }
+
+    getInfo();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     onTapArrow(MoreSeeItem id) async {
       switch (id) {
+        case MoreSeeItem.appEval:
+          InAppReview inAppReview = InAppReview.instance;
+          String? appleId = dotenv.env['APPLE_ID'];
+          String? androidId = dotenv.env['ANDROID_ID'];
+
+          if (Platform.isIOS) {
+            inAppReview.openStoreListing(appStoreId: appleId);
+          } else {
+            showSnackBar(
+              context: context,
+              text: '해당 기능은 준비 중입니다 :)',
+              buttonName: '확인',
+              width: 300,
+            );
+          }
+
+          break;
+
         case MoreSeeItem.appShare:
-          Share.share('https://www.naver.com', subject: '앱 이름');
+          String? appStoreLink = dotenv.env['APP_STORE_LINK'];
+
+          if (Platform.isIOS) {
+            Share.share(appStoreLink!, subject: '체중 메이트');
+          } else {
+            showSnackBar(
+              context: context,
+              text: '해당 기능은 준비 중입니다 :)',
+              buttonName: '확인',
+              width: 300,
+            );
+          }
           break;
 
         case MoreSeeItem.developerInp:
-          Map<String, dynamic> deviceInfo = await getDeviceInfo();
-          Map<String, dynamic> appInfo = await getAppInfo();
           String body = '';
 
-          body += "==============\n";
-          body += "아래 내용을 함께 보내주시면 큰 도움이 됩니다. \n";
+          if (appInfo != null && deviceInfo != null) {
+            body += "==============\n";
+            body += "아래 내용을 함께 보내주시면 큰 도움이 됩니다. \n";
 
-          appInfo.forEach((key, value) {
-            body += "$key: $value\n";
-          });
+            appInfo!.forEach((key, value) {
+              body += "$key: $value\n";
+            });
 
-          deviceInfo.forEach((key, value) {
-            body += "$key: $value\n";
-          });
+            deviceInfo!.forEach((key, value) {
+              body += "$key: $value\n";
+            });
+          }
 
           body += "==============\n";
 
@@ -85,17 +138,24 @@ class MoreEtcInfoWidget extends StatelessWidget {
       }
     }
 
+    setAppVersion() {
+      if (appInfo == null) return '';
+      return '${appInfo!['앱 버전']} (${appInfo!['앱 빌드 번호']})';
+    }
+
     List<MoreSeeItemClass> moreSeeEtcItems = [
       MoreSeeItemClass(
+        // todo: store 배포 완료 후 기능 구현 할 것.
         index: 0,
         id: MoreSeeItem.appEval,
         icon: Icons.rate_review_outlined,
-        title: '앱 리뷰',
+        title: '앱 리뷰 작성',
         value: '',
         widgetType: MoreSeeWidgetTypes.arrow,
         onTapArrow: onTapArrow,
       ),
       MoreSeeItemClass(
+        // todo: store 배포 완료 후 기능 구현 할 것.
         index: 1,
         id: MoreSeeItem.appShare,
         icon: Icons.share,
@@ -118,7 +178,7 @@ class MoreEtcInfoWidget extends StatelessWidget {
         id: MoreSeeItem.appVersion,
         icon: Icons.error_outline,
         title: '앱 버전',
-        value: '1.1',
+        value: setAppVersion(),
         widgetType: MoreSeeWidgetTypes.none,
       ),
     ];

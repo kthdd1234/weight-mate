@@ -137,18 +137,25 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
           final pickedImage = File(xFile.path);
           final filePath = await saveImageToLocalDirectory(pickedImage);
 
+          int year = widget.importDateTime.year;
+          int month = widget.importDateTime.month;
+          int day = widget.importDateTime.day;
+          DateTime now = DateTime.now();
+          DateTime diaryDateTime =
+              DateTime(year, month, day, now.hour, now.minute);
+
           if (recordInfo == null) {
             recordBox.put(
               getDateTimeToInt(widget.importDateTime),
               RecordBox(
                 createDateTime: widget.importDateTime,
-                diaryDateTime: DateTime.now(),
+                diaryDateTime: diaryDateTime,
                 leftEyeBodyFilePath: pos == 'left' ? filePath : null,
                 rightEyeBodyFilePath: pos == 'right' ? filePath : null,
               ),
             );
           } else {
-            recordInfo.diaryDateTime = DateTime.now();
+            recordInfo.diaryDateTime = diaryDateTime;
             pos == 'left'
                 ? recordInfo.leftEyeBodyFilePath = filePath
                 : recordInfo.rightEyeBodyFilePath = filePath;
