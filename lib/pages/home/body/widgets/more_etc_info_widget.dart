@@ -14,6 +14,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MoreEtcInfoWidget extends StatefulWidget {
   const MoreEtcInfoWidget({super.key});
@@ -134,6 +135,21 @@ class _MoreEtcInfoWidgetState extends State<MoreEtcInfoWidget> {
           );
 
           break;
+
+        case MoreSeeItem.privacyPolicy:
+          // https://nettle-dill-e85.notion.site/3eb8ce7ef1df4ec487e0a27ad31d798b?pvs=4
+          Uri url = Uri(
+            scheme: 'https',
+            host: 'nettle-dill-e85.notion.site',
+            path: '3eb8ce7ef1df4ec487e0a27ad31d798b',
+            queryParameters: {'pvs': '4'},
+          );
+          await canLaunchUrl(url)
+              ? await launchUrl(url)
+              : throw 'launchUrl error';
+
+          break;
+
         default:
       }
     }
@@ -175,6 +191,15 @@ class _MoreEtcInfoWidgetState extends State<MoreEtcInfoWidget> {
       ),
       MoreSeeItemClass(
         index: 3,
+        id: MoreSeeItem.privacyPolicy,
+        icon: Icons.verified_user_outlined,
+        title: '개인정보처리방침',
+        value: '',
+        widgetType: MoreSeeWidgetTypes.arrow,
+        onTapArrow: onTapArrow,
+      ),
+      MoreSeeItemClass(
+        index: 4,
         id: MoreSeeItem.appVersion,
         icon: Icons.error_outline,
         title: '앱 버전',

@@ -46,7 +46,8 @@ enum MoreSeeItem {
   setWeight,
   checkPlan,
   dietWiseSaying,
-  mySetting
+  mySetting,
+  privacyPolicy
 }
 
 enum MoreSeeWidgetTypes { none, arrow, switching }

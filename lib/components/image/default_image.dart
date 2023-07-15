@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,10 @@ class DefaultImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('------------------ file log --------------------');
+    // log('${File(path).existsSync()}');
+    log('${FileImage(File(path))}');
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Image(
