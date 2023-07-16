@@ -25,8 +25,8 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       actions: (fields[5] as List?)
           ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
           .toList(),
-      leftEyeBodyFilePath: fields[6] as String?,
-      rightEyeBodyFilePath: fields[7] as String?,
+      leftFile: fields[6] as Uint8List?,
+      rightFile: fields[7] as Uint8List?,
       whiteText: fields[8] as String?,
     );
   }
@@ -48,9 +48,9 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(5)
       ..write(obj.actions)
       ..writeByte(6)
-      ..write(obj.leftEyeBodyFilePath)
+      ..write(obj.leftFile)
       ..writeByte(7)
-      ..write(obj.rightEyeBodyFilePath)
+      ..write(obj.rightFile)
       ..writeByte(8)
       ..write(obj.whiteText);
   }

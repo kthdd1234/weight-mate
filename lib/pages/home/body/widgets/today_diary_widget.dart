@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -30,11 +31,12 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class TodayDiaryWidget extends StatefulWidget {
-  TodayDiaryWidget(
-      {super.key,
-      required this.seletedRecordSubType,
-      required this.setActiveCamera,
-      required this.importDateTime});
+  TodayDiaryWidget({
+    super.key,
+    required this.seletedRecordSubType,
+    required this.setActiveCamera,
+    required this.importDateTime,
+  });
 
   RecordIconTypes seletedRecordSubType;
   DateTime importDateTime;
@@ -57,11 +59,11 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
   Widget build(BuildContext context) {
     RecordBox? recordInfo =
         recordBox.get(getDateTimeToInt(widget.importDateTime));
-    String? leftEyeBodyFilePath = recordInfo?.leftEyeBodyFilePath;
-    String? rightEyeBodyFilePath = recordInfo?.rightEyeBodyFilePath;
-    Map<String, String?> filePathInfo = {
-      'left': leftEyeBodyFilePath,
-      'right': rightEyeBodyFilePath,
+    Uint8List? leftFile = recordInfo?.leftFile;
+    Uint8List? rightFile = recordInfo?.rightFile;
+    Map<String, Uint8List?> fileInfo = {
+      'left': leftFile,
+      'right': rightFile,
     };
     RecordIconTypeProvider provider = context.read<RecordIconTypeProvider>();
 
@@ -135,9 +137,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         (xFile) async {
           if (xFile == null) return;
 
-          final pickedImage = File(xFile.path);
-          final filePath = await saveImageToLocalDirectory(pickedImage);
-
+          Uint8List pickedImage = await File(xFile.path).readAsBytes();
           int year = widget.importDateTime.year;
           int month = widget.importDateTime.month;
           int day = widget.importDateTime.day;
@@ -151,18 +151,17 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
               RecordBox(
                 createDateTime: widget.importDateTime,
                 diaryDateTime: diaryDateTime,
-                leftEyeBodyFilePath: pos == 'left' ? filePath : null,
-                rightEyeBodyFilePath: pos == 'right' ? filePath : null,
+                leftFile: pos == 'left' ? pickedImage : null,
+                rightFile: pos == 'right' ? pickedImage : null,
               ),
             );
           } else {
             recordInfo.diaryDateTime = diaryDateTime;
             pos == 'left'
-                ? recordInfo.leftEyeBodyFilePath = filePath
-                : recordInfo.rightEyeBodyFilePath = filePath;
+                ? recordInfo.leftFile = pickedImage
+                : recordInfo.rightFile = pickedImage;
             recordInfo.save();
           }
-          // widget.setActiveCamera(false);
 
           // 뺑글뺑글 종료
         },
@@ -182,7 +181,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     }
 
     onTapImage(String pos) {
-      final isFilePath = filePathInfo[pos] != null;
+      final isFilePath = fileInfo[pos] != null;
 
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -195,7 +194,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
               isFilePath
                   ? Column(
                       children: [
-                        DefaultImage(path: filePathInfo[pos]!, height: 280),
+                        DefaultImage(data: fileInfo[pos]!, height: 280),
                         SpaceHeight(height: smallSpace)
                       ],
                     )
@@ -228,8 +227,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
 
     onReoveImage(String pos) {
       pos == 'left'
-          ? recordInfo?.leftEyeBodyFilePath = null
-          : recordInfo?.rightEyeBodyFilePath = null;
+          ? recordInfo?.leftFile = null
+          : recordInfo?.rightFile = null;
 
       recordInfo?.save();
     }
@@ -261,7 +260,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
           children: [
             InkWell(
               onTap: () => onTapImage(pos),
-              child: DefaultImage(path: filePathInfo[pos]!, height: 170),
+              child: DefaultImage(data: fileInfo[pos]!, height: 170),
             ),
             Positioned(
               right: 0,
@@ -285,11 +284,11 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     Widget setEyeBodyWidgets() {
       return Row(
         children: [
-          leftEyeBodyFilePath != null
+          leftFile != null
               ? setEyeBodyImageWidget('left')
               : setEmptyImageWidget('left'),
           SpaceWidth(width: tinySpace),
-          rightEyeBodyFilePath != null
+          rightFile != null
               ? setEyeBodyImageWidget('right')
               : setEmptyImageWidget('right')
         ],

@@ -1,30 +1,21 @@
-import 'dart:developer';
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 class DefaultImage extends StatelessWidget {
-  DefaultImage({
-    super.key,
-    required this.path,
-    required this.height,
-  });
+  DefaultImage({super.key, required this.data, required this.height});
 
-  String path;
+  Uint8List data;
   double height;
 
   @override
   Widget build(BuildContext context) {
-    log('------------------ file log --------------------');
-    // log('${File(path).existsSync()}');
-    log('${FileImage(File(path))}');
-
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
-      child: Image(
+      child: Image.memory(
         fit: BoxFit.cover,
         width: double.infinity,
         height: height,
-        image: FileImage(File(path)),
+        data,
       ),
     );
   }

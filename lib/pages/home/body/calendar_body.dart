@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -148,8 +150,7 @@ class CalendarBodyState extends State<CalendarBody> {
         final builerDayInt = getDateTimeToInt(day);
         final weight = recordInfo.weight;
         final actions = recordInfo.actions;
-        final imageFilePath =
-            recordInfo.leftEyeBodyFilePath ?? recordInfo.rightEyeBodyFilePath;
+        final fileData = recordInfo.leftFile ?? recordInfo.rightFile;
         final whiteText = recordInfo.whiteText;
 
         addColorDot(dynamic target, Color color) {
@@ -170,7 +171,7 @@ class CalendarBodyState extends State<CalendarBody> {
           addWeightText(weight);
           addColorDot(weight, weightColor);
           addColorDot(actions, actionColor);
-          addColorDot(imageFilePath, eyeBodyColor);
+          addColorDot(fileData, eyeBodyColor);
           addColorDot(whiteText, diaryColor);
         }
       }

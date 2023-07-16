@@ -48,9 +48,9 @@ class RecordInfoPage extends StatelessWidget {
       final weight = recordInfo.weight;
       final actions = recordInfo.actions;
       final whiteText = recordInfo.whiteText;
-      final leftEyeBodyFilePath = recordInfo.leftEyeBodyFilePath;
-      final rightEyeBodyFilePath = recordInfo.rightEyeBodyFilePath;
-      final diary = whiteText ?? leftEyeBodyFilePath ?? rightEyeBodyFilePath;
+      final leftFile = recordInfo.leftFile;
+      final rightFile = recordInfo.rightFile;
+      final diary = whiteText ?? leftFile ?? rightFile;
 
       return Column(
         children: [
@@ -67,8 +67,8 @@ class RecordInfoPage extends StatelessWidget {
           diary != null
               ? CalendarDiaryInfo(
                   whiteText: whiteText,
-                  leftEyeBodyFilePath: leftEyeBodyFilePath,
-                  rightEyeBodyFilePath: rightEyeBodyFilePath,
+                  leftFile: leftFile,
+                  rightFile: rightFile,
                   diaryDateTime: recordInfo.diaryDateTime,
                 )
               : const EmptyArea(),

@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:hive/hive.dart';
 
 part 'record_box.g.dart';
@@ -11,8 +12,8 @@ class RecordBox extends HiveObject {
     this.diaryDateTime,
     this.weight,
     this.actions,
-    this.leftEyeBodyFilePath,
-    this.rightEyeBodyFilePath,
+    this.leftFile,
+    this.rightFile,
     this.whiteText,
   });
 
@@ -35,10 +36,10 @@ class RecordBox extends HiveObject {
   List<Map<String, dynamic>>? actions;
 
   @HiveField(6)
-  String? leftEyeBodyFilePath;
+  Uint8List? leftFile;
 
   @HiveField(7)
-  String? rightEyeBodyFilePath;
+  Uint8List? rightFile;
 
   @HiveField(8)
   String? whiteText;

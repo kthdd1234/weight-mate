@@ -67,22 +67,23 @@ class _HomeContainerState extends State<HomeContainer>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    UserBox? userProfile = userBox.get('userProfile');
-
-    setGenerate() {
+    setGeneratedWeight() {
       RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
 
       if (recordInfo == null || recordInfo.weight == null) {
         context
+            .read<ImportDateTimeProvider>()
+            .setImportDateTime(DateTime.now());
+        context
             .read<RecordIconTypeProvider>()
             .setSeletedRecordIconType(RecordIconTypes.addWeight);
       }
-
-      context.read<ImportDateTimeProvider>().setImportDateTime(DateTime.now());
     }
 
     if (state == AppLifecycleState.resumed) {
       if (isActiveCamera == false) {
+        UserBox? userProfile = userBox.get('userProfile');
+
         if (userProfile != null && userProfile.screenLockPasswords != null) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -91,9 +92,10 @@ class _HomeContainerState extends State<HomeContainer>
             ),
           );
         }
+
+        setGeneratedWeight();
       }
 
-      setGenerate();
       setState(() => isActiveCamera = false);
     }
   }

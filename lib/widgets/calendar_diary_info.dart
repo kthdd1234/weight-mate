@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
@@ -15,12 +17,13 @@ class CalendarDiaryInfo extends StatelessWidget {
   CalendarDiaryInfo({
     super.key,
     this.whiteText,
-    this.leftEyeBodyFilePath,
-    this.rightEyeBodyFilePath,
+    this.leftFile,
+    this.rightFile,
     this.diaryDateTime,
   });
 
-  String? whiteText, leftEyeBodyFilePath, rightEyeBodyFilePath;
+  String? whiteText;
+  Uint8List? leftFile, rightFile;
   DateTime? diaryDateTime;
 
   @override
@@ -41,18 +44,12 @@ class CalendarDiaryInfo extends StatelessWidget {
         ]),
         SpaceHeight(height: smallSpace),
         setRowWidgets([
-          leftEyeBodyFilePath != null
-              ? Expanded(
-                  child: DefaultImage(path: leftEyeBodyFilePath!, height: 150),
-                )
+          leftFile != null
+              ? Expanded(child: DefaultImage(data: leftFile!, height: 150))
               : const EmptyArea(),
-          leftEyeBodyFilePath != null
-              ? SpaceWidth(width: tinySpace)
-              : const EmptyArea(),
-          rightEyeBodyFilePath != null
-              ? Expanded(
-                  child: DefaultImage(path: rightEyeBodyFilePath!, height: 150),
-                )
+          leftFile != null ? SpaceWidth(width: tinySpace) : const EmptyArea(),
+          rightFile != null
+              ? Expanded(child: DefaultImage(data: rightFile!, height: 150))
               : const EmptyArea(),
         ]),
         SpaceHeight(height: smallSpace),
