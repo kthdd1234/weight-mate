@@ -168,9 +168,12 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       ).catchError(
         (error) {
           print('error 확인 ==>> $error');
+
+          final target = ImageSource.camera == source ? '카메라' : '사진';
+
           showSnackBar(
             context: context,
-            text: '땡땡 접근 권한이 없습니다.',
+            text: '$target 접근 권한이 없습니다.',
             buttonName: '설정으로 이동',
             onPressed: openAppSettings,
           );
