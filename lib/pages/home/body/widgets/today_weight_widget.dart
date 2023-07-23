@@ -42,6 +42,10 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       icon: Icons.edit,
     ),
     RecordIconClass(
+      enumId: RecordIconTypes.editGoalWeight,
+      icon: Icons.flag,
+    ),
+    RecordIconClass(
       enumId: RecordIconTypes.alarmWeight,
       icon: Icons.notifications,
     ),
@@ -84,6 +88,10 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
             buttonName: '확인',
           );
         }
+      }
+
+      if (enumId == RecordIconTypes.editGoalWeight) {
+        context.read<RecordIconTypeProvider>().setSeletedRecordIconType(enumId);
       }
 
       if (enumId == RecordIconTypes.alarmWeight) {
@@ -129,6 +137,8 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
             widget.seletedRecordIconType == RecordIconTypes.addWeight;
 
         return TodayWeightEditWidget(
+          userBox: userBox,
+          recordBox: recordBox,
           importDateTime: widget.importDateTime,
           seletedRecordIconType: widget.seletedRecordIconType,
           weightText: isAddWeight ? '' : weight.toString(),
@@ -167,11 +177,16 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
         );
       }
 
+      List<RecordBox> valueList = recordBox.values.toList();
+      List<RecordBox> recordList =
+          valueList.where((e) => e.weight != null).toList();
+
       return TodayWeightInfosWidget(
         weight: weight,
         goalWeight: goalWeight,
         tall: tall,
         beforeWeight: beforeWeight,
+        recordCount: recordList.length,
       );
     }
 

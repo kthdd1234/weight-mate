@@ -187,11 +187,12 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
         if (recordBoxDateTimeFormatter == selectedDateTimeFormatter) {
           if (recordBox.actions != null) {
             for (var i = 0; i < recordBox.actions!.length; i++) {
-              String id = recordBox.actions![i]['id'];
-              DateTime createDateTime = recordBox.actions![i]['createDateTime'];
-              String title = recordBox.actions![i]['title'];
-              String name = recordBox.actions![i]['name'];
-              Color color = planTypeColors[recordBox.actions![i]['type']]!;
+              Map<String, dynamic> actionItem = recordBox.actions![i];
+              String id = actionItem['id'];
+              String title = actionItem['title'];
+              String name = actionItem['name'];
+              Color color = planTypeColors[actionItem['type']]!;
+              DateTime actionDateTime = actionItem['actionDateTime'];
 
               actionHistoryList.add(
                 timeLineWidget(
@@ -200,7 +201,7 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
                   dateTimeFormat: i == 0 ? 'yyyy\nMM.dd E' : null,
                   circleColor: color,
                   name: name,
-                  time: createDateTime,
+                  time: actionDateTime,
                 ),
               );
             }

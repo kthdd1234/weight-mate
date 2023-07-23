@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_con
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_data_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
-import 'package:flutter_app_weight_management/services/file_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -28,6 +26,8 @@ import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart'
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
+import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:provider/provider.dart';
 
 class TodayDiaryWidget extends StatefulWidget {
@@ -61,10 +61,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         recordBox.get(getDateTimeToInt(widget.importDateTime));
     Uint8List? leftFile = recordInfo?.leftFile;
     Uint8List? rightFile = recordInfo?.rightFile;
-    Map<String, Uint8List?> fileInfo = {
-      'left': leftFile,
-      'right': rightFile,
-    };
+    Map<String, Uint8List?> fileInfo = {'left': leftFile, 'right': rightFile};
     RecordIconTypeProvider provider = context.read<RecordIconTypeProvider>();
 
     List<RecordIconClass> iconClassList = [
@@ -98,7 +95,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                   if (recordInfo == null || recordInfo.whiteText == null) {
                     showSnackBar(
                       context: context,
-                      text: '삭제할 일기 내용이 없어요.',
+                      text: '삭제할 메모 내용이 없어요.',
                       buttonName: '확인',
                     );
                   } else {
@@ -106,9 +103,9 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                       context: context,
                       builder: (context) => ConfirmDialog(
                         width: 230,
-                        titleText: '일기 삭제',
+                        titleText: '메모 삭제',
                         contentIcon: Icons.delete_forever,
-                        contentText1: '오늘의 일기 내용을',
+                        contentText1: '오늘의 메모 내용을',
                         contentText2: '삭제하시겠습니까?',
                         onPressedOk: onPressedDelete,
                       ),
@@ -197,7 +194,16 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
               isFilePath
                   ? Column(
                       children: [
-                        DefaultImage(data: fileInfo[pos]!, height: 280),
+                        InkWell(
+                            onTap: () => Navigator.push(
+                                  context,
+                                  FadePageRoute(
+                                    page: ImagePullSizePage(
+                                        binaryData: fileInfo[pos]!),
+                                  ),
+                                ),
+                            child: DefaultImage(
+                                data: fileInfo[pos]!, height: 280)),
                         SpaceHeight(height: smallSpace)
                       ],
                     )
@@ -351,7 +357,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             backgroundColor: dialogBackgroundColor,
             topHeight: largeSpace,
             downHeight: largeSpace,
-            text: '오늘의 일기를 작성해보세요.',
+            text: '오늘의 메모를 작성해보세요.',
             icon: Icons.add,
             onTap: () =>
                 provider.setSeletedRecordIconType(RecordIconTypes.editNote),
@@ -365,7 +371,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     return Column(
       children: [
         ContentsTitleText(
-          text: '${dateTimeToTitle(widget.importDateTime)} 일기',
+          text: '${dateTimeToTitle(widget.importDateTime)} 메모',
           icon: Icons.menu_book,
           sub: icons,
         ),

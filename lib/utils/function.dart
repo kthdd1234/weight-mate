@@ -170,9 +170,7 @@ showSnackBar({
               onPressed: onPressed,
               child: Text(
                 buttonName,
-                style: TextStyle(
-                  color: Colors.grey,
-                ),
+                style: const TextStyle(color: Colors.grey),
               ))
         ],
       ),
@@ -311,4 +309,16 @@ planNotifyTitle() {
 
 planNotifyBody({required String title, required String body}) {
   return '[$title: $body]\n지금 바로 실천해보세요!';
+}
+
+calculatedGoalWeight({required double goalWeight, required double weight}) {
+  double value = goalWeight - weight;
+  String fixedValue = value.toStringAsFixed(1);
+  String operator = goalWeight == weight
+      ? ''
+      : goalWeight > weight
+          ? '+'
+          : '';
+
+  return '$operator$fixedValue kg';
 }

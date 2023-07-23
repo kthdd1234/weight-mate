@@ -48,7 +48,7 @@ class _TodayDiaryEditWidgetState extends State<TodayDiaryEditWidget> {
         children: [
           SpaceHeight(height: tinySpace),
           MultiLineTextInput(
-            hintText: '일기를 작성해주세요.',
+            hintText: '메모를 작성해주세요.',
             controller: textController,
             maxLength: textMaxLength,
             onEditingComplete: onEditingComplete,

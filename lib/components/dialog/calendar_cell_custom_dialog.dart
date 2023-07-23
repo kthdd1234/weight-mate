@@ -42,7 +42,7 @@ class _CalendarCellCustomDialogState extends State<CalendarCellCustomDialog> {
       final colorData = {
         '체중': weightColor,
         '실천': actionColor,
-        '일기': diaryColor
+        '메모': diaryColor
       };
 
       return ColorTextInfo(

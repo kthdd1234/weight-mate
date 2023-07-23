@@ -18,6 +18,8 @@ import 'package:provider/provider.dart';
 class TodayWeightEditWidget extends StatefulWidget {
   TodayWeightEditWidget({
     super.key,
+    required this.userBox,
+    required this.recordBox,
     required this.importDateTime,
     required this.seletedRecordIconType,
     required this.weightText,
@@ -28,15 +30,14 @@ class TodayWeightEditWidget extends StatefulWidget {
   String weightText;
   String goalWeightText;
   DateTime importDateTime;
+  Box<UserBox> userBox;
+  Box<RecordBox> recordBox;
 
   @override
   State<TodayWeightEditWidget> createState() => _TodayWeightEditWidgetState();
 }
 
 class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
-  late Box<UserBox> userBox;
-  late Box<RecordBox> recordBox;
-
   TextEditingController textInputController = TextEditingController();
   dynamic errorText;
   bool isEnabledOnPressed = true;
@@ -66,9 +67,6 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
   void initState() {
     super.initState();
     setInputText();
-
-    userBox = Hive.box<UserBox>('userBox');
-    recordBox = Hive.box<RecordBox>('recordBox');
   }
 
   @override
@@ -150,17 +148,49 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
       });
     }
 
+    setWeightTitle() {
+      List<RecordBox> valueList = widget.recordBox.values.toList();
+      List<RecordBox> recordList =
+          valueList.where((e) => e.weight != null).toList();
+
+      return '👏🏻 ${recordList.length}일째 기록 했어요!';
+    }
+
+    showDialogPopup({required String title}) {
+      showDialog(
+        context: context,
+        builder: (dialogContext) {
+          onClick(BottomNavigationEnum enumId) async {
+            closeDialog(dialogContext);
+            dialogContext
+                .read<BottomNavigationProvider>()
+                .setBottomNavigation(enumId: enumId);
+          }
+
+          return NativeAdDialog(
+            title: title,
+            leftText: '달력 보기',
+            rightText: '체중 보기',
+            leftIcon: Icons.calendar_month,
+            rightIcon: Icons.auto_graph_rounded,
+            onLeftClick: () => onClick(BottomNavigationEnum.calendar),
+            onRightClick: () => onClick(BottomNavigationEnum.analyze),
+          );
+        },
+      );
+    }
+
     onPressedResister() {
-      UserBox? userProfile = userBox.get('userProfile');
+      UserBox? userProfile = widget.userBox.get('userProfile');
       int importDateTimeInt = getDateTimeToInt(widget.importDateTime);
-      RecordBox? recordInfo = recordBox.get(importDateTimeInt);
+      RecordBox? recordInfo = widget.recordBox.get(importDateTimeInt);
       String text = textInputController.text;
 
       switch (widget.seletedRecordIconType) {
         case RecordIconTypes.addWeight:
         case RecordIconTypes.editWeight:
           if (recordInfo == null) {
-            recordBox.put(
+            widget.recordBox.put(
               importDateTimeInt,
               RecordBox(
                 createDateTime: widget.importDateTime,
@@ -171,46 +201,21 @@ class _TodayWeightEditWidgetState extends State<TodayWeightEditWidget> {
           } else {
             recordInfo.weightDateTime = DateTime.now();
             recordInfo.weight = stringToDouble(text);
-            recordBox.put(importDateTimeInt, recordInfo);
+            widget.recordBox.put(importDateTimeInt, recordInfo);
           }
 
-          showDialog(
-            context: context,
-            builder: (dialogContext) {
-              onClick(BottomNavigationEnum enumId) async {
-                closeDialog(dialogContext);
-                dialogContext
-                    .read<BottomNavigationProvider>()
-                    .setBottomNavigation(enumId: enumId);
-              }
-
-              setTitleText() {
-                List<RecordBox> valueList = recordBox.values.toList();
-                List<RecordBox> recordList =
-                    valueList.where((e) => e.weight != null).toList();
-
-                return '👏🏻 ${recordList.length}일째 기록 했어요!';
-              }
-
-              return NativeAdDialog(
-                title: setTitleText(),
-                leftText: '달력 보기',
-                rightText: '체중 보기',
-                leftIcon: Icons.calendar_month,
-                rightIcon: Icons.auto_graph_rounded,
-                onLeftClick: () => onClick(BottomNavigationEnum.calendar),
-                onRightClick: () => onClick(BottomNavigationEnum.analyze),
-              );
-            },
-          );
-
+          showDialogPopup(title: setWeightTitle());
           break;
 
         case RecordIconTypes.editGoalWeight:
           if (userProfile == null) return null;
 
-          userProfile.goalWeight = stringToDouble(text);
+          double newGoalWeight = stringToDouble(text);
+          userProfile.goalWeight = newGoalWeight;
           userProfile.save();
+
+          showDialogPopup(title: '🎯 목표 체중을 변경했어요 :)');
+
           break;
 
         default:

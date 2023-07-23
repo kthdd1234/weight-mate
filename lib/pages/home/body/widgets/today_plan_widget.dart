@@ -60,10 +60,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     RecordBox? recordInfo = recordBox.get(currentDateTimeInt);
     List<PlanBox> planInfoList = planBox.values.toList();
     List<RecordIconClass> recordIconClassList = [
-      RecordIconClass(
-        enumId: RecordIconTypes.removePlan,
-        icon: Icons.delete,
-      ),
+      RecordIconClass(enumId: RecordIconTypes.removePlan, icon: Icons.delete),
     ];
     List<Widget> iconWidgets = recordIconClassList
         .map(
