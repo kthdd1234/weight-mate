@@ -95,16 +95,17 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
                 importDateTime: importDateTime,
               ),
               SpaceHeight(height: largeSpace),
-              TodayPlanWidget(
-                seletedRecordIconType: seletedRecordIconType,
-                importDateTime: importDateTime,
-              ),
-              SpaceHeight(height: largeSpace),
               TodayDiaryWidget(
                 importDateTime: importDateTime,
                 seletedRecordSubType: seletedRecordIconType,
                 setActiveCamera: widget.setActiveCamera,
               ),
+              SpaceHeight(height: largeSpace),
+              TodayPlanWidget(
+                seletedRecordIconType: seletedRecordIconType,
+                importDateTime: importDateTime,
+              ),
+              SpaceHeight(height: largeSpace),
             ],
           );
         },

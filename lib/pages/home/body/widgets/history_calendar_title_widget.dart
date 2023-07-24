@@ -30,7 +30,7 @@ class HistoryCalendarTitleWidget extends StatelessWidget {
         // ColorTextInfo(
         //   width: smallSpace,
         //   height: smallSpace,
-        //   text: '메모',
+        //   text: '눈바디',
         //   color: memoDotColor,
         // ),
       ],

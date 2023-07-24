@@ -230,7 +230,7 @@ class CalendarBodyState extends State<CalendarBody> {
             setColorTextInfo(text: '체중 기록', color: weightColor),
             setColorTextInfo(text: '계획 실천', color: actionColor),
             setColorTextInfo(text: '사진 등록', color: eyeBodyColor),
-            setColorTextInfo(text: '메모 작성', color: diaryColor),
+            setColorTextInfo(text: '눈바디 작성', color: diaryColor),
           ],
         ),
         SpaceHeight(height: regularSapce),

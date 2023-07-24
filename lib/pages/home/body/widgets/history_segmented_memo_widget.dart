@@ -26,7 +26,7 @@ class HistorySegmentedMemoWidget extends StatelessWidget {
         children: [
           HistorySegmentedItemWidget(
             icon: Icons.textsms,
-            name: '메모',
+            name: '눈바디',
             subWidget: HistorySubTextWidget(
               text: '',
               color: buttonBackgroundColor,

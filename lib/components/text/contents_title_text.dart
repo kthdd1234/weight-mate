@@ -4,18 +4,19 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class ContentsTitleText extends StatelessWidget {
-  ContentsTitleText({
-    super.key,
-    required this.text,
-    this.icon,
-    this.sub,
-    this.preffix,
-  });
+  ContentsTitleText(
+      {super.key,
+      required this.text,
+      this.icon,
+      this.sub,
+      this.preffix,
+      this.fontSize});
 
   Widget? preffix;
   String text;
   IconData? icon;
   List<Widget>? sub;
+  double? fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,9 @@ class ContentsTitleText extends StatelessWidget {
           children: [
             Text(
               text,
-              style: Theme.of(context).textTheme.labelLarge,
+              style: fontSize != null
+                  ? TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold)
+                  : Theme.of(context).textTheme.labelLarge,
             ),
             icon != null
                 ? Row(

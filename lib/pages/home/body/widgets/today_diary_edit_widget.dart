@@ -44,18 +44,12 @@ class _TodayDiaryEditWidgetState extends State<TodayDiaryEditWidget> {
     }
 
     return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          SpaceHeight(height: tinySpace),
-          MultiLineTextInput(
-            hintText: '메모를 작성해주세요.',
-            controller: textController,
-            maxLength: textMaxLength,
-            onEditingComplete: onEditingComplete,
-            onTapOutside: onEditingComplete,
-          ),
-          SpaceHeight(height: smallSpace),
-        ],
+      contentsWidget: MultiLineTextInput(
+        hintText: '메모를 작성해주세요.',
+        controller: textController,
+        maxLength: textMaxLength,
+        onEditingComplete: onEditingComplete,
+        onTapOutside: onEditingComplete,
       ),
     );
   }

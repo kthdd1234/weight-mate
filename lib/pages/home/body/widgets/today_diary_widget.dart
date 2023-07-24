@@ -12,7 +12,9 @@ import 'package:flutter_app_weight_management/components/icon/circular_icon.dart
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
+import 'package:flutter_app_weight_management/components/text/icon_text.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
@@ -65,58 +67,22 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     RecordIconTypeProvider provider = context.read<RecordIconTypeProvider>();
 
     List<RecordIconClass> iconClassList = [
-      RecordIconClass(
-        enumId: RecordIconTypes.editNote,
-        icon: Icons.edit,
-      ),
-      RecordIconClass(
-        enumId: RecordIconTypes.removeNote,
-        icon: Icons.delete,
-      )
+      // RecordIconClass(
+      //   enumId: RecordIconTypes.editNote,
+      //   icon: Icons.edit,
+      // ),
+      // RecordIconClass(
+      //   enumId: RecordIconTypes.removeNote,
+      //   icon: Icons.delete,
+      // )
     ];
-
-    onPressedDelete() {
-      recordInfo!.whiteText = null;
-      recordInfo.save();
-    }
 
     List<RecordContentsTitleIcon> icons = iconClassList
         .map(
           (element) => RecordContentsTitleIcon(
             id: element.enumId,
             icon: element.icon,
-            onTap: (id) {
-              switch (id) {
-                case RecordIconTypes.editNote:
-                  provider.setSeletedRecordIconType(RecordIconTypes.editNote);
-
-                  break;
-                case RecordIconTypes.removeNote:
-                  if (recordInfo == null || recordInfo.whiteText == null) {
-                    showSnackBar(
-                      context: context,
-                      text: '삭제할 메모 내용이 없어요.',
-                      buttonName: '확인',
-                    );
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (context) => ConfirmDialog(
-                        width: 230,
-                        titleText: '메모 삭제',
-                        contentIcon: Icons.delete_forever,
-                        contentText1: '오늘의 메모 내용을',
-                        contentText2: '삭제하시겠습니까?',
-                        onPressedOk: onPressedDelete,
-                      ),
-                    );
-                    provider.setSeletedRecordIconType(RecordIconTypes.none);
-                  }
-
-                  break;
-                default:
-              }
-            },
+            onTap: (id) {},
           ),
         )
         .toList();
@@ -195,15 +161,16 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                   ? Column(
                       children: [
                         InkWell(
-                            onTap: () => Navigator.push(
-                                  context,
-                                  FadePageRoute(
-                                    page: ImagePullSizePage(
-                                        binaryData: fileInfo[pos]!),
-                                  ),
-                                ),
-                            child: DefaultImage(
-                                data: fileInfo[pos]!, height: 280)),
+                          onTap: () => Navigator.push(
+                            context,
+                            FadePageRoute(
+                              page:
+                                  ImagePullSizePage(binaryData: fileInfo[pos]!),
+                            ),
+                          ),
+                          child:
+                              DefaultImage(data: fileInfo[pos]!, height: 280),
+                        ),
                         SpaceHeight(height: smallSpace)
                       ],
                     )
@@ -250,13 +217,11 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             radius: const Radius.circular(30),
             color: Colors.transparent,
             strokeWidth: 1,
-            child: ContentsBox(
-              padding: const EdgeInsets.all(10),
-              contentsWidget: EmptyTextVerticalArea(
-                icon: Icons.add,
-                title: '사진 추가',
-                backgroundColor: dialogBackgroundColor,
-              ),
+            child: EmptyTextVerticalArea(
+              icon: Icons.add,
+              title: '사진 추가',
+              backgroundColor: dialogBackgroundColor,
+              height: 170,
             ),
           ),
         ),
@@ -351,34 +316,51 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
           onPressedOk: onPressedOk,
         );
       } else if (whiteText == null) {
-        return ContentsBox(
-          padding: const EdgeInsets.all(10),
-          contentsWidget: EmptyTextArea(
-            backgroundColor: dialogBackgroundColor,
-            topHeight: largeSpace,
-            downHeight: largeSpace,
-            text: '오늘의 메모를 작성해보세요.',
-            icon: Icons.add,
-            onTap: () =>
-                provider.setSeletedRecordIconType(RecordIconTypes.editNote),
-          ),
+        return EmptyTextArea(
+          backgroundColor: dialogBackgroundColor,
+          topHeight: largeSpace,
+          downHeight: largeSpace,
+          text: '메모를 작성해보세요.',
+          icon: Icons.add,
+          onTap: () =>
+              provider.setSeletedRecordIconType(RecordIconTypes.editNote),
         );
       }
 
-      return TodayDiaryDataWidget(text: whiteText);
+      return TodayDiaryDataWidget(
+        provider: provider,
+        text: whiteText,
+        recordInfo: recordInfo,
+      );
     }
 
     return Column(
       children: [
         ContentsTitleText(
-          text: '${dateTimeToTitle(widget.importDateTime)} 메모',
-          icon: Icons.menu_book,
+          text: '${dateTimeToTitle(widget.importDateTime)} 눈바디',
+          icon: Icons.person_pin_rounded,
           sub: icons,
         ),
-        SpaceHeight(height: smallSpace + 5),
-        setEyeBodyWidgets(),
-        SpaceHeight(height: tinySpace),
-        setDiaryWidget(),
+        SpaceHeight(height: smallSpace),
+        ContentsBox(
+          padding: const EdgeInsets.all(10),
+          contentsWidget: Column(
+            children: [
+              setEyeBodyWidgets(),
+              SpaceHeight(height: tinySpace),
+              setDiaryWidget(),
+              SpaceHeight(height: smallSpace),
+              IconText(
+                icon: Icons.error_outline,
+                iconColor: Colors.grey.shade400,
+                iconSize: 14,
+                text: '추가한 사진은 앱 내에 저장되요. (서버로 전송 x)',
+                textColor: Colors.grey.shade400,
+                textSize: 12,
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

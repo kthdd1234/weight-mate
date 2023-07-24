@@ -49,7 +49,7 @@ class CalendarDiaryInfo extends StatelessWidget {
       color: diaryColor,
       rowWidgetList: [
         setRowWidgets([
-          ContentsTitleText(text: '메모 작성'),
+          ContentsTitleText(text: '눈바디 작성'),
           ColorDot(width: 10, height: 10, color: diaryColor),
         ]),
         SpaceHeight(height: smallSpace),

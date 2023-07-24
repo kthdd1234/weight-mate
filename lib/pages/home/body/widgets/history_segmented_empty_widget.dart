@@ -29,7 +29,7 @@ class HistorySegmentedEmptyWidget extends StatelessWidget {
       final titles = {
         SegmentedTypes.weight: '기록된 체중 정보가 없어요.',
         SegmentedTypes.action: '실천한 계획이 없어요.',
-        SegmentedTypes.diary: '기록한 메모가 없어요.'
+        SegmentedTypes.diary: '기록한 눈바디가 없어요.'
       };
 
       return titles[segmented];

@@ -123,7 +123,7 @@
 //           onTap: () => onTapPopupMenuItem(ePopupMenuItem.editNote),
 //           child: PopupMenuItemText(
 //             icon: Icons.edit_rounded,
-//             text: '메모 편집',
+//             text: '눈바디 편집',
 //           ),
 //         ),
 //         PopupMenuItem<String>(
@@ -131,7 +131,7 @@
 //           onTap: () => onTapPopupMenuItem(ePopupMenuItem.deleteNote),
 //           child: PopupMenuItemText(
 //             icon: Icons.delete,
-//             text: '메모 삭제',
+//             text: '눈바디 삭제',
 //           ),
 //         ),
 //         PopupMenuItem<String>(
