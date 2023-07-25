@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
@@ -20,17 +21,21 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_con
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_data_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
+import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../provider/ads_provider.dart';
 
 class TodayDiaryWidget extends StatefulWidget {
   TodayDiaryWidget({
@@ -51,10 +56,48 @@ class TodayDiaryWidget extends StatefulWidget {
 class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
   late Box<RecordBox> recordBox;
 
+  RewardedInterstitialAd? rewardedInterstitialAd;
+  bool rewardedInterstitialAdIsLoaded = false;
+
   @override
   void initState() {
     recordBox = Hive.box<RecordBox>('recordBox');
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    createRewardedInterstitialAd();
+  }
+
+  void createRewardedInterstitialAd() async {
+    AdsService adsState =
+        Provider.of<AdsProvider>(context, listen: false).adsState;
+
+    await adsState.initialization.then(
+      (value) {
+        RewardedInterstitialAd.load(
+          adUnitId: adsState.rewardedInterstitialAdUnitId,
+          request: const AdRequest(),
+          rewardedInterstitialAdLoadCallback:
+              RewardedInterstitialAdLoadCallback(
+            onAdLoaded: (RewardedInterstitialAd ad) => setState(() {
+              rewardedInterstitialAd = ad;
+              rewardedInterstitialAdIsLoaded = true;
+            }),
+            onAdFailedToLoad: (LoadAdError error) {
+              log('LoadAdError $error');
+
+              setState(() {
+                rewardedInterstitialAd = null;
+                rewardedInterstitialAdIsLoaded = false;
+              });
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -77,6 +120,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       // )
     ];
 
+    log("rewardedInterstitialAd$rewardedInterstitialAd");
+
     List<RecordContentsTitleIcon> icons = iconClassList
         .map(
           (element) => RecordContentsTitleIcon(
@@ -87,67 +132,108 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         )
         .toList();
 
+    setPickedImage({required String pos, required XFile? xFile}) async {
+      if (xFile == null) return;
+
+      Uint8List pickedImage = await File(xFile.path).readAsBytes();
+      int year = widget.importDateTime.year;
+      int month = widget.importDateTime.month;
+      int day = widget.importDateTime.day;
+      DateTime now = DateTime.now();
+      DateTime diaryDateTime = DateTime(year, month, day, now.hour, now.minute);
+
+      if (recordInfo == null) {
+        recordBox.put(
+          getDateTimeToInt(widget.importDateTime),
+          RecordBox(
+            createDateTime: widget.importDateTime,
+            diaryDateTime: diaryDateTime,
+            leftFile: pos == 'left' ? pickedImage : null,
+            rightFile: pos == 'right' ? pickedImage : null,
+          ),
+        );
+      } else {
+        recordInfo.diaryDateTime = diaryDateTime;
+        pos == 'left'
+            ? recordInfo.leftFile = pickedImage
+            : recordInfo.rightFile = pickedImage;
+        recordInfo.save();
+      }
+    }
+
+    _showRewardedInterstitialAd(
+        {required String pos, required XFile xFileData}) async {
+      if (rewardedInterstitialAdIsLoaded) {
+        rewardedInterstitialAd!.fullScreenContentCallback =
+            FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (ad) {
+            log('onAdDismissed!');
+
+            ad.dispose();
+            createRewardedInterstitialAd();
+          },
+          onAdFailedToShowFullScreenContent: (ad, error) {
+            log("onAdFailed => $error");
+
+            ad.dispose();
+            createRewardedInterstitialAd();
+          },
+        );
+
+        await rewardedInterstitialAd!.show(
+          onUserEarnedReward: (ad, reward) {
+            log('Done!');
+            setPickedImage(pos: pos, xFile: xFileData);
+          },
+        );
+      }
+    }
+
     setImagePicker({
       required ImageSource source,
       required String pos,
-    }) {
-      // 뺑글뺑글 시작
-      closeDialog(context);
+    }) async {
+      XFile? xFileData;
 
+      closeDialog(context);
       widget.setActiveCamera(true);
 
-      ImagePicker().pickImage(source: source).then(
+      await ImagePicker().pickImage(source: source).then(
         (xFile) async {
           if (xFile == null) return;
 
-          Uint8List pickedImage = await File(xFile.path).readAsBytes();
-          int year = widget.importDateTime.year;
-          int month = widget.importDateTime.month;
-          int day = widget.importDateTime.day;
-          DateTime now = DateTime.now();
-          DateTime diaryDateTime =
-              DateTime(year, month, day, now.hour, now.minute);
-
-          if (recordInfo == null) {
-            recordBox.put(
-              getDateTimeToInt(widget.importDateTime),
-              RecordBox(
-                createDateTime: widget.importDateTime,
-                diaryDateTime: diaryDateTime,
-                leftFile: pos == 'left' ? pickedImage : null,
-                rightFile: pos == 'right' ? pickedImage : null,
-              ),
-            );
-          } else {
-            recordInfo.diaryDateTime = diaryDateTime;
-            pos == 'left'
-                ? recordInfo.leftFile = pickedImage
-                : recordInfo.rightFile = pickedImage;
-            recordInfo.save();
-          }
-
-          // 뺑글뺑글 종료
+          xFileData = xFile;
         },
       ).catchError(
         (error) {
           print('error 확인 ==>> $error');
 
-          final target = ImageSource.camera == source ? '카메라' : '사진';
-
           showSnackBar(
             context: context,
-            text: '$target 접근 권한이 없습니다.',
+            text: '${ImageSource.camera == source ? '카메라' : '사진'} 접근 권한이 없습니다.',
             buttonName: '설정으로 이동',
             onPressed: openAppSettings,
           );
-
-          // 뺑글뺑글 종료
         },
       );
+
+      return xFileData;
     }
 
     onTapImage(String pos) {
       final isFilePath = fileInfo[pos] != null;
+
+      onShowImagePicker(ImageSource source) async {
+        XFile? xFileData = await setImagePicker(
+          source: source,
+          pos: pos,
+        );
+
+        if (xFileData != null) {
+          await Future.delayed(const Duration(milliseconds: 300));
+          await _showRewardedInterstitialAd(pos: pos, xFileData: xFileData);
+        }
+      }
 
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
@@ -178,17 +264,14 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
               Row(
                 children: [
                   ExpandedButtonVerti(
-                    icon: Icons.add_a_photo,
-                    title: '사진 촬영',
-                    onTap: () =>
-                        setImagePicker(source: ImageSource.camera, pos: pos),
-                  ),
+                      icon: Icons.add_a_photo,
+                      title: '사진 촬영',
+                      onTap: () => onShowImagePicker(ImageSource.camera)),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
                     icon: Icons.collections,
                     title: '앨범 열기',
-                    onTap: () =>
-                        setImagePicker(source: ImageSource.gallery, pos: pos),
+                    onTap: () => onShowImagePicker(ImageSource.gallery),
                   ),
                 ],
               ),
@@ -354,7 +437,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                 icon: Icons.error_outline,
                 iconColor: Colors.grey.shade400,
                 iconSize: 14,
-                text: '추가한 사진은 앱 내에 저장되요. (서버로 전송 x)',
+                text: '추가한 사진은 앱 내에 저장되요.',
                 textColor: Colors.grey.shade400,
                 textSize: 12,
               ),

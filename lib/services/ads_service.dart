@@ -13,6 +13,9 @@ class AdsService {
       Platform.isAndroid ? androidBannerAdUnitId : iosBannerAdUnitId;
   String get nativeAdUnitId =>
       Platform.isAndroid ? androidNativeAdUnitId : iosNativeAdUnitId;
+  String get rewardedInterstitialAdUnitId => Platform.isAndroid
+      ? androidRewardedInterstitialAdUnitId
+      : iosRewardedInterstitialAdUnitId;
 
   BannerAdListener get bannerAdListener => _bannerAdListener;
   NativeAdListener get nativeAdListener => _nativeAdListener;
@@ -44,6 +47,22 @@ class AdsService {
   String get iosNativeAdUnitId {
     String? testId = dotenv.env['IOS_NATIVE_TEST_ID'] ?? '';
     String? realId = dotenv.env['IOS_NATIVE_REAL_ID'] ?? '';
+
+    // return testId;
+    return kDebugMode ? testId : realId;
+  }
+
+  String get androidRewardedInterstitialAdUnitId {
+    String? testId = dotenv.env['ANDROID_REWARDED_INTERSTITIAL_TEST_ID'] ?? '';
+    String? realId = dotenv.env['ANDROID_REWARDED_INTERSTITIAL_REAL_ID'] ?? '';
+
+    // return testId;
+    return kDebugMode ? testId : realId;
+  }
+
+  String get iosRewardedInterstitialAdUnitId {
+    String? testId = dotenv.env['IOS_REWARDED_INTERSTITIAL_TEST_ID'] ?? '';
+    String? realId = dotenv.env['IOS_REWARDED_INTERSTITIAL_REAL_ID'] ?? '';
 
     // return testId;
     return kDebugMode ? testId : realId;
