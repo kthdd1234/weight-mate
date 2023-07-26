@@ -6,12 +6,11 @@ enum RecordIconTypes {
   editGoalWeight,
   alarmWeight,
   addPlan,
-  alarmPlan,
   removePlan,
   editNote,
   removeNote,
-  editEyeBody,
-  removeEyeBody
+  eyeBodyCollections,
+  eyeBodySlideshow
 }
 
 enum BottomNavigationEnum { record, calendar, analyze, setting }

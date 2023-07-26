@@ -4,18 +4,18 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TextIcon extends StatelessWidget {
-  TextIcon({
-    super.key,
-    required this.backgroundColor,
-    required this.text,
-    required this.borderRadius,
-    required this.textColor,
-    required this.fontSize,
-    this.icon,
-    this.iconSize,
-    this.iconColor,
-    this.padding,
-  });
+  TextIcon(
+      {super.key,
+      required this.backgroundColor,
+      required this.text,
+      required this.borderRadius,
+      required this.textColor,
+      required this.fontSize,
+      this.icon,
+      this.iconSize,
+      this.iconColor,
+      this.padding,
+      this.backgroundColorOpacity});
 
   Color backgroundColor;
   double borderRadius;
@@ -26,12 +26,13 @@ class TextIcon extends StatelessWidget {
   double? iconSize;
   Color? iconColor;
   double? padding;
+  double? backgroundColorOpacity;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: backgroundColor.withOpacity(backgroundColorOpacity ?? 1),
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Padding(

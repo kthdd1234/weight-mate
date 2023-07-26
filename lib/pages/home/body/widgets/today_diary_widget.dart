@@ -110,24 +110,32 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     RecordIconTypeProvider provider = context.read<RecordIconTypeProvider>();
 
     List<RecordIconClass> iconClassList = [
-      // RecordIconClass(
-      //   enumId: RecordIconTypes.editNote,
-      //   icon: Icons.edit,
-      // ),
-      // RecordIconClass(
-      //   enumId: RecordIconTypes.removeNote,
-      //   icon: Icons.delete,
-      // )
+      RecordIconClass(
+        enumId: RecordIconTypes.eyeBodyCollections,
+        icon: Icons.apps_rounded,
+      ),
+      RecordIconClass(
+        enumId: RecordIconTypes.eyeBodySlideshow,
+        icon: Icons.slideshow,
+      )
     ];
-
-    log("rewardedInterstitialAd$rewardedInterstitialAd");
 
     List<RecordContentsTitleIcon> icons = iconClassList
         .map(
           (element) => RecordContentsTitleIcon(
             id: element.enumId,
             icon: element.icon,
-            onTap: (id) {},
+            onTap: (id) {
+              switch (id) {
+                case RecordIconTypes.eyeBodyCollections:
+                  Navigator.pushNamed(context, '/image-collections-page');
+
+                  break;
+                case RecordIconTypes.eyeBodySlideshow:
+                  break;
+                default:
+              }
+            },
           ),
         )
         .toList();
@@ -161,8 +169,10 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       }
     }
 
-    _showRewardedInterstitialAd(
-        {required String pos, required XFile xFileData}) async {
+    _showRewardedInterstitialAd({
+      required String pos,
+      required XFile xFileData,
+    }) async {
       if (rewardedInterstitialAdIsLoaded) {
         rewardedInterstitialAd!.fullScreenContentCallback =
             FullScreenContentCallback(
@@ -183,10 +193,11 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         await rewardedInterstitialAd!.show(
           onUserEarnedReward: (ad, reward) {
             log('Done!');
-            setPickedImage(pos: pos, xFile: xFileData);
           },
         );
       }
+
+      setPickedImage(pos: pos, xFile: xFileData);
     }
 
     setImagePicker({
@@ -230,7 +241,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         );
 
         if (xFileData != null) {
-          await Future.delayed(const Duration(milliseconds: 300));
+          await Future.delayed(const Duration(milliseconds: 500));
           await _showRewardedInterstitialAd(pos: pos, xFileData: xFileData);
         }
       }
@@ -264,9 +275,10 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
               Row(
                 children: [
                   ExpandedButtonVerti(
-                      icon: Icons.add_a_photo,
-                      title: '사진 촬영',
-                      onTap: () => onShowImagePicker(ImageSource.camera)),
+                    icon: Icons.add_a_photo,
+                    title: '사진 촬영',
+                    onTap: () => onShowImagePicker(ImageSource.camera),
+                  ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
                     icon: Icons.collections,
@@ -421,7 +433,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       children: [
         ContentsTitleText(
           text: '${dateTimeToTitle(widget.importDateTime)} 눈바디',
-          icon: Icons.person_pin_rounded,
+          icon: Icons.portrait,
           sub: icons,
         ),
         SpaceHeight(height: smallSpace),

@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.d
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_type.dart';
 import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
+import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
 import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_container.dart';
 import 'package:flutter_app_weight_management/pages/splash/splash.dart';
@@ -122,7 +123,8 @@ class _MyAppState extends State<MyApp> {
         '/screen-lock': (context) => const ScreenLockPage(),
         '/common-alarm': (context) => const CommonAlarmPage(),
         '/record-info-page': (context) => const RecordInfoPage(),
-        '/enter-screen-lock': (context) => const EnterScreenLockPage()
+        '/enter-screen-lock': (context) => const EnterScreenLockPage(),
+        '/image-collections-page': (context) => const ImageCollectionsPage()
       },
     );
   }

@@ -11,10 +11,13 @@ class EmptyTextVerticalArea extends StatelessWidget {
     this.mainColor,
     this.height,
     this.backgroundColor,
+    this.titleSize,
+    this.iconSize,
   });
 
   IconData icon;
   String title;
+  double? titleSize, iconSize;
   double? height;
   Color? mainColor;
   Color? backgroundColor;
@@ -32,12 +35,13 @@ class EmptyTextVerticalArea extends StatelessWidget {
           Icon(
             icon,
             color: mainColor ?? disEnabledTypeColor,
-            size: 30,
+            size: iconSize ?? 30,
           ),
           SpaceHeight(height: smallSpace),
           Text(
             title,
             style: TextStyle(
+              fontSize: titleSize,
               color: mainColor ?? disEnabledTypeColor,
               height: 1.5,
             ),
