@@ -1,4 +1,4 @@
-# flutter_app_weight_management
+# 체중 메이트
 
 A new Flutter project.
 
