@@ -114,10 +114,6 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         enumId: RecordIconTypes.eyeBodyCollections,
         icon: Icons.apps_rounded,
       ),
-      RecordIconClass(
-        enumId: RecordIconTypes.eyeBodySlideshow,
-        icon: Icons.slideshow,
-      )
     ];
 
     List<RecordContentsTitleIcon> icons = iconClassList
@@ -246,6 +242,11 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         }
       }
 
+      onNavigatorPage() async {
+        closeDialog(context);
+        await Navigator.pushNamed(context, '/image-collections-page');
+      }
+
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
@@ -261,8 +262,9 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                           onTap: () => Navigator.push(
                             context,
                             FadePageRoute(
-                              page:
-                                  ImagePullSizePage(binaryData: fileInfo[pos]!),
+                              page: ImagePullSizePage(
+                                binaryData: fileInfo[pos]!,
+                              ),
                             ),
                           ),
                           child:
@@ -284,6 +286,12 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                     icon: Icons.collections,
                     title: '앨범 열기',
                     onTap: () => onShowImagePicker(ImageSource.gallery),
+                  ),
+                  SpaceWidth(width: tinySpace),
+                  ExpandedButtonVerti(
+                    icon: Icons.apps_rounded,
+                    title: '사진 보기',
+                    onTap: onNavigatorPage,
                   ),
                 ],
               ),

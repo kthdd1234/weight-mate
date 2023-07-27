@@ -56,7 +56,27 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    onPressed() {}
+    onNavigatorPage({required int index, required bool isAutoPlay}) async {
+      if (fileItemList.isEmpty) {
+        return showSnackBar(
+          context: context,
+          text: '사진 슬라이드가 없어요.',
+          buttonName: '확인',
+          width: 230,
+        );
+      }
+
+      await Navigator.push(
+        context,
+        FadePageRoute(
+          page: ImageCarouselSliderPage(
+            initPageIndex: index,
+            fileItemList: fileItemList,
+            isAutoPlay: isAutoPlay,
+          ),
+        ),
+      );
+    }
 
     return AppFramework(
       widget: Scaffold(
@@ -67,7 +87,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
           elevation: 0.0,
           actions: [
             TextButton(
-              onPressed: onPressed,
+              onPressed: () => onNavigatorPage(index: 0, isAutoPlay: true),
               child: const Text('사진 슬라이드로 보기'),
             )
           ],
@@ -91,20 +111,11 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                         Uint8List binaryData = item['binaryData'];
                         DateTime dateTime = item['dateTime'];
 
-                        onTap(int index) async {
-                          await Navigator.push(
-                            context,
-                            FadePageRoute(
-                              page: ImageCarouselSliderPage(
-                                initPageIndex: index,
-                                fileItemList: fileItemList,
-                              ),
-                            ),
-                          );
-                        }
-
                         return InkWell(
-                          onTap: () => onTap(index),
+                          onTap: () => onNavigatorPage(
+                            index: index,
+                            isAutoPlay: false,
+                          ),
                           child: Stack(
                             children: [
                               DefaultImage(
