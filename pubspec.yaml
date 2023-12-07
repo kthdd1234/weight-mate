@@ -72,6 +72,8 @@ dependencies:
   url_launcher: ^6.1.12
   in_app_review: ^2.0.6
   carousel_slider: ^4.2.1
+  easy_localization: ^3.0.2
+  gdpr_dialog: ^2.1.1
 
 dev_dependencies:
   flutter_test:

@@ -15,6 +15,7 @@ import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:gdpr_dialog/gdpr_dialog.dart';
 
 class AddBodyInfo extends StatefulWidget {
   const AddBodyInfo({super.key});
@@ -29,6 +30,8 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       goalWeightContoller = TextEditingController();
 
   late DateTime timeValue;
+
+  String status = 'none';
 
   @override
   void initState() {

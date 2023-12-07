@@ -85,6 +85,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             onAdLoaded: (RewardedInterstitialAd ad) => setState(() {
               rewardedInterstitialAd = ad;
               rewardedInterstitialAdIsLoaded = true;
+              log('load test!!');
             }),
             onAdFailedToLoad: (LoadAdError error) {
               log('LoadAdError $error');
@@ -189,11 +190,10 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         await rewardedInterstitialAd!.show(
           onUserEarnedReward: (ad, reward) {
             log('Done!');
+            setPickedImage(pos: pos, xFile: xFileData);
           },
         );
       }
-
-      setPickedImage(pos: pos, xFile: xFileData);
     }
 
     setImagePicker({
@@ -202,7 +202,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     }) async {
       XFile? xFileData;
 
-      closeDialog(context);
+      // closeDialog(context);
       widget.setActiveCamera(true);
 
       await ImagePicker().pickImage(source: source).then(
@@ -231,13 +231,12 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       final isFilePath = fileInfo[pos] != null;
 
       onShowImagePicker(ImageSource source) async {
-        XFile? xFileData = await setImagePicker(
-          source: source,
-          pos: pos,
-        );
+        closeDialog(context);
+
+        XFile? xFileData = await setImagePicker(source: source, pos: pos);
 
         if (xFileData != null) {
-          await Future.delayed(const Duration(milliseconds: 500));
+          await Future.delayed(const Duration(milliseconds: 1500));
           await _showRewardedInterstitialAd(pos: pos, xFileData: xFileData);
         }
       }

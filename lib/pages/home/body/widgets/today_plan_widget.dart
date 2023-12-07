@@ -490,18 +490,18 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
             mainColor: dietColor,
             backgroundColor: dietColor.shade100,
             counterText: '간헐적 단식, 저탄코지 다이어트'),
-        setContentWidgets(
-            type: PlanTypeEnum.exercise,
-            title: '운동',
-            mainColor: exerciseColor,
-            backgroundColor: exerciseColor.shade100,
-            counterText: '헬스, 필라테스, 홈 트레이닝'),
-        setContentWidgets(
-            type: PlanTypeEnum.lifestyle,
-            title: '생활습관',
-            mainColor: lifeStyleColor,
-            backgroundColor: lifeStyleColor.shade100,
-            counterText: '야식 금지, 다이어트 동기부여 영상 보기'),
+        // setContentWidgets(
+        //     type: PlanTypeEnum.exercise,
+        //     title: '운동',
+        //     mainColor: exerciseColor,
+        //     backgroundColor: exerciseColor.shade100,
+        //     counterText: '헬스, 필라테스, 홈 트레이닝'),
+        // setContentWidgets(
+        //     type: PlanTypeEnum.lifestyle,
+        //     title: '생활습관',
+        //     mainColor: lifeStyleColor,
+        //     backgroundColor: lifeStyleColor.shade100,
+        //     counterText: '야식 금지, 다이어트 동기부여 영상 보기'),
       ],
     );
   }
