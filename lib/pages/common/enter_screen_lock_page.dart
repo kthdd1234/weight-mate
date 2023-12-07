@@ -1,9 +1,18 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/screen_lock_contents.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
+
+import '../../model/user_box/user_box.dart';
 
 class EnterScreenLockPage extends StatefulWidget {
   const EnterScreenLockPage({super.key});
@@ -13,49 +22,63 @@ class EnterScreenLockPage extends StatefulWidget {
 }
 
 class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
-  late Box<UserBox> userBox;
-
+  List<String> inputPasswords = ['', '', '', ''];
+  List<String> userPasswords = ['', '', '', ''];
+  RecordBox? recordInfo;
   bool isError = false;
-  List<String> passwords = ['', '', '', ''];
   int count = 0;
 
   @override
   void initState() {
-    userBox = Hive.box('userBox');
+    Box<UserBox> userBox = Hive.box('userBox');
+    Box<RecordBox> recordBox = Hive.box('recordBox');
+
+    UserBox? userProfile = userBox.get('userProfile');
+    recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
+
+    if (userProfile == null) return;
+    userPasswords = userProfile.screenLockPasswords!.split('');
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserBox? userProfile = userBox.get('userProfile');
-
     onTap(String button, int index) {
       switch (index) {
         case 11:
           setState(() {
             if (count > 0) count -= 1;
-            passwords[count] = '';
+            inputPasswords[count] = '';
           });
           break;
 
         default:
           setState(() {
             if (count < 5) {
-              passwords[count] = button;
+              inputPasswords[count] = button;
               count += 1;
 
               if (count == 4) {
-                if (userProfile == null) return;
+                if (userPasswords.join() == inputPasswords.join()) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/home-container',
+                    (route) => false,
+                  );
 
-                String screenLockPasswords = userProfile.screenLockPasswords!;
-                String inputPasswordStr = passwords.join();
-
-                if (screenLockPasswords == inputPasswordStr) {
-                  Navigator.of(context).popUntil((route) => route.isFirst);
+                  if (recordInfo == null || recordInfo!.weight == null) {
+                    context
+                        .read<ImportDateTimeProvider>()
+                        .setImportDateTime(DateTime.now());
+                    context
+                        .read<RecordIconTypeProvider>()
+                        .setSeletedRecordIconType(RecordIconTypes.addWeight);
+                  }
                 }
 
                 isError = true;
-                passwords = ['', '', '', ''];
+                inputPasswords = ['', '', '', ''];
                 count = 0;
               }
             }
@@ -73,7 +96,7 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
           automaticallyImplyLeading: false,
         ),
         body: ScreenLockContents(
-          passwords: passwords,
+          passwords: inputPasswords,
           passwordMsg: '비밀번호를 입력해주세요.',
           passwordErrMsg: isError ? '비밀번호가 일치하지 않습니다.' : '',
           isExit: false,

@@ -257,7 +257,7 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
         ContentsTitleText(
           text: setContetnsTitle(),
           sub: setIconWidgets(),
-          icon: setContetnsIcon(),
+          // icon: setContetnsIcon(),
         ),
         SpaceHeight(height: smallSpace + 5),
         contentsWidgets(

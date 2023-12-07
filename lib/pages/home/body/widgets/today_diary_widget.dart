@@ -8,12 +8,10 @@ import 'package:flutter_app_weight_management/components/area/empty_text_area.da
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/icon_text.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -21,7 +19,6 @@ import 'package:flutter_app_weight_management/pages/home/body/widgets/record_con
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_data_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
-import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -35,7 +32,7 @@ import 'package:flutter_app_weight_management/components/route/fade_page_route.d
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../provider/ads_provider.dart';
+import '../../../../components/dialog/native_ad_dialog.dart';
 
 class TodayDiaryWidget extends StatefulWidget {
   TodayDiaryWidget({
@@ -68,37 +65,6 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    createRewardedInterstitialAd();
-  }
-
-  void createRewardedInterstitialAd() async {
-    AdsService adsState =
-        Provider.of<AdsProvider>(context, listen: false).adsState;
-
-    await adsState.initialization.then(
-      (value) {
-        RewardedInterstitialAd.load(
-          adUnitId: adsState.rewardedInterstitialAdUnitId,
-          request: const AdRequest(),
-          rewardedInterstitialAdLoadCallback:
-              RewardedInterstitialAdLoadCallback(
-            onAdLoaded: (RewardedInterstitialAd ad) => setState(() {
-              rewardedInterstitialAd = ad;
-              rewardedInterstitialAdIsLoaded = true;
-              log('load test!!');
-            }),
-            onAdFailedToLoad: (LoadAdError error) {
-              log('LoadAdError $error');
-
-              setState(() {
-                rewardedInterstitialAd = null;
-                rewardedInterstitialAdIsLoaded = false;
-              });
-            },
-          ),
-        );
-      },
-    );
   }
 
   @override
@@ -137,6 +103,10 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         )
         .toList();
 
+    convertUnit8List(XFile? xFile) async {
+      return await File(xFile!.path).readAsBytes();
+    }
+
     setPickedImage({required String pos, required XFile? xFile}) async {
       if (xFile == null) return;
 
@@ -163,36 +133,6 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             ? recordInfo.leftFile = pickedImage
             : recordInfo.rightFile = pickedImage;
         recordInfo.save();
-      }
-    }
-
-    _showRewardedInterstitialAd({
-      required String pos,
-      required XFile xFileData,
-    }) async {
-      if (rewardedInterstitialAdIsLoaded) {
-        rewardedInterstitialAd!.fullScreenContentCallback =
-            FullScreenContentCallback(
-          onAdDismissedFullScreenContent: (ad) {
-            log('onAdDismissed!');
-
-            ad.dispose();
-            createRewardedInterstitialAd();
-          },
-          onAdFailedToShowFullScreenContent: (ad, error) {
-            log("onAdFailed => $error");
-
-            ad.dispose();
-            createRewardedInterstitialAd();
-          },
-        );
-
-        await rewardedInterstitialAd!.show(
-          onUserEarnedReward: (ad, reward) {
-            log('Done!');
-            setPickedImage(pos: pos, xFile: xFileData);
-          },
-        );
       }
     }
 
@@ -227,8 +167,46 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       return xFileData;
     }
 
+    onNavigatorImageCollectionsPage() async {
+      closeDialog(context);
+      Navigator.pushNamed(context, '/image-collections-page');
+    }
+
+    onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
+      closeDialog(context);
+
+      Navigator.push(
+        context,
+        FadePageRoute(
+          page: ImagePullSizePage(
+            binaryData: binaryData,
+          ),
+        ),
+      );
+    }
+
+    showDialogPopup({required String title, required Uint8List binaryData}) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return NativeAdDialog(
+            title: title,
+            leftText: '눈바디 확인',
+            rightText: '눈바디 목록',
+            leftIcon: Icons.image_outlined,
+            rightIcon: Icons.apps_rounded,
+            onLeftClick: () =>
+                onNavigatorImagePullSizePage(binaryData: binaryData),
+            onRightClick: onNavigatorImageCollectionsPage,
+          );
+        },
+      );
+    }
+
     onTapImage(String pos) {
       final isFilePath = fileInfo[pos] != null;
+
+      log('isFilePath $isFilePath');
 
       onShowImagePicker(ImageSource source) async {
         closeDialog(context);
@@ -236,21 +214,18 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
         XFile? xFileData = await setImagePicker(source: source, pos: pos);
 
         if (xFileData != null) {
-          await Future.delayed(const Duration(milliseconds: 1500));
-          await _showRewardedInterstitialAd(pos: pos, xFileData: xFileData);
-        }
-      }
+          setPickedImage(pos: pos, xFile: xFileData);
 
-      onNavigatorPage() async {
-        closeDialog(context);
-        await Navigator.pushNamed(context, '/image-collections-page');
+          final unit8List = await convertUnit8List(xFileData);
+          showDialogPopup(title: '눈바디 기록 완료!', binaryData: unit8List);
+        }
       }
 
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
         builder: (context) => DefaultBottomSheet(
-          title: '사진 ${isFilePath ? '편집' : '추가'}',
+          title: '눈바디 ${isFilePath ? '편집' : '추가'}',
           height: isFilePath ? 500 : 220,
           contents: Column(
             children: [
@@ -258,14 +233,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                   ? Column(
                       children: [
                         InkWell(
-                          onTap: () => Navigator.push(
-                            context,
-                            FadePageRoute(
-                              page: ImagePullSizePage(
-                                binaryData: fileInfo[pos]!,
-                              ),
-                            ),
-                          ),
+                          onTap: () => onNavigatorImagePullSizePage(
+                              binaryData: fileInfo[pos]!),
                           child:
                               DefaultImage(data: fileInfo[pos]!, height: 280),
                         ),
@@ -289,8 +258,8 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
                     icon: Icons.apps_rounded,
-                    title: '사진 보기',
-                    onTap: onNavigatorPage,
+                    title: '눈바디 목록',
+                    onTap: onNavigatorImageCollectionsPage,
                   ),
                 ],
               ),
@@ -321,7 +290,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
             strokeWidth: 1,
             child: EmptyTextVerticalArea(
               icon: Icons.add,
-              title: '사진 추가',
+              title: '눈바디 추가',
               backgroundColor: dialogBackgroundColor,
               height: 170,
             ),
@@ -440,7 +409,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
       children: [
         ContentsTitleText(
           text: '${dateTimeToTitle(widget.importDateTime)} 눈바디',
-          icon: Icons.portrait,
+          // icon: Icons.portrait,
           sub: icons,
         ),
         SpaceHeight(height: smallSpace),
@@ -467,3 +436,62 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
     );
   }
 }
+    // _showRewardedInterstitialAd({
+    //   required String pos,
+    //   required XFile xFileData,
+    // }) async {
+    //   if (rewardedInterstitialAdIsLoaded) {
+    //     rewardedInterstitialAd!.fullScreenContentCallback =
+    //         FullScreenContentCallback(
+    //       onAdDismissedFullScreenContent: (ad) {
+    //         log('onAdDismissed!');
+
+    //         ad.dispose();
+    //         createRewardedInterstitialAd();
+    //       },
+    //       onAdFailedToShowFullScreenContent: (ad, error) {
+    //         log("onAdFailed => $error");
+
+    //         ad.dispose();
+    //         createRewardedInterstitialAd();
+    //       },
+    //     );
+
+    //     await rewardedInterstitialAd!.show(
+    //       onUserEarnedReward: (ad, reward) {
+    //         log('Done!');
+    //         setPickedImage(pos: pos, xFile: xFileData);
+    //       },
+    //     );
+    //   }
+    // }
+
+  //     void createRewardedInterstitialAd() async {
+  //   AdsService adsState =
+  //       Provider.of<AdsProvider>(context, listen: false).adsState;
+
+  //   await adsState.initialization.then(
+  //     (value) {
+  //       RewardedInterstitialAd.load(
+  //         adUnitId: adsState.rewardedInterstitialAdUnitId,
+  //         request: const AdRequest(),
+  //         rewardedInterstitialAdLoadCallback:
+  //             RewardedInterstitialAdLoadCallback(
+  //           onAdLoaded: (RewardedInterstitialAd ad) => setState(() {
+  //             rewardedInterstitialAd = ad;
+  //             rewardedInterstitialAdIsLoaded = true;
+  //             log('load test!!');
+  //           }),
+  //           onAdFailedToLoad: (LoadAdError error) {
+  //             log('LoadAdError $error');
+
+  //             setState(() {
+  //               rewardedInterstitialAd = null;
+  //               rewardedInterstitialAdIsLoaded = false;
+  //             });
+  //           },
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }

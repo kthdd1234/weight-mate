@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -67,23 +71,16 @@ class _HomeContainerState extends State<HomeContainer>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
-    setGeneratedWeight() {
-      RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
+    UserBox? userProfile = userBox.get('userProfile');
+    RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
 
-      if (recordInfo == null || recordInfo.weight == null) {
-        context
-            .read<ImportDateTimeProvider>()
-            .setImportDateTime(DateTime.now());
-        context
-            .read<RecordIconTypeProvider>()
-            .setSeletedRecordIconType(RecordIconTypes.addWeight);
-      }
-    }
+    setState(() {});
+
+    debugPrint('AppLifecycleState $state');
+    debugPrint('isActiveCamera $isActiveCamera');
 
     if (state == AppLifecycleState.resumed) {
       if (isActiveCamera == false) {
-        UserBox? userProfile = userBox.get('userProfile');
-
         if (userProfile != null && userProfile.screenLockPasswords != null) {
           await Navigator.of(context).push(
             MaterialPageRoute(
@@ -91,9 +88,16 @@ class _HomeContainerState extends State<HomeContainer>
               fullscreenDialog: true,
             ),
           );
+        } else {
+          if (recordInfo == null || recordInfo.weight == null) {
+            context
+                .read<ImportDateTimeProvider>()
+                .setImportDateTime(DateTime.now());
+            context
+                .read<RecordIconTypeProvider>()
+                .setSeletedRecordIconType(RecordIconTypes.addWeight);
+          }
         }
-
-        setGeneratedWeight();
       }
 
       setState(() => isActiveCamera = false);

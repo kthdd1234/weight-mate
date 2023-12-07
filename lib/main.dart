@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -91,6 +93,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     userBox = Hive.box('userBox');
+
     super.initState();
   }
 
@@ -98,6 +101,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     UserBox? userProfile = userBox.get('userProfile');
     PlanInfoClass planInfo = context.watch<DietInfoProvider>().getPlanInfo();
+    String initialRoute = userProfile?.userId == null
+        ? '/splash-screen'
+        : userProfile?.screenLockPasswords == null
+            ? '/home-container'
+            : '/enter-screen-lock';
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -111,8 +119,7 @@ class _MyAppState extends State<MyApp> {
         Locale('ko', 'KR'),
       ],
       theme: AppThemes.lightTheme,
-      initialRoute:
-          userProfile?.userId != null ? '/home-container' : '/splash-screen',
+      initialRoute: initialRoute,
       routes: {
         '/splash-screen': (context) => const SplashScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
