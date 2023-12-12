@@ -216,16 +216,21 @@ class GridIconClass {
 
 class PlanTypeDetailClass {
   PlanTypeDetailClass({
+    required this.title,
     required this.classList,
     required this.initId,
     required this.subText,
     required this.counterText,
     required this.icon,
+    required this.mainColor,
+    required this.shadeColor,
+    required this.desc,
   });
 
   List<PlanItemClass> classList;
-  String initId, subText, counterText;
+  String title, desc, initId, subText, counterText;
   IconData icon;
+  Color mainColor, shadeColor;
 }
 
 class ActionItemClass {
@@ -253,4 +258,19 @@ class ActionItemClass {
       'createDateTime': createDateTime,
     };
   }
+}
+
+class ArgmentsTypeClass {
+  ArgmentsTypeClass({
+    required this.createDateTime,
+    required this.planId,
+    required this.buttonText,
+    required this.contentsTitleWidget,
+    this.pageTitle,
+  });
+
+  DateTime createDateTime;
+  String planId, buttonText;
+  String? pageTitle;
+  Widget contentsTitleWidget;
 }

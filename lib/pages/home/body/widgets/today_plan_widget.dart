@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/check/plan_contents.dart';
@@ -24,6 +27,7 @@ import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart'
 import 'package:flutter_app_weight_management/widgets/touch_and_check_input_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_app_weight_management/services/notifi_service.dart';
 
 class TodayPlanWidget extends StatefulWidget {
   TodayPlanWidget({
@@ -56,64 +60,43 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 
   @override
   Widget build(BuildContext context) {
+    DietInfoProvider dietInfoProvider = context.read<DietInfoProvider>();
     int currentDateTimeInt = getDateTimeToInt(widget.importDateTime);
     RecordBox? recordInfo = recordBox.get(currentDateTimeInt);
     List<PlanBox> planInfoList = planBox.values.toList();
-    List<RecordIconClass> recordIconClassList = [
-      RecordIconClass(enumId: RecordIconTypes.removePlan, icon: Icons.delete),
-    ];
-    List<Widget> iconWidgets = recordIconClassList
-        .map(
-          (element) => RecordContentsTitleIcon(
-            id: element.enumId,
-            icon: element.icon,
-            onTap: (enumId) {
-              if (RecordIconTypes.removePlan == enumId) {
-                if (planInfoList.isEmpty) {
-                  return showSnackBar(
-                    context: context,
-                    text: '삭제할 계획이 없어요.',
-                    buttonName: '확인',
-                  );
-                }
 
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return ConfirmDialog(
-                      width: 230,
-                      titleText: '계획 삭제',
-                      contentIcon: Icons.delete_forever,
-                      contentText1:
-                          '${dateTimeToTitle(widget.importDateTime)} 모든 계획을',
-                      contentText2: '삭제하시겠습니까?',
-                      onPressedOk: () {
-                        List<String> deleteIdList = [];
+    onTapRemoveAll(enumId) {
+      if (RecordIconTypes.removePlan == enumId) {
+        if (planInfoList.isEmpty) {
+          return showSnackBar(
+            context: context,
+            text: '삭제할 계획이 없어요.',
+            buttonName: '확인',
+          );
+        }
 
-                        for (var i = 0; i < planInfoList.length; i++) {
-                          PlanBox planInfo = planInfoList[i];
+        showDialog(
+          context: context,
+          builder: (context) {
+            return ConfirmDialog(
+              width: 230,
+              titleText: '계획 삭제',
+              contentIcon: Icons.delete_forever,
+              contentText1: '모든 계획을',
+              contentText2: '삭제하시겠습니까?',
+              onPressedOk: () {
+                planInfoList.forEach((element) {
+                  if (element.alarmId != null) {
+                    NotificationService().deleteAlarm(element.alarmId!);
+                  }
+                });
 
-                          if (getDateTimeToInt(planInfo.createDateTime) ==
-                              currentDateTimeInt) {
-                            deleteIdList.add(planInfo.id);
-                          }
-                        }
-
-                        if (deleteIdList.isNotEmpty) {
-                          planBox.deleteAll(deleteIdList);
-                        }
-                      },
-                    );
-                  },
-                );
-              }
-            },
-          ),
-        )
-        .toList();
-
-    onTapEmptyArea(PlanTypeEnum type) {
-      setState(() => curType = type);
+                planBox.clear();
+              },
+            );
+          },
+        );
+      }
     }
 
     onTapCheck({required String id, required bool isSelected}) async {
@@ -168,59 +151,23 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       }
     }
 
-    onEditingComplete({
-      required String text,
-      required bool isAction,
-      required String title,
-      required PlanTypeEnum type,
-    }) {
-      if (text == '') {
-        showSnackBar(
-          context: context,
-          text: '한 글자 이상 입력해주세요.',
-          buttonName: '확인',
-          width: 270,
-        );
-      } else {
-        String planId = getUUID();
-        planBox.put(
-          planId,
-          PlanBox(
-            id: planId,
-            type: type.toString(),
-            title: title,
-            name: text,
-            priority: PlanPriorityEnum.medium.toString(),
-            isAlarm: false,
-            createDateTime: widget.importDateTime,
-          ),
-        );
-
-        if (isAction) {
-          onTapCheck(id: planId, isSelected: isAction);
-        }
-      }
-
-      FocusScope.of(context).unfocus();
-      setState(() => curType = PlanTypeEnum.none);
-    }
-
     onTapEditPlan(PlanBox planInfo) async {
-      context.read<DietInfoProvider>().changePlanInfo(
-            PlanInfoClass(
-                type: planType[planInfo.type]!,
-                title: planInfo.title,
-                id: planInfo.id,
-                name: planInfo.name,
-                priority:
-                    planPrioritys[planInfo.priority]!['id'] as PlanPriorityEnum,
-                isAlarm: planInfo.isAlarm,
-                alarmTime: planInfo.alarmTime,
-                alarmId: planInfo.alarmId,
-                createDateTime: planInfo.createDateTime),
-          );
+      dietInfoProvider.changePlanInfo(
+        PlanInfoClass(
+          type: planType[planInfo.type]!,
+          title: planInfo.title,
+          id: planInfo.id,
+          name: planInfo.name,
+          priority: planPrioritys[planInfo.priority]!['id'] as PlanPriorityEnum,
+          isAlarm: planInfo.isAlarm,
+          alarmTime: planInfo.alarmTime,
+          alarmId: planInfo.alarmId,
+          createDateTime: planInfo.createDateTime,
+        ),
+      );
 
       closeDialog(context);
+
       await Navigator.pushNamed(
         context,
         '/add-plan-setting',
@@ -257,14 +204,14 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
               ExpandedButtonVerti(
                 mainColor: buttonBackgroundColor,
                 icon: Icons.edit_note,
-                title: '이름, 순위, 알림 설정',
+                title: '수정하기',
                 onTap: () => onTapEditPlan(planInfo),
               ),
               SpaceWidth(width: tinySpace),
               ExpandedButtonVerti(
                 mainColor: Colors.red,
                 icon: Icons.delete_forever,
-                title: '계획 삭제하기',
+                title: '삭제하기',
                 onTap: () => onTapRemovePlan(id),
               ),
             ],
@@ -276,13 +223,19 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       );
     }
 
-    setContentWidgets({
-      required PlanTypeEnum type,
-      required String title,
-      required Color mainColor,
-      required Color backgroundColor,
-      required String counterText,
-    }) {
+    onTapAddPlan() async {
+      initPlanInfo.name = '';
+      initPlanInfo.type = PlanTypeEnum.diet;
+      dietInfoProvider.changePlanInfo(initPlanInfo);
+
+      await Navigator.pushNamed(
+        context,
+        '/add-plan-setting',
+        arguments: ArgmentsTypeEnum.add,
+      );
+    }
+
+    setContentWidgets() {
       List<PlanContents> planContentsList = [];
 
       for (var i = 0; i < planInfoList.length; i++) {
@@ -301,116 +254,23 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           return data;
         }
 
-        if (planInfo.type == type.toString()) {
-          if (getDateTimeToInt(planInfo.createDateTime) == currentDateTimeInt) {
-            planContentsList.add(
-              PlanContents(
-                id: planInfo.id,
-                text: planInfo.name,
-                isChecked: actionData()?['id'] != null,
-                mainColor: mainColor,
-                alarmTime: planInfo.alarmTime,
-                priority: planInfo.priority,
-                checkIcon: Icons.check_box,
-                notCheckIcon: Icons.check_box,
-                notCheckColor: Colors.grey.shade300,
-                recordTime: actionData()?['actionDateTime'],
-                onTapCheck: onTapCheck,
-                onTapContents: onTapContents,
-                onTapMore: onTapContents,
-              ),
-            );
-          }
-        }
-      }
-
-      getWherePlanList() {
-        return planBox.values
-            .toList()
-            .where(
-              (element) =>
-                  element.type == type.toString() &&
-                  getDateTimeToInt(element.createDateTime) < currentDateTimeInt,
-            )
-            .toList();
-      }
-
-      setActionPercent() {
-        if (recordInfo == null || recordInfo.actions == null) {
-          return '0.0';
-        }
-
-        final typeActions = recordInfo.actions!.where((actionData) =>
-            actionData['type'] == type.toString() &&
-            getDateTimeToInt(actionData['createDateTime']) ==
-                currentDateTimeInt);
-
-        return planToActionPercent(
-            a: typeActions.length, b: planContentsList.length);
-      }
-
-      setBeforePlanList() {
-        return getWherePlanList().length;
-      }
-
-      onPressedOk(List<String> idList) {
-        for (var i = 0; i < idList.length; i++) {
-          PlanBox? planInfo = planBox.get(idList[i]);
-
-          if (planInfo != null) {
-            final uuid = getUUID();
-
-            planBox.put(
-              uuid,
-              PlanBox(
-                id: uuid,
-                type: planInfo.type,
-                title: planInfo.title,
-                name: planInfo.name,
-                priority: planInfo.priority,
-                isAlarm: planInfo.isAlarm,
-                alarmId: planInfo.alarmId,
-                alarmTime: planInfo.alarmTime,
-                createDateTime: widget.importDateTime,
-              ),
-            );
-
-            if (planInfo.isAlarm) {
-              NotificationService().addNotification(
-                id: planInfo.alarmId!,
-                dateTime: widget.importDateTime,
-                alarmTime: planInfo.alarmTime!,
-                title: planNotifyTitle(),
-                body: planNotifyBody(title: title, body: planInfo.name),
-                payload: 'plan',
-              );
-            }
-          }
-        }
-
-        closeDialog(context);
-      }
-
-      onTapBeforePlanList() {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return BeforePlanListDialog(
-              title: title,
-              planList: getWherePlanList(),
-              onPressedOk: onPressedOk,
-              emptyIcon: planTypeDetailInfo[type]!.icon,
-            );
-          },
+        planContentsList.add(
+          PlanContents(
+            id: planInfo.id,
+            text: planInfo.name,
+            type: planInfo.type,
+            isChecked: actionData()?['id'] != null,
+            alarmTime: planInfo.alarmTime,
+            checkIcon: Icons.check_box,
+            notCheckIcon: Icons.check_box,
+            notCheckColor: Colors.grey.shade300,
+            recordTime: actionData()?['actionDateTime'],
+            onTapCheck: onTapCheck,
+            onTapContents: onTapContents,
+            onTapMore: onTapContents,
+          ),
         );
       }
-
-      planContentsList.sort((a, b) {
-        int orderA = planPrioritys[a.priority]!['order'] as int;
-        int orderB = planPrioritys[b.priority]!['order'] as int;
-
-        return orderA.compareTo(orderB);
-      });
 
       return Column(
         children: [
@@ -418,37 +278,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           ContentsBox(
             contentsWidget: Column(
               children: [
-                ContentsTitleText(
-                  text: title,
-                  sub: [
-                    TextIcon(
-                      iconSize: 12,
-                      iconColor: mainColor,
-                      backgroundColor: backgroundColor,
-                      text: '실천율: ${setActionPercent()}%',
-                      borderRadius: 5,
-                      textColor: mainColor,
-                      fontSize: 10,
-                      padding: 7,
-                    ),
-                    SpaceWidth(width: tinySpace),
-                    InkWell(
-                      onTap: onTapBeforePlanList,
-                      child: TextIcon(
-                        iconSize: 12,
-                        iconColor: enableTextColor,
-                        backgroundColor: enableBackgroundColor,
-                        text: '이전 계획: ${setBeforePlanList()}개',
-                        borderRadius: 5,
-                        textColor: enableTextColor,
-                        fontSize: 10,
-                        padding: 7,
-                      ),
-                    ),
-                    //
-                  ],
-                ),
-                SpaceHeight(height: smallSpace),
                 Column(
                     children: planContentsList.isNotEmpty
                         ? planContentsList
@@ -456,21 +285,17 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
                             EmptyTextVerticalArea(
                               height: 130,
                               backgroundColor: Colors.transparent,
-                              icon: planTypeDetailInfo[type]!.icon,
-                              title: '$title 계획이 없어요. \n (ex. $counterText)',
+                              icon: Icons.history_edu_outlined,
+                              title: '다이어트 계획이 없어요.',
                             ),
                           ]),
-                SpaceHeight(height: smallSpace),
-                TouchAndCheckInputWidget(
-                  type: type,
-                  mainColor: mainColor,
-                  title: title,
-                  checkBoxEnabledIcon: Icons.check_box,
-                  checkBoxDisEnabledIcon: Icons.check_box_outlined,
-                  showEmptyTouchArea: curType != type,
-                  onTapEmptyArea: onTapEmptyArea,
-                  onEditingComplete: onEditingComplete,
-                )
+                EmptyTextArea(
+                  text: '계획을 추가해보세요.',
+                  icon: Icons.add,
+                  topHeight: smallSpace,
+                  downHeight: smallSpace,
+                  onTap: onTapAddPlan,
+                ),
               ],
             ),
           ),
@@ -482,32 +307,20 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       children: [
         ContentsTitleText(
           text: '${dateTimeToTitle(widget.importDateTime)} 계획',
-          // icon: Icons.playlist_add_check,
-          sub: iconWidgets,
+          sub: [
+            RecordContentsTitleIcon(
+              id: RecordIconTypes.removePlan,
+              icon: Icons.delete,
+              onTap: onTapRemoveAll,
+            )
+          ],
         ),
-        setContentWidgets(
-            type: PlanTypeEnum.diet,
-            title: '식이요법',
-            mainColor: dietColor,
-            backgroundColor: dietColor.shade100,
-            counterText: '간헐적 단식, 저탄코지 다이어트'),
-        setContentWidgets(
-            type: PlanTypeEnum.exercise,
-            title: '운동',
-            mainColor: exerciseColor,
-            backgroundColor: exerciseColor.shade100,
-            counterText: '헬스, 필라테스, 홈 트레이닝'),
-        setContentWidgets(
-            type: PlanTypeEnum.lifestyle,
-            title: '생활습관',
-            mainColor: lifeStyleColor,
-            backgroundColor: lifeStyleColor.shade100,
-            counterText: '야식 금지, 다이어트 동기부여 영상 보기'),
+        setContentWidgets(),
       ],
     );
   }
 }
-
+// RecordIconTypes.removePlan, icon: Icons.delete
 // setBodyWidgets() {
 //   return planInfoList.isEmpty
 //       ? Column(
@@ -622,3 +435,166 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 //     ),
 //   );
 // }
+// ContentsTitleText(
+//   text: title,
+//   sub: [
+//     TextIcon(
+//       iconSize: 12,
+//       iconColor: mainColor,
+//       backgroundColor: backgroundColor,
+//       text: '실천율: ${setActionPercent()}%',
+//       borderRadius: 5,
+//       textColor: mainColor,
+//       fontSize: 10,
+//       padding: 7,
+//     ),
+//     SpaceWidth(width: tinySpace),
+//     InkWell(
+//       onTap: onTapBeforePlanList,
+//       child: TextIcon(
+//         iconSize: 12,
+//         iconColor: enableTextColor,
+//         backgroundColor: enableBackgroundColor,
+//         text: '이전 계획: ${setBeforePlanList()}개',
+//         borderRadius: 5,
+//         textColor: enableTextColor,
+//         fontSize: 10,
+//         padding: 7,
+//       ),
+//     ),
+//     //
+//   ],
+// ),
+// SpaceHeight(height: smallSpace),
+// getWherePlanList() {
+//   return planBox.values
+//       .toList()
+//       .where(
+//         (element) =>
+//             element.type == type.toString() &&
+//             getDateTimeToInt(element.createDateTime) < currentDateTimeInt,
+//       )
+//       .toList();
+// }
+
+// setActionPercent() {
+//   if (recordInfo == null || recordInfo.actions == null) {
+//     return '0.0';
+//   }
+
+//   final typeActions = recordInfo.actions!.where((actionData) =>
+//       actionData['type'] == type.toString() &&
+//       getDateTimeToInt(actionData['createDateTime']) ==
+//           currentDateTimeInt);
+
+//   return planToActionPercent(
+//       a: typeActions.length, b: planContentsList.length);
+// }
+
+// setBeforePlanList() {
+//   return getWherePlanList().length;
+// }
+
+// onPressedOk(List<String> idList) {
+//   for (var i = 0; i < idList.length; i++) {
+//     PlanBox? planInfo = planBox.get(idList[i]);
+
+//     if (planInfo != null) {
+//       final uuid = getUUID();
+
+//       planBox.put(
+//         uuid,
+//         PlanBox(
+//           id: uuid,
+//           type: planInfo.type,
+//           title: planInfo.title,
+//           name: planInfo.name,
+//           priority: planInfo.priority,
+//           isAlarm: planInfo.isAlarm,
+//           alarmId: planInfo.alarmId,
+//           alarmTime: planInfo.alarmTime,
+//           createDateTime: widget.importDateTime,
+//         ),
+//       );
+
+//       if (planInfo.isAlarm) {
+//         NotificationService().addNotification(
+//           id: planInfo.alarmId!,
+//           dateTime: widget.importDateTime,
+//           alarmTime: planInfo.alarmTime!,
+//           title: planNotifyTitle(),
+//           body: planNotifyBody(title: title, body: planInfo.name),
+//           payload: 'plan',
+//         );
+//       }
+//     }
+//   }
+
+//   closeDialog(context);
+// }
+
+// onTapBeforePlanList() {
+//   showDialog(
+//     context: context,
+//     builder: (context) {
+//       return BeforePlanListDialog(
+//         title: title,
+//         planList: getWherePlanList(),
+//         onPressedOk: onPressedOk,
+//         emptyIcon: planTypeDetailInfo[type]!.icon,
+//       );
+//     },
+//   );
+// }
+// onEditingComplete({
+//   required String text,
+//   required bool isAction,
+//   required String title,
+//   required PlanTypeEnum type,
+// }) {
+//   if (text == '') {
+//     showSnackBar(
+//       context: context,
+//       text: '한 글자 이상 입력해주세요.',
+//       buttonName: '확인',
+//       width: 270,
+//     );
+//   } else {
+//     String planId = getUUID();
+//     planBox.put(
+//       planId,
+//       PlanBox(
+//         id: planId,
+//         type: type.toString(),
+//         title: title,
+//         name: text,
+//         priority: PlanPriorityEnum.medium.toString(),
+//         isAlarm: false,
+//         createDateTime: widget.importDateTime,
+//       ),
+//     );
+
+//     if (isAction) {
+//       onTapCheck(id: planId, isSelected: isAction);
+//     }
+//   }
+
+//   FocusScope.of(context).unfocus();
+//   setState(() => curType = PlanTypeEnum.none);
+// }
+
+// onTapEmptyArea(PlanTypeEnum type) {
+//   setState(() => curType = type);
+// }
+      // setContentWidgets(
+        //     type: PlanTypeEnum.exercise,
+        //     title: '운동',
+        //     mainColor: exerciseColor,
+        //     backgroundColor: exerciseColor.shade100,
+        //     counterText: '헬스, 필라테스, 홈 트레이닝'),
+        // setContentWidgets(
+        //     type: PlanTypeEnum.lifestyle,
+        //     title: '생활습관',
+        //     mainColor: lifeStyleColor,
+        //     backgroundColor: lifeStyleColor.shade100,
+        //     counterText: '야식 금지, 다이어트 동기부여 영상 보기'),

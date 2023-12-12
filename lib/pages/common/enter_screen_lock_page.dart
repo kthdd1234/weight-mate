@@ -75,11 +75,11 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
                         .read<RecordIconTypeProvider>()
                         .setSeletedRecordIconType(RecordIconTypes.addWeight);
                   }
+                } else {
+                  isError = true;
+                  inputPasswords = ['', '', '', ''];
+                  count = 0;
                 }
-
-                isError = true;
-                inputPasswords = ['', '', '', ''];
-                count = 0;
               }
             }
           });

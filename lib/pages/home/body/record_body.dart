@@ -70,11 +70,11 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
-    onPressed() {
-      userBox.clear();
-      recordBox.clear();
-      planBox.clear();
-    }
+    // onPressed() {
+    //   userBox.clear();
+    //   recordBox.clear();
+    //   planBox.clear();
+    // }
 
     return SingleChildScrollView(
       child: MultiValueListenableBuilder(
@@ -87,8 +87,6 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
           return Column(
             children: [
               BannerWidget(),
-              SpaceHeight(height: smallSpace),
-              TodayWiseSayingWidget(importDateTime: importDateTime),
               SpaceHeight(height: largeSpace),
               TodayWeightWidget(
                 seletedRecordIconType: seletedRecordIconType,

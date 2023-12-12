@@ -11,10 +11,10 @@ final initAlarmDateTime = DateTime(
 );
 
 final initPlanInfo = PlanInfoClass(
-  type: PlanTypeEnum.none,
-  title: '',
+  type: PlanTypeEnum.diet,
+  title: '식이요법',
   id: '',
-  name: '',
+  name: '간헐적 단식',
   priority: PlanPriorityEnum.medium,
   isAlarm: true,
   alarmTime: initAlarmDateTime,

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_plan_item.dart';
+import 'package:flutter_app_weight_management/etc/add_plan_item.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_plan_type.dart';
+import 'package:flutter_app_weight_management/etc/add_plan_type.dart';
 import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
@@ -119,7 +119,7 @@ class _MyAppState extends State<MyApp> {
         Locale('ko', 'KR'),
       ],
       theme: AppThemes.lightTheme,
-      initialRoute: initialRoute,
+      initialRoute: initialRoute, // initialRoute
       routes: {
         '/splash-screen': (context) => const SplashScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),

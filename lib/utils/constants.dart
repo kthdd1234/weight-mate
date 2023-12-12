@@ -143,7 +143,7 @@ const diaryColor = Colors.orange;
 const dietColor = Colors.teal;
 
 /// exerciseColor
-const exerciseColor = Colors.blue;
+const exerciseColor = Colors.lightBlue;
 
 /// lifeStyleColor
 const lifeStyleColor = Colors.brown;

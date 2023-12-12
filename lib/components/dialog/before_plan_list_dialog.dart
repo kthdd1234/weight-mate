@@ -75,13 +75,12 @@ class _BeforePlanListDialogState extends State<BeforePlanListDialog> {
             PlanCheckClass item = planCheckClassList[index];
 
             return PlanContents(
-              mainColor: buttonBackgroundColor,
               id: item.id,
               text: item.text,
+              type: 'diet',
               checkIcon: Icons.check_box_outlined,
               notCheckIcon: Icons.check_box_outline_blank,
               isChecked: item.isChecked,
-              priority: item.priority,
               notCheckColor: buttonBackgroundColor,
               alarmTime: item.alarmTime,
               createDateTime: item.createDateTime,

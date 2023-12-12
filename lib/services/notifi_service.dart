@@ -64,7 +64,7 @@ class NotificationService {
     /// add schedule notification
     final details =
         notificationDetails(id: id.toString(), title: title, body: body);
-    final other = DateTime(
+    var settingDatetime = DateTime(
       dateTime.year,
       dateTime.month,
       dateTime.day,
@@ -72,14 +72,13 @@ class NotificationService {
       alarmTime.minute,
     );
 
-    DateTime now = dateTime.add(const Duration(seconds: 5));
-    tz.TZDateTime scheduledDate = tz.TZDateTime.from(other, tz.local);
-
-    if (now.isAfter(other) && payload == 'plan') {
-      return false;
+    if (DateTime.now().isAfter(settingDatetime)) {
+      settingDatetime = settingDatetime.add(const Duration(days: 1));
     }
 
-    notification.zonedSchedule(
+    tz.TZDateTime scheduledDate = tz.TZDateTime.from(settingDatetime, tz.local);
+
+    await notification.zonedSchedule(
       id,
       title,
       body,
@@ -88,8 +87,7 @@ class NotificationService {
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload,
-      matchDateTimeComponents:
-          payload == 'weight' ? DateTimeComponents.time : null,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
 
     return true;
@@ -127,6 +125,10 @@ class NotificationService {
     }
 
     return false;
+  }
+
+  Future<void> deleteAlarm(int id) async {
+    await notification.cancel(id);
   }
 
   Future<void> deleteMultipleAlarm(List<String> alarmIds) async {

@@ -10,12 +10,12 @@ class nameTextInput extends StatefulWidget {
   nameTextInput({
     super.key,
     required this.name,
-    required this.onCounterText,
     required this.onChanged,
+    this.onCounterText,
   });
 
   String name;
-  Function() onCounterText;
+  Function()? onCounterText;
   Function(String str) onChanged;
 
   @override
@@ -45,7 +45,8 @@ class _nameTextInputState extends State<nameTextInput> {
           suffixText: '',
           hintText: '이름을 입력해주세요.',
           counterText: null,
-          helperText: widget.onCounterText(),
+          helperText:
+              widget.onCounterText != null ? widget.onCounterText!() : '',
           onChanged: widget.onChanged,
           errorText: null,
           keyboardType: TextInputType.text,

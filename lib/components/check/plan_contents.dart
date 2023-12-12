@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/icon_text.dart';
@@ -10,13 +11,12 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 class PlanContents extends StatelessWidget {
   PlanContents({
     super.key,
-    required this.mainColor,
     required this.id,
     required this.text,
+    required this.type,
     required this.isChecked,
     required this.onTapCheck,
     required this.onTapContents,
-    required this.priority,
     required this.checkIcon,
     required this.notCheckIcon,
     required this.notCheckColor,
@@ -27,10 +27,8 @@ class PlanContents extends StatelessWidget {
   });
 
   String id;
-  String text;
+  String text, type;
   bool isChecked;
-  Color mainColor;
-  String priority;
   IconData checkIcon, notCheckIcon;
   Color notCheckColor;
   Function({required String id, required bool isSelected}) onTapCheck;
@@ -41,6 +39,16 @@ class PlanContents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final planInfo = planTypeDetailInfo[planType[type]]!;
+    final alarmIcon = alarmTime != null
+        ? Icons.notifications_active_outlined
+        : Icons.notifications_off_outlined;
+    final alarmBgColor =
+        alarmTime != null ? Colors.blue.shade50 : Colors.grey.shade50;
+    final alarmText =
+        alarmTime != null ? '${timeToString(alarmTime)}' : '알림 OFF';
+    final alarmColor = alarmTime != null ? Colors.blue : Colors.grey;
+
     return Column(
       children: [
         Row(
@@ -50,7 +58,7 @@ class PlanContents extends StatelessWidget {
               onTap: () => onTapCheck(id: id, isSelected: !isChecked),
               child: Icon(
                 isChecked ? checkIcon : notCheckIcon,
-                color: isChecked ? mainColor : notCheckColor,
+                color: isChecked ? planInfo.mainColor : notCheckColor,
               ),
             ),
             SpaceWidth(width: smallSpace),
@@ -67,25 +75,28 @@ class PlanContents extends StatelessWidget {
                     SpaceHeight(height: tinySpace),
                     Row(
                       children: [
-                        IconText(
-                          icon: planPrioritys[priority]!['icon'] as IconData,
-                          iconColor: buttonBackgroundColor,
-                          iconSize: 12,
-                          text: planPrioritys[priority]!['name'] as String,
-                          textColor: buttonBackgroundColor,
-                          textSize: 11,
+                        TextIcon(
+                          backgroundColor: planInfo.shadeColor,
+                          text: planInfo.title,
+                          borderRadius: 5,
+                          textColor: planInfo.mainColor,
+                          fontSize: 10,
+                          padding: 8,
+                          icon: planInfo.icon,
+                          iconColor: planInfo.mainColor,
+                          iconSize: 14,
                         ),
                         SpaceWidth(width: tinySpace),
-                        IconText(
-                          icon: alarmTime != null
-                              ? Icons.notifications_active
-                              : Icons.notifications_active_outlined,
-                          iconColor: buttonBackgroundColor,
-                          iconSize: 12,
-                          text:
-                              '${alarmTime != null ? timeToString(alarmTime) : '알림 OFF'}',
-                          textColor: buttonBackgroundColor,
-                          textSize: 11,
+                        TextIcon(
+                          backgroundColor: alarmBgColor,
+                          text: alarmText,
+                          borderRadius: 5,
+                          textColor: alarmColor,
+                          fontSize: 10,
+                          padding: 8,
+                          icon: alarmIcon,
+                          iconColor: alarmColor,
+                          iconSize: 14,
                         ),
                         SpaceWidth(width: tinySpace),
                         createDateTime != null
@@ -115,15 +126,17 @@ class PlanContents extends StatelessWidget {
                         onTap: () => onTapMore!(id),
                         child: const Icon(Icons.more_horiz, color: Colors.grey),
                       ),
+                      SpaceHeight(height: smallSpace),
                       isChecked
                           ? Row(
                               children: [
-                                Icon(Icons.check, size: 12, color: mainColor),
+                                Icon(Icons.check,
+                                    size: 12, color: planInfo.mainColor),
                                 SpaceWidth(width: 3),
                                 Text(
                                   timeToString(recordTime),
-                                  style:
-                                      TextStyle(fontSize: 11, color: mainColor),
+                                  style: TextStyle(
+                                      fontSize: 11, color: planInfo.mainColor),
                                 ),
                               ],
                             )
@@ -138,3 +151,22 @@ class PlanContents extends StatelessWidget {
     );
   }
 }
+           // IconText(
+                        //   icon: planPrioritys[priority]!['icon'] as IconData,
+                        //   iconColor: buttonBackgroundColor,
+                        //   iconSize: 12,
+                        //   text: planPrioritys[priority]!['name'] as String,
+                        //   textColor: buttonBackgroundColor,
+                        //   textSize: 11,
+                        // ),
+                        //          IconText(
+                        //   icon: alarmTime != null
+                        //       ? Icons.notifications_active
+                        //       : Icons.notifications_active_outlined,
+                        //   iconColor: buttonBackgroundColor,
+                        //   iconSize: 12,
+                        //   text:
+                        //       '${alarmTime != null ? timeToString(alarmTime) : '알림 OFF'}',
+                        //   textColor: buttonBackgroundColor,
+                        //   textSize: 11,
+                        // ),

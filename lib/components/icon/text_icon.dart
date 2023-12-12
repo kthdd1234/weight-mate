@@ -38,6 +38,7 @@ class TextIcon extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(padding ?? smallSpace),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             icon != null

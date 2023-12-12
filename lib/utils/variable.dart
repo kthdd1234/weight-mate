@@ -18,23 +18,41 @@ var todayOfWiseSayingList = [
 
 var planTypeDetailInfo = {
   PlanTypeEnum.diet: PlanTypeDetailClass(
+      title: '식이요법',
       classList: dietPlanClassList,
       initId: 'intermittentFasting',
       subText: '를',
       counterText: '(예: 덴마크 다이어트, 다이어트 도시락 등)',
-      icon: Icons.dining_outlined),
+      icon: Icons.dining_outlined,
+      mainColor: dietColor,
+      shadeColor: dietColor.shade50,
+      desc: 'Diet'),
   PlanTypeEnum.exercise: PlanTypeDetailClass(
+      title: '운동',
       classList: exercisePlanClassList,
       initId: 'health',
       subText: '을',
       counterText: '(예: 등산, 수영, 테니스 등)',
-      icon: Icons.fitness_center),
+      icon: Icons.fitness_center,
+      mainColor: exerciseColor,
+      shadeColor: exerciseColor.shade100,
+      desc: 'Exercise'),
   PlanTypeEnum.lifestyle: PlanTypeDetailClass(
+      title: '생활습관',
       classList: lifeStylePlanClassList,
       initId: 'weightRecord',
       subText: '을',
       counterText: '(예: 저녁에 샐러드 먹기, 금주 선언 등)',
-      icon: Icons.home),
+      icon: Icons.home,
+      mainColor: lifeStyleColor,
+      shadeColor: lifeStyleColor.shade100,
+      desc: 'LifeStyle'),
+};
+
+var planTypeColors = {
+  PlanTypeEnum.diet.toString(): dietColor,
+  PlanTypeEnum.exercise.toString(): exerciseColor,
+  PlanTypeEnum.lifestyle.toString(): lifeStyleColor,
 };
 
 var planTypeClassList = [
@@ -202,12 +220,6 @@ var dayOfWeek = {
   'Fri': '금',
   'Sat': '토',
   'Sun': '일'
-};
-
-var planTypeColors = {
-  PlanTypeEnum.diet.toString(): dietColor,
-  PlanTypeEnum.exercise.toString(): exerciseColor,
-  PlanTypeEnum.lifestyle.toString(): lifeStyleColor,
 };
 
 var planType = {

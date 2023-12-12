@@ -191,7 +191,7 @@ setStep({required ArgmentsTypeEnum argmentsType, required int step}) {
 }
 
 setRange({required ArgmentsTypeEnum argmentsType}) {
-  return argmentsType == ArgmentsTypeEnum.start ? 4 : 3;
+  return 2;
 }
 
 planTypeEnumToString(String str) {
@@ -270,7 +270,7 @@ checkStringFirstDot(String value) {
   }
 }
 
-getUUID() {
+uuid() {
   return DateTime.now().microsecondsSinceEpoch.toString();
 }
 

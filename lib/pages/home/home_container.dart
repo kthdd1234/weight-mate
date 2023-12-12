@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/calendar_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart';
@@ -43,6 +44,7 @@ class _HomeContainerState extends State<HomeContainer>
   late Box<UserBox> userBox;
 
   bool isActiveCamera = false;
+  bool isShowMateScreen = false;
 
   @override
   void initState() {
@@ -71,15 +73,24 @@ class _HomeContainerState extends State<HomeContainer>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
+    setState(() {});
+
     UserBox? userProfile = userBox.get('userProfile');
     RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
-
-    setState(() {});
+    bool isShowScreen = [
+      AppLifecycleState.hidden,
+      AppLifecycleState.inactive,
+      AppLifecycleState.paused
+    ].contains(state);
 
     debugPrint('AppLifecycleState $state');
     debugPrint('isActiveCamera $isActiveCamera');
 
-    if (state == AppLifecycleState.resumed) {
+    if (isShowScreen) {
+      if (isActiveCamera == false) {
+        setState(() => isShowMateScreen = true);
+      }
+    } else if (state == AppLifecycleState.resumed) {
       if (isActiveCamera == false) {
         if (userProfile != null && userProfile.screenLockPasswords != null) {
           await Navigator.of(context).push(
@@ -100,6 +111,7 @@ class _HomeContainerState extends State<HomeContainer>
         }
       }
 
+      setState(() => isShowMateScreen = false);
       setState(() => isActiveCamera = false);
     }
   }
@@ -141,27 +153,38 @@ class _HomeContainerState extends State<HomeContainer>
           .setBottomNavigation(enumId: indexList[index]);
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: HomeAppBarWidget(appBar: AppBar(), id: bottomNavitionId),
-        body: Padding(
-          padding: pagePadding,
-          child: SafeArea(child: bodyList[bottomNavitionId.index]),
-        ),
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-          child: BottomNavigationBar(
-            items: items,
-            elevation: 0,
-            currentIndex: bottomNavitionId.index,
-            selectedItemColor: buttonBackgroundColor,
-            unselectedItemColor: const Color(0xFF151515),
-            backgroundColor: Colors.red,
-            onTap: onBottomNavigation,
-          ),
-        ),
-      ),
-    );
+    return isShowMateScreen
+        ? AddContainer(
+            body: Center(
+              child: Image.asset('assets/images/MATE.png', width: 150),
+            ),
+            isNotBack: true,
+            isCenter: true,
+            buttonEnabled: false,
+            bottomSubmitButtonText: '',
+          )
+        : AppFramework(
+            widget: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: HomeAppBarWidget(appBar: AppBar(), id: bottomNavitionId),
+              body: Padding(
+                padding: pagePadding,
+                child: SafeArea(child: bodyList[bottomNavitionId.index]),
+              ),
+              bottomNavigationBar: Theme(
+                data:
+                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                child: BottomNavigationBar(
+                  items: items,
+                  elevation: 0,
+                  currentIndex: bottomNavitionId.index,
+                  selectedItemColor: buttonBackgroundColor,
+                  unselectedItemColor: const Color(0xFF151515),
+                  backgroundColor: Colors.red,
+                  onTap: onBottomNavigation,
+                ),
+              ),
+            ),
+          );
   }
 }

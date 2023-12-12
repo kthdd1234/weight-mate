@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -54,14 +55,42 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     final importProvider = context.watch<ImportDateTimeProvider>();
     final infoProvider = context.read<DietInfoProvider>();
     final planInfo = infoProvider.getPlanInfo();
-    final notifyWeightUid = UniqueKey().hashCode;
-    final notifyPlanUid = UniqueKey().hashCode;
+    final newUserAlarmtUid = UniqueKey().hashCode;
+    final newPlanAlarmUid = UniqueKey().hashCode;
     final argmentsType =
         ModalRoute.of(context)!.settings.arguments as ArgmentsTypeEnum;
-
-    buttonEnabled() {
-      return planInfo.name != '';
-    }
+    final argmentsTypeIdx = ArgmentsTypeEnum.start == argmentsType
+        ? 0
+        : ArgmentsTypeEnum.add == argmentsType
+            ? 1
+            : 2;
+    final argmentsTypeList = [
+      ArgmentsTypeClass(
+        pageTitle: null,
+        contentsTitleWidget: AddTitleWidget(
+          argmentsType: argmentsType,
+          step: 2,
+          title: '간단하게 계획을 세워보세요.',
+        ),
+        createDateTime: DateTime.now(),
+        planId: uuid(),
+        buttonText: '완료',
+      ),
+      ArgmentsTypeClass(
+        pageTitle: '계획 추가',
+        contentsTitleWidget: const EmptyArea(),
+        createDateTime: DateTime.now(),
+        planId: uuid(),
+        buttonText: '추가',
+      ),
+      ArgmentsTypeClass(
+        pageTitle: '계획 수정',
+        contentsTitleWidget: const EmptyArea(),
+        createDateTime: planInfo.createDateTime,
+        planId: planInfo.id,
+        buttonText: '수정',
+      )
+    ];
 
     onChanged(String str) {
       planInfo.name = str;
@@ -80,13 +109,11 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       );
     }
 
-    setStartPage() {
+    start() {
       final userInfoState = infoProvider.getUserInfo();
       final recordInfoState = infoProvider.getRecordInfo();
       final uuidV1 = const Uuid().v1();
       final now = DateTime.now();
-
-      NotificationService().notification.cancelAll();
 
       userBox.put(
         'userProfile',
@@ -97,7 +124,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           createDateTime: now,
           isAlarm: userInfoState.isAlarm,
           alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
-          alarmId: userInfoState.isAlarm ? notifyWeightUid : null,
+          alarmId: userInfoState.isAlarm ? newUserAlarmtUid : null,
         ),
       );
 
@@ -112,7 +139,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
 
       if (userInfoState.isAlarm) {
         NotificationService().addNotification(
-          id: notifyWeightUid,
+          id: newUserAlarmtUid,
           alarmTime: userInfoState.alarmTime!,
           dateTime: now,
           title: weightNotifyTitle(),
@@ -122,11 +149,20 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       }
 
       if (planInfo.isAlarm) {
-        addPlanNotification(alarmId: notifyPlanUid, dateTime: now);
+        addPlanNotification(alarmId: newPlanAlarmUid, dateTime: now);
       }
     }
 
-    setEditPage() async {
+    add() {
+      if (planInfo.isAlarm) {
+        addPlanNotification(
+          alarmId: newPlanAlarmUid,
+          dateTime: importProvider.getImportDateTime(),
+        );
+      }
+    }
+
+    edit() async {
       final notificationIds =
           await NotificationService().pendingNotificationIds;
 
@@ -134,7 +170,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         bool isAlarmId = notificationIds.contains(planInfo.alarmId);
 
         addPlanNotification(
-          alarmId: isAlarmId ? planInfo.alarmId! : notifyPlanUid,
+          alarmId: isAlarmId ? planInfo.alarmId! : newPlanAlarmUid,
           dateTime: importProvider.getImportDateTime(),
         );
       } else {
@@ -145,31 +181,30 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     }
 
     onPressedBottomNavigationButton() async {
-      final planInfoId =
-          argmentsType == ArgmentsTypeEnum.edit ? planInfo.id : getUUID();
-      final argmentsTypeMaps = {
-        ArgmentsTypeEnum.start: setStartPage,
-        ArgmentsTypeEnum.edit: setEditPage
-      };
-      final createDateTime = argmentsType == ArgmentsTypeEnum.edit
-          ? planInfo.createDateTime
-          : DateTime.now();
+      final data = argmentsTypeList[argmentsTypeIdx];
 
-      if (buttonEnabled()) {
-        argmentsTypeMaps[argmentsType]!();
+      bool isStart = ArgmentsTypeEnum.start == argmentsType;
+      bool isEdit = ArgmentsTypeEnum.edit == argmentsType;
+
+      if (planInfo.name != '') {
+        isStart
+            ? start()
+            : isEdit
+                ? edit()
+                : add();
 
         planBox.put(
-          planInfoId,
+          data.planId,
           PlanBox(
-            id: planInfoId,
+            id: data.planId,
             type: planInfo.type.toString(),
             title: planInfo.title,
             name: planInfo.name,
             priority: planInfo.priority.toString(),
             isAlarm: planInfo.isAlarm,
             alarmTime: planInfo.isAlarm ? planInfo.alarmTime : null,
-            alarmId: planInfo.isAlarm ? notifyPlanUid : null,
-            createDateTime: createDateTime,
+            alarmId: planInfo.isAlarm ? newPlanAlarmUid : null,
+            createDateTime: data.createDateTime,
           ),
         );
 
@@ -229,87 +264,49 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       setState(() {});
     }
 
-    onCounterText() {
-      if (planInfo.id == 'custom') {
-        return planTypeDetailInfo[planInfo.type]!.counterText;
-      }
-
-      return '* 이름은 언제든지 수정이 가능해요.';
+    onTapItem(type) {
+      setState(() => planInfo.type = type);
     }
 
-    setPageTitle() {
-      return argmentsType == ArgmentsTypeEnum.edit ? '계획 수정하기' : null;
-    }
-
-    setAppTitleWidget() {
-      return argmentsType == ArgmentsTypeEnum.edit
-          ? const EmptyArea()
-          : AddTitleWidget(
-              argmentsType: argmentsType,
-              step: 4,
-              title: '오늘의 ${planInfo.title} 계획을 세워보세요.',
-            );
-    }
-
-    setBottomWidget() {
-      return argmentsType == ArgmentsTypeEnum.edit
-          ? const EmptyArea()
-          : Column(
-              children: [
-                SpaceHeight(height: regularSapce),
-                BottomText(bottomText: '기록 화면에서 여러 계획을 추가할 수 있어요.')
-              ],
-            );
-    }
-
-    setBottomButtonText() {
-      return argmentsType == ArgmentsTypeEnum.edit ? '수정하기' : '완료';
-    }
-
-    onTapItem(enumId) {
-      setState(() => planInfo.priority = enumId);
-    }
-
-    setPlanPriority(int index) {
-      final item = planPriorityInfos[index]!;
+    planWidget(PlanTypeEnum type) {
+      final item = planTypeDetailInfo[type]!;
 
       return Expanded(
         child: PlanItemWidget(
-          id: item['id'] as PlanPriorityEnum,
-          name: item['name'] as String,
-          desc: item['desc'] as String,
-          icon: item['icon'] as IconData,
-          isEnabled: item['id'] == planInfo.priority,
+          id: type,
+          name: item.title,
+          desc: item.desc,
+          icon: item.icon,
+          isEnabled: type == planInfo.type,
           onTap: onTapItem,
         ),
       );
     }
 
     return AddContainer(
-      title: setPageTitle(),
+      title: argmentsTypeList[argmentsTypeIdx].pageTitle,
       body: Column(
         children: [
-          setAppTitleWidget(),
+          argmentsTypeList[argmentsTypeIdx].contentsTitleWidget,
           ContentsBox(
             contentsWidget: Column(
               children: [
                 nameTextInput(
                   name: planInfo.name,
-                  onCounterText: onCounterText,
                   onChanged: onChanged,
                 ),
                 SpaceHeight(height: regularSapce),
-                ContentsTitleText(text: '우선 순위'),
+                ContentsTitleText(text: '유형'),
                 SpaceHeight(height: smallSpace),
                 SizedBox(
                   height: 150,
                   child: Row(
                     children: [
-                      setPlanPriority(0),
+                      planWidget(PlanTypeEnum.diet),
                       SpaceWidth(width: smallSpace),
-                      setPlanPriority(1),
+                      planWidget(PlanTypeEnum.exercise),
                       SpaceWidth(width: smallSpace),
-                      setPlanPriority(2),
+                      planWidget(PlanTypeEnum.lifestyle),
                     ],
                   ),
                 ),
@@ -318,8 +315,8 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
                 SpaceHeight(height: regularSapce),
                 AlarmItemWidget(
                   id: 'alarm-setting',
-                  title: '계획 실천 알림',
-                  desc: '정해진 시간에 실천 알림을 드려요.',
+                  title: '실천 알림',
+                  desc: '매일 실천 알림을 보내드려요.',
                   icon: Icons.notifications_active,
                   isEnabled: planInfo.isAlarm,
                   alarmTime: planInfo.alarmTime,
@@ -331,11 +328,10 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
               ],
             ),
           ),
-          setBottomWidget()
         ],
       ),
-      buttonEnabled: buttonEnabled(),
-      bottomSubmitButtonText: setBottomButtonText(),
+      buttonEnabled: planInfo.name != '',
+      bottomSubmitButtonText: argmentsTypeList[argmentsTypeIdx].buttonText,
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
     );
   }

@@ -43,7 +43,7 @@ class TodayDiaryDataWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ContentsTitleText(
-              text: '눈바디 메모',
+              text: '메모',
               fontSize: 13,
               sub: [
                 DefaultIcon(

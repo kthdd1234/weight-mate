@@ -53,47 +53,6 @@ class CalendarBodyState extends State<CalendarBody> {
   @override
   Widget build(BuildContext context) {
     List<RecordBox> recordValues = recordBox.values.toList();
-    RecordBox? currentRecordInfo = recordBox.get(getDateTimeToInt(currentDay));
-
-    onTapMoreInfo() {
-      if (currentRecordInfo == null) {
-        return showSnackBar(
-          context: context,
-          text: '기록된 정보가 없어요.',
-          buttonName: '확인',
-          width: 230,
-        );
-      }
-
-      return Navigator.pushNamed(
-        context,
-        '/record-info-page',
-        arguments: RecordInfoArgumentsClass(
-          recordInfo: currentRecordInfo,
-          currentDay: currentDay,
-          planBox: planBox,
-        ),
-      );
-    }
-
-    onTapDeleteRecord() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return ConfirmDialog(
-            width: 230,
-            titleText: '기록 삭제',
-            contentIcon: Icons.delete_forever,
-            contentText1: '${getDateTimeToStr(currentDay)}',
-            contentText2: '기록을 삭제하시겠습니까?',
-            onPressedOk: () {
-              currentRecordInfo?.delete();
-              setState(() {});
-            },
-          );
-        },
-      );
-    }
 
     setColorTextInfo({required String text, required Color color}) {
       return ColorTextInfo(
@@ -151,7 +110,7 @@ class CalendarBodyState extends State<CalendarBody> {
         final weight = recordInfo.weight;
         final actions = recordInfo.actions;
         final fileData = recordInfo.leftFile ?? recordInfo.rightFile;
-        final whiteText = recordInfo.whiteText;
+        // final whiteText = recordInfo.whiteText;
 
         addColorDot(dynamic target, Color color) {
           if (target != null) {
@@ -171,8 +130,7 @@ class CalendarBodyState extends State<CalendarBody> {
           addWeightText(weight);
           addColorDot(weight, weightColor);
           addColorDot(actions, actionColor);
-          addColorDot(fileData, eyeBodyColor);
-          addColorDot(whiteText, diaryColor);
+          addColorDot(fileData, diaryColor);
         }
       }
 
@@ -229,29 +187,10 @@ class CalendarBodyState extends State<CalendarBody> {
           children: [
             setColorTextInfo(text: '체중 기록', color: weightColor),
             setColorTextInfo(text: '계획 실천', color: actionColor),
-            setColorTextInfo(text: '사진 등록', color: eyeBodyColor),
-            setColorTextInfo(text: '눈바디 작성', color: diaryColor),
+            setColorTextInfo(text: '눈바디 추가', color: diaryColor),
           ],
         ),
         SpaceHeight(height: regularSapce),
-        Row(
-          children: [
-            ExpandedButtonHori(
-              imgUrl: 'assets/images/t-9.png',
-              icon: Icons.search,
-              text: '자세히 보기',
-              onTap: onTapMoreInfo,
-            ),
-            SpaceWidth(width: tinySpace),
-            ExpandedButtonHori(
-              imgUrl: 'assets/images/t-14.png',
-              icon: Icons.delete_outline,
-              text: '기록 삭제하기',
-              onTap: onTapDeleteRecord,
-            ),
-          ],
-        ),
-        SpaceHeight(height: tinySpace),
         Row(
           children: [
             ExpandedButtonHori(
@@ -266,3 +205,60 @@ class CalendarBodyState extends State<CalendarBody> {
     );
   }
 }
+// Row(
+//   children: [
+//     ExpandedButtonHori(
+//       imgUrl: 'assets/images/t-9.png',
+//       icon: Icons.search,
+//       text: '자세히 보기',
+//       onTap: onTapMoreInfo,
+//     ),
+//     SpaceWidth(width: tinySpace),
+//     ExpandedButtonHori(
+//       imgUrl: 'assets/images/t-14.png',
+//       icon: Icons.delete_outline,
+//       text: '기록 삭제하기',
+//       onTap: onTapDeleteRecord,
+//     ),
+//   ],
+// ),
+// SpaceHeight(height: tinySpace),
+// onTapDeleteRecord() {
+//   showDialog(
+//     context: context,
+//     builder: (context) {
+//       return ConfirmDialog(
+//         width: 230,
+//         titleText: '기록 삭제',
+//         contentIcon: Icons.delete_forever,
+//         contentText1: '${getDateTimeToStr(currentDay)}',
+//         contentText2: '기록을 삭제하시겠습니까?',
+//         onPressedOk: () {
+//           currentRecordInfo?.delete();
+//           setState(() {});
+//         },
+//       );
+//     },
+//   );
+// }
+//     onTapMoreInfo() {
+//   if (currentRecordInfo == null) {
+//     return showSnackBar(
+//       context: context,
+//       text: '기록된 정보가 없어요.',
+//       buttonName: '확인',
+//       width: 230,
+//     );
+//   }
+
+//   return Navigator.pushNamed(
+//     context,
+//     '/record-info-page',
+//     arguments: RecordInfoArgumentsClass(
+//       recordInfo: currentRecordInfo,
+//       currentDay: currentDay,
+//       planBox: planBox,
+//     ),
+//   );
+// }
+// RecordBox? currentRecordInfo = recordBox.get(getDateTimeToInt(currentDay));

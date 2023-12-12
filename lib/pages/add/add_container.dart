@@ -13,6 +13,7 @@ class AddContainer extends StatelessWidget {
     this.onPressedBottomNavigationButton,
     this.title,
     this.isCenter,
+    this.isNotBack,
   });
 
   Widget body;
@@ -21,6 +22,7 @@ class AddContainer extends StatelessWidget {
   VoidCallback? onPressedBottomNavigationButton;
   String? title;
   bool? isCenter;
+  bool? isNotBack;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,15 @@ class AddContainer extends StatelessWidget {
       child: AppFramework(
         widget: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: title != null ? Text(title!) : null,
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            centerTitle: true,
-            foregroundColor: buttonBackgroundColor,
-          ),
+          appBar: isNotBack == true
+              ? null
+              : AppBar(
+                  title: title != null ? Text(title!) : null,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0.0,
+                  centerTitle: true,
+                  foregroundColor: buttonBackgroundColor,
+                ),
           body: Padding(
             padding: pagePadding,
             child: SafeArea(

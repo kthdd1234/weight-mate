@@ -34,7 +34,7 @@ class _MoreMyInfoWidgetState extends State<MoreMyInfoWidget> {
 
     Map<MoreSeeItem, double?> textData = {
       MoreSeeItem.tall: userProfile!.tall,
-      MoreSeeItem.weight: recordInfo?.weight,
+      // MoreSeeItem.weight: recordInfo?.weight,
       MoreSeeItem.goalWeight: userProfile.goalWeight,
     };
 
@@ -47,22 +47,22 @@ class _MoreMyInfoWidgetState extends State<MoreMyInfoWidget> {
           userProfile.save();
 
           break;
-        case MoreSeeItem.weight:
-          if (recordInfo == null) {
-            widget.recordBox.put(
-              getDateTimeToInt(now),
-              RecordBox(
-                createDateTime: now,
-                weightDateTime: now,
-                weight: value,
-              ),
-            );
-          } else {
-            recordInfo.weight = value;
-            recordInfo.save();
-          }
+        // case MoreSeeItem.weight:
+        //   if (recordInfo == null) {
+        //     widget.recordBox.put(
+        //       getDateTimeToInt(now),
+        //       RecordBox(
+        //         createDateTime: now,
+        //         weightDateTime: now,
+        //         weight: value,
+        //       ),
+        //     );
+        //   } else {
+        //     recordInfo.weight = value;
+        //     recordInfo.save();
+        //   }
 
-          break;
+        //   break;
         case MoreSeeItem.goalWeight:
           userProfile.goalWeight = value;
           userProfile.save();
@@ -77,7 +77,7 @@ class _MoreMyInfoWidgetState extends State<MoreMyInfoWidget> {
     onTapArrow(MoreSeeItem id) {
       Map<MoreSeeItem, String> titleData = {
         MoreSeeItem.tall: '키',
-        MoreSeeItem.weight: '현재 체중',
+        // MoreSeeItem.weight: '현재 체중',
         MoreSeeItem.goalWeight: '목표 체중',
       };
 
@@ -106,15 +106,15 @@ class _MoreMyInfoWidgetState extends State<MoreMyInfoWidget> {
         widgetType: MoreSeeWidgetTypes.arrow,
         onTapArrow: onTapArrow,
       ),
-      MoreSeeItemClass(
-        index: 1,
-        id: MoreSeeItem.weight,
-        icon: Icons.monitor_weight_outlined,
-        title: '현재 체중',
-        value: '${recordInfo?.weight ?? '-'} kg',
-        widgetType: MoreSeeWidgetTypes.arrow,
-        onTapArrow: onTapArrow,
-      ),
+      // MoreSeeItemClass(
+      //   index: 1,
+      //   id: MoreSeeItem.weight,
+      //   icon: Icons.monitor_weight_outlined,
+      //   title: '현재 체중',
+      //   value: '${recordInfo?.weight ?? '-'} kg',
+      //   widgetType: MoreSeeWidgetTypes.arrow,
+      //   onTapArrow: onTapArrow,
+      // ),
       MoreSeeItemClass(
         index: 2,
         id: MoreSeeItem.goalWeight,

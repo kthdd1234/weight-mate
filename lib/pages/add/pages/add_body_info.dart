@@ -119,7 +119,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
         Navigator.pushNamed(
           context,
-          '/add-plan-type',
+          '/add-plan-setting',
           arguments: ArgmentsTypeEnum.start,
         );
       }
@@ -204,7 +204,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           AlarmItemWidget(
             id: 'weight-alarm',
             title: '체중 기록 알림',
-            desc: '정해진 시간에 알림을 드려요.',
+            desc: '매일 알림을 보내드려요',
             isEnabled: isAlarm,
             alarmTime: alarmTime,
             icon: Icons.notifications_active,
