@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -48,32 +49,20 @@ class _MoreEtcInfoWidgetState extends State<MoreEtcInfoWidget> {
           String? appleId = dotenv.env['APPLE_ID'];
           String? androidId = dotenv.env['ANDROID_ID'];
 
-          if (Platform.isIOS) {
-            inAppReview.openStoreListing(appStoreId: appleId);
-          } else {
-            showSnackBar(
-              context: context,
-              text: '해당 기능은 준비 중입니다 :)',
-              buttonName: '확인',
-              width: 300,
-            );
-          }
+          inAppReview.openStoreListing(
+            appStoreId: appleId,
+            microsoftStoreId: androidId,
+          );
 
           break;
 
         case MoreSeeItem.appShare:
           String? appStoreLink = dotenv.env['APP_STORE_LINK'];
+          String? playStoreLink = dotenv.env['PLAY_STORE_LINK'];
 
-          if (Platform.isIOS) {
-            Share.share(appStoreLink!, subject: '체중 메이트');
-          } else {
-            showSnackBar(
-              context: context,
-              text: '해당 기능은 준비 중입니다 :)',
-              buttonName: '확인',
-              width: 300,
-            );
-          }
+          Platform.isIOS
+              ? Share.share(appStoreLink!, subject: '체중 메이트')
+              : Share.share(playStoreLink!, subject: '체중 메이트');
           break;
 
         case MoreSeeItem.developerInp:
