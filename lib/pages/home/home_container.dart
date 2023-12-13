@@ -22,6 +22,7 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/home_app_bar_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
+import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
 
 List<BottomNavigationEnum> bottomIdList = [
@@ -63,6 +64,23 @@ class _HomeContainerState extends State<HomeContainer>
       ),
     );
     WidgetsBinding.instance.addObserver(this);
+
+    requestInAppReview() async {
+      List<RecordBox> recordInfoList = recordBox.values.toList();
+      InAppReview inAppReview = InAppReview.instance;
+      bool isAvailable = await inAppReview.isAvailable();
+      bool isNotNewUser = recordInfoList.length > 2;
+      bool isDay21 = DateTime.now().day == 21;
+
+      log('${DateTime.now().day}');
+      log('${recordInfoList.length}');
+
+      if (isAvailable && isNotNewUser && isDay21) {
+        inAppReview.requestReview();
+      }
+    }
+
+    requestInAppReview();
   }
 
   @override
@@ -82,9 +100,6 @@ class _HomeContainerState extends State<HomeContainer>
       AppLifecycleState.inactive,
       AppLifecycleState.paused
     ].contains(state);
-
-    debugPrint('AppLifecycleState $state');
-    debugPrint('isActiveCamera $isActiveCamera');
 
     if (isShowScreen) {
       if (isActiveCamera == false) {
