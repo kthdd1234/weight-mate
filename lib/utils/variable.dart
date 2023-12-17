@@ -17,12 +17,22 @@ var todayOfWiseSayingList = [
 ];
 
 var planTypeDetailInfo = {
+  PlanTypeEnum.all: PlanTypeDetailClass(
+      title: '계획',
+      classList: dietPlanClassList,
+      initId: 'intermittentFasting',
+      subText: '를',
+      counterText: '',
+      icon: Icons.list_alt_rounded,
+      mainColor: actionColor,
+      shadeColor: actionColor.shade50,
+      desc: ''),
   PlanTypeEnum.diet: PlanTypeDetailClass(
       title: '식이요법',
       classList: dietPlanClassList,
       initId: 'intermittentFasting',
       subText: '를',
-      counterText: '(예: 덴마크 다이어트, 다이어트 도시락 등)',
+      counterText: '(예: 아침에 사과 반쪽 + 달걀 2개)',
       icon: Icons.dining_outlined,
       mainColor: dietColor,
       shadeColor: dietColor.shade50,
@@ -42,7 +52,7 @@ var planTypeDetailInfo = {
       classList: lifeStylePlanClassList,
       initId: 'weightRecord',
       subText: '을',
-      counterText: '(예: 저녁에 샐러드 먹기, 금주 선언 등)',
+      counterText: '(예: 밤 8시 이후로 공복 유지)',
       icon: Icons.home,
       mainColor: lifeStyleColor,
       shadeColor: lifeStyleColor.shade100,
@@ -235,25 +245,31 @@ var planPriorityInfos = [
 ];
 
 var planPrioritys = {
-  PlanPriorityEnum.high.toString(): {
-    'id': PlanPriorityEnum.high,
-    'name': '높음',
-    'desc': 'High',
-    'icon': Icons.filter_1,
-    'order': 1,
-  },
-  PlanPriorityEnum.medium.toString(): {
-    'id': PlanPriorityEnum.medium,
-    'name': '중간',
-    'desc': 'Medium',
-    'icon': Icons.filter_2,
-    'order': 2,
-  },
-  PlanPriorityEnum.low.toString(): {
-    'id': PlanPriorityEnum.low,
-    'name': '낮음',
-    'desc': 'Low',
-    'icon': Icons.filter_3,
-    'order': 3,
-  },
+  PlanPriorityEnum.high.toString(): PlanPriorityClass(
+    id: PlanPriorityEnum.high,
+    name: '높음',
+    desc: 'High',
+    icon: Icons.looks_one_outlined,
+    order: 1,
+    bgColor: Colors.red.shade50,
+    textColor: Colors.red,
+  ),
+  PlanPriorityEnum.medium.toString(): PlanPriorityClass(
+    id: PlanPriorityEnum.medium,
+    name: '중간',
+    desc: 'Medium',
+    icon: Icons.looks_two_outlined,
+    order: 2,
+    bgColor: Colors.indigo.shade50,
+    textColor: Colors.indigo,
+  ),
+  PlanPriorityEnum.low.toString(): PlanPriorityClass(
+    id: PlanPriorityEnum.low,
+    name: '낮음',
+    desc: 'Low',
+    icon: Icons.looks_3,
+    order: 3,
+    bgColor: Colors.blueGrey.shade50,
+    textColor: Colors.blueGrey,
+  ),
 };

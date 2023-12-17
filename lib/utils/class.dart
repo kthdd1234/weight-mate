@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
 class UserInfoClass {
@@ -274,3 +275,27 @@ class ArgmentsTypeClass {
   String? pageTitle;
   Widget contentsTitleWidget;
 }
+
+class PlanPriorityClass {
+  PlanPriorityClass({
+    required this.id,
+    required this.name,
+    required this.desc,
+    required this.icon,
+    required this.order,
+    required this.bgColor,
+    required this.textColor,
+  });
+
+  PlanPriorityEnum id;
+  String name, desc;
+  IconData icon;
+  int order;
+  Color bgColor, textColor;
+}
+
+  // 'id': PlanPriorityEnum.medium,
+  //   'name': '중간',
+  //   'desc': 'Medium',
+  //   'icon': Icons.looks_two_outlined,
+  //   'order': 2,

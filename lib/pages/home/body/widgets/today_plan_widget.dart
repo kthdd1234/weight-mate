@@ -2,20 +2,21 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/check/plan_contents.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/before_plan_list_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
-import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
+import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_detail_item.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -24,10 +25,8 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
-import 'package:flutter_app_weight_management/widgets/touch_and_check_input_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_app_weight_management/services/notifi_service.dart';
 
 class TodayPlanWidget extends StatefulWidget {
   TodayPlanWidget({
@@ -47,6 +46,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
 
+  UserBox? userProfile;
   SegmentedTypes selectedSegment = SegmentedTypes.planCheck;
   PlanTypeEnum curType = PlanTypeEnum.none;
 
@@ -54,6 +54,9 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
   void initState() {
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
+
+    Box<UserBox> userBox = Hive.box<UserBox>('userBox');
+    userProfile = userBox.get('userProfile');
 
     super.initState();
   }
@@ -65,16 +68,18 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     RecordBox? recordInfo = recordBox.get(currentDateTimeInt);
     List<PlanBox> planInfoList = planBox.values.toList();
 
-    onTapRemoveAll(enumId) {
-      if (RecordIconTypes.removePlan == enumId) {
-        if (planInfoList.isEmpty) {
-          return showSnackBar(
-            context: context,
-            text: '삭제할 계획이 없어요.',
-            buttonName: '확인',
-          );
-        }
+    String? planViewType = userProfile?.planViewType == null
+        ? RecordIconTypes.separPlan.toString()
+        : userProfile!.planViewType;
 
+    onTapRemoveAll(enumId) {
+      if (planInfoList.isEmpty) {
+        showSnackBar(
+          context: context,
+          text: '삭제할 계획이 없어요.',
+          buttonName: '확인',
+        );
+      } else {
         showDialog(
           context: context,
           builder: (context) {
@@ -97,6 +102,11 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           },
         );
       }
+    }
+
+    onTapPlanViewType(enumId) {
+      userProfile?.planViewType = enumId.toString();
+      userProfile?.save();
     }
 
     onTapCheck({required String id, required bool isSelected}) async {
@@ -158,7 +168,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           title: planInfo.title,
           id: planInfo.id,
           name: planInfo.name,
-          priority: planPrioritys[planInfo.priority]!['id'] as PlanPriorityEnum,
+          priority: planPrioritys[planInfo.priority]!.id,
           isAlarm: planInfo.isAlarm,
           alarmTime: planInfo.alarmTime,
           alarmId: planInfo.alarmId,
@@ -223,9 +233,9 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       );
     }
 
-    onTapAddPlan() async {
+    onTapAddPlan(PlanTypeEnum planType) async {
       initPlanInfo.name = '';
-      initPlanInfo.type = PlanTypeEnum.diet;
+      initPlanInfo.type = planType;
       dietInfoProvider.changePlanInfo(initPlanInfo);
 
       await Navigator.pushNamed(
@@ -235,87 +245,109 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       );
     }
 
-    setContentWidgets() {
+    planContainer({
+      required PlanTypeEnum planType,
+    }) {
       List<PlanContents> planContentsList = [];
+      String emptyTitle = PlanTypeEnum.all == planType
+          ? '계획'
+          : planTypeDetailInfo[planType]!.title;
+
+      actionPercent() {
+        if (recordInfo?.actions == null) {
+          return '0.0';
+        }
+
+        final typeActions = recordInfo!.actions!.where((actionData) =>
+            actionData['type'] == planType.toString() &&
+            getDateTimeToInt(actionData['createDateTime']) ==
+                currentDateTimeInt);
+
+        return planToActionPercent(
+          a: typeActions.length,
+          b: planContentsList.length,
+        ).toString();
+      }
 
       for (var i = 0; i < planInfoList.length; i++) {
         PlanBox planInfo = planInfoList[i];
 
         actionData() {
-          if (recordInfo == null || recordInfo.actions == null) {
+          if (recordInfo?.actions == null) {
             return null;
           }
 
-          Map<String, dynamic> data = recordInfo.actions!.firstWhere(
+          return recordInfo!.actions!.firstWhere(
             (element) => element['id'] == planInfo.id,
             orElse: () => {'id': null, 'actionDateTime': null},
           );
-
-          return data;
         }
 
-        planContentsList.add(
-          PlanContents(
-            id: planInfo.id,
-            text: planInfo.name,
-            type: planInfo.type,
-            isChecked: actionData()?['id'] != null,
-            alarmTime: planInfo.alarmTime,
-            checkIcon: Icons.check_box,
-            notCheckIcon: Icons.check_box,
-            notCheckColor: Colors.grey.shade300,
-            recordTime: actionData()?['actionDateTime'],
-            onTapCheck: onTapCheck,
-            onTapContents: onTapContents,
-            onTapMore: onTapContents,
-          ),
+        PlanContents data = PlanContents(
+          id: planInfo.id,
+          text: planInfo.name,
+          type: planInfo.type,
+          isShowType: planType == PlanTypeEnum.all,
+          priority: planInfo.priority,
+          isChecked: actionData()?['id'] != null,
+          alarmTime: planInfo.alarmTime,
+          checkIcon: Icons.check_box,
+          notCheckIcon: Icons.check_box,
+          notCheckColor: Colors.grey.shade300,
+          recordTime: actionData()?['actionDateTime'],
+          onTapCheck: onTapCheck,
+          onTapContents: onTapContents,
+          onTapMore: onTapContents,
         );
+
+        if (planType == PlanTypeEnum.all) {
+          planContentsList.add(data);
+        } else if (planType.toString() == planInfo.type) {
+          planContentsList.add(data);
+        }
       }
 
-      return Column(
-        children: [
-          SpaceHeight(height: smallSpace),
-          ContentsBox(
-            contentsWidget: Column(
-              children: [
-                Column(
-                    children: planContentsList.isNotEmpty
-                        ? planContentsList
-                        : [
-                            EmptyTextVerticalArea(
-                              height: 130,
-                              backgroundColor: Colors.transparent,
-                              icon: Icons.history_edu_outlined,
-                              title: '다이어트 계획이 없어요.',
-                            ),
-                          ]),
-                EmptyTextArea(
-                  text: '계획을 추가해보세요.',
-                  icon: Icons.add,
-                  topHeight: smallSpace,
-                  downHeight: smallSpace,
-                  onTap: onTapAddPlan,
-                ),
-              ],
-            ),
-          ),
-        ],
+      return TodayPlanDetailItem(
+        planType: planType,
+        title: planType == PlanTypeEnum.all
+            ? '계획 리스트'
+            : planTypeDetailInfo[planType]!.title,
+        actionPercent: actionPercent(),
+        emptyString: '$emptyTitle이 없어요.',
+        addString: '$emptyTitle을 추가해보세요.',
+        contentsList: planContentsList,
+        onTap: () => onTapAddPlan(planType),
       );
+    }
+
+    setSub() {
+      bool isSeparPlan = planViewType == RecordIconTypes.separPlan.toString();
+
+      return [
+        // RecordContentsTitleIcon(
+        //   id: isSeparPlan
+        //       ? RecordIconTypes.comonPlan
+        //       : RecordIconTypes.separPlan,
+        //   icon: isSeparPlan ? Icons.close_fullscreen_rounded : Icons.swap_vert,
+        //   onTap: onTapPlanViewType,
+        // ),
+        RecordContentsTitleIcon(
+          id: RecordIconTypes.removePlan,
+          icon: Icons.delete,
+          onTap: onTapRemoveAll,
+        ),
+      ];
     }
 
     return Column(
       children: [
         ContentsTitleText(
           text: '${dateTimeToTitle(widget.importDateTime)} 계획',
-          sub: [
-            RecordContentsTitleIcon(
-              id: RecordIconTypes.removePlan,
-              icon: Icons.delete,
-              onTap: onTapRemoveAll,
-            )
-          ],
+          sub: setSub(),
         ),
-        setContentWidgets(),
+        planContainer(planType: PlanTypeEnum.diet),
+        planContainer(planType: PlanTypeEnum.exercise),
+        planContainer(planType: PlanTypeEnum.lifestyle),
       ],
     );
   }
@@ -477,19 +509,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 //       .toList();
 // }
 
-// setActionPercent() {
-//   if (recordInfo == null || recordInfo.actions == null) {
-//     return '0.0';
-//   }
 
-//   final typeActions = recordInfo.actions!.where((actionData) =>
-//       actionData['type'] == type.toString() &&
-//       getDateTimeToInt(actionData['createDateTime']) ==
-//           currentDateTimeInt);
-
-//   return planToActionPercent(
-//       a: typeActions.length, b: planContentsList.length);
-// }
 
 // setBeforePlanList() {
 //   return getWherePlanList().length;

@@ -10,7 +10,9 @@ enum RecordIconTypes {
   editNote,
   removeNote,
   eyeBodyCollections,
-  eyeBodySlideshow
+  eyeBodySlideshow,
+  separPlan,
+  comonPlan
 }
 
 enum BottomNavigationEnum { record, calendar, analyze, setting }
@@ -51,7 +53,7 @@ enum MoreSeeItem {
 
 enum MoreSeeWidgetTypes { none, arrow, switching }
 
-enum PlanTypeEnum { none, diet, exercise, lifestyle, custom }
+enum PlanTypeEnum { none, all, diet, exercise, lifestyle, custom }
 
 enum ArgmentsTypeEnum { none, start, add, edit }
 

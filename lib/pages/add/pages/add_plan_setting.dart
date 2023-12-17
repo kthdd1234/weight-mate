@@ -118,14 +118,14 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       userBox.put(
         'userProfile',
         UserBox(
-          userId: uuidV1,
-          tall: userInfoState.tall,
-          goalWeight: userInfoState.goalWeight,
-          createDateTime: now,
-          isAlarm: userInfoState.isAlarm,
-          alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
-          alarmId: userInfoState.isAlarm ? newUserAlarmtUid : null,
-        ),
+            userId: uuidV1,
+            tall: userInfoState.tall,
+            goalWeight: userInfoState.goalWeight,
+            createDateTime: now,
+            isAlarm: userInfoState.isAlarm,
+            alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
+            alarmId: userInfoState.isAlarm ? newUserAlarmtUid : null,
+            planViewType: RecordIconTypes.separPlan.toString()),
       );
 
       recordBox.put(
@@ -210,11 +210,15 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
 
         infoProvider.setInitPlanInfo();
 
-        Navigator.pushNamedAndRemoveUntil(
-          context,
-          '/home-container',
-          (_) => false,
-        );
+        if (argmentsType == ArgmentsTypeEnum.start) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/home-container',
+            (_) => false,
+          );
+        } else {
+          Navigator.pop(context);
+        }
       }
 
       return null;

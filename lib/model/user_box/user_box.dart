@@ -10,6 +10,7 @@ class UserBox extends HiveObject {
     required this.goalWeight,
     required this.createDateTime,
     required this.isAlarm,
+    this.planViewType,
     this.alarmTime,
     this.alarmId,
     this.screenLockPasswords,
@@ -38,4 +39,7 @@ class UserBox extends HiveObject {
 
   @HiveField(7)
   String? screenLockPasswords;
+
+  @HiveField(8)
+  String? planViewType;
 }

@@ -22,6 +22,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       goalWeight: fields[2] as double,
       createDateTime: fields[3] as DateTime,
       isAlarm: fields[4] as bool,
+      planViewType: fields[8] as String?,
       alarmTime: fields[5] as DateTime?,
       alarmId: fields[6] as int?,
       screenLockPasswords: fields[7] as String?,
@@ -31,7 +32,7 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(6)
       ..write(obj.alarmId)
       ..writeByte(7)
-      ..write(obj.screenLockPasswords);
+      ..write(obj.screenLockPasswords)
+      ..writeByte(8)
+      ..write(obj.planViewType);
   }
 
   @override
