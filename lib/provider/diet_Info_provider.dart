@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-
-final initAlarmDateTime = DateTime(
-  DateTime.now().year,
-  DateTime.now().month,
-  DateTime.now().day,
-  10,
-  30,
-);
+import 'package:flutter_app_weight_management/utils/function.dart';
 
 final initPlanInfo = PlanInfoClass(
   type: PlanTypeEnum.diet,
@@ -17,7 +10,7 @@ final initPlanInfo = PlanInfoClass(
   name: '간헐적 단식',
   priority: PlanPriorityEnum.medium,
   isAlarm: true,
-  alarmTime: initAlarmDateTime,
+  alarmTime: initDateTime(),
   alarmId: null,
   createDateTime: DateTime.now(),
 );
@@ -28,7 +21,7 @@ class DietInfoProvider with ChangeNotifier {
   String _weightText = '';
   String _goalWeightText = '';
   bool _isAlarm = true;
-  DateTime? _alarmTime = initAlarmDateTime;
+  DateTime? _alarmTime = initDateTime();
   PlanInfoClass _planInfo = initPlanInfo;
   DateTime _recordStartDateTime = DateTime.now();
 

@@ -70,12 +70,9 @@ class _HomeContainerState extends State<HomeContainer>
       InAppReview inAppReview = InAppReview.instance;
       bool isAvailable = await inAppReview.isAvailable();
       bool isNotNewUser = recordInfoList.length > 2;
-      bool isDay21 = DateTime.now().day == 21;
+      bool isDay27 = DateTime.now().day == 27;
 
-      log('${DateTime.now().day}');
-      log('${recordInfoList.length}');
-
-      if (isAvailable && isNotNewUser && isDay21) {
+      if (isAvailable && isNotNewUser && isDay27) {
         inAppReview.requestReview();
       }
     }

@@ -36,25 +36,6 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
   late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
 
-  List<RecordIconClass> recordIconClassList = [
-    RecordIconClass(
-      enumId: RecordIconTypes.editWeight,
-      icon: Icons.edit,
-    ),
-    RecordIconClass(
-      enumId: RecordIconTypes.editGoalWeight,
-      icon: Icons.flag,
-    ),
-    RecordIconClass(
-      enumId: RecordIconTypes.alarmWeight,
-      icon: Icons.notifications,
-    ),
-    RecordIconClass(
-      enumId: RecordIconTypes.removeWeight,
-      icon: Icons.delete,
-    ),
-  ];
-
   @override
   void initState() {
     userBox = Hive.box<UserBox>('userBox');
@@ -67,6 +48,20 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
   Widget build(BuildContext context) {
     RecordBox? recordInfo =
         recordBox.get(getDateTimeToInt(widget.importDateTime));
+    UserBox? userInfo = userBox.get('userProfile');
+
+    List<RecordIconClass> recordIconClassList = [
+      RecordIconClass(
+        enumId: RecordIconTypes.alarmWeight,
+        icon: userInfo?.isAlarm == true
+            ? Icons.notifications_active
+            : Icons.notifications_off_rounded,
+      ),
+      RecordIconClass(
+        enumId: RecordIconTypes.removeWeight,
+        icon: Icons.delete,
+      ),
+    ];
 
     setIconType(enumId) {
       context.read<RecordIconTypeProvider>().setSeletedRecordIconType(enumId);
@@ -191,8 +186,6 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
     }
 
     setTall() {
-      UserBox? userInfo = userBox.get('userProfile');
-
       if (userInfo == null) return null;
       return userInfo.tall;
     }
@@ -204,7 +197,6 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
     }
 
     setGoalWeight() {
-      UserBox? userInfo = userBox.get('userProfile');
       return userInfo?.goalWeight;
     }
 
@@ -242,14 +234,6 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       }
 
       return '${dateTimeToTitle(widget.importDateTime)} 체중';
-    }
-
-    setContetnsIcon() {
-      Map<String, dynamic>? contentsTitleInfo =
-          weightContentsTitles[widget.seletedRecordIconType];
-
-      if (contentsTitleInfo == null) return Icons.bar_chart;
-      return contentsTitleInfo['icon'];
     }
 
     return Column(

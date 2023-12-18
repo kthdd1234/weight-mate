@@ -47,7 +47,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
 
-    timeValue = initAlarmDateTime;
+    timeValue = initDateTime();
   }
 
   @override
@@ -260,7 +260,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           infoProvider.changeIsPlanAlarm(newValue);
         }
 
-        planInfo.alarmTime ??= initAlarmDateTime;
+        planInfo.alarmTime ??= initDateTime();
       } else {
         infoProvider.changeIsPlanAlarm(newValue);
       }

@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/components/icon/default_icon.dart'
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -31,7 +32,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     setCalculatedGoalWeight() {
       if (weight == null || goalWeight == null) {
-        return '- kg';
+        return '-';
       }
 
       return calculatedGoalWeight(goalWeight: goalWeight!, weight: weight!);
@@ -80,13 +81,13 @@ class TodayWeightInfosWidget extends StatelessWidget {
         iconColor: Colors.blue.shade400,
       ),
       WeightInfoClass(
-          id: 'bmi',
-          title: 'BMI 지수',
-          value: setCalculatedBMI(),
-          icon: Icons.person_search,
-          more: Icons.help_outline_outlined,
-          tooltipMsg: '현재 체중(kg)을 키의 제곱(m)으로 나눈 값입니다.',
-          iconColor: Colors.cyan.shade400),
+          id: 'goal',
+          title: '목표 체중',
+          value: '$goalWeight kg',
+          icon: Icons.flag,
+          more: Icons.error_outline,
+          tooltipMsg: '(목표 체중) - (현재 체중) 결과 값입니다.',
+          iconColor: Colors.purple.shade400),
       WeightInfoClass(
           id: 'change',
           title: '체중 변화',
@@ -96,14 +97,18 @@ class TodayWeightInfosWidget extends StatelessWidget {
           tooltipMsg: '(현재 체중) - (이전의 체중) 결과 값입니다.',
           iconColor: Colors.red.shade400),
       WeightInfoClass(
-          id: 'goal',
-          title: '목표 체중까지',
-          value: setCalculatedGoalWeight(),
-          icon: Icons.flag,
-          more: Icons.error_outline,
-          tooltipMsg: '(목표 체중) - (현재 체중) 결과 값입니다.',
-          iconColor: Colors.purple.shade400),
+          id: 'bmi',
+          title: 'BMI 지수',
+          value: setCalculatedBMI(),
+          icon: Icons.person_search,
+          more: Icons.help_outline_outlined,
+          tooltipMsg: '현재 체중(kg)을 키의 제곱(m)으로 나눈 값입니다.',
+          iconColor: Colors.cyan.shade400),
     ];
+    RecordIconTypeProvider recordProvider =
+        context.read<RecordIconTypeProvider>();
+    BottomNavigationProvider navigationProvider =
+        context.read<BottomNavigationProvider>();
 
     contentsWidget({
       required String id,
@@ -112,28 +117,15 @@ class TodayWeightInfosWidget extends StatelessWidget {
       required IconData icon,
       required IconData more,
       required String tooltipMsg,
-      Function(String id)? onTap,
+      required Function() onTap,
       required Color iconColor,
       required String bottomText,
     }) {
-      onTapLink() async {
-        Uri url = Uri(
-          scheme: 'https',
-          host: 'ko.wikipedia.org',
-          path: 'wiki/%EC%B2%B4%EC%A7%88%EB%9F%89_%EC%A7%80%EC%88%98',
-        );
-        if (await canLaunchUrl(url)) {
-          await launchUrl(url);
-        } else {
-          throw 'Could not launch $url';
-        }
-      }
-
       return Expanded(
         child: ContentsBox(
           backgroundColor: Colors.white,
           contentsWidget: InkWell(
-            onTap: () => onTap != null ? onTap(id) : null,
+            onTap: onTap,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,15 +168,13 @@ class TodayWeightInfosWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     InkWell(
-                      onTap: id == 'bmi' ? onTapLink : null,
+                      onTap: onTap,
                       child: Text(
                         bottomText,
                         style: TextStyle(
                           fontSize: 11,
                           height: 1.4,
                           color: iconColor,
-                          decoration:
-                              id == 'bmi' ? TextDecoration.underline : null,
                         ),
                       ),
                     ),
@@ -194,6 +184,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
                       icon: icon,
                       iconColor: iconColor,
                       backgroundColor: typeBackgroundColor,
+                      onTap: (_) => onTap(),
                     ),
                   ],
                 )
@@ -204,12 +195,29 @@ class TodayWeightInfosWidget extends StatelessWidget {
       );
     }
 
-    onTap(String id) {
-      final setIconType =
-          context.read<RecordIconTypeProvider>().setSeletedRecordIconType;
-      id == 'weight'
-          ? setIconType(RecordIconTypes.editWeight)
-          : setIconType(RecordIconTypes.editGoalWeight);
+    onTapCurrentWeight() {
+      recordProvider.setSeletedRecordIconType(RecordIconTypes.editWeight);
+    }
+
+    onTapGoalWeight() {
+      recordProvider.setSeletedRecordIconType(RecordIconTypes.editGoalWeight);
+    }
+
+    onTapChangeWeight() {
+      navigationProvider.setBottomNavigation(
+          enumId: BottomNavigationEnum.analyze);
+    }
+
+    onTapBMI() async {
+      Uri url = Uri(
+        scheme: 'https',
+        host: 'ko.wikipedia.org',
+        path: 'wiki/%EC%B2%B4%EC%A7%88%EB%9F%89_%EC%A7%80%EC%88%98',
+      );
+
+      await canLaunchUrl(url)
+          ? await launchUrl(url)
+          : throw 'Could not launch $url';
     }
 
     return Column(
@@ -225,7 +233,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
               tooltipMsg: weightInfoClassList[0].tooltipMsg,
               iconColor: weightInfoClassList[0].iconColor,
               bottomText: '기록 횟수: ${recordCount ?? 0}',
-              onTap: onTap,
+              onTap: onTapCurrentWeight,
             ),
             SpaceWidth(width: tinySpace),
             contentsWidget(
@@ -234,9 +242,10 @@ class TodayWeightInfosWidget extends StatelessWidget {
               value: weightInfoClassList[1].value,
               icon: weightInfoClassList[1].icon,
               more: weightInfoClassList[1].more,
-              tooltipMsg: weightInfoClassList[1].tooltipMsg,
               iconColor: weightInfoClassList[1].iconColor,
-              bottomText: '출처: 위키백과',
+              tooltipMsg: weightInfoClassList[1].tooltipMsg,
+              bottomText: '목표까지: ${setCalculatedGoalWeight()}',
+              onTap: onTapGoalWeight,
             ),
           ],
         ),
@@ -252,6 +261,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
               iconColor: weightInfoClassList[2].iconColor,
               tooltipMsg: weightInfoClassList[2].tooltipMsg,
               bottomText: '이전 체중: ${beforeWeight ?? '-'}',
+              onTap: onTapChangeWeight,
             ),
             SpaceWidth(width: tinySpace),
             contentsWidget(
@@ -260,10 +270,10 @@ class TodayWeightInfosWidget extends StatelessWidget {
               value: weightInfoClassList[3].value,
               icon: weightInfoClassList[3].icon,
               more: weightInfoClassList[3].more,
-              iconColor: weightInfoClassList[3].iconColor,
               tooltipMsg: weightInfoClassList[3].tooltipMsg,
-              bottomText: '목표 체중: $goalWeight',
-              onTap: onTap,
+              iconColor: weightInfoClassList[3].iconColor,
+              bottomText: '출처: 위키백과',
+              onTap: onTapBMI,
             ),
           ],
         )

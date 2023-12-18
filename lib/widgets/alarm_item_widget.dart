@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/date_time_tap_widget.dart';
 
 class AlarmItemWidget extends StatelessWidget {
@@ -74,7 +75,7 @@ class AlarmItemWidget extends StatelessWidget {
         isEnabled
             ? TimeChipWidget(
                 id: id,
-                time: alarmTime ?? initAlarmDateTime,
+                time: alarmTime ?? initDateTime(),
                 backgroundColor: chipBackgroundColor,
                 onTap: onTap,
               )

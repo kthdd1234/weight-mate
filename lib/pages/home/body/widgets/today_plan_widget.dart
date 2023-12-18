@@ -46,7 +46,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
 
-  UserBox? userProfile;
   SegmentedTypes selectedSegment = SegmentedTypes.planCheck;
   PlanTypeEnum curType = PlanTypeEnum.none;
 
@@ -54,9 +53,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
   void initState() {
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
-
-    Box<UserBox> userBox = Hive.box<UserBox>('userBox');
-    userProfile = userBox.get('userProfile');
 
     super.initState();
   }
@@ -67,10 +63,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     int currentDateTimeInt = getDateTimeToInt(widget.importDateTime);
     RecordBox? recordInfo = recordBox.get(currentDateTimeInt);
     List<PlanBox> planInfoList = planBox.values.toList();
-
-    String? planViewType = userProfile?.planViewType == null
-        ? RecordIconTypes.separPlan.toString()
-        : userProfile!.planViewType;
 
     onTapRemoveAll(enumId) {
       if (planInfoList.isEmpty) {
@@ -102,11 +94,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           },
         );
       }
-    }
-
-    onTapPlanViewType(enumId) {
-      userProfile?.planViewType = enumId.toString();
-      userProfile?.save();
     }
 
     onTapCheck({required String id, required bool isSelected}) async {
@@ -234,8 +221,17 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     }
 
     onTapAddPlan(PlanTypeEnum planType) async {
+      DateTime now = DateTime.now();
+
+      initPlanInfo.id = '';
       initPlanInfo.name = '';
       initPlanInfo.type = planType;
+      initPlanInfo.title = planTypeDetailInfo[planType]!.title;
+      initPlanInfo.isAlarm = true;
+      initPlanInfo.alarmId = null;
+      initPlanInfo.alarmTime = DateTime(now.year, now.month, now.day, 10, 30);
+      initPlanInfo.createDateTime = now;
+
       dietInfoProvider.changePlanInfo(initPlanInfo);
 
       await Navigator.pushNamed(
@@ -252,22 +248,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       String emptyTitle = PlanTypeEnum.all == planType
           ? '계획'
           : planTypeDetailInfo[planType]!.title;
-
-      actionPercent() {
-        if (recordInfo?.actions == null) {
-          return '0.0';
-        }
-
-        final typeActions = recordInfo!.actions!.where((actionData) =>
-            actionData['type'] == planType.toString() &&
-            getDateTimeToInt(actionData['createDateTime']) ==
-                currentDateTimeInt);
-
-        return planToActionPercent(
-          a: typeActions.length,
-          b: planContentsList.length,
-        ).toString();
-      }
 
       for (var i = 0; i < planInfoList.length; i++) {
         PlanBox planInfo = planInfoList[i];
@@ -307,43 +287,42 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         }
       }
 
+      actionPercent() {
+        if (recordInfo?.actions == null) {
+          return '0.0';
+        }
+
+        final actions = recordInfo!.actions!.where((element) {
+          bool isPlanType = planType.toString() == element['type'];
+          bool isAction =
+              currentDateTimeInt == getDateTimeToInt(element['actionDateTime']);
+          bool isShowPlan = planBox.get(element['id']) != null;
+
+          return isPlanType && isAction && isShowPlan;
+        });
+
+        return planToActionPercent(
+          a: actions.length,
+          b: planContentsList.length,
+        ).toString();
+      }
+
       return TodayPlanDetailItem(
         planType: planType,
-        title: planType == PlanTypeEnum.all
-            ? '계획 리스트'
-            : planTypeDetailInfo[planType]!.title,
+        title: planTypeDetailInfo[planType]!.title,
         actionPercent: actionPercent(),
         emptyString: '$emptyTitle이 없어요.',
         addString: '$emptyTitle을 추가해보세요.',
         contentsList: planContentsList,
-        onTap: () => onTapAddPlan(planType),
+        onTapAddItem: onTapAddPlan,
+        onTapRemoveItem: ,
       );
-    }
-
-    setSub() {
-      bool isSeparPlan = planViewType == RecordIconTypes.separPlan.toString();
-
-      return [
-        // RecordContentsTitleIcon(
-        //   id: isSeparPlan
-        //       ? RecordIconTypes.comonPlan
-        //       : RecordIconTypes.separPlan,
-        //   icon: isSeparPlan ? Icons.close_fullscreen_rounded : Icons.swap_vert,
-        //   onTap: onTapPlanViewType,
-        // ),
-        RecordContentsTitleIcon(
-          id: RecordIconTypes.removePlan,
-          icon: Icons.delete,
-          onTap: onTapRemoveAll,
-        ),
-      ];
     }
 
     return Column(
       children: [
         ContentsTitleText(
           text: '${dateTimeToTitle(widget.importDateTime)} 계획',
-          sub: setSub(),
         ),
         planContainer(planType: PlanTypeEnum.diet),
         planContainer(planType: PlanTypeEnum.exercise),

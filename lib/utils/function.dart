@@ -320,5 +320,17 @@ calculatedGoalWeight({required double goalWeight, required double weight}) {
           ? '+'
           : '';
 
-  return '$operator$fixedValue kg';
+  return '$operator$fixedValue';
+}
+
+initDateTime() {
+  DateTime now = DateTime.now();
+
+  return DateTime(
+    now.year,
+    now.month,
+    now.day,
+    now.hour,
+    now.minute,
+  );
 }

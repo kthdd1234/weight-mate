@@ -5,6 +5,7 @@ import 'package:flutter_app_weight_management/components/check/plan_contents.dar
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -12,21 +13,21 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class TodayPlanDetailItem extends StatelessWidget {
-  TodayPlanDetailItem({
-    super.key,
-    required this.planType,
-    required this.title,
-    required this.emptyString,
-    required this.addString,
-    required this.contentsList,
-    required this.onTap,
-    required this.actionPercent,
-  });
+  TodayPlanDetailItem(
+      {super.key,
+      required this.planType,
+      required this.title,
+      required this.emptyString,
+      required this.addString,
+      required this.contentsList,
+      required this.actionPercent,
+      required this.onTapAddItem,
+      required this.onTapRemoveItem});
 
   PlanTypeEnum planType;
   String title, emptyString, addString, actionPercent;
   List<PlanContents> contentsList;
-  Function() onTap;
+  Function(PlanTypeEnum planType) onTapAddItem, onTapRemoveItem;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +51,19 @@ class TodayPlanDetailItem extends StatelessWidget {
                     textColor: planInfo.mainColor,
                     fontSize: 10,
                     padding: 7,
+                    onTap: () => null,
+                  ),
+                  SpaceWidth(width: tinySpace),
+                  TextIcon(
+                    iconSize: 12,
+                    iconColor: Colors.pink.shade400,
+                    backgroundColor: Colors.pink.shade50,
+                    text: '선택 삭제',
+                    borderRadius: 5,
+                    textColor: Colors.pink.shade400,
+                    fontSize: 10,
+                    padding: 7,
+                    onTap: () => onTapRemoveItem(planType),
                   )
                 ],
               ),
@@ -70,7 +84,7 @@ class TodayPlanDetailItem extends StatelessWidget {
                 icon: Icons.add,
                 topHeight: smallSpace,
                 downHeight: smallSpace,
-                onTap: onTap,
+                onTap: () => onTapAddItem(planType),
               ),
             ],
           ),
