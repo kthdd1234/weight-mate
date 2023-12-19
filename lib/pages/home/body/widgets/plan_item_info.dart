@@ -82,6 +82,7 @@ class PlanItemInfo extends StatelessWidget {
                         icon: Icons.notifications_active,
                         iconSize: 13,
                         iconColor: enableTextColor,
+                        onTap: () => null,
                       )
                     : TextIcon(
                         backgroundColor: disabledButtonBackgroundColor,
@@ -91,6 +92,7 @@ class PlanItemInfo extends StatelessWidget {
                         fontSize: 10,
                         iconSize: 13,
                         iconColor: disEnabledTypeColor,
+                        onTap: () => null,
                       )
               ],
             )

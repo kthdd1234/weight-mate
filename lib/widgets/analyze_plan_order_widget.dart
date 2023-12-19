@@ -32,6 +32,7 @@ class AnalyzePlanOrderWidget extends StatelessWidget {
               borderRadius: 5,
               textColor: buttonBackgroundColor,
               fontSize: 12,
+              onTap: () => null,
             ),
             SpaceWidth(width: smallSpace),
             CircularIcon(
@@ -48,6 +49,7 @@ class AnalyzePlanOrderWidget extends StatelessWidget {
               borderRadius: 7,
               textColor: buttonBackgroundColor,
               fontSize: 10,
+              onTap: () => null,
             ),
           ],
         ),

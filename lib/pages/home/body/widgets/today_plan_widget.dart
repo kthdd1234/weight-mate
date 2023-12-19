@@ -1,21 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/check/plan_contents.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
 import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_detail_item.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -63,38 +53,6 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     int currentDateTimeInt = getDateTimeToInt(widget.importDateTime);
     RecordBox? recordInfo = recordBox.get(currentDateTimeInt);
     List<PlanBox> planInfoList = planBox.values.toList();
-
-    onTapRemoveAll(enumId) {
-      if (planInfoList.isEmpty) {
-        showSnackBar(
-          context: context,
-          text: '삭제할 계획이 없어요.',
-          buttonName: '확인',
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return ConfirmDialog(
-              width: 230,
-              titleText: '계획 삭제',
-              contentIcon: Icons.delete_forever,
-              contentText1: '모든 계획을',
-              contentText2: '삭제하시겠습니까?',
-              onPressedOk: () {
-                planInfoList.forEach((element) {
-                  if (element.alarmId != null) {
-                    NotificationService().deleteAlarm(element.alarmId!);
-                  }
-                });
-
-                planBox.clear();
-              },
-            );
-          },
-        );
-      }
-    }
 
     onTapCheck({required String id, required bool isSelected}) async {
       PlanBox? planInfo = planBox.get(id);
@@ -175,11 +133,9 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
     onTapRemovePlan(id) {
       PlanBox? planInfo = planBox.get(id);
 
-      planBox.delete(id); // 계획 삭제
-
-      if (planInfo!.alarmId != null) {
-        NotificationService()
-            .deleteMultipleAlarm([planInfo.alarmId.toString()]);
+      planBox.delete(id);
+      if (planInfo?.alarmId != null) {
+        NotificationService().deleteAlarm(planInfo!.alarmId!);
       }
 
       closeDialog(context);
@@ -220,7 +176,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       );
     }
 
-    onTapAddPlan(PlanTypeEnum planType) async {
+    onTapAddTag(PlanTypeEnum planType) async {
       DateTime now = DateTime.now();
 
       initPlanInfo.id = '';
@@ -269,6 +225,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           type: planInfo.type,
           isShowType: planType == PlanTypeEnum.all,
           priority: planInfo.priority,
+          alarmId: planInfo.alarmId,
           isChecked: actionData()?['id'] != null,
           alarmTime: planInfo.alarmTime,
           checkIcon: Icons.check_box,
@@ -280,9 +237,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           onTapMore: onTapContents,
         );
 
-        if (planType == PlanTypeEnum.all) {
-          planContentsList.add(data);
-        } else if (planType.toString() == planInfo.type) {
+        if (planType.toString() == planInfo.type) {
           planContentsList.add(data);
         }
       }
@@ -308,14 +263,14 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       }
 
       return TodayPlanDetailItem(
+        planBox: planBox,
         planType: planType,
         title: planTypeDetailInfo[planType]!.title,
         actionPercent: actionPercent(),
         emptyString: '$emptyTitle이 없어요.',
         addString: '$emptyTitle을 추가해보세요.',
         contentsList: planContentsList,
-        onTapAddItem: onTapAddPlan,
-        onTapRemoveItem: ,
+        onTapAddItem: onTapAddTag,
       );
     }
 
@@ -597,3 +552,34 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
         //     mainColor: lifeStyleColor,
         //     backgroundColor: lifeStyleColor.shade100,
         //     counterText: '야식 금지, 다이어트 동기부여 영상 보기'),
+   // onTapRemoveAll(enumId) {
+    //   if (planInfoList.isEmpty) {
+    //     showSnackBar(
+    //       context: context,
+    //       text: '삭제할 계획이 없어요.',
+    //       buttonName: '확인',
+    //     );
+    //   } else {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) {
+    //         return ConfirmDialog(
+    //           width: 230,
+    //           titleText: '계획 삭제',
+    //           contentIcon: Icons.delete_forever,
+    //           contentText1: '모든 계획을',
+    //           contentText2: '삭제하시겠습니까?',
+    //           onPressedOk: () {
+    //             planInfoList.forEach((element) {
+    //               if (element.alarmId != null) {
+    //                 NotificationService().deleteAlarm(element.alarmId!);
+    //               }
+    //             });
+
+    //             planBox.clear();
+    //           },
+    //         );
+    //       },
+    //     );
+    //   }
+    // }

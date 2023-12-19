@@ -26,6 +26,7 @@ class PlanContents extends StatelessWidget {
     required this.notCheckColor,
     required this.isShowType,
     required this.priority,
+    this.alarmId,
     this.onTapMore,
     this.alarmTime,
     this.recordTime,
@@ -38,6 +39,7 @@ class PlanContents extends StatelessWidget {
   bool isShowType;
   IconData checkIcon, notCheckIcon;
   Color notCheckColor;
+  int? alarmId;
 
   Function({required String id, required bool isSelected}) onTapCheck;
   Function(String id) onTapContents;
@@ -88,6 +90,7 @@ class PlanContents extends StatelessWidget {
                                     icon: planInfo.icon,
                                     iconColor: planInfo.mainColor,
                                     iconSize: 14,
+                                    onTap: () => onTapContents(id),
                                   ),
                                   SpaceWidth(width: tinySpace),
                                 ],

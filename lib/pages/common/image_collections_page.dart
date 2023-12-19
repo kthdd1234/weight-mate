@@ -134,6 +134,10 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                                     borderRadius: 5,
                                     textColor: typeBackgroundColor,
                                     fontSize: 10,
+                                    onTap: () => onNavigatorPage(
+                                      index: index,
+                                      isAutoPlay: false,
+                                    ),
                                   ),
                                 ),
                               )

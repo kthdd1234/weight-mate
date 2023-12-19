@@ -125,6 +125,7 @@ class _PlanRemoveContentsState extends State<PlanRemoveContents> {
                           borderRadius: 10,
                           textColor: Colors.grey,
                           fontSize: 9,
+                          onTap: () => null,
                         )
                       ],
                     ),

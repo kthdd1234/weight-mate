@@ -73,6 +73,7 @@ class ScreenLockContents extends StatelessWidget {
                     : buttonBackgroundColor
                 : buttonBackgroundColor,
             fontSize: index == 9 || index == 11 ? 14 : 20,
+            onTap: () => onTap(buttonList[index], index),
           ),
         ),
       );
