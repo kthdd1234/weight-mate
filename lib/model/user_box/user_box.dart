@@ -42,4 +42,9 @@ class UserBox extends HiveObject {
 
   @HiveField(8)
   String? planViewType;
+
+  @override
+  String toString() {
+    return '{userId: $userId, tall: $tall, goalWeight: $goalWeight, createDateTime: $createDateTime, isAlarm: $isAlarm, alarmTime: $alarmTime, alarmId: $alarmId, screenLockPasswords: $screenLockPasswords, planViewType: $planViewType }';
+  }
 }

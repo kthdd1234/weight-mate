@@ -43,4 +43,9 @@ class RecordBox extends HiveObject {
 
   @HiveField(8)
   String? whiteText;
+
+  @override
+  String toString() {
+    return 'createDateTime: $createDateTime, weightDateTime: $weightDateTime, actionDateTime: $actionDateTime, diaryDateTime: $diaryDateTime, weight: $weight, actions: $actions, leftFile: $leftFile, rightFile: $rightFile, whiteText: $whiteText';
+  }
 }

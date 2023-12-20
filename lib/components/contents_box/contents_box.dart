@@ -38,7 +38,6 @@ class ContentsBox extends StatelessWidget {
                   color:
                       const Color.fromARGB(255, 206, 206, 206).withOpacity(0.5),
                   blurRadius: 10,
-                  // spreadRadius: 1.0,
                   offset: Offset(2, 4),
                 )
               ]

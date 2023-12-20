@@ -170,12 +170,6 @@ class _MoreAppSettingWidgetState extends State<MoreAppSettingWidget> {
             ))
         .toList();
 
-    return Column(
-      children: [
-        ContentsTitleText(text: '설정'),
-        SpaceHeight(height: regularSapce),
-        Column(children: widgetList),
-      ],
-    );
+    return Column(children: widgetList);
   }
 }

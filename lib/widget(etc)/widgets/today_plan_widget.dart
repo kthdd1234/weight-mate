@@ -6,7 +6,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_plan_detail_item.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/today_plan_detail_item.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';

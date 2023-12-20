@@ -9,7 +9,7 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/more_see_item_widget.dart';
 import 'package:hive/hive.dart';
-import '../../../../model/record_box/record_box.dart';
+import '../../model/record_box/record_box.dart';
 
 class MoreMyInfoWidget extends StatefulWidget {
   MoreMyInfoWidget({
@@ -77,7 +77,6 @@ class _MoreMyInfoWidgetState extends State<MoreMyInfoWidget> {
     onTapArrow(MoreSeeItem id) {
       Map<MoreSeeItem, String> titleData = {
         MoreSeeItem.tall: '키',
-        // MoreSeeItem.weight: '현재 체중',
         MoreSeeItem.goalWeight: '목표 체중',
       };
 
@@ -140,12 +139,6 @@ class _MoreMyInfoWidgetState extends State<MoreMyInfoWidget> {
         )
         .toList();
 
-    return Column(
-      children: [
-        ContentsTitleText(text: '내 정보'),
-        SpaceHeight(height: regularSapce),
-        Column(children: widgetList),
-      ],
-    );
+    return Column(children: widgetList);
   }
 }

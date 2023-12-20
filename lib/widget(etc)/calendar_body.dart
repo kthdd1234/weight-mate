@@ -1,25 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
-import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 Map<SegmentedTypes, Color> dotColors = <SegmentedTypes, Color>{
@@ -92,13 +83,6 @@ class CalendarBodyState extends State<CalendarBody> {
       );
     }
 
-    onTapModifyRecord() {
-      context.read<ImportDateTimeProvider>().setImportDateTime(currentDay);
-      context
-          .read<BottomNavigationProvider>()
-          .setBottomNavigation(enumId: BottomNavigationEnum.record);
-    }
-
     markerBuilder(context, day, events) {
       String? weightText;
       List<Widget> colorDotList = [];
@@ -151,7 +135,7 @@ class CalendarBodyState extends State<CalendarBody> {
 
     return Column(
       children: [
-        BannerWidget(),
+        // BannerWidget(),
         Expanded(
           child: ContentsBox(
             backgroundColor: Colors.transparent,
@@ -172,35 +156,24 @@ class CalendarBodyState extends State<CalendarBody> {
               firstDay: DateTime.utc(2010, 10, 16),
               lastDay: DateTime.now(),
               focusedDay: currentDay,
-              headerStyle: const HeaderStyle(
-                headerMargin: EdgeInsets.only(bottom: 10),
-                titleCentered: true,
-                formatButtonVisible: false,
-              ),
+              headerVisible: false,
               onFormatChanged: onFormatChanged,
             ),
           ),
         ),
-        SpaceHeight(height: smallSpace),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            setColorTextInfo(text: '체중 기록', color: weightColor),
-            setColorTextInfo(text: '계획 실천', color: actionColor),
-            setColorTextInfo(text: '눈바디 추가', color: diaryColor),
-          ],
-        ),
-        SpaceHeight(height: regularSapce),
-        Row(
-          children: [
-            ExpandedButtonHori(
-              imgUrl: 'assets/images/t-15.png',
-              icon: Icons.edit,
-              text: '기록 수정하기',
-              onTap: onTapModifyRecord,
-            )
-          ],
-        ),
+        // SpaceHeight(height: smallSpace),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   children: [
+        //     setColorTextInfo(text: '체중', color: weightColor),
+        //     setColorTextInfo(text: '감정', color: actionColor),
+        //     setColorTextInfo(text: '식단', color: dietColor),
+        //     setColorTextInfo(text: '운동', color: exerciseColor),
+        //     setColorTextInfo(text: '생활', color: lifeStyleColor),
+        //     setColorTextInfo(text: '사진', color: eyeBodyColor),
+        //     setColorTextInfo(text: '일기', color: diaryColor),
+        //   ],
+        // ),
       ],
     );
   }
@@ -262,3 +235,21 @@ class CalendarBodyState extends State<CalendarBody> {
 //   );
 // }
 // RecordBox? currentRecordInfo = recordBox.get(getDateTimeToInt(currentDay));
+     // SpaceHeight(height: regularSapce),
+        // Row(
+        //   children: [
+        //     ExpandedButtonHori(
+        //       imgUrl: 'assets/images/t-15.png',
+        //       icon: Icons.edit,
+        //       text: '기록 수정하기',
+        //       onTap: onTapModifyRecord,
+        //     )
+        //   ],
+        // ),
+
+    //         onTapModifyRecord() {
+    //   context.read<ImportDateTimeProvider>().setImportDateTime(currentDay);
+    //   context
+    //       .read<BottomNavigationProvider>()
+    //       .setBottomNavigation(enumId: BottomNavigationEnum.record);
+    // }

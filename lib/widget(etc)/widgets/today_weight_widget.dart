@@ -6,9 +6,9 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_edit_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_weight_infos_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/record_contents_title_icon.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/today_weight_edit_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/today_weight_infos_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';

@@ -209,12 +209,6 @@ class _MoreEtcInfoWidgetState extends State<MoreEtcInfoWidget> {
             ))
         .toList();
 
-    return Column(
-      children: [
-        ContentsTitleText(text: '기타'),
-        SpaceHeight(height: regularSapce),
-        Column(children: widgetList),
-      ],
-    );
+    return Column(children: widgetList);
   }
 }

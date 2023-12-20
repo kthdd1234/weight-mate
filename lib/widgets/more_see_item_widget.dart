@@ -104,18 +104,12 @@ class MoreSeeItemWidget extends StatelessWidget {
       return const EmptyArea();
     }
 
-    final switchSpace = MoreSeeWidgetTypes.switching == widgetType
-        ? smallSpace + tinySpace
-        : regularSapce;
-
     return InkWell(
       onTap: () => onTapArrow != null ? onTapArrow!(id) : null,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          index != 0
-              ? SpaceHeight(height: switchSpace)
-              : SpaceHeight(height: smallSpace),
+          SpaceHeight(height: smallSpace),
           Row(
             children: [
               Icon(icon, color: buttonBackgroundColor),
@@ -131,11 +125,7 @@ class MoreSeeItemWidget extends StatelessWidget {
             ],
           ),
           setBottomWidget(),
-          SpaceHeight(height: switchSpace),
-          WidthDivider(
-            width: MediaQuery.of(context).size.width,
-            color: Colors.grey.shade300,
-          )
+          SpaceHeight(height: regularSapce + smallSpace),
         ],
       ),
     );

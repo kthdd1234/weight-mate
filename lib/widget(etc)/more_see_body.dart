@@ -3,9 +3,9 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/more_app_setting_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/more_etc_info_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/more_my_info_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/more_app_setting_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/more_etc_info_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/more_my_info_widget.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -46,12 +46,10 @@ class _MoreSeeBodyState extends State<MoreSeeBody> {
               userBox: userBox,
               recordBox: recordBox,
             ),
-            SpaceHeight(height: largeSpace),
             MoreAppSettingWidget(
               userProfile: userBox.get('userProfile'),
               planBox: planBox,
             ),
-            SpaceHeight(height: largeSpace),
             const MoreEtcInfoWidget()
           ],
         ),

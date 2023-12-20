@@ -146,7 +146,7 @@
 
 //         Navigator.pushNamedAndRemoveUntil(
 //           context,
-//           '/home-container',
+//           '/home',
 //           (_) => false,
 //         );
 //       }

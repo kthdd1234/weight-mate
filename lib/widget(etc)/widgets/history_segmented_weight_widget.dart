@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/history_segmented_empty_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/history_segmented_item_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/history_segmented_empty_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/history_segmented_item_widget.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';

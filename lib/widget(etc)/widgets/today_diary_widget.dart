@@ -15,9 +15,9 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/components/text/icon_text.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/record_contents_title_icon.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_edit_widget.dart';
-import 'package:flutter_app_weight_management/pages/home/body/widgets/today_diary_data_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/record_contents_title_icon.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/today_diary_edit_widget.dart';
+import 'package:flutter_app_weight_management/widget(etc)/widgets/today_diary_data_widget.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -32,7 +32,7 @@ import 'package:flutter_app_weight_management/components/route/fade_page_route.d
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../components/dialog/native_ad_dialog.dart';
+import '../../components/dialog/native_ad_dialog.dart';
 
 class TodayDiaryWidget extends StatefulWidget {
   TodayDiaryWidget({

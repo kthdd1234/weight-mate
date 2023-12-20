@@ -63,7 +63,7 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
                 if (userPasswords.join() == inputPasswords.join()) {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/home-container',
+                    '/home-page',
                     (route) => false,
                   );
 

@@ -42,4 +42,9 @@ class PlanBox extends HiveObject {
 
   @HiveField(8)
   DateTime createDateTime;
+
+  @override
+  String toString() {
+    return 'id: $id, type: $type, title: $title, priority: $priority, name: $name, isAlarm: $isAlarm, alarmTime: $alarmTime, alarmId: $alarmId, createDateTime: $createDateTime';
+  }
 }

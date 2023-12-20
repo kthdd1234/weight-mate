@@ -3,8 +3,8 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -34,7 +34,6 @@ class AddPlanSetting extends StatefulWidget {
 }
 
 class _AddPlanSettingState extends State<AddPlanSetting> {
-  late Box<UserBox> userBox;
   late Box<RecordBox> recordBox;
   late Box<PlanBox> planBox;
   late DateTime timeValue;
@@ -43,7 +42,6 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
   void initState() {
     super.initState();
 
-    userBox = Hive.box<UserBox>('userBox');
     recordBox = Hive.box<RecordBox>('recordBox');
     planBox = Hive.box<PlanBox>('planBox');
 
@@ -115,17 +113,16 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       final uuidV1 = const Uuid().v1();
       final now = DateTime.now();
 
-      userBox.put(
-        'userProfile',
+      userRepository.updateUser(
         UserBox(
-            userId: uuidV1,
-            tall: userInfoState.tall,
-            goalWeight: userInfoState.goalWeight,
-            createDateTime: now,
-            isAlarm: userInfoState.isAlarm,
-            alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
-            alarmId: userInfoState.isAlarm ? newUserAlarmtUid : null,
-            planViewType: RecordIconTypes.separPlan.toString()),
+          userId: uuidV1,
+          tall: userInfoState.tall,
+          goalWeight: userInfoState.goalWeight,
+          createDateTime: now,
+          isAlarm: userInfoState.isAlarm,
+          alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
+          alarmId: userInfoState.isAlarm ? newUserAlarmtUid : null,
+        ),
       );
 
       recordBox.put(
@@ -213,7 +210,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
         if (argmentsType == ArgmentsTypeEnum.start) {
           Navigator.pushNamedAndRemoveUntil(
             context,
-            '/home-container',
+            '/home-page',
             (_) => false,
           );
         } else {

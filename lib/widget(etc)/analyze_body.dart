@@ -14,9 +14,9 @@ import 'package:flutter_app_weight_management/widgets/graph_date_time_custom.dar
 import 'package:flutter_app_weight_management/widgets/segmented_widget.dart';
 import 'package:hive/hive.dart';
 
-import '../../../model/plan_box/plan_box.dart';
-import '../../../model/record_box/record_box.dart';
-import '../../../model/user_box/user_box.dart';
+import '../model/plan_box/plan_box.dart';
+import '../model/record_box/record_box.dart';
+import '../model/user_box/user_box.dart';
 
 final countInfo = {
   SegmentedTypes.week: 6,
@@ -201,7 +201,7 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
           children: [
             setAnalyzeCustom(),
             SpaceHeight(height: smallSpace),
-            setInfoText(),
+            // setInfoText(),
             DefaultSegmented(
               selectedSegment: selectedDateTimeSegment,
               children: dateTimeChildren,
@@ -218,15 +218,15 @@ class _AnalyzeBodyState extends State<AnalyzeBody> {
 
     return Column(
       children: [
-        BannerWidget(),
-        SpaceHeight(height: smallSpace),
-        DefaultSegmented(
-          selectedSegment: selectedRecordTypeSegment,
-          children: recordTypeChildren,
-          backgroundColor: typeBackgroundColor,
-          thumbColor: dialogBackgroundColor,
-          onSegmentedChanged: onSegmentedRecordTypeChanged,
-        ),
+        // BannerWidget(),
+        // SpaceHeight(height: smallSpace),
+        // DefaultSegmented(
+        //   selectedSegment: selectedRecordTypeSegment,
+        //   children: recordTypeChildren,
+        //   backgroundColor: typeBackgroundColor,
+        //   thumbColor: dialogBackgroundColor,
+        //   onSegmentedChanged: onSegmentedRecordTypeChanged,
+        // ),
         setAnalyzeContents(),
         setAnalyzeBottom()
       ],

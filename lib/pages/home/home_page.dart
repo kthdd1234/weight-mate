@@ -1,17 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/calendar_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/analyze_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/more_see_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/widget(etc)/calendar_body.dart';
+import 'package:flutter_app_weight_management/widget(etc)/analyze_body.dart';
+import 'package:flutter_app_weight_management/widget(etc)/more_see_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -21,7 +19,6 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/home_app_bar_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
 
@@ -32,27 +29,20 @@ List<BottomNavigationEnum> bottomIdList = [
   BottomNavigationEnum.setting
 ];
 
-class HomeContainer extends StatefulWidget {
-  const HomeContainer({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeContainer> createState() => _HomeContainerState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeContainerState extends State<HomeContainer>
-    with WidgetsBindingObserver {
-  late Box<RecordBox> recordBox;
-  late Box<UserBox> userBox;
-
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool isActiveCamera = false;
   bool isShowMateScreen = false;
 
   @override
   void initState() {
     super.initState();
-
-    userBox = Hive.box('userBox');
-    recordBox = Hive.box<RecordBox>('recordBox');
 
     onNotifications.stream.listen(
       (String? payload) => WidgetsBinding.instance.addPostFrameCallback(
@@ -66,10 +56,10 @@ class _HomeContainerState extends State<HomeContainer>
     WidgetsBinding.instance.addObserver(this);
 
     requestInAppReview() async {
-      List<RecordBox> recordInfoList = recordBox.values.toList();
+      List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
       bool isAvailable = await inAppReview.isAvailable();
-      bool isNotNewUser = recordInfoList.length > 2;
+      bool isNotNewUser = recordList.length > 2;
       bool isDay27 = DateTime.now().day == 27;
 
       if (isAvailable && isNotNewUser && isDay27) {
@@ -90,8 +80,9 @@ class _HomeContainerState extends State<HomeContainer>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     setState(() {});
 
-    UserBox? userProfile = userBox.get('userProfile');
-    RecordBox? recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
+    UserBox userProfile = userRepository.profile;
+    RecordBox? recordInfo =
+        recordRepository.recordBox.get(getDateTimeToInt(DateTime.now()));
     bool isShowScreen = [
       AppLifecycleState.hidden,
       AppLifecycleState.inactive,
@@ -104,7 +95,7 @@ class _HomeContainerState extends State<HomeContainer>
       }
     } else if (state == AppLifecycleState.resumed) {
       if (isActiveCamera == false) {
-        if (userProfile != null && userProfile.screenLockPasswords != null) {
+        if (userProfile.screenLockPasswords != null) {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => const EnterScreenLockPage(),
@@ -112,7 +103,7 @@ class _HomeContainerState extends State<HomeContainer>
             ),
           );
         } else {
-          if (recordInfo == null || recordInfo.weight == null) {
+          if (recordInfo?.weight == null) {
             context
                 .read<ImportDateTimeProvider>()
                 .setImportDateTime(DateTime.now());
@@ -138,9 +129,9 @@ class _HomeContainerState extends State<HomeContainer>
           padding: EdgeInsets.only(bottom: 3),
           child: Icon(FontAwesomeIcons.chartLine, size: 17),
         ),
-        label: '분석',
+        label: '그래프',
       ),
-      BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
+      BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
     ];
 
     List<Widget> bodyList = [
