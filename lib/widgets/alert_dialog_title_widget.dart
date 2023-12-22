@@ -18,7 +18,7 @@ class AlertDialogTitleWidget extends StatelessWidget {
       children: [
         Text(
           text,
-          style: const TextStyle(fontSize: 18, color: buttonBackgroundColor),
+          style: const TextStyle(fontSize: 18, color: themeColor),
         ),
         InkWell(
           onTap: onTap,

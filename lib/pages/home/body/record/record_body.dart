@@ -3,8 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/record_edit.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/record_history.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/widget/record_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
@@ -36,7 +35,9 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
         valueListenables: valueListenables,
         builder: (context, values, child) {
           return Column(
-            children: [RecordEdit(), RecordHistory()],
+            children: [
+              RecordContainer(recordType: eRecordContainer.edit),
+            ],
           );
         },
       ),

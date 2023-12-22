@@ -21,7 +21,7 @@ class SplashScreen extends StatelessWidget {
           const Text(
             '체중 메이트',
             style: TextStyle(
-              color: buttonBackgroundColor,
+              color: themeColor,
               fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
@@ -30,7 +30,7 @@ class SplashScreen extends StatelessWidget {
           const Text(
             '매일 체중을 기록하고',
             style: TextStyle(
-              color: buttonBackgroundColor,
+              color: themeColor,
               fontSize: 13,
             ),
           ),
@@ -38,7 +38,7 @@ class SplashScreen extends StatelessWidget {
           const Text(
             '다이어트 계획을 세워 실천해보세요!',
             style: TextStyle(
-              color: buttonBackgroundColor,
+              color: themeColor,
               fontSize: 13,
             ),
           ),

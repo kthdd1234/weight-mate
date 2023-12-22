@@ -90,7 +90,7 @@ class MoreSeeItemWidget extends StatelessWidget {
                   child: Text(
                     dateTimeStr ?? '',
                     style: const TextStyle(
-                      color: buttonBackgroundColor,
+                      color: themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),
@@ -112,13 +112,12 @@ class MoreSeeItemWidget extends StatelessWidget {
           SpaceHeight(height: smallSpace),
           Row(
             children: [
-              Icon(icon, color: buttonBackgroundColor),
+              Icon(icon, color: themeColor),
               SpaceWidth(width: regularSapce),
               Expanded(
                 child: Text(
                   title,
-                  style: const TextStyle(
-                      color: buttonBackgroundColor, fontSize: 15),
+                  style: const TextStyle(color: themeColor, fontSize: 15),
                 ),
               ),
               setWidget(),

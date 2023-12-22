@@ -91,7 +91,7 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: buttonBackgroundColor,
+          foregroundColor: themeColor,
           elevation: 0.0,
           automaticallyImplyLeading: false,
         ),

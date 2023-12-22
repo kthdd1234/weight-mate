@@ -83,7 +83,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: buttonBackgroundColor,
+          foregroundColor: themeColor,
           elevation: 0.0,
           actions: [
             TextButton(
@@ -127,7 +127,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                                 child: Padding(
                                   padding: const EdgeInsets.all(3.0),
                                   child: TextIcon(
-                                    backgroundColor: buttonBackgroundColor,
+                                    backgroundColor: themeColor,
                                     backgroundColorOpacity: 0.5,
                                     text: dateTimeFormatter(
                                         dateTime: dateTime, format: 'MM월 dd일'),

@@ -70,7 +70,7 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
             onTap: onTapCalendarIcon,
             child: const Icon(
               Icons.calendar_month,
-              color: buttonBackgroundColor,
+              color: themeColor,
             ),
           ),
           isEnabled: true,
@@ -86,7 +86,7 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
           icon: Icon(
             icon,
             size: 20,
-            color: buttonBackgroundColor,
+            color: themeColor,
           ));
     }
 
@@ -105,7 +105,7 @@ class _ImportDateTimeTitleWidgetState extends State<ImportDateTimeTitleWidget> {
               InkWell(
                 onTap: onTapTitle,
                 child: const Icon(Icons.expand_circle_down_outlined,
-                    size: 20, color: buttonBackgroundColor),
+                    size: 20, color: themeColor),
               ),
             ],
           ),

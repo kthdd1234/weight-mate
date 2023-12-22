@@ -34,7 +34,7 @@ class HistorySegmentedItemWidget extends StatelessWidget {
                   color: typeBackgroundColor,
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: Icon(icon, size: 20, color: buttonBackgroundColor),
+                child: Icon(icon, size: 20, color: themeColor),
               ),
               SpaceWidth(width: regularSapce),
               Expanded(
@@ -45,8 +45,7 @@ class HistorySegmentedItemWidget extends StatelessWidget {
                     Text(
                       name,
                       style: const TextStyle(
-                          color: buttonBackgroundColor,
-                          fontWeight: FontWeight.bold),
+                          color: themeColor, fontWeight: FontWeight.bold),
                     ),
                     subWidget != null
                         ? Column(

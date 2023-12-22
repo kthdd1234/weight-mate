@@ -27,7 +27,7 @@ class SegmentedWidget extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 12,
-            color: buttonBackgroundColor,
+            color: themeColor,
           ),
         ),
       ],

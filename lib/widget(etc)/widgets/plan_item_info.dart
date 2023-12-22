@@ -32,11 +32,11 @@ class PlanItemInfo extends StatelessWidget {
     iconText({required IconData icon, required String text}) {
       return Row(
         children: [
-          Icon(icon, size: 18, color: buttonBackgroundColor),
+          Icon(icon, size: 18, color: themeColor),
           SpaceWidth(width: tinySpace),
           Text(
             text,
-            style: const TextStyle(color: buttonBackgroundColor, fontSize: 12),
+            style: const TextStyle(color: themeColor, fontSize: 12),
           )
         ],
       );
@@ -56,7 +56,7 @@ class PlanItemInfo extends StatelessWidget {
                 SpaceHeight(height: smallSpace),
                 Text(
                   name,
-                  style: const TextStyle(color: buttonBackgroundColor),
+                  style: const TextStyle(color: themeColor),
                 ),
                 SpaceHeight(height: smallSpace),
               ],

@@ -66,7 +66,7 @@ class AlarmItemWidget extends StatelessWidget {
               ],
             ),
             CupertinoSwitch(
-              activeColor: buttonBackgroundColor,
+              activeColor: themeColor,
               value: isEnabled,
               onChanged: onChanged,
             ),

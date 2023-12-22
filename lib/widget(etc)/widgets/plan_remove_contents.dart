@@ -104,7 +104,7 @@ class _PlanRemoveContentsState extends State<PlanRemoveContents> {
                                 icon: removeIds.contains(item.id)
                                     ? Icons.check_box
                                     : Icons.check_box_outline_blank,
-                                color: buttonBackgroundColor,
+                                color: themeColor,
                                 onTap: (_) => onTap(item.id),
                               ),
                               SpaceWidth(width: regularSapce),

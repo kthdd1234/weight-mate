@@ -14,12 +14,12 @@ class AnalyzeDietWayIntroWidget extends StatelessWidget {
         appBar: AppBar(
             title: const Text(
               '다이어트 방법',
-              style: TextStyle(fontSize: 18, color: buttonBackgroundColor),
+              style: TextStyle(fontSize: 18, color: themeColor),
             ),
             backgroundColor: Colors.transparent,
             elevation: 0.0,
             iconTheme: const IconThemeData(
-              color: buttonBackgroundColor,
+              color: themeColor,
             )),
         body: SingleChildScrollView(
           child: Padding(

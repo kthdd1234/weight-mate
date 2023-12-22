@@ -32,7 +32,7 @@ class HistorySegmentedWidget extends StatelessWidget {
               name,
               style: const TextStyle(
                 fontSize: 12,
-                color: buttonBackgroundColor,
+                color: themeColor,
               ),
             )
           ],

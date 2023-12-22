@@ -1,32 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class Tag extends StatelessWidget {
-  const Tag({super.key});
+  Tag({
+    super.key,
+    required this.color,
+    required this.text,
+  });
+
+  String color, text;
 
   @override
   Widget build(BuildContext context) {
-    final colors = {
-      'green': {
-        'bgColor': Colors.green.shade50,
-        'textColor': Colors.green,
-      },
-      'red': {
-        'bgColor': Colors.red.shade50,
-        'textColor': Colors.red,
-      }
-    };
+    Map<String, Color> tagColor = tagColors[color]!;
 
     return Container(
       decoration: BoxDecoration(
-          color: Colors.green.shade50, borderRadius: BorderRadius.circular(5)),
-      padding: EdgeInsets.all(7),
-      child: Text(
-        '목표 체중: 55kg',
-        style: TextStyle(
-          color: Colors.green.shade400,
-          fontSize: 12,
-          fontWeight: FontWeight.bold,
-        ),
+        color: tagColor['bgColor'],
+        borderRadius: BorderRadius.circular(5),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.add_circle_outline_rounded,
+            size: 16,
+            color: tagColor['textColor'],
+          ),
+          SpaceWidth(width: tinySpace),
+          Text(
+            text,
+            style: TextStyle(
+              color: tagColor['textColor'],
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

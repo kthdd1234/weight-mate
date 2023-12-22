@@ -262,7 +262,7 @@ class _AnalyzeActionRecordState extends State<AnalyzeActionRecord> {
             children: [
               IconText(
                 icon: Icons.check,
-                iconColor: buttonBackgroundColor,
+                iconColor: themeColor,
                 iconSize: 13,
                 text: '실천 완료',
                 textColor: Colors.grey.shade700,

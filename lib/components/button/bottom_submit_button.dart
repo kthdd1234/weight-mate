@@ -30,9 +30,8 @@ class BottomSubmitButton extends StatelessWidget {
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
             elevation: isEnabled ? 2.0 : 0.0,
-            backgroundColor: isEnabled
-                ? buttonBackgroundColor
-                : disabledButtonBackgroundColor,
+            backgroundColor:
+                isEnabled ? themeColor : disabledButtonBackgroundColor,
             foregroundColor:
                 isEnabled ? buttonTextColor : disabledButtonTextColor,
             shape: RoundedRectangleBorder(

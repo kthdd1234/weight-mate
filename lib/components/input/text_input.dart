@@ -5,10 +5,10 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 class TextInput extends StatefulWidget {
   TextInput({
     super.key,
-    required this.maxLength,
-    required this.prefixIcon,
+    this.maxLength,
     required this.suffixText,
     required this.hintText,
+    this.prefixIcon,
     this.counterText,
     required this.onChanged,
     required this.errorText,
@@ -18,7 +18,7 @@ class TextInput extends StatefulWidget {
     this.helperText,
   });
 
-  int maxLength;
+  int? maxLength;
   IconData? prefixIcon;
   String suffixText;
   String hintText;

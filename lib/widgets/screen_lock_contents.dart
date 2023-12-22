@@ -37,9 +37,7 @@ class ScreenLockContents extends StatelessWidget {
 
     passwordWidgets() {
       widget(int index) {
-        final color = passwords[index] == ''
-            ? typeBackgroundColor
-            : buttonBackgroundColor;
+        final color = passwords[index] == '' ? typeBackgroundColor : themeColor;
 
         return Row(
           children: [
@@ -70,8 +68,8 @@ class ScreenLockContents extends StatelessWidget {
             textColor: isExit == false
                 ? index == 9
                     ? Colors.transparent
-                    : buttonBackgroundColor
-                : buttonBackgroundColor,
+                    : themeColor
+                : themeColor,
             fontSize: index == 9 || index == 11 ? 14 : 20,
             onTap: () => onTap(buttonList[index], index),
           ),
@@ -89,7 +87,7 @@ class ScreenLockContents extends StatelessWidget {
             Text(
               passwordMsg,
               style: const TextStyle(
-                color: buttonBackgroundColor,
+                color: themeColor,
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
               ),

@@ -155,7 +155,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
           contents: Row(
             children: [
               ExpandedButtonVerti(
-                mainColor: buttonBackgroundColor,
+                mainColor: themeColor,
                 icon: Icons.edit_note,
                 title: '수정하기',
                 onTap: () => onTapEditPlan(planInfo),
@@ -397,7 +397,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
 //     padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
 //     child: Text(
 //       '$text $count',
-//       style: const TextStyle(fontSize: 12, color: buttonBackgroundColor),
+//       style: const TextStyle(fontSize: 12, color: themeColor),
 //     ),
 //   );
 // }

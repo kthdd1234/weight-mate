@@ -32,7 +32,7 @@ class ContentsTitleText extends StatelessWidget {
                   ? TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.bold,
-                      color: buttonBackgroundColor,
+                      color: themeColor,
                     )
                   : Theme.of(context).textTheme.labelLarge,
             ),
@@ -43,7 +43,7 @@ class ContentsTitleText extends StatelessWidget {
                       Icon(
                         icon,
                         size: 18,
-                        color: buttonBackgroundColor,
+                        color: themeColor,
                       ),
                     ],
                   )

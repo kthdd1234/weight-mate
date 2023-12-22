@@ -29,7 +29,7 @@ class PlanTypeWidget extends StatelessWidget {
           child: Container(
             width: double.infinity,
             decoration: BoxDecoration(
-              color: isEnabled ? buttonBackgroundColor : typeBackgroundColor,
+              color: isEnabled ? themeColor : typeBackgroundColor,
               borderRadius: BorderRadius.circular(7),
             ),
             child: Padding(

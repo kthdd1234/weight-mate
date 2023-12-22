@@ -10,7 +10,7 @@ class TitleBlock extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String text = type == 'start' ? '시작일' : '종료일';
-    final Color color = type == 'start' ? buttonBackgroundColor : Colors.red;
+    final Color color = type == 'start' ? themeColor : Colors.red;
 
     return Expanded(
       child: Row(
@@ -18,7 +18,7 @@ class TitleBlock extends StatelessWidget {
         children: [
           Text(
             '$text 선택',
-            style: const TextStyle(color: buttonBackgroundColor, fontSize: 17),
+            style: const TextStyle(color: themeColor, fontSize: 17),
           ),
           Row(
             children: [

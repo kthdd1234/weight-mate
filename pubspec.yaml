@@ -74,6 +74,7 @@ dependencies:
   carousel_slider: ^4.2.1
   easy_localization: ^3.0.2
   gdpr_dialog: ^2.1.1
+  flutter_svg: ^2.0.9
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +100,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/Cloudy_Apple.png
     - assets/images/deep-space.jpeg
     - assets/images/MATE.png
@@ -125,7 +127,26 @@ flutter:
     - assets/images/t-22.png
     - assets/images/t-23.png
     - assets/images/splash-mate.png
-    - .env
+
+    - assets/svgs/amazed-face.svg
+    - assets/svgs/anxious-face.svg
+    - assets/svgs/crying-face.svg
+    - assets/svgs/determined-face.svg
+    - assets/svgs/disappointed-face.svg
+    - assets/svgs/dizzy-face.svg
+    - assets/svgs/expressionless-face.svg
+    - assets/svgs/face-blowing-a-kiss.svg
+    - assets/svgs/grinning-face-with-smiling-eyes.svg
+    - assets/svgs/grinning-face-with-sweat.svg
+    - assets/svgs/grinning-squinting-face.svg
+    - assets/svgs/neutral-face.svg
+    - assets/svgs/slightly-smiling-face.svg
+    - assets/svgs/sneezing-face.svg
+    - assets/svgs/face-with-steam-from-nose.svg
+    - assets/svgs/kissing-face.svg
+    - assets/svgs/loudly-crying-face.svg
+    - assets/svgs/smiling-face-with-halo.svg
+    - assets/svgs/winking-face-with-tongue.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

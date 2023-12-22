@@ -137,7 +137,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
                       title,
                       style: const TextStyle(
                         fontSize: 13,
-                        color: buttonBackgroundColor,
+                        color: themeColor,
                         decoration: TextDecoration.underline,
                       ),
                     ),
@@ -149,7 +149,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
                         child: Icon(
                           more,
                           size: 15,
-                          color: buttonBackgroundColor,
+                          color: themeColor,
                         ))
                   ],
                 ),
@@ -157,7 +157,7 @@ class TodayWeightInfosWidget extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    color: buttonBackgroundColor,
+                    color: themeColor,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),

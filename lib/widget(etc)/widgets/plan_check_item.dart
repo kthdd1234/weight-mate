@@ -60,8 +60,7 @@ class PlanCheckItem extends StatelessWidget {
                     itemName,
                     style: TextStyle(
                       fontSize: 13,
-                      color:
-                          isChecked ? buttonBackgroundColor : enabledTypeColor,
+                      color: isChecked ? themeColor : enabledTypeColor,
                     ),
                   )
                 ],

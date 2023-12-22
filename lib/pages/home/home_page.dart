@@ -181,7 +181,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                   items: items,
                   elevation: 0,
                   currentIndex: bottomNavitionId.index,
-                  selectedItemColor: buttonBackgroundColor,
+                  selectedItemColor: themeColor,
                   unselectedItemColor: const Color(0xFF151515),
                   backgroundColor: Colors.red,
                   onTap: onBottomNavigation,

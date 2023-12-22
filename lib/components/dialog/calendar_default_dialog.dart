@@ -53,8 +53,7 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
         height: 450,
         contentsWidget: SfDateRangePicker(
           showNavigationArrow: true,
-          selectionColor:
-              widget.type == 'start' ? buttonBackgroundColor : Colors.red,
+          selectionColor: widget.type == 'start' ? themeColor : Colors.red,
           todayHighlightColor: Colors.transparent,
           controller: _pickerController,
           view: DateRangePickerView.month,

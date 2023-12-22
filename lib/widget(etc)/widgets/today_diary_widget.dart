@@ -316,7 +316,7 @@ class _TodayDiaryWidgetState extends State<TodayDiaryWidget> {
                 adjustSize: 3,
                 size: 20,
                 borderRadius: 5,
-                backgroundColor: buttonBackgroundColor,
+                backgroundColor: themeColor,
                 backgroundColorOpacity: 0.5,
                 onTap: (_) => onReoveImage(pos),
               ),

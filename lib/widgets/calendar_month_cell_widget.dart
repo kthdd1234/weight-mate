@@ -72,7 +72,7 @@ class CalendarMonthCellWidget extends StatelessWidget {
           width: 33,
           height: 33,
           decoration: BoxDecoration(
-            color: isSelectedDay ? buttonBackgroundColor : null,
+            color: isSelectedDay ? themeColor : null,
             shape: BoxShape.circle,
           ),
           child: Center(

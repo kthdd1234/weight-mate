@@ -29,7 +29,7 @@ class HistorySegmentedMemoWidget extends StatelessWidget {
             name: '눈바디',
             subWidget: HistorySubTextWidget(
               text: '',
-              color: buttonBackgroundColor,
+              color: themeColor,
             ),
             suffixWidget: HistoryEditButtonWidget(
               id: 'memo',

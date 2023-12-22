@@ -36,7 +36,7 @@ class TimeChipWidget extends StatelessWidget {
                   child: Text(
                     timeToString(time),
                     style: const TextStyle(
-                      color: buttonBackgroundColor,
+                      color: themeColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),

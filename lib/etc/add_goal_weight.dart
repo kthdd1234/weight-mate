@@ -68,12 +68,12 @@
 
 //     onTitleWidget(String type) {
 //       final String text = type == 'start' ? '시작일' : '종료일';
-//       final Color color = type == 'start' ? buttonBackgroundColor : Colors.red;
+//       final Color color = type == 'start' ? themeColor : Colors.red;
 
 //       return [
 //         Text(
 //           '$text 설정',
-//           style: const TextStyle(color: buttonBackgroundColor, fontSize: 17),
+//           style: const TextStyle(color: themeColor, fontSize: 17),
 //         ),
 //         Row(
 //           children: [

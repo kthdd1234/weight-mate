@@ -51,7 +51,7 @@ class _NativeWidgetState extends State<NativeWidget> {
               cornerRadius: 5.0,
               callToActionTextStyle: NativeTemplateTextStyle(
                 textColor: Colors.white,
-                backgroundColor: buttonBackgroundColor,
+                backgroundColor: themeColor,
                 size: 16.0,
               ),
             ),

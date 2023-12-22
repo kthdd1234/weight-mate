@@ -25,7 +25,7 @@ class AnalyzeDietWayWidget extends StatelessWidget {
                 '다이어트 방법 소개',
                 style: TextStyle(
                   fontSize: 15,
-                  color: buttonBackgroundColor,
+                  color: themeColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -33,7 +33,7 @@ class AnalyzeDietWayWidget extends StatelessWidget {
               const Icon(
                 Icons.auto_awesome_outlined,
                 size: 18,
-                color: buttonBackgroundColor,
+                color: themeColor,
               )
             ],
           ),
@@ -75,7 +75,7 @@ class AnalyzeDietWayWidget extends StatelessWidget {
                     child: const Icon(
                       Icons.content_paste_search,
                       size: 50,
-                      color: buttonBackgroundColor,
+                      color: themeColor,
                     ),
                   ),
                   SpaceWidth(width: smallSpace)

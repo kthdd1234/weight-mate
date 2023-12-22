@@ -39,7 +39,7 @@ class HistorySegmentedWeightWidget extends StatelessWidget {
             name: '체중',
             subWidget: HistorySubTextWidget(
               text: setWeight(),
-              color: buttonBackgroundColor,
+              color: themeColor,
             ),
             suffixWidget: HistoryEditButtonWidget(
               id: 'weight',
@@ -51,7 +51,7 @@ class HistorySegmentedWeightWidget extends StatelessWidget {
             icon: Icons.align_vertical_bottom,
             subWidget: HistorySubTextWidget(
               text: setBodyFat(),
-              color: buttonBackgroundColor,
+              color: themeColor,
             ),
             suffixWidget: HistoryEditButtonWidget(
               id: 'bodyFat',

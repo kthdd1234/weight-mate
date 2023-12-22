@@ -31,8 +31,7 @@ class PlanItemWidget extends StatelessWidget {
       onTap: () => onTap(id),
       child: ContentsBox(
         width: width,
-        backgroundColor:
-            isEnabled ? buttonBackgroundColor : typeBackgroundColor,
+        backgroundColor: isEnabled ? themeColor : typeBackgroundColor,
         contentsWidget: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

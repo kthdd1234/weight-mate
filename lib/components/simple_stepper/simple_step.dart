@@ -22,7 +22,7 @@ class SimpleStep extends StatelessWidget {
     ];
     return Icon(
       icons[index],
-      color: buttonBackgroundColor,
+      color: themeColor,
     );
   }
 }

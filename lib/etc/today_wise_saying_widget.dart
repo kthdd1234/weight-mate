@@ -69,7 +69,7 @@
 //                     child: const Icon(
 //                       Icons.close,
 //                       size: 18,
-//                       color: buttonBackgroundColor,
+//                       color: themeColor,
 //                     ),
 //                   ),
 //                 ),

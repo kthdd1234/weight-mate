@@ -25,7 +25,7 @@ class CircleProgress extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: fontSize,
-              color: buttonBackgroundColor,
+              color: themeColor,
               fontWeight: fontWeight,
             ),
           ),
@@ -49,7 +49,7 @@ class CircleProgress extends StatelessWidget {
               GaugeRange(
                 startValue: 0,
                 endValue: 70,
-                color: buttonBackgroundColor,
+                color: themeColor,
               ),
             ],
             annotations: [

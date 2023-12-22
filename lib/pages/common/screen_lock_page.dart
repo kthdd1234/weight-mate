@@ -88,7 +88,7 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: buttonBackgroundColor,
+          foregroundColor: themeColor,
           elevation: 0.0,
           title: const Text('화면 잠금'),
         ),

@@ -50,7 +50,7 @@ class TodayDietPlanItemWidget extends StatelessWidget {
             isAction
                 ? const Icon(
                     Icons.task_alt_sharp,
-                    color: buttonBackgroundColor,
+                    color: themeColor,
                     size: 20,
                   )
                 : const EmptyArea(),

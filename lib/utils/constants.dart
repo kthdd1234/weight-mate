@@ -25,8 +25,8 @@ const EdgeInsetsGeometry submitButtonBoxPadding =
 // primaryColor
 const primaryColor = Color(0xFF40465E);
 
-/// buttonBackgroundColor
-const buttonBackgroundColor = Color(0xFF404763);
+/// themeColor
+const themeColor = Color(0xFF404763);
 
 /// buttonTextColor
 const buttonTextColor = Color(0xFFFFFFFF);
@@ -156,3 +156,39 @@ const enableBackgroundColor = Color(0xffEDE8FF);
 
 /// appTextColor
 const appTextColor = Color(0xffE0B1F6);
+
+/// tagColors
+final tagColors = {
+  'green': {
+    'bgColor': Colors.green.shade50,
+    'textColor': Colors.green,
+  },
+  'red': {
+    'bgColor': Colors.red.shade50,
+    'textColor': Colors.red,
+  },
+  'blue': {
+    'bgColor': Colors.blue.shade50,
+    'textColor': Colors.blue,
+  },
+  'teal': {
+    'bgColor': Colors.teal.shade100,
+    'textColor': Colors.teal,
+  },
+  'lightBlue': {
+    'bgColor': Colors.lightBlue.shade100,
+    'textColor': Colors.lightBlue,
+  },
+  'brown': {
+    'bgColor': Colors.brown.shade100,
+    'textColor': Colors.brown,
+  },
+  'orange': {
+    'bgColor': Colors.orange.shade100,
+    'textColor': Colors.orange,
+  },
+  'purple': {
+    'bgColor': Colors.purple.shade100,
+    'textColor': themeColor,
+  }
+};
