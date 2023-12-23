@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 
 class DotContainer extends StatelessWidget {
   DotContainer({
@@ -30,8 +31,11 @@ class DotContainer extends StatelessWidget {
           radius: Radius.circular(radius),
           child: SizedBox(
             height: height,
-            child: Center(
-              child: Text(text, style: const TextStyle(color: Colors.grey)),
+            child: CommonText(
+              text: text,
+              color: Colors.grey,
+              size: 13,
+              isCenter: true,
             ),
           ),
         ),

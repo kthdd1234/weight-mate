@@ -147,6 +147,7 @@ flutter:
     - assets/svgs/loudly-crying-face.svg
     - assets/svgs/smiling-face-with-halo.svg
     - assets/svgs/winking-face-with-tongue.svg
+    - assets/svgs/worried-face.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

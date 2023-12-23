@@ -7,9 +7,9 @@ class RecordTodo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<TodoItem> todoData = [
-      TodoItem(color: 'teal', text: '식단', icon: Icons.local_dining),
-      TodoItem(color: 'lightBlue', text: '운동', icon: Icons.fitness_center),
-      TodoItem(color: 'brown', text: '생활', icon: Icons.self_improvement),
+      TodoItem(color: 'teal', title: '식단', icon: Icons.local_dining),
+      TodoItem(color: 'lightBlue', title: '운동', icon: Icons.fitness_center),
+      TodoItem(color: 'brown', title: '생활', icon: Icons.self_improvement),
     ];
 
     return Column(
@@ -17,7 +17,7 @@ class RecordTodo extends StatelessWidget {
           .map(
             (item) => TodoContainer(
               color: item.color,
-              text: item.text,
+              title: item.title,
               icon: item.icon,
             ),
           )
@@ -27,7 +27,7 @@ class RecordTodo extends StatelessWidget {
 }
 
 class TodoItem {
-  TodoItem({required this.color, required this.text, required this.icon});
-  String color, text;
+  TodoItem({required this.color, required this.title, required this.icon});
+  String color, title;
   IconData icon;
 }

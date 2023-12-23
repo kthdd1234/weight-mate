@@ -1,44 +1,46 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dot_container.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class SvgClass {
-  SvgClass({required this.id, required this.name});
-  String id, name;
+  SvgClass({required this.emotion, required this.name});
+  String emotion, name;
 }
 
 List<SvgClass> svgData = [
-  SvgClass(id: 'slightly-smiling-face', name: '흐뭇'),
-  SvgClass(id: 'grinning-face-with-smiling-eyes', name: '기쁨'),
-  SvgClass(id: 'grinning-squinting-face', name: '짜릿'),
-  SvgClass(id: 'kissing-face', name: '신남'),
-  SvgClass(id: 'neutral-face', name: '보통'),
-  SvgClass(id: 'amazed-face', name: '놀람'),
-  SvgClass(id: 'anxious-face', name: '서운'),
-  SvgClass(id: 'crying-face', name: '슬픔'),
-  SvgClass(id: 'determined-face', name: '다짐'),
-  SvgClass(id: 'disappointed-face', name: '실망'),
-  SvgClass(id: 'dizzy-face', name: '피곤'),
-  SvgClass(id: 'grinning-face-with-sweat', name: '다행'),
-  SvgClass(id: 'expressionless-face', name: '고요'),
-  SvgClass(id: 'face-blowing-a-kiss', name: '사랑'),
-  SvgClass(id: 'sneezing-face', name: '아픔'),
-  SvgClass(id: 'worried-face', name: '걱정'),
-  SvgClass(id: 'winking-face-with-tongue', name: '장난'),
-  SvgClass(id: 'face-with-steam-from-nose', name: '화남'),
-  SvgClass(id: 'loudly-crying-face', name: '감동'),
-  SvgClass(id: 'smiling-face-with-halo', name: '해탈'),
+  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
+  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
+  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
+  SvgClass(emotion: 'kissing-face', name: '신남'),
+  SvgClass(emotion: 'neutral-face', name: '보통'),
+  SvgClass(emotion: 'amazed-face', name: '놀람'),
+  SvgClass(emotion: 'anxious-face', name: '서운'),
+  SvgClass(emotion: 'crying-face', name: '슬픔'),
+  SvgClass(emotion: 'determined-face', name: '다짐'),
+  SvgClass(emotion: 'disappointed-face', name: '실망'),
+  SvgClass(emotion: 'dizzy-face', name: '피곤'),
+  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
+  SvgClass(emotion: 'expressionless-face', name: '고요'),
+  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
+  SvgClass(emotion: 'sneezing-face', name: '아픔'),
+  SvgClass(emotion: 'worried-face', name: '걱정'),
+  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
+  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
+  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
+  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
 ];
 
 class RecordProfile extends StatefulWidget {
@@ -51,16 +53,31 @@ class RecordProfile extends StatefulWidget {
 class _RecordProfileState extends State<RecordProfile> {
   @override
   Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.read<ImportDateTimeProvider>().getImportDateTime();
     DateTime now = DateTime.now();
-    RecordBox? recordInfo =
-        recordRepository.recordBox.get(getDateTimeToInt(now));
+    int recordKey = getDateTimeToInt(now);
+    RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
 
-    onTap(String id) {
-      // todo
+    onTap(String emotion) {
+      if (recordInfo == null) {
+        recordRepository.updateRecord(
+          key: recordKey,
+          record: RecordBox(
+            createDateTime: importDateTime,
+            emotion: emotion,
+          ),
+        );
+      } else {
+        recordInfo.emotion = emotion;
+      }
+
+      recordInfo?.save();
+      closeDialog(context);
     }
 
-    onTapEmptyEmotion() {
+    onTapEmotion() {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -78,77 +95,61 @@ class _RecordProfileState extends State<RecordProfile> {
                 ),
                 itemBuilder: (context, index) {
                   SvgClass data = svgData[index];
+                  String svgPath = 'assets/svgs/${data.emotion}.svg';
 
                   return InkWell(
-                    onTap: () => onTap(data.id),
-                    child: Column(
+                    onTap: () => onTap(data.emotion),
+                    child: Stack(
                       children: [
-                        Stack(
+                        Column(
                           children: [
-                            CircleAvatar(
-                              radius: 25,
-                              backgroundColor: emotion == data.id
-                                  ? Colors.purple.shade100
-                                  : Colors.transparent,
-                              child: Center(
-                                child: SvgPicture.asset(
-                                  'assets/svgs/${data.id}.svg',
-                                  height: 40,
+                            SvgPicture.asset(svgPath, height: 40),
+                            SpaceHeight(height: tinySpace),
+                            CommonText(
+                              text: data.name,
+                              size: 12,
+                              isCenter: true,
+                            ),
+                          ],
+                        ),
+                        data.emotion == emotion
+                            ? Positioned(
+                                right: 7,
+                                child: Icon(
+                                  Icons.check_circle,
+                                  color: Colors.purple.shade200,
+                                  size: 18,
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SpaceHeight(height: tinySpace),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            emotion == data.id
-                                ? Column(
-                                    children: [
-                                      const Icon(
-                                        Icons.check,
-                                        size: 12,
-                                        color: themeColor,
-                                      ),
-                                      SpaceWidth(width: 3),
-                                    ],
-                                  )
-                                : const EmptyArea(),
-                            Text(
-                              data.name,
-                              style: const TextStyle(
-                                color: themeColor,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                              )
+                            : const EmptyArea(),
                       ],
                     ),
                   );
                 },
               ),
             ),
-            submitText: '확인',
           );
         },
       );
     }
 
-    onTapEmptyWeight() {
+    onTapWeight() {
       //
     }
 
-    Widget wSvg = SvgPicture.asset('assets/svgs/amazed-face.svg', height: 70);
+    onTapFilter() {
+      //
+    }
+
+    Widget wSvg = SvgPicture.asset('assets/svgs/$emotion.svg', height: 70);
     Widget wEmotion = emotion != null
-        ? wSvg
+        ? InkWell(onTap: onTapEmotion, child: wSvg)
         : DotContainer(
             height: 100,
             text: '감정',
             borderType: BorderType.Circle,
             radius: 100,
-            onTap: onTapEmptyEmotion,
+            onTap: onTapEmotion,
           );
 
     return Column(
@@ -162,13 +163,18 @@ class _RecordProfileState extends State<RecordProfile> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    '21일 목요일 (오늘)',
-                    style: TextStyle(
-                      color: themeColor,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CommonText(text: '21일 목요일 (오늘)', size: 15, isBold: true),
+                      CommonText(
+                        text: '필터',
+                        size: 13,
+                        leftIcon: Icons.filter_alt_outlined,
+                        color: Colors.grey,
+                        onTap: onTapFilter,
+                      ),
+                    ],
                   ),
                   SpaceHeight(height: smallSpace),
                   Row(
@@ -178,7 +184,7 @@ class _RecordProfileState extends State<RecordProfile> {
                         text: '체중(kg)',
                         borderType: BorderType.RRect,
                         radius: 10,
-                        onTap: onTapEmptyWeight,
+                        onTap: onTapWeight,
                       ),
                     ],
                   ),

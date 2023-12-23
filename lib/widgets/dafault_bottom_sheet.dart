@@ -15,7 +15,7 @@ class DefaultBottomSheet extends StatelessWidget {
     required this.title,
     required this.height,
     required this.contents,
-    required this.submitText,
+    this.submitText,
     this.onSubmit,
     this.isEnabled,
     this.titleLeftWidget,
@@ -24,7 +24,7 @@ class DefaultBottomSheet extends StatelessWidget {
   String title;
   double height;
   Widget contents;
-  String submitText;
+  String? submitText;
   bool? isEnabled;
   Function()? onSubmit;
   Widget? titleLeftWidget;
@@ -68,7 +68,7 @@ class DefaultBottomSheet extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
                     width: MediaQuery.of(context).size.width,
-                    text: submitText,
+                    text: submitText ?? '',
                     onPressed: onSubmit!,
                     isEnabled: isEnabled!,
                   )

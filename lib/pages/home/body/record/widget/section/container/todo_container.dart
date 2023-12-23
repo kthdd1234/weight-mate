@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -7,11 +8,11 @@ class TodoContainer extends StatelessWidget {
   TodoContainer({
     super.key,
     required this.color,
-    required this.text,
+    required this.title,
     required this.icon,
   });
 
-  String color, text;
+  String color, title;
   IconData icon;
 
   @override
@@ -24,20 +25,7 @@ class TodoContainer extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Icon(icon, size: 16),
-                SpaceWidth(width: tinySpace),
-                Text(
-                  text,
-                  style: const TextStyle(
-                    color: themeColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-              ],
-            ),
+            CommonText(text: title, size: 15, leftIcon: icon, isBold: true),
             const Icon(Icons.add_circle, color: themeColor),
           ],
         ),
@@ -56,49 +44,21 @@ class TodoContainer extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '🍎사과 1개, 🍠 고구마 반쪽',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                        decoration: TextDecoration.lineThrough,
-                        decorationThickness: 2,
-                        decorationColor: Colors.grey,
-                      ),
-                    ),
+                    CommonText(text: '🍎 테스트', size: 15, color: Colors.grey),
                     SpaceHeight(height: 3),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.notifications_active,
-                          size: 13,
-                          color: themeColor,
-                        ),
-                        SpaceWidth(width: tinySpace),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            '오전 08:30',
-                            style: TextStyle(color: themeColor, fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    )
+                    CommonText(
+                      text: '오전 08:30',
+                      size: 12,
+                      leftIcon: Icons.notifications_active,
+                    ),
                   ],
                 ),
               ),
-              Expanded(
+              const Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Icon(Icons.more_horiz, color: Colors.grey),
-                    // SpaceHeight(height: 3),
-                    // Text(
-                    //   '오전 08:30',
-                    //   style: TextStyle(color: mainColor, fontSize: 12),
-                    // ),
-                  ],
+                  children: [Icon(Icons.more_horiz, color: Colors.grey)],
                 ),
               ),
             ],
@@ -109,3 +69,9 @@ class TodoContainer extends StatelessWidget {
     );
   }
 }
+
+        // SpaceHeight(height: 3),
+                    // Text(
+                    //   '오전 08:30',
+                    //   style: TextStyle(color: mainColor, fontSize: 12),
+                    // ),
