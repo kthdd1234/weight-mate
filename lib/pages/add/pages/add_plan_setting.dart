@@ -122,6 +122,7 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
           isAlarm: userInfoState.isAlarm,
           alarmTime: userInfoState.isAlarm ? userInfoState.alarmTime : null,
           alarmId: userInfoState.isAlarm ? newUserAlarmtUid : null,
+          filterList: initFilterList,
         ),
       );
 

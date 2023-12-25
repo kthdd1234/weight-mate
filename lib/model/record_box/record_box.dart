@@ -5,17 +5,18 @@ part 'record_box.g.dart';
 
 @HiveType(typeId: 2)
 class RecordBox extends HiveObject {
-  RecordBox(
-      {required this.createDateTime,
-      this.weightDateTime,
-      this.actionDateTime,
-      this.diaryDateTime,
-      this.weight,
-      this.actions,
-      this.leftFile,
-      this.rightFile,
-      this.whiteText,
-      this.emotion});
+  RecordBox({
+    required this.createDateTime,
+    this.weightDateTime,
+    this.actionDateTime,
+    this.diaryDateTime,
+    this.weight,
+    this.actions,
+    this.leftFile,
+    this.rightFile,
+    this.whiteText,
+    this.emotion,
+  });
 
   @HiveField(0)
   DateTime createDateTime;

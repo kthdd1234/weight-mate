@@ -64,7 +64,6 @@ class TodoContainer extends StatelessWidget {
             ],
           ),
         ),
-        SpaceHeight(height: smallSpace)
       ],
     );
   }

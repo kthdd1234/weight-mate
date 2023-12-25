@@ -87,7 +87,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     UserBox? userProfile = userBox.get('userProfile');
-    PlanInfoClass planInfo = context.watch<DietInfoProvider>().getPlanInfo();
     String initialRoute = userProfile?.userId == null
         ? '/splash-screen'
         : userProfile?.screenLockPasswords == null

@@ -6,15 +6,15 @@ import 'package:hive/hive.dart';
 
 class UserRepository {
   Box<UserBox>? _userBox;
-  String userProfile = 'userProfile';
+  String userKey = 'userProfile';
 
   Box<UserBox> get userBox {
     _userBox ??= Hive.box<UserBox>(MateHiveBox.userBox);
     return _userBox!;
   }
 
-  UserBox get profile {
-    return userBox.get(userProfile)!;
+  UserBox get user {
+    return userBox.get(userKey)!;
   }
 
   void addUser(UserBox user) async {
@@ -32,9 +32,9 @@ class UserRepository {
   }
 
   void updateUser(UserBox user) async {
-    await userBox.put(userProfile, user);
+    await userBox.put(userKey, user);
 
-    log('[updateUser] update (key:$userProfile) $user');
+    log('[updateUser] update (key:$userKey) $user');
     log('result ${userBox.values.toList()}');
   }
 }

@@ -64,3 +64,5 @@ enum jumpDayTypeEnum { none, subtract, add }
 enum ActionSortEnum { none, recent, past }
 
 enum PlanPriorityEnum { none, high, medium, low }
+
+enum FILITER { weight, emotion, picture, diet, exercise, lifeStyle, diary }

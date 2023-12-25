@@ -1,24 +1,29 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dot_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
-class SvgClass {
-  SvgClass({required this.emotion, required this.name});
-  String emotion, name;
-}
 
 List<SvgClass> svgData = [
   SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
@@ -51,6 +56,8 @@ class RecordProfile extends StatefulWidget {
 }
 
 class _RecordProfileState extends State<RecordProfile> {
+  bool isEditWeight = false;
+
   @override
   Widget build(BuildContext context) {
     DateTime importDateTime =
@@ -59,6 +66,7 @@ class _RecordProfileState extends State<RecordProfile> {
     int recordKey = getDateTimeToInt(now);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
+    UserBox user = userRepository.user;
 
     onTap(String emotion) {
       if (recordInfo == null) {
@@ -96,32 +104,22 @@ class _RecordProfileState extends State<RecordProfile> {
                 itemBuilder: (context, index) {
                   SvgClass data = svgData[index];
                   String svgPath = 'assets/svgs/${data.emotion}.svg';
+                  Widget wCheckIcon = data.emotion == emotion
+                      ? Icon(
+                          Icons.check_circle,
+                          color: Colors.purple.shade200,
+                          size: 18,
+                        )
+                      : const EmptyArea();
 
                   return InkWell(
                     onTap: () => onTap(data.emotion),
-                    child: Stack(
+                    child: Column(
                       children: [
-                        Column(
-                          children: [
-                            SvgPicture.asset(svgPath, height: 40),
-                            SpaceHeight(height: tinySpace),
-                            CommonText(
-                              text: data.name,
-                              size: 12,
-                              isCenter: true,
-                            ),
-                          ],
-                        ),
-                        data.emotion == emotion
-                            ? Positioned(
-                                right: 7,
-                                child: Icon(
-                                  Icons.check_circle,
-                                  color: Colors.purple.shade200,
-                                  size: 18,
-                                ),
-                              )
-                            : const EmptyArea(),
+                        SvgPicture.asset(svgPath, height: 40),
+                        SpaceHeight(height: tinySpace),
+                        CommonText(text: data.name, size: 12, isCenter: true),
+                        wCheckIcon,
                       ],
                     ),
                   );
@@ -133,73 +131,195 @@ class _RecordProfileState extends State<RecordProfile> {
       );
     }
 
-    onTapWeight() {
+    onCompletedWeight() {
       //
+    }
+
+    onTapWeight() {
+      setState(() => isEditWeight = true);
+
+      showModalBottomSheet(
+        barrierColor: Colors.transparent,
+        context: context,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: AppFramework(
+              widget: Padding(
+                padding: EdgeInsets.all(regularSapce),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [],
+                ),
+              ),
+            ),
+          );
+        },
+      );
     }
 
     onTapFilter() {
-      //
+      showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: ((context, setState) {
+              onTapCheckBox({required dynamic id, required bool newValue}) {
+                bool isNotWeight = filterClassList.first.id != id;
+                bool isFilterList = user.filterList != null;
+
+                if (isNotWeight && isFilterList) {
+                  newValue
+                      ? user.filterList!.add(id)
+                      : user.filterList!.remove(id);
+                  user.save();
+
+                  setState(() {});
+                }
+              }
+
+              onCheckBox(String filterId) {
+                List<String>? filterList = user.filterList;
+                bool isWeight = filterClassList.first.id == filterId;
+
+                if (isWeight) {
+                  return true;
+                }
+
+                return filterList != null
+                    ? filterList.contains(filterId)
+                    : false;
+              }
+
+              List<Widget> children = filterClassList
+                  .map((data) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              CommonCheckBox(
+                                id: data.id,
+                                isCheck: onCheckBox(data.id),
+                                checkColor: themeColor,
+                                onTap: onTapCheckBox,
+                              ),
+                              CommonText(text: data.name, size: 14),
+                              SpaceWidth(width: 3),
+                              filterClassList.first.id == data.id
+                                  ? CommonText(
+                                      text: '(필수)',
+                                      size: 10,
+                                      color: Colors.red,
+                                    )
+                                  : const EmptyArea()
+                            ],
+                          ),
+                          SpaceHeight(
+                            height: filterClassList.last.id == data.id
+                                ? 0.0
+                                : smallSpace,
+                          ),
+                        ],
+                      ))
+                  .toList();
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AlertDialog(
+                    backgroundColor: dialogBackgroundColor,
+                    shape: containerBorderRadious,
+                    title: AlertDialogTitleWidget(
+                      text: '항목 필터',
+                      onTap: () => closeDialog(context),
+                    ),
+                    content: ContentsBox(
+                      contentsWidget: Column(children: children),
+                    ),
+                  ),
+                ],
+              );
+            }),
+          );
+        },
+      );
     }
 
     Widget wSvg = SvgPicture.asset('assets/svgs/$emotion.svg', height: 70);
-    Widget wEmotion = emotion != null
-        ? InkWell(onTap: onTapEmotion, child: wSvg)
-        : DotContainer(
-            height: 100,
-            text: '감정',
-            borderType: BorderType.Circle,
-            radius: 100,
-            onTap: onTapEmotion,
-          );
+    bool isEmotion = user.filterList!.contains(FILITER.emotion.toString());
+    Widget wEmotion = isEmotion
+        ? emotion != null
+            ? InkWell(onTap: onTapEmotion, child: wSvg)
+            : DotContainer(
+                height: 100,
+                text: '감정',
+                borderType: BorderType.Circle,
+                radius: 100,
+                onTap: onTapEmotion,
+              )
+        : const EmptyArea();
 
-    return Column(
+    return Row(
       children: [
-        Row(
-          children: [
-            wEmotion,
-            SpaceWidth(width: smallSpace + tinySpace),
-            Expanded(
-              flex: 4,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CommonText(text: '21일 목요일 (오늘)', size: 15, isBold: true),
-                      CommonText(
-                        text: '필터',
-                        size: 13,
-                        leftIcon: Icons.filter_alt_outlined,
-                        color: Colors.grey,
-                        onTap: onTapFilter,
-                      ),
-                    ],
-                  ),
-                  SpaceHeight(height: smallSpace),
-                  Row(
-                    children: [
-                      DotContainer(
-                        height: 40,
-                        text: '체중(kg)',
-                        borderType: BorderType.RRect,
-                        radius: 10,
-                        onTap: onTapWeight,
-                      ),
-                    ],
-                  ),
-                  // TextInput(
-                  //   suffixText: 'kg',
-                  //   hintText: '체중을 입력해주세요.',
-                  //   onChanged: (String newValue) {},
-                  //   errorText: null,
-                  // )
-                ],
-              ),
+        wEmotion,
+        SpaceWidth(width: isEmotion ? smallSpace + tinySpace : 0),
+        Expanded(
+          flex: 4,
+          child: Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CommonText(text: '21일 목요일 (오늘)', size: 15, isBold: true),
+                    CommonText(
+                      text: '필터',
+                      size: 13,
+                      leftIcon: Icons.filter_alt_outlined,
+                      color: Colors.grey,
+                      onTap: onTapFilter,
+                    ),
+                  ],
+                ),
+                SpaceHeight(height: smallSpace),
+                Row(
+                  children: [
+                    isEditWeight
+                        ? Expanded(
+                            child: TextInput(
+                              autofocus: true,
+                              isMediumSize: true,
+                              inputHeight: largeSpace,
+                              inputBorderType: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                borderSide:
+                                    BorderSide(color: themeColor, width: 2),
+                              ),
+                              suffixText: 'kg',
+                              hintText: '',
+                              onChanged: (String newValue) {},
+                              errorText: null,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: smallSpace,
+                              ),
+                            ),
+                          )
+                        : DotContainer(
+                            height: largeSpace,
+                            text: '체중(kg)',
+                            borderType: BorderType.RRect,
+                            radius: 10,
+                            onTap: onTapWeight,
+                          ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-        SizedBox(height: smallSpace)
       ],
     );
   }

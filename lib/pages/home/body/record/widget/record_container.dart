@@ -25,10 +25,8 @@ class _RecordContainerState extends State<RecordContainer> {
       children: [
         RecordProfile(),
         RecordPicture(),
-        SpaceHeight(height: regularSapce),
         RecordTodo(),
         RecordDiary(),
-        SpaceHeight(height: regularSapce),
       ],
     );
   }

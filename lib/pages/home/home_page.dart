@@ -43,7 +43,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
+    /** */
+    List<String>? filterList = userRepository.user.filterList;
+
+    if (filterList == null) {
+      userRepository.user.filterList = initFilterList;
+      userRepository.user.save();
+    }
+
+    /** */
     onNotifications.stream.listen(
       (String? payload) => WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) {
@@ -53,8 +63,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         },
       ),
     );
-    WidgetsBinding.instance.addObserver(this);
 
+    /** */
     requestInAppReview() async {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
@@ -80,7 +90,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     setState(() {});
 
-    UserBox userProfile = userRepository.profile;
     RecordBox? recordInfo =
         recordRepository.recordBox.get(getDateTimeToInt(DateTime.now()));
     bool isShowScreen = [
@@ -95,7 +104,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       }
     } else if (state == AppLifecycleState.resumed) {
       if (isActiveCamera == false) {
-        if (userProfile.screenLockPasswords != null) {
+        if (userRepository.user.screenLockPasswords != null) {
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => const EnterScreenLockPage(),

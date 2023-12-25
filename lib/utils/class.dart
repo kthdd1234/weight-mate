@@ -294,8 +294,12 @@ class PlanPriorityClass {
   Color bgColor, textColor;
 }
 
-  // 'id': PlanPriorityEnum.medium,
-  //   'name': '중간',
-  //   'desc': 'Medium',
-  //   'icon': Icons.looks_two_outlined,
-  //   'order': 2,
+class SvgClass {
+  SvgClass({required this.emotion, required this.name});
+  String emotion, name;
+}
+
+class FilterClass {
+  FilterClass({required this.id, required this.name});
+  String id, name;
+}
