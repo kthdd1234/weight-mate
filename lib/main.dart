@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.d
 import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/record_profile.dart';
 import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/pages/splash/page.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
@@ -60,6 +61,9 @@ void main() async {
         ),
         ChangeNotifierProvider<BottomNavigationProvider>(
           create: (_) => BottomNavigationProvider(),
+        ),
+        ChangeNotifierProvider<EnabledProvider>(
+          create: (_) => EnabledProvider(),
         ),
       ],
       child: const MyApp(),

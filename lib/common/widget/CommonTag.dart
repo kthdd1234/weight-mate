@@ -24,12 +24,12 @@ class CommonTag extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Icons.add_circle_outline_rounded,
-            size: 16,
-            color: tagColor['textColor'],
-          ),
-          SpaceWidth(width: tinySpace),
+          // Icon(
+          //   Icons.add_circle_outline_rounded,
+          //   size: 16,
+          //   color: tagColor['textColor'],
+          // ),
+          // SpaceWidth(width: tinySpace),
           Text(
             text,
             style: TextStyle(

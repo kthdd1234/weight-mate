@@ -74,6 +74,9 @@ const tallErrMsg = '120 ~ 220 입력해주세요.';
 /// weightErrMsg
 const weightErrMsg = '20 ~ 200 입력해주세요.';
 
+/// weightErrMsg2
+const weightErrMsg2 = '20 ~ 200 사이의 값을 입력해주세요.';
+
 /// tallHintText
 const tallHintText = '키를 입력해주세요.';
 
@@ -192,6 +195,10 @@ final tagColors = {
   'purple': {
     'bgColor': Colors.purple.shade100,
     'textColor': themeColor,
+  },
+  'indigo': {
+    'bgColor': Colors.indigo.shade50,
+    'textColor': Colors.indigo,
   }
 };
 

@@ -49,6 +49,14 @@ class _TextInputState extends State<TextInput> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
+    // onTapOutside(PointerDownEvent event) {
+    //   // FocusScope.of(context).unfocus();
+
+    //   if (widget.onCancel != null) {
+    //     widget.onCancel!();
+    //   }
+    // }
+
     return SizedBox(
       height: widget.inputHeight,
       child: TextFormField(
@@ -73,7 +81,6 @@ class _TextInputState extends State<TextInput> {
           contentPadding: widget.contentPadding ?? inputContentPadding,
         ),
         onChanged: widget.onChanged,
-        onTapOutside: ((event) => FocusScope.of(context).unfocus()),
       ),
     );
   }
