@@ -231,7 +231,7 @@ class _RecordProfileState extends State<RecordProfile> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return WidgetAboveKeyboard(
+          return WeightAboveKeyboard(
             onCompleted: onCompleted,
             onCancel: onInit,
           );
@@ -283,7 +283,8 @@ class _RecordProfileState extends State<RecordProfile> {
                                 checkColor: themeColor,
                                 onTap: onTapCheckBox,
                               ),
-                              CommonText(text: data.name, size: 14),
+                              CommonText(
+                                  text: data.name, size: 14, isNotTop: true),
                               SpaceWidth(width: 3),
                               filterClassList.first.id == data.id
                                   ? CommonText(
@@ -364,7 +365,7 @@ class _RecordProfileState extends State<RecordProfile> {
     Widget wEmotion = isEmotion
         ? emotion != null
             ? InkWell(onTap: onTapEmotion, child: wSvg)
-            : DotContainer(
+            : DashContainer(
                 height: 75,
                 text: '감정',
                 borderType: BorderType.Circle,
@@ -438,7 +439,7 @@ class _RecordProfileState extends State<RecordProfile> {
                                   ],
                                 ),
                               )
-                            : DotContainer(
+                            : DashContainer(
                                 height: largeSpace,
                                 text: '체중(kg)',
                                 borderType: BorderType.RRect,
@@ -456,8 +457,8 @@ class _RecordProfileState extends State<RecordProfile> {
   }
 }
 
-class WidgetAboveKeyboard extends StatelessWidget {
-  WidgetAboveKeyboard({
+class WeightAboveKeyboard extends StatelessWidget {
+  WeightAboveKeyboard({
     super.key,
     required this.onCompleted,
     required this.onCancel,

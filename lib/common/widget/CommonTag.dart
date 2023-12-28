@@ -21,24 +21,13 @@ class CommonTag extends StatelessWidget {
         borderRadius: BorderRadius.circular(5),
       ),
       padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Icon(
-          //   Icons.add_circle_outline_rounded,
-          //   size: 16,
-          //   color: tagColor['textColor'],
-          // ),
-          // SpaceWidth(width: tinySpace),
-          Text(
-            text,
-            style: TextStyle(
-              color: tagColor['textColor'],
-              fontSize: 13,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+      child: Text(
+        text,
+        style: TextStyle(
+          color: tagColor['textColor'],
+          fontSize: 10.5,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

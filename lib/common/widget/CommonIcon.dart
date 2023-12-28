@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class CommonIcon extends StatelessWidget {
   CommonIcon({
@@ -16,6 +17,8 @@ class CommonIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(onTap: onTap, child: Icon(icon, size: size, color: color));
+    return InkWell(
+        onTap: onTap,
+        child: Icon(icon, size: size, color: color ?? themeColor));
   }
 }

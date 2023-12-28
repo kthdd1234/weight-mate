@@ -9,20 +9,23 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 
 List<TodoItem> todoData = [
   TodoItem(
-      id: FILITER.diet.toString(),
-      color: 'teal',
-      title: '식단',
-      icon: Icons.local_dining),
+    id: FILITER.diet.toString(),
+    color: 'teal',
+    title: '식단',
+    icon: Icons.local_dining,
+  ),
   TodoItem(
-      id: FILITER.exercise.toString(),
-      color: 'lightBlue',
-      title: '운동',
-      icon: Icons.fitness_center),
+    id: FILITER.exercise.toString(),
+    color: 'lightBlue',
+    title: '운동',
+    icon: Icons.fitness_center,
+  ),
   TodoItem(
-      id: FILITER.lifeStyle.toString(),
-      color: 'brown',
-      title: '생활',
-      icon: Icons.self_improvement),
+    id: FILITER.lifeStyle.toString(),
+    color: 'brown',
+    title: '생활',
+    icon: Icons.self_improvement,
+  ),
 ];
 
 class RecordTodo extends StatelessWidget {
@@ -45,6 +48,7 @@ class RecordTodo extends StatelessWidget {
                   children: [
                     SpaceHeight(height: tinySpace),
                     TodoContainer(
+                      containerId: item.id,
                       color: item.color,
                       title: item.title,
                       icon: item.icon,

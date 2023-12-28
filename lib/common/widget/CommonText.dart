@@ -14,6 +14,7 @@ class CommonText extends StatelessWidget {
       this.color,
       this.isLineThrough,
       this.isCenter,
+      this.isNotTop,
       this.onTap});
 
   String text;
@@ -23,6 +24,7 @@ class CommonText extends StatelessWidget {
   IconData? leftIcon, rightIcon;
   Color? color;
   bool? isLineThrough;
+  bool? isNotTop;
   Function()? onTap;
 
   @override
@@ -40,16 +42,19 @@ class CommonText extends StatelessWidget {
                   SpaceWidth(width: 3)
                 ])
               : const EmptyArea(),
-          Text(
-            text,
-            style: TextStyle(
-              color: color ?? themeColor,
-              fontSize: size,
-              fontWeight: isBold == true ? FontWeight.bold : null,
-              decoration:
-                  isLineThrough == true ? TextDecoration.lineThrough : null,
-              decorationThickness: 2,
-              decorationColor: Colors.grey,
+          Padding(
+            padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: color ?? themeColor,
+                fontSize: size,
+                fontWeight: isBold == true ? FontWeight.bold : null,
+                decoration:
+                    isLineThrough == true ? TextDecoration.lineThrough : null,
+                decorationThickness: 2,
+                decorationColor: Colors.grey,
+              ),
             ),
           ),
           rightIcon != null

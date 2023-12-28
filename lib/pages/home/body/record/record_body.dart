@@ -7,20 +7,10 @@ import 'package:flutter_app_weight_management/pages/home/body/record/widget/reco
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
-class RecordBody extends StatefulWidget {
+class RecordBody extends StatelessWidget {
   RecordBody({super.key, required this.setActiveCamera});
 
   Function(bool isActive) setActiveCamera;
-
-  @override
-  State<RecordBody> createState() => _RecordBodyState();
-}
-
-class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +26,10 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
         builder: (context, values, child) {
           return Column(
             children: [
-              RecordContainer(recordType: eRecordContainer.edit),
+              RecordContainer(
+                recordType: eRecordContainer.edit,
+                setActiveCamera: setActiveCamera,
+              ),
             ],
           );
         },
@@ -44,6 +37,7 @@ class _RecordBodyState extends State<RecordBody> with WidgetsBindingObserver {
     );
   }
 }
+
 // BannerWidget(),
 // SpaceHeight(height: largeSpace),
 // TodayWeightWidget(

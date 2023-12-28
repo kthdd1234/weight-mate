@@ -1,59 +1,300 @@
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
+import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/components/image/default_image.dart';
+import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dot_container.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class RecordPicture extends StatelessWidget {
-  const RecordPicture({super.key});
+  RecordPicture({
+    super.key,
+    required this.setActiveCamera,
+    required this.importDateTime,
+  });
+
+  DateTime importDateTime;
+  Function(bool isActive) setActiveCamera;
 
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
+    int recordKey = getDateTimeToInt(importDateTime);
+    RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
+    Uint8List? leftFile = recordInfo?.leftFile;
+    Uint8List? rightFile = recordInfo?.rightFile;
+    Map<String, Uint8List?> fileInfo = {'left': leftFile, 'right': rightFile};
 
-    onTapLeft() {
-      //
+    convertUnit8List(XFile? xFile) async {
+      return await File(xFile!.path).readAsBytes();
     }
 
-    onTapRight() {
-      //
+    onNavigatorImageCollectionsPage() async {
+      closeDialog(context);
+      Navigator.pushNamed(context, '/image-collections-page');
     }
 
-    bool isContainPicture = user.filterList!.contains(
-      FILITER.picture.toString(),
-    );
+    onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
+      closeDialog(context);
+
+      Navigator.push(
+        context,
+        FadePageRoute(
+          page: ImagePullSizePage(
+            binaryData: binaryData,
+          ),
+        ),
+      );
+    }
+
+    setImagePicker({
+      required ImageSource source,
+      required String pos,
+    }) async {
+      XFile? xFileData;
+      setActiveCamera(true);
+
+      await ImagePicker().pickImage(source: source).then(
+        (xFile) async {
+          if (xFile == null) return;
+
+          xFileData = xFile;
+        },
+      ).catchError(
+        (error) {
+          print('error 확인 ==>> $error');
+
+          showSnackBar(
+            context: context,
+            text: '${ImageSource.camera == source ? '카메라' : '사진'} 접근 권한이 없습니다.',
+            buttonName: '설정으로 이동',
+            onPressed: openAppSettings,
+          );
+        },
+      );
+
+      return xFileData;
+    }
+
+    showDialogPopup({required String title, required Uint8List binaryData}) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return NativeAdDialog(
+            title: title,
+            leftText: '눈바디 확인',
+            rightText: '눈바디 목록',
+            leftIcon: Icons.image_outlined,
+            rightIcon: Icons.apps_rounded,
+            onLeftClick: () =>
+                onNavigatorImagePullSizePage(binaryData: binaryData),
+            onRightClick: onNavigatorImageCollectionsPage,
+          );
+        },
+      );
+    }
+
+    setPickedImage({required String pos, required XFile? xFile}) async {
+      if (xFile == null) return;
+
+      Uint8List pickedImage = await File(xFile.path).readAsBytes();
+      int year = importDateTime.year;
+      int month = importDateTime.month;
+      int day = importDateTime.day;
+      DateTime now = DateTime.now();
+      DateTime diaryDateTime = DateTime(year, month, day, now.hour, now.minute);
+
+      if (recordInfo == null) {
+        recordRepository.recordBox.put(
+          recordKey,
+          RecordBox(
+            createDateTime: importDateTime,
+            diaryDateTime: diaryDateTime,
+            leftFile: pos == 'left' ? pickedImage : null,
+            rightFile: pos == 'right' ? pickedImage : null,
+          ),
+        );
+      } else {
+        recordInfo.diaryDateTime = diaryDateTime;
+        pos == 'left'
+            ? recordInfo.leftFile = pickedImage
+            : recordInfo.rightFile = pickedImage;
+        recordInfo.save();
+      }
+    }
+
+    onShowImagePicker(ImageSource source, String pos) async {
+      closeDialog(context);
+
+      XFile? xFileData = await setImagePicker(source: source, pos: pos);
+
+      if (xFileData != null) {
+        setPickedImage(pos: pos, xFile: xFileData);
+
+        Uint8List unit8List = await convertUnit8List(xFileData);
+        showDialogPopup(title: '사진 기록 완료!', binaryData: unit8List);
+      }
+    }
+
+    onTapPicture(String pos) {
+      bool isFilePath = fileInfo[pos] != null;
+
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) => DefaultBottomSheet(
+          title: '사진 ${isFilePath ? '편집' : '추가'}',
+          height: isFilePath ? 500 : 220,
+          contents: Column(
+            children: [
+              isFilePath
+                  ? Column(
+                      children: [
+                        InkWell(
+                          onTap: () => onNavigatorImagePullSizePage(
+                              binaryData: fileInfo[pos]!),
+                          child:
+                              DefaultImage(data: fileInfo[pos]!, height: 280),
+                        ),
+                        SpaceHeight(height: smallSpace)
+                      ],
+                    )
+                  : const EmptyArea(),
+              Row(
+                children: [
+                  ExpandedButtonVerti(
+                    icon: Icons.add_a_photo,
+                    title: '사진 촬영',
+                    onTap: () => onShowImagePicker(ImageSource.camera, pos),
+                  ),
+                  SpaceWidth(width: tinySpace),
+                  ExpandedButtonVerti(
+                    icon: Icons.collections,
+                    title: '앨범 열기',
+                    onTap: () => onShowImagePicker(ImageSource.gallery, pos),
+                  ),
+                  SpaceWidth(width: tinySpace),
+                  ExpandedButtonVerti(
+                    icon: Icons.apps_rounded,
+                    title: '눈바디 목록',
+                    onTap: onNavigatorImageCollectionsPage,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    onTapRemove(String pos) {
+      pos == 'left'
+          ? recordInfo?.leftFile = null
+          : recordInfo?.rightFile = null;
+
+      recordInfo?.save();
+    }
 
     return Column(
-      children: isContainPicture
+      children: user.filterList!.contains(FILITER.picture.toString())
           ? [
               SpaceHeight(height: smallSpace),
               Row(
                 children: [
-                  DotContainer(
-                    height: 150,
-                    text: '사진1',
-                    borderType: BorderType.RRect,
-                    radius: 10,
-                    onTap: onTapLeft,
-                  ),
+                  leftFile != null
+                      ? Picture(
+                          pos: 'left',
+                          uint8List: leftFile,
+                          onTapPicture: () => onTapPicture('left'),
+                          onTapRemove: () => onTapRemove('left'),
+                        )
+                      : DashContainer(
+                          height: 150,
+                          text: '사진1',
+                          borderType: BorderType.RRect,
+                          radius: 10,
+                          onTap: () => onTapPicture('left'),
+                        ),
                   SpaceWidth(width: smallSpace),
-                  DotContainer(
-                    height: 150,
-                    text: '사진2',
-                    borderType: BorderType.RRect,
-                    radius: 10,
-                    onTap: onTapRight,
-                  ),
+                  rightFile != null
+                      ? Picture(
+                          pos: 'right',
+                          uint8List: rightFile,
+                          onTapPicture: () => onTapPicture('right'),
+                          onTapRemove: () => onTapRemove('right'),
+                        )
+                      : DashContainer(
+                          height: 150,
+                          text: '사진2',
+                          borderType: BorderType.RRect,
+                          radius: 10,
+                          onTap: () => onTapPicture('right'),
+                        ),
                 ],
               ),
               SpaceHeight(height: smallSpace),
             ]
           : [SpaceHeight(height: smallSpace)],
+    );
+  }
+}
+
+class Picture extends StatelessWidget {
+  Picture({
+    super.key,
+    required this.pos,
+    required this.onTapPicture,
+    required this.uint8List,
+    required this.onTapRemove,
+  });
+
+  String pos;
+  Uint8List uint8List;
+  RecordBox? recordInfo;
+  Function() onTapPicture;
+  Function() onTapRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Stack(
+        children: [
+          InkWell(
+            onTap: onTapPicture,
+            child: DefaultImage(data: uint8List, height: 150),
+          ),
+          Positioned(
+            right: 0,
+            child: CircularIcon(
+              padding: 5,
+              icon: Icons.close,
+              iconColor: typeBackgroundColor,
+              adjustSize: 3,
+              size: 20,
+              borderRadius: 5,
+              backgroundColor: themeColor,
+              backgroundColorOpacity: 0.5,
+              onTap: (_) => onTapRemove(),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

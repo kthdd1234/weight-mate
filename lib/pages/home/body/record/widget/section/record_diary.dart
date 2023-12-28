@@ -23,7 +23,7 @@ class RecordDiary extends StatelessWidget {
     return Row(
       children: [
         isContainDiary
-            ? DotContainer(
+            ? DashContainer(
                 height: 40,
                 text: '일기 또는 메모',
                 borderType: BorderType.RRect,

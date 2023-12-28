@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
-class DotContainer extends StatelessWidget {
-  DotContainer({
+class DashContainer extends StatelessWidget {
+  DashContainer({
     super.key,
     required this.height,
     required this.text,

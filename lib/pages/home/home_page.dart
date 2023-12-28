@@ -143,16 +143,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
     ];
 
-    List<Widget> bodyList = [
-      RecordBody(
-        setActiveCamera: (bool newValue) =>
-            setState(() => isActiveCamera = newValue),
-      ),
-      CalendarBody(),
-      const AnalyzeBody(),
-      const MoreSeeBody()
-    ];
-
     BottomNavigationEnum bottomNavitionId =
         context.watch<BottomNavigationProvider>().selectedEnumId;
 
@@ -164,6 +154,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           .read<BottomNavigationProvider>()
           .setBottomNavigation(enumId: indexList[index]);
     }
+
+    setActiveCamera(bool newValue) {
+      setState(() => isActiveCamera = newValue);
+    }
+
+    List<Widget> bodyList = [
+      RecordBody(setActiveCamera: setActiveCamera),
+      CalendarBody(),
+      const AnalyzeBody(),
+      const MoreSeeBody()
+    ];
 
     return isShowMateScreen
         ? AddContainer(
