@@ -4,31 +4,40 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class CommonText extends StatelessWidget {
-  CommonText(
-      {super.key,
-      required this.text,
-      required this.size,
-      this.isBold,
-      this.leftIcon,
-      this.rightIcon,
-      this.color,
-      this.isLineThrough,
-      this.isCenter,
-      this.isNotTop,
-      this.onTap});
+  CommonText({
+    super.key,
+    required this.text,
+    required this.size,
+    this.isBold,
+    this.leftIcon,
+    this.rightIcon,
+    this.color,
+    this.decoration,
+    this.isCenter,
+    this.isNotTop,
+    this.onTap,
+    this.isWidth,
+    this.decoColor,
+  });
 
   String text;
   double size;
   bool? isCenter;
   bool? isBold;
   IconData? leftIcon, rightIcon;
-  Color? color;
-  bool? isLineThrough;
+  Color? color, decoColor;
+  String? decoration;
   bool? isNotTop;
+  bool? isWidth;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
+    TextDecoration? textDecoration = {
+      'lineThrough': TextDecoration.lineThrough,
+      'underLine': TextDecoration.underline
+    }[decoration];
+
     return InkWell(
       onTap: onTap,
       child: Row(
@@ -44,16 +53,20 @@ class CommonText extends StatelessWidget {
               : const EmptyArea(),
           Padding(
             padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
-            child: Text(
-              text,
-              style: TextStyle(
-                color: color ?? themeColor,
-                fontSize: size,
-                fontWeight: isBold == true ? FontWeight.bold : null,
-                decoration:
-                    isLineThrough == true ? TextDecoration.lineThrough : null,
-                decorationThickness: 2,
-                decorationColor: Colors.grey,
+            child: SizedBox(
+              width: isWidth == true
+                  ? MediaQuery.of(context).size.width - 40
+                  : null,
+              child: Text(
+                text,
+                style: TextStyle(
+                  color: color ?? themeColor,
+                  fontSize: size,
+                  fontWeight: isBold == true ? FontWeight.bold : null,
+                  decoration: textDecoration,
+                  decorationThickness: 2,
+                  decorationColor: decoColor ?? themeColor,
+                ),
               ),
             ),
           ),

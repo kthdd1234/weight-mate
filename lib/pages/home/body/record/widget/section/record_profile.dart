@@ -16,7 +16,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dot_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -139,11 +139,8 @@ class _RecordProfileState extends State<RecordProfile> {
                   SvgClass data = svgData[index];
                   String svgPath = 'assets/svgs/${data.emotion}.svg';
                   Widget wCheckIcon = data.emotion == emotion
-                      ? Icon(
-                          Icons.check_circle,
-                          color: Colors.purple.shade200,
-                          size: 18,
-                        )
+                      ? const Icon(Icons.check_circle,
+                          color: themeColor, size: 18)
                       : const EmptyArea();
 
                   return InkWell(
@@ -284,7 +281,10 @@ class _RecordProfileState extends State<RecordProfile> {
                                 onTap: onTapCheckBox,
                               ),
                               CommonText(
-                                  text: data.name, size: 14, isNotTop: true),
+                                text: data.name,
+                                size: 14,
+                                isNotTop: true,
+                              ),
                               SpaceWidth(width: 3),
                               filterClassList.first.id == data.id
                                   ? CommonText(

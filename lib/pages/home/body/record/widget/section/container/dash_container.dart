@@ -1,8 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class DashContainer extends StatelessWidget {
   DashContainer({
@@ -25,7 +23,7 @@ class DashContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: Container(
+      child: SizedBox(
         height: height - (adjustHeight ?? 0),
         child: GestureDetector(
           onTap: onTap,

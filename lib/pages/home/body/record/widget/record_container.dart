@@ -22,18 +22,12 @@ class RecordContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-
     return Column(
       children: [
         RecordProfile(),
-        RecordPicture(
-          setActiveCamera: setActiveCamera,
-          importDateTime: importDateTime,
-        ),
-        RecordTodo(),
+        RecordPicture(setActiveCamera: setActiveCamera),
         RecordDiary(),
+        RecordTodo(),
       ],
     );
   }

@@ -171,7 +171,7 @@ class CalendarBodyState extends State<CalendarBody> {
         //     setColorTextInfo(text: '운동', color: exerciseColor),
         //     setColorTextInfo(text: '생활', color: lifeStyleColor),
         //     setColorTextInfo(text: '사진', color: eyeBodyColor),
-        //     setColorTextInfo(text: '일기', color: diaryColor),
+        //     setColorTextInfo(text: '메모', color: diaryColor),
         //   ],
         // ),
       ],

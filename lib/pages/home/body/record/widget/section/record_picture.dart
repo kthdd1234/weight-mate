@@ -14,26 +14,25 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dot_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dash_container.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 class RecordPicture extends StatelessWidget {
-  RecordPicture({
-    super.key,
-    required this.setActiveCamera,
-    required this.importDateTime,
-  });
+  RecordPicture({super.key, required this.setActiveCamera});
 
-  DateTime importDateTime;
   Function(bool isActive) setActiveCamera;
 
   @override
   Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
     UserBox user = userRepository.user;
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);

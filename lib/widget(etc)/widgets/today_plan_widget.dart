@@ -197,9 +197,7 @@ class _TodayPlanWidgetState extends State<TodayPlanWidget> {
       );
     }
 
-    planContainer({
-      required PlanTypeEnum planType,
-    }) {
+    planContainer({required PlanTypeEnum planType}) {
       List<PlanContents> planContentsList = [];
       String emptyTitle = PlanTypeEnum.all == planType
           ? '계획'

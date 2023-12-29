@@ -10,18 +10,21 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 List<TodoItem> todoData = [
   TodoItem(
     id: FILITER.diet.toString(),
+    type: PlanTypeEnum.diet.toString(),
     color: 'teal',
     title: '식단',
     icon: Icons.local_dining,
   ),
   TodoItem(
     id: FILITER.exercise.toString(),
+    type: PlanTypeEnum.exercise.toString(),
     color: 'lightBlue',
     title: '운동',
     icon: Icons.fitness_center,
   ),
   TodoItem(
     id: FILITER.lifeStyle.toString(),
+    type: PlanTypeEnum.lifestyle.toString(),
     color: 'brown',
     title: '생활',
     icon: Icons.self_improvement,
@@ -52,6 +55,7 @@ class RecordTodo extends StatelessWidget {
                       color: item.color,
                       title: item.title,
                       icon: item.icon,
+                      type: item.type,
                     ),
                     SpaceHeight(height: smallSpace),
                   ],
@@ -66,12 +70,14 @@ class RecordTodo extends StatelessWidget {
 class TodoItem {
   TodoItem({
     required this.id,
+    required this.type,
     required this.color,
     required this.title,
     required this.icon,
   });
 
   dynamic id;
+  String type;
   String color, title;
   IconData icon;
 }

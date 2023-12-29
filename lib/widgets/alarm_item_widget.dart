@@ -37,40 +37,13 @@ class AlarmItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                icon != null
-                    ? Row(
-                        children: [
-                          CircularIcon(
-                            size: 40,
-                            borderRadius: 10,
-                            icon: icon,
-                            backgroundColor: iconBackgroundColor,
-                          ),
-                          SpaceWidth(width: regularSapce),
-                        ],
-                      )
-                    : const EmptyArea(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(title, style: const TextStyle(fontSize: 15)),
-                    SpaceHeight(height: tinySpace),
-                    BodySmallText(text: desc),
-                  ],
-                ),
-              ],
-            ),
-            CupertinoSwitch(
-              activeColor: themeColor,
-              value: isEnabled,
-              onChanged: onChanged,
-            ),
-          ],
+        AlarmRow(
+          icon: icon,
+          iconBackgroundColor: iconBackgroundColor,
+          title: title,
+          desc: desc,
+          isEnabled: isEnabled,
+          onChanged: onChanged,
         ),
         isEnabled
             ? TimeChipWidget(
@@ -80,6 +53,64 @@ class AlarmItemWidget extends StatelessWidget {
                 onTap: onTap,
               )
             : const EmptyArea()
+      ],
+    );
+  }
+}
+
+class AlarmRow extends StatelessWidget {
+  const AlarmRow({
+    super.key,
+    this.icon,
+    required this.iconBackgroundColor,
+    required this.title,
+    required this.desc,
+    required this.isEnabled,
+    required this.onChanged,
+  });
+
+  final IconData? icon;
+  final Color iconBackgroundColor;
+  final String title;
+  final String desc;
+  final bool isEnabled;
+  final Function(bool newValue) onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            icon != null
+                ? Row(
+                    children: [
+                      CircularIcon(
+                        size: 40,
+                        borderRadius: 10,
+                        icon: icon,
+                        backgroundColor: iconBackgroundColor,
+                      ),
+                      SpaceWidth(width: regularSapce),
+                    ],
+                  )
+                : const EmptyArea(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: const TextStyle(fontSize: 15)),
+                SpaceHeight(height: tinySpace),
+                BodySmallText(text: desc),
+              ],
+            ),
+          ],
+        ),
+        CupertinoSwitch(
+          activeColor: themeColor,
+          value: isEnabled,
+          onChanged: onChanged,
+        ),
       ],
     );
   }
