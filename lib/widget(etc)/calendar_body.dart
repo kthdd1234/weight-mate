@@ -133,48 +133,53 @@ class CalendarBodyState extends State<CalendarBody> {
       );
     }
 
-    return Column(
-      children: [
-        // BannerWidget(),
-        Expanded(
-          child: ContentsBox(
-            backgroundColor: Colors.transparent,
-            padding: const EdgeInsets.all(0),
-            contentsWidget: TableCalendar(
-              shouldFillViewport: true,
-              currentDay: currentDay,
-              calendarBuilders: CalendarBuilders(markerBuilder: markerBuilder),
-              onDaySelected: onDaySelected,
-              availableGestures: AvailableGestures.horizontalSwipe,
-              availableCalendarFormats: const {
-                CalendarFormat.month: '1개월',
-                CalendarFormat.twoWeeks: '2주일',
-                CalendarFormat.week: '1주일'
-              },
-              calendarFormat: calendarFormat,
-              locale: 'ko-KR',
-              firstDay: DateTime.utc(2010, 10, 16),
-              lastDay: DateTime.now(),
-              focusedDay: currentDay,
-              headerVisible: false,
-              onFormatChanged: onFormatChanged,
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: tinySpace, vertical: smallSpace),
+      child: Column(
+        children: [
+          // BannerWidget(),
+          Expanded(
+            child: ContentsBox(
+              backgroundColor: Colors.transparent,
+              padding: const EdgeInsets.all(0),
+              contentsWidget: TableCalendar(
+                shouldFillViewport: true,
+                firstDay: DateTime.utc(2010, 10, 16),
+                lastDay: DateTime.now(),
+                currentDay: currentDay,
+                focusedDay: currentDay,
+                calendarBuilders:
+                    CalendarBuilders(markerBuilder: markerBuilder),
+                onDaySelected: onDaySelected,
+                availableGestures: AvailableGestures.horizontalSwipe,
+                availableCalendarFormats: const {
+                  CalendarFormat.month: '1개월',
+                  CalendarFormat.twoWeeks: '2주일',
+                  CalendarFormat.week: '1주일'
+                },
+                calendarFormat: calendarFormat,
+                locale: 'ko-KR',
+                headerVisible: false,
+                onFormatChanged: onFormatChanged,
+              ),
             ),
           ),
-        ),
-        // SpaceHeight(height: smallSpace),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.end,
-        //   children: [
-        //     setColorTextInfo(text: '체중', color: weightColor),
-        //     setColorTextInfo(text: '감정', color: actionColor),
-        //     setColorTextInfo(text: '식단', color: dietColor),
-        //     setColorTextInfo(text: '운동', color: exerciseColor),
-        //     setColorTextInfo(text: '생활', color: lifeStyleColor),
-        //     setColorTextInfo(text: '사진', color: eyeBodyColor),
-        //     setColorTextInfo(text: '메모', color: diaryColor),
-        //   ],
-        // ),
-      ],
+          // SpaceHeight(height: smallSpace),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     setColorTextInfo(text: '체중', color: weightColor),
+          //     setColorTextInfo(text: '감정', color: actionColor),
+          //     setColorTextInfo(text: '식단', color: dietColor),
+          //     setColorTextInfo(text: '운동', color: exerciseColor),
+          //     setColorTextInfo(text: '생활', color: lifeStyleColor),
+          //     setColorTextInfo(text: '사진', color: eyeBodyColor),
+          //     setColorTextInfo(text: '메모', color: diaryColor),
+          //   ],
+          // ),
+        ],
+      ),
     );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/todo_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 
@@ -31,8 +31,8 @@ List<TodoItem> todoData = [
   ),
 ];
 
-class RecordTodo extends StatelessWidget {
-  const RecordTodo({super.key});
+class EditTodo extends StatelessWidget {
+  const EditTodo({super.key});
 
   @override
   Widget build(BuildContext context) {

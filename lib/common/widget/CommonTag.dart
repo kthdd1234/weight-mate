@@ -8,26 +8,31 @@ class CommonTag extends StatelessWidget {
     super.key,
     required this.color,
     required this.text,
+    this.onTap,
   });
 
   String color, text;
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     Map<String, Color> tagColor = tagColors[color]!;
 
-    return Container(
-      decoration: BoxDecoration(
-        // color: tagColor['textColor'],
-        borderRadius: BorderRadius.circular(5),
-      ),
-      // padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
-      child: CommonText(
-        text: text,
-        color: Colors.grey,
-        size: 11,
-        isBold: true,
-        isNotTop: true,
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: tagColor['bgColor'],
+          borderRadius: BorderRadius.circular(5),
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+        child: CommonText(
+          text: text,
+          color: tagColor['textColor'],
+          size: 10,
+          isBold: true,
+          isNotTop: true,
+        ),
       ),
     );
   }

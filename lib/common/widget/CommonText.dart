@@ -72,8 +72,8 @@ class CommonText extends StatelessWidget {
           ),
           rightIcon != null
               ? Row(children: [
-                  SpaceWidth(width: 3),
-                  Icon(leftIcon, size: size, color: color),
+                  // SpaceWidth(width: 3),
+                  Icon(rightIcon, size: size, color: color),
                 ])
               : const EmptyArea()
         ],

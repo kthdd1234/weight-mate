@@ -1,9 +1,7 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/record_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_container.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
@@ -24,13 +22,9 @@ class RecordBody extends StatelessWidget {
       child: MultiValueListenableBuilder(
         valueListenables: valueListenables,
         builder: (context, values, child) {
-          return Column(
-            children: [
-              RecordContainer(
-                recordType: eRecordContainer.edit,
-                setActiveCamera: setActiveCamera,
-              ),
-            ],
+          return EditContainer(
+            recordType: eEditContainer.edit,
+            setActiveCamera: setActiveCamera,
           );
         },
       ),

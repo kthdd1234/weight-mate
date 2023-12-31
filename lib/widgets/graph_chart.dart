@@ -160,7 +160,7 @@ class _GraphChartState extends State<GraphChart> {
         color: weightColor,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.y,
-        name: '체중 기록',
+        name: '체중 기록', // todo: "체중 기록" 을 "00월 00일" 로 변경
         markerSettings: MarkerSettings(
           isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
         ),

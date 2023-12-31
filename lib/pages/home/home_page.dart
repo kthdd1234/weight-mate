@@ -132,7 +132,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> items = const [
       BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
-      BottomNavigationBarItem(icon: Icon(Icons.calendar_month), label: '달력'),
+      BottomNavigationBarItem(
+          icon: Icon(Icons.calendar_month_outlined), label: '달력'),
       BottomNavigationBarItem(
         icon: Padding(
           padding: EdgeInsets.only(bottom: 3),
@@ -180,10 +181,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             widget: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: HomeAppBarWidget(appBar: AppBar(), id: bottomNavitionId),
-              body: Padding(
-                padding: pagePadding,
-                child: SafeArea(child: bodyList[bottomNavitionId.index]),
-              ),
+              body: SafeArea(child: bodyList[bottomNavitionId.index]),
               bottomNavigationBar: Theme(
                 data:
                     Theme.of(context).copyWith(canvasColor: Colors.transparent),

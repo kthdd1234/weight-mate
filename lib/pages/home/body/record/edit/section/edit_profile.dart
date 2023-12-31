@@ -16,7 +16,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dash_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -52,14 +52,14 @@ List<SvgClass> svgData = [
   SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
 ];
 
-class RecordProfile extends StatefulWidget {
-  const RecordProfile({super.key});
+class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
 
   @override
-  State<RecordProfile> createState() => _RecordProfileState();
+  State<EditProfile> createState() => _EditProfileState();
 }
 
-class _RecordProfileState extends State<RecordProfile> {
+class _EditProfileState extends State<EditProfile> {
   bool isEditWeight = false;
   TextEditingController textController = TextEditingController();
   String helperText = '';
@@ -388,14 +388,13 @@ class _RecordProfileState extends State<RecordProfile> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CommonText(
-                      text: '21일 목요일 (오늘)',
+                      text: '12월 31일 일요일',
                       size: 15,
                       isBold: true,
                     ),
-                    CommonText(
+                    CommonTag(
+                      color: 'indigo',
                       text: '필터',
-                      size: 14,
-                      color: Colors.grey,
                       onTap: onTapFilter,
                     ),
                   ],
@@ -430,11 +429,15 @@ class _RecordProfileState extends State<RecordProfile> {
                                       size: 20,
                                       onTap: onTapWeight,
                                     ),
-                                    CommonText(
-                                      text: 'BMI ${onBMI()}',
-                                      size: 12,
-                                      color: Colors.grey,
-                                      onTap: onTapBMI,
+                                    Row(
+                                      children: [
+                                        CommonText(
+                                          text: 'BMI ${onBMI()}',
+                                          size: 10,
+                                          color: Colors.grey,
+                                          onTap: onTapBMI,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

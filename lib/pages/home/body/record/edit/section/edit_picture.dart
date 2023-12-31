@@ -14,7 +14,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dash_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -24,8 +24,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class RecordPicture extends StatelessWidget {
-  RecordPicture({super.key, required this.setActiveCamera});
+class EditPicture extends StatelessWidget {
+  EditPicture({super.key, required this.setActiveCamera});
 
   Function(bool isActive) setActiveCamera;
 
@@ -190,7 +190,7 @@ class RecordPicture extends StatelessWidget {
                   ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
-                    icon: Icons.apps_rounded,
+                    icon: Icons.apps,
                     title: '눈바디 목록',
                     onTap: onNavigatorImageCollectionsPage,
                   ),

@@ -170,35 +170,39 @@ final tagColors = {
   },
   'red': {
     'bgColor': Colors.red.shade50,
-    'textColor': Colors.red,
+    'textColor': Colors.red.shade300,
   },
   'blue': {
     'bgColor': Colors.blue.shade50,
     'textColor': Colors.blue,
   },
   'teal': {
-    'bgColor': Colors.teal.shade100,
-    'textColor': Colors.teal,
+    'bgColor': Colors.teal.shade50,
+    'textColor': Colors.teal.shade300,
   },
   'lightBlue': {
-    'bgColor': Colors.lightBlue.shade100,
-    'textColor': Colors.lightBlue,
+    'bgColor': Colors.lightBlue.shade50,
+    'textColor': Colors.lightBlue.shade300,
   },
   'brown': {
-    'bgColor': Colors.brown.shade100,
-    'textColor': Colors.brown,
+    'bgColor': Colors.brown.shade50,
+    'textColor': Colors.brown.shade300,
   },
   'orange': {
-    'bgColor': Colors.orange.shade100,
-    'textColor': Colors.orange,
+    'bgColor': Colors.orange.shade50,
+    'textColor': Colors.orange.shade300,
   },
   'purple': {
-    'bgColor': Colors.purple.shade100,
-    'textColor': themeColor,
+    'bgColor': Colors.purple.shade50,
+    'textColor': Colors.purple.shade300,
   },
   'indigo': {
     'bgColor': Colors.indigo.shade50,
-    'textColor': Colors.indigo,
+    'textColor': Colors.indigo.shade300,
+  },
+  'grey': {
+    'bgColor': Colors.grey.shade200,
+    'textColor': Colors.grey,
   }
 };
 
@@ -206,10 +210,10 @@ List<FilterClass> filterClassList = [
   FilterClass(id: FILITER.weight.toString(), name: '체중'),
   FilterClass(id: FILITER.emotion.toString(), name: '감정'),
   FilterClass(id: FILITER.picture.toString(), name: '사진'),
-  FilterClass(id: FILITER.diary.toString(), name: '메모'),
   FilterClass(id: FILITER.diet.toString(), name: '식단'),
   FilterClass(id: FILITER.exercise.toString(), name: '운동'),
   FilterClass(id: FILITER.lifeStyle.toString(), name: '생활'),
+  FilterClass(id: FILITER.diary.toString(), name: '메모'),
 ];
 
 List<String> initFilterList = filterClassList.map((e) => e.id).toList();

@@ -172,33 +172,36 @@ class _TodoContainerState extends State<TodoContainer> {
       );
     }
 
-    return Column(
-      children: [
-        TodoTitle(
-          id: widget.containerId,
-          title: widget.title,
-          icon: widget.icon,
-          color: widget.color,
-          planBox: planBox,
-          planType: widget.type,
-          recordKey: recordKey,
-          actions: actions,
-          planList: planList,
-        ),
-        TodoList(
-          actions: actions,
-          mainColor: mainColor,
-          planList: planList,
-          onCheckBox: onCheckBox,
-          onTapMoreTodo: onTapMoreTodo,
-          onTapTodoUpdate: onTapTodoComplete,
-        ),
-        TodoAdd(
-          title: widget.title,
-          mainColor: mainColor,
-          onTapTodoAdd: onTapTodoComplete,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: Column(
+        children: [
+          TodoTitle(
+            id: widget.containerId,
+            title: widget.title,
+            icon: widget.icon,
+            color: widget.color,
+            planBox: planBox,
+            planType: widget.type,
+            recordKey: recordKey,
+            actions: actions,
+            planList: planList,
+          ),
+          TodoList(
+            actions: actions,
+            mainColor: mainColor,
+            planList: planList,
+            onCheckBox: onCheckBox,
+            onTapMoreTodo: onTapMoreTodo,
+            onTapTodoUpdate: onTapTodoComplete,
+          ),
+          TodoAdd(
+            title: widget.title,
+            mainColor: mainColor,
+            onTapTodoAdd: onTapTodoComplete,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -483,15 +486,11 @@ class TodoTitle extends StatelessWidget {
           text: title,
           size: 15,
           isBold: true,
-          decoration: 'underLine',
         ),
-        // CommonText(
-        //   text: '실천율: ${value()}%',
-        //   color: value() != '0.0' ? themeColor : Colors.grey,
-        //   size: 11,
-        //   isBold: true,
-        //   isNotTop: true,
-        // )
+        CommonTag(
+          color: value() != '0.0' ? color : 'grey',
+          text: '실천율: ${value()}%',
+        )
       ],
     );
   }

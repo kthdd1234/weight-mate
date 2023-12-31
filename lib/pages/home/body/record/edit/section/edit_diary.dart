@@ -2,11 +2,12 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/widget/section/container/dash_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -14,14 +15,14 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
-class RecordDiary extends StatefulWidget {
-  const RecordDiary({super.key});
+class EditDiary extends StatefulWidget {
+  const EditDiary({super.key});
 
   @override
-  State<RecordDiary> createState() => _RecordDiaryState();
+  State<EditDiary> createState() => _EditDiaryState();
 }
 
-class _RecordDiaryState extends State<RecordDiary> {
+class _EditDiaryState extends State<EditDiary> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
 
@@ -75,9 +76,8 @@ class _RecordDiaryState extends State<RecordDiary> {
                       children: [
                         recordInfo?.whiteText != null
                             ? CommonText(
-                                text: recordInfo!.whiteText!,
-                                isWidth: true,
-                                size: 13,
+                                text: '📌${recordInfo!.whiteText!}',
+                                size: 14,
                                 onTap: onTap,
                               )
                             : DashContainer(
