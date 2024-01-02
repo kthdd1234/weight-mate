@@ -1,10 +1,7 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -16,11 +13,9 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_diary.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -58,7 +53,7 @@ class EditPicture extends StatelessWidget {
 
     onNavigatorImageCollectionsPage() async {
       closeDialog(context);
-      Navigator.pushNamed(context, '/image-collections-page');
+      await Navigator.pushNamed(context, '/image-collections-page');
     }
 
     onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
@@ -66,11 +61,7 @@ class EditPicture extends StatelessWidget {
 
       Navigator.push(
         context,
-        FadePageRoute(
-          page: ImagePullSizePage(
-            binaryData: binaryData,
-          ),
-        ),
+        FadePageRoute(page: ImagePullSizePage(binaryData: binaryData)),
       );
     }
 
@@ -109,8 +100,8 @@ class EditPicture extends StatelessWidget {
         builder: (context) {
           return NativeAdDialog(
             title: title,
-            leftText: '눈바디 확인',
-            rightText: '눈바디 목록',
+            leftText: '사진 확인',
+            rightText: '사진 목록',
             leftIcon: Icons.image_outlined,
             rightIcon: Icons.apps_rounded,
             onLeftClick: () =>
@@ -181,10 +172,8 @@ class EditPicture extends StatelessWidget {
                           onTap: () => onNavigatorImagePullSizePage(
                             binaryData: fileInfo[pos]!,
                           ),
-                          child: DefaultImage(
-                            data: fileInfo[pos]!,
-                            height: 280,
-                          ),
+                          child:
+                              DefaultImage(data: fileInfo[pos]!, height: 280),
                         ),
                         SpaceHeight(height: smallSpace)
                       ],
@@ -205,13 +194,13 @@ class EditPicture extends StatelessWidget {
                     title: '앨범 열기',
                     onTap: () => onShowImagePicker(ImageSource.gallery, pos),
                   ),
-                  SpaceWidth(width: tinySpace),
-                  ExpandedButtonVerti(
-                    mainColor: themeColor,
-                    icon: Icons.apps,
-                    title: '사진 목록',
-                    onTap: onNavigatorImageCollectionsPage,
-                  ),
+                  // SpaceWidth(width: tinySpace),
+                  // ExpandedButtonVerti(
+                  //   mainColor: themeColor,
+                  //   icon: Icons.apps,
+                  //   title: '사진 목록',
+                  //   onTap: onNavigatorImageCollectionsPage,
+                  // ),
                 ],
               ),
             ],
@@ -228,8 +217,6 @@ class EditPicture extends StatelessWidget {
       recordInfo?.save();
     }
 
-    onTapEyeBodyLst() {}
-
     onTapCollapse() {
       //
     }
@@ -239,15 +226,16 @@ class EditPicture extends StatelessWidget {
         children: [
           TitleContainer(
             title: '사진',
-            icon: Icons.widgets,
+            icon: Icons.auto_awesome,
             tags: [
               TagClass(
                 text: '사진 목록',
                 color: 'purple',
-                onTap: onTapEyeBodyLst,
+                onTap: () =>
+                    Navigator.pushNamed(context, '/image-collections-page'),
               ),
               TagClass(
-                icon: Icons.keyboard_arrow_down,
+                icon: Icons.keyboard_arrow_down_rounded,
                 color: 'purple',
                 onTap: onTapCollapse,
               )
@@ -270,17 +258,17 @@ class EditPicture extends StatelessWidget {
               ),
             ],
           ),
-          SpaceHeight(height: smallSpace),
-          Row(
-            children: [
-              PictureContainer(
-                file: mainFile,
-                pos: 'main',
-                onTapPicture: onTapPicture,
-                onTapRemove: onTapRemove,
-              ),
-            ],
-          )
+          // SpaceHeight(height: smallSpace),
+          // Row(
+          //   children: [
+          //     PictureContainer(
+          //       file: mainFile,
+          //       pos: 'main',
+          //       onTapPicture: onTapPicture,
+          //       onTapRemove: onTapRemove,
+          //     ),
+          //   ],
+          // )
         ],
       ),
     );

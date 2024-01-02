@@ -1,14 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonButton.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonCheckBox.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonTag.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
+import 'package:flutter_app_weight_management/common/CommonButton.dart';
+import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
+import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -211,7 +208,7 @@ class _TodoContainerState extends State<TodoContainer> {
         onTap: onTapActionPercent,
       ),
       TagClass(
-        icon: Icons.keyboard_arrow_down,
+        icon: Icons.keyboard_arrow_down_rounded,
         color: widget.color,
         onTap: onTapCollapse,
       )
@@ -255,74 +252,6 @@ class _TodoContainerState extends State<TodoContainer> {
         : const EmptyArea();
   }
 }
-
-// class TodoTitle extends StatelessWidget {
-//   TodoTitle({
-//     super.key,
-//     required this.id,
-//     required this.title,
-//     required this.icon,
-//     required this.color,
-//     required this.planBox,
-//     required this.planType,
-//     required this.recordKey,
-//     required this.actions,
-//     required this.planList,
-//   });
-
-//   Box<PlanBox> planBox;
-//   String id, title, color, planType;
-//   int recordKey;
-//   IconData icon;
-//   List<Map<String, dynamic>>? actions;
-//   List<PlanBox> planList;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     Color textColor = tagColors[color]!['textColor']!;
-
-//     actionPercent() {
-//       if (actions == null) {
-//         return '0.0';
-//       }
-
-//       final result = actions!.where((element) {
-//         bool isPlanType = planType == element['type'];
-//         bool isAction =
-//             recordKey == getDateTimeToInt(element['actionDateTime']);
-//         bool isShowPlan = planBox.get(element['id']) != null;
-
-//         return isPlanType && isAction && isShowPlan;
-//       });
-
-//       return planToActionPercent(
-//         a: result.length,
-//         b: planList.length,
-//       ).toString();
-//     }
-
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       children: [
-//         CommonText(
-//           text: title,
-//           size: 15,
-//           isBold: true,
-//           color: Colors.grey.shade600,
-//           leftIcon: icon,
-//         ),
-//         Row(
-//           children: [
-//             CommonTag(color: color, text: '실천율: ${value()}%'),
-//             SpaceWidth(width: tinySpace),
-//             CommonTag(color: 'red', text: '삭제')
-//           ],
-//         )
-//       ],
-//     );
-//   }
-// }
 
 class TodoList extends StatelessWidget {
   TodoList({

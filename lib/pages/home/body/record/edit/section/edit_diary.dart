@@ -1,22 +1,22 @@
-import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonTag.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
+import 'package:flutter_app_weight_management/common/CommonTag.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_picture.dart';
-import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EditDiary extends StatefulWidget {
   EditDiary({
@@ -38,23 +38,47 @@ class _EditDiaryState extends State<EditDiary> {
 
   @override
   Widget build(BuildContext context) {
-    bool isEdit = widget.recordType == RECORD.edit;
     Box<RecordBox> recordBox = recordRepository.recordBox;
-    RecordBox? recordInfo =
-        recordBox.get(getDateTimeToInt(widget.importDateTime));
+    int recordKey = getDateTimeToInt(widget.importDateTime);
+    RecordBox? recordInfo = recordBox.get(recordKey);
     UserBox user = userRepository.user;
     List<String>? filterList = user.filterList;
+    String? emotion = recordInfo?.emotion;
     bool isContainDiary =
         filterList != null && filterList.contains(FILITER.diary.toString());
 
-    onTap() {
+    onTapDiary() {
       textController.text = recordInfo?.whiteText ?? '';
 
       setState(() => isShowInput = !isShowInput);
     }
 
-    onTapRequest() {
-      //
+    onTapEmtion(String selectedEmotion) {
+      if (recordInfo == null) {
+        recordRepository.updateRecord(
+          key: recordKey,
+          record: RecordBox(
+            createDateTime: widget.importDateTime,
+            emotion: selectedEmotion,
+          ),
+        );
+      } else {
+        recordInfo.emotion = selectedEmotion;
+      }
+
+      recordInfo?.save();
+      closeDialog(context);
+    }
+
+    onTapEmotionList() {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) => EmotionModal(
+          emotion: emotion ?? '',
+          onTap: onTapEmtion,
+        ),
+      );
     }
 
     onEditingComplete() {
@@ -88,12 +112,12 @@ class _EditDiaryState extends State<EditDiary> {
                 icon: Icons.auto_fix_high,
                 tags: [
                   TagClass(
-                    text: '질문 변경',
+                    text: '감정 기록',
                     color: 'orange',
-                    onTap: onTapRequest,
+                    onTap: onTapEmotionList,
                   ),
                   TagClass(
-                    icon: Icons.keyboard_arrow_down,
+                    icon: Icons.keyboard_arrow_down_rounded,
                     color: 'orange',
                     onTap: onTapCollapse,
                   )
@@ -112,6 +136,93 @@ class _EditDiaryState extends State<EditDiary> {
   }
 }
 
+class EmotionModal extends StatelessWidget {
+  EmotionModal({super.key, required this.emotion, required this.onTap});
+
+  String emotion;
+  Function(String selectedEmotion) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    onTapStreamline() async {
+      await launchUrl(Uri(scheme: 'https', host: 'home.streamlinehq.com'));
+    }
+
+    onTapCCBY() async {
+      await launchUrl(
+        Uri(
+            scheme: 'https',
+            host: 'creativecommons.org',
+            path: 'licenses/by/4.0/'),
+      );
+    }
+
+    return DefaultBottomSheet(
+      title: '감정',
+      height: 560,
+      contents: Expanded(
+        child: ContentsBox(
+          contentsWidget: GridView.builder(
+            itemCount: emotionList.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+            ),
+            itemBuilder: (context, index) {
+              SvgClass data = emotionList[index];
+              String svgPath = 'assets/svgs/${data.emotion}.svg';
+
+              return InkWell(
+                onTap: () => onTap(data.emotion),
+                child: Column(
+                  children: [
+                    SvgPicture.asset(svgPath, height: 40),
+                    SpaceHeight(height: tinySpace),
+                    data.emotion == emotion
+                        ? CommonTag(color: 'orange', text: data.name)
+                        : CommonText(text: data.name, size: 12, isCenter: true),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+      subContents: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          CommonText(
+            text: '저작권 출처: ',
+            size: 11,
+            color: Colors.grey,
+          ),
+          CommonText(
+            text: 'streamline',
+            color: Colors.grey,
+            size: 11,
+            decoration: 'underLine',
+            decoColor: Colors.grey,
+            onTap: onTapStreamline,
+          ),
+          CommonText(
+            text: ' / ',
+            size: 11,
+            color: Colors.grey,
+          ),
+          CommonText(
+            text: 'CC BY',
+            decoration: 'underLine',
+            size: 11,
+            decoColor: Colors.grey,
+            color: Colors.grey,
+            onTap: onTapCCBY,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 
 // Row(

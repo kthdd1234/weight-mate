@@ -169,7 +169,7 @@ const appTextColor = Color(0xffE0B1F6);
 final tagColors = {
   'green': {
     'bgColor': Colors.green.shade50,
-    'textColor': Colors.green,
+    'textColor': Colors.red.shade300,
   },
   'red': {
     'bgColor': Colors.red.shade50,
@@ -177,19 +177,19 @@ final tagColors = {
   },
   'blue': {
     'bgColor': Colors.blue.shade50,
-    'textColor': Colors.blue,
+    'textColor': Colors.blue.shade300,
   },
   'teal': {
     'bgColor': Colors.teal.shade50,
-    'textColor': Colors.teal.shade400,
+    'textColor': Colors.teal.shade300,
   },
   'lightBlue': {
     'bgColor': Colors.lightBlue.shade50,
-    'textColor': Colors.lightBlue.shade400,
+    'textColor': Colors.lightBlue.shade300,
   },
   'brown': {
     'bgColor': Colors.brown.shade50,
-    'textColor': Colors.brown.shade400,
+    'textColor': Colors.brown.shade300,
   },
   'orange': {
     'bgColor': Colors.orange.shade50,
@@ -201,7 +201,7 @@ final tagColors = {
   },
   'indigo': {
     'bgColor': Colors.indigo.shade50,
-    'textColor': Colors.indigo.shade400,
+    'textColor': Colors.indigo.shade300,
   },
   'grey': {
     'bgColor': Colors.grey.shade200,

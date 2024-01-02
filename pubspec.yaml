@@ -75,7 +75,7 @@ dependencies:
   easy_localization: ^3.0.2
   gdpr_dialog: ^2.1.1
   flutter_svg: ^2.0.9
-  keyboard_actions: ^4.2.0
+  flutter_keyboard_visibility: ^6.0.0
 
 dev_dependencies:
   flutter_test:

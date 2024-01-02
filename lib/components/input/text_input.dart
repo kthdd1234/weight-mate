@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:keyboard_actions/keyboard_actions.dart';
 
 class TextInput extends StatefulWidget {
   TextInput({
@@ -48,14 +47,6 @@ class _TextInputState extends State<TextInput> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-
-    // onTapOutside(PointerDownEvent event) {
-    //   // FocusScope.of(context).unfocus();
-
-    //   if (widget.onCancel != null) {
-    //     widget.onCancel!();
-    //   }
-    // }
 
     return SizedBox(
       height: widget.inputHeight,

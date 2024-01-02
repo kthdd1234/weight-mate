@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonTag.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:flutter_app_weight_management/widgets/app_bar_calendar_day_widget.dart';
-import 'package:provider/provider.dart';
 
 class HomeAppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   HomeAppBarWidget({super.key, required this.appBar, required this.id});

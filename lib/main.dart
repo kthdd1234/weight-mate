@@ -9,7 +9,7 @@ import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_pag
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
 import 'package:flutter_app_weight_management/pages/common/record_history_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_profile.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_weight.dart';
 import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';

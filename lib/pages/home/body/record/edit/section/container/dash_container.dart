@@ -1,8 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 
 class DashContainer extends StatelessWidget {
   DashContainer({

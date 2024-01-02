@@ -64,7 +64,7 @@ class CommonText extends StatelessWidget {
                   fontSize: size,
                   fontWeight: isBold == true ? FontWeight.bold : null,
                   decoration: textDecoration,
-                  decorationThickness: 2,
+                  decorationThickness: 1,
                   decorationColor: decoColor ?? themeColor,
                 ),
               ),
@@ -72,7 +72,7 @@ class CommonText extends StatelessWidget {
           ),
           rightIcon != null
               ? Row(children: [
-                  // SpaceWidth(width: 3),
+                  SpaceWidth(width: 3),
                   Icon(rightIcon, size: size + 3, color: color),
                 ])
               : const EmptyArea()

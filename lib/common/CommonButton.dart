@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class CommonButton extends StatelessWidget {
-  CommonButton({
-    super.key,
-    required this.text,
-    required this.fontSize,
-    required this.bgColor,
-    required this.radious,
-    required this.textColor,
-    required this.onTap,
-    this.isBold,
-  });
+  CommonButton(
+      {super.key,
+      required this.text,
+      required this.fontSize,
+      required this.bgColor,
+      required this.radious,
+      required this.textColor,
+      required this.onTap,
+      this.isBold,
+      this.height});
 
   String text;
   double fontSize, radious;
   Color bgColor, textColor;
+  double? height;
   bool? isBold;
   Function()? onTap;
 
@@ -26,7 +27,7 @@ class CommonButton extends StatelessWidget {
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          height: largeSpace,
+          height: height ?? largeSpace,
           decoration: BoxDecoration(
             color: bgColor,
             borderRadius: BorderRadius.circular(radious),

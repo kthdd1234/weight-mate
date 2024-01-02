@@ -19,11 +19,13 @@ class DefaultBottomSheet extends StatelessWidget {
     this.onSubmit,
     this.isEnabled,
     this.titleLeftWidget,
+    this.subContents,
   });
 
   String title;
   double height;
   Widget contents;
+  Widget? subContents;
   String? submitText;
   bool? isEnabled;
   Function()? onSubmit;
@@ -62,7 +64,9 @@ class DefaultBottomSheet extends StatelessWidget {
             ),
             SpaceHeight(height: regularSapce),
             contents,
-            SpaceHeight(height: regularSapce),
+            SpaceHeight(height: smallSpace),
+            subContents ?? const EmptyArea(),
+            SpaceHeight(height: subContents != null ? regularSapce : 0),
             isEnabled != null
                 ? BottomSubmitButton(
                     padding:

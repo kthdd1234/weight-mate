@@ -11,6 +11,7 @@ class ContentsBox extends StatelessWidget {
     this.width,
     this.height,
     this.imgUrl,
+    this.borderRadius,
   });
 
   Widget contentsWidget;
@@ -20,6 +21,7 @@ class ContentsBox extends StatelessWidget {
   double? height;
   bool? isBoxShadow;
   String? imgUrl;
+  double? borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class ContentsBox extends StatelessWidget {
             ? DecorationImage(image: AssetImage(imgUrl!), fit: BoxFit.cover)
             : null,
         color: backgroundColor ?? Colors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(borderRadius ?? 10),
         boxShadow: isBoxShadow != null
             ? [
                 BoxShadow(
