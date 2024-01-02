@@ -8,6 +8,9 @@ const double tinySpace = 5.0;
 /// 10.0
 const double smallSpace = 10.0;
 
+/// 15.0
+const double contentSpace = 15.0;
+
 /// 20.0
 const double regularSapce = 20.0;
 
@@ -145,13 +148,13 @@ const eyeBodyColor = Colors.green;
 const diaryColor = Colors.orange;
 
 /// dietColor
-const dietColor = Colors.teal;
+const dietColor = Colors.teal; // 0xFF009688
 
 /// exerciseColor
-const exerciseColor = Colors.lightBlue;
+const exerciseColor = Colors.lightBlue; // 0xFF03A9F4
 
 /// lifeStyleColor
-const lifeStyleColor = Colors.brown;
+const lifeStyleColor = Colors.brown; // 0xFF705548
 
 /// enableTextColor
 const enableTextColor = Color(0xff6237E2);
@@ -178,15 +181,15 @@ final tagColors = {
   },
   'teal': {
     'bgColor': Colors.teal.shade50,
-    'textColor': Colors.teal.shade300,
+    'textColor': Colors.teal.shade400,
   },
   'lightBlue': {
     'bgColor': Colors.lightBlue.shade50,
-    'textColor': Colors.lightBlue.shade300,
+    'textColor': Colors.lightBlue.shade400,
   },
   'brown': {
     'bgColor': Colors.brown.shade50,
-    'textColor': Colors.brown.shade300,
+    'textColor': Colors.brown.shade400,
   },
   'orange': {
     'bgColor': Colors.orange.shade50,
@@ -198,7 +201,7 @@ final tagColors = {
   },
   'indigo': {
     'bgColor': Colors.indigo.shade50,
-    'textColor': Colors.indigo.shade300,
+    'textColor': Colors.indigo.shade400,
   },
   'grey': {
     'bgColor': Colors.grey.shade200,
@@ -210,10 +213,10 @@ List<FilterClass> filterClassList = [
   FilterClass(id: FILITER.weight.toString(), name: '체중'),
   FilterClass(id: FILITER.emotion.toString(), name: '감정'),
   FilterClass(id: FILITER.picture.toString(), name: '사진'),
+  FilterClass(id: FILITER.diary.toString(), name: '메모'),
   FilterClass(id: FILITER.diet.toString(), name: '식단'),
   FilterClass(id: FILITER.exercise.toString(), name: '운동'),
   FilterClass(id: FILITER.lifeStyle.toString(), name: '생활'),
-  FilterClass(id: FILITER.diary.toString(), name: '메모'),
 ];
 
 List<String> initFilterList = filterClassList.map((e) => e.id).toList();

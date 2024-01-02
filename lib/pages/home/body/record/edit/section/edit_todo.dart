@@ -6,6 +6,22 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:provider/provider.dart';
+
+class TodoItem {
+  TodoItem({
+    required this.id,
+    required this.type,
+    required this.color,
+    required this.title,
+    required this.icon,
+  });
+
+  dynamic id;
+  String type;
+  String color, title;
+  IconData icon;
+}
 
 List<TodoItem> todoData = [
   TodoItem(
@@ -26,58 +42,38 @@ List<TodoItem> todoData = [
     id: FILITER.lifeStyle.toString(),
     type: PlanTypeEnum.lifestyle.toString(),
     color: 'brown',
-    title: '생활',
+    title: '습관',
     icon: Icons.self_improvement,
   ),
 ];
 
 class EditTodo extends StatelessWidget {
-  const EditTodo({super.key});
+  EditTodo({
+    super.key,
+    required this.importDateTime,
+    required this.recordType,
+  });
+
+  DateTime importDateTime;
+  RECORD recordType;
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    List<String>? filterList = user.filterList;
+    bool isEdit = RECORD.edit == recordType;
 
-    return Column(
-      children: todoData.map(
-        (item) {
-          if (filterList == null) {
-            return const EmptyArea();
-          }
-
-          return filterList.contains(item.id)
-              ? Column(
-                  children: [
-                    SpaceHeight(height: tinySpace),
-                    TodoContainer(
+    return isEdit
+        ? Column(
+            children: todoData
+                .map((item) => TodoContainer(
                       containerId: item.id,
                       color: item.color,
                       title: item.title,
                       icon: item.icon,
                       type: item.type,
-                    ),
-                    SpaceHeight(height: smallSpace),
-                  ],
-                )
-              : const EmptyArea();
-        },
-      ).toList(),
-    );
+                      importDateTime: importDateTime,
+                    ))
+                .toList(),
+          )
+        : TodoResult(importDateTime: importDateTime);
   }
-}
-
-class TodoItem {
-  TodoItem({
-    required this.id,
-    required this.type,
-    required this.color,
-    required this.title,
-    required this.icon,
-  });
-
-  dynamic id;
-  String type;
-  String color, title;
-  IconData icon;
 }

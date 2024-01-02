@@ -149,6 +149,9 @@ flutter:
     - assets/svgs/winking-face-with-tongue.svg
     - assets/svgs/worried-face.svg
     - assets/svgs/square-dashed.svg
+    - assets/svgs/check-diet.svg
+    - assets/svgs/check-exercise.svg
+    - assets/svgs/check-life.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

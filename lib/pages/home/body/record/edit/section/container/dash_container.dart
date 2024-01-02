@@ -1,6 +1,8 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class DashContainer extends StatelessWidget {
   DashContainer({
@@ -29,7 +31,7 @@ class DashContainer extends StatelessWidget {
           onTap: onTap,
           child: DottedBorder(
             color: Colors.grey,
-            dashPattern: const [4, 4],
+            dashPattern: const [2, 5],
             borderType: borderType,
             radius: Radius.circular(radius),
             child: SizedBox(
@@ -47,3 +49,23 @@ class DashContainer extends StatelessWidget {
     );
   }
 }
+
+
+
+// Expanded(
+//       child: Container(
+//         height: height - (adjustHeight ?? 0),
+//         decoration: BoxDecoration(
+//           color: dialogBackgroundColor,
+//           borderRadius: BorderRadius.all(
+//             Radius.circular(radius),
+//           ),
+//         ),
+//         child: CommonText(
+//           text: text,
+//           color: Colors.grey,
+//           size: 13,
+//           isCenter: true,
+//         ),
+//       ),
+//     );

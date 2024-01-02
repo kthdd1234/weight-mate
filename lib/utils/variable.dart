@@ -273,3 +273,9 @@ var planPrioritys = {
     textColor: Colors.blueGrey,
   ),
 };
+
+var planOrder = {
+  PlanTypeEnum.diet.toString(): 0,
+  PlanTypeEnum.exercise.toString(): 1,
+  PlanTypeEnum.lifestyle.toString(): 2,
+};

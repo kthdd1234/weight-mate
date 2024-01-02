@@ -3,12 +3,14 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
+import 'package:flutter_app_weight_management/pages/common/record_history_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_profile.dart';
 import 'package:flutter_app_weight_management/pages/home/home_page.dart';
-import 'package:flutter_app_weight_management/pages/splash/page.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
@@ -92,7 +94,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     UserBox? userProfile = userBox.get('userProfile');
     String initialRoute = userProfile?.userId == null
-        ? '/splash-screen'
+        ? '/add-start-screen'
         : userProfile?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
@@ -111,14 +113,15 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.lightTheme,
       initialRoute: initialRoute, // initialRoute
       routes: {
-        '/splash-screen': (context) => const SplashScreen(),
+        '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-setting': (context) => const AddPlanSetting(),
         '/home-page': (context) => const HomePage(),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/common-alarm': (context) => const CommonAlarmPage(),
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),
-        '/image-collections-page': (context) => const ImageCollectionsPage()
+        '/image-collections-page': (context) => const ImageCollectionsPage(),
+        '/record-history-page': (context) => const RecordHistoryPage(),
       },
     );
   }

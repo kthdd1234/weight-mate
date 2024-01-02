@@ -48,14 +48,14 @@ class CommonText extends StatelessWidget {
           leftIcon != null
               ? Row(children: [
                   Icon(leftIcon, size: size, color: color),
-                  SpaceWidth(width: 3)
+                  SpaceWidth(width: tinySpace)
                 ])
               : const EmptyArea(),
           Padding(
             padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
             child: SizedBox(
               width: isWidth == true
-                  ? MediaQuery.of(context).size.width - 40
+                  ? MediaQuery.of(context).size.width - 80
                   : null,
               child: Text(
                 text,
@@ -73,7 +73,7 @@ class CommonText extends StatelessWidget {
           rightIcon != null
               ? Row(children: [
                   // SpaceWidth(width: 3),
-                  Icon(rightIcon, size: size, color: color),
+                  Icon(rightIcon, size: size + 3, color: color),
                 ])
               : const EmptyArea()
         ],

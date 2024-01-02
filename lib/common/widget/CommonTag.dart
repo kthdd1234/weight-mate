@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -7,16 +9,21 @@ class CommonTag extends StatelessWidget {
   CommonTag({
     super.key,
     required this.color,
-    required this.text,
+    this.text,
+    this.icon,
     this.onTap,
   });
 
-  String color, text;
+  String color;
+  String? text;
+  IconData? icon;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     Map<String, Color> tagColor = tagColors[color]!;
+
+    print(icon);
 
     return InkWell(
       onTap: onTap,
@@ -26,13 +33,15 @@ class CommonTag extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
-        child: CommonText(
-          text: text,
-          color: tagColor['textColor'],
-          size: 10,
-          isBold: true,
-          isNotTop: true,
-        ),
+        child: text != null
+            ? CommonText(
+                text: text ?? '',
+                color: tagColor['textColor'],
+                size: 10,
+                isBold: true,
+                isNotTop: true,
+              )
+            : Icon(icon, size: 15, color: tagColor['textColor']),
       ),
     );
   }

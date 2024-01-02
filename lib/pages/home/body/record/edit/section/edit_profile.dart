@@ -5,6 +5,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonCheckBox.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -53,22 +54,27 @@ List<SvgClass> svgData = [
 ];
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  EditProfile({
+    super.key,
+    required this.importDateTime,
+    required this.recordType,
+  });
+
+  DateTime importDateTime;
+  RECORD recordType;
 
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
-  bool isEditWeight = false;
+  bool isShowInput = false;
   TextEditingController textController = TextEditingController();
   String helperText = '';
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.read<ImportDateTimeProvider>().getImportDateTime();
-    int recordKey = getDateTimeToInt(DateTime.now());
+    int recordKey = getDateTimeToInt(widget.importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
     UserBox user = userRepository.user;
@@ -107,7 +113,7 @@ class _EditProfileState extends State<EditProfile> {
         recordRepository.updateRecord(
           key: recordKey,
           record: RecordBox(
-            createDateTime: importDateTime,
+            createDateTime: widget.importDateTime,
             emotion: emotion,
           ),
         );
@@ -175,7 +181,7 @@ class _EditProfileState extends State<EditProfile> {
 
     onInit() {
       setState(() {
-        isEditWeight = false;
+        isShowInput = false;
         textController.text = '';
       });
 
@@ -197,7 +203,7 @@ class _EditProfileState extends State<EditProfile> {
           recordRepository.recordBox.put(
             recordKey,
             RecordBox(
-              createDateTime: importDateTime,
+              createDateTime: widget.importDateTime,
               weightDateTime: now,
               weight: stringToDouble(textController.text),
             ),
@@ -220,7 +226,7 @@ class _EditProfileState extends State<EditProfile> {
           context.read<EnabledProvider>().setEnabled(true);
         }
 
-        isEditWeight = true;
+        isShowInput = true;
       });
 
       showModalBottomSheet(
@@ -360,24 +366,33 @@ class _EditProfileState extends State<EditProfile> {
       context.read<EnabledProvider>().setEnabled(onValidWeight());
     }
 
-    Widget wSvg = SvgPicture.asset('assets/svgs/$emotion.svg', height: 75);
-    bool isEmotion = user.filterList!.contains(FILITER.emotion.toString());
-    Widget wEmotion = isEmotion
-        ? emotion != null
-            ? InkWell(onTap: onTapEmotion, child: wSvg)
-            : DashContainer(
-                height: 75,
-                text: '감정',
-                borderType: BorderType.Circle,
-                radius: 100,
-                onTap: onTapEmotion,
-              )
-        : const EmptyArea();
+    bool isEdit = RECORD.edit == widget.recordType;
+    bool isContainEmotion =
+        user.filterList!.contains(FILITER.emotion.toString());
+    Widget wSvg = SvgPicture.asset(
+      'assets/svgs/$emotion.svg',
+      height: isEdit ? 60 : 50,
+    );
+    Widget? wEmotion = isEdit
+        ? isContainEmotion
+            ? emotion != null
+                ? InkWell(onTap: onTapEmotion, child: wSvg)
+                : DashContainer(
+                    height: 60,
+                    text: '감정',
+                    borderType: BorderType.Circle,
+                    radius: 100,
+                    onTap: onTapEmotion,
+                  )
+            : null
+        : emotion != null
+            ? wSvg
+            : null;
 
     return Row(
       children: [
-        wEmotion,
-        SpaceWidth(width: isEmotion ? smallSpace + tinySpace : 0),
+        wEmotion ?? const EmptyArea(),
+        SpaceWidth(width: wEmotion != null ? smallSpace : 0),
         Expanded(
           flex: 4,
           child: Container(
@@ -389,48 +404,59 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     CommonText(
                       text: '12월 31일 일요일',
-                      size: 15,
+                      size: isEdit ? 14 : 12,
                       isBold: true,
+                      rightIcon:
+                          isEdit ? Icons.keyboard_arrow_down_rounded : null,
                     ),
-                    CommonTag(
-                      color: 'indigo',
-                      text: '필터',
-                      onTap: onTapFilter,
-                    ),
+                    isEdit
+                        ? CommonText(
+                            text: '필터',
+                            size: 13,
+                            color: themeColor,
+                            leftIcon: Icons.filter_list_sharp,
+                            onTap: onTapFilter,
+                          )
+                        : CommonIcon(
+                            icon: Icons.more_vert,
+                            size: 14,
+                            color: Colors.grey,
+                          ),
                   ],
                 ),
-                SpaceHeight(height: smallSpace),
+                SpaceHeight(height: 7.5),
                 Row(
                   children: [
-                    isEditWeight
-                        ? Expanded(
-                            child: SizedBox(
-                            height: largeSpace,
-                            child: TextFormField(
-                              keyboardType: inputKeyboardType,
-                              controller: textController,
-                              maxLength: 4,
-                              autofocus: true,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                              decoration:
-                                  InputDecoration(helperText: helperText),
-                              onChanged: onChangedText,
-                            ),
-                          ))
-                        : recordInfo?.weight != null
+                    isEdit
+                        ? isShowInput
                             ? Expanded(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    CommonText(
-                                      text: '${recordInfo?.weight ?? '0.0'}kg',
-                                      size: 20,
-                                      onTap: onTapWeight,
-                                    ),
-                                    Row(
+                                child: SizedBox(
+                                height: 25,
+                                child: TextFormField(
+                                  keyboardType: inputKeyboardType,
+                                  controller: textController,
+                                  maxLength: 4,
+                                  autofocus: true,
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                  decoration:
+                                      const InputDecoration(counterText: ''),
+                                  onChanged: onChangedText,
+                                ),
+                              ))
+                            : recordInfo?.weight != null
+                                ? Expanded(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
                                       children: [
+                                        CommonText(
+                                          text:
+                                              '${recordInfo?.weight ?? '0.0'}kg',
+                                          size: 18,
+                                          onTap: onTapWeight,
+                                        ),
                                         CommonText(
                                           text: 'BMI ${onBMI()}',
                                           size: 10,
@@ -439,16 +465,32 @@ class _EditProfileState extends State<EditProfile> {
                                         ),
                                       ],
                                     ),
-                                  ],
+                                  )
+                                : DashContainer(
+                                    height: 40,
+                                    text: '체중 입력',
+                                    borderType: BorderType.RRect,
+                                    radius: 10,
+                                    onTap: onTapWeight,
+                                  )
+                        : Expanded(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                CommonText(
+                                  text: '${recordInfo?.weight ?? '--'}kg',
+                                  size: 15,
                                 ),
-                              )
-                            : DashContainer(
-                                height: largeSpace,
-                                text: '체중(kg)',
-                                borderType: BorderType.RRect,
-                                radius: 10,
-                                onTap: onTapWeight,
-                              ),
+                                CommonText(
+                                  text:
+                                      'BMI ${recordInfo?.weight != null ? onBMI() : '--'}',
+                                  size: 9,
+                                  color: Colors.grey,
+                                ),
+                              ],
+                            ),
+                          ),
                   ],
                 ),
               ],

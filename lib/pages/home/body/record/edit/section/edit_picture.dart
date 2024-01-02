@@ -1,9 +1,13 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/widget/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
@@ -15,6 +19,8 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_diary.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -25,17 +31,23 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class EditPicture extends StatelessWidget {
-  EditPicture({super.key, required this.setActiveCamera});
+  EditPicture({
+    super.key,
+    required this.setActiveCamera,
+    required this.recordType,
+  });
 
+  RECORD recordType;
   Function(bool isActive) setActiveCamera;
 
   @override
   Widget build(BuildContext context) {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
-    UserBox user = userRepository.user;
+    bool isEdit = recordType == RECORD.edit;
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
+    Uint8List? mainFile = null; //recordInfo?.centerFile;
     Uint8List? leftFile = recordInfo?.leftFile;
     Uint8List? rightFile = recordInfo?.rightFile;
     Map<String, Uint8List?> fileInfo = {'left': leftFile, 'right': rightFile};
@@ -50,7 +62,7 @@ class EditPicture extends StatelessWidget {
     }
 
     onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
-      closeDialog(context);
+      isEdit && closeDialog(context);
 
       Navigator.push(
         context,
@@ -167,9 +179,12 @@ class EditPicture extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () => onNavigatorImagePullSizePage(
-                              binaryData: fileInfo[pos]!),
-                          child:
-                              DefaultImage(data: fileInfo[pos]!, height: 280),
+                            binaryData: fileInfo[pos]!,
+                          ),
+                          child: DefaultImage(
+                            data: fileInfo[pos]!,
+                            height: 280,
+                          ),
                         ),
                         SpaceHeight(height: smallSpace)
                       ],
@@ -178,20 +193,23 @@ class EditPicture extends StatelessWidget {
               Row(
                 children: [
                   ExpandedButtonVerti(
+                    mainColor: themeColor,
                     icon: Icons.add_a_photo,
                     title: '사진 촬영',
                     onTap: () => onShowImagePicker(ImageSource.camera, pos),
                   ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
+                    mainColor: themeColor,
                     icon: Icons.collections,
                     title: '앨범 열기',
                     onTap: () => onShowImagePicker(ImageSource.gallery, pos),
                   ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
+                    mainColor: themeColor,
                     icon: Icons.apps,
-                    title: '눈바디 목록',
+                    title: '사진 목록',
                     onTap: onNavigatorImageCollectionsPage,
                   ),
                 ],
@@ -210,47 +228,95 @@ class EditPicture extends StatelessWidget {
       recordInfo?.save();
     }
 
-    return Column(
-      children: user.filterList!.contains(FILITER.picture.toString())
-          ? [
-              SpaceHeight(height: smallSpace),
-              Row(
-                children: [
-                  leftFile != null
-                      ? Picture(
-                          pos: 'left',
-                          uint8List: leftFile,
-                          onTapPicture: () => onTapPicture('left'),
-                          onTapRemove: () => onTapRemove('left'),
-                        )
-                      : DashContainer(
-                          height: 150,
-                          text: '사진1',
-                          borderType: BorderType.RRect,
-                          radius: 10,
-                          onTap: () => onTapPicture('left'),
-                        ),
-                  SpaceWidth(width: smallSpace),
-                  rightFile != null
-                      ? Picture(
-                          pos: 'right',
-                          uint8List: rightFile,
-                          onTapPicture: () => onTapPicture('right'),
-                          onTapRemove: () => onTapRemove('right'),
-                        )
-                      : DashContainer(
-                          height: 150,
-                          text: '사진2',
-                          borderType: BorderType.RRect,
-                          radius: 10,
-                          onTap: () => onTapPicture('right'),
-                        ),
-                ],
+    onTapEyeBodyLst() {}
+
+    onTapCollapse() {
+      //
+    }
+
+    return ContentsBox(
+      contentsWidget: Column(
+        children: [
+          TitleContainer(
+            title: '사진',
+            icon: Icons.widgets,
+            tags: [
+              TagClass(
+                text: '사진 목록',
+                color: 'purple',
+                onTap: onTapEyeBodyLst,
               ),
-              SpaceHeight(height: smallSpace),
-            ]
-          : [SpaceHeight(height: smallSpace)],
+              TagClass(
+                icon: Icons.keyboard_arrow_down,
+                color: 'purple',
+                onTap: onTapCollapse,
+              )
+            ],
+          ),
+          Row(
+            children: [
+              PictureContainer(
+                file: leftFile,
+                pos: 'left',
+                onTapPicture: onTapPicture,
+                onTapRemove: onTapRemove,
+              ),
+              SpaceWidth(width: smallSpace),
+              PictureContainer(
+                file: rightFile,
+                pos: 'right',
+                onTapPicture: onTapPicture,
+                onTapRemove: onTapRemove,
+              ),
+            ],
+          ),
+          SpaceHeight(height: smallSpace),
+          Row(
+            children: [
+              PictureContainer(
+                file: mainFile,
+                pos: 'main',
+                onTapPicture: onTapPicture,
+                onTapRemove: onTapRemove,
+              ),
+            ],
+          )
+        ],
+      ),
     );
+  }
+}
+
+class PictureContainer extends StatelessWidget {
+  PictureContainer({
+    super.key,
+    required this.file,
+    required this.pos,
+    required this.onTapPicture,
+    required this.onTapRemove,
+  });
+
+  Uint8List? file;
+  String pos;
+  Function(String pos) onTapPicture, onTapRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return file != null
+        ? Picture(
+            pos: pos,
+            isEdit: true,
+            uint8List: file,
+            onTapPicture: onTapPicture,
+            onTapRemove: onTapRemove,
+          )
+        : DashContainer(
+            height: 150,
+            text: '사진',
+            borderType: BorderType.RRect,
+            radius: 10,
+            onTap: () => onTapPicture(pos),
+          );
   }
 }
 
@@ -258,29 +324,53 @@ class Picture extends StatelessWidget {
   Picture({
     super.key,
     required this.pos,
-    required this.onTapPicture,
-    required this.uint8List,
-    required this.onTapRemove,
+    required this.isEdit,
+    this.uint8List,
+    this.onTapRemove,
+    this.onTapPicture,
   });
 
   String pos;
-  Uint8List uint8List;
-  RecordBox? recordInfo;
-  Function() onTapPicture;
-  Function() onTapRemove;
+  bool isEdit;
+  Uint8List? uint8List;
+  Function(String pos)? onTapPicture, onTapRemove;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Stack(
-        children: [
-          InkWell(
-            onTap: onTapPicture,
-            child: DefaultImage(data: uint8List, height: 150),
-          ),
-          Positioned(
-            right: 0,
-            child: CircularIcon(
+    return uint8List != null
+        ? Expanded(
+            child: Stack(
+              children: [
+                InkWell(
+                  onTap: () => onTapPicture != null ? onTapPicture!(pos) : null,
+                  child: DefaultImage(data: uint8List!, height: 150),
+                ),
+                CloseIcon(isEdit: isEdit, onTapRemove: onTapRemove, pos: pos)
+              ],
+            ),
+          )
+        : const EmptyArea();
+  }
+}
+
+class CloseIcon extends StatelessWidget {
+  const CloseIcon({
+    super.key,
+    required this.isEdit,
+    required this.onTapRemove,
+    required this.pos,
+  });
+
+  final bool isEdit;
+  final Function(String pos)? onTapRemove;
+  final String pos;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      right: 0,
+      child: isEdit == true
+          ? CircularIcon(
               padding: 5,
               icon: Icons.close,
               iconColor: typeBackgroundColor,
@@ -289,11 +379,73 @@ class Picture extends StatelessWidget {
               borderRadius: 5,
               backgroundColor: themeColor,
               backgroundColorOpacity: 0.5,
-              onTap: (_) => onTapRemove(),
-            ),
-          )
-        ],
-      ),
+              onTap: (_) => onTapRemove != null ? onTapRemove!(pos) : null,
+            )
+          : const EmptyArea(),
     );
   }
 }
+
+// class HistoryPicture extends StatelessWidget {
+//   HistoryPicture({
+//     super.key,
+//     required this.leftFile,
+//     required this.rightFile,
+//   });
+
+//   Uint8List? leftFile, rightFile;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     List<Uint8List?> fileList = [leftFile, rightFile];
+
+//     return Column(
+//       children: [
+//         SpaceHeight(height: smallSpace),
+//         Row(
+//           children: [
+//             leftFile != null
+//                 ? DefaultImage(data: leftFile!, height: 150)
+//                 : EmptyArea(),
+//             rightFile != null
+//                 ? DefaultImage(data: rightFile!, height: 150)
+//                 : EmptyArea()
+//           ],
+//         ),
+//         Row(
+//           children: fileList
+//               .map((file) => file != null
+//                   ? Expanded(child: DefaultImage(data: file, height: 150))
+//                   : const EmptyArea())
+//               .toList(),
+//         ),
+//         SpaceHeight(height: smallSpace),
+//       ],
+//     );
+//   }
+// }
+// Column(
+//             children: [
+//               SpaceHeight(height: smallSpace),
+//               Row(
+//                 children: [
+//                   Picture(
+//                     pos: 'left',
+//                     isEdit: false,
+//                     uint8List: leftFile,
+//                     onTapPicture: (_) =>
+//                         onNavigatorImagePullSizePage(binaryData: leftFile!),
+//                   ),
+//                   SpaceWidth(width: tinySpace),
+//                   Picture(
+//                     pos: 'right',
+//                     isEdit: false,
+//                     uint8List: rightFile,
+//                     onTapPicture: (_) =>
+//                         onNavigatorImagePullSizePage(binaryData: rightFile!),
+//                   ),
+//                 ],
+//               ),
+//               SpaceHeight(height: smallSpace),
+//             ],
+//           );

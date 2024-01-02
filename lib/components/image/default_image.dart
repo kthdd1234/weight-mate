@@ -2,7 +2,11 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 
 class DefaultImage extends StatelessWidget {
-  DefaultImage({super.key, required this.data, required this.height});
+  DefaultImage({
+    super.key,
+    required this.data,
+    required this.height,
+  });
 
   Uint8List data;
   double height;

@@ -64,7 +64,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
-    /** */
     requestInAppReview() async {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
