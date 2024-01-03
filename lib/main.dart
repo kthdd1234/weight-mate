@@ -24,12 +24,12 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'pages/add/pages/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
+import 'package:gdpr_dialog/gdpr_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -88,11 +88,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String status = 'none';
   late Box<UserBox> userBox;
 
   @override
   void initState() {
     userBox = Hive.box('userBox');
+
+    GdprDialog.instance.resetDecision();
+    GdprDialog.instance
+        .showDialog(isForTest: false, testDeviceId: '')
+        .then((value) {
+      final result = GdprDialog.instance.getConsentStatus();
+      print('result === $result, $value');
+      status = 'dialog result == $value';
+    });
 
     super.initState();
   }
