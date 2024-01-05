@@ -23,14 +23,7 @@ class RecordHistoryPage extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           child: Column(
-            children: [
-              EditContainer(
-                setActiveCamera: (_) {},
-                importDateTime: DateTime.now(),
-                recordType: RECORD.history,
-              ),
-              DashDivider(color: Colors.grey.shade400)
-            ],
+            children: [DashDivider(color: Colors.grey.shade400)],
           ),
         ),
       ),

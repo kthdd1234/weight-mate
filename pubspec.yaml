@@ -103,7 +103,6 @@ flutter:
   assets:
     - .env
     - assets/images/Cloudy_Apple.png
-    - assets/images/deep-space.jpeg
     - assets/images/MATE.png
     - assets/images/t-1.png
     - assets/images/t-2.png
@@ -120,6 +119,7 @@ flutter:
     - assets/images/t-13.png
     - assets/images/t-14.png
     - assets/images/t-15.png
+    - assets/images/t-16.png
     - assets/images/t-17.png
     - assets/images/t-18.png
     - assets/images/t-19.png

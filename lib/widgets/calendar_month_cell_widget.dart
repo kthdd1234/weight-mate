@@ -46,7 +46,7 @@ class CalendarMonthCellWidget extends StatelessWidget {
 
       return Column(
         children: [
-          ColorDot(width: 7, height: 7, color: dotColors[type]!),
+          Dot(size: 7, color: dotColors[type]!),
           SpaceWidth(width: 10)
         ],
       );

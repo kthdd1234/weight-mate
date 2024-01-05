@@ -25,9 +25,8 @@ class ColorTextInfo extends StatelessWidget {
     return Row(
       children: [
         SpaceWidth(width: smallSpace),
-        ColorDot(
-          width: width,
-          height: height,
+        Dot(
+          size: width,
           color: color,
           isOutlined: isOutlined,
         ),

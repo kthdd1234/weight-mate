@@ -1,14 +1,12 @@
-import 'dart:developer';
+// ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/calendar/calendar_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_container.dart';
-import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
-import 'package:provider/provider.dart';
 
 class RecordBody extends StatelessWidget {
   RecordBody({super.key, required this.setActiveCamera});
@@ -22,17 +20,16 @@ class RecordBody extends StatelessWidget {
       recordRepository.recordBox.listenable(),
       planRepository.planBox.listenable()
     ];
-    DateTime importDateTime =
-        context.read<ImportDateTimeProvider>().getImportDateTime();
 
     return SingleChildScrollView(
       child: MultiValueListenableBuilder(
         valueListenables: valueListenables,
         builder: (context, values, child) {
-          return EditContainer(
-            importDateTime: importDateTime,
-            setActiveCamera: setActiveCamera,
-            recordType: RECORD.edit,
+          return Column(
+            children: [
+              CalendarContainer(),
+              EditContainer(setActiveCamera: setActiveCamera),
+            ],
           );
         },
       ),

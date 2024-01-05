@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
@@ -39,10 +41,6 @@ class TodayWeightInfosWidget extends StatelessWidget {
     }
 
     setCalculatedBMI() {
-      if (weight == null || tall == null) {
-        return '0.00';
-      }
-
       final cmToM = tall! / 100;
       final bmi = weight! / (cmToM * cmToM);
       final bmiToFixed = bmi.toStringAsFixed(1);
@@ -66,44 +64,47 @@ class TodayWeightInfosWidget extends StatelessWidget {
       return '$operator$fixedValue kg';
     }
 
-    setCalculatedWeight() {
-      return '$weight kg';
-    }
-
     List<WeightInfoClass> weightInfoClassList = [
       WeightInfoClass(
         id: 'weight',
-        title: '현재 체중',
-        value: setCalculatedWeight(),
+        title: '오늘의 체중',
+        value: '$weight kg',
         icon: Icons.monitor_weight,
         more: Icons.check_circle_outline_outlined,
         tooltipMsg: '체중 기록 완료!',
         iconColor: Colors.blue.shade400,
+        onTap: () {},
       ),
       WeightInfoClass(
-          id: 'goal',
-          title: '목표 체중',
-          value: '$goalWeight kg',
-          icon: Icons.flag,
-          more: Icons.error_outline,
-          tooltipMsg: '(목표 체중) - (현재 체중) 결과 값입니다.',
-          iconColor: Colors.purple.shade400),
+        id: 'goal',
+        title: '목표 체중',
+        value: '$goalWeight kg',
+        icon: Icons.flag,
+        more: Icons.error_outline,
+        tooltipMsg: '(목표 체중) - (현재 체중) 결과 값입니다.',
+        iconColor: Colors.purple.shade400,
+        onTap: () {},
+      ),
       WeightInfoClass(
-          id: 'change',
-          title: '체중 변화',
-          value: setCalculatedBeforeRecord(),
-          icon: Icons.insights,
-          more: Icons.error_outline,
-          tooltipMsg: '(현재 체중) - (이전의 체중) 결과 값입니다.',
-          iconColor: Colors.red.shade400),
+        id: 'change',
+        title: '체중 변화',
+        value: setCalculatedBeforeRecord(),
+        icon: Icons.insights,
+        more: Icons.error_outline,
+        tooltipMsg: '(현재 체중) - (이전의 체중) 결과 값입니다.',
+        iconColor: Colors.red.shade400,
+        onTap: () {},
+      ),
       WeightInfoClass(
-          id: 'bmi',
-          title: 'BMI 지수',
-          value: setCalculatedBMI(),
-          icon: Icons.person_search,
-          more: Icons.help_outline_outlined,
-          tooltipMsg: '현재 체중(kg)을 키의 제곱(m)으로 나눈 값입니다.',
-          iconColor: Colors.cyan.shade400),
+        id: 'bmi',
+        title: 'BMI',
+        value: setCalculatedBMI(),
+        icon: Icons.person_search,
+        more: Icons.help_outline_outlined,
+        tooltipMsg: '현재 체중(kg)을 키의 제곱(m)으로 나눈 값입니다.',
+        iconColor: Colors.cyan.shade400,
+        onTap: () {},
+      ),
     ];
     RecordIconTypeProvider recordProvider =
         context.read<RecordIconTypeProvider>();
@@ -122,75 +123,9 @@ class TodayWeightInfosWidget extends StatelessWidget {
       required String bottomText,
     }) {
       return Expanded(
-        child: ContentsBox(
-          backgroundColor: Colors.white,
-          contentsWidget: InkWell(
-            onTap: onTap,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        fontSize: 13,
-                        color: themeColor,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    Tooltip(
-                        showDuration: const Duration(seconds: 4),
-                        triggerMode: TooltipTriggerMode.tap,
-                        preferBelow: false,
-                        message: tooltipMsg,
-                        child: Icon(
-                          more,
-                          size: 15,
-                          color: themeColor,
-                        ))
-                  ],
-                ),
-                SpaceHeight(height: smallSpace),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    color: themeColor,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                SpaceHeight(height: regularSapce),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      onTap: onTap,
-                      child: Text(
-                        bottomText,
-                        style: TextStyle(
-                          fontSize: 11,
-                          height: 1.4,
-                          color: iconColor,
-                        ),
-                      ),
-                    ),
-                    CircularIcon(
-                      size: 40,
-                      borderRadius: 50,
-                      icon: icon,
-                      iconColor: iconColor,
-                      backgroundColor: typeBackgroundColor,
-                      onTap: (_) => onTap(),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+        child: CommonText(
+          text: value,
+          size: 10,
         ),
       );
     }
@@ -221,63 +156,148 @@ class TodayWeightInfosWidget extends StatelessWidget {
     }
 
     return Column(
-      children: [
-        Row(
-          children: [
-            contentsWidget(
-              id: weightInfoClassList[0].id,
-              title: weightInfoClassList[0].title,
-              value: weightInfoClassList[0].value,
-              icon: weightInfoClassList[0].icon,
-              more: weightInfoClassList[0].more,
-              tooltipMsg: weightInfoClassList[0].tooltipMsg,
-              iconColor: weightInfoClassList[0].iconColor,
-              bottomText: '기록 횟수: ${recordCount ?? 0}',
-              onTap: onTapCurrentWeight,
+      children: weightInfoClassList
+          .map(
+            (e) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    CommonText(
+                      text: e.title,
+                      size: 11,
+                      color: Colors.grey,
+                      decoColor: Colors.grey,
+                    ),
+                    SpaceHeight(height: 3),
+                    CommonText(
+                      text: e.value,
+                      size: 13,
+                      isBold: true,
+                    ),
+                  ],
+                ),
+                SpaceHeight(height: regularSapce),
+              ],
             ),
-            SpaceWidth(width: tinySpace),
-            contentsWidget(
-              id: weightInfoClassList[1].id,
-              title: weightInfoClassList[1].title,
-              value: weightInfoClassList[1].value,
-              icon: weightInfoClassList[1].icon,
-              more: weightInfoClassList[1].more,
-              iconColor: weightInfoClassList[1].iconColor,
-              tooltipMsg: weightInfoClassList[1].tooltipMsg,
-              bottomText: '목표까지: ${setCalculatedGoalWeight()}',
-              onTap: onTapGoalWeight,
-            ),
-          ],
-        ),
-        SpaceHeight(height: tinySpace),
-        Row(
-          children: [
-            contentsWidget(
-              id: weightInfoClassList[2].id,
-              title: weightInfoClassList[2].title,
-              value: weightInfoClassList[2].value,
-              icon: weightInfoClassList[2].icon,
-              more: weightInfoClassList[2].more,
-              iconColor: weightInfoClassList[2].iconColor,
-              tooltipMsg: weightInfoClassList[2].tooltipMsg,
-              bottomText: '이전 체중: ${beforeWeight ?? '-'}',
-              onTap: onTapChangeWeight,
-            ),
-            SpaceWidth(width: tinySpace),
-            contentsWidget(
-              id: weightInfoClassList[3].id,
-              title: weightInfoClassList[3].title,
-              value: weightInfoClassList[3].value,
-              icon: weightInfoClassList[3].icon,
-              more: weightInfoClassList[3].more,
-              tooltipMsg: weightInfoClassList[3].tooltipMsg,
-              iconColor: weightInfoClassList[3].iconColor,
-              bottomText: '출처: 위키백과',
-              onTap: onTapBMI,
-            ),
-          ],
-        )
-      ],
+          )
+          .toList(),
+      // children: [
+      //   contentsWidget(
+      //     id: weightInfoClassList[0].id,
+      //     title: weightInfoClassList[0].title,
+      //     value: weightInfoClassList[0].value,
+      //     icon: weightInfoClassList[0].icon,
+      //     more: weightInfoClassList[0].more,
+      //     tooltipMsg: weightInfoClassList[0].tooltipMsg,
+      //     iconColor: weightInfoClassList[0].iconColor,
+      //     bottomText: '기록 횟수: ${recordCount ?? 0}',
+      //     onTap: onTapCurrentWeight,
+      //   ),
+      //   contentsWidget(
+      //     id: weightInfoClassList[1].id,
+      //     title: weightInfoClassList[1].title,
+      //     value: weightInfoClassList[1].value,
+      //     icon: weightInfoClassList[1].icon,
+      //     more: weightInfoClassList[1].more,
+      //     iconColor: weightInfoClassList[1].iconColor,
+      //     tooltipMsg: weightInfoClassList[1].tooltipMsg,
+      //     bottomText: '목표까지: ${setCalculatedGoalWeight()}',
+      //     onTap: onTapGoalWeight,
+      //   ),
+      //   contentsWidget(
+      //     id: weightInfoClassList[2].id,
+      //     title: weightInfoClassList[2].title,
+      //     value: weightInfoClassList[2].value,
+      //     icon: weightInfoClassList[2].icon,
+      //     more: weightInfoClassList[2].more,
+      //     iconColor: weightInfoClassList[2].iconColor,
+      //     tooltipMsg: weightInfoClassList[2].tooltipMsg,
+      //     bottomText: '이전 체중: ${beforeWeight ?? '-'}',
+      //     onTap: onTapChangeWeight,
+      //   ),
+      //   contentsWidget(
+      //     id: weightInfoClassList[3].id,
+      //     title: weightInfoClassList[3].title,
+      //     value: weightInfoClassList[3].value,
+      //     icon: weightInfoClassList[3].icon,
+      //     more: weightInfoClassList[3].more,
+      //     tooltipMsg: weightInfoClassList[3].tooltipMsg,
+      //     iconColor: weightInfoClassList[3].iconColor,
+      //     bottomText: '출처: 위키백과',
+      //     onTap: onTapBMI,
+      //   ),
+      // ],
     );
   }
 }
+// ContentsBox(
+//           contentsWidget: InkWell(
+//             onTap: onTap,
+//             child: Column(
+//               mainAxisAlignment: MainAxisAlignment.start,
+//               crossAxisAlignment: CrossAxisAlignment.start,
+//               children: [
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   children: [
+//                     Text(
+//                       title,
+//                       style: const TextStyle(
+//                         fontSize: 13,
+//                         color: Colors.grey,
+//                         decoration: TextDecoration.underline,
+//                       ),
+//                     ),
+//                     Tooltip(
+//                         showDuration: const Duration(seconds: 4),
+//                         triggerMode: TooltipTriggerMode.tap,
+//                         preferBelow: false,
+//                         message: tooltipMsg,
+//                         child: Icon(
+//                           more,
+//                           size: 15,
+//                           color: themeColor,
+//                         ))
+//                   ],
+//                 ),
+//                 SpaceHeight(height: smallSpace),
+//                 Text(
+//                   value,
+//                   style: const TextStyle(
+//                     color: themeColor,
+//                     fontSize: 14,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//                 SpaceHeight(height: regularSapce),
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   crossAxisAlignment: CrossAxisAlignment.end,
+//                   children: [
+//                     InkWell(
+//                       onTap: onTap,
+//                       child: Text(
+//                         bottomText,
+//                         style: TextStyle(
+//                           fontSize: 11,
+//                           height: 1.4,
+//                           color: iconColor,
+//                         ),
+//                       ),
+//                     ),
+//                     CircularIcon(
+//                       size: 40,
+//                       borderRadius: 50,
+//                       icon: icon,
+//                       iconColor: iconColor,
+//                       backgroundColor: typeBackgroundColor,
+//                       onTap: (_) => onTap(),
+//                     ),
+//                   ],
+//                 )
+//               ],
+//             ),
+//           ),
+//         ),
+//       );

@@ -16,7 +16,10 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_todo.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -29,21 +32,20 @@ import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart'
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 
 class TodoContainer extends StatefulWidget {
   TodoContainer({
     super.key,
-    required this.containerId,
+    required this.filterId,
     required this.type,
     required this.color,
     required this.title,
     required this.icon,
-    required this.importDateTime,
   });
 
-  String containerId, color, title, type;
+  String filterId, color, title, type;
   IconData icon;
-  DateTime importDateTime;
 
   @override
   State<TodoContainer> createState() => _TodoContainerState();
@@ -54,13 +56,15 @@ class _TodoContainerState extends State<TodoContainer> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+
     UserBox user = userRepository.user;
-    List<String>? filterList = user.filterList;
-    bool? isContainId = filterList?.contains(widget.containerId);
+    bool? isOpen = user.filterList?.contains(widget.filterId) == true;
 
     Box<PlanBox> planBox = planRepository.planBox;
     Box<RecordBox> recordBox = recordRepository.recordBox;
-    int recordKey = getDateTimeToInt(widget.importDateTime);
+    int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordBox.get(recordKey);
     List<Map<String, dynamic>>? actions = recordInfo?.actions;
     List<PlanBox> planList =
@@ -71,9 +75,9 @@ class _TodoContainerState extends State<TodoContainer> {
       PlanBox? planInfo = planBox.get(id);
       DateTime now = DateTime.now();
       DateTime actionDateTime = DateTime(
-        widget.importDateTime.year,
-        widget.importDateTime.month,
-        widget.importDateTime.day,
+        importDateTime.year,
+        importDateTime.month,
+        importDateTime.day,
         now.hour,
         now.minute,
       );
@@ -98,7 +102,7 @@ class _TodoContainerState extends State<TodoContainer> {
           await recordBox.put(
             recordKey,
             RecordBox(
-              createDateTime: widget.importDateTime,
+              createDateTime: importDateTime,
               actions: [actionItem.setObject()],
             ),
           );
@@ -158,21 +162,6 @@ class _TodoContainerState extends State<TodoContainer> {
       }
     }
 
-    onTapMoreTodo({required dynamic id}) {
-      PlanBox? planInfo = planBox.get(id);
-
-      showModalBottomSheet(
-        backgroundColor: Colors.transparent,
-        context: context,
-        builder: (context) => TodoModalBottomSheet(
-          id: id,
-          title: widget.title,
-          planBox: planBox,
-          planInfo: planInfo,
-        ),
-      );
-    }
-
     actionPercent() {
       if (actions == null) {
         return '0.0';
@@ -197,9 +186,12 @@ class _TodoContainerState extends State<TodoContainer> {
       //
     }
 
-    onTapRemove() {}
-
-    onTapCollapse() {}
+    onTapOpen() {
+      isOpen
+          ? user.filterList?.remove(widget.filterId)
+          : user.filterList?.add(widget.filterId);
+      user.save();
+    }
 
     List<TagClass> tags = [
       TagClass(
@@ -208,48 +200,50 @@ class _TodoContainerState extends State<TodoContainer> {
         onTap: onTapActionPercent,
       ),
       TagClass(
-        icon: Icons.keyboard_arrow_down_rounded,
+        icon: isOpen
+            ? Icons.keyboard_arrow_down_rounded
+            : Icons.keyboard_arrow_right_rounded,
         color: widget.color,
-        onTap: onTapCollapse,
+        onTap: onTapOpen,
       )
-      // TagClass(
-      //   text: '삭제',
-      //   color: 'red',
-      //   onTap: onTapRemove,
-      // ),
     ];
 
-    return isContainId == true
-        ? Column(
+    return Column(
+      children: [
+        ContentsBox(
+          isBoxShadow: true,
+          contentsWidget: Column(
             children: [
-              SpaceHeight(height: smallSpace),
-              ContentsBox(
-                contentsWidget: Column(
-                  children: [
-                    TitleContainer(
-                      title: widget.title,
-                      icon: widget.icon,
-                      tags: tags,
-                    ),
-                    TodoList(
-                      actions: actions,
-                      mainColor: mainColor,
-                      planList: planList,
-                      onCheckBox: onCheckBox,
-                      onTapMoreTodo: onTapMoreTodo,
-                      onTapTodoUpdate: onTapTodoComplete,
-                    ),
-                    TodoAdd(
-                      title: widget.title,
-                      mainColor: mainColor,
-                      onTapTodoAdd: onTapTodoComplete,
-                    ),
-                  ],
-                ),
+              TitleContainer(
+                isDivider: isOpen,
+                title: widget.title,
+                icon: widget.icon,
+                tags: tags,
               ),
+              isOpen
+                  ? Column(
+                      children: [
+                        TodoList(
+                          actions: actions,
+                          mainColor: mainColor,
+                          planList: planList,
+                          onCheckBox: onCheckBox,
+                          onTapTodoUpdate: onTapTodoComplete,
+                        ),
+                        TodoAdd(
+                          title: widget.title,
+                          mainColor: mainColor,
+                          onTapTodoAdd: onTapTodoComplete,
+                        ),
+                      ],
+                    )
+                  : const EmptyArea(),
             ],
-          )
-        : const EmptyArea();
+          ),
+        ),
+        SpaceHeight(height: smallSpace),
+      ],
+    );
   }
 }
 
@@ -260,7 +254,6 @@ class TodoList extends StatelessWidget {
     required this.planList,
     required this.mainColor,
     required this.onCheckBox,
-    required this.onTapMoreTodo,
     required this.onTapTodoUpdate,
   });
 
@@ -268,7 +261,6 @@ class TodoList extends StatelessWidget {
   List<Map<String, dynamic>>? actions;
   List<PlanBox> planList;
   Function({required dynamic id, required bool newValue}) onCheckBox;
-  Function({required dynamic id}) onTapMoreTodo;
   Function({
     required dynamic id,
     required String text,
@@ -298,29 +290,29 @@ class TodoList extends StatelessWidget {
     return Column(
       children: planList
           .map(
-            (e) => Padding(
+            (info) => Padding(
               padding: const EdgeInsets.only(bottom: regularSapce),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CommonCheckBox(
-                    id: e.id,
-                    isCheck: action(e.id)['id'] != null,
+                    id: info.id,
+                    isCheck: action(info.id)['id'] != null,
                     checkColor: mainColor,
                     onTap: onCheckBox,
                   ),
                   TodoName(
-                    todo: e,
-                    isChcked: action(e.id)['id'] != null,
-                    onTapTodoUpdate: onTapTodoUpdate,
+                    planInfo: info,
                     color: mainColor,
+                    isChcked: action(info.id)['id'] != null,
+                    onTapTodoUpdate: onTapTodoUpdate,
                   ),
-                  TodoMore(
-                    id: e.id,
-                    matinColor: mainColor,
-                    actionDateTime: action(e.id)['actionDateTime'],
-                    onTapMoreTodo: onTapMoreTodo,
-                  ),
+                  // TodoMore(
+                  //   id: e.id,
+                  //   matinColor: mainColor,
+                  //   actionDateTime: action(e.id)['actionDateTime'],
+                  //   onTapMoreTodo: onTapMoreTodo,
+                  // ),
                 ],
               ),
             ),
@@ -332,14 +324,13 @@ class TodoList extends StatelessWidget {
 
 class TodoName extends StatefulWidget {
   TodoName({
-    super.key,
-    required this.todo,
+    required this.planInfo,
     required this.isChcked,
     required this.onTapTodoUpdate,
     required this.color,
   });
 
-  PlanBox todo;
+  PlanBox planInfo;
   bool isChcked;
   Color color;
   Function({
@@ -363,7 +354,7 @@ class _TodoNameState extends State<TodoName> {
 
   @override
   void initState() {
-    textController.text = widget.todo.name;
+    textController.text = widget.planInfo.name;
     super.initState();
   }
 
@@ -378,18 +369,37 @@ class _TodoNameState extends State<TodoName> {
 
       if (textController.text != '') {
         widget.onTapTodoUpdate(
-          id: widget.todo.id,
+          id: widget.planInfo.id,
           text: textController.text,
           newValue: widget.isChcked,
-          createDateTime: widget.todo.createDateTime,
-          isAlarm: widget.todo.isAlarm,
-          priority: widget.todo.priority,
-          alarmTime: widget.todo.alarmTime,
-          alarmId: widget.todo.alarmId,
+          createDateTime: widget.planInfo.createDateTime,
+          isAlarm: widget.planInfo.isAlarm,
+          priority: widget.planInfo.priority,
+          alarmTime: widget.planInfo.alarmTime,
+          alarmId: widget.planInfo.alarmId,
         );
       } else {
-        textController.text = widget.todo.name;
+        textController.text = widget.planInfo.name;
       }
+    }
+
+    onTapEdit() {
+      textController.text = widget.planInfo.name;
+      setState(() => isShowInput = true);
+    }
+
+    onTapMore() {
+      showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) => TodoModalBottomSheet(
+          id: widget.planInfo.id,
+          icon: todoData[widget.planInfo.type]!.icon,
+          title: todoData[widget.planInfo.type]!.title,
+          planInfo: widget.planInfo,
+          onTapEdit: onTapEdit,
+        ),
+      );
     }
 
     return isShowInput
@@ -398,87 +408,68 @@ class _TodoNameState extends State<TodoName> {
             onEditingComplete: onEditingComplete,
           )
         : Expanded(
-            flex: 4,
-            child: GestureDetector(
-              onTap: onTapName,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.todo.name,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: themeColor,
-                      decorationColor: widget.color,
-                      decoration:
-                          widget.isChcked ? TextDecoration.lineThrough : null,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: onTapName,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          // width: 10,
+                          child: Text(
+                            widget.planInfo.name,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: themeColor,
+                              decorationColor: widget.color,
+                              decoration: widget.isChcked
+                                  ? TextDecoration.lineThrough
+                                  : null,
+                            ),
+                          ),
+                        ),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                          text: widget.planInfo.isAlarm
+                              ? timeToString(widget.planInfo.alarmTime)
+                              : '알림 없음',
+                          size: 11,
+                          leftIcon: widget.planInfo.isAlarm
+                              ? Icons.alarm
+                              : Icons.alarm_off_rounded,
+                          color: widget.planInfo.isAlarm
+                              ? themeColor
+                              : Colors.grey,
+                        ),
+                      ],
                     ),
                   ),
-                  SpaceHeight(height: 3),
-                  CommonText(
-                    text: widget.todo.isAlarm
-                        ? timeToString(widget.todo.alarmTime)
-                        : '알림 없음',
-                    size: 11,
-                    leftIcon: widget.todo.isAlarm
-                        ? Icons.alarm
-                        : Icons.alarm_off_rounded,
-                    color: widget.todo.isAlarm ? themeColor : Colors.grey,
+                ),
+                SpaceWidth(width: regularSapce),
+                InkWell(
+                  onTap: onTapMore,
+                  child: Column(
+                    children: [
+                      CommonIcon(
+                        icon: Icons.more_horiz,
+                        size: 22,
+                        color: Colors.grey,
+                        onTap: onTapMore,
+                      ),
+                      SpaceHeight(height: smallSpace)
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           );
   }
 }
 
-class TodoMore extends StatelessWidget {
-  TodoMore({
-    super.key,
-    required this.id,
-    required this.onTapMoreTodo,
-    required this.matinColor,
-    this.actionDateTime,
-  });
-
-  dynamic id;
-  Color matinColor;
-  DateTime? actionDateTime;
-  Function({required dynamic id}) onTapMoreTodo;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SpaceWidth(width: regularSapce),
-        Expanded(
-          flex: 0,
-          child: InkWell(
-            onTap: () => onTapMoreTodo(id: id),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                CommonIcon(
-                  icon: Icons.more_horiz,
-                  size: 22,
-                  color: Colors.grey,
-                  onTap: () => onTapMoreTodo(id: id),
-                ),
-                SpaceHeight(height: 3),
-                // CommonText(
-                //   text: timeToString(actionDateTime),
-                //   size: 11,
-                //   color: matinColor,
-                //   leftIcon: actionDateTime != null ? Icons.check : null,
-                // )
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
+// SpaceWidth(width: regularSapce),
 
 class TodoAdd extends StatefulWidget {
   TodoAdd({
@@ -537,38 +528,33 @@ class _TodoAddState extends State<TodoAdd> {
       }
     }
 
-    return Column(
-      children: [
-        // SpaceHeight(height: smallSpace),
-        InkWell(
-          onTap: onTap,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CommonCheckBox(
-                id: isShowInput ? uuid() : 'disabled',
-                isCheck: isChecked,
-                checkColor: isChecked ? widget.mainColor : Colors.grey,
-                isDisabled: !isShowInput,
-                onTap: onCheckBox,
-              ),
-              !isShowInput
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: CommonText(
-                        text: '${widget.title} 추가',
-                        size: 15,
-                        color: Colors.grey,
-                      ),
-                    )
-                  : TodoInput(
-                      controller: textController,
-                      onEditingComplete: onEditingComplete,
-                    )
-            ],
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          CommonCheckBox(
+            id: isShowInput ? uuid() : 'disabled',
+            isCheck: isChecked,
+            checkColor: isChecked ? widget.mainColor : Colors.grey,
+            isDisabled: !isShowInput,
+            onTap: onCheckBox,
           ),
-        ),
-      ],
+          !isShowInput
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: CommonText(
+                    text: '${widget.title} 추가',
+                    size: 15,
+                    color: Colors.grey,
+                  ),
+                )
+              : TodoInput(
+                  controller: textController,
+                  onEditingComplete: onEditingComplete,
+                )
+        ],
+      ),
     );
   }
 }
@@ -586,7 +572,6 @@ class TodoInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      flex: 6,
       child: TextFormField(
         maxLength: 70,
         controller: controller,
@@ -606,89 +591,20 @@ class TodoInput extends StatelessWidget {
   }
 }
 
-class TodoResult extends StatelessWidget {
-  TodoResult({super.key, required this.importDateTime});
-
-  DateTime importDateTime;
-
-  @override
-  Widget build(BuildContext context) {
-    Box<RecordBox> recordBox = recordRepository.recordBox;
-    int recordKey = getDateTimeToInt(importDateTime);
-    RecordBox? recordInfo = recordBox.get(recordKey);
-    List<Map<String, dynamic>>? actions = recordInfo?.actions;
-
-    renderSvg(String type) => SvgPicture.asset('assets/svgs/check-$type.svg');
-
-    final wSvgPicture = {
-      PlanTypeEnum.diet.toString(): renderSvg('diet'),
-      PlanTypeEnum.exercise.toString(): renderSvg('exercise'),
-      PlanTypeEnum.lifestyle.toString(): renderSvg('life'),
-    };
-
-    final todoResultList = actions
-        ?.where(
-          (action) =>
-              getDateTimeToInt(action['actionDateTime']) ==
-              getDateTimeToInt(importDateTime),
-        )
-        .toList();
-
-    todoResultList?.sort(
-        (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!));
-
-    final todoWidgetList = todoResultList
-        ?.map((data) => Column(
-              children: [
-                SpaceHeight(height: smallSpace),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 0,
-                      child: wSvgPicture[data['type']] ?? EmptyArea(),
-                    ),
-                    SpaceWidth(width: smallSpace),
-                    Expanded(
-                      flex: 5,
-                      child: Text(
-                        data['name'],
-                        style: const TextStyle(fontSize: 13, color: themeColor),
-                      ),
-                    ),
-                    SpaceWidth(width: largeSpace),
-                    Expanded(
-                      flex: 0,
-                      child: Text(
-                        timeToString(data['actionDateTime']),
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: planTypeColors[data['type']],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ))
-        .toList();
-
-    return Column(children: todoWidgetList ?? []);
-  }
-}
-
 class TodoModalBottomSheet extends StatefulWidget {
   TodoModalBottomSheet({
     super.key,
+    required this.icon,
     required this.id,
     required this.title,
-    required this.planBox,
     required this.planInfo,
+    required this.onTapEdit,
   });
 
+  IconData icon;
   String id, title;
-  Box<PlanBox> planBox;
   PlanBox? planInfo;
+  Function() onTapEdit;
 
   @override
   State<TodoModalBottomSheet> createState() => _TodoModalBottomSheetState();
@@ -723,7 +639,7 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
         NotificationService().deleteAlarm(widget.planInfo!.alarmId!);
       }
 
-      widget.planBox.delete(widget.id);
+      planRepository.planBox.delete(widget.id);
       closeDialog(context);
     }
 
@@ -831,10 +747,6 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
       );
     }
 
-    onTapChangeName() {
-      //
-    }
-
     return DefaultBottomSheet(
       title: '${widget.title} 설정',
       titleLeftWidget: isShowAlarm
@@ -847,43 +759,15 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
           : null,
       height: isShowAlarm ? 430 : 220,
       contents: isShowAlarm
-          ? ContentsBox(
-              backgroundColor: Colors.white,
-              contentsWidget: Column(
-                children: [
-                  AlarmRow(
-                    title: '실천 알림',
-                    iconBackgroundColor: dialogBackgroundColor,
-                    desc: '매일 정해진 시간에 실천 알림을 드려요.',
-                    isEnabled: isEnabled,
-                    onChanged: onChanged,
-                  ),
-                  isEnabled
-                      ? Column(
-                          children: [
-                            DefaultTimePicker(
-                              initialDateTime: alarmTime,
-                              mode: CupertinoDatePickerMode.time,
-                              onDateTimeChanged: onDateTimeChanged,
-                            ),
-                            Row(
-                              children: [
-                                CommonButton(
-                                  text: '완료',
-                                  fontSize: 13,
-                                  bgColor: themeColor,
-                                  radious: 10,
-                                  textColor: Colors.white,
-                                  onTap: onCompleted,
-                                  isBold: true,
-                                ),
-                              ],
-                            )
-                          ],
-                        )
-                      : const EmptyArea()
-                ],
-              ),
+          ? AlarmContainer(
+              icon: widget.icon,
+              title: '${widget.title} 실천 알림',
+              desc: '매일 정해진 시간에 실천 알림을 드려요.',
+              isEnabled: isEnabled,
+              alarmTime: alarmTime,
+              onChanged: onChanged,
+              onDateTimeChanged: onDateTimeChanged,
+              onCompleted: onCompleted,
             )
           : Column(
               children: [
@@ -893,7 +777,10 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
                       mainColor: themeColor,
                       icon: Icons.edit,
                       title: '${widget.title} 수정',
-                      onTap: onTapChangeName,
+                      onTap: () {
+                        closeDialog(context);
+                        widget.onTapEdit();
+                      },
                     ),
                     SpaceWidth(width: tinySpace),
                     ExpandedButtonVerti(
@@ -916,3 +803,73 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
     );
   }
 }
+// class TodoResult extends StatelessWidget {
+//   TodoResult({super.key, required this.importDateTime});
+
+//   DateTime importDateTime;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     Box<RecordBox> recordBox = recordRepository.recordBox;
+//     int recordKey = getDateTimeToInt(importDateTime);
+//     RecordBox? recordInfo = recordBox.get(recordKey);
+//     List<Map<String, dynamic>>? actions = recordInfo?.actions;
+
+//     renderSvg(String type) => SvgPicture.asset('assets/svgs/check-$type.svg');
+
+//     final wSvgPicture = {
+//       PlanTypeEnum.diet.toString(): renderSvg('diet'),
+//       PlanTypeEnum.exercise.toString(): renderSvg('exercise'),
+//       PlanTypeEnum.lifestyle.toString(): renderSvg('life'),
+//     };
+
+//     final todoResultList = actions
+//         ?.where(
+//           (action) =>
+//               getDateTimeToInt(action['actionDateTime']) ==
+//               getDateTimeToInt(importDateTime),
+//         )
+//         .toList();
+
+//     todoResultList?.sort(
+//         (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!));
+
+//     final todoWidgetList = todoResultList
+//         ?.map((data) => Column(
+//               children: [
+//                 SpaceHeight(height: smallSpace),
+//                 Row(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Expanded(
+//                       flex: 0,
+//                       child: wSvgPicture[data['type']] ?? EmptyArea(),
+//                     ),
+//                     SpaceWidth(width: smallSpace),
+//                     Expanded(
+//                       flex: 5,
+//                       child: Text(
+//                         data['name'],
+//                         style: const TextStyle(fontSize: 13, color: themeColor),
+//                       ),
+//                     ),
+//                     SpaceWidth(width: largeSpace),
+//                     Expanded(
+//                       flex: 0,
+//                       child: Text(
+//                         timeToString(data['actionDateTime']),
+//                         style: TextStyle(
+//                           fontSize: 10,
+//                           color: planTypeColors[data['type']],
+//                         ),
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ],
+//             ))
+//         .toList();
+
+//     return Column(children: todoWidgetList ?? []);
+//   }
+// }

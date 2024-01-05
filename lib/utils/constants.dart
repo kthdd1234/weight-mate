@@ -136,7 +136,7 @@ const inputKeyboardType = TextInputType.numberWithOptions(decimal: true);
 const dialogBackgroundColor = Color(0xffF3F4F9);
 
 /// weightColor
-const weightColor = Colors.blueGrey;
+const weightColor = Colors.indigo;
 
 /// actionColor
 const actionColor = Colors.purple;

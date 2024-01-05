@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -92,16 +93,16 @@ class AlarmRow extends StatelessWidget {
                         icon: icon,
                         backgroundColor: iconBackgroundColor,
                       ),
-                      SpaceWidth(width: regularSapce),
+                      SpaceWidth(width: 15),
                     ],
                   )
                 : const EmptyArea(),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontSize: 15)),
-                SpaceHeight(height: tinySpace),
-                BodySmallText(text: desc),
+                CommonText(text: title, size: 15),
+                SpaceHeight(height: 2),
+                CommonText(text: desc, size: 12, color: Colors.grey)
               ],
             ),
           ],

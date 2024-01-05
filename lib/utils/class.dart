@@ -195,12 +195,14 @@ class WeightInfoClass {
     required this.more,
     required this.tooltipMsg,
     required this.iconColor,
+    required this.onTap,
   });
 
   String id, title, value;
   IconData icon, more;
   String tooltipMsg;
   Color iconColor;
+  Function() onTap;
 }
 
 class GridIconClass {

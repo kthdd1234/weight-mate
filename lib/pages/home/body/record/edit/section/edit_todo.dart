@@ -17,57 +17,59 @@ class TodoItem {
   IconData icon;
 }
 
-List<TodoItem> todoData = [
-  TodoItem(
-    id: FILITER.diet.toString(),
-    type: PlanTypeEnum.diet.toString(),
+Map<String, TodoDataClass> todoData = {
+  PlanTypeEnum.diet.toString(): TodoDataClass(
+    filterId: FILITER.diet.toString(),
     color: 'teal',
     title: '식단',
     icon: Icons.local_dining,
   ),
-  TodoItem(
-    id: FILITER.exercise.toString(),
-    type: PlanTypeEnum.exercise.toString(),
+  PlanTypeEnum.exercise.toString(): TodoDataClass(
+    filterId: FILITER.exercise.toString(),
     color: 'lightBlue',
     title: '운동',
     icon: Icons.fitness_center,
   ),
-  TodoItem(
-    id: FILITER.lifeStyle.toString(),
-    type: PlanTypeEnum.lifestyle.toString(),
+  PlanTypeEnum.lifestyle.toString(): TodoDataClass(
+    filterId: FILITER.lifeStyle.toString(),
     color: 'brown',
     title: '습관',
     icon: Icons.self_improvement,
-  ),
-];
+  )
+};
 
 class EditTodo extends StatelessWidget {
-  EditTodo({
-    super.key,
-    required this.importDateTime,
-    required this.recordType,
-  });
-
-  DateTime importDateTime;
-  RECORD recordType;
+  EditTodo({super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool isEdit = RECORD.edit == recordType;
+    List<Widget> children = [];
 
-    return isEdit
-        ? Column(
-            children: todoData
-                .map((item) => TodoContainer(
-                      containerId: item.id,
-                      color: item.color,
-                      title: item.title,
-                      icon: item.icon,
-                      type: item.type,
-                      importDateTime: importDateTime,
-                    ))
-                .toList(),
-          )
-        : TodoResult(importDateTime: importDateTime);
+    todoData.forEach(
+      (type, data) => children.add(
+        TodoContainer(
+          filterId: data.filterId,
+          color: data.color,
+          title: data.title,
+          icon: data.icon,
+          type: type,
+        ),
+      ),
+    );
+
+    return Column(children: children);
   }
+}
+
+class TodoDataClass {
+  TodoDataClass({
+    required this.filterId,
+    required this.color,
+    required this.title,
+    required this.icon,
+  });
+
+  String filterId;
+  String color, title;
+  IconData icon;
 }

@@ -28,7 +28,7 @@ class CalendarWeightInfo extends StatelessWidget {
     return CalendarContentsBox(color: weightColor, rowWidgetList: [
       setRowWidgets([
         ContentsTitleText(text: '체중 기록'),
-        ColorDot(width: 10, height: 10, color: weightColor),
+        Dot(size: 10, color: weightColor),
       ]),
       SpaceHeight(height: smallSpace),
       setRowWidgets([

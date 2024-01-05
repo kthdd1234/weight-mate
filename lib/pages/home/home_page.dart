@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<BottomNavigationBarItem> items = const [
       BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
       BottomNavigationBarItem(
-          icon: Icon(Icons.calendar_month_outlined), label: '달력'),
+          icon: Icon(Icons.format_list_bulleted_sharp), label: '히스토리'),
       BottomNavigationBarItem(
         icon: Padding(
           padding: EdgeInsets.only(bottom: 3),

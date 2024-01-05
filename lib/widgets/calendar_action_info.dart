@@ -55,7 +55,7 @@ class CalendarActionInfo extends StatelessWidget {
         setRowWidgets(
           [
             ContentsTitleText(text: '계획 실천'),
-            ColorDot(width: 10, height: 10, color: actionColor),
+            Dot(size: 10, color: actionColor),
           ],
           smallSpace,
         ),

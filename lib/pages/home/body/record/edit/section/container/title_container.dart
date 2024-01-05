@@ -1,20 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TitleContainer extends StatelessWidget {
-  TitleContainer({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.tags,
-  });
+  TitleContainer(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.tags,
+      required this.isDivider});
 
   String title;
   IconData icon;
   List<TagClass> tags;
+  bool isDivider;
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +29,7 @@ class TitleContainer extends StatelessWidget {
                   text: tag.text,
                   onTap: tag.onTap,
                   icon: tag.icon,
+                  leftIcon: tag.leftIcon,
                 )
               ],
             ))
@@ -47,8 +50,9 @@ class TitleContainer extends StatelessWidget {
             Row(children: wRow)
           ],
         ),
-        // SpaceHeight(height: regularSapce),
-        Divider(color: Colors.grey.shade100, height: 30),
+        isDivider
+            ? Divider(color: Colors.grey.shade100, height: 30)
+            : const EmptyArea(),
       ],
     );
   }
@@ -60,10 +64,11 @@ class TagClass {
     required this.onTap,
     this.icon,
     this.text,
+    this.leftIcon,
   });
 
   String color;
   String? text;
-  IconData? icon;
+  IconData? icon, leftIcon;
   Function() onTap;
 }

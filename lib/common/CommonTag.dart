@@ -9,11 +9,12 @@ class CommonTag extends StatelessWidget {
     this.text,
     this.icon,
     this.onTap,
+    this.leftIcon,
   });
 
   String color;
   String? text;
-  IconData? icon;
+  IconData? icon, leftIcon;
   Function()? onTap;
 
   @override
@@ -36,6 +37,7 @@ class CommonTag extends StatelessWidget {
                 isCenter: true,
                 isBold: true,
                 isNotTop: true,
+                leftIcon: leftIcon,
               )
             : Icon(icon, size: 15, color: tagColor['textColor']),
       ),

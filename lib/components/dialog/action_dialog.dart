@@ -59,7 +59,7 @@ class ActionDialog extends StatelessWidget {
           children: [
             ContentsTitleText(
               text: contentsTitle,
-              sub: [ColorDot(width: 10, height: 10, color: color)],
+              sub: [Dot(size: 10, color: color)],
             ),
             SpaceHeight(height: smallSpace),
             WidthDivider(width: double.maxFinite, height: 1),

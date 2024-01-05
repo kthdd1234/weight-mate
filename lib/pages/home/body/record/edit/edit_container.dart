@@ -7,21 +7,12 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 
 class EditContainer extends StatelessWidget {
-  EditContainer({
-    super.key,
-    required this.importDateTime,
-    required this.setActiveCamera,
-    required this.recordType,
-  });
+  EditContainer({super.key, required this.setActiveCamera});
 
-  DateTime importDateTime;
   Function(bool isActive) setActiveCamera;
-  RECORD recordType;
 
   @override
   Widget build(BuildContext context) {
-    bool isEdit = recordType == RECORD.edit;
-
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: regularSapce,
@@ -29,10 +20,10 @@ class EditContainer extends StatelessWidget {
       ),
       child: Column(
         children: [
-          EditWeight(importDateTime: importDateTime, recordType: recordType),
-          EditPicture(setActiveCamera: setActiveCamera, recordType: recordType),
-          EditTodo(importDateTime: importDateTime, recordType: recordType),
-          EditDiary(importDateTime: importDateTime, recordType: recordType),
+          EditWeight(),
+          EditPicture(setActiveCamera: setActiveCamera),
+          EditTodo(),
+          EditDiary(),
         ],
       ),
     );

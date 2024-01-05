@@ -1,13 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -16,17 +22,11 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class EditDiary extends StatefulWidget {
-  EditDiary({
-    super.key,
-    required this.importDateTime,
-    required this.recordType,
-  });
-
-  DateTime importDateTime;
-  RECORD recordType;
+  EditDiary({super.key});
 
   @override
   State<EditDiary> createState() => _EditDiaryState();
@@ -34,23 +34,28 @@ class EditDiary extends StatefulWidget {
 
 class _EditDiaryState extends State<EditDiary> {
   TextEditingController textController = TextEditingController();
+  bool isStartDiary = false;
   bool isShowInput = false;
 
   @override
   Widget build(BuildContext context) {
-    Box<RecordBox> recordBox = recordRepository.recordBox;
-    int recordKey = getDateTimeToInt(widget.importDateTime);
-    RecordBox? recordInfo = recordBox.get(recordKey);
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+    String fDiary = FILITER.diary.toString();
     UserBox user = userRepository.user;
-    List<String>? filterList = user.filterList;
+    bool? isOpen = user.filterList?.contains(fDiary) == true;
+
+    Box<RecordBox> recordBox = recordRepository.recordBox;
+    int recordKey = getDateTimeToInt(importDateTime);
+    RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
-    bool isContainDiary =
-        filterList != null && filterList.contains(FILITER.diary.toString());
 
-    onTapDiary() {
-      textController.text = recordInfo?.whiteText ?? '';
-
-      setState(() => isShowInput = !isShowInput);
+    onTapEditDiary() {
+      setState(() {
+        textController.text = recordInfo?.whiteText ?? '';
+        isStartDiary = true;
+        isShowInput = true;
+      });
     }
 
     onTapEmtion(String selectedEmotion) {
@@ -58,7 +63,7 @@ class _EditDiaryState extends State<EditDiary> {
         recordRepository.updateRecord(
           key: recordKey,
           record: RecordBox(
-            createDateTime: widget.importDateTime,
+            createDateTime: importDateTime,
             emotion: selectedEmotion,
           ),
         );
@@ -70,7 +75,7 @@ class _EditDiaryState extends State<EditDiary> {
       closeDialog(context);
     }
 
-    onTapEmotionList() {
+    onTapOpenEmotion() {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
@@ -81,56 +86,268 @@ class _EditDiaryState extends State<EditDiary> {
       );
     }
 
-    onEditingComplete() {
+    onEditingComplete() async {
       if (textController.text != '') {
-        recordInfo?.whiteText = textController.text;
+        DateTime now = DateTime.now();
+        DateTime diaryDateTime = DateTime(
+          importDateTime.year,
+          importDateTime.month,
+          importDateTime.day,
+          now.hour,
+          now.minute,
+        );
+
+        if (recordInfo == null) {
+          await recordBox.put(
+            recordKey,
+            RecordBox(
+              createDateTime: diaryDateTime,
+              diaryDateTime: diaryDateTime,
+              whiteText: textController.text,
+            ),
+          );
+        } else {
+          recordInfo.whiteText = textController.text;
+          recordInfo.diaryDateTime = diaryDateTime;
+        }
+
         recordInfo?.save();
       }
 
       setState(() => isShowInput = false);
     }
 
-    onTapRemove(_) {
-      recordInfo?.whiteText = null;
-      textController.text = '';
-
-      recordInfo?.save();
+    onTapOpen() {
+      isOpen ? user.filterList?.remove(fDiary) : user.filterList?.add(fDiary);
+      user.save();
     }
 
-    onTapCollapse() {
-      //
+    onTapRemoveDiary() {
+      if (recordInfo?.whiteText != null) {
+        recordInfo?.whiteText = null;
+        recordInfo?.diaryDateTime = null;
+        recordInfo?.save();
+      }
+
+      setState(() {
+        isStartDiary = false;
+        isShowInput = false;
+      });
+      closeDialog(context);
+    }
+
+    onTapRemoveEmotion() {
+      if (recordInfo?.emotion != null) {
+        recordInfo?.emotion = null;
+        recordInfo?.save();
+      }
+
+      closeDialog(context);
+    }
+
+    onTapMore() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return DefaultBottomSheet(
+            title: '일기 설정',
+            height: 220,
+            contents: Row(
+              children: [
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.edit,
+                  title: '내용 수정',
+                  onTap: () {
+                    closeDialog(context);
+                    onTapEditDiary();
+                  },
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  mainColor: Colors.red,
+                  icon: Icons.delete_forever,
+                  title: '내용 삭제',
+                  onTap: onTapRemoveDiary,
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  mainColor: Colors.red,
+                  icon: Icons.delete_forever,
+                  title: '감정 삭제',
+                  onTap: onTapRemoveEmotion,
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
 
     return Column(
       children: [
-        SpaceHeight(height: smallSpace),
         ContentsBox(
+          isBoxShadow: true,
           contentsWidget: Column(
             children: [
               TitleContainer(
+                isDivider: isOpen,
                 title: '일기',
                 icon: Icons.auto_fix_high,
                 tags: [
                   TagClass(
                     text: '감정 기록',
                     color: 'orange',
-                    onTap: onTapEmotionList,
+                    onTap: onTapOpenEmotion,
                   ),
                   TagClass(
-                    icon: Icons.keyboard_arrow_down_rounded,
+                    icon: isOpen
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.keyboard_arrow_right_rounded,
                     color: 'orange',
-                    onTap: onTapCollapse,
+                    onTap: onTapOpen,
                   )
                 ],
               ),
-              CommonText(
-                text: '오늘의 다이어트는 어땠나요?',
-                size: 15,
-                color: Colors.grey,
-              )
+              isOpen
+                  ? Column(
+                      children: [
+                        DiaryTitle(
+                          importDateTime: importDateTime,
+                          emotion: emotion,
+                          onTapMore: onTapMore,
+                          onTapEmotion: onTapOpenEmotion,
+                        ),
+                        isShowInput
+                            ? TextFormField(
+                                autofocus: true,
+                                textInputAction: TextInputAction.done,
+                                controller: textController,
+                                maxLength: 200,
+                                maxLines: null,
+                                minLines: null,
+                                onEditingComplete: onEditingComplete,
+                              )
+                            : recordInfo?.whiteText != null
+                                ? Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SpaceHeight(height: smallSpace),
+                                      InkWell(
+                                        onTap: onTapEditDiary,
+                                        child: Text(
+                                          recordInfo?.whiteText ?? '',
+                                          style: const TextStyle(
+                                            fontSize: 13,
+                                            color: themeColor,
+                                          ),
+                                        ),
+                                      ),
+                                      SpaceHeight(height: smallSpace),
+                                      CommonText(
+                                        text: recordInfo?.diaryDateTime != null
+                                            ? timeToString(
+                                                recordInfo!.diaryDateTime,
+                                              )
+                                            : '',
+                                        size: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ],
+                                  )
+                                : Column(
+                                    children: [
+                                      SpaceHeight(height: smallSpace),
+                                      InkWell(
+                                        onTap: onTapEditDiary,
+                                        child: ContentsBox(
+                                          padding:
+                                              const EdgeInsets.all(smallSpace),
+                                          imgUrl: 'assets/images/t-16.png',
+                                          contentsWidget: CommonText(
+                                            text: '일기 작성하기',
+                                            size: 14,
+                                            isCenter: true,
+                                            isBold: true,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                      ],
+                    )
+                  : const EmptyArea(),
             ],
           ),
         ),
+      ],
+    );
+  }
+}
+
+class DiaryTitle extends StatelessWidget {
+  DiaryTitle({
+    super.key,
+    required this.importDateTime,
+    required this.emotion,
+    required this.onTapMore,
+    required this.onTapEmotion,
+  });
+
+  DateTime importDateTime;
+  String? emotion;
+  Function() onTapMore;
+  Function() onTapEmotion;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        emotion != null
+            ? Row(
+                children: [
+                  InkWell(
+                    onTap: onTapEmotion,
+                    child: SvgPicture.asset(
+                      'assets/svgs/$emotion.svg',
+                      height: 40,
+                    ),
+                  ),
+                  SpaceWidth(width: smallSpace),
+                ],
+              )
+            : const EmptyArea(),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CommonText(
+              text: dateTimeFormatter(
+                format: 'M월 d일',
+                dateTime: importDateTime,
+              ),
+              size: 13,
+              isBold: true,
+            ),
+            CommonText(
+              text: dateTimeFormatter(
+                format: 'EE요일',
+                dateTime: importDateTime,
+              ),
+              size: 13,
+              color: Colors.grey,
+            )
+          ],
+        ),
+        const Spacer(),
+        CommonIcon(
+          icon: Icons.more_vert_rounded,
+          size: 20,
+          color: Colors.grey,
+          onTap: onTapMore,
+        )
       ],
     );
   }
@@ -193,7 +410,7 @@ class EmotionModal extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CommonText(
-            text: '저작권 출처: ',
+            text: '출처: ',
             size: 11,
             color: Colors.grey,
           ),
@@ -223,7 +440,6 @@ class EmotionModal extends StatelessWidget {
     );
   }
 }
-
 
 // Row(
 //                           children: [

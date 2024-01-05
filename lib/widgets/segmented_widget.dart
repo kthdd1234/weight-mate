@@ -19,9 +19,7 @@ class SegmentedWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        color != null
-            ? ColorDot(width: 7.5, height: 7.5, color: color!)
-            : const EmptyArea(),
+        color != null ? Dot(size: 7.5, color: color!) : const EmptyArea(),
         color != null ? SpaceWidth(width: tinySpace) : const EmptyArea(),
         Text(
           title,

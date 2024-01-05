@@ -185,48 +185,48 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
       );
     }
 
-    setTall() {
-      if (userInfo == null) return null;
-      return userInfo.tall;
-    }
+    // setTall() {
+    //   if (userInfo == null) return null;
+    //   return userInfo.tall;
+    // }
 
-    setWeight() {
-      RecordBox? recordInfo =
-          recordBox.get(getDateTimeToInt(widget.importDateTime));
-      return recordInfo?.weight;
-    }
+    // setWeight() {
+    //   RecordBox? recordInfo =
+    //       recordBox.get(getDateTimeToInt(widget.importDateTime));
+    //   return recordInfo?.weight;
+    // }
 
-    setGoalWeight() {
-      return userInfo?.goalWeight;
-    }
+    // setGoalWeight() {
+    //   return userInfo?.goalWeight;
+    // }
 
-    double? setBeforeWeight() {
-      RecordBox? recordInfo =
-          recordBox.get(getDateTimeToInt(widget.importDateTime));
+    // setBeforeWeight() {
+    //   RecordBox? recordInfo =
+    //       recordBox.get(getDateTimeToInt(widget.importDateTime));
 
-      if (recordInfo == null) return null;
+    //   if (recordInfo == null) return null;
 
-      List<RecordBox> recordBoxValues = recordBox.values.toList();
+    //   List<RecordBox> recordBoxValues = recordBox.values.toList();
 
-      int index = recordBoxValues.indexWhere(
-        (element) =>
-            getDateTimeToInt(element.createDateTime) ==
-            getDateTimeToInt(widget.importDateTime),
-      );
+    //   int index = recordBoxValues.indexWhere(
+    //     (element) =>
+    //         getDateTimeToInt(element.createDateTime) ==
+    //         getDateTimeToInt(widget.importDateTime),
+    //   );
 
-      if (index <= 0) return 0.0;
+    //   if (index <= 0) return 0.0;
 
-      List<RecordBox> sublist = recordBoxValues.sublist(0, index).toList();
-      List<RecordBox> reverseList = List.from(sublist.reversed);
+    //   List<RecordBox> sublist = recordBoxValues.sublist(0, index).toList();
+    //   List<RecordBox> reverseList = List.from(sublist.reversed);
 
-      for (var i = 0; i < reverseList.length; i++) {
-        if (reverseList[i].weight != null) {
-          return reverseList[i].weight;
-        }
-      }
+    //   for (var i = 0; i < reverseList.length; i++) {
+    //     if (reverseList[i].weight != null) {
+    //       return reverseList[i].weight;
+    //     }
+    //   }
 
-      return 0.0;
-    }
+    //   return 0.0;
+    // }
 
     setContetnsTitle() {
       if (widget.seletedRecordIconType == RecordIconTypes.editGoalWeight) {
@@ -243,13 +243,13 @@ class _TodayWeightWidgetState extends State<TodayWeightWidget> {
           sub: setIconWidgets(),
           // icon: setContetnsIcon(),
         ),
-        SpaceHeight(height: smallSpace + 5),
-        contentsWidgets(
-          tall: setTall(),
-          weight: setWeight(),
-          goalWeight: setGoalWeight(),
-          beforeWeight: setBeforeWeight(),
-        ),
+        // SpaceHeight(height: smallSpace + 5),
+        // contentsWidgets(
+        //   tall: setTall(),
+        //   weight: setWeight(),
+        //   goalWeight: setGoalWeight(),
+        //   beforeWeight: setBeforeWeight(),
+        // ),
       ],
     );
   }

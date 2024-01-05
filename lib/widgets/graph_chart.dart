@@ -47,32 +47,6 @@ class _GraphChartState extends State<GraphChart> {
   double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
   List<RecordBox?> recordInfoList = [];
 
-  // @override
-  // void initState() {
-  //   DateTime now = DateTime.now();
-
-  //   startDateTime = jumpDayDateTime(
-  //     type: jumpDayTypeEnum.subtract,
-  //     dateTime: now,
-  //     days: countInfo[widget.selectedDateTimeSegment]!,
-  //   );
-  //   endDateTime = now;
-  //   super.initState();
-  // }
-
-  // @override
-  // void didUpdateWidget(covariant GraphChart oldWidget) {
-  //   final now = DateTime.now();
-
-  //   startDateTime = jumpDayDateTime(
-  //     type: jumpDayTypeEnum.subtract,
-  //     dateTime: now,
-  //     days: countInfo[widget.selectedDateTimeSegment]!,
-  //   );
-  //   endDateTime = now;
-  //   super.didUpdateWidget(oldWidget);
-  // }
-
   @override
   Widget build(BuildContext context) {
     final userProfile = widget.userBox.get('userProfile');
@@ -157,7 +131,7 @@ class _GraphChartState extends State<GraphChart> {
       return LineSeries(
         emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
         dataSource: setLineSeriesData(),
-        color: weightColor,
+        color: weightColor.shade300,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.y,
         name: '체중 기록', // todo: "체중 기록" 을 "00월 00일" 로 변경
@@ -171,40 +145,6 @@ class _GraphChartState extends State<GraphChart> {
     }
 
     setLineSeriesData();
-    // setStackedLineSeriesData();
-
-    // setChartSwipeDirectionStart() {
-    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-    //     return;
-    //   }
-
-    //   endDateTime = startDateTime;
-    //   startDateTime = jumpDayDateTime(
-    //     type: jumpDayTypeEnum.subtract,
-    //     dateTime: endDateTime,
-    //     days: countInfo[widget.selectedDateTimeSegment]!,
-    //   );
-    // }
-
-    // setChartSwipeDirectionEnd() {
-    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-    //     return;
-    //   } else if (getDateTimeToInt(endDateTime) >=
-    //       getDateTimeToInt(DateTime.now())) {
-    //     return showSnackBar(
-    //       context: context,
-    //       text: '미래의 날짜를 불러올 순 없어요.',
-    //       buttonName: '확인',
-    //     );
-    //   }
-
-    //   startDateTime = endDateTime;
-    //   endDateTime = jumpDayDateTime(
-    //     type: jumpDayTypeEnum.add,
-    //     dateTime: startDateTime,
-    //     days: countInfo[widget.selectedDateTimeSegment]!,
-    //   );
-    // }
 
     onPlotAreaSwipe(ChartSwipeDirection direction) {
       setState(() {
@@ -455,3 +395,63 @@ class _GraphChartState extends State<GraphChart> {
 //   final int? y2;
 //   final int? y3;
 // }
+
+  // @override
+  // void initState() {
+  //   DateTime now = DateTime.now();
+
+  //   startDateTime = jumpDayDateTime(
+  //     type: jumpDayTypeEnum.subtract,
+  //     dateTime: now,
+  //     days: countInfo[widget.selectedDateTimeSegment]!,
+  //   );
+  //   endDateTime = now;
+  //   super.initState();
+  // }
+
+  // @override
+  // void didUpdateWidget(covariant GraphChart oldWidget) {
+  //   final now = DateTime.now();
+
+  //   startDateTime = jumpDayDateTime(
+  //     type: jumpDayTypeEnum.subtract,
+  //     dateTime: now,
+  //     days: countInfo[widget.selectedDateTimeSegment]!,
+  //   );
+  //   endDateTime = now;
+  //   super.didUpdateWidget(oldWidget);
+  // }
+   // setStackedLineSeriesData();
+
+    // setChartSwipeDirectionStart() {
+    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
+    //     return;
+    //   }
+
+    //   endDateTime = startDateTime;
+    //   startDateTime = jumpDayDateTime(
+    //     type: jumpDayTypeEnum.subtract,
+    //     dateTime: endDateTime,
+    //     days: countInfo[widget.selectedDateTimeSegment]!,
+    //   );
+    // }
+
+    // setChartSwipeDirectionEnd() {
+    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
+    //     return;
+    //   } else if (getDateTimeToInt(endDateTime) >=
+    //       getDateTimeToInt(DateTime.now())) {
+    //     return showSnackBar(
+    //       context: context,
+    //       text: '미래의 날짜를 불러올 순 없어요.',
+    //       buttonName: '확인',
+    //     );
+    //   }
+
+    //   startDateTime = endDateTime;
+    //   endDateTime = jumpDayDateTime(
+    //     type: jumpDayTypeEnum.add,
+    //     dateTime: startDateTime,
+    //     days: countInfo[widget.selectedDateTimeSegment]!,
+    //   );
+    // }

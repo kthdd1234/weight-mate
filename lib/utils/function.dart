@@ -334,3 +334,11 @@ initDateTime() {
     now.minute,
   );
 }
+
+isCheckToday(DateTime date) {
+  final now = DateTime.now();
+
+  return now.year == date.year &&
+      now.month == date.month &&
+      now.day == date.day;
+}

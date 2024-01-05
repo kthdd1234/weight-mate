@@ -71,7 +71,7 @@ class CalendarBodyState extends State<CalendarBody> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ColorDot(width: 5, height: 5, color: color),
+              Dot(size: 5, color: color),
               SpaceWidth(width: 3),
               text != null
                   ? Text(text, style: const TextStyle(fontSize: 7))
@@ -139,32 +139,32 @@ class CalendarBodyState extends State<CalendarBody> {
       child: Column(
         children: [
           // BannerWidget(),
-          Expanded(
-            child: ContentsBox(
-              backgroundColor: Colors.transparent,
-              padding: const EdgeInsets.all(0),
-              contentsWidget: TableCalendar(
-                shouldFillViewport: true,
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.now(),
-                currentDay: currentDay,
-                focusedDay: currentDay,
-                calendarBuilders:
-                    CalendarBuilders(markerBuilder: markerBuilder),
-                onDaySelected: onDaySelected,
-                availableGestures: AvailableGestures.horizontalSwipe,
-                availableCalendarFormats: const {
-                  CalendarFormat.month: '1개월',
-                  CalendarFormat.twoWeeks: '2주일',
-                  CalendarFormat.week: '1주일'
-                },
-                calendarFormat: calendarFormat,
-                locale: 'ko-KR',
-                headerVisible: false,
-                onFormatChanged: onFormatChanged,
-              ),
-            ),
-          ),
+          // Expanded(
+          //   child: ContentsBox(
+          //     backgroundColor: Colors.transparent,
+          //     padding: const EdgeInsets.all(0),
+          //     contentsWidget: TableCalendar(
+          //       shouldFillViewport: true,
+          //       firstDay: DateTime.utc(2010, 10, 16),
+          //       lastDay: DateTime.now(),
+          //       currentDay: currentDay,
+          //       focusedDay: currentDay,
+          //       calendarBuilders:
+          //           CalendarBuilders(markerBuilder: markerBuilder),
+          //       onDaySelected: onDaySelected,
+          //       availableGestures: AvailableGestures.horizontalSwipe,
+          //       availableCalendarFormats: const {
+          //         CalendarFormat.month: '1개월',
+          //         CalendarFormat.twoWeeks: '2주일',
+          //         CalendarFormat.week: '1주일'
+          //       },
+          //       calendarFormat: calendarFormat,
+          //       locale: 'ko-KR',
+          //       headerVisible: false,
+          //       onFormatChanged: onFormatChanged,
+          //     ),
+          //   ),
+          // ),
           // SpaceHeight(height: smallSpace),
           // Row(
           //   mainAxisAlignment: MainAxisAlignment.end,

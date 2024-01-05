@@ -13,6 +13,7 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
@@ -26,23 +27,19 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class EditPicture extends StatelessWidget {
-  EditPicture({
-    super.key,
-    required this.setActiveCamera,
-    required this.recordType,
-  });
+  EditPicture({super.key, required this.setActiveCamera});
 
-  RECORD recordType;
-  Function(bool isActive) setActiveCamera;
+  Function(bool newValue) setActiveCamera;
 
   @override
   Widget build(BuildContext context) {
+    String fPicture = FILITER.picture.toString();
+    UserBox user = userRepository.user;
+    bool isOpen = user.filterList?.contains(fPicture) == true;
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
-    bool isEdit = recordType == RECORD.edit;
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-    Uint8List? mainFile = null; //recordInfo?.centerFile;
     Uint8List? leftFile = recordInfo?.leftFile;
     Uint8List? rightFile = recordInfo?.rightFile;
     Map<String, Uint8List?> fileInfo = {'left': leftFile, 'right': rightFile};
@@ -57,7 +54,7 @@ class EditPicture extends StatelessWidget {
     }
 
     onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
-      isEdit && closeDialog(context);
+      closeDialog(context);
 
       Navigator.push(
         context,
@@ -194,13 +191,6 @@ class EditPicture extends StatelessWidget {
                     title: '앨범 열기',
                     onTap: () => onShowImagePicker(ImageSource.gallery, pos),
                   ),
-                  // SpaceWidth(width: tinySpace),
-                  // ExpandedButtonVerti(
-                  //   mainColor: themeColor,
-                  //   icon: Icons.apps,
-                  //   title: '사진 목록',
-                  //   onTap: onNavigatorImageCollectionsPage,
-                  // ),
                 ],
               ),
             ],
@@ -218,59 +208,62 @@ class EditPicture extends StatelessWidget {
     }
 
     onTapCollapse() {
-      //
+      isOpen
+          ? user.filterList?.remove(fPicture)
+          : user.filterList?.add(fPicture);
+      user.save();
     }
 
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          TitleContainer(
-            title: '사진',
-            icon: Icons.auto_awesome,
-            tags: [
-              TagClass(
-                text: '사진 목록',
-                color: 'purple',
-                onTap: () =>
-                    Navigator.pushNamed(context, '/image-collections-page'),
-              ),
-              TagClass(
-                icon: Icons.keyboard_arrow_down_rounded,
-                color: 'purple',
-                onTap: onTapCollapse,
-              )
-            ],
-          ),
-          Row(
+    return Column(
+      children: [
+        ContentsBox(
+          isBoxShadow: true,
+          contentsWidget: Column(
             children: [
-              PictureContainer(
-                file: leftFile,
-                pos: 'left',
-                onTapPicture: onTapPicture,
-                onTapRemove: onTapRemove,
+              TitleContainer(
+                isDivider: isOpen,
+                title: '눈바디',
+                icon: Icons.auto_awesome,
+                tags: [
+                  TagClass(
+                    text: '눈바디 목록',
+                    color: 'purple',
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/image-collections-page'),
+                  ),
+                  TagClass(
+                    icon: isOpen
+                        ? Icons.keyboard_arrow_down_rounded
+                        : Icons.keyboard_arrow_right_rounded,
+                    color: 'purple',
+                    onTap: onTapCollapse,
+                  )
+                ],
               ),
-              SpaceWidth(width: smallSpace),
-              PictureContainer(
-                file: rightFile,
-                pos: 'right',
-                onTapPicture: onTapPicture,
-                onTapRemove: onTapRemove,
-              ),
+              isOpen
+                  ? Row(
+                      children: [
+                        PictureContainer(
+                          file: leftFile,
+                          pos: 'left',
+                          onTapPicture: onTapPicture,
+                          onTapRemove: onTapRemove,
+                        ),
+                        SpaceWidth(width: smallSpace),
+                        PictureContainer(
+                          file: rightFile,
+                          pos: 'right',
+                          onTapPicture: onTapPicture,
+                          onTapRemove: onTapRemove,
+                        ),
+                      ],
+                    )
+                  : const EmptyArea(),
             ],
           ),
-          // SpaceHeight(height: smallSpace),
-          // Row(
-          //   children: [
-          //     PictureContainer(
-          //       file: mainFile,
-          //       pos: 'main',
-          //       onTapPicture: onTapPicture,
-          //       onTapRemove: onTapRemove,
-          //     ),
-          //   ],
-          // )
-        ],
-      ),
+        ),
+        SpaceHeight(height: smallSpace),
+      ],
     );
   }
 }
