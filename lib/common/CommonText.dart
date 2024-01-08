@@ -38,7 +38,7 @@ class CommonText extends StatelessWidget {
       'underLine': TextDecoration.underline
     }[decoration];
 
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Row(
         mainAxisAlignment: isCenter == true

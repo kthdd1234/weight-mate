@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 /// 5.0
 const double tinySpace = 5.0;
@@ -167,6 +168,10 @@ const appTextColor = Color(0xffE0B1F6);
 
 /// tagColors
 final tagColors = {
+  'default': {
+    'bgColor': Colors.indigo.shade100,
+    'textColor': Colors.white,
+  },
   'green': {
     'bgColor': Colors.green.shade50,
     'textColor': Colors.red.shade300,
@@ -220,3 +225,25 @@ List<FilterClass> filterClassList = [
 ];
 
 List<String> initFilterList = filterClassList.map((e) => e.id).toList();
+
+const availableCalendarFormats = {
+  CalendarFormat.week: '1주일',
+  CalendarFormat.twoWeeks: '2주일',
+  CalendarFormat.month: '1개월',
+};
+
+const nextCalendarFormats = {
+  CalendarFormat.week: CalendarFormat.twoWeeks,
+  CalendarFormat.twoWeeks: CalendarFormat.month,
+  CalendarFormat.month: CalendarFormat.week
+};
+
+const availableCalendarMaker = {
+  CalendarMaker.sticker: '스티커',
+  CalendarMaker.weight: '체중',
+};
+
+const nextCalendarMaker = {
+  CalendarMaker.sticker: CalendarMaker.weight,
+  CalendarMaker.weight: CalendarMaker.sticker,
+};

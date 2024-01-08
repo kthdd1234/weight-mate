@@ -6,7 +6,6 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/widgets/circle_progress.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 
 class PlanListItem extends StatelessWidget {
   const PlanListItem({super.key});
@@ -19,7 +18,7 @@ class PlanListItem extends StatelessWidget {
           backgroundColor: dialogBackgroundColor,
           contentsWidget: Row(
             children: [
-              CircleProgress(),
+              // CircleProgress(),
               SpaceWidth(width: regularSapce),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

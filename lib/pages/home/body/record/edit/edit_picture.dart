@@ -15,8 +15,8 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/dash_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -207,7 +207,7 @@ class EditPicture extends StatelessWidget {
       recordInfo?.save();
     }
 
-    onTapCollapse() {
+    onTapOpen() {
       isOpen
           ? user.filterList?.remove(fPicture)
           : user.filterList?.add(fPicture);
@@ -226,7 +226,16 @@ class EditPicture extends StatelessWidget {
                 icon: Icons.auto_awesome,
                 tags: [
                   TagClass(
-                    text: '눈바디 목록',
+                    text: '사진 ${[
+                      recordInfo?.leftFile,
+                      recordInfo?.rightFile
+                    ].whereType<Uint8List>().length}장',
+                    color: 'purple',
+                    isHide: isOpen,
+                    onTap: onTapOpen,
+                  ),
+                  TagClass(
+                    text: '사진 앨범',
                     color: 'purple',
                     onTap: () =>
                         Navigator.pushNamed(context, '/image-collections-page'),
@@ -236,7 +245,7 @@ class EditPicture extends StatelessWidget {
                         ? Icons.keyboard_arrow_down_rounded
                         : Icons.keyboard_arrow_right_rounded,
                     color: 'purple',
-                    onTap: onTapCollapse,
+                    onTap: onTapOpen,
                   )
                 ],
               ),

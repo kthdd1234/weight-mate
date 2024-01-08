@@ -7,9 +7,6 @@ import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.d
 import 'package:flutter_app_weight_management/etc/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
-import 'package:flutter_app_weight_management/pages/common/record_history_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_weight.dart';
 import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
@@ -17,13 +14,13 @@ import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -68,6 +65,9 @@ void main() async {
         ChangeNotifierProvider<EnabledProvider>(
           create: (_) => EnabledProvider(),
         ),
+        ChangeNotifierProvider<TitleDateTimeProvider>(
+          create: (_) => TitleDateTimeProvider(),
+        )
       ],
       child: const MyApp(),
     ),
@@ -122,7 +122,6 @@ class _MyAppState extends State<MyApp> {
         '/common-alarm': (context) => const CommonAlarmPage(),
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
-        '/record-history-page': (context) => const RecordHistoryPage(),
       },
     );
   }

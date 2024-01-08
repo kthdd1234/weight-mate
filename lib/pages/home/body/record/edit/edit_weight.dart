@@ -11,8 +11,8 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/alarm_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -25,6 +25,7 @@ import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart'
 import 'package:flutter_app_weight_management/widgets/graph_chart.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 List<SvgClass> svgData = [
   SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
@@ -287,6 +288,18 @@ class _EditWeightState extends State<EditWeight> {
       user.save();
     }
 
+    onTapBMI() async {
+      Uri url = Uri(
+        scheme: 'https',
+        host: 'ko.wikipedia.org',
+        path: 'wiki/%EC%B2%B4%EC%A7%88%EB%9F%89_%EC%A7%80%EC%88%98',
+      );
+
+      await canLaunchUrl(url)
+          ? await launchUrl(url)
+          : throw 'Could not launch $url';
+    }
+
     return Column(
       children: [
         ContentsBox(
@@ -299,11 +312,18 @@ class _EditWeightState extends State<EditWeight> {
                 icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
                 tags: [
                   TagClass(
-                    text: user.isAlarm
-                        ? '${timeToString(user.alarmTime)}'
-                        : '알림 없음',
+                    text: '체중 ${recordInfo?.weight ?? '- '}kg',
                     color: 'indigo',
-                    onTap: onTapTimeSetting,
+                    isHide: isOpen,
+                    onTap: onTapOpen,
+                  ),
+                  TagClass(
+                    text: 'BMI ${bmi(
+                      tall: user.tall,
+                      weight: recordInfo?.weight,
+                    )}',
+                    color: 'indigo',
+                    onTap: onTapBMI,
                   ),
                   TagClass(
                     icon: isOpen
@@ -778,26 +798,11 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
 //         ),
 //       ],
 //     );
- 
-  // onBMI() {
-    //   double tall = user.tall;
-    //   double weight = recordInfo?.weight ?? 0.0;
 
-    //   final cmToM = tall / 100;
-    //   final bmi = weight / (cmToM * cmToM);
-    //   final bmiToFixed = bmi.toStringAsFixed(1);
-
-    //   return bmiToFixed;
-    // }
-
-    // onTapBMI() async {
-    //   Uri url = Uri(
-    //     scheme: 'https',
-    //     host: 'ko.wikipedia.org',
-    //     path: 'wiki/%EC%B2%B4%EC%A7%88%EB%9F%89_%EC%A7%80%EC%88%98',
-    //   );
-
-    //   await canLaunchUrl(url)
-    //       ? await launchUrl(url)
-    //       : throw 'Could not launch $url';
-    // }
+        // TagClass(
+        //             text: user.isAlarm
+        //                 ? '${timeToString(user.alarmTime)}'
+        //                 : '알림 없음',
+        //             color: 'indigo',
+        //             onTap: onTapTimeSetting,
+        //           ),

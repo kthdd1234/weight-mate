@@ -10,18 +10,20 @@ class CommonTag extends StatelessWidget {
     this.icon,
     this.onTap,
     this.leftIcon,
+    this.size,
   });
 
   String color;
   String? text;
   IconData? icon, leftIcon;
+  double? size;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     Map<String, Color> tagColor = tagColors[color]!;
 
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -33,7 +35,7 @@ class CommonTag extends StatelessWidget {
             ? CommonText(
                 text: text ?? '',
                 color: tagColor['textColor'],
-                size: 10,
+                size: size ?? 10,
                 isCenter: true,
                 isBold: true,
                 isNotTop: true,

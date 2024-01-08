@@ -68,3 +68,5 @@ enum PlanPriorityEnum { none, high, medium, low }
 enum FILITER { weight, emotion, picture, diet, exercise, lifeStyle, diary }
 
 enum RECORD { edit, history }
+
+enum CalendarMaker { sticker, weight }

@@ -26,11 +26,20 @@ class HomeAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     IconData? rightIcon =
         id.index < 2 ? Icons.keyboard_arrow_down_rounded : null;
 
+    onTap() {
+      //
+    }
+
     return AppBar(
       title: Row(
         children: [
           SpaceWidth(width: smallSpace),
-          CommonText(text: title, size: 20, rightIcon: rightIcon),
+          CommonText(
+            text: title,
+            size: 20,
+            rightIcon: rightIcon,
+            onTap: onTap,
+          ),
         ],
       ),
       backgroundColor: Colors.transparent,

@@ -1,23 +1,23 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/widget(etc)/calendar_body.dart';
+import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/widget(etc)/analyze_body.dart';
 import 'package:flutter_app_weight_management/widget(etc)/more_see_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/home_app_bar_widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
@@ -112,12 +112,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           );
         } else {
           if (recordInfo?.weight == null) {
-            context
-                .read<ImportDateTimeProvider>()
-                .setImportDateTime(DateTime.now());
-            context
-                .read<RecordIconTypeProvider>()
-                .setSeletedRecordIconType(RecordIconTypes.addWeight);
+            DateTime now = DateTime.now();
+
+            context.read<ImportDateTimeProvider>().setImportDateTime(now);
+            context.read<TitleDateTimeProvider>().setTitleDateTime(now);
           }
         }
       }
@@ -132,7 +130,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<BottomNavigationBarItem> items = const [
       BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
       BottomNavigationBarItem(
-          icon: Icon(Icons.format_list_bulleted_sharp), label: '히스토리'),
+          icon: Icon(Icons.menu_book_rounded), label: '히스토리'),
       BottomNavigationBarItem(
         icon: Padding(
           padding: EdgeInsets.only(bottom: 3),
@@ -161,7 +159,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     List<Widget> bodyList = [
       RecordBody(setActiveCamera: setActiveCamera),
-      CalendarBody(),
+      const HistoryBody(),
       const AnalyzeBody(),
       const MoreSeeBody()
     ];
@@ -179,11 +177,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         : AppFramework(
             widget: Scaffold(
               backgroundColor: Colors.transparent,
-              appBar: HomeAppBarWidget(appBar: AppBar(), id: bottomNavitionId),
-              body: SafeArea(child: bodyList[bottomNavitionId.index]),
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    SpaceHeight(height: regularSapce),
+                    CommonAppBar(id: bottomNavitionId),
+                    bodyList[bottomNavitionId.index],
+                  ],
+                ),
+              ),
               bottomNavigationBar: Theme(
-                data:
-                    Theme.of(context).copyWith(canvasColor: Colors.transparent),
+                data: Theme.of(context).copyWith(
+                  canvasColor: Colors.transparent,
+                ),
                 child: BottomNavigationBar(
                   items: items,
                   elevation: 0,

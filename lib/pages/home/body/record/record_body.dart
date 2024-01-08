@@ -2,11 +2,21 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/calendar/calendar_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_picture.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
+
+List<ValueListenable<Box<HiveObject>>> valueListenables = [
+  userRepository.userBox.listenable(),
+  recordRepository.recordBox.listenable(),
+  planRepository.planBox.listenable()
+];
 
 class RecordBody extends StatelessWidget {
   RecordBody({super.key, required this.setActiveCamera});
@@ -15,27 +25,28 @@ class RecordBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<ValueListenable<Box<HiveObject>>> valueListenables = [
-      userRepository.userBox.listenable(),
-      recordRepository.recordBox.listenable(),
-      planRepository.planBox.listenable()
-    ];
-
-    return SingleChildScrollView(
-      child: MultiValueListenableBuilder(
-        valueListenables: valueListenables,
-        builder: (context, values, child) {
-          return Column(
-            children: [
-              CalendarContainer(),
-              EditContainer(setActiveCamera: setActiveCamera),
-            ],
-          );
-        },
-      ),
+    return MultiValueListenableBuilder(
+      valueListenables: valueListenables,
+      builder: (context, values, child) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: ListView(
+              children: [
+                SpaceHeight(height: smallSpace),
+                EditWeight(),
+                EditPicture(setActiveCamera: setActiveCamera),
+                EditTodo(),
+                EditDiary(),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
+
 
 // BannerWidget(),
 // SpaceHeight(height: largeSpace),

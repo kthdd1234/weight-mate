@@ -342,3 +342,15 @@ isCheckToday(DateTime date) {
       now.month == date.month &&
       now.day == date.day;
 }
+
+bmi({required double tall, required double? weight}) {
+  if (weight == null) {
+    return '-';
+  }
+
+  final cmToM = tall / 100;
+  final bmi = weight / (cmToM * cmToM);
+  final bmiToFixed = bmi.toStringAsFixed(1);
+
+  return bmiToFixed;
+}

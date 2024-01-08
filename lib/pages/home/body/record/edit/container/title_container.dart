@@ -6,12 +6,13 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TitleContainer extends StatelessWidget {
-  TitleContainer(
-      {super.key,
-      required this.title,
-      required this.icon,
-      required this.tags,
-      required this.isDivider});
+  TitleContainer({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.tags,
+    required this.isDivider,
+  });
 
   String title;
   IconData icon;
@@ -21,18 +22,20 @@ class TitleContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Row> wRow = tags
-        .map((tag) => Row(
-              children: [
-                SpaceWidth(width: tinySpace),
-                CommonTag(
-                  color: tag.color,
-                  text: tag.text,
-                  onTap: tag.onTap,
-                  icon: tag.icon,
-                  leftIcon: tag.leftIcon,
-                )
-              ],
-            ))
+        .map((tag) => tag.isHide != true
+            ? Row(
+                children: [
+                  SpaceWidth(width: tinySpace),
+                  CommonTag(
+                    color: tag.color,
+                    text: tag.text,
+                    onTap: tag.onTap,
+                    icon: tag.icon,
+                    leftIcon: tag.leftIcon,
+                  )
+                ],
+              )
+            : Row(children: []))
         .toList();
 
     return Column(
@@ -62,6 +65,7 @@ class TagClass {
   TagClass({
     required this.color,
     required this.onTap,
+    this.isHide,
     this.icon,
     this.text,
     this.leftIcon,
@@ -70,5 +74,6 @@ class TagClass {
   String color;
   String? text;
   IconData? icon, leftIcon;
+  bool? isHide;
   Function() onTap;
 }

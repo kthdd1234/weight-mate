@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
@@ -12,7 +10,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -69,6 +67,11 @@ class _EditDiaryState extends State<EditDiary> {
         );
       } else {
         recordInfo.emotion = selectedEmotion;
+      }
+
+      bool? isContain = user.filterList?.contains(fDiary);
+      if (isContain == false || isContain == null) {
+        user.filterList?.add(fDiary);
       }
 
       recordInfo?.save();
@@ -195,6 +198,14 @@ class _EditDiaryState extends State<EditDiary> {
                 title: '일기',
                 icon: Icons.auto_fix_high,
                 tags: [
+                  TagClass(
+                    text: recordInfo?.diaryDateTime != null
+                        ? timeToString(recordInfo?.diaryDateTime)
+                        : '미작성',
+                    color: 'orange',
+                    isHide: isOpen,
+                    onTap: onTapOpen,
+                  ),
                   TagClass(
                     text: '감정 기록',
                     color: 'orange',

@@ -16,9 +16,9 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/alarm_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/container/title_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/section/edit_todo.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -195,7 +195,13 @@ class _TodoContainerState extends State<TodoContainer> {
 
     List<TagClass> tags = [
       TagClass(
-        text: '실천율: ${actionPercent()}%',
+        text: '할 일 ${planList.length}개',
+        color: widget.color,
+        isHide: isOpen,
+        onTap: onTapOpen,
+      ),
+      TagClass(
+        text: '실천율 ${actionPercent()}%',
         color: widget.color,
         onTap: onTapActionPercent,
       ),
@@ -307,12 +313,6 @@ class TodoList extends StatelessWidget {
                     isChcked: action(info.id)['id'] != null,
                     onTapTodoUpdate: onTapTodoUpdate,
                   ),
-                  // TodoMore(
-                  //   id: e.id,
-                  //   matinColor: mainColor,
-                  //   actionDateTime: action(e.id)['actionDateTime'],
-                  //   onTapMoreTodo: onTapMoreTodo,
-                  // ),
                 ],
               ),
             ),
@@ -803,73 +803,3 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
     );
   }
 }
-// class TodoResult extends StatelessWidget {
-//   TodoResult({super.key, required this.importDateTime});
-
-//   DateTime importDateTime;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     Box<RecordBox> recordBox = recordRepository.recordBox;
-//     int recordKey = getDateTimeToInt(importDateTime);
-//     RecordBox? recordInfo = recordBox.get(recordKey);
-//     List<Map<String, dynamic>>? actions = recordInfo?.actions;
-
-//     renderSvg(String type) => SvgPicture.asset('assets/svgs/check-$type.svg');
-
-//     final wSvgPicture = {
-//       PlanTypeEnum.diet.toString(): renderSvg('diet'),
-//       PlanTypeEnum.exercise.toString(): renderSvg('exercise'),
-//       PlanTypeEnum.lifestyle.toString(): renderSvg('life'),
-//     };
-
-//     final todoResultList = actions
-//         ?.where(
-//           (action) =>
-//               getDateTimeToInt(action['actionDateTime']) ==
-//               getDateTimeToInt(importDateTime),
-//         )
-//         .toList();
-
-//     todoResultList?.sort(
-//         (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!));
-
-//     final todoWidgetList = todoResultList
-//         ?.map((data) => Column(
-//               children: [
-//                 SpaceHeight(height: smallSpace),
-//                 Row(
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Expanded(
-//                       flex: 0,
-//                       child: wSvgPicture[data['type']] ?? EmptyArea(),
-//                     ),
-//                     SpaceWidth(width: smallSpace),
-//                     Expanded(
-//                       flex: 5,
-//                       child: Text(
-//                         data['name'],
-//                         style: const TextStyle(fontSize: 13, color: themeColor),
-//                       ),
-//                     ),
-//                     SpaceWidth(width: largeSpace),
-//                     Expanded(
-//                       flex: 0,
-//                       child: Text(
-//                         timeToString(data['actionDateTime']),
-//                         style: TextStyle(
-//                           fontSize: 10,
-//                           color: planTypeColors[data['type']],
-//                         ),
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ))
-//         .toList();
-
-//     return Column(children: todoWidgetList ?? []);
-//   }
-// }
