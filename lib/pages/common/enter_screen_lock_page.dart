@@ -71,9 +71,9 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
                     context
                         .read<ImportDateTimeProvider>()
                         .setImportDateTime(DateTime.now());
-                    context
-                        .read<RecordIconTypeProvider>()
-                        .setSeletedRecordIconType(RecordIconTypes.addWeight);
+                    // context
+                    //     .read<RecordIconTypeProvider>()
+                    //     .setSeletedRecordIconType(RecordIconTypes.addWeight);
                   }
                 } else {
                   isError = true;

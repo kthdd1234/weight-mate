@@ -5,7 +5,7 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+// import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class PlanGroupItem extends StatelessWidget {
   PlanGroupItem({
@@ -50,22 +50,22 @@ class PlanGroupItem extends StatelessWidget {
               )
             ],
           ),
-          CircularPercentIndicator(
-            radius: 30.0,
-            lineWidth: 5.0,
-            animation: true,
-            percent: percent * 0.01,
-            center: Text(
-              '$percent%',
-              style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 10.0,
-                  color: Color(0xff6237E2)),
-            ),
-            circularStrokeCap: CircularStrokeCap.round,
-            backgroundColor: enableBackgroundColor,
-            progressColor: enableTextColor,
-          )
+          // CircularPercentIndicator(
+          //   radius: 30.0,
+          //   lineWidth: 5.0,
+          //   animation: true,
+          //   percent: percent * 0.01,
+          //   center: Text(
+          //     '$percent%',
+          //     style: const TextStyle(
+          //         fontWeight: FontWeight.bold,
+          //         fontSize: 10.0,
+          //         color: Color(0xff6237E2)),
+          //   ),
+          //   circularStrokeCap: CircularStrokeCap.round,
+          //   backgroundColor: enableBackgroundColor,
+          //   progressColor: enableTextColor,
+          // )
         ],
       ),
     );

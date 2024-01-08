@@ -116,9 +116,9 @@ class _HomeContainerState extends State<HomeContainer>
             context
                 .read<ImportDateTimeProvider>()
                 .setImportDateTime(DateTime.now());
-            context
-                .read<RecordIconTypeProvider>()
-                .setSeletedRecordIconType(RecordIconTypes.addWeight);
+            // context
+            //     .read<RecordIconTypeProvider>()
+            //     .setSeletedRecordIconType(RecordIconTypes.addWeight);
           }
         }
       }

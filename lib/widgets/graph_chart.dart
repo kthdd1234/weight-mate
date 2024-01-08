@@ -148,8 +148,8 @@ class _GraphChartState extends State<GraphChart> {
       return setLineSeriesDateTime(
         count: setCount()!,
         format: widget.selectedDateTimeSegment == SegmentedTypes.week
-            ? 'dd일'
-            : 'MM월\ndd일',
+            ? 'd일'
+            : 'M.d',
       );
     }
 
@@ -251,8 +251,9 @@ class _GraphChartState extends State<GraphChart> {
         textStyle: const TextStyle(fontSize: 10),
       ),
       tooltipBehavior: TooltipBehavior(
+        header: '',
         enable: true,
-        format: 'point.y kg',
+        format: 'point.x: point.ykg',
       ),
       primaryXAxis: CategoryAxis(),
       primaryYAxis: NumericAxis(

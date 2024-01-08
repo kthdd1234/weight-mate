@@ -21,8 +21,8 @@ import '../../../model/user_box/user_box.dart';
 final countInfo = {
   SegmentedTypes.week: 6,
   SegmentedTypes.month: 29,
-  SegmentedTypes.threeMonth: 59,
-  SegmentedTypes.sixMonth: 89,
+  SegmentedTypes.threeMonth: 89,
+  SegmentedTypes.sixMonth: 179,
   SegmentedTypes.custom: 0,
 };
 
