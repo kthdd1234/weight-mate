@@ -12,9 +12,11 @@ import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/provider/year_date_time_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
@@ -47,27 +49,15 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<DietInfoProvider>(
-          create: (_) => DietInfoProvider(),
-        ),
-        ChangeNotifierProvider<RecordIconTypeProvider>(
-          create: (_) => RecordIconTypeProvider(),
-        ),
-        ChangeNotifierProvider<ImportDateTimeProvider>(
-          create: (_) => ImportDateTimeProvider(),
-        ),
-        ChangeNotifierProvider<AdsProvider>(
-          create: (_) => AdsProvider(adsState: adsState),
-        ),
-        ChangeNotifierProvider<BottomNavigationProvider>(
-          create: (_) => BottomNavigationProvider(),
-        ),
-        ChangeNotifierProvider<EnabledProvider>(
-          create: (_) => EnabledProvider(),
-        ),
-        ChangeNotifierProvider<TitleDateTimeProvider>(
-          create: (_) => TitleDateTimeProvider(),
-        )
+        ChangeNotifierProvider(create: (_) => DietInfoProvider()),
+        ChangeNotifierProvider(create: (_) => RecordIconTypeProvider()),
+        ChangeNotifierProvider(create: (_) => ImportDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => AdsProvider(adsState: adsState)),
+        ChangeNotifierProvider(create: (_) => BottomNavigationProvider()),
+        ChangeNotifierProvider(create: (_) => EnabledProvider()),
+        ChangeNotifierProvider(create: (_) => TitleDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => YearDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
       ],
       child: const MyApp(),
     ),

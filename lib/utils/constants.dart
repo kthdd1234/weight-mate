@@ -247,3 +247,13 @@ const nextCalendarMaker = {
   CalendarMaker.sticker: CalendarMaker.weight,
   CalendarMaker.weight: CalendarMaker.sticker,
 };
+
+const historyFilterFormats = {
+  HistoryFilter.recent: '최신순',
+  HistoryFilter.past: '과거순'
+};
+
+const nextHistoryFilter = {
+  HistoryFilter.recent: HistoryFilter.past,
+  HistoryFilter.past: HistoryFilter.recent
+};

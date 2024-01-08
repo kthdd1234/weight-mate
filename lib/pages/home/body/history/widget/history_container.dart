@@ -3,24 +3,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
+import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/widget/dash_divider.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class HistoryContainer extends StatelessWidget {
-  HistoryContainer({
-    super.key,
-    required this.recordInfo,
-  });
+  HistoryContainer({super.key, required this.recordInfo});
 
   RecordBox recordInfo;
 
@@ -31,6 +36,7 @@ class HistoryContainer extends StatelessWidget {
       children: [
         SpaceHeight(height: 15),
         HistoryHeader(
+          recordInfo: recordInfo,
           createDateTime: recordInfo.createDateTime,
           weight: recordInfo.weight,
           emotion: recordInfo.emotion,
@@ -55,11 +61,13 @@ class HistoryContainer extends StatelessWidget {
 class HistoryHeader extends StatelessWidget {
   HistoryHeader({
     super.key,
+    required this.recordInfo,
     required this.createDateTime,
     required this.weight,
     required this.emotion,
   });
 
+  RecordBox? recordInfo;
   DateTime createDateTime;
   double? weight;
   String? emotion;
@@ -67,6 +75,53 @@ class HistoryHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
+    String formatDateTime = dateTimeFormatter(
+      format: 'M월 d일 (E)',
+      dateTime: createDateTime,
+    );
+
+    onTapEdit() {
+      context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
+      context.read<TitleDateTimeProvider>().setTitleDateTime(createDateTime);
+      context
+          .read<BottomNavigationProvider>()
+          .setBottomNavigation(enumId: BottomNavigationEnum.record);
+
+      closeDialog(context);
+    }
+
+    onTapRemove() {
+      recordRepository.recordBox.delete(getDateTimeToInt(createDateTime));
+
+      closeDialog(context);
+    }
+
+    onTapMore() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => DefaultBottomSheet(
+          title: formatDateTime,
+          height: 200,
+          contents: Row(
+            children: [
+              ExpandedButtonVerti(
+                mainColor: themeColor,
+                icon: Icons.edit,
+                title: '기록 수정',
+                onTap: onTapEdit,
+              ),
+              SpaceWidth(width: tinySpace),
+              ExpandedButtonVerti(
+                mainColor: Colors.red,
+                icon: Icons.delete_forever,
+                title: '기록 삭제',
+                onTap: onTapRemove,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Column(
       children: [
@@ -90,15 +145,16 @@ class HistoryHeader extends StatelessWidget {
                   Row(
                     children: [
                       CommonText(
-                        text: dateTimeFormatter(
-                          format: 'M월 d일 (E)',
-                          dateTime: createDateTime,
-                        ),
+                        text: formatDateTime,
                         size: 11,
                         isBold: true,
                       ),
                       Spacer(),
-                      CommonIcon(icon: Icons.more_vert_rounded, size: 16)
+                      CommonIcon(
+                        icon: Icons.more_vert_rounded,
+                        size: 16,
+                        onTap: onTapMore,
+                      )
                     ],
                   ),
                   SpaceHeight(height: 2),
@@ -142,6 +198,15 @@ class HistoryPicture extends StatelessWidget {
     double height =
         [leftFile, rightFile].whereType<Uint8List>().length == 1 ? 300 : 150;
 
+    onTapPicture(Uint8List binaryData) {
+      Navigator.push(
+        context,
+        FadePageRoute(
+          page: ImagePullSizePage(binaryData: binaryData),
+        ),
+      );
+    }
+
     return isFile != null
         ? Column(
             children: [
@@ -149,12 +214,18 @@ class HistoryPicture extends StatelessWidget {
                 children: [
                   leftFile != null
                       ? Expanded(
-                          child: DefaultImage(data: leftFile!, height: height))
+                          child: GestureDetector(
+                          onTap: () => onTapPicture(leftFile!),
+                          child: DefaultImage(data: leftFile!, height: height),
+                        ))
                       : const EmptyArea(),
                   SpaceWidth(width: leftFile != null ? tinySpace : 0),
                   rightFile != null
                       ? Expanded(
-                          child: DefaultImage(data: rightFile!, height: height))
+                          child: GestureDetector(
+                          onTap: () => onTapPicture(rightFile!),
+                          child: DefaultImage(data: rightFile!, height: height),
+                        ))
                       : const EmptyArea(),
                 ],
               ),

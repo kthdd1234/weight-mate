@@ -70,3 +70,5 @@ enum FILITER { weight, emotion, picture, diet, exercise, lifeStyle, diary }
 enum RECORD { edit, history }
 
 enum CalendarMaker { sticker, weight }
+
+enum HistoryFilter { recent, past }
