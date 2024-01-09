@@ -1,6 +1,8 @@
 import 'dart:developer';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -33,7 +35,6 @@ import 'package:gdpr_dialog/gdpr_dialog.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
 
@@ -89,22 +90,46 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String status = 'none';
+  String _authStatus = 'Unknown';
   late Box<UserBox> userBox;
 
   @override
   void initState() {
     userBox = Hive.box('userBox');
 
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => initAppTrackingPlugin());
+    initGdprPlugin();
+    super.initState();
+  }
+
+  Future<void> initAppTrackingPlugin() async {
+    try {
+      final TrackingStatus status =
+          await AppTrackingTransparency.trackingAuthorizationStatus;
+
+      setState(() => _authStatus = '$status');
+
+      if (status == TrackingStatus.notDetermined) {
+        final TrackingStatus status =
+            await AppTrackingTransparency.requestTrackingAuthorization();
+        setState(() => _authStatus = '$status');
+      }
+    } on PlatformException {
+      setState(() => _authStatus = 'error');
+    }
+
+    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+    print("UUID: $uuid");
+  }
+
+  initGdprPlugin() {
     GdprDialog.instance.resetDecision();
     GdprDialog.instance
         .showDialog(isForTest: false, testDeviceId: '')
         .then((value) {
-      final result = GdprDialog.instance.getConsentStatus();
-      print('result === $result, $value');
       status = 'dialog result == $value';
     });
-
-    super.initState();
   }
 
   @override
