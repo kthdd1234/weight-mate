@@ -264,16 +264,11 @@ class CalendarBar extends StatelessWidget {
 
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Container(
-          decoration: BoxDecoration(
-              color: isWeight ? dialogBackgroundColor : null,
-              borderRadius: BorderRadius.circular(100)),
-          child: CommonText(
-            text: isWeight ? '${recordInfo?.weight}kg' : '',
-            size: 8,
-            color: Colors.indigo,
-            isCenter: true,
-          ),
+        child: CommonText(
+          text: isWeight ? '${recordInfo?.weight}kg' : '',
+          size: 8,
+          color: Colors.black,
+          isCenter: true,
         ),
       );
     }
