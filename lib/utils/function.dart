@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
@@ -223,7 +223,7 @@ showAlarmBottomSheet({
 }) {
   showCupertinoModalPopup(
     context: context,
-    builder: (context) => DefaultBottomSheet(
+    builder: (context) => CommonBottomSheet(
       title: '알림 시간 설정',
       height: 380,
       contents: DefaultTimePicker(

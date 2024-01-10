@@ -147,6 +147,16 @@ flutter:
     - assets/svgs/check-diet.svg
     - assets/svgs/check-exercise.svg
     - assets/svgs/check-life.svg
+    - assets/svgs/version.svg
+    - assets/svgs/share.svg
+    - assets/svgs/review.svg
+    - assets/svgs/private.svg
+    - assets/svgs/alarm.svg
+    - assets/svgs/developer.svg
+    - assets/svgs/goal.svg
+    - assets/svgs/reset.svg
+    - assets/svgs/lock.svg
+    - assets/svgs/tall.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

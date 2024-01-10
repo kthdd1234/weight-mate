@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +50,30 @@ class _EditDiaryState extends State<EditDiary> {
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
 
+    showAdDialog(String title) {
+      showDialog(
+        context: context,
+        builder: (dContext) {
+          onClick(BottomNavigationEnum enumId) async {
+            dContext
+                .read<BottomNavigationProvider>()
+                .setBottomNavigation(enumId: enumId);
+            closeDialog(dContext);
+          }
+
+          return NativeAdDialog(
+            title: title,
+            leftText: '히스토리 보기',
+            rightText: '그래프 보기',
+            leftIcon: Icons.menu_book_rounded,
+            rightIcon: Icons.auto_graph_rounded,
+            onLeftClick: () => onClick(BottomNavigationEnum.history),
+            onRightClick: () => onClick(BottomNavigationEnum.graph),
+          );
+        },
+      );
+    }
+
     onTapEditDiary() {
       setState(() {
         textController.text = recordInfo?.whiteText ?? '';
@@ -76,6 +102,8 @@ class _EditDiaryState extends State<EditDiary> {
 
       recordInfo?.save();
       closeDialog(context);
+
+      showAdDialog('감정 기록 완료!');
     }
 
     onTapOpenEmotion() {
@@ -118,6 +146,8 @@ class _EditDiaryState extends State<EditDiary> {
       }
 
       setState(() => isShowInput = false);
+
+      showAdDialog('일기 작성 완료!');
     }
 
     onTapOpen() {
@@ -152,7 +182,7 @@ class _EditDiaryState extends State<EditDiary> {
       showModalBottomSheet(
         context: context,
         builder: (context) {
-          return DefaultBottomSheet(
+          return CommonBottomSheet(
             title: '일기 설정',
             height: 220,
             contents: Row(
@@ -385,7 +415,7 @@ class EmotionModal extends StatelessWidget {
       );
     }
 
-    return DefaultBottomSheet(
+    return CommonBottomSheet(
       title: '감정',
       height: 560,
       contents: Expanded(

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -21,7 +22,6 @@ import 'package:flutter_app_weight_management/provider/import_date_time_provider
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -157,7 +157,7 @@ class EditPicture extends StatelessWidget {
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
-        builder: (context) => DefaultBottomSheet(
+        builder: (context) => CommonBottomSheet(
           title: '사진 ${isFilePath ? '편집' : '추가'}',
           height: isFilePath ? 500 : 220,
           contents: Column(
@@ -181,14 +181,14 @@ class EditPicture extends StatelessWidget {
                   ExpandedButtonVerti(
                     mainColor: themeColor,
                     icon: Icons.add_a_photo,
-                    title: '사진 촬영',
+                    title: '사진 촬영하기',
                     onTap: () => onShowImagePicker(ImageSource.camera, pos),
                   ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
                     mainColor: themeColor,
                     icon: Icons.collections,
-                    title: '앨범 열기',
+                    title: '사진 가져오기',
                     onTap: () => onShowImagePicker(ImageSource.gallery, pos),
                   ),
                 ],

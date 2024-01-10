@@ -173,8 +173,8 @@ final tagColors = {
     'textColor': Colors.white,
   },
   'green': {
-    'bgColor': Colors.green.shade50,
-    'textColor': Colors.red.shade300,
+    'bgColor': Colors.green.shade50, // E8F5E9
+    'textColor': Colors.green.shade300, // 4CAF50
   },
   'red': {
     'bgColor': Colors.red.shade50,
@@ -193,25 +193,45 @@ final tagColors = {
     'textColor': Colors.lightBlue.shade300,
   },
   'brown': {
-    'bgColor': Colors.brown.shade50,
-    'textColor': Colors.brown.shade300,
+    'bgColor': Colors.brown.shade50, // EFEBE9
+    'textColor': Colors.brown.shade300, // A1887F
   },
   'orange': {
     'bgColor': Colors.orange.shade50,
     'textColor': Colors.orange.shade300,
+  },
+  'deepOrange': {
+    'bgColor': Colors.deepOrange.shade50,
+    'textColor': Colors.deepOrange.shade300,
   },
   'purple': {
     'bgColor': Colors.purple.shade50,
     'textColor': Colors.purple.shade300,
   },
   'indigo': {
-    'bgColor': Colors.indigo.shade50,
-    'textColor': Colors.indigo.shade300,
+    'bgColor': Colors.indigo.shade50, //
+    'textColor': Colors.indigo.shade300, //
+  },
+  'blueGrey': {
+    'bgColor': Colors.blueGrey.shade50, // ECEFF1
+    'textColor': Colors.blueGrey.shade300, // 90A4AE
   },
   'grey': {
     'bgColor': Colors.grey.shade200,
     'textColor': Colors.grey,
-  }
+  },
+  'whiteBlue': {
+    'bgColor': Colors.blue.shade200,
+    'textColor': Colors.white,
+  },
+  'whiteIndigo': {
+    'bgColor': Colors.indigo.shade200,
+    'textColor': Colors.white,
+  },
+  'whiteRed': {
+    'bgColor': Colors.red.shade200,
+    'textColor': Colors.white,
+  },
 };
 
 List<FilterClass> filterClassList = [

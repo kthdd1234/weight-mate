@@ -11,12 +11,14 @@ class CommonTag extends StatelessWidget {
     this.onTap,
     this.leftIcon,
     this.size,
+    this.bgColor,
   });
 
   String color;
   String? text;
   IconData? icon, leftIcon;
   double? size;
+  Color? bgColor;
   Function()? onTap;
 
   @override
@@ -27,7 +29,7 @@ class CommonTag extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: tagColor['bgColor'],
+          color: bgColor ?? tagColor['bgColor'],
           borderRadius: BorderRadius.circular(5),
         ),
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),

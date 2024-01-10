@@ -15,7 +15,7 @@ enum RecordIconTypes {
   comonPlan
 }
 
-enum BottomNavigationEnum { record, calendar, analyze, setting }
+enum BottomNavigationEnum { record, history, graph, setting }
 
 enum SegmentedTypes {
   weight,
@@ -32,22 +32,16 @@ enum SegmentedTypes {
 }
 
 enum MoreSeeItem {
-  none,
   tall,
-  weight,
   goalWeight,
+  appAlarm,
   appLock,
   appReset,
-  appAlarm,
   appLang,
   appVersion,
   appEval,
   appShare,
   developerInp,
-  setWeight,
-  checkPlan,
-  dietWiseSaying,
-  mySetting,
   privacyPolicy
 }
 

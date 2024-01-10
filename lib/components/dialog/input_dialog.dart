@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
 
 Map<MoreSeeItem, TextInputClass> textInputData = {
   MoreSeeItem.tall: TextInputClass(
@@ -20,17 +20,6 @@ Map<MoreSeeItem, TextInputClass> textInputData = {
     ),
     prefixIcon: tallPrefixIcon,
     suffixText: tallSuffixText,
-  ),
-  MoreSeeItem.weight: TextInputClass(
-    maxLength: weightMaxLength,
-    hintText: weightHintText,
-    inputTextErr: InputTextErrorClass(
-      min: weightMin,
-      max: weightMax,
-      errMsg: weightErrMsg,
-    ),
-    prefixIcon: weightPrefixIcon,
-    suffixText: weightSuffixText,
   ),
   MoreSeeItem.goalWeight: TextInputClass(
     maxLength: weightMaxLength,
@@ -111,12 +100,13 @@ class _InputDialogState extends State<InputDialog> {
       shape: containerBorderRadious,
       backgroundColor: dialogBackgroundColor,
       elevation: 0.0,
-      title: AlertDialogTitleWidget(text: widget.title, onTap: onTapClose),
+      title: DialogTitle(text: widget.title, onTap: onTapClose),
       content: ContentsBox(
         height: errorText == null ? 156 : 180,
         contentsWidget: Column(
           children: [
             TextInput(
+              autofocus: true,
               maxLength: item.maxLength,
               prefixIcon: item.prefixIcon,
               suffixText: item.suffixText,

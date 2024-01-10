@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -17,7 +16,6 @@ import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -105,6 +103,7 @@ class _CommonTitleState extends State<CommonTitle> {
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
     IconData? rightIcon = isHistory ? Icons.keyboard_arrow_down_rounded : null;
+    bool isToday = isCheckToday(titleDateTime);
 
     onSelectionChanged(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -121,7 +120,7 @@ class _CommonTitleState extends State<CommonTitle> {
                 AlertDialog(
                   backgroundColor: dialogBackgroundColor,
                   shape: containerBorderRadious,
-                  title: AlertDialogTitleWidget(
+                  title: DialogTitle(
                     text: '선택 년도',
                     onTap: () => closeDialog(context),
                   ),
@@ -141,6 +140,13 @@ class _CommonTitleState extends State<CommonTitle> {
           );
     }
 
+    onTapToday() {
+      DateTime now = DateTime.now();
+
+      context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+      context.read<ImportDateTimeProvider>().setImportDateTime(now);
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
@@ -157,9 +163,17 @@ class _CommonTitleState extends State<CommonTitle> {
               isRecord
                   ? Row(
                       children: [
+                        isToday
+                            ? const EmptyArea()
+                            : CommonTag(
+                                text: '오늘로 이동',
+                                color: 'whiteBlue',
+                                onTap: onTapToday,
+                              ),
+                        SpaceWidth(width: tinySpace),
                         CommonTag(
                           text: availableCalendarMaker[widget.calendarMaker],
-                          color: 'default',
+                          color: 'whiteIndigo',
                           onTap: () => widget.onTapMakerType(
                             nextCalendarMaker[widget.calendarMaker]!,
                           ),
@@ -167,7 +181,7 @@ class _CommonTitleState extends State<CommonTitle> {
                         SpaceWidth(width: tinySpace),
                         CommonTag(
                           text: availableCalendarFormats[widget.calendarFormat],
-                          color: 'default',
+                          color: 'whiteIndigo',
                           onTap: () => widget.onFormatChanged(
                             nextCalendarFormats[widget.calendarFormat]!,
                           ),
@@ -178,7 +192,9 @@ class _CommonTitleState extends State<CommonTitle> {
               isHistory
                   ? CommonTag(
                       text: historyFilterFormats[historyFilter],
-                      color: 'blue',
+                      color: historyFilter == HistoryFilter.recent
+                          ? 'whiteBlue'
+                          : 'whiteRed',
                       onTap: onTapFilter,
                     )
                   : const EmptyArea(),

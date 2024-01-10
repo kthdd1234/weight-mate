@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
-import 'package:flutter_app_weight_management/etc/common_alarm_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_page.dart';
@@ -14,7 +13,6 @@ import 'package:flutter_app_weight_management/provider/history_filter_provider.d
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
-import 'package:flutter_app_weight_management/provider/year_date_time_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
@@ -54,7 +52,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => BottomNavigationProvider()),
         ChangeNotifierProvider(create: (_) => EnabledProvider()),
         ChangeNotifierProvider(create: (_) => TitleDateTimeProvider()),
-        ChangeNotifierProvider(create: (_) => YearDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
       ],
       child: const MyApp(),
@@ -107,7 +104,6 @@ class _MyAppState extends State<MyApp> {
         '/add-plan-setting': (context) => const AddPlanSetting(),
         '/home-page': (context) => const HomePage(),
         '/screen-lock': (context) => const ScreenLockPage(),
-        '/common-alarm': (context) => const CommonAlarmPage(),
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
       },

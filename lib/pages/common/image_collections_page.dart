@@ -2,12 +2,14 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_carousel_slider_page.dart';
@@ -23,6 +25,7 @@ class ImageCollectionsPage extends StatefulWidget {
 }
 
 class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
+  bool isRecent = true;
   List<Map<String, dynamic>> fileItemList = [];
 
   @override
@@ -49,7 +52,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       }
     }
 
-    fileItemList = itemList;
+    fileItemList = itemList.reversed.toList();
 
     super.initState();
   }
@@ -60,7 +63,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       if (fileItemList.isEmpty) {
         return showSnackBar(
           context: context,
-          text: '사진 슬라이드가 없어요.',
+          text: '사진이 없어요.',
           buttonName: '확인',
           width: 230,
         );
@@ -78,6 +81,13 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       );
     }
 
+    onTapFilter() {
+      setState(() {
+        isRecent = !isRecent;
+        fileItemList = fileItemList.reversed.toList();
+      });
+    }
+
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.transparent,
@@ -86,10 +96,18 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
           foregroundColor: themeColor,
           elevation: 0.0,
           actions: [
-            TextButton(
-              onPressed: () => onNavigatorPage(index: 0, isAutoPlay: true),
-              child: const Text('사진 슬라이드로 보기'),
-            )
+            CommonTag(
+              color: 'whiteIndigo',
+              text: '사진 슬라이드로 보기',
+              onTap: () => onNavigatorPage(index: 0, isAutoPlay: true),
+            ),
+            SpaceWidth(width: tinySpace),
+            CommonTag(
+              color: isRecent ? 'whiteBlue' : 'whiteRed',
+              text: isRecent ? '최신순' : '과거순',
+              onTap: onTapFilter,
+            ),
+            SpaceWidth(width: smallSpace),
           ],
         ),
         body: Column(

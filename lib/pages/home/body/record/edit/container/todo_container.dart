@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -19,17 +19,13 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
-import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -126,6 +122,7 @@ class _TodoContainerState extends State<TodoContainer> {
     }
 
     onTapTodoComplete({
+      required String completedType,
       required dynamic id,
       required String text,
       required bool newValue,
@@ -160,6 +157,26 @@ class _TodoContainerState extends State<TodoContainer> {
           payload: 'plan',
         );
       }
+
+      onClick(BottomNavigationEnum enumId) async {
+        context
+            .read<BottomNavigationProvider>()
+            .setBottomNavigation(enumId: enumId);
+        closeDialog(context);
+      }
+
+      showDialog(
+        context: context,
+        builder: (context) => NativeAdDialog(
+          title: '${widget.title} $completedType 완료!',
+          leftText: '히스토리 보기',
+          rightText: '그래프 보기',
+          leftIcon: Icons.menu_book_rounded,
+          rightIcon: Icons.auto_graph_rounded,
+          onLeftClick: () => onClick(BottomNavigationEnum.history),
+          onRightClick: () => onClick(BottomNavigationEnum.graph),
+        ),
+      );
     }
 
     actionPercent() {
@@ -268,6 +285,7 @@ class TodoList extends StatelessWidget {
   List<PlanBox> planList;
   Function({required dynamic id, required bool newValue}) onCheckBox;
   Function({
+    required String completedType,
     required dynamic id,
     required String text,
     required bool newValue,
@@ -334,6 +352,7 @@ class TodoName extends StatefulWidget {
   bool isChcked;
   Color color;
   Function({
+    required String completedType,
     required dynamic id,
     required String text,
     required bool newValue,
@@ -369,6 +388,7 @@ class _TodoNameState extends State<TodoName> {
 
       if (textController.text != '') {
         widget.onTapTodoUpdate(
+          completedType: '수정',
           id: widget.planInfo.id,
           text: textController.text,
           newValue: widget.isChcked,
@@ -425,6 +445,7 @@ class _TodoNameState extends State<TodoName> {
                               fontSize: 15,
                               color: themeColor,
                               decorationColor: widget.color,
+                              decorationThickness: 2,
                               decoration: widget.isChcked
                                   ? TextDecoration.lineThrough
                                   : null,
@@ -469,8 +490,6 @@ class _TodoNameState extends State<TodoName> {
   }
 }
 
-// SpaceWidth(width: regularSapce),
-
 class TodoAdd extends StatefulWidget {
   TodoAdd({
     super.key,
@@ -482,6 +501,7 @@ class TodoAdd extends StatefulWidget {
   String title;
   Color mainColor;
   Function({
+    required String completedType,
     required dynamic id,
     required String text,
     required bool newValue,
@@ -505,6 +525,7 @@ class _TodoAddState extends State<TodoAdd> {
     onEditingComplete() {
       if (textController.text != '') {
         widget.onTapTodoAdd(
+          completedType: '추가',
           id: uuid(),
           text: textController.text,
           newValue: isChecked,
@@ -696,58 +717,12 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
 
       WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          showDialog(
-            context: context,
-            builder: (context) => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AlertDialog(
-                  backgroundColor: dialogBackgroundColor,
-                  shape: containerBorderRadious,
-                  title: AlertDialogTitleWidget(
-                    text: '알림 허용 요청',
-                    onTap: () => closeDialog(context),
-                  ),
-                  content: Column(
-                    children: [
-                      ContentsBox(
-                        contentsWidget: Column(
-                          children: ['설정으로 이동하여', '알림을 허용 해주세요.']
-                              .map((text) => CommonText(
-                                    text: text,
-                                    size: 15,
-                                    isCenter: true,
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-                      SpaceHeight(height: smallSpace),
-                      Row(
-                        children: [
-                          CommonButton(
-                            text: '설정으로 이동',
-                            fontSize: 15,
-                            bgColor: themeColor,
-                            radious: 10,
-                            textColor: Colors.white,
-                            onTap: () {
-                              openAppSettings();
-                              closeDialog(context);
-                            },
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
+          showDialog(context: context, builder: (context) => PermissionPopup());
         },
       );
     }
 
-    return DefaultBottomSheet(
+    return CommonBottomSheet(
       title: '${widget.title} 설정',
       titleLeftWidget: isShowAlarm
           ? InkWell(
@@ -800,6 +775,60 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
                 ),
               ],
             ),
+    );
+  }
+}
+
+class PermissionPopup extends StatelessWidget {
+  const PermissionPopup({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: '알림 허용 요청',
+            onTap: () => closeDialog(context),
+          ),
+          content: Column(
+            children: [
+              ContentsBox(
+                contentsWidget: Column(
+                  children: ['설정으로 이동하여', '알림을 허용 해주세요.']
+                      .map((text) => CommonText(
+                            text: text,
+                            size: 15,
+                            isCenter: true,
+                          ))
+                      .toList(),
+                ),
+              ),
+              SpaceHeight(height: smallSpace),
+              Row(
+                children: [
+                  CommonButton(
+                    text: '설정으로 이동',
+                    fontSize: 15,
+                    bgColor: themeColor,
+                    radious: 10,
+                    textColor: Colors.white,
+                    onTap: () {
+                      openAppSettings();
+                      closeDialog(context);
+                    },
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

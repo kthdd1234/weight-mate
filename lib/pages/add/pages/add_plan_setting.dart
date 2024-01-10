@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
@@ -9,6 +11,8 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_body_info.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -17,10 +21,9 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
-import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
-import 'package:flutter_app_weight_management/widgets/name_text_input.dart';
-import 'package:flutter_app_weight_management/widgets/plan_item_widget.dart';
+// import 'package:flutter_app_weight_management/etc/widgets/add_title_widget.dart';
+// import 'package:flutter_app_weight_management/etc/widgets/name_text_input.dart';
+// import 'package:flutter_app_weight_management/etc/widgets/plan_item_widget.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -335,6 +338,130 @@ class _AddPlanSettingState extends State<AddPlanSetting> {
       buttonEnabled: planInfo.name != '',
       bottomSubmitButtonText: argmentsTypeList[argmentsTypeIdx].buttonText,
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
+    );
+  }
+}
+
+class PlanItemWidget extends StatelessWidget {
+  PlanItemWidget({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.desc,
+    required this.icon,
+    required this.isEnabled,
+    required this.onTap,
+    this.width,
+  });
+
+  dynamic id;
+  String name;
+  String desc;
+  IconData icon;
+  bool isEnabled;
+  Function(dynamic id) onTap;
+  double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => onTap(id),
+      child: ContentsBox(
+        width: width,
+        backgroundColor: isEnabled ? themeColor : typeBackgroundColor,
+        contentsWidget: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: isEnabled ? buttonTextColor : primaryColor,
+                    ),
+                  ),
+                  SpaceHeight(height: tinySpace),
+                  Text(
+                    desc,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: isEnabled ? enabledTypeColor : disEnabledTypeColor,
+                      height: 1.5,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircularIcon(
+                  icon: icon,
+                  size: 50,
+                  borderRadius: 40,
+                  backgroundColor: dialogBackgroundColor,
+                  onTap: (_) => onTap(id),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class nameTextInput extends StatefulWidget {
+  nameTextInput({
+    super.key,
+    required this.name,
+    required this.onChanged,
+    this.onCounterText,
+  });
+
+  String name;
+  Function()? onCounterText;
+  Function(String str) onChanged;
+
+  @override
+  State<nameTextInput> createState() => _nameTextInputState();
+}
+
+class _nameTextInputState extends State<nameTextInput> {
+  TextEditingController nameController = TextEditingController();
+
+  @override
+  void initState() {
+    nameController.text = widget.name;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ContentsTitleText(text: '이름'),
+        SpaceHeight(height: smallSpace),
+        TextInput(
+          controller: nameController,
+          autofocus: true,
+          maxLength: 30,
+          prefixIcon: Icons.edit,
+          suffixText: '',
+          hintText: '이름을 입력해주세요.',
+          counterText: null,
+          helperText:
+              widget.onCounterText != null ? widget.onCounterText!() : '',
+          onChanged: widget.onChanged,
+          errorText: null,
+          keyboardType: TextInputType.text,
+        )
+      ],
     );
   }
 }

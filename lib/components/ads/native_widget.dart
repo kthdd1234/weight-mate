@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -63,7 +64,7 @@ class _NativeWidgetState extends State<NativeWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (nativeAdIsLoaded == false) return const EmptyArea();
+    bool isShowAd = nativeAd != null && nativeAdIsLoaded;
 
     return Column(
       children: [
@@ -71,7 +72,21 @@ class _NativeWidgetState extends State<NativeWidget> {
           padding: const EdgeInsets.all(10),
           width: double.maxFinite,
           height: 300,
-          contentsWidget: AdWidget(ad: nativeAd!),
+          contentsWidget: isShowAd
+              ? AdWidget(ad: nativeAd!)
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(strokeWidth: 3),
+                    SpaceHeight(height: smallSpace),
+                    CommonText(
+                      text: '광고 로드 중...',
+                      size: 11,
+                      isCenter: true,
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
         ),
         SpaceHeight(height: smallSpace),
       ],

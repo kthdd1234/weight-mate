@@ -1,17 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
-import 'package:flutter_app_weight_management/widget(etc)/analyze_body.dart';
-import 'package:flutter_app_weight_management/widget(etc)/more_see_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -24,8 +22,8 @@ import 'package:provider/provider.dart';
 
 List<BottomNavigationEnum> bottomIdList = [
   BottomNavigationEnum.record,
-  BottomNavigationEnum.calendar,
-  BottomNavigationEnum.analyze,
+  BottomNavigationEnum.history,
+  BottomNavigationEnum.graph,
   BottomNavigationEnum.setting
 ];
 
@@ -160,8 +158,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<Widget> bodyList = [
       RecordBody(setActiveCamera: setActiveCamera),
       const HistoryBody(),
-      const AnalyzeBody(),
-      const MoreSeeBody()
+      const GraphBody(),
+      const SettingBody()
     ];
 
     return isShowMateScreen
@@ -177,15 +175,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         : AppFramework(
             widget: Scaffold(
               backgroundColor: Colors.transparent,
-              body: SafeArea(
-                child: Column(
-                  children: [
-                    SpaceHeight(height: regularSapce),
-                    CommonAppBar(id: bottomNavitionId),
-                    bodyList[bottomNavitionId.index],
-                  ],
-                ),
-              ),
+              body: SafeArea(child: bodyList[bottomNavitionId.index]),
               bottomNavigationBar: Theme(
                 data: Theme.of(context).copyWith(
                   canvasColor: Colors.transparent,

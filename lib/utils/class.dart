@@ -134,28 +134,18 @@ class RecordIconClass {
 
 class MoreSeeItemClass {
   MoreSeeItemClass({
-    required this.index,
     required this.id,
     required this.icon,
     required this.title,
     required this.value,
-    required this.widgetType,
-    this.onTapArrow,
-    this.onTapSwitch,
-    this.bottomWidget,
-    this.dateTimeStr,
+    required this.onTap,
+    required this.color,
   });
 
-  int index;
   MoreSeeItem id;
-  IconData icon;
-  String title;
-  dynamic value;
-  MoreSeeWidgetTypes widgetType;
-  Function(MoreSeeItem id)? onTapArrow;
-  Function(MoreSeeItem id, bool value)? onTapSwitch;
-  String? bottomWidget;
-  String? dateTimeStr;
+  String title, value, icon;
+  Color color;
+  Function(MoreSeeItem id) onTap;
 }
 
 class PlanTypeClass {

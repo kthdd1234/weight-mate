@@ -11,18 +11,15 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
-import 'package:flutter_app_weight_management/widgets/graph_chart.dart';
+import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -87,12 +84,12 @@ class _EditWeightState extends State<EditWeight> {
 
           return NativeAdDialog(
             title: title,
-            leftText: '달력 보기',
-            rightText: '체중 보기',
-            leftIcon: Icons.calendar_month,
+            leftText: '히스토리 보기',
+            rightText: '그래프 보기',
+            leftIcon: Icons.menu_book_rounded,
             rightIcon: Icons.auto_graph_rounded,
-            onLeftClick: () => onClick(BottomNavigationEnum.calendar),
-            onRightClick: () => onClick(BottomNavigationEnum.analyze),
+            onLeftClick: () => onClick(BottomNavigationEnum.history),
+            onRightClick: () => onClick(BottomNavigationEnum.graph),
           );
         },
       );
@@ -208,76 +205,6 @@ class _EditWeightState extends State<EditWeight> {
               }
             },
             onCancel: onInit,
-          );
-        },
-      );
-    }
-
-    onTapTimeSetting() {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          bool isEnabled = user.isAlarm;
-          DateTime alarmTime = user.alarmTime ?? DateTime.now();
-
-          return StatefulBuilder(
-            builder: (context, setModalState) {
-              onChanged(bool newValue) {
-                if (newValue == false) {
-                  if (user.alarmId != null) {
-                    NotificationService().deleteAlarm(user.alarmId!);
-                  }
-
-                  user.isAlarm = false;
-                  user.alarmId = null;
-                  user.alarmTime = null;
-                  user.save();
-                }
-
-                setModalState(() => isEnabled = newValue);
-              }
-
-              onCompleted() {
-                if (isEnabled) {
-                  int alarmId = user.alarmId ?? UniqueKey().hashCode;
-
-                  NotificationService().addNotification(
-                    id: alarmId,
-                    dateTime: DateTime.now(),
-                    alarmTime: alarmTime,
-                    title: weightNotifyTitle(),
-                    body: weightNotifyBody(),
-                    payload: 'weight',
-                  );
-
-                  user.isAlarm = true;
-                  user.alarmId = alarmId;
-                  user.alarmTime = alarmTime;
-                }
-
-                user.save();
-                closeDialog(context);
-              }
-
-              onDateTimeChanged(DateTime dateTime) {
-                setModalState(() => alarmTime = dateTime);
-              }
-
-              return DefaultBottomSheet(
-                title: '알림 설정',
-                height: 430,
-                contents: AlarmContainer(
-                  icon: Icons.edit,
-                  title: '체중 기록 알림',
-                  desc: '매일 정해진 시간에 기록 알림을 드려요.',
-                  isEnabled: isEnabled,
-                  alarmTime: alarmTime,
-                  onChanged: onChanged,
-                  onCompleted: onCompleted,
-                  onDateTimeChanged: onDateTimeChanged,
-                ),
-              );
-            },
           );
         },
       );
