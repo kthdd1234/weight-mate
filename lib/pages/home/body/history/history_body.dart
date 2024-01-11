@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -38,10 +39,15 @@ class HistoryBody extends StatelessWidget {
             ? recordList.reversed.toList()
             : recordList;
 
+        if (recordList.isNotEmpty) {
+          recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
+        }
+
         return Column(
           children: [
             SpaceHeight(height: regularSapce),
             CommonAppBar(id: id),
+            SpaceHeight(height: smallSpace),
             Expanded(
               child: recordList.isEmpty
                   ? EmptyTextVerticalArea(
@@ -56,13 +62,17 @@ class HistoryBody extends StatelessWidget {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                    horizontal: 25,
+                                    horizontal: 20,
                                   ),
-                                  child: HistoryContainer(
-                                    recordInfo: recordInfo,
+                                  child: ContentsBox(
+                                    isBoxShadow: true,
+                                    contentsWidget: HistoryContainer(
+                                      recordInfo: recordInfo,
+                                    ),
                                   ),
                                 ),
-                                DashDivider(color: Colors.grey.shade400)
+                                SpaceHeight(height: smallSpace),
+                                // DashDivider(color: Colors.grey.shade400)
                               ],
                             ),
                           )

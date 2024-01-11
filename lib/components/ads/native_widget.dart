@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
@@ -8,72 +7,23 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-class NativeWidget extends StatefulWidget {
-  NativeWidget({super.key});
+class NativeWidget extends StatelessWidget {
+  NativeWidget({super.key, this.padding});
 
-  @override
-  State<NativeWidget> createState() => _NativeWidgetState();
-}
-
-class _NativeWidgetState extends State<NativeWidget> {
-  NativeAd? nativeAd;
-  bool nativeAdIsLoaded = false;
-
-  @override
-  void dispose() {
-    nativeAd = null;
-    super.dispose();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final adsState = Provider.of<AdsProvider>(context).adsState;
-
-    adsState.initialization.then(
-      (value) => {
-        setState(() {
-          nativeAd = NativeAd(
-            adUnitId: adsState.nativeAdUnitId,
-            listener: NativeAdListener(
-              onAdLoaded: (ad) {
-                debugPrint('$NativeAd loaded.');
-                setState(() => nativeAdIsLoaded = true);
-              },
-              onAdFailedToLoad: (ad, error) {
-                debugPrint('$NativeAd failed to load: $error');
-                ad.dispose();
-              },
-            ),
-            request: const AdRequest(),
-            nativeTemplateStyle: NativeTemplateStyle(
-              templateType: TemplateType.medium,
-              mainBackgroundColor: typeBackgroundColor,
-              cornerRadius: 5.0,
-              callToActionTextStyle: NativeTemplateTextStyle(
-                textColor: Colors.white,
-                backgroundColor: themeColor,
-                size: 16.0,
-              ),
-            ),
-          )..load();
-        })
-      },
-    );
-  }
+  double? padding;
 
   @override
   Widget build(BuildContext context) {
-    bool isShowAd = nativeAd != null && nativeAdIsLoaded;
+    NativeAd? nativeAd = context.read<AdsProvider>().ad;
 
     return Column(
       children: [
         ContentsBox(
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(padding ?? 10),
           width: double.maxFinite,
           height: 300,
-          contentsWidget: isShowAd
-              ? AdWidget(ad: nativeAd!)
+          contentsWidget: nativeAd != null
+              ? AdWidget(ad: nativeAd)
               : Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

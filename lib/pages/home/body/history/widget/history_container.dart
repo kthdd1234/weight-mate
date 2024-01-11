@@ -1,8 +1,10 @@
+import 'dart:math';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
@@ -14,14 +16,17 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/widget/dash_divider.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class HistoryContainer extends StatelessWidget {
@@ -31,30 +36,33 @@ class HistoryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SpaceHeight(height: 15),
-        HistoryHeader(
-          recordInfo: recordInfo,
-          createDateTime: recordInfo.createDateTime,
-          weight: recordInfo.weight,
-          emotion: recordInfo.emotion,
-        ),
-        HistoryPicture(
-          leftFile: recordInfo.leftFile,
-          rightFile: recordInfo.rightFile,
-        ),
-        HistoryTodo(
-          actions: recordInfo.actions,
-          createDateTime: recordInfo.createDateTime,
-        ),
-        HistoryDiary(
-          whiteText: recordInfo.whiteText,
-          diaryDateTime: recordInfo.diaryDateTime,
-        ),
-      ],
-    );
+    bool isAd = recordInfo.createDateTime.year == 1000;
+
+    return isAd
+        ? NativeAdContainer()
+        : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HistoryHeader(
+                recordInfo: recordInfo,
+                createDateTime: recordInfo.createDateTime,
+                weight: recordInfo.weight,
+                emotion: recordInfo.emotion,
+              ),
+              HistoryPicture(
+                leftFile: recordInfo.leftFile,
+                rightFile: recordInfo.rightFile,
+              ),
+              HistoryTodo(
+                actions: recordInfo.actions,
+                createDateTime: recordInfo.createDateTime,
+              ),
+              HistoryDiary(
+                whiteText: recordInfo.whiteText,
+                diaryDateTime: recordInfo.diaryDateTime,
+              ),
+            ],
+          );
   }
 }
 
@@ -295,10 +303,7 @@ class HistoryTodo extends StatelessWidget {
             ))
         .toList();
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 3),
-      child: Column(children: todoWidgetList ?? []),
-    );
+    return Column(children: todoWidgetList ?? []);
   }
 }
 
@@ -320,15 +325,37 @@ class HistoryDiary extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(whiteText!,
-                  style: TextStyle(color: themeColor, fontSize: 13)),
+                  style: const TextStyle(
+                    color: themeColor,
+                    fontSize: 13,
+                  )),
               SpaceHeight(height: tinySpace),
               Text(
                 timeToString(diaryDateTime),
                 style: const TextStyle(color: Colors.grey, fontSize: 11),
               ),
-              SpaceHeight(height: 15)
             ],
           )
         : const EmptyArea();
+  }
+}
+
+class NativeAdContainer extends StatefulWidget {
+  NativeAdContainer({super.key});
+
+  @override
+  State<NativeAdContainer> createState() => _NativeAdContainerState();
+}
+
+class _NativeAdContainerState extends State<NativeAdContainer> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        CommonText(text: '광고', size: 12, isBold: true),
+        SpaceHeight(height: smallSpace),
+        NativeWidget(padding: 0)
+      ],
+    );
   }
 }

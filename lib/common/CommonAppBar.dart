@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
@@ -102,12 +104,19 @@ class _CommonTitleState extends State<CommonTitle> {
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
-    IconData? rightIcon = isHistory ? Icons.keyboard_arrow_down_rounded : null;
+    IconData recordRightIcon = CalendarFormat.month == widget.calendarFormat
+        ? Icons.keyboard_arrow_up_rounded
+        : Icons.keyboard_arrow_down_rounded;
+    IconData historyRightIcon = Icons.keyboard_arrow_down_rounded;
     bool isToday = isCheckToday(titleDateTime);
 
     onSelectionChanged(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
       closeDialog(context);
+    }
+
+    onTapTitleDateTime() {
+      widget.onFormatChanged(nextCalendarFormats[widget.calendarFormat]!);
     }
 
     onTapHistory() {
@@ -147,6 +156,19 @@ class _CommonTitleState extends State<CommonTitle> {
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
     }
 
+    List<IconData?> rightIconList = [
+      recordRightIcon,
+      historyRightIcon,
+      null,
+      null
+    ];
+    List<Null Function()?> onTapList = [
+      onTapTitleDateTime,
+      onTapHistory,
+      null,
+      null
+    ];
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Row(
@@ -155,8 +177,8 @@ class _CommonTitleState extends State<CommonTitle> {
           CommonText(
             text: title,
             size: 20,
-            rightIcon: rightIcon,
-            onTap: isHistory ? onTapHistory : null,
+            rightIcon: rightIconList[widget.index],
+            onTap: onTapList[widget.index],
           ),
           Row(
             children: [

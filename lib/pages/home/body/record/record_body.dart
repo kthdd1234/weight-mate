@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_d
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_picture.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -22,10 +25,24 @@ List<ValueListenable<Box<HiveObject>>> valueListenables = [
   planRepository.planBox.listenable()
 ];
 
-class RecordBody extends StatelessWidget {
+class RecordBody extends StatefulWidget {
   RecordBody({super.key, required this.setActiveCamera});
 
   Function(bool isActive) setActiveCamera;
+
+  @override
+  State<RecordBody> createState() => _RecordBodyState();
+}
+
+class _RecordBodyState extends State<RecordBody> {
+  // @override
+  // void didChangeDependencies() {
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     context.read<AdsProvider>().setNativeAd();
+  //   });
+
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +63,7 @@ class RecordBody extends StatelessWidget {
                   children: [
                     SpaceHeight(height: smallSpace),
                     EditWeight(),
-                    EditPicture(setActiveCamera: setActiveCamera),
+                    EditPicture(setActiveCamera: widget.setActiveCamera),
                     EditTodo(),
                     EditDiary(),
                   ],

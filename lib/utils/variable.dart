@@ -28,7 +28,7 @@ var planTypeDetailInfo = {
       shadeColor: actionColor.shade50,
       desc: ''),
   PlanTypeEnum.diet: PlanTypeDetailClass(
-      title: '식이요법',
+      title: '식단',
       classList: dietPlanClassList,
       initId: 'intermittentFasting',
       subText: '를',
@@ -48,7 +48,7 @@ var planTypeDetailInfo = {
       shadeColor: exerciseColor.shade100,
       desc: 'Exercise'),
   PlanTypeEnum.lifestyle: PlanTypeDetailClass(
-      title: '생활습관',
+      title: '습관',
       classList: lifeStylePlanClassList,
       initId: 'weightRecord',
       subText: '을',
@@ -68,7 +68,7 @@ var planTypeColors = {
 var planTypeClassList = [
   PlanTypeClass(
     id: PlanTypeEnum.diet,
-    title: '식이요법',
+    title: '식단',
     desc: '간헐적 단식, 밥 반공기만 먹기 등',
     icon: Icons.dining_outlined,
   ),
@@ -80,7 +80,7 @@ var planTypeClassList = [
   ),
   PlanTypeClass(
     id: PlanTypeEnum.lifestyle,
-    title: '생활습관',
+    title: '습관',
     desc: '아침에 체중 기록하기, 야식 금지 등',
     icon: Icons.home,
   ),
@@ -120,7 +120,7 @@ var dietPlanClassList = [
   PlanItemClass(
     id: 'custom',
     name: '사용자 정의',
-    desc: '나만의 식이요법\n직접 추가하기',
+    desc: '나만의 식단\n직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];
@@ -198,7 +198,7 @@ var lifeStylePlanClassList = [
   PlanItemClass(
     id: 'custom',
     name: '사용자 정의',
-    desc: '나만의 생활습관\n직접 추가하기',
+    desc: '나만의 습관\n직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];

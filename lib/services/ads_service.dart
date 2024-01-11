@@ -17,8 +17,8 @@ class AdsService {
       ? androidRewardedInterstitialAdUnitId
       : iosRewardedInterstitialAdUnitId;
 
-  BannerAdListener get bannerAdListener => _bannerAdListener;
-  NativeAdListener get nativeAdListener => _nativeAdListener;
+  // BannerAdListener get bannerAdListener => _bannerAdListener;
+  // NativeAdListener get nativeAdListener => _nativeAdListener;
 
   String get androidBannerAdUnitId {
     String? testId = dotenv.env['ANDROID_BANNER_TEST_ID'] ?? '';
@@ -68,25 +68,25 @@ class AdsService {
     return kDebugMode ? testId : realId;
   }
 
-  final BannerAdListener _bannerAdListener = BannerAdListener(
-    onAdLoaded: (ad) => log('Ad loaded: ${ad.adUnitId}'),
-    onAdClicked: (ad) => log('ad clicked: ${ad.adUnitId}'),
-    onAdFailedToLoad: (ad, error) =>
-        log('Ad failed to load: ${ad.adUnitId}, $error'),
-    onAdOpened: (ad) => log('Ad opened: ${ad.adUnitId}'),
-    onAdClosed: (ad) => log('Ad opened: ${ad.adUnitId}'),
-    onAdImpression: (ad) => log('ad impresstion: ${ad.adUnitId}'),
-    onAdWillDismissScreen: (ad) => log('log willDismissScreen: ${ad.adUnitId}'),
-  );
+  // final BannerAdListener _bannerAdListener = BannerAdListener(
+  //   onAdLoaded: (ad) => log('Ad loaded: ${ad.adUnitId}'),
+  //   onAdClicked: (ad) => log('ad clicked: ${ad.adUnitId}'),
+  //   onAdFailedToLoad: (ad, error) =>
+  //       log('Ad failed to load: ${ad.adUnitId}, $error'),
+  //   onAdOpened: (ad) => log('Ad opened: ${ad.adUnitId}'),
+  //   onAdClosed: (ad) => log('Ad opened: ${ad.adUnitId}'),
+  //   onAdImpression: (ad) => log('ad impresstion: ${ad.adUnitId}'),
+  //   onAdWillDismissScreen: (ad) => log('log willDismissScreen: ${ad.adUnitId}'),
+  // );
 
-  final NativeAdListener _nativeAdListener = NativeAdListener(
-    onAdLoaded: (ad) => log('Ad loaded: ${ad.adUnitId}'),
-    onAdClicked: (ad) => log('ad clicked: ${ad.adUnitId}'),
-    onAdFailedToLoad: (ad, error) =>
-        log('Ad failed to load: ${ad.adUnitId}, $error'),
-    onAdOpened: (ad) => log('Ad opened: ${ad.adUnitId}'),
-    onAdClosed: (ad) => log('Ad opened: ${ad.adUnitId}'),
-    onAdImpression: (ad) => log('ad impresstion: ${ad.adUnitId}'),
-    onAdWillDismissScreen: (ad) => log('log willDismissScreen: ${ad.adUnitId}'),
-  );
+  // final NativeAdListener _nativeAdListener = NativeAdListener(
+  //   onAdLoaded: (ad) => log('Ad loaded: ${ad.adUnitId}'),
+  //   onAdClicked: (ad) => log('ad clicked: ${ad.adUnitId}'),
+  //   onAdFailedToLoad: (ad, error) =>
+  //       log('Ad failed to load: ${ad.adUnitId}, $error'),
+  //   onAdOpened: (ad) => log('Ad opened: ${ad.adUnitId}'),
+  //   onAdClosed: (ad) => log('Ad opened: ${ad.adUnitId}'),
+  //   onAdImpression: (ad) => log('ad impresstion: ${ad.adUnitId}'),
+  //   onAdWillDismissScreen: (ad) => log('log willDismissScreen: ${ad.adUnitId}'),
+  // );
 }

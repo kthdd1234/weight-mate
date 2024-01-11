@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -9,6 +11,7 @@ import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.d
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -75,6 +78,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     requestInAppReview();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      context.read<AdsProvider>().setNativeAd();
+    });
   }
 
   @override

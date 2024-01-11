@@ -11,7 +11,6 @@ import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
@@ -46,7 +45,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => DietInfoProvider()),
-        ChangeNotifierProvider(create: (_) => RecordIconTypeProvider()),
         ChangeNotifierProvider(create: (_) => ImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => AdsProvider(adsState: adsState)),
         ChangeNotifierProvider(create: (_) => BottomNavigationProvider()),
