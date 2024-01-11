@@ -1,3 +1,4 @@
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:hive/hive.dart';
 
 part 'user_box.g.dart';
@@ -14,6 +15,7 @@ class UserBox extends HiveObject {
     this.alarmTime,
     this.alarmId,
     this.screenLockPasswords,
+    this.filterList,
   });
 
   @HiveField(0)
@@ -42,4 +44,12 @@ class UserBox extends HiveObject {
 
   @HiveField(8)
   String? planViewType;
+
+  @HiveField(9)
+  List<String>? filterList;
+
+  @override
+  String toString() {
+    return '{userId: $userId, tall: $tall, goalWeight: $goalWeight, createDateTime: $createDateTime, isAlarm: $isAlarm, alarmTime: $alarmTime, alarmId: $alarmId, screenLockPasswords: $screenLockPasswords, planViewType: $planViewType, filterList: $filterList }';
+  }
 }

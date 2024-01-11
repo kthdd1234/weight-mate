@@ -81,7 +81,7 @@
 //               checkIcon: Icons.check_box_outlined,
 //               notCheckIcon: Icons.check_box_outline_blank,
 //               isChecked: item.isChecked,
-//               notCheckColor: buttonBackgroundColor,
+//               notCheckColor: themeColor,
 //               alarmTime: item.alarmTime,
 //               createDateTime: item.createDateTime,
 //               onTapCheck: onTap,

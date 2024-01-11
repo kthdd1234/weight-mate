@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 /// 5.0
 const double tinySpace = 5.0;
 
 /// 10.0
 const double smallSpace = 10.0;
+
+/// 15.0
+const double contentSpace = 15.0;
 
 /// 20.0
 const double regularSapce = 20.0;
@@ -25,8 +31,8 @@ const EdgeInsetsGeometry submitButtonBoxPadding =
 // primaryColor
 const primaryColor = Color(0xFF40465E);
 
-/// buttonBackgroundColor
-const buttonBackgroundColor = Color(0xFF404763);
+/// themeColor
+const themeColor = Color(0xFF404763);
 
 /// buttonTextColor
 const buttonTextColor = Color(0xFFFFFFFF);
@@ -71,6 +77,9 @@ const tallErrMsg = '120 ~ 220 입력해주세요.';
 
 /// weightErrMsg
 const weightErrMsg = '20 ~ 200 입력해주세요.';
+
+/// weightErrMsg2
+const weightErrMsg2 = '20 ~ 200 사이의 값을 입력해주세요.';
 
 /// tallHintText
 const tallHintText = '키를 입력해주세요.';
@@ -119,7 +128,7 @@ final containerBorderRadious =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
 
 /// inputContentPadding
-const inputContentPadding = EdgeInsets.only(top: 15);
+const inputContentPadding = EdgeInsets.only(top: 10);
 
 /// inputKeyboardType
 const inputKeyboardType = TextInputType.numberWithOptions(decimal: true);
@@ -128,7 +137,7 @@ const inputKeyboardType = TextInputType.numberWithOptions(decimal: true);
 const dialogBackgroundColor = Color(0xffF3F4F9);
 
 /// weightColor
-const weightColor = Colors.blueGrey;
+const weightColor = Colors.indigo;
 
 /// actionColor
 const actionColor = Colors.purple;
@@ -140,13 +149,13 @@ const eyeBodyColor = Colors.green;
 const diaryColor = Colors.orange;
 
 /// dietColor
-const dietColor = Colors.teal;
+const dietColor = Colors.teal; // 0xFF009688
 
 /// exerciseColor
-const exerciseColor = Colors.lightBlue;
+const exerciseColor = Colors.lightBlue; // 0xFF03A9F4
 
 /// lifeStyleColor
-const lifeStyleColor = Colors.brown;
+const lifeStyleColor = Colors.brown; // 0xFF705548
 
 /// enableTextColor
 const enableTextColor = Color(0xff6237E2);
@@ -156,3 +165,115 @@ const enableBackgroundColor = Color(0xffEDE8FF);
 
 /// appTextColor
 const appTextColor = Color(0xffE0B1F6);
+
+/// tagColors
+final tagColors = {
+  'default': {
+    'bgColor': Colors.indigo.shade100,
+    'textColor': Colors.white,
+  },
+  'green': {
+    'bgColor': Colors.green.shade50, // E8F5E9
+    'textColor': Colors.green.shade300, // 4CAF50
+  },
+  'red': {
+    'bgColor': Colors.red.shade50,
+    'textColor': Colors.red.shade300,
+  },
+  'blue': {
+    'bgColor': Colors.blue.shade50,
+    'textColor': Colors.blue.shade300,
+  },
+  'teal': {
+    'bgColor': Colors.teal.shade50,
+    'textColor': Colors.teal.shade300,
+  },
+  'lightBlue': {
+    'bgColor': Colors.lightBlue.shade50,
+    'textColor': Colors.lightBlue.shade300,
+  },
+  'brown': {
+    'bgColor': Colors.brown.shade50, // EFEBE9
+    'textColor': Colors.brown.shade300, // A1887F
+  },
+  'orange': {
+    'bgColor': Colors.orange.shade50,
+    'textColor': Colors.orange.shade300,
+  },
+  'deepOrange': {
+    'bgColor': Colors.deepOrange.shade50,
+    'textColor': Colors.deepOrange.shade300,
+  },
+  'purple': {
+    'bgColor': Colors.purple.shade50,
+    'textColor': Colors.purple.shade300,
+  },
+  'indigo': {
+    'bgColor': Colors.indigo.shade50, //
+    'textColor': Colors.indigo.shade300, //
+  },
+  'blueGrey': {
+    'bgColor': Colors.blueGrey.shade50, // ECEFF1
+    'textColor': Colors.blueGrey.shade300, // 90A4AE
+  },
+  'grey': {
+    'bgColor': Colors.grey.shade200,
+    'textColor': Colors.grey,
+  },
+  'whiteBlue': {
+    'bgColor': Colors.blue.shade200,
+    'textColor': Colors.white,
+  },
+  'whiteIndigo': {
+    'bgColor': Colors.indigo.shade200,
+    'textColor': Colors.white,
+  },
+  'whiteRed': {
+    'bgColor': Colors.red.shade200,
+    'textColor': Colors.white,
+  },
+};
+
+List<FilterClass> filterClassList = [
+  FilterClass(id: FILITER.weight.toString(), name: '체중'),
+  FilterClass(id: FILITER.emotion.toString(), name: '감정'),
+  FilterClass(id: FILITER.picture.toString(), name: '사진'),
+  FilterClass(id: FILITER.diary.toString(), name: '메모'),
+  FilterClass(id: FILITER.diet.toString(), name: '식단'),
+  FilterClass(id: FILITER.exercise.toString(), name: '운동'),
+  FilterClass(id: FILITER.lifeStyle.toString(), name: '생활'),
+];
+
+List<String> initFilterList = filterClassList.map((e) => e.id).toList();
+
+const availableCalendarFormats = {
+  CalendarFormat.week: '1주일',
+  CalendarFormat.twoWeeks: '2주일',
+  CalendarFormat.month: '1개월',
+};
+
+const nextCalendarFormats = {
+  CalendarFormat.week: CalendarFormat.twoWeeks,
+  CalendarFormat.twoWeeks: CalendarFormat.month,
+  CalendarFormat.month: CalendarFormat.week
+};
+
+const availableCalendarMaker = {
+  CalendarMaker.sticker: '스티커',
+  CalendarMaker.weight: '체중',
+};
+
+const nextCalendarMaker = {
+  CalendarMaker.sticker: CalendarMaker.weight,
+  CalendarMaker.weight: CalendarMaker.sticker,
+};
+
+const historyFilterFormats = {
+  HistoryFilter.recent: '최신순',
+  HistoryFilter.past: '과거순'
+};
+
+const nextHistoryFilter = {
+  HistoryFilter.recent: HistoryFilter.past,
+  HistoryFilter.past: HistoryFilter.recent
+};

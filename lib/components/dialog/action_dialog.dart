@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/divider/width_divider.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
 
 class ActionDialog extends StatelessWidget {
   ActionDialog({
@@ -50,8 +48,7 @@ class ActionDialog extends StatelessWidget {
       shape: containerBorderRadious,
       backgroundColor: dialogBackgroundColor,
       elevation: 0.0,
-      title: AlertDialogTitleWidget(
-          text: dayTitle, onTap: () => closeDialog(context)),
+      title: DialogTitle(text: dayTitle, onTap: () => closeDialog(context)),
       content: ContentsBox(
         width: double.maxFinite,
         height: 300,
@@ -59,7 +56,7 @@ class ActionDialog extends StatelessWidget {
           children: [
             ContentsTitleText(
               text: contentsTitle,
-              sub: [ColorDot(width: 10, height: 10, color: color)],
+              sub: [Dot(size: 10, color: color)],
             ),
             SpaceHeight(height: smallSpace),
             WidthDivider(width: double.maxFinite, height: 1),

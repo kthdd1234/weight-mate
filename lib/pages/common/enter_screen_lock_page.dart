@@ -1,17 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/pages/common/screen_lock_page.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/screen_lock_contents.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-
 import '../../model/user_box/user_box.dart';
 
 class EnterScreenLockPage extends StatefulWidget {
@@ -63,17 +59,17 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
                 if (userPasswords.join() == inputPasswords.join()) {
                   Navigator.pushNamedAndRemoveUntil(
                     context,
-                    '/home-container',
+                    '/home-page',
                     (route) => false,
                   );
 
-                  if (recordInfo == null || recordInfo!.weight == null) {
+                  if (recordInfo?.weight == null) {
+                    DateTime now = DateTime.now();
+
+                    context.read<TitleDateTimeProvider>().setTitleDateTime(now);
                     context
                         .read<ImportDateTimeProvider>()
                         .setImportDateTime(DateTime.now());
-                    // context
-                    //     .read<RecordIconTypeProvider>()
-                    //     .setSeletedRecordIconType(RecordIconTypes.addWeight);
                   }
                 } else {
                   isError = true;
@@ -91,7 +87,7 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: buttonBackgroundColor,
+          foregroundColor: themeColor,
           elevation: 0.0,
           automaticallyImplyLeading: false,
         ),

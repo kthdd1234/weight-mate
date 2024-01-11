@@ -16,11 +16,11 @@ class PopupMenuItemText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: buttonBackgroundColor),
+        Icon(icon, color: themeColor),
         SpaceWidth(width: smallSpace),
         Text(
           text,
-          style: const TextStyle(color: buttonBackgroundColor),
+          style: const TextStyle(color: themeColor),
         ),
       ],
     );

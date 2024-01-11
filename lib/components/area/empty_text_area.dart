@@ -38,8 +38,10 @@ class EmptyTextArea extends StatelessWidget {
                 SpaceWidth(width: tinySpace),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 3, 0, 0),
-                  child: Text(text,
-                      style: const TextStyle(color: disEnabledTypeColor)),
+                  child: Text(
+                    text,
+                    style: const TextStyle(color: disEnabledTypeColor),
+                  ),
                 )
               ],
             ),

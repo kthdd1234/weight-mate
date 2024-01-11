@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_app_weight_management/widgets/dafault_bottom_sheet.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
@@ -223,7 +228,7 @@ showAlarmBottomSheet({
 }) {
   showCupertinoModalPopup(
     context: context,
-    builder: (context) => DefaultBottomSheet(
+    builder: (context) => CommonBottomSheet(
       title: '알림 시간 설정',
       height: 380,
       contents: DefaultTimePicker(
@@ -333,4 +338,50 @@ initDateTime() {
     now.hour,
     now.minute,
   );
+}
+
+isCheckToday(DateTime date) {
+  final now = DateTime.now();
+
+  return now.year == date.year &&
+      now.month == date.month &&
+      now.day == date.day;
+}
+
+bmi({required double tall, required double? weight}) {
+  if (weight == null) {
+    return '-';
+  }
+
+  final cmToM = tall / 100;
+  final bmi = weight / (cmToM * cmToM);
+  final bmiToFixed = bmi.toStringAsFixed(1);
+
+  return bmiToFixed;
+}
+
+loadNativeAd(String adUnitId) {
+  return NativeAd(
+    adUnitId: adUnitId,
+    listener: NativeAdListener(
+      onAdLoaded: (adLoaded) {
+        log('$adLoaded loaded~~~!!');
+      },
+      onAdFailedToLoad: (ad, error) {
+        debugPrint('$NativeAd failed to load: $error');
+        ad.dispose();
+      },
+    ),
+    request: const AdRequest(),
+    nativeTemplateStyle: NativeTemplateStyle(
+      templateType: TemplateType.medium,
+      mainBackgroundColor: typeBackgroundColor,
+      cornerRadius: 5.0,
+      callToActionTextStyle: NativeTemplateTextStyle(
+        textColor: Colors.white,
+        backgroundColor: themeColor,
+        size: 16.0,
+      ),
+    ),
+  )..load();
 }

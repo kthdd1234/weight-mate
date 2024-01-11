@@ -15,6 +15,7 @@ class RecordBox extends HiveObject {
     this.leftFile,
     this.rightFile,
     this.whiteText,
+    this.emotion,
   });
 
   @HiveField(0)
@@ -43,4 +44,12 @@ class RecordBox extends HiveObject {
 
   @HiveField(8)
   String? whiteText;
+
+  @HiveField(9)
+  String? emotion;
+
+  // @override
+  // String toString() {
+  //   return '{ createDateTime: $createDateTime, weightDateTime: $weightDateTime, actionDateTime: $actionDateTime, diaryDateTime: $diaryDateTime, weight: $weight, actions: $actions, leftFile: $leftFile, rightFile: $rightFile, whiteText: $whiteText, emotion: $emotion }';
+  // }
 }

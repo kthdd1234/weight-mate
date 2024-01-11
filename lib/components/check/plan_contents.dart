@@ -100,27 +100,25 @@ class PlanContents extends StatelessWidget {
                           icon: alarmTime != null
                               ? Icons.alarm
                               : Icons.alarm_off_outlined,
-                          iconColor: alarmTime != null
-                              ? buttonBackgroundColor
-                              : Colors.grey,
+                          iconColor:
+                              alarmTime != null ? themeColor : Colors.grey,
                           iconSize: 12,
                           text:
                               '${alarmTime != null ? timeToString(alarmTime) : '알림 없음'}',
-                          textColor: alarmTime != null
-                              ? buttonBackgroundColor
-                              : Colors.grey,
+                          textColor:
+                              alarmTime != null ? themeColor : Colors.grey,
                           textSize: 11,
                         ),
                         SpaceWidth(width: tinySpace),
                         createDateTime != null
                             ? IconText(
                                 icon: Icons.calendar_month,
-                                iconColor: buttonBackgroundColor,
+                                iconColor: themeColor,
                                 iconSize: 12,
                                 text: dateTimeFormatter(
                                     format: 'yy.MM.dd',
                                     dateTime: createDateTime!),
-                                textColor: buttonBackgroundColor,
+                                textColor: themeColor,
                                 textSize: 11,
                               )
                             : const EmptyArea(),
@@ -166,21 +164,21 @@ class PlanContents extends StatelessWidget {
 }
            // IconText(
                         //   icon: planPrioritys[priority]!['icon'] as IconData,
-                        //   iconColor: buttonBackgroundColor,
+                        //   iconColor: themeColor,
                         //   iconSize: 12,
                         //   text: planPrioritys[priority]!['name'] as String,
-                        //   textColor: buttonBackgroundColor,
+                        //   textColor: themeColor,
                         //   textSize: 11,
                         // ),
                         //          IconText(
                         //   icon: alarmTime != null
                         //       ? Icons.notifications_active
                         //       : Icons.notifications_active_outlined,
-                        //   iconColor: buttonBackgroundColor,
+                        //   iconColor: themeColor,
                         //   iconSize: 12,
                         //   text:
                         //       '${alarmTime != null ? timeToString(alarmTime) : '알림 OFF'}',
-                        //   textColor: buttonBackgroundColor,
+                        //   textColor: themeColor,
                         //   textSize: 11,
                         // ),
                                // TextIcon(

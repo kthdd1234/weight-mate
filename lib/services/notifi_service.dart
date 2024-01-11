@@ -147,4 +147,8 @@ class NotificationService {
         .then((value) => value.map((e) => e.id).toList());
     return list;
   }
+
+  Future<void> deleteAllAlarm() async {
+    await notification.cancelAll();
+  }
 }

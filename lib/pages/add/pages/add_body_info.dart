@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
+import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
+import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/add_title_widget.dart';
-import 'package:flutter_app_weight_management/widgets/alarm_item_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:gdpr_dialog/gdpr_dialog.dart';
 
 class AddBodyInfo extends StatefulWidget {
   const AddBodyInfo({super.key});
@@ -285,6 +285,34 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       bottomSubmitButtonText: '다음',
       buttonEnabled: buttonEnabled(),
       onPressedBottomNavigationButton: onPressedBottomNavigationButton,
+    );
+  }
+}
+
+class AddTitleWidget extends StatelessWidget {
+  AddTitleWidget({
+    super.key,
+    required this.argmentsType,
+    required this.step,
+    required this.title,
+  });
+
+  ArgmentsTypeEnum argmentsType;
+  int step;
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SimpleStepper(
+          step: setStep(argmentsType: argmentsType, step: step),
+          range: setRange(argmentsType: argmentsType),
+        ),
+        SpaceHeight(height: regularSapce),
+        HeadlineText(text: title),
+        SpaceHeight(height: regularSapce),
+      ],
     );
   }
 }

@@ -28,7 +28,7 @@ var planTypeDetailInfo = {
       shadeColor: actionColor.shade50,
       desc: ''),
   PlanTypeEnum.diet: PlanTypeDetailClass(
-      title: '식이요법',
+      title: '식단',
       classList: dietPlanClassList,
       initId: 'intermittentFasting',
       subText: '를',
@@ -48,7 +48,7 @@ var planTypeDetailInfo = {
       shadeColor: exerciseColor.shade100,
       desc: 'Exercise'),
   PlanTypeEnum.lifestyle: PlanTypeDetailClass(
-      title: '생활습관',
+      title: '습관',
       classList: lifeStylePlanClassList,
       initId: 'weightRecord',
       subText: '을',
@@ -68,7 +68,7 @@ var planTypeColors = {
 var planTypeClassList = [
   PlanTypeClass(
     id: PlanTypeEnum.diet,
-    title: '식이요법',
+    title: '식단',
     desc: '간헐적 단식, 밥 반공기만 먹기 등',
     icon: Icons.dining_outlined,
   ),
@@ -80,7 +80,7 @@ var planTypeClassList = [
   ),
   PlanTypeClass(
     id: PlanTypeEnum.lifestyle,
-    title: '생활습관',
+    title: '습관',
     desc: '아침에 체중 기록하기, 야식 금지 등',
     icon: Icons.home,
   ),
@@ -120,7 +120,7 @@ var dietPlanClassList = [
   PlanItemClass(
     id: 'custom',
     name: '사용자 정의',
-    desc: '나만의 식이요법\n직접 추가하기',
+    desc: '나만의 식단\n직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];
@@ -198,7 +198,7 @@ var lifeStylePlanClassList = [
   PlanItemClass(
     id: 'custom',
     name: '사용자 정의',
-    desc: '나만의 생활습관\n직접 추가하기',
+    desc: '나만의 습관\n직접 추가하기',
     icon: Icons.add_circle_outline,
   ),
 ];
@@ -273,3 +273,32 @@ var planPrioritys = {
     textColor: Colors.blueGrey,
   ),
 };
+
+var planOrder = {
+  PlanTypeEnum.diet.toString(): 0,
+  PlanTypeEnum.exercise.toString(): 1,
+  PlanTypeEnum.lifestyle.toString(): 2,
+};
+
+List<SvgClass> emotionList = [
+  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
+  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
+  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
+  SvgClass(emotion: 'kissing-face', name: '신남'),
+  SvgClass(emotion: 'neutral-face', name: '보통'),
+  SvgClass(emotion: 'amazed-face', name: '놀람'),
+  SvgClass(emotion: 'anxious-face', name: '서운'),
+  SvgClass(emotion: 'crying-face', name: '슬픔'),
+  SvgClass(emotion: 'determined-face', name: '다짐'),
+  SvgClass(emotion: 'disappointed-face', name: '실망'),
+  SvgClass(emotion: 'dizzy-face', name: '피곤'),
+  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
+  SvgClass(emotion: 'expressionless-face', name: '고요'),
+  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
+  SvgClass(emotion: 'sneezing-face', name: '아픔'),
+  SvgClass(emotion: 'worried-face', name: '걱정'),
+  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
+  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
+  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
+  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
+];

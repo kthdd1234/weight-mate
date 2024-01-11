@@ -21,20 +21,20 @@ class SimpleStepper extends StatelessWidget {
         const Icon(
           Icons.remove,
           size: 10,
-          color: buttonBackgroundColor,
+          color: themeColor,
         ),
         SimpleStep(index: 2, step: step),
         // const Icon(
         //   Icons.remove,
         //   size: 10,
-        //   color: buttonBackgroundColor,
+        //   color: themeColor,
         // ),
         // SimpleStep(index: 3, step: step),
         // range > 3
         //     ? const Icon(
         //         Icons.remove,
         //         size: 10,
-        //         color: buttonBackgroundColor,
+        //         color: themeColor,
         //       )
         //     : const EmptyArea(),
         // range > 3 ? SimpleStep(index: 4, step: step) : const EmptyArea(),

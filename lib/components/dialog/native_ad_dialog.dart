@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/widgets/alert_dialog_title_widget.dart';
+import 'package:provider/provider.dart';
 
 class NativeAdDialog extends StatelessWidget {
   NativeAdDialog({
@@ -26,11 +26,15 @@ class NativeAdDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    onPopInvoked(_) {
+      context.read<AdsProvider>().setNativeAd();
+    }
+
     return AlertDialog(
       shape: containerBorderRadious,
       backgroundColor: dialogBackgroundColor,
       elevation: 0.0,
-      title: AlertDialogTitleWidget(
+      title: DialogTitle(
         text: title,
         onTap: () => closeDialog(context),
       ),
@@ -39,7 +43,7 @@ class NativeAdDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            NativeWidget(),
+            PopScope(onPopInvoked: onPopInvoked, child: NativeWidget()),
             Row(
               children: [
                 ExpandedButtonHori(

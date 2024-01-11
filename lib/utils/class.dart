@@ -134,28 +134,18 @@ class RecordIconClass {
 
 class MoreSeeItemClass {
   MoreSeeItemClass({
-    required this.index,
     required this.id,
     required this.icon,
     required this.title,
     required this.value,
-    required this.widgetType,
-    this.onTapArrow,
-    this.onTapSwitch,
-    this.bottomWidget,
-    this.dateTimeStr,
+    required this.onTap,
+    required this.color,
   });
 
-  int index;
   MoreSeeItem id;
-  IconData icon;
-  String title;
-  dynamic value;
-  MoreSeeWidgetTypes widgetType;
-  Function(MoreSeeItem id)? onTapArrow;
-  Function(MoreSeeItem id, bool value)? onTapSwitch;
-  String? bottomWidget;
-  String? dateTimeStr;
+  String title, value, icon;
+  Color color;
+  Function(MoreSeeItem id) onTap;
 }
 
 class PlanTypeClass {
@@ -195,12 +185,14 @@ class WeightInfoClass {
     required this.more,
     required this.tooltipMsg,
     required this.iconColor,
+    required this.onTap,
   });
 
   String id, title, value;
   IconData icon, more;
   String tooltipMsg;
   Color iconColor;
+  Function() onTap;
 }
 
 class GridIconClass {
@@ -294,8 +286,12 @@ class PlanPriorityClass {
   Color bgColor, textColor;
 }
 
-  // 'id': PlanPriorityEnum.medium,
-  //   'name': '중간',
-  //   'desc': 'Medium',
-  //   'icon': Icons.looks_two_outlined,
-  //   'order': 2,
+class SvgClass {
+  SvgClass({required this.emotion, required this.name});
+  String emotion, name;
+}
+
+class FilterClass {
+  FilterClass({required this.id, required this.name});
+  String id, name;
+}

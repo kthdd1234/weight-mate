@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
-class ColorDot extends StatelessWidget {
-  ColorDot({
+class Dot extends StatelessWidget {
+  Dot({
     super.key,
-    required this.width,
-    required this.height,
+    required this.size,
     required this.color,
     this.isOutlined,
   });
 
-  double width;
-  double height;
+  double size;
   bool? isOutlined;
   Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: width,
-      height: height,
+      width: size,
+      height: size,
       decoration: isOutlined == true
           ? BoxDecoration(
               border: Border.all(width: 1, color: color),

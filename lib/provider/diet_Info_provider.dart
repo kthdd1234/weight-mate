@@ -5,9 +5,9 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 
 final initPlanInfo = PlanInfoClass(
   type: PlanTypeEnum.diet,
-  title: '식이요법',
+  title: '식단',
   id: '',
-  name: '간헐적 단식',
+  name: '간헐적 단식 16:8',
   priority: PlanPriorityEnum.medium,
   isAlarm: true,
   alarmTime: initDateTime(),

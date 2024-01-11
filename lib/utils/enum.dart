@@ -15,7 +15,7 @@ enum RecordIconTypes {
   comonPlan
 }
 
-enum BottomNavigationEnum { record, calendar, analyze, setting }
+enum BottomNavigationEnum { record, history, graph, setting }
 
 enum SegmentedTypes {
   weight,
@@ -32,22 +32,16 @@ enum SegmentedTypes {
 }
 
 enum MoreSeeItem {
-  none,
   tall,
-  weight,
   goalWeight,
+  appAlarm,
   appLock,
   appReset,
-  appAlarm,
   appLang,
   appVersion,
   appEval,
   appShare,
   developerInp,
-  setWeight,
-  checkPlan,
-  dietWiseSaying,
-  mySetting,
   privacyPolicy
 }
 
@@ -64,3 +58,11 @@ enum jumpDayTypeEnum { none, subtract, add }
 enum ActionSortEnum { none, recent, past }
 
 enum PlanPriorityEnum { none, high, medium, low }
+
+enum FILITER { weight, emotion, picture, diet, exercise, lifeStyle, diary }
+
+enum RECORD { edit, history }
+
+enum CalendarMaker { sticker, weight }
+
+enum HistoryFilter { recent, past }

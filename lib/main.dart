@@ -1,28 +1,25 @@
-import 'dart:developer';
-
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/etc/add_plan_item.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
-import 'package:flutter_app_weight_management/etc/add_plan_type.dart';
-import 'package:flutter_app_weight_management/pages/common/common_alarm_page.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
-import 'package:flutter_app_weight_management/pages/common/record_info_page.dart';
-import 'package:flutter_app_weight_management/pages/home/home_container.dart';
-import 'package:flutter_app_weight_management/pages/splash/splash.dart';
+import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/provider/record_icon_type_provider.dart';
+import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
+import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
+import 'package:flutter_app_weight_management/repositories/record_repository.dart';
+import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -33,52 +30,34 @@ import 'pages/add/pages/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 
+UserRepository userRepository = UserRepository();
+RecordRepository recordRepository = RecordRepository();
+PlanRepository planRepository = PlanRepository();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
 
   await dotenv.load(fileName: ".env");
-
-  NotificationService().initNotification();
-  NotificationService().initializeTimeZone();
-
-  await _initHive();
+  await NotificationService().initNotification();
+  await NotificationService().initializeTimeZone();
+  await MateHive().initializeHive();
 
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider<DietInfoProvider>(
-          create: (_) => DietInfoProvider(),
-        ),
-        ChangeNotifierProvider<RecordIconTypeProvider>(
-          create: (_) => RecordIconTypeProvider(),
-        ),
-        ChangeNotifierProvider<ImportDateTimeProvider>(
-          create: (_) => ImportDateTimeProvider(),
-        ),
-        ChangeNotifierProvider<AdsProvider>(
-          create: (_) => AdsProvider(adsState: adsState),
-        ),
-        ChangeNotifierProvider<BottomNavigationProvider>(
-          create: (_) => BottomNavigationProvider(),
-        ),
+        ChangeNotifierProvider(create: (_) => DietInfoProvider()),
+        ChangeNotifierProvider(create: (_) => ImportDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => AdsProvider(adsState: adsState)),
+        ChangeNotifierProvider(create: (_) => BottomNavigationProvider()),
+        ChangeNotifierProvider(create: (_) => EnabledProvider()),
+        ChangeNotifierProvider(create: (_) => TitleDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
       ],
       child: const MyApp(),
     ),
   );
-}
-
-_initHive() async {
-  await Hive.initFlutter();
-
-  Hive.registerAdapter(UserBoxAdapter());
-  Hive.registerAdapter(RecordBoxAdapter());
-  Hive.registerAdapter(PlanBoxAdapter());
-
-  await Hive.openBox<UserBox>('userBox');
-  await Hive.openBox<RecordBox>('recordBox');
-  await Hive.openBox<PlanBox>('planBox');
 }
 
 class MyApp extends StatefulWidget {
@@ -135,11 +114,10 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     UserBox? userProfile = userBox.get('userProfile');
-    PlanInfoClass planInfo = context.watch<DietInfoProvider>().getPlanInfo();
     String initialRoute = userProfile?.userId == null
-        ? '/splash-screen'
+        ? '/add-start-screen'
         : userProfile?.screenLockPasswords == null
-            ? '/home-container'
+            ? '/home-page'
             : '/enter-screen-lock';
 
     return MaterialApp(
@@ -156,17 +134,13 @@ class _MyAppState extends State<MyApp> {
       theme: AppThemes.lightTheme,
       initialRoute: initialRoute, // initialRoute
       routes: {
-        '/splash-screen': (context) => const SplashScreen(),
+        '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
-        '/add-plan-type': (context) => AddPlanType(planInfo: planInfo),
-        '/add-plan-item': (context) => AddPlanItem(planInfo: planInfo),
         '/add-plan-setting': (context) => const AddPlanSetting(),
-        '/home-container': (context) => const HomeContainer(),
+        '/home-page': (context) => const HomePage(),
         '/screen-lock': (context) => const ScreenLockPage(),
-        '/common-alarm': (context) => const CommonAlarmPage(),
-        '/record-info-page': (context) => const RecordInfoPage(),
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),
-        '/image-collections-page': (context) => const ImageCollectionsPage()
+        '/image-collections-page': (context) => const ImageCollectionsPage(),
       },
     );
   }

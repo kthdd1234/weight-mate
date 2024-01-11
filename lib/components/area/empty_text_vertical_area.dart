@@ -25,7 +25,7 @@ class EmptyTextVerticalArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContentsBox(
-      backgroundColor: backgroundColor ?? dialogBackgroundColor,
+      backgroundColor: backgroundColor,
       width: MediaQuery.of(context).size.width,
       height: height ?? 150,
       contentsWidget: Column(

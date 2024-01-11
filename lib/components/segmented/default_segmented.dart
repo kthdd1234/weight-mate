@@ -20,18 +20,21 @@ class DefaultSegmented extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: CupertinoSlidingSegmentedControl(
-            backgroundColor: backgroundColor ?? dialogBackgroundColor,
-            thumbColor: thumbColor ?? typeBackgroundColor,
-            groupValue: selectedSegment,
-            children: children,
-            onValueChanged: onSegmentedChanged,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Row(
+        children: [
+          Expanded(
+            child: CupertinoSlidingSegmentedControl(
+              backgroundColor: backgroundColor ?? dialogBackgroundColor,
+              thumbColor: thumbColor ?? typeBackgroundColor,
+              groupValue: selectedSegment,
+              children: children,
+              onValueChanged: onSegmentedChanged,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

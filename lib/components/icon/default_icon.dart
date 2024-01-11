@@ -28,7 +28,7 @@ class DefaultIcon extends StatelessWidget {
           child: Icon(
             icon,
             size: iconSize ?? 21,
-            color: color ?? buttonBackgroundColor,
+            color: color ?? themeColor,
           ),
         ),
       ],

@@ -38,7 +38,7 @@ class AddContainer extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   elevation: 0.0,
                   centerTitle: true,
-                  foregroundColor: buttonBackgroundColor,
+                  foregroundColor: themeColor,
                 ),
           body: Padding(
             padding: pagePadding,
