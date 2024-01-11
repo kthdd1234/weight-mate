@@ -6,7 +6,6 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/widget/History_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history/widget/dash_divider.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -39,9 +38,9 @@ class HistoryBody extends StatelessWidget {
             ? recordList.reversed.toList()
             : recordList;
 
-        if (recordList.isNotEmpty) {
-          recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
-        }
+        // if (recordList.isNotEmpty) {
+        //   recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
+        // }
 
         return Column(
           children: [
