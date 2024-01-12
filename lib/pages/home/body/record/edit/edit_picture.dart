@@ -222,7 +222,7 @@ class EditPicture extends StatelessWidget {
             children: [
               TitleContainer(
                 isDivider: isOpen,
-                title: '눈바디',
+                title: '사진',
                 icon: Icons.auto_awesome,
                 tags: [
                   TagClass(
