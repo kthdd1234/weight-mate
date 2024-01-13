@@ -242,6 +242,7 @@ class _TodoContainerState extends State<TodoContainer> {
                 title: widget.title,
                 icon: widget.icon,
                 tags: tags,
+                onTap: onTapOpen,
               ),
               isOpen
                   ? Column(

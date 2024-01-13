@@ -260,6 +260,7 @@ class _EditWeightState extends State<EditWeight> {
                     onTap: onTapOpen,
                   ),
                 ],
+                onTap: onTapOpen,
               ),
               isOpen
                   ? isShowInput

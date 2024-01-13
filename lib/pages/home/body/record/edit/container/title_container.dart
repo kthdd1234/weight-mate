@@ -6,18 +6,19 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TitleContainer extends StatelessWidget {
-  TitleContainer({
-    super.key,
-    required this.title,
-    required this.icon,
-    required this.tags,
-    required this.isDivider,
-  });
+  TitleContainer(
+      {super.key,
+      required this.title,
+      required this.icon,
+      required this.tags,
+      required this.isDivider,
+      this.onTap});
 
   String title;
   IconData icon;
   List<TagClass> tags;
   bool isDivider;
+  Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -38,25 +39,28 @@ class TitleContainer extends StatelessWidget {
             : Row(children: []))
         .toList();
 
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CommonText(
-              text: title,
-              size: 15,
-              leftIcon: icon,
-              isBold: true,
-              color: Colors.grey.shade600,
-            ),
-            Row(children: wRow)
-          ],
-        ),
-        isDivider
-            ? Divider(color: Colors.grey.shade100, height: 30)
-            : const EmptyArea(),
-      ],
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CommonText(
+                text: title,
+                size: 15,
+                leftIcon: icon,
+                isBold: true,
+                color: Colors.grey.shade600,
+              ),
+              Row(children: wRow)
+            ],
+          ),
+          isDivider
+              ? Divider(color: Colors.grey.shade100, height: 30)
+              : const EmptyArea(),
+        ],
+      ),
     );
   }
 }

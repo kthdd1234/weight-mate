@@ -426,7 +426,7 @@ class _SettingBodyState extends State<SettingBody> {
           children: [
             SpaceHeight(height: regularSapce),
             CommonAppBar(id: bodyId),
-            SingleChildScrollView(child: Column(children: children))
+            Expanded(child: ListView(children: children))
           ],
         );
       },

@@ -68,7 +68,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String status = 'none';
   String _authStatus = 'Unknown';
   late Box<UserBox> userBox;
 
@@ -76,9 +75,9 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     userBox = Hive.box('userBox');
 
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => initAppTrackingPlugin());
-    initGdprPlugin();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await initAppTrackingPlugin();
+    });
     super.initState();
   }
 
@@ -102,15 +101,6 @@ class _MyAppState extends State<MyApp> {
     print("UUID: $uuid");
   }
 
-  initGdprPlugin() {
-    GdprDialog.instance.resetDecision();
-    GdprDialog.instance
-        .showDialog(isForTest: false, testDeviceId: '')
-        .then((value) {
-      status = 'dialog result == $value';
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     UserBox? userProfile = userBox.get('userProfile');
@@ -119,6 +109,8 @@ class _MyAppState extends State<MyApp> {
         : userProfile?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
+
+    // String initialRoute = '/add-start-screen';
 
     return MaterialApp(
       title: 'Flutter Demo',

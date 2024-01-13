@@ -248,6 +248,7 @@ class EditPicture extends StatelessWidget {
                     onTap: onTapOpen,
                   )
                 ],
+                onTap: onTapOpen,
               ),
               isOpen
                   ? Row(

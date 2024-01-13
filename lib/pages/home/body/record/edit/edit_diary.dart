@@ -249,6 +249,7 @@ class _EditDiaryState extends State<EditDiary> {
                     onTap: onTapOpen,
                   )
                 ],
+                onTap: onTapOpen,
               ),
               isOpen
                   ? Column(

@@ -18,6 +18,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
 
@@ -39,10 +40,19 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool isActiveCamera = false;
   bool isShowMateScreen = false;
 
+  String status = 'none';
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    // GdprDialog.instance.resetDecision();
+    GdprDialog.instance
+        .showDialog(isForTest: false, testDeviceId: '')
+        .then((value) {
+      status = 'dialog result == $value';
+    });
 
     /** */
     List<String>? filterList = userRepository.user.filterList;
