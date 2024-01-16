@@ -4,14 +4,9 @@ import 'package:flutter_app_weight_management/components/simple_stepper/simple_s
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class SimpleStepper extends StatelessWidget {
-  SimpleStepper({
-    super.key,
-    required this.step,
-    required this.range,
-  });
+  SimpleStepper({super.key, required this.step});
 
   int step;
-  int range;
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +19,12 @@ class SimpleStepper extends StatelessWidget {
           color: themeColor,
         ),
         SimpleStep(index: 2, step: step),
-        // const Icon(
-        //   Icons.remove,
-        //   size: 10,
-        //   color: themeColor,
-        // ),
-        // SimpleStep(index: 3, step: step),
+        const Icon(
+          Icons.remove,
+          size: 10,
+          color: themeColor,
+        ),
+        SimpleStep(index: 3, step: step),
         // range > 3
         //     ? const Icon(
         //         Icons.remove,

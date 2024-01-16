@@ -72,6 +72,7 @@ dependencies:
   gdpr_dialog: ^2.1.1
   app_tracking_transparency: ^2.0.4
   flutter_svg: ^2.0.9
+  keyboard_actions: ^4.2.0
 
 dev_dependencies:
   flutter_test:
@@ -158,6 +159,7 @@ flutter:
     - assets/svgs/reset.svg
     - assets/svgs/lock.svg
     - assets/svgs/tall.svg
+    - assets/svgs/pencil-square.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

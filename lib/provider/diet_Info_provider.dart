@@ -13,6 +13,7 @@ final initPlanInfo = PlanInfoClass(
   alarmTime: initDateTime(),
   alarmId: null,
   createDateTime: DateTime.now(),
+  planItemList: [],
 );
 
 class DietInfoProvider with ChangeNotifier {
@@ -24,6 +25,7 @@ class DietInfoProvider with ChangeNotifier {
   DateTime? _alarmTime = initDateTime();
   PlanInfoClass _planInfo = initPlanInfo;
   DateTime _recordStartDateTime = DateTime.now();
+  List<String> planItemList = [];
 
   UserInfoClass getUserInfo() {
     return UserInfoClass(
@@ -70,6 +72,10 @@ class DietInfoProvider with ChangeNotifier {
     return _alarmTime;
   }
 
+  List<String> getPlanItemList() {
+    return planItemList;
+  }
+
   setInitPlanInfo() {
     _planInfo = initPlanInfo;
     notifyListeners();
@@ -112,6 +118,11 @@ class DietInfoProvider with ChangeNotifier {
 
   changeIsPlanAlarm(bool value) {
     _planInfo.isAlarm = value;
+    notifyListeners();
+  }
+
+  changePlanItemList(List<String> list) {
+    planItemList = list;
     notifyListeners();
   }
 }

@@ -11,13 +11,15 @@ class CommonCheckBox extends StatelessWidget {
     required this.isCheck,
     required this.checkColor,
     required this.onTap,
+    this.isNotBottom,
     this.isDisabled,
   });
 
   dynamic id;
   bool isCheck;
-  bool? isDisabled;
+  bool? isDisabled, isNotBottom;
   Color checkColor;
+
   Function({required dynamic id, required bool newValue}) onTap;
 
   @override
@@ -32,19 +34,15 @@ class CommonCheckBox extends StatelessWidget {
           Row(
             children: [
               Expanded(
-                  flex: 0,
-                  child: isDisabled == true
-                      ? SvgPicture.asset(
-                          'assets/svgs/square-dashed.svg',
-                        )
-                      : Icon(
-                          icon,
-                          color: color,
-                        )),
+                flex: 0,
+                child: isDisabled == true
+                    ? SvgPicture.asset('assets/svgs/square-dashed.svg')
+                    : Icon(icon, color: color),
+              ),
               SpaceWidth(width: smallSpace),
             ],
           ),
-          SpaceHeight(height: tinySpace),
+          SpaceHeight(height: isNotBottom == true ? 0 : tinySpace),
         ],
       ),
     );

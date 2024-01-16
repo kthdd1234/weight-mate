@@ -84,9 +84,10 @@ class _GraphChartState extends State<GraphChart> {
 
         if (recordInfo?.weight != null) {
           weightList.add(recordInfo!.weight!);
+          lineSeriesData.add(chartData);
+        } else if (i == count) {
+          lineSeriesData.add(chartData);
         }
-
-        lineSeriesData.add(chartData);
       }
 
       setState(() {
@@ -116,12 +117,14 @@ class _GraphChartState extends State<GraphChart> {
     }
 
     List<GraphData> setLineSeriesData() {
-      return setLineSeriesDateTime(
+      List<GraphData> lineSeriesData = setLineSeriesDateTime(
         count: setCount()!,
         format: widget.selectedDateTimeSegment == SegmentedTypes.week
             ? 'd일'
             : 'M.d',
       );
+
+      return lineSeriesData;
     }
 
     setLineSeries() {

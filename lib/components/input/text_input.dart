@@ -3,25 +3,25 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
-class TextInput extends StatefulWidget {
-  TextInput({
-    super.key,
-    required this.suffixText,
-    required this.hintText,
-    required this.onChanged,
-    required this.errorText,
-    this.maxLength,
-    this.prefixIcon,
-    this.counterText,
-    this.autofocus,
-    this.controller,
-    this.keyboardType,
-    this.helperText,
-    this.inputBorderType,
-    this.inputHeight,
-    this.contentPadding,
-    this.isMediumSize,
-  });
+class TextInput extends StatelessWidget {
+  TextInput(
+      {super.key,
+      required this.suffixText,
+      required this.hintText,
+      required this.onChanged,
+      required this.errorText,
+      this.maxLength,
+      this.prefixIcon,
+      this.counterText,
+      this.autofocus,
+      this.controller,
+      this.keyboardType,
+      this.helperText,
+      this.inputBorderType,
+      this.inputHeight,
+      this.contentPadding,
+      this.isMediumSize,
+      this.focusNode});
 
   int? maxLength;
   IconData? prefixIcon;
@@ -38,46 +38,41 @@ class TextInput extends StatefulWidget {
   double? inputHeight;
   EdgeInsets? contentPadding;
   bool? isMediumSize;
+  FocusNode? focusNode;
 
-  @override
-  State<TextInput> createState() => _TextInputState();
-}
-
-class _TextInputState extends State<TextInput> {
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
 
     return SizedBox(
-      height: widget.inputHeight,
+      height: inputHeight,
       child: TextFormField(
-        controller: widget.controller,
-        style: widget.isMediumSize == true
-            ? textTheme.bodyMedium
-            : textTheme.bodyLarge,
-        autofocus: widget.autofocus != null,
-        keyboardType: widget.keyboardType ?? inputKeyboardType,
+        focusNode: focusNode,
+        controller: controller,
+        style:
+            isMediumSize == true ? textTheme.bodyMedium : textTheme.bodyLarge,
+        autofocus: autofocus != null,
+        keyboardType: keyboardType ?? inputKeyboardType,
         textInputAction: TextInputAction.next,
-        maxLength: widget.maxLength,
+        maxLength: maxLength,
         decoration: InputDecoration(
-          focusedBorder: widget.inputBorderType ?? const UnderlineInputBorder(),
-          border: widget.inputBorderType ?? const UnderlineInputBorder(),
-          prefixIcon:
-              widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
-          suffixText: widget.suffixText,
-          errorText: widget.errorText,
-          counterText: widget.counterText,
-          hintText: widget.hintText,
-          helperText: widget.helperText,
-          contentPadding: widget.contentPadding ?? inputContentPadding,
+          focusedBorder: inputBorderType ?? const UnderlineInputBorder(),
+          border: inputBorderType ?? const UnderlineInputBorder(),
+          prefixIcon: prefixIcon != null ? Icon(prefixIcon) : null,
+          suffixText: suffixText,
+          errorText: errorText,
+          counterText: counterText,
+          hintText: hintText,
+          helperText: helperText,
+          contentPadding: contentPadding ?? inputContentPadding,
         ),
-        onChanged: widget.onChanged,
+        onChanged: onChanged,
       ),
     );
   }
 }
 
-      // showModalBottomSheet(
+// showModalBottomSheet(
       //   barrierColor: Colors.transparent,
       //   context: context,
       //   builder: (context) {

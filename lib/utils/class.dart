@@ -48,6 +48,7 @@ class PlanInfoClass {
     this.alarmTime,
     this.alarmId,
     required this.createDateTime,
+    required this.planItemList,
   });
 
   PlanTypeEnum type;
@@ -59,6 +60,7 @@ class PlanInfoClass {
   DateTime? alarmTime;
   int? alarmId;
   DateTime createDateTime;
+  List<String> planItemList;
 }
 
 class TextInputClass {
@@ -162,19 +164,19 @@ class PlanTypeClass {
   IconData icon;
 }
 
-class PlanItemClass {
-  PlanItemClass({
-    required this.id,
-    required this.name,
-    required this.desc,
-    required this.icon,
-  });
+// class PlanItemClass {
+//   PlanItemClass({
+//     required this.id,
+//     required this.name,
+//     required this.desc,
+//     required this.icon,
+//   });
 
-  dynamic id;
-  String name;
-  String desc;
-  IconData icon;
-}
+//   dynamic id;
+//   String name;
+//   String desc;
+//   IconData icon;
+// }
 
 class WeightInfoClass {
   WeightInfoClass({
@@ -195,17 +197,17 @@ class WeightInfoClass {
   Function() onTap;
 }
 
-class GridIconClass {
-  GridIconClass({
-    required this.id,
-    required this.icon,
-    required this.isEnabled,
-  });
+// class GridIconClass {
+//   GridIconClass({
+//     required this.id,
+//     required this.icon,
+//     required this.isEnabled,
+//   });
 
-  String id;
-  IconData icon;
-  bool isEnabled;
-}
+//   String id;
+//   IconData icon;
+//   bool isEnabled;
+// }
 
 class PlanTypeDetailClass {
   PlanTypeDetailClass({
@@ -235,10 +237,12 @@ class ActionItemClass {
     required this.priority,
     required this.actionDateTime,
     required this.createDateTime,
+    this.isRecord,
   });
 
   String id, title, type, name, priority;
   DateTime actionDateTime, createDateTime;
+  bool? isRecord;
 
   setObject() {
     return {
@@ -249,42 +253,43 @@ class ActionItemClass {
       'priority': priority,
       'actionDateTime': actionDateTime,
       'createDateTime': createDateTime,
+      'isRecord': isRecord,
     };
   }
 }
 
-class ArgmentsTypeClass {
-  ArgmentsTypeClass({
-    required this.createDateTime,
-    required this.planId,
-    required this.buttonText,
-    required this.contentsTitleWidget,
-    this.pageTitle,
-  });
+// class ArgmentsTypeClass {
+//   ArgmentsTypeClass({
+//     required this.createDateTime,
+//     required this.planId,
+//     required this.buttonText,
+//     required this.contentsTitleWidget,
+//     this.pageTitle,
+//   });
 
-  DateTime createDateTime;
-  String planId, buttonText;
-  String? pageTitle;
-  Widget contentsTitleWidget;
-}
+//   DateTime createDateTime;
+//   String planId, buttonText;
+//   String? pageTitle;
+//   Widget contentsTitleWidget;
+// }
 
-class PlanPriorityClass {
-  PlanPriorityClass({
-    required this.id,
-    required this.name,
-    required this.desc,
-    required this.icon,
-    required this.order,
-    required this.bgColor,
-    required this.textColor,
-  });
+// class PlanPriorityClass {
+//   PlanPriorityClass({
+//     required this.id,
+//     required this.name,
+//     required this.desc,
+//     required this.icon,
+//     required this.order,
+//     required this.bgColor,
+//     required this.textColor,
+//   });
 
-  PlanPriorityEnum id;
-  String name, desc;
-  IconData icon;
-  int order;
-  Color bgColor, textColor;
-}
+//   PlanPriorityEnum id;
+//   String name, desc;
+//   IconData icon;
+//   int order;
+//   Color bgColor, textColor;
+// }
 
 class SvgClass {
   SvgClass({required this.emotion, required this.name});
@@ -294,4 +299,13 @@ class SvgClass {
 class FilterClass {
   FilterClass({required this.id, required this.name});
   String id, name;
+}
+
+class PlanItemClass {
+  PlanItemClass({
+    required this.type,
+    required this.name,
+  });
+
+  String type, name;
 }

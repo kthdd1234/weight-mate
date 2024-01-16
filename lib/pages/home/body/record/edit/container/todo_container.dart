@@ -1,4 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
+import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -26,6 +29,8 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -65,7 +70,11 @@ class _TodoContainerState extends State<TodoContainer> {
     List<Map<String, dynamic>>? actions = recordInfo?.actions;
     List<PlanBox> planList =
         planBox.values.where((element) => element.type == widget.type).toList();
-    Color mainColor = tagColors[widget.color]!['textColor']!;
+    Map<String, Color> tagColor = tagColors[widget.color]!;
+    Color mainColor = tagColor['textColor']!;
+    Color bgColor = tagColor['bgColor']!;
+
+    bool isLife = widget.filterId == FILITER.lifeStyle.toString();
 
     onCheckBox({required dynamic id, required bool newValue}) async {
       PlanBox? planInfo = planBox.get(id);
@@ -121,7 +130,7 @@ class _TodoContainerState extends State<TodoContainer> {
       await recordInfo?.save();
     }
 
-    onTapTodoComplete({
+    onGoalComplete({
       required String completedType,
       required dynamic id,
       required String text,
@@ -168,7 +177,7 @@ class _TodoContainerState extends State<TodoContainer> {
       showDialog(
         context: context,
         builder: (context) => NativeAdDialog(
-          title: '${widget.title} $completedType 완료!',
+          title: '목표 $completedType 완료!',
           leftText: '히스토리 보기',
           rightText: '그래프 보기',
           leftIcon: Icons.menu_book_rounded,
@@ -177,6 +186,47 @@ class _TodoContainerState extends State<TodoContainer> {
           onRightClick: () => onClick(BottomNavigationEnum.graph),
         ),
       );
+    }
+
+    onRecordComplete({
+      required String completedType,
+      required String id,
+      required String name,
+      required DateTime actionDateTime,
+    }) async {
+      ActionItemClass actionItem = ActionItemClass(
+        id: id,
+        title: '',
+        type: widget.type,
+        name: name,
+        priority: '',
+        isRecord: true,
+        actionDateTime: actionDateTime,
+        createDateTime: actionDateTime,
+      );
+
+      if (completedType == '추가') {
+        if (recordInfo == null) {
+          await recordBox.put(
+            recordKey,
+            RecordBox(
+              createDateTime: importDateTime,
+              actions: [actionItem.setObject()],
+            ),
+          );
+        } else {
+          recordInfo.actions == null
+              ? recordInfo.actions = [actionItem.setObject()]
+              : recordInfo.actions!.add(actionItem.setObject());
+        }
+      } else {
+        int? idx = recordInfo?.actions?.indexWhere((item) => item['id'] == id);
+        if (idx != null && idx != -1) {
+          recordInfo?.actions![idx] = actionItem.setObject();
+        }
+      }
+
+      await recordInfo?.save();
     }
 
     actionPercent() {
@@ -208,11 +258,41 @@ class _TodoContainerState extends State<TodoContainer> {
           ? user.filterList?.remove(widget.filterId)
           : user.filterList?.add(widget.filterId);
       user.save();
+
+      //
     }
 
-    List<TagClass> tags = [
+    TagClass commonTag = TagClass(
+      icon: isOpen
+          ? Icons.keyboard_arrow_down_rounded
+          : Icons.keyboard_arrow_right_rounded,
+      color: widget.color,
+      onTap: onTapOpen,
+    );
+
+    List<TagClass> dietExerciseTags = [
       TagClass(
-        text: '할 일 ${planList.length}개',
+        text: '기록 ${onActionList(
+              actions: actions,
+              type: widget.type,
+              onRecordUpdate: onRecordComplete,
+            )?.length ?? 0}개',
+        color: widget.color,
+        isHide: isOpen,
+        onTap: onTapOpen,
+      ),
+      TagClass(
+        text: '목표 ${planList.length}개',
+        color: widget.color,
+        isHide: isOpen,
+        onTap: onTapOpen,
+      ),
+      commonTag
+    ];
+
+    List<TagClass> lifeTags = [
+      TagClass(
+        text: '습관 ${planList.length}개',
         color: widget.color,
         isHide: isOpen,
         onTap: onTapOpen,
@@ -222,13 +302,7 @@ class _TodoContainerState extends State<TodoContainer> {
         color: widget.color,
         onTap: onTapActionPercent,
       ),
-      TagClass(
-        icon: isOpen
-            ? Icons.keyboard_arrow_down_rounded
-            : Icons.keyboard_arrow_right_rounded,
-        color: widget.color,
-        onTap: onTapOpen,
-      )
+      commonTag
     ];
 
     return Column(
@@ -241,27 +315,30 @@ class _TodoContainerState extends State<TodoContainer> {
                 isDivider: isOpen,
                 title: widget.title,
                 icon: widget.icon,
-                tags: tags,
+                tags: isLife ? lifeTags : dietExerciseTags,
                 onTap: onTapOpen,
               ),
-              isOpen
-                  ? Column(
-                      children: [
-                        TodoList(
-                          actions: actions,
-                          mainColor: mainColor,
-                          planList: planList,
-                          onCheckBox: onCheckBox,
-                          onTapTodoUpdate: onTapTodoComplete,
-                        ),
-                        TodoAdd(
-                          title: widget.title,
-                          mainColor: mainColor,
-                          onTapTodoAdd: onTapTodoComplete,
-                        ),
-                      ],
+              isLife
+                  ? LifeContainer(
+                      isOpen: isOpen,
+                      title: widget.title,
+                      actions: actions,
+                      mainColor: mainColor,
+                      planList: planList,
+                      onCheckBox: onCheckBox,
+                      onGoalComplete: onGoalComplete,
                     )
-                  : const EmptyArea(),
+                  : DietExerciseContainer(
+                      type: widget.type,
+                      isOpen: isOpen,
+                      bgColor: bgColor,
+                      actions: actions,
+                      mainColor: mainColor,
+                      planList: planList,
+                      onCheckBox: onCheckBox,
+                      onGoalComplete: onGoalComplete,
+                      onRecordComplete: onRecordComplete,
+                    )
             ],
           ),
         ),
@@ -271,14 +348,379 @@ class _TodoContainerState extends State<TodoContainer> {
   }
 }
 
-class TodoList extends StatelessWidget {
-  TodoList({
+class DietExerciseContainer extends StatefulWidget {
+  DietExerciseContainer({
+    super.key,
+    required this.type,
+    required this.isOpen,
+    required this.bgColor,
+    required this.actions,
+    required this.mainColor,
+    required this.planList,
+    required this.onCheckBox,
+    required this.onGoalComplete,
+    required this.onRecordComplete,
+  });
+
+  String type;
+  bool isOpen;
+  Color bgColor;
+  List<Map<String, dynamic>>? actions;
+  Color mainColor;
+  List<PlanBox> planList;
+  Function({required dynamic id, required bool newValue}) onCheckBox;
+  Function({
+    required String completedType,
+    required dynamic id,
+    required bool newValue,
+    required String text,
+    int? alarmId,
+    DateTime? alarmTime,
+    DateTime? createDateTime,
+    bool? isAlarm,
+    String? priority,
+  }) onGoalComplete;
+  Function({
+    required String completedType,
+    required String id,
+    required String name,
+    required DateTime actionDateTime,
+  }) onRecordComplete;
+
+  @override
+  State<DietExerciseContainer> createState() => _DietExerciseContainerState();
+}
+
+class _DietExerciseContainerState extends State<DietExerciseContainer> {
+  SegmentedTypes selectedSegment = SegmentedTypes.record;
+
+  @override
+  Widget build(BuildContext context) {
+    onSegmentedChanged(SegmentedTypes? segmented) {
+      setState(() {
+        selectedSegment = segmented!;
+      });
+    }
+
+    bool isRecord = selectedSegment == SegmentedTypes.record;
+    List<Widget>? actionList = onActionList(
+      actions: widget.actions,
+      type: widget.type,
+      onRecordUpdate: widget.onRecordComplete,
+    );
+
+    Map<SegmentedTypes, Widget> children = {
+      SegmentedTypes.record: onSegmentedWidget(
+        title: '기록 ${actionList?.length ?? 0}',
+        type: SegmentedTypes.record,
+        selected: selectedSegment,
+      ),
+      SegmentedTypes.month: onSegmentedWidget(
+        title: '목표 ${widget.planList.length}',
+        type: SegmentedTypes.month,
+        selected: selectedSegment,
+      ),
+    };
+
+    return widget.isOpen
+        ? Column(
+            children: [
+              isRecord
+                  ? Column(
+                      children: [
+                        RecordList(
+                          actionList: actionList,
+                          onRecordUpdate: widget.onRecordComplete,
+                        ),
+                        RecordAdd(onRecordAdd: widget.onRecordComplete),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        GoalList(
+                          actions: widget.actions,
+                          planList: widget.planList,
+                          mainColor: widget.mainColor,
+                          onCheckBox: widget.onCheckBox,
+                          onGoalUpdate: widget.onGoalComplete,
+                        ),
+                        GoalAdd(
+                          title: '목표',
+                          mainColor: widget.mainColor,
+                          onTapGoalAdd: widget.onGoalComplete,
+                        ),
+                      ],
+                    ),
+              SpaceHeight(height: 15),
+              DefaultSegmented(
+                selectedSegment: selectedSegment,
+                children: children,
+                backgroundColor: dialogBackgroundColor,
+                thumbColor: Colors.white, //
+                onSegmentedChanged: onSegmentedChanged,
+              ),
+            ],
+          )
+        : const EmptyArea();
+  }
+}
+
+class RecordList extends StatelessWidget {
+  RecordList({
+    super.key,
+    required this.actionList,
+    required this.onRecordUpdate,
+  });
+
+  List<Widget>? actionList;
+  Function({
+    required String completedType,
+    required String id,
+    required String name,
+    required DateTime actionDateTime,
+  }) onRecordUpdate;
+
+  @override
+  Widget build(BuildContext context) {
+    bool? isList = actionList?.isNotEmpty;
+    return isList == true ? Column(children: actionList!) : const EmptyArea();
+  }
+}
+
+class RecordName extends StatefulWidget {
+  RecordName({
+    super.key,
+    required this.id,
+    required this.name,
+    required this.actionDateTime,
+    required this.onRecordUpdate,
+  });
+
+  String id, name;
+  DateTime actionDateTime;
+  Function({
+    required String completedType,
+    required String id,
+    required String name,
+    required DateTime actionDateTime,
+  }) onRecordUpdate;
+
+  @override
+  State<RecordName> createState() => _RecordNameState();
+}
+
+class _RecordNameState extends State<RecordName> {
+  TextEditingController textController = TextEditingController();
+  bool isShowInput = false;
+
+  @override
+  void initState() {
+    textController.text = widget.name;
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    onTapName() {
+      setState(() => isShowInput = true);
+    }
+
+    onTapEdit() {
+      textController.text = widget.name;
+      setState(() => isShowInput = true);
+    }
+
+    onTapMore() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return RecordBottomSheet(id: widget.id, onTapEdit: onTapEdit);
+        },
+      );
+    }
+
+    onEditingComplete() {
+      if (textController.text != '') {
+        widget.onRecordUpdate(
+            completedType: '수정',
+            id: widget.id,
+            name: textController.text,
+            actionDateTime: widget.actionDateTime);
+      }
+
+      setState(() => isShowInput = false);
+    }
+
+    return isShowInput
+        ? Row(
+            children: [
+              TodoInput(
+                controller: textController,
+                onEditingComplete: onEditingComplete,
+              ),
+            ],
+          )
+        : Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: onTapName,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.name,
+                        style: const TextStyle(color: themeColor, fontSize: 15),
+                      ),
+                      SpaceHeight(height: 3),
+                      CommonText(
+                        text: timeToString(widget.actionDateTime),
+                        size: 11,
+                        color: Colors.grey,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SpaceWidth(width: regularSapce),
+              CommonIcon(
+                icon: Icons.more_horiz_rounded,
+                size: 20,
+                color: Colors.grey,
+                onTap: onTapMore,
+              )
+            ],
+          );
+  }
+}
+
+class RecordAdd extends StatefulWidget {
+  RecordAdd({
+    super.key,
+    required this.onRecordAdd,
+  });
+
+  Function({
+    required String completedType,
+    required String id,
+    required String name,
+    required DateTime actionDateTime,
+  }) onRecordAdd;
+
+  @override
+  State<RecordAdd> createState() => _RecordAddState();
+}
+
+class _RecordAddState extends State<RecordAdd> {
+  TextEditingController textController = TextEditingController();
+  bool isShowInput = false;
+
+  @override
+  Widget build(BuildContext context) {
+    onTapAdd() {
+      setState(() => isShowInput = true);
+    }
+
+    onEditingComplete() {
+      if (textController.text != '') {
+        widget.onRecordAdd(
+          completedType: '추가',
+          id: uuid(),
+          name: textController.text,
+          actionDateTime: DateTime.now(),
+        );
+      }
+
+      setState(() {
+        isShowInput = false;
+        textController.text = '';
+      });
+    }
+
+    return isShowInput
+        ? Row(
+            children: [
+              TodoInput(
+                controller: textController,
+                onEditingComplete: onEditingComplete,
+              ),
+            ],
+          )
+        : InkWell(
+            onTap: onTapAdd,
+            child: Row(
+              children: [
+                SvgPicture.asset('assets/svgs/pencil-square.svg', height: 18),
+                SpaceWidth(width: 7),
+                CommonText(text: '기록 추가', size: 15, color: Colors.grey),
+              ],
+            ),
+          );
+  }
+}
+
+class LifeContainer extends StatelessWidget {
+  LifeContainer({
+    super.key,
+    required this.isOpen,
+    required this.title,
+    required this.actions,
+    required this.mainColor,
+    required this.planList,
+    required this.onCheckBox,
+    required this.onGoalComplete,
+  });
+
+  bool isOpen;
+  String title;
+  List<Map<String, dynamic>>? actions;
+  Color mainColor;
+  List<PlanBox> planList;
+  Function({required dynamic id, required bool newValue}) onCheckBox;
+  Function({
+    required String completedType,
+    required dynamic id,
+    required bool newValue,
+    required String text,
+    int? alarmId,
+    DateTime? alarmTime,
+    DateTime? createDateTime,
+    bool? isAlarm,
+    String? priority,
+  }) onGoalComplete;
+
+  @override
+  Widget build(BuildContext context) {
+    return isOpen
+        ? Column(
+            children: [
+              GoalList(
+                actions: actions,
+                mainColor: mainColor,
+                planList: planList,
+                onCheckBox: onCheckBox,
+                onGoalUpdate: onGoalComplete,
+              ),
+              GoalAdd(
+                title: title,
+                mainColor: mainColor,
+                onTapGoalAdd: onGoalComplete,
+              ),
+            ],
+          )
+        : const EmptyArea();
+  }
+}
+
+class GoalList extends StatelessWidget {
+  GoalList({
     super.key,
     required this.actions,
     required this.planList,
     required this.mainColor,
     required this.onCheckBox,
-    required this.onTapTodoUpdate,
+    required this.onGoalUpdate,
   });
 
   Color mainColor;
@@ -295,7 +737,7 @@ class TodoList extends StatelessWidget {
     DateTime? createDateTime,
     DateTime? alarmTime,
     int? alarmId,
-  }) onTapTodoUpdate;
+  }) onGoalUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -316,7 +758,7 @@ class TodoList extends StatelessWidget {
       children: planList
           .map(
             (info) => Padding(
-              padding: const EdgeInsets.only(bottom: regularSapce),
+              padding: const EdgeInsets.only(bottom: 10),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -326,11 +768,11 @@ class TodoList extends StatelessWidget {
                     checkColor: mainColor,
                     onTap: onCheckBox,
                   ),
-                  TodoName(
+                  GoalName(
                     planInfo: info,
                     color: mainColor,
                     isChcked: action(info.id)['id'] != null,
-                    onTapTodoUpdate: onTapTodoUpdate,
+                    onGoalUpdate: onGoalUpdate,
                   ),
                 ],
               ),
@@ -341,17 +783,21 @@ class TodoList extends StatelessWidget {
   }
 }
 
-class TodoName extends StatefulWidget {
-  TodoName({
+class GoalName extends StatefulWidget {
+  GoalName({
     required this.planInfo,
     required this.isChcked,
-    required this.onTapTodoUpdate,
+    required this.onGoalUpdate,
     required this.color,
+    this.fontSize,
+    this.textColor,
   });
 
   PlanBox planInfo;
+  double? fontSize;
   bool isChcked;
   Color color;
+  Color? textColor;
   Function({
     required String completedType,
     required dynamic id,
@@ -362,13 +808,13 @@ class TodoName extends StatefulWidget {
     DateTime? createDateTime,
     DateTime? alarmTime,
     int? alarmId,
-  }) onTapTodoUpdate;
+  }) onGoalUpdate;
 
   @override
-  State<TodoName> createState() => _TodoNameState();
+  State<GoalName> createState() => _GoalNameState();
 }
 
-class _TodoNameState extends State<TodoName> {
+class _GoalNameState extends State<GoalName> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
 
@@ -388,7 +834,7 @@ class _TodoNameState extends State<TodoName> {
       setState(() => isShowInput = false);
 
       if (textController.text != '') {
-        widget.onTapTodoUpdate(
+        widget.onGoalUpdate(
           completedType: '수정',
           id: widget.planInfo.id,
           text: textController.text,
@@ -413,7 +859,7 @@ class _TodoNameState extends State<TodoName> {
       showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: context,
-        builder: (context) => TodoModalBottomSheet(
+        builder: (context) => GoalBottomSheet(
           id: widget.planInfo.id,
           icon: todoData[widget.planInfo.type]!.icon,
           title: todoData[widget.planInfo.type]!.title,
@@ -421,6 +867,24 @@ class _TodoNameState extends State<TodoName> {
           onTapEdit: onTapEdit,
         ),
       );
+    }
+
+    onActionCount() {
+      int count = 0;
+
+      recordRepository.recordList.forEach((record) {
+        final actionList = record.actions;
+
+        if (actionList != null) {
+          actionList.forEach((action) {
+            if (action['id'] == widget.planInfo.id) {
+              count += 1;
+            }
+          });
+        }
+      });
+
+      return count;
     }
 
     return isShowInput
@@ -438,15 +902,15 @@ class _TodoNameState extends State<TodoName> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          // width: 10,
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
                           child: Text(
                             widget.planInfo.name,
                             style: TextStyle(
-                              fontSize: 15,
-                              color: themeColor,
+                              fontSize: widget.fontSize ?? 15,
+                              color: widget.textColor ?? themeColor,
                               decorationColor: widget.color,
-                              decorationThickness: 2,
+                              decorationThickness: 1,
                               decoration: widget.isChcked
                                   ? TextDecoration.lineThrough
                                   : null,
@@ -454,17 +918,22 @@ class _TodoNameState extends State<TodoName> {
                           ),
                         ),
                         SpaceHeight(height: 3),
-                        CommonText(
-                          text: widget.planInfo.isAlarm
-                              ? timeToString(widget.planInfo.alarmTime)
-                              : '알림 없음',
-                          size: 11,
-                          leftIcon: widget.planInfo.isAlarm
-                              ? Icons.alarm
-                              : Icons.alarm_off_rounded,
-                          color: widget.planInfo.isAlarm
-                              ? themeColor
-                              : Colors.grey,
+                        Row(
+                          children: [
+                            widget.planInfo.isAlarm
+                                ? CommonText(
+                                    text:
+                                        '${timeToString(widget.planInfo.alarmTime)} 알림, ',
+                                    size: 11,
+                                    color: Colors.grey,
+                                  )
+                                : const EmptyArea(),
+                            CommonText(
+                              text: '실천 ${onActionCount()}회',
+                              size: 11,
+                              color: Colors.grey,
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -474,6 +943,8 @@ class _TodoNameState extends State<TodoName> {
                 InkWell(
                   onTap: onTapMore,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       CommonIcon(
                         icon: Icons.more_horiz,
@@ -481,7 +952,13 @@ class _TodoNameState extends State<TodoName> {
                         color: Colors.grey,
                         onTap: onTapMore,
                       ),
-                      SpaceHeight(height: smallSpace)
+                      widget.isChcked
+                          ? CommonText(
+                              text: timeToString(DateTime.now()),
+                              size: 11,
+                              color: widget.color,
+                            )
+                          : const EmptyArea()
                     ],
                   ),
                 ),
@@ -491,12 +968,12 @@ class _TodoNameState extends State<TodoName> {
   }
 }
 
-class TodoAdd extends StatefulWidget {
-  TodoAdd({
+class GoalAdd extends StatefulWidget {
+  GoalAdd({
     super.key,
     required this.title,
     required this.mainColor,
-    required this.onTapTodoAdd,
+    required this.onTapGoalAdd,
   });
 
   String title;
@@ -506,13 +983,13 @@ class TodoAdd extends StatefulWidget {
     required dynamic id,
     required String text,
     required bool newValue,
-  }) onTapTodoAdd;
+  }) onTapGoalAdd;
 
   @override
-  State<TodoAdd> createState() => _TodoAddState();
+  State<GoalAdd> createState() => _GoalAddState();
 }
 
-class _TodoAddState extends State<TodoAdd> {
+class _GoalAddState extends State<GoalAdd> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
   bool isChecked = false;
@@ -525,7 +1002,7 @@ class _TodoAddState extends State<TodoAdd> {
 
     onEditingComplete() {
       if (textController.text != '') {
-        widget.onTapTodoAdd(
+        widget.onTapGoalAdd(
           completedType: '추가',
           id: uuid(),
           text: textController.text,
@@ -613,8 +1090,99 @@ class TodoInput extends StatelessWidget {
   }
 }
 
-class TodoModalBottomSheet extends StatefulWidget {
-  TodoModalBottomSheet({
+class RecordBottomSheet extends StatefulWidget {
+  RecordBottomSheet({
+    super.key,
+    required this.id,
+    required this.onTapEdit,
+  });
+
+  String id;
+  Function() onTapEdit;
+
+  @override
+  State<RecordBottomSheet> createState() => _RecordBottomSheetState();
+}
+
+class _RecordBottomSheetState extends State<RecordBottomSheet> {
+  bool isShowTimeSetting = false;
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+    Box<RecordBox> recordBox = recordRepository.recordBox;
+    int recordKey = getDateTimeToInt(importDateTime);
+    RecordBox? recordInfo = recordBox.get(recordKey);
+
+    onTapRemove() async {
+      recordInfo!.actions!.removeWhere((element) => element['id'] == widget.id);
+
+      if (recordInfo.actions!.isEmpty) {
+        recordInfo.actions = null;
+      }
+
+      await recordInfo.save();
+
+      closeDialog(context);
+    }
+
+    onTapChangeTime() {
+      setState(() => isShowTimeSetting = true);
+    }
+
+    onCompleted() {
+      //
+    }
+
+    return CommonBottomSheet(
+      title: '기록 설정',
+      height: isShowTimeSetting ? 400 : 220,
+      contents: isShowTimeSetting
+          ? const EmptyArea()
+          // AlarmContainer(
+          //     icon: widget.icon,
+          //     title: '',
+          //     desc: '',
+          //     isEnabled: isEnabled,
+          //     alarmTime: alarmTime,
+          //     onChanged: onChanged,
+          //     onDateTimeChanged: onDateTimeChanged,
+          //     onCompleted: onCompleted,
+          //   )
+          : Row(
+              children: [
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.edit,
+                  title: '기록 명 수정',
+                  onTap: () {
+                    closeDialog(context);
+                    widget.onTapEdit();
+                  },
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.alarm_on_rounded,
+                  title: '기록 시간 변경',
+                  onTap: onTapChangeTime,
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  mainColor: Colors.red,
+                  icon: Icons.delete_forever,
+                  title: '기록 삭제',
+                  onTap: onTapRemove,
+                )
+              ],
+            ),
+    );
+  }
+}
+
+class GoalBottomSheet extends StatefulWidget {
+  GoalBottomSheet({
     super.key,
     required this.icon,
     required this.id,
@@ -629,10 +1197,10 @@ class TodoModalBottomSheet extends StatefulWidget {
   Function() onTapEdit;
 
   @override
-  State<TodoModalBottomSheet> createState() => _TodoModalBottomSheetState();
+  State<GoalBottomSheet> createState() => _GoalBottomSheetState();
 }
 
-class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
+class _GoalBottomSheetState extends State<GoalBottomSheet> {
   bool isShowAlarm = false;
   bool isEnabled = true;
   bool isRequestPermission = false;
@@ -724,7 +1292,7 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
     }
 
     return CommonBottomSheet(
-      title: '${widget.title} 설정',
+      title: '목표 설정',
       titleLeftWidget: isShowAlarm
           ? InkWell(
               onTap: onTapBack,
@@ -745,34 +1313,30 @@ class _TodoModalBottomSheetState extends State<TodoModalBottomSheet> {
               onDateTimeChanged: onDateTimeChanged,
               onCompleted: onCompleted,
             )
-          : Column(
+          : Row(
               children: [
-                Row(
-                  children: [
-                    ExpandedButtonVerti(
-                      mainColor: themeColor,
-                      icon: Icons.edit,
-                      title: '${widget.title} 수정',
-                      onTap: () {
-                        closeDialog(context);
-                        widget.onTapEdit();
-                      },
-                    ),
-                    SpaceWidth(width: tinySpace),
-                    ExpandedButtonVerti(
-                      mainColor: themeColor,
-                      icon: Icons.alarm_rounded,
-                      title: '시간 알림',
-                      onTap: onTapAlarm,
-                    ),
-                    SpaceWidth(width: tinySpace),
-                    ExpandedButtonVerti(
-                      mainColor: Colors.red,
-                      icon: Icons.delete_forever,
-                      title: '${widget.title} 삭제',
-                      onTap: onTapRemove,
-                    ),
-                  ],
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.edit,
+                  title: '목표 수정',
+                  onTap: () {
+                    closeDialog(context);
+                    widget.onTapEdit();
+                  },
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.alarm_rounded,
+                  title: '시간 알림',
+                  onTap: onTapAlarm,
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  mainColor: Colors.red,
+                  icon: Icons.delete_forever,
+                  title: '목표 삭제',
+                  onTap: onTapRemove,
                 ),
               ],
             ),

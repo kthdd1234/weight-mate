@@ -2,7 +2,8 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_plan_setting.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_alarm_permission.dart';
+import 'package:flutter_app_weight_management/pages/add/pages/add_plan_list.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
@@ -28,7 +29,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'pages/add/pages/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
-import 'package:gdpr_dialog/gdpr_dialog.dart';
 
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
@@ -128,7 +128,8 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
-        '/add-plan-setting': (context) => const AddPlanSetting(),
+        '/add-plan-list': (context) => const AddPlanList(),
+        '/add-alarm-permission': (context) => const AddAlarmPermission(),
         '/home-page': (context) => const HomePage(),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),

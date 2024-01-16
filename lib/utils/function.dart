@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -56,7 +58,7 @@ timeToString(DateTime? dateTime) {
     return '';
   }
 
-  String dateTimeToStr = DateFormat('a hh:mm').format(dateTime);
+  String dateTimeToStr = DateFormat('a h:mm').format(dateTime);
 
   if (dateTimeToStr.contains('AM')) {
     return dateTimeToStr.replaceFirst(RegExp(r'AM'), '오전');
@@ -384,4 +386,32 @@ loadNativeAd(String adUnitId) {
       ),
     ),
   )..load();
+}
+
+List<Widget>? onActionList({
+  required List<Map<String, dynamic>>? actions,
+  required String type,
+  required Function({
+    required String completedType,
+    required String id,
+    required String name,
+    required DateTime actionDateTime,
+  }) onRecordUpdate,
+}) {
+  final list = actions
+      ?.where((item) => type == item['type'] && item['isRecord'] != null)
+      .map((item) => Column(
+            children: [
+              RecordName(
+                id: item['id'],
+                name: item['name'],
+                actionDateTime: item['actionDateTime'],
+                onRecordUpdate: onRecordUpdate,
+              ),
+              SpaceHeight(height: 15)
+            ],
+          ))
+      .toList();
+
+  return list;
 }

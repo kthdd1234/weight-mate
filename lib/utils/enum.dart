@@ -17,19 +17,7 @@ enum RecordIconTypes {
 
 enum BottomNavigationEnum { record, history, graph, setting }
 
-enum SegmentedTypes {
-  weight,
-  action,
-  diary,
-  week,
-  month,
-  threeMonth,
-  sixMonth,
-  custom,
-  planTypes,
-  planItems,
-  planCheck
-}
+enum SegmentedTypes { week, month, threeMonth, sixMonth, custom, goal, record }
 
 enum MoreSeeItem {
   tall,

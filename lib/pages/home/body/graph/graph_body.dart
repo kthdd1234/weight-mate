@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
@@ -39,7 +40,6 @@ class GraphBody extends StatefulWidget {
 class _GraphBodyState extends State<GraphBody> {
   late DateTime startDateTime, endDateTime;
 
-  SegmentedTypes selectedRecordTypeSegment = SegmentedTypes.weight;
   SegmentedTypes selectedDateTimeSegment = SegmentedTypes.week;
 
   setTitleDateTime() {
@@ -67,11 +67,31 @@ class _GraphBodyState extends State<GraphBody> {
         context.watch<BottomNavigationProvider>().selectedEnumId;
 
     Map<SegmentedTypes, Widget> dateTimeChildren = {
-      SegmentedTypes.week: SegmentedWidget(title: '일주일'),
-      SegmentedTypes.month: SegmentedWidget(title: '한달'),
-      SegmentedTypes.threeMonth: SegmentedWidget(title: '3개월'),
-      SegmentedTypes.sixMonth: SegmentedWidget(title: '6개월'),
-      SegmentedTypes.custom: SegmentedWidget(title: '날짜 선택'),
+      SegmentedTypes.week: onSegmentedWidget(
+        title: '일주일',
+        type: SegmentedTypes.week,
+        selected: selectedDateTimeSegment,
+      ),
+      SegmentedTypes.month: onSegmentedWidget(
+        title: '한달',
+        type: SegmentedTypes.month,
+        selected: selectedDateTimeSegment,
+      ),
+      SegmentedTypes.threeMonth: onSegmentedWidget(
+        title: '3개월',
+        type: SegmentedTypes.threeMonth,
+        selected: selectedDateTimeSegment,
+      ),
+      SegmentedTypes.sixMonth: onSegmentedWidget(
+        title: '6개월',
+        type: SegmentedTypes.sixMonth,
+        selected: selectedDateTimeSegment,
+      ),
+      SegmentedTypes.custom: onSegmentedWidget(
+        title: '날짜 선택',
+        type: SegmentedTypes.custom,
+        selected: selectedDateTimeSegment,
+      ),
     };
 
     setChartSwipeDirectionStart() {
@@ -149,12 +169,15 @@ class _GraphBodyState extends State<GraphBody> {
               )
             : const EmptyArea(),
         SpaceHeight(height: smallSpace),
-        DefaultSegmented(
-          selectedSegment: selectedDateTimeSegment,
-          children: dateTimeChildren,
-          backgroundColor: typeBackgroundColor,
-          thumbColor: dialogBackgroundColor,
-          onSegmentedChanged: onSegmentedDateTimeChanged,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: DefaultSegmented(
+            selectedSegment: selectedDateTimeSegment,
+            children: dateTimeChildren,
+            backgroundColor: typeBackgroundColor,
+            thumbColor: dialogBackgroundColor,
+            onSegmentedChanged: onSegmentedDateTimeChanged,
+          ),
         ),
         SpaceHeight(height: tinySpace),
       ],
@@ -162,34 +185,21 @@ class _GraphBodyState extends State<GraphBody> {
   }
 }
 
-class SegmentedWidget extends StatelessWidget {
-  SegmentedWidget({
-    super.key,
-    required this.title,
-    this.color,
-  });
+// class SegmentedWidget extends StatelessWidget {
+//   SegmentedWidget({
+//     super.key,
+//     required this.title,
+//     required this.color,
+//   });
 
-  String title;
-  Color? color;
+//   String title;
+//   Color color;
 
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        color != null ? Dot(size: 7.5, color: color!) : const EmptyArea(),
-        color != null ? SpaceWidth(width: tinySpace) : const EmptyArea(),
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 12,
-            color: themeColor,
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Text(title, style: TextStyle(fontSize: 12, color: color));
+//   }
+// }
 
 class GraphDateTimeCustom extends StatelessWidget {
   GraphDateTimeCustom({
