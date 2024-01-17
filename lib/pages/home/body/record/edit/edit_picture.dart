@@ -217,7 +217,6 @@ class EditPicture extends StatelessWidget {
     return Column(
       children: [
         ContentsBox(
-          isBoxShadow: true,
           contentsWidget: Column(
             children: [
               TitleContainer(

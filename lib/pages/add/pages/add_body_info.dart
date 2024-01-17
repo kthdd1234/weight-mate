@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -10,12 +8,9 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
-import 'package:flutter_app_weight_management/components/text/headline_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
-import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:provider/provider.dart';
@@ -35,33 +30,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
   final FocusNode _tallInput = FocusNode();
   final FocusNode _weightInput = FocusNode();
   final FocusNode _goalWeightInput = FocusNode();
-
-  @override
-  void initState() {
-    // setPermission() async {
-    //   bool isPermission = await NotificationService().permissionNotification;
-
-    //   if (isPermission == false) {
-    //     bool? isResult = await NotificationService().requestPermission();
-
-    //     if (isResult == false) {
-    //       WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //         DietInfoProvider readProvider = context.read<DietInfoProvider>();
-
-    //         readProvider.changeIsAlarm(false);
-    //         readProvider.changeIsPlanAlarm(false);
-    //       });
-    //     }
-    //   }
-    // }
-
-    // setPermission();
-
-    // DateTime now = DateTime.now();
-    // timeValue = DateTime(now.year, now.month, now.day, 10, 30);
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,66 +129,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         ],
       );
     }
-
-    // onChangedAlarm(bool newValue) async {
-    //   if (newValue) {
-    //     bool isPermission = await NotificationService().permissionNotification;
-
-    //     if (isPermission == false) {
-    //       // ignore: use_build_context_synchronously
-    //       showSnackBar(
-    //         context: context,
-    //         width: 270,
-    //         text: '알림 권한이 없어요.',
-    //         buttonName: '설정창으로 이동',
-    //         onPressed: openAppSettings,
-    //       );
-    //     } else {
-    //       readProvider.changeIsAlarm(newValue);
-    //     }
-    //   } else {
-    //     readProvider.changeIsAlarm(newValue);
-    //   }
-    // }
-
-    // onDateTimeChanged(DateTime value) {
-    //   setState(() => timeValue = value);
-    // }
-
-    // onSubmit() {
-    //   readProvider.changeAlarmTime(timeValue);
-    //   closeDialog(context);
-    // }
-
-    // onTap(dynamic id) {
-    //   showAlarmBottomSheet(
-    //     context: context,
-    //     initialDateTime: alarmTime!,
-    //     onDateTimeChanged: onDateTimeChanged,
-    //     onSubmit: onSubmit,
-    //   );
-    // }
-
-    // bodyAlarmWidget() {
-    //   return Column(
-    //     children: [
-    //       ContentsTitleText(text: '알림 설정'),
-    //       SpaceHeight(height: regularSapce),
-    //       AlarmItemWidget(
-    //         id: 'weight-alarm',
-    //         title: '체중 기록 알림',
-    //         desc: '매일 알림을 보내드려요',
-    //         isEnabled: isAlarm,
-    //         alarmTime: alarmTime,
-    //         icon: Icons.notifications_active,
-    //         iconBackgroundColor: dialogBackgroundColor,
-    //         chipBackgroundColor: dialogBackgroundColor,
-    //         onChanged: onChangedAlarm,
-    //         onTap: onTap,
-    //       ),
-    //     ],
-    //   );
-    // }
 
     actionItem(focusNode) {
       return KeyboardActionsItem(

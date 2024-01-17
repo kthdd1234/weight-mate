@@ -26,10 +26,6 @@ class NativeAdDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onPopInvoked(_) {
-      context.read<AdsProvider>().setNativeAd();
-    }
-
     return AlertDialog(
       shape: containerBorderRadious,
       backgroundColor: dialogBackgroundColor,
@@ -43,7 +39,7 @@ class NativeAdDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PopScope(onPopInvoked: onPopInvoked, child: NativeWidget()),
+            NativeWidget(),
             Row(
               children: [
                 ExpandedButtonHori(

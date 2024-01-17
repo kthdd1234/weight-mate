@@ -8,8 +8,8 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/widget/History_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
-import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -20,7 +20,8 @@ class HistoryBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
+    DateTime historyDateTime =
+        context.watch<HistoryDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
 
@@ -32,15 +33,15 @@ class HistoryBody extends StatelessWidget {
       builder: (context, values, child) {
         List<RecordBox> recordList = recordRepository.recordBox.values.toList();
         recordList = recordList
-            .where((e) => e.createDateTime.year == titleDateTime.year)
+            .where((e) => e.createDateTime.year == historyDateTime.year)
             .toList();
         recordList = HistoryFilter.recent == historyFilter
             ? recordList.reversed.toList()
             : recordList;
 
-        // if (recordList.isNotEmpty) {
-        //   recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
-        // }
+        if (recordList.isNotEmpty) {
+          recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
+        }
 
         return Column(
           children: [
@@ -71,7 +72,6 @@ class HistoryBody extends StatelessWidget {
                                   ),
                                 ),
                                 SpaceHeight(height: smallSpace),
-                                // DashDivider(color: Colors.grey.shade400)
                               ],
                             ),
                           )

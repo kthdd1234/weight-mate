@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -311,7 +312,7 @@ weightNotifyBody() {
 }
 
 planNotifyTitle() {
-  return '오늘의 계획 실천 알림 ⏰';
+  return '목표 실천 알림 ⏰';
 }
 
 planNotifyBody({required String title, required String body}) {
@@ -396,22 +397,32 @@ List<Widget>? onActionList({
     required String id,
     required String name,
     required DateTime actionDateTime,
+    required String title,
   }) onRecordUpdate,
 }) {
-  final list = actions
+  final actionList = actions
       ?.where((item) => type == item['type'] && item['isRecord'] != null)
-      .map((item) => Column(
+      .toList();
+
+  actionList?.sort((itemA, itemB) => categoryOrders[itemA['title']]!
+      .compareTo(categoryOrders[itemB['title']]!));
+
+  final renderList = actionList
+      ?.map((item) => Column(
             children: [
               RecordName(
+                type: type,
                 id: item['id'],
                 name: item['name'],
                 actionDateTime: item['actionDateTime'],
                 onRecordUpdate: onRecordUpdate,
+                title: item['title'],
+                topTitle: todoData[type]!.title,
               ),
               SpaceHeight(height: 15)
             ],
           ))
       .toList();
 
-  return list;
+  return renderList;
 }

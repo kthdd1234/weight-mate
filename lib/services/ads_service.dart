@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -16,9 +15,8 @@ class AdsService {
   String get rewardedInterstitialAdUnitId => Platform.isAndroid
       ? androidRewardedInterstitialAdUnitId
       : iosRewardedInterstitialAdUnitId;
-
-  // BannerAdListener get bannerAdListener => _bannerAdListener;
-  // NativeAdListener get nativeAdListener => _nativeAdListener;
+  String get appOpeningUnitId =>
+      Platform.isAndroid ? androidAppOpeningAdUnitId : iosAppOpeningAdUnitId;
 
   String get androidBannerAdUnitId {
     String? testId = dotenv.env['ANDROID_BANNER_TEST_ID'] ?? '';
@@ -68,25 +66,17 @@ class AdsService {
     return kDebugMode ? testId : realId;
   }
 
-  // final BannerAdListener _bannerAdListener = BannerAdListener(
-  //   onAdLoaded: (ad) => log('Ad loaded: ${ad.adUnitId}'),
-  //   onAdClicked: (ad) => log('ad clicked: ${ad.adUnitId}'),
-  //   onAdFailedToLoad: (ad, error) =>
-  //       log('Ad failed to load: ${ad.adUnitId}, $error'),
-  //   onAdOpened: (ad) => log('Ad opened: ${ad.adUnitId}'),
-  //   onAdClosed: (ad) => log('Ad opened: ${ad.adUnitId}'),
-  //   onAdImpression: (ad) => log('ad impresstion: ${ad.adUnitId}'),
-  //   onAdWillDismissScreen: (ad) => log('log willDismissScreen: ${ad.adUnitId}'),
-  // );
+  String get androidAppOpeningAdUnitId {
+    String? testId = dotenv.env['ANDROID_APP_OPENING_TEST_ID'] ?? '';
+    String? realId = dotenv.env['ANDROID_APP_OPENING_REAL_ID'] ?? '';
 
-  // final NativeAdListener _nativeAdListener = NativeAdListener(
-  //   onAdLoaded: (ad) => log('Ad loaded: ${ad.adUnitId}'),
-  //   onAdClicked: (ad) => log('ad clicked: ${ad.adUnitId}'),
-  //   onAdFailedToLoad: (ad, error) =>
-  //       log('Ad failed to load: ${ad.adUnitId}, $error'),
-  //   onAdOpened: (ad) => log('Ad opened: ${ad.adUnitId}'),
-  //   onAdClosed: (ad) => log('Ad opened: ${ad.adUnitId}'),
-  //   onAdImpression: (ad) => log('ad impresstion: ${ad.adUnitId}'),
-  //   onAdWillDismissScreen: (ad) => log('log willDismissScreen: ${ad.adUnitId}'),
-  // );
+    return kDebugMode ? testId : realId;
+  }
+
+  String get iosAppOpeningAdUnitId {
+    String? testId = dotenv.env['IOS_APP_OPENING_TEST_ID'] ?? '';
+    String? realId = dotenv.env['IOS_APP_OPENING_REAL_ID'] ?? '';
+
+    return kDebugMode ? testId : realId;
+  }
 }

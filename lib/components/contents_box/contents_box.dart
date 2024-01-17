@@ -34,11 +34,11 @@ class ContentsBox extends StatelessWidget {
             : null,
         color: backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(borderRadius ?? 10),
-        boxShadow: isBoxShadow != null
+        boxShadow: isBoxShadow == null
             ? [
                 BoxShadow(
                   color:
-                      const Color.fromARGB(255, 206, 206, 206).withOpacity(0.5),
+                      const Color.fromARGB(255, 206, 206, 206).withOpacity(0.1),
                   blurRadius: 10,
                   offset: Offset(2, 4),
                 )

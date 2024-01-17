@@ -39,8 +39,6 @@ class GraphChart extends StatefulWidget {
 }
 
 class _GraphChartState extends State<GraphChart> {
-  // late DateTime startDateTime, endDateTime;
-
   double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
   List<RecordBox?> recordInfoList = [];
 
@@ -84,10 +82,9 @@ class _GraphChartState extends State<GraphChart> {
 
         if (recordInfo?.weight != null) {
           weightList.add(recordInfo!.weight!);
-          lineSeriesData.add(chartData);
-        } else if (i == count) {
-          lineSeriesData.add(chartData);
         }
+
+        lineSeriesData.add(chartData);
       }
 
       setState(() {
@@ -128,7 +125,7 @@ class _GraphChartState extends State<GraphChart> {
     }
 
     setLineSeries() {
-      return LineSeries(
+      return FastLineSeries(
         emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
         dataSource: setLineSeriesData(),
         color: Colors.indigo.shade200,
@@ -138,6 +135,7 @@ class _GraphChartState extends State<GraphChart> {
           isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
         ),
         dataLabelSettings: DataLabelSettings(
+          showZeroValue: false,
           isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
           useSeriesColor: true,
           textStyle: const TextStyle(
@@ -205,253 +203,3 @@ class _GraphChartState extends State<GraphChart> {
     );
   }
 }
-
-  // SpaceHeight(height: smallSpace),
-  //       widget.selectedDateTimeSegment == SegmentedTypes.custom
-  //           ? GraphDateTimeCustom(
-  //               startDateTime: startDateTime,
-  //               endDateTime: endDateTime,
-  //               onSubmit: onSubmit,
-  //             )
-  //           : const EmptyArea(),
-
-    // String dietToString = PlanTypeEnum.diet.toString();
-    // String exerciseToString = PlanTypeEnum.exercise.toString();
-    // String lifeStyleToString = PlanTypeEnum.lifestyle.toString();
-    // Map<String, int> planIndexInfo = {
-    //   dietToString: 0,
-    //   exerciseToString: 1,
-    //   lifeStyleToString: 2
-    // };
-    //     onTooltipRender(TooltipArgs tooltipArgs) {
-    //   WidgetsBinding.instance.addPostFrameCallback(
-    //     (timeStamp) {
-    //       if (widget.selectedRecordTypeSegment == SegmentedTypes.action) {
-    //         List<Map<String, dynamic>> typeInfos = [
-    //           {'type': dietToString, 'color': dietColor},
-    //           {'type': exerciseToString, 'color': exerciseColor},
-    //           {'type': lifeStyleToString, 'color': lifeStyleColor},
-    //         ];
-    //         int typeIndex = tooltipArgs.seriesIndex;
-    //         num pointIndex = tooltipArgs.pointIndex ?? -1;
-    //         RecordBox? recordInfo = recordInfoList[pointIndex.toInt()];
-    //         String type = typeInfos[typeIndex]['type'];
-    //         Color color = typeInfos[typeIndex]['color'];
-
-    //         if (recordInfo != null) {
-    //           List<String>? actions = recordInfo.actions;
-    //           List<String> names = [];
-
-    //           if (actions != null) {
-    //             for (var i = 0; i < actions.length; i++) {
-    //               PlanBox? planInfo = planBox.get(actions[i]);
-
-    //               if (planInfo != null && planInfo.type == type) {
-    //                 names.add(planInfo.name);
-    //               }
-    //             }
-    //           }
-
-    //           showDialog(
-    //             context: context,
-    //             builder: (context) => ActionDialog(
-    //               dayTitle:
-    //                   '${dateTimeFormatter(format: 'MM월 dd일', dateTime: recordInfo.createDateTime)} 실천',
-    //               contentsTitle: tooltipArgs.header!,
-    //               names: names,
-    //               color: color,
-    //               count: names.length,
-    //             ),
-    //           );
-    //         }
-    //       }
-    //     },
-    //   );
-    // }
-    //     double? setMinimum =
-    //     widget.selectedRecordTypeSegment == SegmentedTypes.weight
-    //         ? weightMinimum
-    //         : actionMinimum;
-    // double? setMaximum =
-    //     widget.selectedRecordTypeSegment == SegmentedTypes.weight
-    //         ? weightMaximum
-    //         : actionMaximum;
-
-        // String tooltipText =
-        // widget.selectedRecordTypeSegment == SegmentedTypes.weight
-        //     ? ' kg'
-        //     : '회 실천';
-
-
-    // setStackedLineSeriesDateTime({
-    //   required int count,
-    //   required String format,
-    // }) {
-    //   List<ColumnData> columnSeriesData = [];
-    //   List<PlanBox> planInfoList = planBox.values.toList();
-
-    //   List<int> planTypeList = [0, 0, 0];
-    //   List<RecordBox?> infoList = [];
-
-    //   for (var i = 0; i < planInfoList.length; i++) {
-    //     PlanBox planBox = planInfoList[i];
-    //     planTypeList[planIndexInfo[planBox.type]!] += 1;
-    //   }
-
-    //   for (var i = 0; i <= count; i++) {
-    //     List<int> actionCountList = [0, 0, 0];
-    //     DateTime subtractDateTime = jumpDayDateTime(
-    //       type: jumpDayTypeEnum.subtract,
-    //       dateTime: endDateTime,
-    //       days: i,
-    //     );
-    //     RecordBox? recordInfo = getRecordInfo(subtractDateTime);
-    //     String formatterDay =
-    //         dateTimeFormatter(format: format, dateTime: subtractDateTime);
-
-    //     List<String?>? titleList =
-    //         recordInfo?.actions?.map((e) => planBox.get(e)?.type).toList();
-
-    //     infoList.add(recordInfo);
-
-    //     if (titleList != null) {
-    //       titleList.forEach(
-    //           (element) => actionCountList[planIndexInfo[element]!] += 1);
-    //     }
-
-    //     setState(() {
-    //       actionMaximum = (planTypeList.reduce(max) + 2).floorToDouble();
-    //       actionMinimum = 0;
-    //     });
-
-    //     ColumnData columnData = ColumnData(
-    //       formatterDay,
-    //       actionCountList[0],
-    //       actionCountList[1],
-    //       actionCountList[2],
-    //     );
-
-    //     columnSeriesData.add(columnData);
-    //   }
-
-    //   setState(() => recordInfoList = infoList.reversed.toList());
-    //   return columnSeriesData.reversed.toList();
-    // }
-
-    // setStackedLineSeriesData() {
-    //   return setStackedLineSeriesDateTime(
-    //     count: setCount()!,
-    //     format: widget.selectedDateTimeSegment == SegmentedTypes.week
-    //         ? 'dd일'
-    //         : 'MM월\ndd일',
-    //   );
-    // }
-
-    // setStackedLineSeries({
-    //   required String yValue,
-    //   required String lValue,
-    //   required Color color,
-    // }) {
-    //   return StackedColumnSeries(
-    //     color: color,
-    //     name: lValue,
-    //     legendItemText: lValue,
-    //     dataSource: setStackedLineSeriesData(),
-    //     xValueMapper: (data, _) => data.x,
-    //     yValueMapper: (data, _) => yValue == 'y1'
-    //         ? data.y1
-    //         : yValue == 'y2'
-    //             ? data.y2
-    //             : data.y3,
-    //   );
-    // }
-    //    setSeries() {
-    //   return widget.selectedRecordTypeSegment == SegmentedTypes.weight
-    //       ? [setLineSeries()]
-    //       : [
-    //           setStackedLineSeries(
-    //             yValue: 'y1',
-    //             lValue: '식이요법',
-    //             color: dietColor,
-    //           ),
-    //           setStackedLineSeries(
-    //             yValue: 'y2',
-    //             lValue: '운동',
-    //             color: exerciseColor,
-    //           ),
-    //           setStackedLineSeries(
-    //             yValue: 'y3',
-    //             lValue: '생활습관',
-    //             color: lifeStyleColor,
-    //           ),
-    //         ];
-    // }
-
-// class ColumnData {
-//   ColumnData(this.x, this.y1, this.y2, this.y3);
-
-//   final String x;
-//   final int? y1;
-//   final int? y2;
-//   final int? y3;
-// }
-
-  // @override
-  // void initState() {
-  //   DateTime now = DateTime.now();
-
-  //   startDateTime = jumpDayDateTime(
-  //     type: jumpDayTypeEnum.subtract,
-  //     dateTime: now,
-  //     days: countInfo[widget.selectedDateTimeSegment]!,
-  //   );
-  //   endDateTime = now;
-  //   super.initState();
-  // }
-
-  // @override
-  // void didUpdateWidget(covariant GraphChart oldWidget) {
-  //   final now = DateTime.now();
-
-  //   startDateTime = jumpDayDateTime(
-  //     type: jumpDayTypeEnum.subtract,
-  //     dateTime: now,
-  //     days: countInfo[widget.selectedDateTimeSegment]!,
-  //   );
-  //   endDateTime = now;
-  //   super.didUpdateWidget(oldWidget);
-  // }
-   // setStackedLineSeriesData();
-
-    // setChartSwipeDirectionStart() {
-    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-    //     return;
-    //   }
-
-    //   endDateTime = startDateTime;
-    //   startDateTime = jumpDayDateTime(
-    //     type: jumpDayTypeEnum.subtract,
-    //     dateTime: endDateTime,
-    //     days: countInfo[widget.selectedDateTimeSegment]!,
-    //   );
-    // }
-
-    // setChartSwipeDirectionEnd() {
-    //   if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-    //     return;
-    //   } else if (getDateTimeToInt(endDateTime) >=
-    //       getDateTimeToInt(DateTime.now())) {
-    //     return showSnackBar(
-    //       context: context,
-    //       text: '미래의 날짜를 불러올 순 없어요.',
-    //       buttonName: '확인',
-    //     );
-    //   }
-
-    //   startDateTime = endDateTime;
-    //   endDateTime = jumpDayDateTime(
-    //     type: jumpDayTypeEnum.add,
-    //     dateTime: startDateTime,
-    //     days: countInfo[widget.selectedDateTimeSegment]!,
-    //   );
-    // }

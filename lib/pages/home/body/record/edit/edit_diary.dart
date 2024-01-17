@@ -103,7 +103,7 @@ class _EditDiaryState extends State<EditDiary> {
       recordInfo?.save();
       closeDialog(context);
 
-      showAdDialog('감정 기록 완료!');
+      // showAdDialog('감정 기록 완료!');
     }
 
     onTapOpenEmotion() {
@@ -147,7 +147,7 @@ class _EditDiaryState extends State<EditDiary> {
 
       setState(() => isShowInput = false);
 
-      showAdDialog('일기 작성 완료!');
+      // showAdDialog('일기 작성 완료!');
     }
 
     onTapOpen() {
@@ -220,7 +220,6 @@ class _EditDiaryState extends State<EditDiary> {
     return Column(
       children: [
         ContentsBox(
-          isBoxShadow: true,
           contentsWidget: Column(
             children: [
               TitleContainer(

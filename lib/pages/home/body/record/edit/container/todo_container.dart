@@ -35,6 +35,8 @@ import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+String diet = PlanTypeEnum.diet.toString();
+
 class TodoContainer extends StatefulWidget {
   TodoContainer({
     super.key,
@@ -166,26 +168,6 @@ class _TodoContainerState extends State<TodoContainer> {
           payload: 'plan',
         );
       }
-
-      onClick(BottomNavigationEnum enumId) async {
-        context
-            .read<BottomNavigationProvider>()
-            .setBottomNavigation(enumId: enumId);
-        closeDialog(context);
-      }
-
-      showDialog(
-        context: context,
-        builder: (context) => NativeAdDialog(
-          title: '목표 $completedType 완료!',
-          leftText: '히스토리 보기',
-          rightText: '그래프 보기',
-          leftIcon: Icons.menu_book_rounded,
-          rightIcon: Icons.auto_graph_rounded,
-          onLeftClick: () => onClick(BottomNavigationEnum.history),
-          onRightClick: () => onClick(BottomNavigationEnum.graph),
-        ),
-      );
     }
 
     onRecordComplete({
@@ -193,10 +175,11 @@ class _TodoContainerState extends State<TodoContainer> {
       required String id,
       required String name,
       required DateTime actionDateTime,
+      required String title,
     }) async {
       ActionItemClass actionItem = ActionItemClass(
         id: id,
-        title: '',
+        title: title,
         type: widget.type,
         name: name,
         priority: '',
@@ -308,7 +291,6 @@ class _TodoContainerState extends State<TodoContainer> {
     return Column(
       children: [
         ContentsBox(
-          isBoxShadow: true,
           contentsWidget: Column(
             children: [
               TitleContainer(
@@ -385,6 +367,7 @@ class DietExerciseContainer extends StatefulWidget {
     required String id,
     required String name,
     required DateTime actionDateTime,
+    required String title,
   }) onRecordComplete;
 
   @override
@@ -432,7 +415,10 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                           actionList: actionList,
                           onRecordUpdate: widget.onRecordComplete,
                         ),
-                        RecordAdd(onRecordAdd: widget.onRecordComplete),
+                        RecordAdd(
+                          type: widget.type,
+                          onRecordAdd: widget.onRecordComplete,
+                        ),
                       ],
                     )
                   : Column(
@@ -451,7 +437,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                         ),
                       ],
                     ),
-              SpaceHeight(height: 15),
+              SpaceHeight(height: 20),
               DefaultSegmented(
                 selectedSegment: selectedSegment,
                 children: children,
@@ -478,6 +464,7 @@ class RecordList extends StatelessWidget {
     required String id,
     required String name,
     required DateTime actionDateTime,
+    required String title,
   }) onRecordUpdate;
 
   @override
@@ -490,19 +477,23 @@ class RecordList extends StatelessWidget {
 class RecordName extends StatefulWidget {
   RecordName({
     super.key,
+    required this.type,
     required this.id,
     required this.name,
+    required this.title,
+    required this.topTitle,
     required this.actionDateTime,
     required this.onRecordUpdate,
   });
 
-  String id, name;
+  String type, id, name, title, topTitle;
   DateTime actionDateTime;
   Function({
     required String completedType,
     required String id,
     required String name,
     required DateTime actionDateTime,
+    required String title,
   }) onRecordUpdate;
 
   @override
@@ -521,10 +512,6 @@ class _RecordNameState extends State<RecordName> {
 
   @override
   Widget build(BuildContext context) {
-    onTapName() {
-      setState(() => isShowInput = true);
-    }
-
     onTapEdit() {
       textController.text = widget.name;
       setState(() => isShowInput = true);
@@ -534,7 +521,14 @@ class _RecordNameState extends State<RecordName> {
       showModalBottomSheet(
         context: context,
         builder: (context) {
-          return RecordBottomSheet(id: widget.id, onTapEdit: onTapEdit);
+          return RecordBottomSheet(
+            selectedTitle: widget.title,
+            type: widget.type,
+            id: widget.id,
+            name: widget.name,
+            topTitle: widget.topTitle,
+            onTapEdit: onTapEdit,
+          );
         },
       );
     }
@@ -542,10 +536,12 @@ class _RecordNameState extends State<RecordName> {
     onEditingComplete() {
       if (textController.text != '') {
         widget.onRecordUpdate(
-            completedType: '수정',
-            id: widget.id,
-            name: textController.text,
-            actionDateTime: widget.actionDateTime);
+          completedType: '수정',
+          id: widget.id,
+          name: textController.text,
+          actionDateTime: widget.actionDateTime,
+          title: widget.title,
+        );
       }
 
       setState(() => isShowInput = false);
@@ -565,7 +561,7 @@ class _RecordNameState extends State<RecordName> {
             children: [
               Expanded(
                 child: InkWell(
-                  onTap: onTapName,
+                  onTap: () => onTapMore(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -575,7 +571,7 @@ class _RecordNameState extends State<RecordName> {
                       ),
                       SpaceHeight(height: 3),
                       CommonText(
-                        text: timeToString(widget.actionDateTime),
+                        text: widget.title,
                         size: 11,
                         color: Colors.grey,
                       )
@@ -598,14 +594,17 @@ class _RecordNameState extends State<RecordName> {
 class RecordAdd extends StatefulWidget {
   RecordAdd({
     super.key,
+    required this.type,
     required this.onRecordAdd,
   });
 
+  String type;
   Function({
     required String completedType,
     required String id,
     required String name,
     required DateTime actionDateTime,
+    required String title,
   }) onRecordAdd;
 
   @override
@@ -618,24 +617,42 @@ class _RecordAddState extends State<RecordAdd> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+
     onTapAdd() {
       setState(() => isShowInput = true);
     }
 
-    onEditingComplete() {
-      if (textController.text != '') {
-        widget.onRecordAdd(
-          completedType: '추가',
-          id: uuid(),
-          name: textController.text,
-          actionDateTime: DateTime.now(),
-        );
-      }
+    onEditingComplete() async {
+      String name = textController.text;
 
       setState(() {
         isShowInput = false;
         textController.text = '';
       });
+
+      if (name != '') {
+        await showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return CategoryBottomSheet(
+              type: widget.type,
+              name: name,
+              selectedTitle: '',
+              onTap: (String title) {
+                widget.onRecordAdd(
+                  completedType: '추가',
+                  id: uuid(),
+                  name: name,
+                  actionDateTime: importDateTime,
+                  title: title,
+                );
+              },
+            );
+          },
+        );
+      }
     }
 
     return isShowInput
@@ -657,6 +674,78 @@ class _RecordAddState extends State<RecordAdd> {
               ],
             ),
           );
+  }
+}
+
+class CategoryBottomSheet extends StatelessWidget {
+  CategoryBottomSheet({
+    super.key,
+    required this.type,
+    required this.name,
+    required this.selectedTitle,
+    required this.onTap,
+  });
+
+  String type, name, selectedTitle;
+  Function(String title) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return CommonBottomSheet(
+      title: name,
+      height: diet == type ? 200 : 220,
+      contents: CategoryList(
+        selectedTitle: selectedTitle,
+        type: type,
+        onTap: onTap,
+      ),
+    );
+  }
+}
+
+class CategoryList extends StatelessWidget {
+  CategoryList({
+    super.key,
+    required this.type,
+    required this.onTap,
+    required this.selectedTitle,
+  });
+
+  String type, selectedTitle;
+  Function(String title) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+        children: category[type]!
+            .map(
+              (item) => Expanded(
+                child: Row(
+                  children: [
+                    ExpandedButtonVerti(
+                      iconSize: diet == type ? 21 : 30,
+                      titleSize: diet == type ? 13 : 15,
+                      height: diet == type ? 90 : 105,
+                      isBold: item['title'] == selectedTitle,
+                      mainColor: item['title'] == selectedTitle
+                          ? Colors.white
+                          : themeColor,
+                      backgroundColor: item['title'] == selectedTitle
+                          ? themeColor
+                          : Colors.white,
+                      icon: item['icon'],
+                      title: item['title'],
+                      onTap: () {
+                        onTap(item['title']);
+                        closeDialog(context);
+                      },
+                    ),
+                    SpaceWidth(width: item['space'] == true ? 0 : 5)
+                  ],
+                ),
+              ),
+            )
+            .toList());
   }
 }
 
@@ -826,10 +915,6 @@ class _GoalNameState extends State<GoalName> {
 
   @override
   Widget build(BuildContext context) {
-    onTapName() {
-      setState(() => isShowInput = true);
-    }
-
     onEditingComplete() {
       setState(() => isShowInput = false);
 
@@ -857,10 +942,10 @@ class _GoalNameState extends State<GoalName> {
 
     onTapMore() {
       showModalBottomSheet(
-        backgroundColor: Colors.transparent,
         context: context,
         builder: (context) => GoalBottomSheet(
           id: widget.planInfo.id,
+          name: widget.planInfo.name,
           icon: todoData[widget.planInfo.type]!.icon,
           title: todoData[widget.planInfo.type]!.title,
           planInfo: widget.planInfo,
@@ -889,16 +974,14 @@ class _GoalNameState extends State<GoalName> {
 
     return isShowInput
         ? TodoInput(
-            controller: textController,
-            onEditingComplete: onEditingComplete,
-          )
+            controller: textController, onEditingComplete: onEditingComplete)
         : Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: InkWell(
-                    onTap: onTapName,
+                    onTap: () => onTapMore(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -940,27 +1023,11 @@ class _GoalNameState extends State<GoalName> {
                   ),
                 ),
                 SpaceWidth(width: regularSapce),
-                InkWell(
+                CommonIcon(
+                  icon: Icons.more_horiz,
+                  size: 22,
+                  color: Colors.grey,
                   onTap: onTapMore,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      CommonIcon(
-                        icon: Icons.more_horiz,
-                        size: 22,
-                        color: Colors.grey,
-                        onTap: onTapMore,
-                      ),
-                      widget.isChcked
-                          ? CommonText(
-                              text: timeToString(DateTime.now()),
-                              size: 11,
-                              color: widget.color,
-                            )
-                          : const EmptyArea()
-                    ],
-                  ),
                 ),
               ],
             ),
@@ -1050,8 +1117,7 @@ class _GoalAddState extends State<GoalAdd> {
                 )
               : TodoInput(
                   controller: textController,
-                  onEditingComplete: onEditingComplete,
-                )
+                  onEditingComplete: onEditingComplete)
         ],
       ),
     );
@@ -1085,6 +1151,10 @@ class TodoInput extends StatelessWidget {
         minLines: null,
         maxLines: null,
         onEditingComplete: onEditingComplete,
+        onTapOutside: (_) {
+          FocusScope.of(context).unfocus();
+          onEditingComplete();
+        },
       ),
     );
   }
@@ -1093,11 +1163,15 @@ class TodoInput extends StatelessWidget {
 class RecordBottomSheet extends StatefulWidget {
   RecordBottomSheet({
     super.key,
+    required this.type,
     required this.id,
+    required this.name,
+    required this.selectedTitle,
+    required this.topTitle,
     required this.onTapEdit,
   });
 
-  String id;
+  String type, id, name, topTitle, selectedTitle;
   Function() onTapEdit;
 
   @override
@@ -1105,7 +1179,7 @@ class RecordBottomSheet extends StatefulWidget {
 }
 
 class _RecordBottomSheetState extends State<RecordBottomSheet> {
-  bool isShowTimeSetting = false;
+  bool isCategory = false;
 
   @override
   Widget build(BuildContext context) {
@@ -1116,7 +1190,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
     RecordBox? recordInfo = recordBox.get(recordKey);
 
     onTapRemove() async {
-      recordInfo!.actions!.removeWhere((element) => element['id'] == widget.id);
+      recordInfo!.actions!.removeWhere((action) => action['id'] == widget.id);
 
       if (recordInfo.actions!.isEmpty) {
         recordInfo.actions = null;
@@ -1127,35 +1201,33 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
       closeDialog(context);
     }
 
-    onTapChangeTime() {
-      setState(() => isShowTimeSetting = true);
-    }
-
-    onCompleted() {
-      //
+    onTapChangeCategory() {
+      setState(() => isCategory = true);
     }
 
     return CommonBottomSheet(
-      title: '기록 설정',
-      height: isShowTimeSetting ? 400 : 220,
-      contents: isShowTimeSetting
-          ? const EmptyArea()
-          // AlarmContainer(
-          //     icon: widget.icon,
-          //     title: '',
-          //     desc: '',
-          //     isEnabled: isEnabled,
-          //     alarmTime: alarmTime,
-          //     onChanged: onChanged,
-          //     onDateTimeChanged: onDateTimeChanged,
-          //     onCompleted: onCompleted,
-          //   )
+      title: widget.name,
+      height: 220,
+      contents: isCategory
+          ? CategoryList(
+              selectedTitle: widget.selectedTitle,
+              type: widget.type,
+              onTap: (String title) async {
+                recordInfo?.actions?.forEach((action) {
+                  if (action['id'] == widget.id) {
+                    action['title'] = title;
+                  }
+                });
+
+                await recordInfo?.save();
+              },
+            )
           : Row(
               children: [
                 ExpandedButtonVerti(
                   mainColor: themeColor,
                   icon: Icons.edit,
-                  title: '기록 명 수정',
+                  title: '${widget.topTitle} 명 수정',
                   onTap: () {
                     closeDialog(context);
                     widget.onTapEdit();
@@ -1164,15 +1236,15 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
                 SpaceWidth(width: tinySpace),
                 ExpandedButtonVerti(
                   mainColor: themeColor,
-                  icon: Icons.alarm_on_rounded,
-                  title: '기록 시간 변경',
-                  onTap: onTapChangeTime,
+                  icon: Icons.category,
+                  title: '분류 변경',
+                  onTap: onTapChangeCategory,
                 ),
                 SpaceWidth(width: tinySpace),
                 ExpandedButtonVerti(
                   mainColor: Colors.red,
                   icon: Icons.delete_forever,
-                  title: '기록 삭제',
+                  title: '${widget.topTitle} 삭제',
                   onTap: onTapRemove,
                 )
               ],
@@ -1184,6 +1256,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
 class GoalBottomSheet extends StatefulWidget {
   GoalBottomSheet({
     super.key,
+    required this.name,
     required this.icon,
     required this.id,
     required this.title,
@@ -1192,7 +1265,7 @@ class GoalBottomSheet extends StatefulWidget {
   });
 
   IconData icon;
-  String id, title;
+  String id, title, name;
   PlanBox? planInfo;
   Function() onTapEdit;
 
@@ -1292,7 +1365,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
     }
 
     return CommonBottomSheet(
-      title: '목표 설정',
+      title: widget.name,
       titleLeftWidget: isShowAlarm
           ? InkWell(
               onTap: onTapBack,

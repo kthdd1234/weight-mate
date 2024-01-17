@@ -69,7 +69,6 @@ class _EditWeightState extends State<EditWeight> {
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
     UserBox user = userRepository.user;
     bool? isOpen = user.filterList?.contains(fWeight) == true;
-    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
 
     showAdDialog(String title) {
       showDialog(
@@ -115,7 +114,6 @@ class _EditWeightState extends State<EditWeight> {
 
       FocusScope.of(context).unfocus();
       context.read<EnabledProvider>().setEnabled(false);
-      closeDialog(context);
     }
 
     onValidWeight() {
@@ -144,7 +142,6 @@ class _EditWeightState extends State<EditWeight> {
       });
 
       showModalBottomSheet(
-        isDismissible: false,
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
@@ -169,17 +166,25 @@ class _EditWeightState extends State<EditWeight> {
                   recordRepository.recordBox.put(recordKey, recordInfo);
                 }
 
+                recordInfo?.save();
+
+                List<RecordBox> recordList =
+                    recordRepository.recordBox.values.toList();
                 recordList.where((e) => e.weight != null);
                 String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
 
                 onInit();
+                closeDialog(context);
                 showAdDialog(title);
               }
             },
-            onCancel: onInit,
+            onCancel: () {
+              onInit();
+              closeDialog(context);
+            },
           );
         },
-      );
+      ).whenComplete(() => onInit());
     }
 
     onTapGoalWeight() {
@@ -191,7 +196,6 @@ class _EditWeightState extends State<EditWeight> {
       });
 
       showModalBottomSheet(
-        isDismissible: false,
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
@@ -200,14 +204,19 @@ class _EditWeightState extends State<EditWeight> {
               if (onValidWeight()) {
                 user.goalWeight = stringToDouble(textController.text);
                 user.save();
+
                 onInit();
+                closeDialog(context);
                 showAdDialog('⛳ 목표 체중을 변경했어요!');
               }
             },
-            onCancel: onInit,
+            onCancel: () {
+              onInit();
+              closeDialog(context);
+            },
           );
         },
-      );
+      ).whenComplete(() => onInit());
     }
 
     onTapOpen() {
@@ -230,7 +239,6 @@ class _EditWeightState extends State<EditWeight> {
     return Column(
       children: [
         ContentsBox(
-          isBoxShadow: true,
           contentsWidget: Column(
             children: [
               TitleContainer(
@@ -440,6 +448,7 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
         SizedBox(
           height: 300,
           child: SfCartesianChart(
+            enableAxisAnimation: true,
             primaryXAxis: CategoryAxis(),
             primaryYAxis: NumericAxis(
               maximum: maximum,
@@ -453,7 +462,6 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
                   textStyle: const TextStyle(color: disabledButtonTextColor),
                   start: widget.goalWeight,
                   end: widget.goalWeight,
-                  dashArray: const <double>[4, 5],
                 )
               ],
             ),
@@ -463,7 +471,9 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
               format: 'point.x: point.ykg',
             ),
             series: [
-              LineSeries(
+              FastLineSeries(
+                emptyPointSettings:
+                    EmptyPointSettings(mode: EmptyPointMode.drop),
                 enableTooltip: true,
                 markerSettings: const MarkerSettings(isVisible: true),
                 dataLabelSettings: DataLabelSettings(

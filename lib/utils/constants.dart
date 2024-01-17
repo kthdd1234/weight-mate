@@ -187,15 +187,15 @@ final tagColors = {
   'teal': {
     'bgColor': Colors.teal.shade50,
     'textColor': Colors.teal.shade300,
-  },
+  }, // 009688
   'lightBlue': {
     'bgColor': Colors.lightBlue.shade50,
     'textColor': Colors.lightBlue.shade300,
-  },
+  }, // 03A9F4
   'brown': {
-    'bgColor': Colors.brown.shade50, // EFEBE9
-    'textColor': Colors.brown.shade300, // A1887F
-  },
+    'bgColor': Colors.brown.shade50,
+    'textColor': Colors.brown.shade300,
+  }, // 795548
   'orange': {
     'bgColor': Colors.orange.shade50,
     'textColor': Colors.orange.shade300,

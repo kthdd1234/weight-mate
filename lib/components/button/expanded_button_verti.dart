@@ -8,12 +8,20 @@ class ExpandedButtonVerti extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.mainColor,
+    this.backgroundColor,
+    this.isBold,
+    this.titleSize,
+    this.iconSize,
+    this.height,
   });
 
   IconData icon;
   String title;
   Color? mainColor;
+  Color? backgroundColor;
+  bool? isBold;
   Function() onTap;
+  double? titleSize, iconSize, height;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +31,12 @@ class ExpandedButtonVerti extends StatelessWidget {
         child: EmptyTextVerticalArea(
           icon: icon,
           title: title,
-          height: 105,
+          height: height ?? 105,
           mainColor: mainColor,
+          backgroundColor: backgroundColor,
+          isBold: isBold,
+          iconSize: iconSize,
+          titleSize: titleSize,
         ),
       ),
     );

@@ -1,12 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:uuid/uuid.dart';
 
 final initPlanInfo = PlanInfoClass(
   type: PlanTypeEnum.diet,
   title: '식단',
-  id: '',
+  id: const Uuid().v1(),
   name: '간헐적 단식 16:8',
   priority: PlanPriorityEnum.medium,
   isAlarm: true,
@@ -21,8 +24,9 @@ class DietInfoProvider with ChangeNotifier {
   String _tallText = '';
   String _weightText = '';
   String _goalWeightText = '';
-  bool _isAlarm = true;
-  DateTime? _alarmTime = initDateTime();
+  bool _isAlarm = false;
+  DateTime? _alarmTime;
+  int? _alarmId;
   PlanInfoClass _planInfo = initPlanInfo;
   DateTime _recordStartDateTime = DateTime.now();
   List<String> planItemList = [];
@@ -35,7 +39,7 @@ class DietInfoProvider with ChangeNotifier {
       recordStartDateTime: _recordStartDateTime,
       isAlarm: _isAlarm,
       alarmTime: _alarmTime,
-      alarmId: -1,
+      alarmId: _alarmId,
     );
   }
 
@@ -66,6 +70,10 @@ class DietInfoProvider with ChangeNotifier {
 
   bool getIsAlarm() {
     return _isAlarm;
+  }
+
+  int? getAlarmId() {
+    return _alarmId;
   }
 
   DateTime? getAlarmTime() {
@@ -113,6 +121,11 @@ class DietInfoProvider with ChangeNotifier {
 
   changeAlarmTime(DateTime? time) {
     _alarmTime = time;
+    notifyListeners();
+  }
+
+  changeAlarmId(int id) {
+    _alarmId = id;
     notifyListeners();
   }
 

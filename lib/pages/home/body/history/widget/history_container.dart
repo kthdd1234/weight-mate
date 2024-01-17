@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -15,18 +15,14 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history/widget/dash_divider.dart';
-import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
-import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class HistoryContainer extends StatelessWidget {
@@ -256,13 +252,25 @@ class HistoryTodo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    renderSvg(String type) => SvgPicture.asset('assets/svgs/check-$type.svg');
+    renderSvg(String path) => SvgPicture.asset('assets/svgs/$path.svg');
 
-    Map<String, SvgPicture> wSvgPicture = {
-      PlanTypeEnum.diet.toString(): renderSvg('diet'),
-      PlanTypeEnum.exercise.toString(): renderSvg('exercise'),
-      PlanTypeEnum.lifestyle.toString(): renderSvg('life'),
+    Map<String, SvgPicture> planTypeSvgs = {
+      PlanTypeEnum.diet.toString(): renderSvg('check-diet'),
+      PlanTypeEnum.exercise.toString(): renderSvg('check-exercise'),
+      PlanTypeEnum.lifestyle.toString(): renderSvg('check-life'),
     };
+
+    onIcon(String type, bool? isRecord, String title) {
+      if (isRecord == true) {
+        return Icon(
+          categoryIcons[title],
+          color: categoryColors[type],
+          size: 15,
+        );
+      }
+
+      return planTypeSvgs[type];
+    }
 
     final todoResultList = actions
         ?.where(
@@ -271,6 +279,13 @@ class HistoryTodo extends StatelessWidget {
               getDateTimeToInt(createDateTime),
         )
         .toList();
+
+    todoResultList?.sort((A, B) {
+      int itemA = categoryOrders[A['title']] ?? 7;
+      int itemB = categoryOrders[B['title']] ?? 7;
+
+      return itemA.compareTo(itemB);
+    });
 
     todoResultList?.sort(
         (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!));
@@ -285,7 +300,9 @@ class HistoryTodo extends StatelessWidget {
                       flex: 0,
                       child: Padding(
                         padding: const EdgeInsets.only(top: 2),
-                        child: wSvgPicture[data['type']] ?? EmptyArea(),
+                        child: onIcon(data['type'], data['isRecord'],
+                                data['title']) ??
+                            const EmptyArea(),
                       ),
                     ),
                     SpaceWidth(width: smallSpace),
@@ -293,7 +310,7 @@ class HistoryTodo extends StatelessWidget {
                       flex: 1,
                       child: Text(
                         data['name'],
-                        style: const TextStyle(fontSize: 13, color: themeColor),
+                        style: const TextStyle(fontSize: 14, color: themeColor),
                       ),
                     ),
                   ],
@@ -352,9 +369,20 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CommonText(text: '광고', size: 12, isBold: true),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CommonText(text: '광고', size: 12, isBold: true),
+            CommonText(
+              text: '체중 메이트의 발전을 위해 광고가 노출됩니다.',
+              size: 10,
+              color: Colors.grey,
+            ),
+          ],
+        ),
         SpaceHeight(height: smallSpace),
-        NativeWidget(padding: 0)
+        NativeWidget(padding: 0, height: 340)
       ],
     );
   }

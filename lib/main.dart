@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
@@ -54,6 +55,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EnabledProvider()),
         ChangeNotifierProvider(create: (_) => TitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryDateTimeProvider()),
       ],
       child: const MyApp(),
     ),
@@ -109,8 +111,6 @@ class _MyAppState extends State<MyApp> {
         : userProfile?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
-
-    // String initialRoute = '/add-start-screen';
 
     return MaterialApp(
       title: 'Flutter Demo',

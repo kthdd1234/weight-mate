@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -30,12 +31,12 @@ class CommonBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    onCloseIcon(Color color) {
-      return GestureDetector(
-        onTap: () => closeDialog(context),
-        child: Icon(Icons.close, color: color),
-      );
-    }
+    // onCloseIcon(Color color) {
+    //   return GestureDetector(
+    //     onTap: () => closeDialog(context),
+    //     child: Icon(Icons.close, color: color),
+    //   );
+    // }
 
     return Container(
       height: height,
@@ -51,13 +52,10 @@ class CommonBottomSheet extends StatelessWidget {
         padding: pagePadding,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                titleLeftWidget ?? onCloseIcon(Colors.transparent),
-                ContentsTitleText(text: title),
-                onCloseIcon(themeColor),
-              ],
+            Text(
+              title,
+              style: const TextStyle(
+                  fontSize: 15, color: themeColor, fontWeight: FontWeight.bold),
             ),
             SpaceHeight(height: regularSapce),
             contents,

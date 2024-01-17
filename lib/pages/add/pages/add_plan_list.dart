@@ -22,13 +22,7 @@ class AddPlanList extends StatefulWidget {
 }
 
 class _AddPlanListState extends State<AddPlanList> {
-  List<String> checkList = [];
-
-  @override
-  void initState() {
-    checkList.add(planItemList[0].name);
-    super.initState();
-  }
+  List<String> checkList = [initPlanItemList[0].name];
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +46,12 @@ class _AddPlanListState extends State<AddPlanList> {
     return AddContainer(
       body: Column(
         children: [
-          AddTitle(step: 2, title: '꾸준히 실천 할 계획을 모두 골라봐요 :)'),
+          AddTitle(step: 2, title: '꾸준히 달성 할 목표를 모두 골라봐요 :)'),
           ContentsBox(
             height: 430,
             contentsWidget: ListView(
               shrinkWrap: true,
-              children: planItemList
+              children: initPlanItemList
                   .map(
                     (e) => GestureDetector(
                       onTap: () => onCheckBox(id: e.name),

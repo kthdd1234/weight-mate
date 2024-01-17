@@ -8,6 +8,7 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
@@ -92,12 +93,14 @@ class _CommonTitleState extends State<CommonTitle> {
   @override
   Widget build(BuildContext context) {
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
+    DateTime historyDateTime =
+        context.watch<HistoryDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
 
     String title = [
       dateTimeFormatter(format: 'yyyy년 MM월', dateTime: titleDateTime),
-      dateTimeFormatter(format: 'yyyy년', dateTime: titleDateTime),
+      dateTimeFormatter(format: 'yyyy년', dateTime: historyDateTime),
       '체중 변화',
       '설정'
     ][widget.index];
@@ -110,8 +113,8 @@ class _CommonTitleState extends State<CommonTitle> {
     IconData historyRightIcon = Icons.keyboard_arrow_down_rounded;
     bool isToday = isCheckToday(titleDateTime);
 
-    onSelectionChanged(args) {
-      context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
+    onTapHistoryDateTime(args) {
+      context.read<HistoryDateTimeProvider>().setHistoryDateTime(args.value);
       closeDialog(context);
     }
 
@@ -134,8 +137,8 @@ class _CommonTitleState extends State<CommonTitle> {
                     onTap: () => closeDialog(context),
                   ),
                   content: YearContainer(
-                    initialSelectedDate: titleDateTime,
-                    onSelectionChanged: onSelectionChanged,
+                    initialSelectedDate: historyDateTime,
+                    onSelectionChanged: onTapHistoryDateTime,
                   ),
                 ),
               ],

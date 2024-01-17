@@ -4,16 +4,16 @@ import '../contents_box/contents_box.dart';
 import '../space/spaceHeight.dart';
 
 class EmptyTextVerticalArea extends StatelessWidget {
-  EmptyTextVerticalArea({
-    super.key,
-    required this.icon,
-    required this.title,
-    this.mainColor,
-    this.height,
-    this.backgroundColor,
-    this.titleSize,
-    this.iconSize,
-  });
+  EmptyTextVerticalArea(
+      {super.key,
+      required this.icon,
+      required this.title,
+      this.mainColor,
+      this.height,
+      this.backgroundColor,
+      this.titleSize,
+      this.iconSize,
+      this.isBold});
 
   IconData icon;
   String title;
@@ -21,6 +21,7 @@ class EmptyTextVerticalArea extends StatelessWidget {
   double? height;
   Color? mainColor;
   Color? backgroundColor;
+  bool? isBold;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +45,7 @@ class EmptyTextVerticalArea extends StatelessWidget {
               fontSize: titleSize,
               color: mainColor ?? disEnabledTypeColor,
               height: 1.5,
+              fontWeight: isBold == true ? FontWeight.bold : null,
             ),
             textAlign: TextAlign.center,
           )
