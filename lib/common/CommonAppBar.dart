@@ -146,7 +146,7 @@ class _CommonTitleState extends State<CommonTitle> {
           });
     }
 
-    onTapFilter() {
+    onTapChangeYear() {
       context.read<HistoryFilterProvider>().setHistoryFilter(
             nextHistoryFilter[historyFilter]!,
           );
@@ -157,6 +157,10 @@ class _CommonTitleState extends State<CommonTitle> {
 
       context.read<TitleDateTimeProvider>().setTitleDateTime(now);
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
+    }
+
+    onTapFilter() {
+      //
     }
 
     List<IconData?> rightIconList = [
@@ -211,6 +215,12 @@ class _CommonTitleState extends State<CommonTitle> {
                             nextCalendarFormats[widget.calendarFormat]!,
                           ),
                         ),
+                        SpaceWidth(width: tinySpace),
+                        CommonTag(
+                          text: '필터',
+                          color: 'whiteRed',
+                          onTap: onTapFilter,
+                        )
                       ],
                     )
                   : const EmptyArea(),
@@ -220,7 +230,7 @@ class _CommonTitleState extends State<CommonTitle> {
                       color: historyFilter == HistoryFilter.recent
                           ? 'whiteBlue'
                           : 'whiteRed',
-                      onTap: onTapFilter,
+                      onTap: onTapChangeYear,
                     )
                   : const EmptyArea(),
             ],
