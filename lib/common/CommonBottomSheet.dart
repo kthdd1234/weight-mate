@@ -31,13 +31,6 @@ class CommonBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // onCloseIcon(Color color) {
-    //   return GestureDetector(
-    //     onTap: () => closeDialog(context),
-    //     child: Icon(Icons.close, color: color),
-    //   );
-    // }
-
     return Container(
       height: height,
       decoration: BoxDecoration(

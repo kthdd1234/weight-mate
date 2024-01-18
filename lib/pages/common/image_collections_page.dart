@@ -1,6 +1,5 @@
-import 'dart:developer';
+// ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
@@ -10,12 +9,11 @@ import 'package:flutter_app_weight_management/components/image/default_image.dar
 import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_carousel_slider_page.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:hive/hive.dart';
 
 class ImageCollectionsPage extends StatefulWidget {
   const ImageCollectionsPage({super.key});
@@ -30,26 +28,22 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 
   @override
   void initState() {
-    Box<RecordBox> recordBox = Hive.box<RecordBox>('recordBox');
-    List<RecordBox> recordValueList = recordBox.values.toList();
+    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
     List<Map<String, dynamic>> itemList = [];
 
-    for (var i = 0; i < recordValueList.length; i++) {
-      RecordBox recordValue = recordValueList[i];
+    for (var i = 0; i < recordList.length; i++) {
+      RecordBox record = recordList[i];
+      List<Uint8List?> fileList = [
+        record.leftFile,
+        record.rightFile,
+        record.bottomFile
+      ];
 
-      if (recordValue.leftFile != null) {
-        itemList.add({
-          'dateTime': recordValue.createDateTime,
-          'binaryData': recordValue.leftFile!
-        });
-      }
-
-      if (recordValue.rightFile != null) {
-        itemList.add({
-          'dateTime': recordValue.createDateTime,
-          'binaryData': recordValue.rightFile!
-        });
-      }
+      fileList.forEach((file) {
+        if (file != null) {
+          itemList.add({'dateTime': record.createDateTime, 'binaryData': file});
+        }
+      });
     }
 
     fileItemList = itemList.reversed.toList();
@@ -117,6 +111,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
             fileItemList.isNotEmpty
                 ? Expanded(
                     child: GridView.builder(
+                      cacheExtent: 999999,
                       itemCount: fileItemList.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
@@ -137,7 +132,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                           child: Stack(
                             children: [
                               DefaultImage(
-                                data: binaryData,
+                                unit8List: binaryData,
                                 height: 150,
                               ),
                               Positioned(

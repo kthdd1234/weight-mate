@@ -48,6 +48,7 @@ class HistoryContainer extends StatelessWidget {
               HistoryPicture(
                 leftFile: recordInfo.leftFile,
                 rightFile: recordInfo.rightFile,
+                bottomFile: recordInfo.bottomFile,
               ),
               HistoryTodo(
                 actions: recordInfo.actions,
@@ -192,15 +193,28 @@ class HistoryPicture extends StatelessWidget {
     super.key,
     required this.leftFile,
     required this.rightFile,
+    required this.bottomFile,
   });
 
-  Uint8List? leftFile, rightFile;
+  Uint8List? leftFile, rightFile, bottomFile;
 
   @override
   Widget build(BuildContext context) {
-    Uint8List? isFile = leftFile ?? rightFile;
-    double height =
-        [leftFile, rightFile].whereType<Uint8List>().length == 1 ? 300 : 150;
+    List<Uint8List?> uint8List = [leftFile, rightFile, bottomFile];
+    List<Uint8List> fileList = [];
+
+    for (var i = 0; i < uint8List.length; i++) {
+      Uint8List? data = uint8List[i];
+
+      if (data != null) {
+        // print('데이터 있음요');
+        fileList.add(data);
+      }
+    }
+
+    // Uint8List? isFile = leftFile ?? rightFile ?? bottomFile;
+    // double height =
+    //     [leftFile, rightFile].whereType<Uint8List>().length == 1 ? 300 : 150;
 
     onTapPicture(Uint8List binaryData) {
       Navigator.push(
@@ -211,31 +225,52 @@ class HistoryPicture extends StatelessWidget {
       );
     }
 
-    return isFile != null
-        ? Column(
+    image(Uint8List file, double height) {
+      return Expanded(
+        child: GestureDetector(
+          onTap: () => onTapPicture(file),
+          child: DefaultImage(
+            unit8List: file,
+            height: height,
+          ),
+        ),
+      );
+    }
+
+    imageList() {
+      switch (fileList.length) {
+        case 1:
+          return Row(children: [image(fileList[0], 300)]);
+
+        case 2:
+          return Row(
+            children: [
+              image(fileList[0], 150),
+              SpaceWidth(width: tinySpace),
+              image(fileList[1], 150)
+            ],
+          );
+        case 3:
+          return Column(
             children: [
               Row(
                 children: [
-                  leftFile != null
-                      ? Expanded(
-                          child: GestureDetector(
-                          onTap: () => onTapPicture(leftFile!),
-                          child: DefaultImage(data: leftFile!, height: height),
-                        ))
-                      : const EmptyArea(),
-                  SpaceWidth(width: leftFile != null ? tinySpace : 0),
-                  rightFile != null
-                      ? Expanded(
-                          child: GestureDetector(
-                          onTap: () => onTapPicture(rightFile!),
-                          child: DefaultImage(data: rightFile!, height: height),
-                        ))
-                      : const EmptyArea(),
+                  image(fileList[0], 150),
+                  SpaceWidth(width: tinySpace),
+                  image(fileList[1], 150)
                 ],
               ),
-              SpaceHeight(height: 15)
+              SpaceHeight(height: tinySpace),
+              Row(children: [image(fileList[2], 150)])
             ],
-          )
+          );
+        default:
+          return const EmptyArea();
+      }
+    }
+
+    return fileList.isNotEmpty
+        ? Column(children: [imageList(), SpaceHeight(height: 15)])
         : const EmptyArea();
   }
 }

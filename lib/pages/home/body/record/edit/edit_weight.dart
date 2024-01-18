@@ -85,8 +85,6 @@ class _EditWeightState extends State<EditWeight> {
             title: title,
             leftText: '히스토리 보기',
             rightText: '그래프 보기',
-            leftIcon: Icons.menu_book_rounded,
-            rightIcon: Icons.auto_graph_rounded,
             onLeftClick: () => onClick(BottomNavigationEnum.history),
             onRightClick: () => onClick(BottomNavigationEnum.graph),
           );

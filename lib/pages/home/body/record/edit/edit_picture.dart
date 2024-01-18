@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
@@ -40,9 +41,28 @@ class EditPicture extends StatelessWidget {
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-    Uint8List? leftFile = recordInfo?.leftFile;
-    Uint8List? rightFile = recordInfo?.rightFile;
-    Map<String, Uint8List?> fileInfo = {'left': leftFile, 'right': rightFile};
+    Map<String, Uint8List?> fileInfo = {
+      'left': recordInfo?.leftFile,
+      'right': recordInfo?.rightFile,
+      'bottom': recordInfo?.bottomFile,
+    };
+
+    setFile({required Uint8List? newValue, required String pos}) {
+      switch (pos) {
+        case 'left':
+          recordInfo?.leftFile = newValue;
+          break;
+        case 'right':
+          recordInfo?.rightFile = newValue;
+          break;
+        case 'bottom':
+          recordInfo?.bottomFile = newValue;
+          break;
+        default:
+      }
+
+      recordInfo?.save();
+    }
 
     convertUnit8List(XFile? xFile) async {
       return await File(xFile!.path).readAsBytes();
@@ -98,9 +118,7 @@ class EditPicture extends StatelessWidget {
           return NativeAdDialog(
             title: title,
             leftText: '사진 확인',
-            rightText: '사진 목록',
-            leftIcon: Icons.image_outlined,
-            rightIcon: Icons.apps_rounded,
+            rightText: '사진 앨범',
             onLeftClick: () =>
                 onNavigatorImagePullSizePage(binaryData: binaryData),
             onRightClick: onNavigatorImageCollectionsPage,
@@ -113,28 +131,18 @@ class EditPicture extends StatelessWidget {
       if (xFile == null) return;
 
       Uint8List pickedImage = await File(xFile.path).readAsBytes();
-      int year = importDateTime.year;
-      int month = importDateTime.month;
-      int day = importDateTime.day;
-      DateTime now = DateTime.now();
-      DateTime diaryDateTime = DateTime(year, month, day, now.hour, now.minute);
 
       if (recordInfo == null) {
         recordRepository.recordBox.put(
           recordKey,
           RecordBox(
-            createDateTime: importDateTime,
-            diaryDateTime: diaryDateTime,
-            leftFile: pos == 'left' ? pickedImage : null,
-            rightFile: pos == 'right' ? pickedImage : null,
-          ),
+              createDateTime: importDateTime,
+              leftFile: pos == 'left' ? pickedImage : null,
+              rightFile: pos == 'right' ? pickedImage : null,
+              bottomFile: pos == 'bottom' ? pickedImage : null),
         );
       } else {
-        recordInfo.diaryDateTime = diaryDateTime;
-        pos == 'left'
-            ? recordInfo.leftFile = pickedImage
-            : recordInfo.rightFile = pickedImage;
-        recordInfo.save();
+        setFile(pos: pos, newValue: pickedImage);
       }
     }
 
@@ -155,6 +163,7 @@ class EditPicture extends StatelessWidget {
       bool isFilePath = fileInfo[pos] != null;
 
       showModalBottomSheet(
+        isScrollControlled: true,
         backgroundColor: Colors.transparent,
         context: context,
         builder: (context) => CommonBottomSheet(
@@ -169,8 +178,8 @@ class EditPicture extends StatelessWidget {
                           onTap: () => onNavigatorImagePullSizePage(
                             binaryData: fileInfo[pos]!,
                           ),
-                          child:
-                              DefaultImage(data: fileInfo[pos]!, height: 280),
+                          child: DefaultImage(
+                              unit8List: fileInfo[pos]!, height: 280),
                         ),
                         SpaceHeight(height: smallSpace)
                       ],
@@ -200,11 +209,7 @@ class EditPicture extends StatelessWidget {
     }
 
     onTapRemove(String pos) {
-      pos == 'left'
-          ? recordInfo?.leftFile = null
-          : recordInfo?.rightFile = null;
-
-      recordInfo?.save();
+      setFile(pos: pos, newValue: null);
     }
 
     onTapOpen() {
@@ -227,7 +232,8 @@ class EditPicture extends StatelessWidget {
                   TagClass(
                     text: '사진 ${[
                       recordInfo?.leftFile,
-                      recordInfo?.rightFile
+                      recordInfo?.rightFile,
+                      recordInfo?.bottomFile
                     ].whereType<Uint8List>().length}장',
                     color: 'purple',
                     isHide: isOpen,
@@ -250,20 +256,35 @@ class EditPicture extends StatelessWidget {
                 onTap: onTapOpen,
               ),
               isOpen
-                  ? Row(
+                  ? Column(
                       children: [
-                        PictureContainer(
-                          file: leftFile,
-                          pos: 'left',
-                          onTapPicture: onTapPicture,
-                          onTapRemove: onTapRemove,
+                        Row(
+                          children: [
+                            PictureContainer(
+                              file: fileInfo['left'],
+                              pos: 'left',
+                              onTapPicture: onTapPicture,
+                              onTapRemove: onTapRemove,
+                            ),
+                            SpaceWidth(width: smallSpace),
+                            PictureContainer(
+                              file: fileInfo['right'],
+                              pos: 'right',
+                              onTapPicture: onTapPicture,
+                              onTapRemove: onTapRemove,
+                            ),
+                          ],
                         ),
-                        SpaceWidth(width: smallSpace),
-                        PictureContainer(
-                          file: rightFile,
-                          pos: 'right',
-                          onTapPicture: onTapPicture,
-                          onTapRemove: onTapRemove,
+                        SpaceHeight(height: smallSpace),
+                        Row(
+                          children: [
+                            PictureContainer(
+                              file: fileInfo['bottom'],
+                              pos: 'bottom',
+                              onTapPicture: onTapPicture,
+                              onTapRemove: onTapRemove,
+                            ),
+                          ],
                         ),
                       ],
                     )
@@ -333,7 +354,7 @@ class Picture extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () => onTapPicture != null ? onTapPicture!(pos) : null,
-                  child: DefaultImage(data: uint8List!, height: 150),
+                  child: DefaultImage(unit8List: uint8List!, height: 150),
                 ),
                 CloseIcon(isEdit: isEdit, onTapRemove: onTapRemove, pos: pos)
               ],

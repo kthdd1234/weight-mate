@@ -275,7 +275,7 @@ class _TodoContainerState extends State<TodoContainer> {
 
     List<TagClass> lifeTags = [
       TagClass(
-        text: '습관 ${planList.length}개',
+        text: '목표 ${planList.length}개',
         color: widget.color,
         isHide: isOpen,
         onTap: onTapOpen,
@@ -408,6 +408,14 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
     return widget.isOpen
         ? Column(
             children: [
+              DefaultSegmented(
+                selectedSegment: selectedSegment,
+                children: children,
+                backgroundColor: dialogBackgroundColor,
+                thumbColor: Colors.white,
+                onSegmentedChanged: onSegmentedChanged,
+              ),
+              SpaceHeight(height: regularSapce),
               isRecord
                   ? Column(
                       children: [
@@ -437,14 +445,6 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                         ),
                       ],
                     ),
-              SpaceHeight(height: 20),
-              DefaultSegmented(
-                selectedSegment: selectedSegment,
-                children: children,
-                backgroundColor: dialogBackgroundColor,
-                thumbColor: Colors.white, //
-                onSegmentedChanged: onSegmentedChanged,
-              ),
             ],
           )
         : const EmptyArea();
@@ -1227,7 +1227,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
                 ExpandedButtonVerti(
                   mainColor: themeColor,
                   icon: Icons.edit,
-                  title: '${widget.topTitle} 명 수정',
+                  title: '${widget.topTitle} 수정',
                   onTap: () {
                     closeDialog(context);
                     widget.onTapEdit();
