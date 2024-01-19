@@ -215,12 +215,12 @@ class _CommonTitleState extends State<CommonTitle> {
                             nextCalendarFormats[widget.calendarFormat]!,
                           ),
                         ),
-                        SpaceWidth(width: tinySpace),
-                        CommonTag(
-                          text: '필터',
-                          color: 'whiteRed',
-                          onTap: onTapFilter,
-                        )
+                        // SpaceWidth(width: tinySpace),
+                        // CommonTag(
+                        //   text: '필터',
+                        //   color: 'whiteRed',
+                        //   onTap: onTapFilter,
+                        // )
                       ],
                     )
                   : const EmptyArea(),
