@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -159,8 +161,11 @@ class _CommonTitleState extends State<CommonTitle> {
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
     }
 
-    onTapFilter() {
-      //
+    onTapFilter() async {
+      await showDialog(
+        context: context,
+        builder: (context) => const DisplayListContainer(),
+      );
     }
 
     List<IconData?> rightIconList = [
@@ -215,12 +220,12 @@ class _CommonTitleState extends State<CommonTitle> {
                             nextCalendarFormats[widget.calendarFormat]!,
                           ),
                         ),
-                        // SpaceWidth(width: tinySpace),
-                        // CommonTag(
-                        //   text: '필터',
-                        //   color: 'whiteRed',
-                        //   onTap: onTapFilter,
-                        // )
+                        SpaceWidth(width: tinySpace),
+                        CommonTag(
+                          text: '필터',
+                          color: 'whiteIndigo',
+                          onTap: onTapFilter,
+                        )
                       ],
                     )
                   : const EmptyArea(),
@@ -419,6 +424,91 @@ class YearContainer extends StatelessWidget {
         allowViewNavigation: false,
         onSelectionChanged: onSelectionChanged,
       ),
+    );
+  }
+}
+
+class DisplayListContainer extends StatefulWidget {
+  const DisplayListContainer({super.key});
+
+  @override
+  State<DisplayListContainer> createState() => _DisplayListContainerState();
+}
+
+class _DisplayListContainerState extends State<DisplayListContainer> {
+  @override
+  Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String>? displayList = user.displayList;
+
+    onTapCheckBox({required dynamic id, required bool newValue}) {
+      bool isNotWeight = filterClassList.first.id != id;
+      bool isdisplayList = user.displayList != null;
+
+      if (isNotWeight && isdisplayList) {
+        newValue ? user.displayList!.add(id) : user.displayList!.remove(id);
+        user.save();
+
+        setState(() {});
+      }
+    }
+
+    isCheck(String filterId) {
+      if (filterClassList.first.id == filterId) {
+        return true;
+      }
+
+      return displayList != null ? displayList.contains(filterId) : false;
+    }
+
+    List<Widget> children = filterClassList
+        .map((data) => Column(
+              children: [
+                Row(
+                  children: [
+                    CommonCheckBox(
+                      id: data.id,
+                      isCheck: isCheck(data.id),
+                      checkColor: themeColor,
+                      onTap: onTapCheckBox,
+                    ),
+                    CommonText(
+                      text: data.name,
+                      size: 14,
+                      isNotTop: true,
+                    ),
+                    SpaceWidth(width: 3),
+                    filterClassList.first.id == data.id
+                        ? CommonText(
+                            text: '(필수)',
+                            size: 10,
+                            color: Colors.red,
+                          )
+                        : const EmptyArea()
+                  ],
+                ),
+                SpaceHeight(
+                  height: filterClassList.last.id == data.id ? 0.0 : smallSpace,
+                ),
+              ],
+            ))
+        .toList();
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: '카테고리 필터',
+            onTap: () => closeDialog(context),
+          ),
+          content: ContentsBox(
+            contentsWidget: Column(children: children),
+          ),
+        )
+      ],
     );
   }
 }

@@ -63,6 +63,7 @@ class _TodoContainerState extends State<TodoContainer> {
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
     UserBox user = userRepository.user;
+    bool? isDisplay = user.displayList?.contains(widget.filterId) == true;
     bool? isOpen = user.filterList?.contains(widget.filterId) == true;
 
     Box<PlanBox> planBox = planRepository.planBox;
@@ -288,45 +289,47 @@ class _TodoContainerState extends State<TodoContainer> {
       commonTag
     ];
 
-    return Column(
-      children: [
-        ContentsBox(
-          contentsWidget: Column(
+    return isDisplay
+        ? Column(
             children: [
-              TitleContainer(
-                isDivider: isOpen,
-                title: widget.title,
-                icon: widget.icon,
-                tags: isLife ? lifeTags : dietExerciseTags,
-                onTap: onTapOpen,
-              ),
-              isLife
-                  ? LifeContainer(
-                      isOpen: isOpen,
+              ContentsBox(
+                contentsWidget: Column(
+                  children: [
+                    TitleContainer(
+                      isDivider: isOpen,
                       title: widget.title,
-                      actions: actions,
-                      mainColor: mainColor,
-                      planList: planList,
-                      onCheckBox: onCheckBox,
-                      onGoalComplete: onGoalComplete,
-                    )
-                  : DietExerciseContainer(
-                      type: widget.type,
-                      isOpen: isOpen,
-                      bgColor: bgColor,
-                      actions: actions,
-                      mainColor: mainColor,
-                      planList: planList,
-                      onCheckBox: onCheckBox,
-                      onGoalComplete: onGoalComplete,
-                      onRecordComplete: onRecordComplete,
-                    )
+                      icon: widget.icon,
+                      tags: isLife ? lifeTags : dietExerciseTags,
+                      onTap: onTapOpen,
+                    ),
+                    isLife
+                        ? LifeContainer(
+                            isOpen: isOpen,
+                            title: widget.title,
+                            actions: actions,
+                            mainColor: mainColor,
+                            planList: planList,
+                            onCheckBox: onCheckBox,
+                            onGoalComplete: onGoalComplete,
+                          )
+                        : DietExerciseContainer(
+                            type: widget.type,
+                            isOpen: isOpen,
+                            bgColor: bgColor,
+                            actions: actions,
+                            mainColor: mainColor,
+                            planList: planList,
+                            onCheckBox: onCheckBox,
+                            onGoalComplete: onGoalComplete,
+                            onRecordComplete: onRecordComplete,
+                          )
+                  ],
+                ),
+              ),
+              SpaceHeight(height: smallSpace),
             ],
-          ),
-        ),
-        SpaceHeight(height: smallSpace),
-      ],
-    );
+          )
+        : const EmptyArea();
   }
 }
 

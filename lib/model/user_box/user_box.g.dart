@@ -27,13 +27,14 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       screenLockPasswords: fields[7] as String?,
       planViewType: fields[8] as String?,
       filterList: fields[9] as List<String>?,
+      displayList: fields[10] as List<String>?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(10)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -53,7 +54,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(8)
       ..write(obj.planViewType)
       ..writeByte(9)
-      ..write(obj.filterList);
+      ..write(obj.filterList)
+      ..writeByte(10)
+      ..write(obj.displayList);
   }
 
   @override

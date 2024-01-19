@@ -16,6 +16,7 @@ class UserBox extends HiveObject {
     this.alarmId,
     this.screenLockPasswords,
     this.filterList,
+    this.displayList,
   });
 
   @HiveField(0)
@@ -48,8 +49,11 @@ class UserBox extends HiveObject {
   @HiveField(9)
   List<String>? filterList;
 
+  @HiveField(10)
+  List<String>? displayList;
+
   @override
   String toString() {
-    return '{userId: $userId, tall: $tall, goalWeight: $goalWeight, createDateTime: $createDateTime, isAlarm: $isAlarm, alarmTime: $alarmTime, alarmId: $alarmId, screenLockPasswords: $screenLockPasswords, planViewType: $planViewType, filterList: $filterList }';
+    return '{userId: $userId, tall: $tall, goalWeight: $goalWeight, createDateTime: $createDateTime, isAlarm: $isAlarm, alarmTime: $alarmTime, alarmId: $alarmId, screenLockPasswords: $screenLockPasswords, planViewType: $planViewType, filterList: $filterList, displayList: $displayList }';
   }
 }

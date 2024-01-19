@@ -36,6 +36,7 @@ class EditPicture extends StatelessWidget {
   Widget build(BuildContext context) {
     String fPicture = FILITER.picture.toString();
     UserBox user = userRepository.user;
+    bool? isDisplay = user.displayList?.contains(fPicture) == true;
     bool isOpen = user.filterList?.contains(fPicture) == true;
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
@@ -219,82 +220,84 @@ class EditPicture extends StatelessWidget {
       user.save();
     }
 
-    return Column(
-      children: [
-        ContentsBox(
-          contentsWidget: Column(
+    return isDisplay
+        ? Column(
             children: [
-              TitleContainer(
-                isDivider: isOpen,
-                title: '사진',
-                icon: Icons.auto_awesome,
-                tags: [
-                  TagClass(
-                    text: '사진 ${[
-                      recordInfo?.leftFile,
-                      recordInfo?.rightFile,
-                      recordInfo?.bottomFile
-                    ].whereType<Uint8List>().length}장',
-                    color: 'purple',
-                    isHide: isOpen,
-                    onTap: onTapOpen,
-                  ),
-                  TagClass(
-                    text: '사진 앨범',
-                    color: 'purple',
-                    onTap: () =>
-                        Navigator.pushNamed(context, '/image-collections-page'),
-                  ),
-                  TagClass(
-                    icon: isOpen
-                        ? Icons.keyboard_arrow_down_rounded
-                        : Icons.keyboard_arrow_right_rounded,
-                    color: 'purple',
-                    onTap: onTapOpen,
-                  )
-                ],
-                onTap: onTapOpen,
-              ),
-              isOpen
-                  ? Column(
-                      children: [
-                        Row(
-                          children: [
-                            PictureContainer(
-                              file: fileInfo['left'],
-                              pos: 'left',
-                              onTapPicture: onTapPicture,
-                              onTapRemove: onTapRemove,
-                            ),
-                            SpaceWidth(width: smallSpace),
-                            PictureContainer(
-                              file: fileInfo['right'],
-                              pos: 'right',
-                              onTapPicture: onTapPicture,
-                              onTapRemove: onTapRemove,
-                            ),
-                          ],
+              ContentsBox(
+                contentsWidget: Column(
+                  children: [
+                    TitleContainer(
+                      isDivider: isOpen,
+                      title: '사진',
+                      icon: Icons.auto_awesome,
+                      tags: [
+                        TagClass(
+                          text: '사진 ${[
+                            recordInfo?.leftFile,
+                            recordInfo?.rightFile,
+                            recordInfo?.bottomFile
+                          ].whereType<Uint8List>().length}장',
+                          color: 'purple',
+                          isHide: isOpen,
+                          onTap: onTapOpen,
                         ),
-                        SpaceHeight(height: smallSpace),
-                        Row(
-                          children: [
-                            PictureContainer(
-                              file: fileInfo['bottom'],
-                              pos: 'bottom',
-                              onTapPicture: onTapPicture,
-                              onTapRemove: onTapRemove,
-                            ),
-                          ],
+                        TagClass(
+                          text: '사진 앨범',
+                          color: 'purple',
+                          onTap: () => Navigator.pushNamed(
+                              context, '/image-collections-page'),
                         ),
+                        TagClass(
+                          icon: isOpen
+                              ? Icons.keyboard_arrow_down_rounded
+                              : Icons.keyboard_arrow_right_rounded,
+                          color: 'purple',
+                          onTap: onTapOpen,
+                        )
                       ],
-                    )
-                  : const EmptyArea(),
+                      onTap: onTapOpen,
+                    ),
+                    isOpen
+                        ? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  PictureContainer(
+                                    file: fileInfo['left'],
+                                    pos: 'left',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                  SpaceWidth(width: smallSpace),
+                                  PictureContainer(
+                                    file: fileInfo['right'],
+                                    pos: 'right',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                ],
+                              ),
+                              SpaceHeight(height: smallSpace),
+                              Row(
+                                children: [
+                                  PictureContainer(
+                                    file: fileInfo['bottom'],
+                                    pos: 'bottom',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )
+                        : const EmptyArea(),
+                  ],
+                ),
+              ),
+              SpaceHeight(height: smallSpace),
             ],
-          ),
-        ),
-        SpaceHeight(height: smallSpace),
-      ],
-    );
+          )
+        : const EmptyArea();
   }
 }
 

@@ -6,14 +6,12 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -43,34 +41,14 @@ class _EditDiaryState extends State<EditDiary> {
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     String fDiary = FILITER.diary.toString();
     UserBox user = userRepository.user;
+
+    bool? isDisplay = user.displayList?.contains(fDiary) == true;
     bool? isOpen = user.filterList?.contains(fDiary) == true;
 
     Box<RecordBox> recordBox = recordRepository.recordBox;
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
-
-    showAdDialog(String title) {
-      showDialog(
-        context: context,
-        builder: (dContext) {
-          onClick(BottomNavigationEnum enumId) async {
-            dContext
-                .read<BottomNavigationProvider>()
-                .setBottomNavigation(enumId: enumId);
-            closeDialog(dContext);
-          }
-
-          return NativeAdDialog(
-            title: title,
-            leftText: '히스토리 보기',
-            rightText: '그래프 보기',
-            onLeftClick: () => onClick(BottomNavigationEnum.history),
-            onRightClick: () => onClick(BottomNavigationEnum.graph),
-          );
-        },
-      );
-    }
 
     onTapEditDiary() {
       setState(() {
@@ -100,8 +78,6 @@ class _EditDiaryState extends State<EditDiary> {
 
       recordInfo?.save();
       closeDialog(context);
-
-      // showAdDialog('감정 기록 완료!');
     }
 
     onTapOpenEmotion() {
@@ -144,8 +120,6 @@ class _EditDiaryState extends State<EditDiary> {
       }
 
       setState(() => isShowInput = false);
-
-      // showAdDialog('일기 작성 완료!');
     }
 
     onTapOpen() {
@@ -215,114 +189,118 @@ class _EditDiaryState extends State<EditDiary> {
       );
     }
 
-    return Column(
-      children: [
-        ContentsBox(
-          contentsWidget: Column(
+    return isDisplay
+        ? Column(
             children: [
-              TitleContainer(
-                isDivider: isOpen,
-                title: '일기',
-                icon: Icons.auto_fix_high,
-                tags: [
-                  TagClass(
-                    text: recordInfo?.diaryDateTime != null
-                        ? timeToString(recordInfo?.diaryDateTime)
-                        : '미작성',
-                    color: 'orange',
-                    isHide: isOpen,
-                    onTap: onTapOpen,
-                  ),
-                  TagClass(
-                    text: '감정 기록',
-                    color: 'orange',
-                    onTap: onTapOpenEmotion,
-                  ),
-                  TagClass(
-                    icon: isOpen
-                        ? Icons.keyboard_arrow_down_rounded
-                        : Icons.keyboard_arrow_right_rounded,
-                    color: 'orange',
-                    onTap: onTapOpen,
-                  )
-                ],
-                onTap: onTapOpen,
-              ),
-              isOpen
-                  ? Column(
-                      children: [
-                        DiaryTitle(
-                          importDateTime: importDateTime,
-                          emotion: emotion,
-                          onTapMore: onTapMore,
-                          onTapEmotion: onTapOpenEmotion,
+              ContentsBox(
+                contentsWidget: Column(
+                  children: [
+                    TitleContainer(
+                      isDivider: isOpen,
+                      title: '일기',
+                      icon: Icons.auto_fix_high,
+                      tags: [
+                        TagClass(
+                          text: recordInfo?.diaryDateTime != null
+                              ? timeToString(recordInfo?.diaryDateTime)
+                              : '미작성',
+                          color: 'orange',
+                          isHide: isOpen,
+                          onTap: onTapOpen,
                         ),
-                        isShowInput
-                            ? TextFormField(
-                                autofocus: true,
-                                textInputAction: TextInputAction.done,
-                                controller: textController,
-                                maxLength: 200,
-                                maxLines: null,
-                                minLines: null,
-                                onEditingComplete: onEditingComplete,
-                              )
-                            : recordInfo?.whiteText != null
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SpaceHeight(height: smallSpace),
-                                      InkWell(
-                                        onTap: onTapEditDiary,
-                                        child: Text(
-                                          recordInfo?.whiteText ?? '',
-                                          style: const TextStyle(
-                                            fontSize: 13,
-                                            color: themeColor,
-                                          ),
-                                        ),
-                                      ),
-                                      SpaceHeight(height: smallSpace),
-                                      CommonText(
-                                        text: recordInfo?.diaryDateTime != null
-                                            ? timeToString(
-                                                recordInfo!.diaryDateTime,
-                                              )
-                                            : '',
-                                        size: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ],
-                                  )
-                                : Column(
-                                    children: [
-                                      SpaceHeight(height: smallSpace),
-                                      InkWell(
-                                        onTap: onTapEditDiary,
-                                        child: ContentsBox(
-                                          padding:
-                                              const EdgeInsets.all(smallSpace),
-                                          imgUrl: 'assets/images/t-16.png',
-                                          contentsWidget: CommonText(
-                                            text: '일기 작성하기',
-                                            size: 14,
-                                            isCenter: true,
-                                            isBold: true,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
+                        TagClass(
+                          text: '감정 기록',
+                          color: 'orange',
+                          onTap: onTapOpenEmotion,
+                        ),
+                        TagClass(
+                          icon: isOpen
+                              ? Icons.keyboard_arrow_down_rounded
+                              : Icons.keyboard_arrow_right_rounded,
+                          color: 'orange',
+                          onTap: onTapOpen,
+                        )
                       ],
-                    )
-                  : const EmptyArea(),
+                      onTap: onTapOpen,
+                    ),
+                    isOpen
+                        ? Column(
+                            children: [
+                              DiaryTitle(
+                                importDateTime: importDateTime,
+                                emotion: emotion,
+                                onTapMore: onTapMore,
+                                onTapEmotion: onTapOpenEmotion,
+                              ),
+                              isShowInput
+                                  ? TextFormField(
+                                      autofocus: true,
+                                      textInputAction: TextInputAction.done,
+                                      controller: textController,
+                                      maxLength: 200,
+                                      maxLines: null,
+                                      minLines: null,
+                                      onEditingComplete: onEditingComplete,
+                                    )
+                                  : recordInfo?.whiteText != null
+                                      ? Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SpaceHeight(height: smallSpace),
+                                            InkWell(
+                                              onTap: onTapEditDiary,
+                                              child: Text(
+                                                recordInfo?.whiteText ?? '',
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  color: themeColor,
+                                                ),
+                                              ),
+                                            ),
+                                            SpaceHeight(height: smallSpace),
+                                            CommonText(
+                                              text: recordInfo?.diaryDateTime !=
+                                                      null
+                                                  ? timeToString(
+                                                      recordInfo!.diaryDateTime,
+                                                    )
+                                                  : '',
+                                              size: 12,
+                                              color: Colors.grey,
+                                            ),
+                                          ],
+                                        )
+                                      : Column(
+                                          children: [
+                                            SpaceHeight(height: smallSpace),
+                                            InkWell(
+                                              onTap: onTapEditDiary,
+                                              child: ContentsBox(
+                                                padding: const EdgeInsets.all(
+                                                    smallSpace),
+                                                imgUrl:
+                                                    'assets/images/t-16.png',
+                                                contentsWidget: CommonText(
+                                                  text: '일기 작성하기',
+                                                  size: 14,
+                                                  isCenter: true,
+                                                  isBold: true,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                            ],
+                          )
+                        : const EmptyArea(),
+                  ],
+                ),
+              ),
             ],
-          ),
-        ),
-      ],
-    );
+          )
+        : const EmptyArea();
   }
 }
 

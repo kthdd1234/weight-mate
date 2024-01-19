@@ -56,11 +56,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     /** */
     List<String>? filterList = userRepository.user.filterList;
+    List<String>? displayList = userRepository.user.displayList;
 
     if (filterList == null) {
       userRepository.user.filterList = initFilterList;
-      userRepository.user.save();
     }
+
+    if (displayList == null) {
+      userRepository.user.displayList = initFilterList;
+    }
+
+    userRepository.user.save();
 
     /** */
     onNotifications.stream.listen(

@@ -5,26 +5,30 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CommonCheckBox extends StatelessWidget {
-  CommonCheckBox({
-    super.key,
-    required this.id,
-    required this.isCheck,
-    required this.checkColor,
-    required this.onTap,
-    this.isNotBottom,
-    this.isDisabled,
-  });
+  CommonCheckBox(
+      {super.key,
+      required this.id,
+      required this.isCheck,
+      required this.checkColor,
+      required this.onTap,
+      this.isNotBottom,
+      this.isDisabled,
+      this.isOulined});
 
   dynamic id;
   bool isCheck;
-  bool? isDisabled, isNotBottom;
+  bool? isDisabled, isNotBottom, isOulined;
   Color checkColor;
 
   Function({required dynamic id, required bool newValue}) onTap;
 
   @override
   Widget build(BuildContext context) {
-    IconData icon = isCheck ? Icons.check_box_rounded : Icons.check_box;
+    IconData icon = isCheck
+        ? Icons.check_box_rounded
+        : isOulined == true
+            ? Icons.check_box
+            : Icons.check_box_outline_blank_rounded;
     Color color = isCheck ? checkColor : Colors.grey.shade300;
 
     return InkWell(

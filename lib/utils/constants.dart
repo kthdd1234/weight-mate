@@ -236,12 +236,11 @@ final tagColors = {
 
 List<FilterClass> filterClassList = [
   FilterClass(id: FILITER.weight.toString(), name: '체중'),
-  FilterClass(id: FILITER.emotion.toString(), name: '감정'),
   FilterClass(id: FILITER.picture.toString(), name: '사진'),
-  FilterClass(id: FILITER.diary.toString(), name: '메모'),
   FilterClass(id: FILITER.diet.toString(), name: '식단'),
   FilterClass(id: FILITER.exercise.toString(), name: '운동'),
-  FilterClass(id: FILITER.lifeStyle.toString(), name: '생활'),
+  FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
+  FilterClass(id: FILITER.diary.toString(), name: '일기'),
 ];
 
 List<String> initFilterList = filterClassList.map((e) => e.id).toList();
