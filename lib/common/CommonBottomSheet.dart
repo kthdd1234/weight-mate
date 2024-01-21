@@ -73,19 +73,41 @@ class CommonBottomSheet extends StatelessWidget {
 }
 
 class DialogTitle extends StatelessWidget {
-  DialogTitle({super.key, required this.text, required this.onTap});
+  DialogTitle({
+    super.key,
+    required this.text,
+    required this.onTap,
+    this.subText,
+  });
 
   String text;
+  String? subText;
   Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          text,
-          style: const TextStyle(fontSize: 18, color: themeColor),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: const TextStyle(fontSize: 18, color: themeColor),
+            ),
+            // subText != null
+            //     ? Padding(
+            //         padding: const EdgeInsets.only(top: 3),
+            //         child: Text(
+            //           subText!,
+            //           style: const TextStyle(fontSize: 10, color: themeColor),
+            //         ),
+            //       )
+            //     : const EmptyArea(),
+          ],
         ),
         InkWell(
           onTap: onTap,

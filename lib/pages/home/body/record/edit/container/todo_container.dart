@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
 import 'dart:developer';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -35,7 +36,9 @@ import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-String diet = PlanTypeEnum.diet.toString();
+String eDiet = PlanTypeEnum.diet.toString();
+String eExercise = PlanTypeEnum.exercise.toString();
+String eLife = PlanTypeEnum.lifestyle.toString();
 
 class TodoContainer extends StatefulWidget {
   TodoContainer({
@@ -242,8 +245,6 @@ class _TodoContainerState extends State<TodoContainer> {
           ? user.filterList?.remove(widget.filterId)
           : user.filterList?.add(widget.filterId);
       user.save();
-
-      //
     }
 
     TagClass commonTag = TagClass(
@@ -304,6 +305,7 @@ class _TodoContainerState extends State<TodoContainer> {
                     ),
                     isLife
                         ? LifeContainer(
+                            type: widget.type,
                             isOpen: isOpen,
                             title: widget.title,
                             actions: actions,
@@ -435,6 +437,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                   : Column(
                       children: [
                         GoalList(
+                          type: widget.type,
                           actions: widget.actions,
                           planList: widget.planList,
                           mainColor: widget.mainColor,
@@ -442,6 +445,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                           onGoalUpdate: widget.onGoalComplete,
                         ),
                         GoalAdd(
+                          type: widget.type,
                           title: '목표',
                           mainColor: widget.mainColor,
                           onTapGoalAdd: widget.onGoalComplete,
@@ -696,7 +700,7 @@ class CategoryBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonBottomSheet(
       title: name,
-      height: diet == type ? 200 : 220,
+      height: eDiet == type ? 200 : 220,
       contents: CategoryList(
         selectedTitle: selectedTitle,
         type: type,
@@ -726,9 +730,9 @@ class CategoryList extends StatelessWidget {
                 child: Row(
                   children: [
                     ExpandedButtonVerti(
-                      iconSize: diet == type ? 21 : 30,
-                      titleSize: diet == type ? 13 : 15,
-                      height: diet == type ? 90 : 105,
+                      iconSize: eDiet == type ? 21 : 30,
+                      titleSize: eDiet == type ? 13 : 15,
+                      height: eDiet == type ? 90 : 105,
                       isBold: item['title'] == selectedTitle,
                       mainColor: item['title'] == selectedTitle
                           ? Colors.white
@@ -755,6 +759,7 @@ class CategoryList extends StatelessWidget {
 class LifeContainer extends StatelessWidget {
   LifeContainer({
     super.key,
+    required this.type,
     required this.isOpen,
     required this.title,
     required this.actions,
@@ -764,6 +769,7 @@ class LifeContainer extends StatelessWidget {
     required this.onGoalComplete,
   });
 
+  String type;
   bool isOpen;
   String title;
   List<Map<String, dynamic>>? actions;
@@ -788,6 +794,7 @@ class LifeContainer extends StatelessWidget {
         ? Column(
             children: [
               GoalList(
+                type: type,
                 actions: actions,
                 mainColor: mainColor,
                 planList: planList,
@@ -795,6 +802,7 @@ class LifeContainer extends StatelessWidget {
                 onGoalUpdate: onGoalComplete,
               ),
               GoalAdd(
+                type: type,
                 title: title,
                 mainColor: mainColor,
                 onTapGoalAdd: onGoalComplete,
@@ -808,6 +816,7 @@ class LifeContainer extends StatelessWidget {
 class GoalList extends StatelessWidget {
   GoalList({
     super.key,
+    required this.type,
     required this.actions,
     required this.planList,
     required this.mainColor,
@@ -815,6 +824,7 @@ class GoalList extends StatelessWidget {
     required this.onGoalUpdate,
   });
 
+  String type;
   Color mainColor;
   List<Map<String, dynamic>>? actions;
   List<PlanBox> planList;
@@ -833,6 +843,22 @@ class GoalList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String>? orderList = {
+      eDiet: user.dietOrderList,
+      eExercise: user.exerciseOrderList,
+      eLife: user.lifeOrderList,
+    }[type]!;
+
+    print('$orderList');
+
+    planList.sort((itemA, itemB) {
+      int indexA = orderList.indexOf(itemA.id);
+      int indexB = orderList.indexOf(itemB.id);
+
+      return indexA.compareTo(indexB);
+    });
+
     action(String planId) {
       if (actions == null) {
         return {'id': null, 'actionDateTime': null};
@@ -846,37 +872,80 @@ class GoalList extends StatelessWidget {
       return action;
     }
 
-    return Column(
-      children: planList
-          .map(
-            (info) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonCheckBox(
-                    id: info.id,
-                    isCheck: action(info.id)['id'] != null,
-                    checkColor: mainColor,
-                    onTap: onCheckBox,
-                  ),
-                  GoalName(
-                    planInfo: info,
-                    color: mainColor,
-                    isChcked: action(info.id)['id'] != null,
-                    onGoalUpdate: onGoalUpdate,
-                  ),
-                ],
+    Widget item(index) {
+      return InkWell(
+        key: Key(planList[index].id),
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CommonCheckBox(
+                id: planList[index].id,
+                isCheck: action(planList[index].id)['id'] != null,
+                checkColor: mainColor,
+                onTap: onCheckBox,
               ),
+              GoalName(
+                type: type,
+                planInfo: planList[index],
+                color: mainColor,
+                isChcked: action(planList[index].id)['id'] != null,
+                onGoalUpdate: onGoalUpdate,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    Widget proxyDecorator(
+        Widget child, int index, Animation<double> animation) {
+      return AnimatedBuilder(
+        animation: animation,
+        builder: (BuildContext context, Widget? child) {
+          final double animValue = Curves.easeInOut.transform(animation.value);
+          final double scale = lerpDouble(1, 1.02, animValue)!;
+          return Transform.scale(
+            scale: scale,
+            child: Card(
+              margin: const EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+              color: const Color(0xffF9F9FC),
+              elevation: 0.0,
+              child: item(index),
             ),
-          )
-          .toList(),
+          );
+        },
+        child: child,
+      );
+    }
+
+    onReorder(int oldIndex, int newIndex) {
+      String oldId = planList[oldIndex].id;
+      String targetId = uuid();
+
+      orderList[oldIndex] = targetId;
+      orderList.insert(newIndex, oldId);
+      orderList.remove(targetId);
+
+      user.save();
+    }
+
+    return ReorderableListView(
+      shrinkWrap: true,
+      proxyDecorator: proxyDecorator,
+      onReorder: onReorder,
+      children: List.generate(planList.length, (int index) => item(index)),
     );
   }
 }
 
 class GoalName extends StatefulWidget {
   GoalName({
+    required this.type,
     required this.planInfo,
     required this.isChcked,
     required this.onGoalUpdate,
@@ -885,6 +954,7 @@ class GoalName extends StatefulWidget {
     this.textColor,
   });
 
+  String type;
   PlanBox planInfo;
   double? fontSize;
   bool isChcked;
@@ -947,6 +1017,7 @@ class _GoalNameState extends State<GoalName> {
       showModalBottomSheet(
         context: context,
         builder: (context) => GoalBottomSheet(
+          type: widget.type,
           id: widget.planInfo.id,
           name: widget.planInfo.name,
           icon: todoData[widget.planInfo.type]!.icon,
@@ -983,7 +1054,7 @@ class _GoalNameState extends State<GoalName> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: InkWell(
+                  child: GestureDetector(
                     onTap: () => onTapMore(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1041,12 +1112,13 @@ class _GoalNameState extends State<GoalName> {
 class GoalAdd extends StatefulWidget {
   GoalAdd({
     super.key,
+    required this.type,
     required this.title,
     required this.mainColor,
     required this.onTapGoalAdd,
   });
 
-  String title;
+  String type, title;
   Color mainColor;
   Function({
     required String completedType,
@@ -1066,19 +1138,31 @@ class _GoalAddState extends State<GoalAdd> {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String>? orderList = {
+      eDiet: user.dietOrderList,
+      eExercise: user.exerciseOrderList,
+      eLife: user.lifeOrderList,
+    }[widget.type]!;
+
     onTap() {
       setState(() => isShowInput = true);
     }
 
     onEditingComplete() {
+      String id = uuid();
+
       if (textController.text != '') {
         widget.onTapGoalAdd(
           completedType: '추가',
-          id: uuid(),
+          id: id,
           text: textController.text,
           newValue: isChecked,
         );
       }
+
+      orderList.add(id);
+      user.save();
 
       setState(() {
         isShowInput = false;
@@ -1120,7 +1204,8 @@ class _GoalAddState extends State<GoalAdd> {
                 )
               : TodoInput(
                   controller: textController,
-                  onEditingComplete: onEditingComplete)
+                  onEditingComplete: onEditingComplete,
+                )
         ],
       ),
     );
@@ -1259,6 +1344,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
 class GoalBottomSheet extends StatefulWidget {
   GoalBottomSheet({
     super.key,
+    required this.type,
     required this.name,
     required this.icon,
     required this.id,
@@ -1268,7 +1354,7 @@ class GoalBottomSheet extends StatefulWidget {
   });
 
   IconData icon;
-  String id, title, name;
+  String id, title, name, type;
   PlanBox? planInfo;
   Function() onTapEdit;
 
@@ -1292,6 +1378,13 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String>? orderList = {
+      eDiet: user.dietOrderList,
+      eExercise: user.exerciseOrderList,
+      eLife: user.lifeOrderList,
+    }[widget.type]!;
+
     onTapAlarm() async {
       bool isPermission = await NotificationService().permissionNotification;
 
@@ -1306,6 +1399,9 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
       }
 
       planRepository.planBox.delete(widget.id);
+      orderList.remove(widget.id);
+
+      user.save();
       closeDialog(context);
     }
 
@@ -1421,9 +1517,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
 }
 
 class PermissionPopup extends StatelessWidget {
-  const PermissionPopup({
-    super.key,
-  });
+  const PermissionPopup({super.key});
 
   @override
   Widget build(BuildContext context) {

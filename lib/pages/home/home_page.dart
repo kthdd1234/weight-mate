@@ -1,8 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
@@ -21,6 +25,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 List<BottomNavigationEnum> bottomIdList = [
   BottomNavigationEnum.record,
@@ -40,30 +45,84 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool isActiveCamera = false;
   bool isShowMateScreen = false;
 
-  String status = 'none';
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // GdprDialog.instance.resetDecision();
     GdprDialog.instance
         .showDialog(isForTest: false, testDeviceId: '')
-        .then((value) {
-      status = 'dialog result == $value';
-    });
+        .then((value) {});
 
     /** */
-    List<String>? filterList = userRepository.user.filterList;
-    List<String>? displayList = userRepository.user.displayList;
+
+    /** */
+    UserBox user = userRepository.user;
+    List<String>? filterList = user.filterList;
+    List<String>? displayList = user.displayList;
+    String? calendarMaker = user.calendarMaker;
+    String? calendarFormat = user.calendarFormat;
+    List<String>? dietOrderList = user.dietOrderList;
+    List<String>? exerciseOrderList = user.exerciseOrderList;
+    List<String>? lifeOrderList = user.lifeOrderList;
+
+    List<PlanBox> planList = planRepository.planBox.values.toList();
 
     if (filterList == null) {
-      userRepository.user.filterList = initFilterList;
+      userRepository.user.filterList = initOpenList;
     }
 
     if (displayList == null) {
-      userRepository.user.displayList = initFilterList;
+      userRepository.user.displayList = initDisplayList;
+    }
+
+    if (calendarMaker == null) {
+      userRepository.user.calendarMaker = CalendarMaker.sticker.toString();
+    }
+
+    if (calendarFormat == null) {
+      userRepository.user.calendarFormat = CalendarFormat.week.toString();
+    }
+
+    if (dietOrderList == null) {
+      final allOrderList = [
+        {
+          'type': PlanTypeEnum.diet.toString(),
+          'list': dietOrderList,
+        },
+        {
+          'type': PlanTypeEnum.exercise.toString(),
+          'list': exerciseOrderList,
+        },
+        {
+          'type': PlanTypeEnum.lifestyle.toString(),
+          'list': lifeOrderList,
+        },
+      ];
+
+      allOrderList.forEach(
+        (orderInfo) {
+          if (orderInfo['list'] == null) {
+            List<String> list = [];
+
+            planList.forEach(
+              (planItem) {
+                if (planItem.type == orderInfo['type']) {
+                  list.add(planItem.id);
+                }
+              },
+            );
+
+            if (orderInfo['type'] == PlanTypeEnum.diet.toString()) {
+              user.dietOrderList = list;
+            } else if (orderInfo['type'] == PlanTypeEnum.exercise.toString()) {
+              user.exerciseOrderList = list;
+            } else if (orderInfo['type'] == PlanTypeEnum.lifestyle.toString()) {
+              user.lifeOrderList = list;
+            }
+          }
+        },
+      );
     }
 
     userRepository.user.save();
@@ -92,10 +151,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     requestInAppReview();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<AdsProvider>().setNativeAd();
-    });
   }
 
   @override

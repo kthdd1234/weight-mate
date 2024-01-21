@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
 
 var dayOfWeek = {
@@ -230,4 +231,15 @@ final categoryIcons = {
 final categoryColors = {
   PlanTypeEnum.diet.toString(): Colors.teal,
   PlanTypeEnum.exercise.toString(): Colors.lightBlue,
+};
+
+final formatInfo = {
+  CalendarFormat.week.toString(): CalendarFormat.week,
+  CalendarFormat.twoWeeks.toString(): CalendarFormat.twoWeeks,
+  CalendarFormat.month.toString(): CalendarFormat.month,
+};
+
+final makerInfo = {
+  CalendarMaker.sticker.toString(): CalendarMaker.sticker,
+  CalendarMaker.weight.toString(): CalendarMaker.weight
 };

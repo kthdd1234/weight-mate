@@ -217,6 +217,8 @@ class _EditWeightState extends State<EditWeight> {
       ).whenComplete(() => onInit());
     }
 
+    print('$user');
+
     onTapOpen() {
       isOpen ? user.filterList?.remove(fWeight) : user.filterList?.add(fWeight);
       user.save();

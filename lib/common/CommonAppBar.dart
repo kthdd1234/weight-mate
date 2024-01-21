@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
@@ -21,6 +19,7 @@ import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -36,33 +35,36 @@ class CommonAppBar extends StatefulWidget {
 }
 
 class _CommonAppBarState extends State<CommonAppBar> {
-  CalendarFormat calendarFormat = CalendarFormat.week;
-  CalendarMaker calendarMaker = CalendarMaker.sticker;
-
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    String? calendarFormat = user.calendarFormat;
+    String? calendarMaker = user.calendarMaker;
+
     onFormatChanged(CalendarFormat format) {
-      setState(() => calendarFormat = format);
+      user.calendarFormat = format.toString();
+      user.save();
     }
 
     onTapMakerType(CalendarMaker maker) {
-      setState(() => calendarMaker = maker);
+      user.calendarMaker = maker.toString();
+      user.save();
     }
 
     return Column(
       children: [
         CommonTitle(
           index: widget.id.index,
-          calendarMaker: calendarMaker,
-          calendarFormat: calendarFormat,
+          calendarFormat: formatInfo[calendarFormat]!,
+          calendarMaker: makerInfo[calendarMaker]!,
           onFormatChanged: onFormatChanged,
           onTapMakerType: onTapMakerType,
         ),
         SpaceHeight(height: tinySpace),
         widget.id.index == 0
             ? CalendarBar(
-                calendarFormat: calendarFormat,
-                calendarMaker: calendarMaker,
+                calendarFormat: formatInfo[calendarFormat]!,
+                calendarMaker: makerInfo[calendarMaker]!,
                 onFormatChanged: onFormatChanged,
               )
             : const EmptyArea(),
@@ -71,7 +73,7 @@ class _CommonAppBarState extends State<CommonAppBar> {
   }
 }
 
-class CommonTitle extends StatefulWidget {
+class CommonTitle extends StatelessWidget {
   CommonTitle({
     super.key,
     required this.index,
@@ -88,43 +90,66 @@ class CommonTitle extends StatefulWidget {
   Function(CalendarMaker) onTapMakerType;
 
   @override
-  State<CommonTitle> createState() => _CommonTitleState();
-}
-
-class _CommonTitleState extends State<CommonTitle> {
-  @override
   Widget build(BuildContext context) {
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
     DateTime historyDateTime =
         context.watch<HistoryDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
+    UserBox user = userRepository.user;
+    List<String>? displayList = user.displayList;
 
     String title = [
       dateTimeFormatter(format: 'yyyy년 MM월', dateTime: titleDateTime),
       dateTimeFormatter(format: 'yyyy년', dateTime: historyDateTime),
       '체중 변화',
       '설정'
-    ][widget.index];
+    ][index];
 
-    bool isRecord = widget.index == 0;
-    bool isHistory = widget.index == 1;
-    IconData recordRightIcon = CalendarFormat.month == widget.calendarFormat
-        ? Icons.keyboard_arrow_up_rounded
-        : Icons.keyboard_arrow_down_rounded;
-    IconData historyRightIcon = Icons.keyboard_arrow_down_rounded;
+    bool isRecord = index == 0;
+    bool isHistory = index == 1;
     bool isToday = isCheckToday(titleDateTime);
+
+    onTapRecordDateTime(args) {
+      context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
+      context.read<ImportDateTimeProvider>().setImportDateTime(args.value);
+
+      user.calendarFormat = CalendarFormat.month.toString();
+      user.save();
+
+      closeDialog(context);
+    }
 
     onTapHistoryDateTime(args) {
       context.read<HistoryDateTimeProvider>().setHistoryDateTime(args.value);
       closeDialog(context);
     }
 
-    onTapTitleDateTime() {
-      widget.onFormatChanged(nextCalendarFormats[widget.calendarFormat]!);
+    onTapRecordTitle() {
+      showDialog(
+        context: context,
+        builder: (context) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AlertDialog(
+              backgroundColor: dialogBackgroundColor,
+              shape: containerBorderRadious,
+              title: DialogTitle(
+                text: '월 선택',
+                onTap: () => closeDialog(context),
+              ),
+              content: DatePicker(
+                view: DateRangePickerView.year,
+                initialSelectedDate: titleDateTime,
+                onSelectionChanged: onTapRecordDateTime,
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
-    onTapHistory() {
+    onTapHistoryTitle() {
       showDialog(
           context: context,
           builder: (context) {
@@ -138,7 +163,8 @@ class _CommonTitleState extends State<CommonTitle> {
                     text: '선택 년도',
                     onTap: () => closeDialog(context),
                   ),
-                  content: YearContainer(
+                  content: DatePicker(
+                    view: DateRangePickerView.decade,
                     initialSelectedDate: historyDateTime,
                     onSelectionChanged: onTapHistoryDateTime,
                   ),
@@ -169,14 +195,14 @@ class _CommonTitleState extends State<CommonTitle> {
     }
 
     List<IconData?> rightIconList = [
-      recordRightIcon,
-      historyRightIcon,
+      Icons.keyboard_arrow_down_rounded,
+      Icons.keyboard_arrow_down_rounded,
       null,
       null
     ];
     List<Null Function()?> onTapList = [
-      onTapTitleDateTime,
-      onTapHistory,
+      onTapRecordTitle,
+      onTapHistoryTitle,
       null,
       null
     ];
@@ -189,8 +215,8 @@ class _CommonTitleState extends State<CommonTitle> {
           CommonText(
             text: title,
             size: 20,
-            rightIcon: rightIconList[widget.index],
-            onTap: onTapList[widget.index],
+            rightIcon: rightIconList[index],
+            onTap: onTapList[index],
           ),
           Row(
             children: [
@@ -206,23 +232,23 @@ class _CommonTitleState extends State<CommonTitle> {
                               ),
                         SpaceWidth(width: tinySpace),
                         CommonTag(
-                          text: availableCalendarMaker[widget.calendarMaker],
+                          text: availableCalendarMaker[calendarMaker],
                           color: 'whiteIndigo',
-                          onTap: () => widget.onTapMakerType(
-                            nextCalendarMaker[widget.calendarMaker]!,
+                          onTap: () => onTapMakerType(
+                            nextCalendarMaker[calendarMaker]!,
                           ),
                         ),
                         SpaceWidth(width: tinySpace),
                         CommonTag(
-                          text: availableCalendarFormats[widget.calendarFormat],
+                          text: availableCalendarFormats[calendarFormat],
                           color: 'whiteIndigo',
-                          onTap: () => widget.onFormatChanged(
-                            nextCalendarFormats[widget.calendarFormat]!,
+                          onTap: () => onFormatChanged(
+                            nextCalendarFormats[calendarFormat]!,
                           ),
                         ),
                         SpaceWidth(width: tinySpace),
                         CommonTag(
-                          text: '필터',
+                          text: '표시 ${displayList?.length ?? 0}',
                           color: 'whiteIndigo',
                           onTap: onTapFilter,
                         )
@@ -290,15 +316,32 @@ class CalendarBar extends StatelessWidget {
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       List<Map<String, dynamic>>? actions = recordInfo?.actions;
 
-      String? weight = colorName(recordInfo?.weight, 'indigo');
-      String? picture =
-          colorName((recordInfo?.leftFile ?? recordInfo?.rightFile), 'purple');
-      String? diet = colorName(nullCheckAction(actions, dietType), 'teal');
-      String? exercise =
-          colorName(nullCheckAction(actions, exerciseType), 'lightBlue');
-      String? life = colorName(nullCheckAction(actions, lifeType), 'brown');
-      String? diary =
-          colorName((recordInfo?.whiteText ?? recordInfo?.emotion), 'orange');
+      String? weight = colorName(
+        recordInfo?.weight,
+        'indigo',
+      );
+      String? picture = colorName(
+        (recordInfo?.leftFile ??
+            recordInfo?.rightFile ??
+            recordInfo?.bottomFile),
+        'purple',
+      );
+      String? diet = colorName(
+        nullCheckAction(actions, dietType),
+        'teal',
+      );
+      String? exercise = colorName(
+        nullCheckAction(actions, exerciseType),
+        'lightBlue',
+      );
+      String? life = colorName(
+        nullCheckAction(actions, lifeType),
+        'brown',
+      );
+      String? diary = colorName(
+        (recordInfo?.whiteText ?? recordInfo?.emotion),
+        'orange',
+      );
 
       List<String?> row1 = [weight, picture, diet];
       List<String?> row2 = [exercise, life, diary];
@@ -403,13 +446,15 @@ class DotRow extends StatelessWidget {
   }
 }
 
-class YearContainer extends StatelessWidget {
-  YearContainer({
+class DatePicker extends StatelessWidget {
+  DatePicker({
     super.key,
+    required this.view,
     required this.initialSelectedDate,
     required this.onSelectionChanged,
   });
 
+  DateRangePickerView view;
   DateTime initialSelectedDate;
   Function(DateRangePickerSelectionChangedArgs) onSelectionChanged;
 
@@ -418,9 +463,11 @@ class YearContainer extends StatelessWidget {
     return ContentsBox(
       width: MediaQuery.of(context).size.width,
       contentsWidget: SfDateRangePicker(
+        showNavigationArrow: true,
+        initialDisplayDate: initialSelectedDate,
         initialSelectedDate: initialSelectedDate,
         maxDate: DateTime.now(),
-        view: DateRangePickerView.decade,
+        view: view,
         allowViewNavigation: false,
         onSelectionChanged: onSelectionChanged,
       ),
@@ -442,7 +489,7 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
     List<String>? displayList = user.displayList;
 
     onTapCheckBox({required dynamic id, required bool newValue}) {
-      bool isNotWeight = filterClassList.first.id != id;
+      bool isNotWeight = displayClassList.first.id != id;
       bool isdisplayList = user.displayList != null;
 
       if (isNotWeight && isdisplayList) {
@@ -454,14 +501,14 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
     }
 
     isCheck(String filterId) {
-      if (filterClassList.first.id == filterId) {
+      if (displayClassList.first.id == filterId) {
         return true;
       }
 
       return displayList != null ? displayList.contains(filterId) : false;
     }
 
-    List<Widget> children = filterClassList
+    List<Widget> children = displayClassList
         .map((data) => Column(
               children: [
                 Row(
@@ -472,23 +519,16 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
                       checkColor: themeColor,
                       onTap: onTapCheckBox,
                     ),
-                    CommonText(
-                      text: data.name,
-                      size: 14,
-                      isNotTop: true,
-                    ),
+                    CommonText(text: data.name, size: 14, isNotTop: true),
                     SpaceWidth(width: 3),
-                    filterClassList.first.id == data.id
-                        ? CommonText(
-                            text: '(필수)',
-                            size: 10,
-                            color: Colors.red,
-                          )
+                    displayClassList.first.id == data.id
+                        ? CommonText(text: '(필수)', size: 10, color: Colors.red)
                         : const EmptyArea()
                   ],
                 ),
                 SpaceHeight(
-                  height: filterClassList.last.id == data.id ? 0.0 : smallSpace,
+                  height:
+                      displayClassList.last.id == data.id ? 0.0 : smallSpace,
                 ),
               ],
             ))
@@ -501,11 +541,22 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
           backgroundColor: dialogBackgroundColor,
           shape: containerBorderRadious,
           title: DialogTitle(
-            text: '카테고리 필터',
+            text: '카테고리 표시',
+            subText: '사용하지 않는 카테고리는 체크 해제 하면 되요 :D',
             onTap: () => closeDialog(context),
           ),
-          content: ContentsBox(
-            contentsWidget: Column(children: children),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              ContentsBox(contentsWidget: Column(children: children)),
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Text(
+                  '사용하지 않는 카테고리는 체크 해제 하면 되요 :D',
+                  style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
+                ),
+              )
+            ],
           ),
         )
       ],

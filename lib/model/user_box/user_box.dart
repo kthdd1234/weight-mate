@@ -5,19 +5,23 @@ part 'user_box.g.dart';
 
 @HiveType(typeId: 1)
 class UserBox extends HiveObject {
-  UserBox({
-    required this.userId,
-    required this.tall,
-    required this.goalWeight,
-    required this.createDateTime,
-    required this.isAlarm,
-    this.planViewType,
-    this.alarmTime,
-    this.alarmId,
-    this.screenLockPasswords,
-    this.filterList,
-    this.displayList,
-  });
+  UserBox(
+      {required this.userId,
+      required this.tall,
+      required this.goalWeight,
+      required this.createDateTime,
+      required this.isAlarm,
+      this.planViewType,
+      this.alarmTime,
+      this.alarmId,
+      this.screenLockPasswords,
+      this.filterList,
+      this.displayList,
+      this.calendarFormat,
+      this.calendarMaker,
+      this.dietOrderList,
+      this.exerciseOrderList,
+      this.lifeOrderList});
 
   @HiveField(0)
   String userId;
@@ -51,6 +55,21 @@ class UserBox extends HiveObject {
 
   @HiveField(10)
   List<String>? displayList;
+
+  @HiveField(11)
+  String? calendarMaker;
+
+  @HiveField(12)
+  String? calendarFormat;
+
+  @HiveField(13)
+  List<String>? dietOrderList;
+
+  @HiveField(14)
+  List<String>? exerciseOrderList;
+
+  @HiveField(15)
+  List<String>? lifeOrderList;
 
   @override
   String toString() {

@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDGq4zIgUPWXASExmbHxhRSP1K6SukBvc8</string>
+	<string>AIzaSyC7Xphe4_3uytj3PtP_bvCZBq3nuZm-VR0</string>
 	<key>GCM_SENDER_ID</key>
-	<string>587095091642</string>
+	<string>2106449428</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.kthdd.weightMate</string>
 	<key>PROJECT_ID</key>
-	<string>weight-mate-d12d5</string>
+	<string>weight-mate-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>weight-mate-d12d5.appspot.com</string>
+	<string>weight-mate-app.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:587095091642:ios:12eb6e668ed8d727401583</string>
+	<string>1:2106449428:ios:be86c60a6d76e7af28d101</string>
 </dict>
 </plist>

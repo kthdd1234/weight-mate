@@ -98,7 +98,8 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           isAlarm: dietInfo.getUserInfo().isAlarm,
           alarmTime: dietInfo.getUserInfo().alarmTime,
           alarmId: dietInfo.getUserInfo().alarmId,
-          filterList: initFilterList,
+          filterList: initOpenList,
+          displayList: initDisplayList,
         ),
       );
 

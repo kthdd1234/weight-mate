@@ -28,13 +28,18 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       planViewType: fields[8] as String?,
       filterList: fields[9] as List<String>?,
       displayList: fields[10] as List<String>?,
+      calendarMaker: fields[11] as String?,
+      calendarFormat: fields[12] as String?,
+      dietOrderList: fields[13] as List<String>?,
+      exerciseOrderList: fields[14] as List<String>?,
+      lifeOrderList: fields[15] as List<String>?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(16)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -56,7 +61,17 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(9)
       ..write(obj.filterList)
       ..writeByte(10)
-      ..write(obj.displayList);
+      ..write(obj.displayList)
+      ..writeByte(11)
+      ..write(obj.calendarMaker)
+      ..writeByte(12)
+      ..write(obj.calendarFormat)
+      ..writeByte(13)
+      ..write(obj.dietOrderList)
+      ..writeByte(14)
+      ..write(obj.exerciseOrderList)
+      ..writeByte(15)
+      ..write(obj.lifeOrderList);
   }
 
   @override
