@@ -10,8 +10,10 @@ import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box_exp.dart';
 import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -519,9 +521,37 @@ class _RecordNameState extends State<RecordName> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+    Box<RecordBox> recordBox = recordRepository.recordBox;
+    int recordKey = getDateTimeToInt(importDateTime);
+    RecordBox? recordInfo = recordBox.get(recordKey);
+
     onTapEdit() {
       textController.text = widget.name;
       setState(() => isShowInput = true);
+    }
+
+    onTapTitle(String selectedTitle) async {
+      recordInfo?.actions?.forEach(
+        (action) {
+          if (action['id'] == widget.id) {
+            action['title'] = selectedTitle;
+          }
+        },
+      );
+
+      await recordInfo?.save();
+    }
+
+    onTapRemove() async {
+      recordInfo!.actions!.removeWhere((action) => action['id'] == widget.id);
+
+      if (recordInfo.actions!.isEmpty) {
+        recordInfo.actions = null;
+      }
+
+      await recordInfo.save();
     }
 
     onTapMore() {
@@ -535,6 +565,8 @@ class _RecordNameState extends State<RecordName> {
             name: widget.name,
             topTitle: widget.topTitle,
             onTapEdit: onTapEdit,
+            onTapTitle: onTapTitle,
+            onTapRemove: onTapRemove,
           );
         },
       );
@@ -563,38 +595,116 @@ class _RecordNameState extends State<RecordName> {
               ),
             ],
           )
-        : Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: InkWell(
-                  onTap: () => onTapMore(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.name,
-                        style: const TextStyle(color: themeColor, fontSize: 15),
-                      ),
-                      SpaceHeight(height: 3),
-                      CommonText(
-                        text: widget.title,
-                        size: 11,
-                        color: Colors.grey,
-                      )
-                    ],
+        : Dismiss(
+            id: widget.id,
+            onDismiss: onTapRemove,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () => onTapMore(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.name,
+                          style:
+                              const TextStyle(color: themeColor, fontSize: 15),
+                        ),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                          text: widget.title,
+                          size: 11,
+                          color: Colors.grey,
+                        )
+                      ],
+                    ),
                   ),
                 ),
+                SpaceWidth(width: regularSapce),
+                CommonIcon(
+                  icon: Icons.more_horiz_rounded,
+                  size: 20,
+                  color: Colors.grey,
+                  onTap: onTapMore,
+                )
+              ],
+            ));
+  }
+}
+
+class Dismiss extends StatelessWidget {
+  Dismiss({
+    super.key,
+    required this.id,
+    required this.child,
+    required this.onDismiss,
+  });
+
+  String id;
+  Widget child;
+  Function() onDismiss;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dismissible(
+      key: Key(id),
+      dismissThresholds: const {DismissDirection.endToStart: 0.2},
+      direction: DismissDirection.endToStart,
+      background: Container(
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(3),
+        ),
+        padding: const EdgeInsets.only(right: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            CommonIcon(
+              icon: Icons.delete_rounded,
+              size: 20,
+              color: Colors.white,
+            ),
+          ],
+        ),
+      ),
+      confirmDismiss: (direction) async {
+        return showDialog(
+          context: context,
+          builder: (ctx) {
+            return AlertDialog(
+              shape: containerBorderRadious,
+              backgroundColor: dialogBackgroundColor,
+              title: const Text('삭제할까요?',
+                  style: TextStyle(fontSize: 18, color: themeColor)),
+              content: Row(
+                children: [
+                  ExpandedButtonHori(
+                    padding: 12,
+                    imgUrl: 'assets/images/t-11.png',
+                    text: '닫기',
+                    onTap: () => Navigator.of(context).pop(false),
+                  ),
+                  SpaceWidth(width: tinySpace),
+                  ExpandedButtonHori(
+                    padding: 12,
+                    imgUrl: 'assets/images/t-23.png',
+                    text: '삭제',
+                    onTap: () {
+                      onDismiss();
+                      return Navigator.of(context).pop(true);
+                    },
+                  ),
+                ],
               ),
-              SpaceWidth(width: regularSapce),
-              CommonIcon(
-                icon: Icons.more_horiz_rounded,
-                size: 20,
-                color: Colors.grey,
-                onTap: onTapMore,
-              )
-            ],
-          );
+            );
+          },
+        );
+      },
+      child: child,
+    );
   }
 }
 
@@ -850,14 +960,23 @@ class GoalList extends StatelessWidget {
       eLife: user.lifeOrderList,
     }[type]!;
 
-    print('$orderList');
-
     planList.sort((itemA, itemB) {
       int indexA = orderList.indexOf(itemA.id);
       int indexB = orderList.indexOf(itemB.id);
 
       return indexA.compareTo(indexB);
     });
+
+    onTapRemove(PlanBox planInfo) {
+      if (planInfo.alarmId != null) {
+        NotificationService().deleteAlarm(planInfo.alarmId!);
+      }
+
+      planRepository.planBox.delete(planInfo.id);
+      orderList.remove(planInfo.id);
+
+      user.save();
+    }
 
     action(String planId) {
       if (actions == null) {
@@ -875,26 +994,33 @@ class GoalList extends StatelessWidget {
     Widget item(index) {
       return InkWell(
         key: Key(planList[index].id),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CommonCheckBox(
-                id: planList[index].id,
-                isCheck: action(planList[index].id)['id'] != null,
-                checkColor: mainColor,
-                onTap: onCheckBox,
+        child: Column(
+          children: [
+            Dismiss(
+              id: planList[index].id,
+              onDismiss: () => onTapRemove(planList[index]),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CommonCheckBox(
+                    id: planList[index].id,
+                    isCheck: action(planList[index].id)['id'] != null,
+                    checkColor: mainColor,
+                    onTap: onCheckBox,
+                  ),
+                  GoalName(
+                    type: type,
+                    planInfo: planList[index],
+                    color: mainColor,
+                    isChcked: action(planList[index].id)['id'] != null,
+                    onGoalUpdate: onGoalUpdate,
+                    onTapRemove: onTapRemove,
+                  ),
+                ],
               ),
-              GoalName(
-                type: type,
-                planInfo: planList[index],
-                color: mainColor,
-                isChcked: action(planList[index].id)['id'] != null,
-                onGoalUpdate: onGoalUpdate,
-              ),
-            ],
-          ),
+            ),
+            SpaceHeight(height: 10)
+          ],
         ),
       );
     }
@@ -950,6 +1076,7 @@ class GoalName extends StatefulWidget {
     required this.isChcked,
     required this.onGoalUpdate,
     required this.color,
+    required this.onTapRemove,
     this.fontSize,
     this.textColor,
   });
@@ -971,6 +1098,7 @@ class GoalName extends StatefulWidget {
     DateTime? alarmTime,
     int? alarmId,
   }) onGoalUpdate;
+  Function(PlanBox) onTapRemove;
 
   @override
   State<GoalName> createState() => _GoalNameState();
@@ -1024,6 +1152,7 @@ class _GoalNameState extends State<GoalName> {
           title: todoData[widget.planInfo.type]!.title,
           planInfo: widget.planInfo,
           onTapEdit: onTapEdit,
+          onTapRemove: widget.onTapRemove,
         ),
       );
     }
@@ -1048,7 +1177,9 @@ class _GoalNameState extends State<GoalName> {
 
     return isShowInput
         ? TodoInput(
-            controller: textController, onEditingComplete: onEditingComplete)
+            controller: textController,
+            onEditingComplete: onEditingComplete,
+          )
         : Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1257,10 +1388,14 @@ class RecordBottomSheet extends StatefulWidget {
     required this.selectedTitle,
     required this.topTitle,
     required this.onTapEdit,
+    required this.onTapTitle,
+    required this.onTapRemove,
   });
 
   String type, id, name, topTitle, selectedTitle;
   Function() onTapEdit;
+  Function(String) onTapTitle;
+  Function() onTapRemove;
 
   @override
   State<RecordBottomSheet> createState() => _RecordBottomSheetState();
@@ -1271,24 +1406,6 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-    Box<RecordBox> recordBox = recordRepository.recordBox;
-    int recordKey = getDateTimeToInt(importDateTime);
-    RecordBox? recordInfo = recordBox.get(recordKey);
-
-    onTapRemove() async {
-      recordInfo!.actions!.removeWhere((action) => action['id'] == widget.id);
-
-      if (recordInfo.actions!.isEmpty) {
-        recordInfo.actions = null;
-      }
-
-      await recordInfo.save();
-
-      closeDialog(context);
-    }
-
     onTapChangeCategory() {
       setState(() => isCategory = true);
     }
@@ -1300,15 +1417,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
           ? CategoryList(
               selectedTitle: widget.selectedTitle,
               type: widget.type,
-              onTap: (String title) async {
-                recordInfo?.actions?.forEach((action) {
-                  if (action['id'] == widget.id) {
-                    action['title'] = title;
-                  }
-                });
-
-                await recordInfo?.save();
-              },
+              onTap: widget.onTapTitle,
             )
           : Row(
               children: [
@@ -1333,7 +1442,10 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
                   mainColor: Colors.red,
                   icon: Icons.delete_forever,
                   title: '${widget.topTitle} 삭제',
-                  onTap: onTapRemove,
+                  onTap: () {
+                    closeDialog(context);
+                    widget.onTapRemove();
+                  },
                 )
               ],
             ),
@@ -1351,12 +1463,14 @@ class GoalBottomSheet extends StatefulWidget {
     required this.title,
     required this.planInfo,
     required this.onTapEdit,
+    required this.onTapRemove,
   });
 
   IconData icon;
   String id, title, name, type;
   PlanBox? planInfo;
   Function() onTapEdit;
+  Function(PlanBox) onTapRemove;
 
   @override
   State<GoalBottomSheet> createState() => _GoalBottomSheetState();
@@ -1378,31 +1492,12 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    List<String>? orderList = {
-      eDiet: user.dietOrderList,
-      eExercise: user.exerciseOrderList,
-      eLife: user.lifeOrderList,
-    }[widget.type]!;
-
     onTapAlarm() async {
       bool isPermission = await NotificationService().permissionNotification;
 
       setState(() {
         isPermission == false ? isRequestPermission = true : isShowAlarm = true;
       });
-    }
-
-    onTapRemove() {
-      if (widget.planInfo?.alarmId != null) {
-        NotificationService().deleteAlarm(widget.planInfo!.alarmId!);
-      }
-
-      planRepository.planBox.delete(widget.id);
-      orderList.remove(widget.id);
-
-      user.save();
-      closeDialog(context);
     }
 
     onTapBack() {
@@ -1508,7 +1603,10 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                   mainColor: Colors.red,
                   icon: Icons.delete_forever,
                   title: '목표 삭제',
-                  onTap: onTapRemove,
+                  onTap: () {
+                    closeDialog(context);
+                    widget.onTapRemove(widget.planInfo!);
+                  },
                 ),
               ],
             ),

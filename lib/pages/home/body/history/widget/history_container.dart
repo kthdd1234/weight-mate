@@ -95,6 +95,10 @@ class HistoryHeader extends StatelessWidget {
       closeDialog(context);
     }
 
+    onTapPartialDelete() {
+      //
+    }
+
     onTapRemove() {
       recordRepository.recordBox.delete(getDateTimeToInt(createDateTime));
 
@@ -118,8 +122,15 @@ class HistoryHeader extends StatelessWidget {
               SpaceWidth(width: tinySpace),
               ExpandedButtonVerti(
                 mainColor: Colors.red,
+                icon: Icons.delete_sweep,
+                title: '부분 삭제',
+                onTap: onTapPartialDelete,
+              ),
+              SpaceWidth(width: tinySpace),
+              ExpandedButtonVerti(
+                mainColor: Colors.red,
                 icon: Icons.delete_forever,
-                title: '기록 삭제',
+                title: '전체 삭제',
                 onTap: onTapRemove,
               ),
             ],
@@ -207,14 +218,9 @@ class HistoryPicture extends StatelessWidget {
       Uint8List? data = uint8List[i];
 
       if (data != null) {
-        // print('데이터 있음요');
         fileList.add(data);
       }
     }
-
-    // Uint8List? isFile = leftFile ?? rightFile ?? bottomFile;
-    // double height =
-    //     [leftFile, rightFile].whereType<Uint8List>().length == 1 ? 300 : 150;
 
     onTapPicture(Uint8List binaryData) {
       Navigator.push(

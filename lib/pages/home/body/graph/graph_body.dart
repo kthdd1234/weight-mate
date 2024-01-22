@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
@@ -151,7 +152,6 @@ class _GraphBodyState extends State<GraphBody> {
       children: [
         SpaceHeight(height: smallSpace),
         CommonAppBar(id: id),
-        SpaceHeight(height: smallSpace),
         GraphChart(
           startDateTime: startDateTime,
           endDateTime: endDateTime,
@@ -184,22 +184,6 @@ class _GraphBodyState extends State<GraphBody> {
     );
   }
 }
-
-// class SegmentedWidget extends StatelessWidget {
-//   SegmentedWidget({
-//     super.key,
-//     required this.title,
-//     required this.color,
-//   });
-
-//   String title;
-//   Color color;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Text(title, style: TextStyle(fontSize: 12, color: color));
-//   }
-// }
 
 class GraphDateTimeCustom extends StatelessWidget {
   GraphDateTimeCustom({

@@ -70,27 +70,27 @@ class _EditWeightState extends State<EditWeight> {
     UserBox user = userRepository.user;
     bool? isOpen = user.filterList?.contains(fWeight) == true;
 
-    showAdDialog(String title) {
-      showDialog(
-        context: context,
-        builder: (dContext) {
-          onClick(BottomNavigationEnum enumId) async {
-            dContext
-                .read<BottomNavigationProvider>()
-                .setBottomNavigation(enumId: enumId);
-            closeDialog(dContext);
-          }
+    // showAdDialog(String title) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (dContext) {
+    //       onClick(BottomNavigationEnum enumId) async {
+    //         dContext
+    //             .read<BottomNavigationProvider>()
+    //             .setBottomNavigation(enumId: enumId);
+    //         closeDialog(dContext);
+    //       }
 
-          return NativeAdDialog(
-            title: title,
-            leftText: '히스토리 보기',
-            rightText: '그래프 보기',
-            onLeftClick: () => onClick(BottomNavigationEnum.history),
-            onRightClick: () => onClick(BottomNavigationEnum.graph),
-          );
-        },
-      );
-    }
+    //       return NativeAdDialog(
+    //         title: title,
+    //         leftText: '히스토리 보기',
+    //         rightText: '그래프 보기',
+    //         onLeftClick: () => onClick(BottomNavigationEnum.history),
+    //         onRightClick: () => onClick(BottomNavigationEnum.graph),
+    //       );
+    //     },
+    //   );
+    // }
 
     onErrorText() {
       String? errMsg = handleCheckErrorText(
@@ -165,15 +165,13 @@ class _EditWeightState extends State<EditWeight> {
                 }
 
                 recordInfo?.save();
-
-                List<RecordBox> recordList =
-                    recordRepository.recordBox.values.toList();
-                recordList.where((e) => e.weight != null);
-                String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
-
                 onInit();
                 closeDialog(context);
-                showAdDialog(title);
+                // List<RecordBox> recordList =
+                //     recordRepository.recordBox.values.toList();
+                // recordList.where((e) => e.weight != null);
+                // String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
+                // showAdDialog(title);
               }
             },
             onCancel: () {
@@ -205,7 +203,7 @@ class _EditWeightState extends State<EditWeight> {
 
                 onInit();
                 closeDialog(context);
-                showAdDialog('⛳ 목표 체중을 변경했어요!');
+                // showAdDialog('⛳ 목표 체중을 변경했어요!');
               }
             },
             onCancel: () {
@@ -216,8 +214,6 @@ class _EditWeightState extends State<EditWeight> {
         },
       ).whenComplete(() => onInit());
     }
-
-    print('$user');
 
     onTapOpen() {
       isOpen ? user.filterList?.remove(fWeight) : user.filterList?.add(fWeight);

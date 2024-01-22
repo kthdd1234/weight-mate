@@ -40,7 +40,15 @@ class HistoryBody extends StatelessWidget {
             : recordList;
 
         if (recordList.isNotEmpty) {
-          recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
+          for (var i = 0; i < recordList.length; i++) {
+            if (i == 1) {
+              recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
+            }
+
+            if (i != 0 && i % 6 == 0) {
+              recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
+            }
+          }
         }
 
         return Column(

@@ -1,9 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -155,8 +155,8 @@ class EditPicture extends StatelessWidget {
       if (xFileData != null) {
         setPickedImage(pos: pos, xFile: xFileData);
 
-        Uint8List unit8List = await convertUnit8List(xFileData);
-        showDialogPopup(title: '사진 기록 완료!', binaryData: unit8List);
+        // Uint8List unit8List = await convertUnit8List(xFileData);
+        // showDialogPopup(title: '사진 기록 완료!', binaryData: unit8List);
       }
     }
 
@@ -224,6 +224,7 @@ class EditPicture extends StatelessWidget {
         ? Column(
             children: [
               ContentsBox(
+                padding: EdgeInsets.fromLTRB(20, 20, 20, isOpen ? 10 : 20),
                 contentsWidget: Column(
                   children: [
                     TitleContainer(
@@ -268,26 +269,15 @@ class EditPicture extends StatelessWidget {
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
-                                  SpaceWidth(width: smallSpace),
-                                  PictureContainer(
-                                    file: fileInfo['right'],
-                                    pos: 'right',
-                                    onTapPicture: onTapPicture,
-                                    onTapRemove: onTapRemove,
-                                  ),
                                 ],
                               ),
-                              SpaceHeight(height: smallSpace),
-                              Row(
-                                children: [
-                                  PictureContainer(
-                                    file: fileInfo['bottom'],
-                                    pos: 'bottom',
-                                    onTapPicture: onTapPicture,
-                                    onTapRemove: onTapRemove,
-                                  ),
-                                ],
-                              ),
+                              SpaceHeight(height: 7),
+                              CommonText(
+                                leftIcon: Icons.info_outline,
+                                text: '추가한 사진은 앱 내에 저장되요.',
+                                size: 10,
+                                color: Colors.grey,
+                              )
                             ],
                           )
                         : const EmptyArea(),
@@ -357,7 +347,7 @@ class Picture extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () => onTapPicture != null ? onTapPicture!(pos) : null,
-                  child: DefaultImage(unit8List: uint8List!, height: 150),
+                  child: DefaultImage(unit8List: uint8List!, height: 300),
                 ),
                 CloseIcon(isEdit: isEdit, onTapRemove: onTapRemove, pos: pos)
               ],

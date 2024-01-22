@@ -111,7 +111,6 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
             fileItemList.isNotEmpty
                 ? Expanded(
                     child: GridView.builder(
-                      cacheExtent: 999999,
                       itemCount: fileItemList.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(

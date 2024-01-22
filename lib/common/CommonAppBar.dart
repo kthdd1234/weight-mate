@@ -552,7 +552,7 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  '사용하지 않는 카테고리는 체크 해제 하면 되요 :D',
+                  '사용하지 않는 카테고리는 체크 해제 하세요 :D',
                   style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
                 ),
               )

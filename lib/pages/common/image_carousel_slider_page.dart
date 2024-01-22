@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -96,6 +93,3 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
     );
   }
 }
-
-
-// Center(child: Image.memory(binaryData))

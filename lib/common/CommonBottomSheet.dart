@@ -90,24 +90,9 @@ class DialogTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              text,
-              style: const TextStyle(fontSize: 18, color: themeColor),
-            ),
-            // subText != null
-            //     ? Padding(
-            //         padding: const EdgeInsets.only(top: 3),
-            //         child: Text(
-            //           subText!,
-            //           style: const TextStyle(fontSize: 10, color: themeColor),
-            //         ),
-            //       )
-            //     : const EmptyArea(),
-          ],
+        Text(
+          text,
+          style: const TextStyle(fontSize: 18, color: themeColor),
         ),
         InkWell(
           onTap: onTap,

@@ -24,13 +24,12 @@ class DefaultImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
-      child: CachedMemoryImage(
+      child: Image.memory(
+        unit8List,
         fit: BoxFit.cover,
         width: double.maxFinite,
         height: height,
         cacheHeight: height.cacheSize(context),
-        uniqueKey: uuid(),
-        bytes: Uint8List.fromList(unit8List),
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           if (wasSynchronouslyLoaded) return child;
 

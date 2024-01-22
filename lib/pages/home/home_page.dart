@@ -17,6 +17,7 @@ import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -42,6 +43,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  late AppLifecycleReactor _appLifecycleReactor;
+
   bool isActiveCamera = false;
   bool isShowMateScreen = false;
 
@@ -55,6 +58,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         .then((value) {});
 
     /** */
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    _appLifecycleReactor = AppLifecycleReactor(
+      appOpenAdManager: appOpenAdManager,
+    );
+
+    _appLifecycleReactor.listenToAppStateChanges();
 
     /** */
     UserBox user = userRepository.user;
