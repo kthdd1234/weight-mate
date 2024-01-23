@@ -21,24 +21,10 @@ List<ValueListenable<Box<HiveObject>>> valueListenables = [
   planRepository.planBox.listenable()
 ];
 
-class RecordBody extends StatefulWidget {
+class RecordBody extends StatelessWidget {
   RecordBody({super.key, required this.setActiveCamera});
 
   Function(bool isActive) setActiveCamera;
-
-  @override
-  State<RecordBody> createState() => _RecordBodyState();
-}
-
-class _RecordBodyState extends State<RecordBody> {
-  // @override
-  // void didChangeDependencies() {
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //     context.read<AdsProvider>().setNativeAd();
-  //   });
-
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +45,7 @@ class _RecordBodyState extends State<RecordBody> {
                   children: [
                     SpaceHeight(height: smallSpace),
                     EditWeight(),
-                    EditPicture(setActiveCamera: widget.setActiveCamera),
+                    EditPicture(setActiveCamera: setActiveCamera),
                     EditTodo(),
                     EditDiary(),
                   ],
@@ -72,7 +58,6 @@ class _RecordBodyState extends State<RecordBody> {
     );
   }
 }
-
 
 // BannerWidget(),
 // SpaceHeight(height: largeSpace),

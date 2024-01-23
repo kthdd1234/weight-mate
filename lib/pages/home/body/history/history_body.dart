@@ -76,6 +76,7 @@ class HistoryBody extends StatelessWidget {
                                     isBoxShadow: true,
                                     contentsWidget: HistoryContainer(
                                       recordInfo: recordInfo,
+                                      isRemoveMode: false,
                                     ),
                                   ),
                                 ),

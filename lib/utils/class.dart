@@ -1,5 +1,6 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -308,4 +309,11 @@ class PlanItemClass {
   });
 
   String type, name;
+}
+
+class historyImageClass {
+  historyImageClass({required this.pos, this.unit8List});
+
+  String pos;
+  Uint8List? unit8List;
 }

@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -18,6 +17,7 @@ import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -26,68 +26,31 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class HistoryContainer extends StatelessWidget {
-  HistoryContainer({super.key, required this.recordInfo});
+  HistoryContainer({
+    super.key,
+    required this.recordInfo,
+    required this.isRemoveMode,
+  });
 
   RecordBox recordInfo;
+  bool isRemoveMode;
 
   @override
   Widget build(BuildContext context) {
     bool isAd = recordInfo.createDateTime.year == 1000;
-
-    return isAd
-        ? NativeAdContainer()
-        : Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              HistoryHeader(
-                recordInfo: recordInfo,
-                createDateTime: recordInfo.createDateTime,
-                weight: recordInfo.weight,
-                emotion: recordInfo.emotion,
-              ),
-              HistoryPicture(
-                leftFile: recordInfo.leftFile,
-                rightFile: recordInfo.rightFile,
-                bottomFile: recordInfo.bottomFile,
-              ),
-              HistoryTodo(
-                actions: recordInfo.actions,
-                createDateTime: recordInfo.createDateTime,
-              ),
-              HistoryDiary(
-                whiteText: recordInfo.whiteText,
-                diaryDateTime: recordInfo.diaryDateTime,
-              ),
-            ],
-          );
-  }
-}
-
-class HistoryHeader extends StatelessWidget {
-  HistoryHeader({
-    super.key,
-    required this.recordInfo,
-    required this.createDateTime,
-    required this.weight,
-    required this.emotion,
-  });
-
-  RecordBox? recordInfo;
-  DateTime createDateTime;
-  double? weight;
-  String? emotion;
-
-  @override
-  Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
+    int recordKey = getDateTimeToInt(recordInfo.createDateTime);
     String formatDateTime = dateTimeFormatter(
       format: 'M월 d일 (E)',
-      dateTime: createDateTime,
+      dateTime: recordInfo.createDateTime,
     );
 
     onTapEdit() {
-      context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
-      context.read<TitleDateTimeProvider>().setTitleDateTime(createDateTime);
+      context
+          .read<ImportDateTimeProvider>()
+          .setImportDateTime(recordInfo.createDateTime);
+      context
+          .read<TitleDateTimeProvider>()
+          .setTitleDateTime(recordInfo.createDateTime);
       context
           .read<BottomNavigationProvider>()
           .setBottomNavigation(enumId: BottomNavigationEnum.record);
@@ -95,61 +58,122 @@ class HistoryHeader extends StatelessWidget {
       closeDialog(context);
     }
 
-    onTapPartialDelete() {
-      //
-    }
-
-    onTapRemove() {
-      recordRepository.recordBox.delete(getDateTimeToInt(createDateTime));
-
+    onTapRemove() async {
+      recordRepository.recordBox.delete(recordKey);
       closeDialog(context);
     }
 
-    onTapMore() {
-      showModalBottomSheet(
-        context: context,
-        builder: (context) => CommonBottomSheet(
-          title: formatDateTime,
-          height: 200,
-          contents: Row(
-            children: [
-              ExpandedButtonVerti(
-                mainColor: themeColor,
-                icon: Icons.edit,
-                title: '기록 수정',
-                onTap: onTapEdit,
-              ),
-              SpaceWidth(width: tinySpace),
-              ExpandedButtonVerti(
-                mainColor: Colors.red,
-                icon: Icons.delete_sweep,
-                title: '부분 삭제',
-                onTap: onTapPartialDelete,
-              ),
-              SpaceWidth(width: tinySpace),
-              ExpandedButtonVerti(
-                mainColor: Colors.red,
-                icon: Icons.delete_forever,
-                title: '전체 삭제',
-                onTap: onTapRemove,
-              ),
-            ],
-          ),
-        ),
+    onTapPartialDelete() {
+      closeDialog(context);
+      Navigator.pushNamed(
+        context,
+        '/partial-delete-page',
+        arguments: recordKey,
       );
+    }
+
+    onTapMore() {
+      if (isRemoveMode == false) {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) {
+            return CommonBottomSheet(
+              title: formatDateTime,
+              height: 200,
+              contents: MoreButtonList(
+                onTapEdit: onTapEdit,
+                onTapPartialDelete: onTapPartialDelete,
+                onTapRemove: onTapRemove,
+              ),
+            );
+          },
+        );
+      }
+    }
+
+    return isAd
+        ? NativeAdContainer()
+        : GestureDetector(
+            onTap: onTapMore,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                HistoryHeader(
+                  formatDateTime: formatDateTime,
+                  isRemoveMode: isRemoveMode,
+                  recordInfo: recordInfo,
+                  onTapMore: onTapMore,
+                ),
+                HistoryPicture(
+                  isRemoveMode: isRemoveMode,
+                  recordInfo: recordInfo,
+                ),
+                HistoryTodo(
+                  isRemoveMode: isRemoveMode,
+                  recordInfo: recordInfo,
+                ),
+                HistoryDiary(
+                  isRemoveMode: isRemoveMode,
+                  recordInfo: recordInfo,
+                ),
+              ],
+            ),
+          );
+  }
+}
+
+class HistoryHeader extends StatelessWidget {
+  HistoryHeader({
+    super.key,
+    required this.formatDateTime,
+    required this.recordInfo,
+    required this.isRemoveMode,
+    required this.onTapMore,
+  });
+
+  String formatDateTime;
+  RecordBox? recordInfo;
+  bool isRemoveMode;
+  Function() onTapMore;
+
+  @override
+  Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+
+    bmiValue() {
+      return 'BMI ${bmi(tall: user.tall, weight: recordInfo?.weight)}';
+    }
+
+    onRemoveEmotion() {
+      recordInfo?.emotion = null;
+      recordInfo?.save();
+    }
+
+    onTapRemoveWegiht() {
+      recordInfo?.weight = null;
+      recordInfo?.weightDateTime = null;
+      recordInfo?.save();
     }
 
     return Column(
       children: [
         Row(
           children: [
-            emotion != null
+            recordInfo?.emotion != null
                 ? Expanded(
                     flex: 0,
-                    child: Row(
+                    child: Stack(
                       children: [
-                        SvgPicture.asset('assets/svgs/$emotion.svg'),
-                        SpaceWidth(width: smallSpace),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                                'assets/svgs/${recordInfo?.emotion}.svg'),
+                            SpaceWidth(width: smallSpace)
+                          ],
+                        ),
+                        isRemoveMode
+                            ? RemoveIcon(onTap: onRemoveEmotion)
+                            : const EmptyArea()
                       ],
                     ),
                   )
@@ -160,32 +184,41 @@ class HistoryHeader extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CommonText(
-                        text: formatDateTime,
-                        size: 11,
-                        isBold: true,
-                      ),
-                      Spacer(),
-                      CommonIcon(
-                        icon: Icons.more_vert_rounded,
-                        size: 16,
-                        onTap: onTapMore,
-                      )
+                      CommonText(text: formatDateTime, size: 11, isBold: true),
+                      const Spacer(),
+                      isRemoveMode
+                          ? const EmptyArea()
+                          : InkWell(
+                              onTap: onTapMore,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: CommonIcon(
+                                  icon: Icons.more_vert_rounded,
+                                  size: 16,
+                                  onTap: onTapMore,
+                                ),
+                              ),
+                            )
                     ],
                   ),
                   SpaceHeight(height: 2),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      CommonText(
-                        text: '${weight ?? '-'}kg',
-                        size: 17,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CommonText(
+                              text: '${recordInfo?.weight ?? '-'}kg', size: 17),
+                          isRemoveMode && recordInfo?.weight != null
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 3),
+                                  child: RemoveIcon(onTap: onTapRemoveWegiht))
+                              : const EmptyArea()
+                        ],
                       ),
-                      Spacer(),
-                      CommonText(
-                        text: 'BMI ${bmi(tall: user.tall, weight: weight)}',
-                        size: 9,
-                      ),
+                      CommonText(text: bmiValue(), size: 9),
                     ],
                   ),
                 ],
@@ -199,45 +232,132 @@ class HistoryHeader extends StatelessWidget {
   }
 }
 
-class HistoryPicture extends StatelessWidget {
-  HistoryPicture({
+class RemoveIcon extends StatelessWidget {
+  RemoveIcon({
     super.key,
-    required this.leftFile,
-    required this.rightFile,
-    required this.bottomFile,
+    required this.onTap,
   });
 
-  Uint8List? leftFile, rightFile, bottomFile;
+  Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    List<Uint8List?> uint8List = [leftFile, rightFile, bottomFile];
-    List<Uint8List> fileList = [];
+    return CommonIcon(
+      icon: Icons.remove_circle,
+      size: 15,
+      color: Colors.red,
+      onTap: onTap,
+    );
+  }
+}
+
+class MoreButtonList extends StatelessWidget {
+  MoreButtonList({
+    super.key,
+    required this.onTapEdit,
+    required this.onTapPartialDelete,
+    required this.onTapRemove,
+  });
+
+  Function() onTapEdit, onTapPartialDelete, onTapRemove;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        ExpandedButtonVerti(
+          mainColor: themeColor,
+          icon: Icons.edit,
+          title: '기록 수정',
+          onTap: onTapEdit,
+        ),
+        SpaceWidth(width: tinySpace),
+        ExpandedButtonVerti(
+          mainColor: Colors.red,
+          icon: Icons.delete_sweep,
+          title: '부분 삭제',
+          onTap: onTapPartialDelete,
+        ),
+        SpaceWidth(width: tinySpace),
+        ExpandedButtonVerti(
+          mainColor: Colors.red,
+          icon: Icons.delete_forever,
+          title: '모두 삭제',
+          onTap: onTapRemove,
+        ),
+      ],
+    );
+  }
+}
+
+class HistoryPicture extends StatelessWidget {
+  HistoryPicture({
+    super.key,
+    required this.recordInfo,
+    required this.isRemoveMode,
+  });
+
+  bool isRemoveMode;
+  RecordBox? recordInfo;
+
+  @override
+  Widget build(BuildContext context) {
+    List<historyImageClass> uint8List = [
+      historyImageClass(pos: 'left', unit8List: recordInfo?.leftFile),
+      historyImageClass(pos: 'right', unit8List: recordInfo?.rightFile),
+      historyImageClass(pos: 'bottom', unit8List: recordInfo?.bottomFile),
+    ];
+    List<historyImageClass> fileList = [];
 
     for (var i = 0; i < uint8List.length; i++) {
-      Uint8List? data = uint8List[i];
+      historyImageClass data = uint8List[i];
 
-      if (data != null) {
+      if (data.unit8List != null) {
         fileList.add(data);
       }
     }
 
     onTapPicture(Uint8List binaryData) {
-      Navigator.push(
-        context,
-        FadePageRoute(
-          page: ImagePullSizePage(binaryData: binaryData),
-        ),
-      );
+      if (isRemoveMode == false) {
+        Navigator.push(
+          context,
+          FadePageRoute(page: ImagePullSizePage(binaryData: binaryData)),
+        );
+      }
     }
 
-    image(Uint8List file, double height) {
+    image(historyImageClass data, double height) {
       return Expanded(
         child: GestureDetector(
-          onTap: () => onTapPicture(file),
-          child: DefaultImage(
-            unit8List: file,
-            height: height,
+          onTap: () => onTapPicture(data.unit8List!),
+          child: Stack(
+            children: [
+              DefaultImage(
+                unit8List: data.unit8List!,
+                height: height,
+              ),
+              isRemoveMode
+                  ? Positioned(
+                      right: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5),
+                        child: RemoveIcon(
+                          onTap: () {
+                            if (data.pos == 'left') {
+                              recordInfo?.leftFile = null;
+                            } else if (data.pos == 'right') {
+                              recordInfo?.rightFile = null;
+                            } else if (data.pos == 'bottom') {
+                              recordInfo?.bottomFile = null;
+                            }
+
+                            recordInfo?.save();
+                          },
+                        ),
+                      ),
+                    )
+                  : const EmptyArea()
+            ],
           ),
         ),
       );
@@ -284,12 +404,12 @@ class HistoryPicture extends StatelessWidget {
 class HistoryTodo extends StatelessWidget {
   HistoryTodo({
     super.key,
-    required this.actions,
-    required this.createDateTime,
+    required this.isRemoveMode,
+    required this.recordInfo,
   });
 
-  List<Map<String, dynamic>>? actions;
-  DateTime createDateTime;
+  bool isRemoveMode;
+  RecordBox recordInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -313,11 +433,11 @@ class HistoryTodo extends StatelessWidget {
       return planTypeSvgs[type];
     }
 
-    final todoResultList = actions
+    final todoResultList = recordInfo.actions
         ?.where(
           (action) =>
               getDateTimeToInt(action['actionDateTime']) ==
-              getDateTimeToInt(createDateTime),
+              getDateTimeToInt(recordInfo.createDateTime),
         )
         .toList();
 
@@ -329,7 +449,19 @@ class HistoryTodo extends StatelessWidget {
     });
 
     todoResultList?.sort(
-        (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!));
+      (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!),
+    );
+
+    onTapRemoveAction(String targetId) {
+      int? index = recordInfo.actions?.indexWhere(
+        (action) => action['id'] == targetId,
+      );
+
+      if (index != null) {
+        recordInfo.actions?.removeAt(index);
+        recordInfo.save();
+      }
+    }
 
     final todoWidgetList = todoResultList
         ?.map((data) => Column(
@@ -337,6 +469,16 @@ class HistoryTodo extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    isRemoveMode
+                        ? Expanded(
+                            flex: 0,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 2, right: 7),
+                              child: RemoveIcon(
+                                  onTap: () => onTapRemoveAction(data['id'])),
+                            ),
+                          )
+                        : const EmptyArea(),
                     Expanded(
                       flex: 0,
                       child: Padding(
@@ -368,28 +510,47 @@ class HistoryTodo extends StatelessWidget {
 class HistoryDiary extends StatelessWidget {
   HistoryDiary({
     super.key,
-    required this.whiteText,
-    required this.diaryDateTime,
+    required this.isRemoveMode,
+    required this.recordInfo,
   });
 
-  String? whiteText;
-  DateTime? diaryDateTime;
+  bool isRemoveMode;
+  RecordBox? recordInfo;
 
   @override
   Widget build(BuildContext context) {
-    return whiteText != null
+    onTapRemoveDiary() {
+      recordInfo?.diaryDateTime = null;
+      recordInfo?.whiteText = null;
+
+      recordInfo?.save();
+    }
+
+    return recordInfo?.whiteText != null
         ? Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(whiteText!,
-                  style: const TextStyle(
-                    color: themeColor,
-                    fontSize: 13,
-                  )),
+              Row(
+                children: [
+                  Text(
+                    recordInfo!.whiteText!,
+                    style: const TextStyle(
+                      color: themeColor,
+                      fontSize: 13,
+                    ),
+                  ),
+                  isRemoveMode
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 3, left: 3),
+                          child: RemoveIcon(onTap: onTapRemoveDiary),
+                        )
+                      : const EmptyArea(),
+                ],
+              ),
               SpaceHeight(height: tinySpace),
               Text(
-                timeToString(diaryDateTime),
+                timeToString(recordInfo?.diaryDateTime),
                 style: const TextStyle(color: Colors.grey, fontSize: 11),
               ),
             ],

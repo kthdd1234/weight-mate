@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/pages/add/pages/add_plan_list.dart
 import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
+import 'package:flutter_app_weight_management/pages/common/partial_delete_page.dart';
 import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
@@ -134,6 +135,7 @@ class _MyAppState extends State<MyApp> {
         '/screen-lock': (context) => const ScreenLockPage(),
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
+        '/partial-delete-page': (context) => const PatialDeletePage(),
       },
     );
   }
