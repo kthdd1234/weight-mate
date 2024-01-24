@@ -533,11 +533,13 @@ class HistoryDiary extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(
-                    recordInfo!.whiteText!,
-                    style: const TextStyle(
-                      color: themeColor,
-                      fontSize: 13,
+                  Expanded(
+                    child: Text(
+                      recordInfo!.whiteText!,
+                      style: const TextStyle(
+                        color: themeColor,
+                        fontSize: 13,
+                      ),
                     ),
                   ),
                   isRemoveMode

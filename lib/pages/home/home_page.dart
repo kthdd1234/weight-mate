@@ -14,6 +14,7 @@ import 'package:flutter_app_weight_management/pages/home/body/history/history_bo
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -199,6 +200,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
             context.read<ImportDateTimeProvider>().setImportDateTime(now);
             context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+            context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
           }
         }
       }

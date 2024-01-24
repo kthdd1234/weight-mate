@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
@@ -82,6 +83,8 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       });
     }
 
+    log('${MediaQuery.of(context).size.height}');
+
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.transparent,
@@ -114,6 +117,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                       itemCount: fileItemList.length,
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 1,
                         crossAxisCount: 3,
                         mainAxisSpacing: 5,
                         crossAxisSpacing: 5,
@@ -132,17 +136,20 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                             children: [
                               DefaultImage(
                                 unit8List: binaryData,
-                                height: 150,
+                                height: MediaQuery.of(context).size.height,
                               ),
                               Positioned(
                                 bottom: 0,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(3.0),
+                                  padding: const EdgeInsets.all(3.0) / 3,
                                   child: TextIcon(
+                                    padding: 5,
                                     backgroundColor: themeColor,
                                     backgroundColorOpacity: 0.5,
                                     text: dateTimeFormatter(
-                                        dateTime: dateTime, format: 'MM월 dd일'),
+                                      dateTime: dateTime,
+                                      format: 'MM월 dd일',
+                                    ),
                                     borderRadius: 5,
                                     textColor: typeBackgroundColor,
                                     fontSize: 10,

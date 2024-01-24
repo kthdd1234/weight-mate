@@ -33,7 +33,7 @@ class TextIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -41,7 +41,7 @@ class TextIcon extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadius),
         ),
         child: Padding(
-          padding: EdgeInsets.all(padding ?? smallSpace),
+          padding: EdgeInsets.all(padding ?? 0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,

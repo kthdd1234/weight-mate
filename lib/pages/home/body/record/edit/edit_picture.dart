@@ -269,6 +269,13 @@ class EditPicture extends StatelessWidget {
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
+                                  SpaceWidth(width: 5),
+                                  PictureContainer(
+                                    file: fileInfo['right'],
+                                    pos: 'right',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
                                 ],
                               ),
                               SpaceHeight(height: 7),
@@ -347,7 +354,7 @@ class Picture extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () => onTapPicture != null ? onTapPicture!(pos) : null,
-                  child: DefaultImage(unit8List: uint8List!, height: 300),
+                  child: DefaultImage(unit8List: uint8List!, height: 150),
                 ),
                 CloseIcon(isEdit: isEdit, onTapRemove: onTapRemove, pos: pos)
               ],

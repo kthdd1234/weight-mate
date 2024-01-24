@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/screen_lock_page.dart';
+import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -40,9 +41,9 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
 
   @override
   Widget build(BuildContext context) {
-    onTap(String button, int index) {
+    onTap(int index) {
       switch (index) {
-        case 11:
+        case 12:
           setState(() {
             if (count > 0) count -= 1;
             inputPasswords[count] = '';
@@ -52,7 +53,7 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
         default:
           setState(() {
             if (count < 5) {
-              inputPasswords[count] = button;
+              inputPasswords[count] = index.toString();
               count += 1;
 
               if (count == 4) {
@@ -69,7 +70,10 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
                     context.read<TitleDateTimeProvider>().setTitleDateTime(now);
                     context
                         .read<ImportDateTimeProvider>()
-                        .setImportDateTime(DateTime.now());
+                        .setImportDateTime(now);
+                    context
+                        .read<HistoryDateTimeProvider>()
+                        .setHistoryDateTime(now);
                   }
                 } else {
                   isError = true;
