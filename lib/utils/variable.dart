@@ -243,3 +243,47 @@ final makerInfo = {
   CalendarMaker.sticker.toString(): CalendarMaker.sticker,
   CalendarMaker.weight.toString(): CalendarMaker.weight
 };
+
+final localeNames = ['ko_KR', 'en_US', 'ja_JP', 'fr_FR', 'es_ES', 'de_DE'];
+
+final localeDisplayNames = {
+  'ko_KR': '한국어',
+  'en_US': 'English',
+  'ja_JP': '日本語',
+  'fr_FR': 'français',
+  'es_ES': 'espagnol',
+  'de_DE': 'Deutsch',
+};
+
+final languageItemList = [
+  LanguageItemClass(
+    name: '한국어',
+    languageCode: 'ko',
+    countryCode: 'KR',
+  ),
+  LanguageItemClass(
+    name: 'English',
+    languageCode: 'en',
+    countryCode: 'US',
+  ),
+  LanguageItemClass(
+    name: '日本語',
+    languageCode: 'ja',
+    countryCode: 'JP',
+  ),
+  LanguageItemClass(
+    name: 'Deutsch',
+    languageCode: 'de',
+    countryCode: 'DE',
+  ),
+  LanguageItemClass(
+    name: 'français',
+    languageCode: 'fr',
+    countryCode: 'FR',
+  ),
+  LanguageItemClass(
+    name: 'espagnol',
+    languageCode: 'es',
+    countryCode: 'ES',
+  ),
+];

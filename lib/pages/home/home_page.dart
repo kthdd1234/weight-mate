@@ -1,6 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -23,6 +25,7 @@ import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -75,6 +78,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<String>? dietOrderList = user.dietOrderList;
     List<String>? exerciseOrderList = user.exerciseOrderList;
     List<String>? lifeOrderList = user.lifeOrderList;
+    String? language = user.language;
 
     List<PlanBox> planList = planRepository.planBox.values.toList();
 
@@ -133,6 +137,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           }
         },
       );
+    }
+
+    if (language == null) {
+      String localeName = localeNames.contains(Platform.localeName)
+          ? Platform.localeName
+          : 'en_US';
+
+      user.language = localeName;
     }
 
     userRepository.user.save();

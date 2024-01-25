@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -64,17 +65,13 @@ class CommonText extends StatelessWidget {
                   decorationThickness: 1,
                   decorationColor: decoColor ?? themeColor,
                 ),
-              ),
+              ).tr(),
             ),
           ),
           rightIcon != null
               ? Row(children: [
                   SpaceWidth(width: 3),
-                  Icon(
-                    rightIcon,
-                    size: size + 3,
-                    color: color,
-                  ),
+                  Icon(rightIcon, size: size + 3, color: color),
                 ])
               : const EmptyArea()
         ],

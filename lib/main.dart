@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -23,6 +26,8 @@ import 'package:flutter_app_weight_management/repositories/record_repository.dar
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
+import 'package:flutter_app_weight_management/utils/colors.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -31,6 +36,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'pages/add/pages/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
+
+const supportedLocales = [
+  Locale('ko', 'KR'),
+  Locale('en', 'US'),
+  Locale('de', 'DE'),
+  Locale('ja', 'JP'),
+  Locale('es', 'ES'),
+  Locale('fr', 'FR'),
+];
 
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
@@ -45,6 +59,7 @@ void main() async {
   await NotificationService().initNotification();
   await NotificationService().initializeTimeZone();
   await MateHive().initializeHive();
+  await EasyLocalization.ensureInitialized();
 
   runApp(
     MultiProvider(
@@ -58,7 +73,12 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
         ChangeNotifierProvider(create: (_) => HistoryDateTimeProvider()),
       ],
-      child: const MyApp(),
+      child: EasyLocalization(
+        supportedLocales: supportedLocales,
+        fallbackLocale: const Locale('en', 'US'),
+        path: 'assets/translations',
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -100,8 +120,7 @@ class _MyAppState extends State<MyApp> {
       setState(() => _authStatus = 'error');
     }
 
-    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-    print("UUID: $uuid");
+    await AppTrackingTransparency.getAdvertisingIdentifier();
   }
 
   @override
@@ -113,19 +132,25 @@ class _MyAppState extends State<MyApp> {
             ? '/home-page'
             : '/enter-screen-lock';
 
+    print('locale => ${context.locale}');
+
+    final theme = ThemeData(
+      primarySwatch: AppColors.primaryMaterialSwatchDark,
+      fontFamily: context.locale != const Locale('ja', 'JP')
+          ? 'cafe24Ohsquareair'
+          : 'cafe24SsurroundAir',
+      textTheme: textTheme,
+      splashColor: Colors.white,
+      brightness: Brightness.light,
+    );
+
     return MaterialApp(
-      title: 'Flutter Demo',
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('ko', 'KR'),
-      ],
-      theme: AppThemes.lightTheme,
-      initialRoute: initialRoute, // initialRoute
+      title: 'weight-mate',
+      theme: theme,
+      locale: context.locale,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      initialRoute: initialRoute,
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),
@@ -140,3 +165,6 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+// locale: context.locale,
+//       localizationsDelegates: context.localizationDelegates,
+//       supportedLocales: context.supportedLocales,

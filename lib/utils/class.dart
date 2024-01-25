@@ -317,3 +317,13 @@ class historyImageClass {
   String pos;
   Uint8List? unit8List;
 }
+
+class LanguageItemClass {
+  LanguageItemClass({
+    required this.name,
+    required this.languageCode,
+    required this.countryCode,
+  });
+
+  String name, languageCode, countryCode;
+}

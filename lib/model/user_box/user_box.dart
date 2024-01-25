@@ -21,7 +21,8 @@ class UserBox extends HiveObject {
       this.calendarMaker,
       this.dietOrderList,
       this.exerciseOrderList,
-      this.lifeOrderList});
+      this.lifeOrderList,
+      this.language});
 
   @HiveField(0)
   String userId;
@@ -70,6 +71,9 @@ class UserBox extends HiveObject {
 
   @HiveField(15)
   List<String>? lifeOrderList;
+
+  @HiveField(16)
+  String? language;
 
   @override
   String toString() {

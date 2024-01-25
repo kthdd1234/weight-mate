@@ -76,6 +76,7 @@ dependencies:
   shimmer: ^3.0.0
   cached_memory_image: ^1.5.0
   home_widget: ^0.4.1
+  easy_localization: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -101,6 +102,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/translations/
     - .env
     - assets/images/Cloudy_Apple.png
     - assets/images/MATE.png
@@ -166,6 +168,7 @@ flutter:
     - assets/svgs/pencil-square-teal.svg
     - assets/svgs/pencil-square-blue.svg
     - assets/svgs/pencil-square-brown.svg
+    - assets/svgs/language.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

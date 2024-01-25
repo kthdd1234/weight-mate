@@ -2,12 +2,15 @@
 
 import 'dart:developer';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -24,6 +27,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,6 +66,7 @@ class _SettingBodyState extends State<SettingBody> {
         context.watch<BottomNavigationProvider>().selectedEnumId;
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
+    String? language = user.language;
 
     onWeight(MoreSeeItem itemId) async {
       await showDialog(
@@ -69,10 +74,6 @@ class _SettingBodyState extends State<SettingBody> {
         builder: (builder) => WeightDialog(itemId: itemId),
       );
       setState(() {});
-    }
-
-    appVersion() {
-      return '1.0.12(14)';
     }
 
     onTapTall(id) {
@@ -317,6 +318,61 @@ class _SettingBodyState extends State<SettingBody> {
       await canLaunchUrl(url) ? await launchUrl(url) : throw 'launchUrl error';
     }
 
+    onTapLangItem(String languageCode, String countryCode) async {
+      await context.setLocale(Locale(languageCode, countryCode));
+      user.language = '${languageCode}_$countryCode';
+      user.save();
+
+      closeDialog(context);
+    }
+
+    onTapLanguage(id) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => CommonBottomSheet(
+          title: '언어 변경',
+          height: 430,
+          contents: ContentsBox(
+            contentsWidget: ListView(
+              shrinkWrap: true,
+              children: languageItemList.map((item) {
+                String localeName = '${item.languageCode}_${item.countryCode}';
+                bool isLanguage = language == localeName;
+
+                return InkWell(
+                  onTap: () => onTapLangItem(
+                    item.languageCode,
+                    item.countryCode,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item.name,
+                          style: TextStyle(
+                            fontFamily: 'cafe24SsurroundAir',
+                            fontWeight: isLanguage
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: isLanguage ? themeColor : Colors.grey,
+                          ),
+                        ),
+                        isLanguage
+                            ? CommonIcon(icon: Icons.task_alt, size: 20)
+                            : const EmptyArea()
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      );
+    }
+
     onTapVersion(id) {
       // Uri appstoreLink = ;
     }
@@ -337,6 +393,14 @@ class _SettingBodyState extends State<SettingBody> {
         value: '${user.goalWeight} kg',
         color: themeColor,
         onTap: onTapGoalWeight,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appLang,
+        icon: 'language',
+        title: '언어 변경',
+        value: localeDisplayNames[user.language]!,
+        color: themeColor,
+        onTap: onTapLanguage,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appAlarm,
@@ -498,8 +562,6 @@ class MoreSeeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Map<String, Color> tagColor = tagColors[color]!;
-
     return InkWell(
       onTap: () => onTap(id),
       child: Padding(
