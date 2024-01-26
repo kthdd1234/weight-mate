@@ -53,15 +53,21 @@ class _BannerWidgetState extends State<BannerWidget> {
   @override
   Widget build(BuildContext context) {
     if (bannerAdIsLoaded == false) {
-      return const SizedBox(
-        width: 50,
-        height: 50,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
+      return const Padding(
+        padding: EdgeInsets.only(top: 5),
+        child: SizedBox(
+          width: 50,
+          height: 50,
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+          ),
         ),
       );
     }
 
-    return SizedBox(height: 50, child: AdWidget(ad: bannerAd!));
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: SizedBox(height: 50, child: AdWidget(ad: bannerAd!)),
+    );
   }
 }

@@ -44,7 +44,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  late AppLifecycleReactor _appLifecycleReactor;
+  // late AppLifecycleReactor _appLifecycleReactor;
 
   bool isActiveCamera = false;
   bool isShowMateScreen = false;
@@ -58,13 +58,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         .showDialog(isForTest: false, testDeviceId: '')
         .then((value) {});
 
-    /** */
-    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor = AppLifecycleReactor(
-      appOpenAdManager: appOpenAdManager,
-    );
+    // /** */
+    // AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    // _appLifecycleReactor = AppLifecycleReactor(
+    //   appOpenAdManager: appOpenAdManager,
+    // );
 
-    _appLifecycleReactor.listenToAppStateChanges();
+    // _appLifecycleReactor.listenToAppStateChanges();
 
     /** */
     UserBox user = userRepository.user;

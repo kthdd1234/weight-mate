@@ -3,6 +3,7 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -209,63 +210,73 @@ class CommonTitle extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: [
-          CommonText(
-            text: title,
-            size: 20,
-            rightIcon: rightIconList[index],
-            onTap: onTapList[index],
-          ),
+          index != 3
+              ? Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: BannerWidget(),
+                )
+              : const EmptyArea(),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              isRecord
-                  ? Row(
-                      children: [
-                        isToday
-                            ? const EmptyArea()
-                            : CommonTag(
-                                text: '오늘로 이동',
-                                color: 'whiteBlue',
-                                onTap: onTapToday,
+              CommonText(
+                text: title,
+                size: 20,
+                rightIcon: rightIconList[index],
+                onTap: onTapList[index],
+              ),
+              Row(
+                children: [
+                  isRecord
+                      ? Row(
+                          children: [
+                            isToday
+                                ? const EmptyArea()
+                                : CommonTag(
+                                    text: '오늘로 이동',
+                                    color: 'whiteBlue',
+                                    onTap: onTapToday,
+                                  ),
+                            SpaceWidth(width: tinySpace),
+                            CommonTag(
+                              text: availableCalendarMaker[calendarMaker],
+                              color: 'whiteIndigo',
+                              onTap: () => onTapMakerType(
+                                nextCalendarMaker[calendarMaker]!,
                               ),
-                        SpaceWidth(width: tinySpace),
-                        CommonTag(
-                          text: availableCalendarMaker[calendarMaker],
-                          color: 'whiteIndigo',
-                          onTap: () => onTapMakerType(
-                            nextCalendarMaker[calendarMaker]!,
-                          ),
-                        ),
-                        SpaceWidth(width: tinySpace),
-                        CommonTag(
-                          text: availableCalendarFormats[calendarFormat],
-                          color: 'whiteIndigo',
-                          onTap: () => onFormatChanged(
-                            nextCalendarFormats[calendarFormat]!,
-                          ),
-                        ),
-                        SpaceWidth(width: tinySpace),
-                        CommonTag(
-                          text: '표시 ${displayList?.length ?? 0}',
-                          color: 'whiteIndigo',
-                          onTap: onTapFilter,
+                            ),
+                            SpaceWidth(width: tinySpace),
+                            CommonTag(
+                              text: availableCalendarFormats[calendarFormat],
+                              color: 'whiteIndigo',
+                              onTap: () => onFormatChanged(
+                                nextCalendarFormats[calendarFormat]!,
+                              ),
+                            ),
+                            SpaceWidth(width: tinySpace),
+                            CommonTag(
+                              text: '표시 ${displayList?.length ?? 0}',
+                              color: 'whiteIndigo',
+                              onTap: onTapFilter,
+                            )
+                          ],
                         )
-                      ],
-                    )
-                  : const EmptyArea(),
-              isHistory
-                  ? CommonTag(
-                      text: historyFilterFormats[historyFilter],
-                      color: historyFilter == HistoryFilter.recent
-                          ? 'whiteBlue'
-                          : 'whiteRed',
-                      onTap: onTapChangeYear,
-                    )
-                  : const EmptyArea(),
+                      : const EmptyArea(),
+                  isHistory
+                      ? CommonTag(
+                          text: historyFilterFormats[historyFilter],
+                          color: historyFilter == HistoryFilter.recent
+                              ? 'whiteBlue'
+                              : 'whiteRed',
+                          onTap: onTapChangeYear,
+                        )
+                      : const EmptyArea(),
+                ],
+              )
             ],
-          )
+          ),
         ],
       ),
     );

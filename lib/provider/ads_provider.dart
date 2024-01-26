@@ -6,22 +6,18 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class AdsProvider with ChangeNotifier {
   AdsProvider({
     required this.adsState,
-    this.nativeAd,
   });
 
   AdsService adsState;
-  NativeAd? nativeAd;
 
   String get nativeAdUnitId {
     return adsState.nativeAdUnitId;
   }
 
-  NativeAd? get ad {
-    return nativeAd;
-  }
+  // void setNativeAd(Function(NativeAd) callbackNativeAd) async {
+  //   NativeAd nativeAd = loadNativeAd(adsState.nativeAdUnitId);
 
-  void setNativeAd() async {
-    nativeAd = loadNativeAd(adsState.nativeAdUnitId);
-    notifyListeners();
-  }
+  //   callbackNativeAd(nativeAd);
+  //   notifyListeners();
+  // }
 }

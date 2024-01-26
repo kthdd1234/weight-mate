@@ -363,15 +363,21 @@ bmi({required double tall, required double? weight}) {
   return bmiToFixed;
 }
 
-loadNativeAd(String adUnitId) {
+NativeAd loadNativeAd({
+  required String adUnitId,
+  required Function() onAdLoaded,
+  required Function() onAdFailedToLoad,
+}) {
   return NativeAd(
     adUnitId: adUnitId,
     listener: NativeAdListener(
       onAdLoaded: (adLoaded) {
         log('$adLoaded loaded~~~!!');
+        onAdLoaded();
       },
       onAdFailedToLoad: (ad, error) {
-        debugPrint('$NativeAd failed to load: $error');
+        log('$NativeAd failed to load: $error');
+        onAdFailedToLoad();
         ad.dispose();
       },
     ),

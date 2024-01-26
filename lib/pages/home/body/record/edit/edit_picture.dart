@@ -19,10 +19,12 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +49,7 @@ class EditPicture extends StatelessWidget {
       'right': recordInfo?.rightFile,
       'bottom': recordInfo?.bottomFile,
     };
+    String nativeAdUnitId = context.watch<AdsProvider>().nativeAdUnitId;
 
     setFile({required Uint8List? newValue, required String pos}) {
       switch (pos) {
@@ -114,9 +117,11 @@ class EditPicture extends StatelessWidget {
 
     showDialogPopup({required String title, required Uint8List binaryData}) {
       showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return NativeAdDialog(
+            loadingText: '사진 데이터 저장 중...',
             title: title,
             leftText: '사진 확인',
             rightText: '사진 앨범',
@@ -155,8 +160,8 @@ class EditPicture extends StatelessWidget {
       if (xFileData != null) {
         setPickedImage(pos: pos, xFile: xFileData);
 
-        // Uint8List unit8List = await convertUnit8List(xFileData);
-        // showDialogPopup(title: '사진 기록 완료!', binaryData: unit8List);
+        Uint8List unit8List = await convertUnit8List(xFileData);
+        showDialogPopup(title: '사진 기록 완료!', binaryData: unit8List);
       }
     }
 

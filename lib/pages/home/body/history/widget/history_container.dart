@@ -14,6 +14,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
+import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
@@ -23,6 +24,7 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
 class HistoryContainer extends StatelessWidget {
@@ -569,6 +571,25 @@ class NativeAdContainer extends StatefulWidget {
 }
 
 class _NativeAdContainerState extends State<NativeAdContainer> {
+  NativeAd? nativeAd;
+  bool isLoaded = false;
+
+  @override
+  void didChangeDependencies() {
+    final adsState = Provider.of<AdsProvider>(context).adsState;
+
+    onLoaded() {
+      setState(() => isLoaded = true);
+    }
+
+    nativeAd = loadNativeAd(
+      adUnitId: adsState.nativeAdUnitId,
+      onAdLoaded: onLoaded,
+      onAdFailedToLoad: onLoaded,
+    );
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -586,7 +607,15 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
           ],
         ),
         SpaceHeight(height: smallSpace),
-        NativeWidget(padding: 0, height: 340)
+        isLoaded
+            ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd!)
+            : SizedBox(
+                height: 340,
+                child: NativeAdLoading(
+                  text: '',
+                  color: Colors.transparent,
+                ),
+              )
       ],
     );
   }
