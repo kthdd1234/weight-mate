@@ -1,3 +1,16 @@
 {
-  "체중": "Weight"
+  "체중 메이트": "Weight Mate",
+  "반가워요! 체중 메이트와 함께": "Nice to meet you! with Weight-Mate",
+  "건강한 다이어트를 시작해봐요:)": "Let's start a healthy diet :)",
+  "시작하기": "Start",
+  "키와 체중을 입력해주세요.": "Please enter your height and weight.",
+  "키": "Height",
+  "체중": "Weight",
+  "목표 체중": "Target Weight",
+  "120 ~ 220 입력해주세요.": "Please enter 120 to 220.",
+  "20 ~ 200 입력해주세요.": "Please enter 20 to 200.",
+  "키와 체중은 체질량 지수(BMI)를 계산하는데 사용됩니다.": "Height and weight are used to calculate body mass index (BMI).",
+  "닫기": "Close",
+  "다음": "Next",
+  "완료": "Done"
 }

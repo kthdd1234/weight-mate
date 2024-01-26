@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
@@ -52,7 +53,7 @@ class AddContainer extends StatelessWidget {
               ? SafeArea(
                   child: BottomSubmitButton(
                     isEnabled: buttonEnabled,
-                    text: bottomSubmitButtonText,
+                    text: bottomSubmitButtonText.tr(),
                     onPressed: onPressedBottomNavigationButton!,
                   ),
                 )

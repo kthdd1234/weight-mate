@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -7,7 +8,6 @@ import 'package:flutter_app_weight_management/components/simple_stepper/simple_s
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
-import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
 import 'package:flutter_app_weight_management/pages/add/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -48,7 +48,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         text: tallContoller.text == '.' ? '' : tallContoller.text,
         min: tallMin,
         max: tallMax,
-        errMsg: tallErrMsg,
+        errMsg: tallErrMsg.tr(),
       );
     }
 
@@ -57,7 +57,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         text: weightContoller.text == '.' ? '' : weightContoller.text,
         min: weightMin,
         max: weightMax,
-        errMsg: weightErrMsg,
+        errMsg: weightErrMsg.tr(),
       );
     }
 
@@ -66,7 +66,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
         text: goalWeightContoller.text == '.' ? '' : goalWeightContoller.text,
         min: weightMin,
         max: weightMax,
-        errMsg: weightErrMsg,
+        errMsg: weightErrMsg.tr(),
       );
     }
 
@@ -112,7 +112,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
     }) {
       return Column(
         children: [
-          ContentsTitleText(text: title),
+          CommonText(text: title, size: 15, isBold: true),
           SpaceHeight(height: smallSpace),
           TextInput(
             focusNode: focusNode,
@@ -122,7 +122,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             prefixIcon: prefixIcon,
             suffixText: suffixText,
             counterText: counterText,
-            hintText: hintText,
+            hintText: hintText.tr(),
             errorText: errorText,
             onChanged: onChanged,
           )
@@ -215,7 +215,11 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                 ),
               ),
               SpaceHeight(height: regularSapce),
-              BottomText(bottomText: '키와 체중은 체질량 지수(BMI)를 계산하는데 사용됩니다.')
+              const Text(
+                '키와 체중은 체질량 지수(BMI)를 계산하는데 사용됩니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: themeColor, fontSize: 12),
+              ).tr(),
             ],
           ),
         ),
@@ -240,7 +244,7 @@ class ActionBar extends StatelessWidget {
         child: Row(
           children: [
             CommonButton(
-              text: '취소',
+              text: '닫기',
               fontSize: 18,
               radious: 5,
               bgColor: Colors.white,
@@ -276,10 +280,12 @@ class AddTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SimpleStepper(step: step),
         SpaceHeight(height: regularSapce),
-        CommonText(text: title, size: 18),
+        Text(title, style: const TextStyle(fontSize: 18, color: themeColor))
+            .tr(),
         SpaceHeight(height: smallSpace),
       ],
     );

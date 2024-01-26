@@ -1,3 +1,16 @@
 {
-  "체중": "poids"
+  "체중 메이트": "Weight Mate",
+  "반가워요! 체중 메이트와 함께": "Bonjour! Avec Weight-Mate",
+  "건강한 다이어트를 시작해봐요:)": "Commençons par un régime sain :)",
+  "시작하기": "Commencer",
+  "키와 체중을 입력해주세요.": "Veuillez entrer la taille et le poids.",
+  "키": "Taille",
+  "체중": "Poids",
+  "목표 체중": "Poids Cible",
+  "120 ~ 220 입력해주세요.": "Veuillez entrer 120 à 220.",
+  "20 ~ 200 입력해주세요.": "Veuillez entrer 20 à 200.",
+  "키와 체중은 체질량 지수(BMI)를 계산하는데 사용됩니다.": "La taille et le poids sont utilisés pour calculer l'indice de masse corporelle (IMC).",
+  "닫기": "Fermer",
+  "다음": "Suivant",
+  "완료": "fin"
 }
