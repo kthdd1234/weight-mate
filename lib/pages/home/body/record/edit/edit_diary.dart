@@ -6,12 +6,14 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -112,6 +114,30 @@ class _EditDiaryState extends State<EditDiary> {
             ),
           );
         } else {
+          if (recordInfo.whiteText == null) {
+            await showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (dContext) {
+                onClick(BottomNavigationEnum enumId) async {
+                  dContext
+                      .read<BottomNavigationProvider>()
+                      .setBottomNavigation(enumId: enumId);
+                  closeDialog(dContext);
+                }
+
+                return NativeAdDialog(
+                  loadingText: '일기 데이터 저장 중...',
+                  title: '📝 일기 작성 완료!',
+                  leftText: '히스토리',
+                  rightText: '그래프',
+                  onLeftClick: () => onClick(BottomNavigationEnum.history),
+                  onRightClick: () => onClick(BottomNavigationEnum.graph),
+                );
+              },
+            );
+          }
+
           recordInfo.whiteText = textController.text;
           recordInfo.diaryDateTime = diaryDateTime;
         }

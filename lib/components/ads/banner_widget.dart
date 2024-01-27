@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
@@ -15,6 +16,7 @@ class BannerWidget extends StatefulWidget {
 class _BannerWidgetState extends State<BannerWidget> {
   BannerAd? bannerAd;
   bool bannerAdIsLoaded = false;
+  bool isNoAdShow = false;
 
   @override
   void dispose() {
@@ -41,6 +43,7 @@ class _BannerWidgetState extends State<BannerWidget> {
               },
               onAdFailedToLoad: (ad, error) {
                 debugPrint('$NativeAd failed to load: $error');
+                setState(() => isNoAdShow = true);
                 ad.dispose();
               },
             ),
@@ -53,13 +56,15 @@ class _BannerWidgetState extends State<BannerWidget> {
   @override
   Widget build(BuildContext context) {
     if (bannerAdIsLoaded == false) {
-      return const Padding(
+      return Padding(
         padding: EdgeInsets.only(top: 5),
         child: SizedBox(
-          width: 50,
           height: 50,
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
+          child: CommonText(
+            text: 'Ads',
+            size: 12,
+            isCenter: true,
+            color: Colors.grey,
           ),
         ),
       );

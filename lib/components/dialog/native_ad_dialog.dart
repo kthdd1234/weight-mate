@@ -40,11 +40,19 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
       setState(() => isLoaded = true);
     }
 
+    onAdFailedToLoad() {
+      setState(() {
+        nativeAd = null;
+        isLoaded = true;
+      });
+    }
+
     nativeAd = loadNativeAd(
       adUnitId: adsState.nativeAdUnitId,
       onAdLoaded: onLoaded,
-      onAdFailedToLoad: onLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
     );
+
     super.didChangeDependencies();
   }
 
@@ -64,7 +72,7 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
             content: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                NativeWidget(nativeAd: nativeAd!),
+                NativeWidget(nativeAd: nativeAd),
                 SpaceHeight(height: smallSpace),
                 Row(
                   children: [

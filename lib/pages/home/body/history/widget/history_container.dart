@@ -582,10 +582,17 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
       setState(() => isLoaded = true);
     }
 
+    onAdFailedToLoad() {
+      setState(() {
+        isLoaded = true;
+        nativeAd = null;
+      });
+    }
+
     nativeAd = loadNativeAd(
       adUnitId: adsState.nativeAdUnitId,
       onAdLoaded: onLoaded,
-      onAdFailedToLoad: onLoaded,
+      onAdFailedToLoad: onAdFailedToLoad,
     );
     super.didChangeDependencies();
   }
@@ -608,7 +615,7 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
         ),
         SpaceHeight(height: smallSpace),
         isLoaded
-            ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd!)
+            ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd)
             : SizedBox(
                 height: 340,
                 child: NativeAdLoading(
