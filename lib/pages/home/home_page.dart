@@ -78,6 +78,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     List<PlanBox> planList = planRepository.planBox.values.toList();
 
+    dietOrderList = null;
+    exerciseOrderList = null;
+    lifeOrderList = null;
+
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
     }

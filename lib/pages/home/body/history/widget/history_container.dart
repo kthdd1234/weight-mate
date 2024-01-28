@@ -601,27 +601,13 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            CommonText(text: '광고', size: 12, isBold: true),
-            CommonText(
-              text: '체중 메이트의 발전을 위해 광고가 노출됩니다.',
-              size: 10,
-              color: Colors.grey,
-            ),
-          ],
-        ),
+        CommonText(text: '광고', size: 12, isBold: true),
         SpaceHeight(height: smallSpace),
         isLoaded
             ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd)
             : SizedBox(
                 height: 340,
-                child: NativeAdLoading(
-                  text: '',
-                  color: Colors.transparent,
-                ),
+                child: NativeAdLoading(text: '', color: Colors.transparent),
               )
       ],
     );

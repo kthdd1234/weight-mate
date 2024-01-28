@@ -5,6 +5,7 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_list.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
+import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
 import 'package:flutter_app_weight_management/pages/common/partial_delete_page.dart';
@@ -136,6 +137,7 @@ class _MyAppState extends State<MyApp> {
         '/enter-screen-lock': (context) => const EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
         '/partial-delete-page': (context) => const PatialDeletePage(),
+        '/diary-write-page': (context) => const DiaryWritePage(),
       },
     );
   }

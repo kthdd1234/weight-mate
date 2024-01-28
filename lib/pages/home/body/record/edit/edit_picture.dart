@@ -286,7 +286,7 @@ class EditPicture extends StatelessWidget {
                               SpaceHeight(height: 7),
                               CommonText(
                                 leftIcon: Icons.info_outline,
-                                text: '추가한 사진은 앱 내에 저장되요.',
+                                text: '추가한 사진은 앱 내에 저장돼요.',
                                 size: 10,
                                 color: Colors.grey,
                               )
