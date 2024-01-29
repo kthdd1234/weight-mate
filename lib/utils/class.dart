@@ -1,8 +1,12 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:privacy_screen/privacy_screen.dart';
 
 class UserInfoClass {
   UserInfoClass({
@@ -259,39 +263,6 @@ class ActionItemClass {
   }
 }
 
-// class ArgmentsTypeClass {
-//   ArgmentsTypeClass({
-//     required this.createDateTime,
-//     required this.planId,
-//     required this.buttonText,
-//     required this.contentsTitleWidget,
-//     this.pageTitle,
-//   });
-
-//   DateTime createDateTime;
-//   String planId, buttonText;
-//   String? pageTitle;
-//   Widget contentsTitleWidget;
-// }
-
-// class PlanPriorityClass {
-//   PlanPriorityClass({
-//     required this.id,
-//     required this.name,
-//     required this.desc,
-//     required this.icon,
-//     required this.order,
-//     required this.bgColor,
-//     required this.textColor,
-//   });
-
-//   PlanPriorityEnum id;
-//   String name, desc;
-//   IconData icon;
-//   int order;
-//   Color bgColor, textColor;
-// }
-
 class SvgClass {
   SvgClass({required this.emotion, required this.name});
   String emotion, name;
@@ -316,4 +287,32 @@ class historyImageClass {
 
   String pos;
   Uint8List? unit8List;
+}
+
+class AppLifecycleReactor {
+  AppLifecycleReactor({required this.context, this.passwords});
+
+  BuildContext context;
+  String? passwords;
+
+  void listenToAppStateChanges() {
+    AppStateEventNotifier.startListening();
+    AppStateEventNotifier.appStateStream
+        .forEach((state) => _onAppStateChanged(state));
+  }
+
+  void _onAppStateChanged(AppState appState) async {
+    if (appState == AppState.background && passwords != null) {
+      try {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => EnterScreenLockPage(isPop: true),
+            fullscreenDialog: true,
+          ),
+        );
+      } catch (e) {
+        log('error => $e');
+      }
+    }
+  }
 }

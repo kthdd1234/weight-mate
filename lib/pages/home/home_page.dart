@@ -20,12 +20,14 @@ import 'package:flutter_app_weight_management/provider/bottom_navigation_provide
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
+import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   // late AppLifecycleReactor _appLifecycleReactor;
 
   bool isActiveCamera = false;
-  bool isShowMateScreen = false;
+  // bool isShowMateScreen = false;
 
   @override
   void initState() {
@@ -65,6 +67,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     // );
 
     // _appLifecycleReactor.listenToAppStateChanges();
+
+    /** */
+    PrivacyScreen.instance.enable(
+      iosOptions: const PrivacyIosOptions(
+        enablePrivacy: true,
+        privacyImageName: "LaunchImage",
+        autoLockAfterSeconds: 5,
+        lockTrigger: IosLockTrigger.didEnterBackground,
+      ),
+      androidOptions: const PrivacyAndroidOptions(
+        enableSecure: true,
+        autoLockAfterSeconds: 5,
+      ),
+      backgroundColor: Colors.white.withOpacity(0),
+      blurEffect: PrivacyBlurEffect.extraLight,
+    );
 
     /** */
     UserBox user = userRepository.user;
@@ -165,54 +183,65 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     requestInAppReview();
+
+    String? passwords = userRepository.user.screenLockPasswords;
+    AppLifecycleReactor(context: context, passwords: passwords)
+        .listenToAppStateChanges();
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      DateTime now = DateTime.now();
+      context.read<ImportDateTimeProvider>().setImportDateTime(now);
+      context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+      context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
+    });
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    setState(() {});
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) async {
+  //   setState(() {});
 
-    RecordBox? recordInfo =
-        recordRepository.recordBox.get(getDateTimeToInt(DateTime.now()));
-    bool isShowScreen = [
-      AppLifecycleState.hidden,
-      AppLifecycleState.inactive,
-      AppLifecycleState.paused
-    ].contains(state);
+  //   RecordBox? recordInfo =
+  //       recordRepository.recordBox.get(getDateTimeToInt(DateTime.now()));
+  //   bool isShowScreen = [
+  //     AppLifecycleState.hidden,
+  //     AppLifecycleState.inactive,
+  //     AppLifecycleState.paused
+  //   ].contains(state);
 
-    if (isShowScreen) {
-      if (isActiveCamera == false) {
-        setState(() => isShowMateScreen = true);
-      }
-    } else if (state == AppLifecycleState.resumed) {
-      if (isActiveCamera == false) {
-        if (userRepository.user.screenLockPasswords != null) {
-          await Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => const EnterScreenLockPage(),
-              fullscreenDialog: true,
-            ),
-          );
-        } else {
-          if (recordInfo?.weight == null) {
-            DateTime now = DateTime.now();
+  //   if (isShowScreen) {
+  //     if (isActiveCamera == false) {
+  //       // setState(() => isShowMateScreen = true);
+  //     }
+  //   } else if (state == AppLifecycleState.resumed) {
+  //     if (isActiveCamera == false) {
+  //       if (userRepository.user.screenLockPasswords != null) {
+  //         await Navigator.of(context).push(
+  //           MaterialPageRoute(
+  //             builder: (_) => const EnterScreenLockPage(),
+  //             fullscreenDialog: true,
+  //           ),
+  //         );
+  //       } else {
+  //         if (recordInfo?.weight == null) {
+  //           DateTime now = DateTime.now();
 
-            context.read<ImportDateTimeProvider>().setImportDateTime(now);
-            context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-            context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
-          }
-        }
-      }
+  //           context.read<ImportDateTimeProvider>().setImportDateTime(now);
+  //           context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+  //           context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
+  //         }
+  //       }
+  //     }
 
-      setState(() => isShowMateScreen = false);
-      setState(() => isActiveCamera = false);
-    }
-  }
+  //     // setState(() => isShowMateScreen = false);
+  //     setState(() => isActiveCamera = false);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -237,6 +266,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       List<BottomNavigationEnum> indexList =
           BottomNavigationEnum.values.toList();
 
+      if (index == 0) {
+        DateTime now = DateTime.now();
+        context.read<ImportDateTimeProvider>().setImportDateTime(now);
+        context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+      }
+
       context
           .read<BottomNavigationProvider>()
           .setBottomNavigation(enumId: indexList[index]);
@@ -253,35 +288,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       const SettingBody()
     ];
 
-    return isShowMateScreen
-        ? AddContainer(
-            body: Center(
-              child: Image.asset('assets/images/MATE.png', width: 150),
-            ),
-            isNotBack: true,
-            isCenter: true,
-            buttonEnabled: false,
-            bottomSubmitButtonText: '',
-          )
-        : AppFramework(
-            widget: Scaffold(
-              backgroundColor: Colors.transparent,
-              body: SafeArea(child: bodyList[bottomNavitionId.index]),
-              bottomNavigationBar: Theme(
-                data: Theme.of(context).copyWith(
-                  canvasColor: Colors.transparent,
-                ),
-                child: BottomNavigationBar(
-                  items: items,
-                  elevation: 0,
-                  currentIndex: bottomNavitionId.index,
-                  selectedItemColor: themeColor,
-                  unselectedItemColor: const Color(0xFF151515),
-                  backgroundColor: Colors.red,
-                  onTap: onBottomNavigation,
-                ),
-              ),
-            ),
-          );
+    return AppFramework(
+      widget: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(child: bodyList[bottomNavitionId.index]),
+        bottomNavigationBar: Theme(
+          data: Theme.of(context).copyWith(
+            canvasColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            items: items,
+            elevation: 0,
+            currentIndex: bottomNavitionId.index,
+            selectedItemColor: themeColor,
+            unselectedItemColor: const Color(0xFF151515),
+            backgroundColor: Colors.red,
+            onTap: onBottomNavigation,
+          ),
+        ),
+      ),
+    );
   }
 }

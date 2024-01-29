@@ -76,6 +76,7 @@ dependencies:
   shimmer: ^3.0.0
   cached_memory_image: ^1.5.0
   home_widget: ^0.4.1
+  privacy_screen: ^0.0.6
 
 dev_dependencies:
   flutter_test:

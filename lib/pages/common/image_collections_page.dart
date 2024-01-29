@@ -13,6 +13,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_carousel_slider_page.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -48,6 +49,10 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
     }
 
     fileItemList = itemList.reversed.toList();
+
+    String? passwords = userRepository.user.screenLockPasswords;
+    AppLifecycleReactor(context: context, passwords: passwords)
+        .listenToAppStateChanges();
 
     super.initState();
   }

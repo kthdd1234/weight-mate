@@ -12,7 +12,9 @@ import 'package:provider/provider.dart';
 import '../../model/user_box/user_box.dart';
 
 class EnterScreenLockPage extends StatefulWidget {
-  const EnterScreenLockPage({super.key});
+  EnterScreenLockPage({super.key, this.isPop});
+
+  bool? isPop;
 
   @override
   State<EnterScreenLockPage> createState() => _EnterScreenLockPageState();
@@ -58,23 +60,13 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
 
               if (count == 4) {
                 if (userPasswords.join() == inputPasswords.join()) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/home-page',
-                    (route) => false,
-                  );
-
-                  if (recordInfo?.weight == null) {
-                    DateTime now = DateTime.now();
-
-                    context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-                    context
-                        .read<ImportDateTimeProvider>()
-                        .setImportDateTime(now);
-                    context
-                        .read<HistoryDateTimeProvider>()
-                        .setHistoryDateTime(now);
-                  }
+                  widget.isPop == true
+                      ? Navigator.pop(context)
+                      : Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/home-page',
+                          (route) => false,
+                        );
                 } else {
                   isError = true;
                   inputPasswords = ['', '', '', ''];

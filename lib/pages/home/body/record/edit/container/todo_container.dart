@@ -1556,7 +1556,7 @@ class TodoInput extends StatelessWidget {
         onEditingComplete: onEditingComplete,
         onTapOutside: (_) {
           FocusScope.of(context).unfocus();
-          onEditingComplete();
+          // onEditingComplete();
         },
       ),
     );

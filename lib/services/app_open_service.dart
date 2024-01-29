@@ -86,19 +86,19 @@ class AppOpenAdManager {
   }
 }
 
-class AppLifecycleReactor {
-  AppLifecycleReactor({required this.appOpenAdManager});
-  final AppOpenAdManager appOpenAdManager;
+// class AppLifecycleReactor {
+//   AppLifecycleReactor({required this.appOpenAdManager});
+//   final AppOpenAdManager appOpenAdManager;
 
-  void listenToAppStateChanges() {
-    AppStateEventNotifier.startListening();
-    AppStateEventNotifier.appStateStream
-        .forEach((state) => _onAppStateChanged(state));
-  }
+//   void listenToAppStateChanges() {
+//     AppStateEventNotifier.startListening();
+//     AppStateEventNotifier.appStateStream
+//         .forEach((state) => _onAppStateChanged(state));
+//   }
 
-  void _onAppStateChanged(AppState appState) {
-    if (appState == AppState.foreground) {
-      appOpenAdManager.showAdIfAvailable();
-    }
-  }
-}
+//   void _onAppStateChanged(AppState appState) {
+//     if (appState == AppState.foreground) {
+//       appOpenAdManager.showAdIfAvailable();
+//     }
+//   }
+// }

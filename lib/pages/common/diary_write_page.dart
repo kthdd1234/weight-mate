@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
@@ -9,9 +11,12 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class DiaryWritePage extends StatefulWidget {
@@ -22,21 +27,97 @@ class DiaryWritePage extends StatefulWidget {
 }
 
 class _DiaryWritePageState extends State<DiaryWritePage> {
+  DateTime? importDateTime;
+  RecordBox? recordInfo;
   TextEditingController controller = TextEditingController();
+  bool isEnabledButton = false;
+  String emotion = '';
+
+  @override
+  void initState() {
+    String? passwords = userRepository.user.screenLockPasswords;
+    AppLifecycleReactor(context: context, passwords: passwords)
+        .listenToAppStateChanges();
+
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      importDateTime =
+          context.watch<ImportDateTimeProvider>().getImportDateTime();
+      recordInfo =
+          recordRepository.recordBox.get(getDateTimeToInt(importDateTime));
+      controller.text = recordInfo?.whiteText ?? '';
+      emotion = recordInfo?.emotion ?? '';
+
+      if (recordInfo?.emotion != null || recordInfo?.whiteText != null) {
+        isEnabledButton = true;
+      }
+    });
+
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-    int recordKey = getDateTimeToInt(importDateTime);
-    RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
+    onTapEmotion() {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => EmotionModal(
+          emotion: emotion,
+          onTap: (selectedEmotion) {
+            setState(() {
+              emotion = selectedEmotion;
+              isEnabledButton = true;
+            });
 
-    onTapEmptyEmotion() {
-      //
+            closeDialog(context);
+          },
+        ),
+      );
     }
 
-    onPressed() {
-      //
+    onChanged(String newValue) {
+      setState(() {
+        isEnabledButton = newValue == '' && emotion == '' ? false : true;
+      });
+    }
+
+    onTapCompleted() {
+      if (isEnabledButton) {
+        DateTime now = DateTime.now();
+        DateTime diaryDateTime = DateTime(
+          importDateTime!.year,
+          importDateTime!.month,
+          importDateTime!.day,
+          now.hour,
+          now.minute,
+        );
+        String? rEmotion = emotion != '' ? emotion : null;
+        String? whiteText = controller.text != '' ? controller.text : null;
+
+        if (recordInfo == null) {
+          recordRepository.updateRecord(
+            key: getDateTimeToInt(importDateTime),
+            record: RecordBox(
+              createDateTime: diaryDateTime,
+              diaryDateTime: diaryDateTime,
+              whiteText: whiteText,
+              emotion: rEmotion,
+            ),
+          );
+        } else {
+          recordInfo?.emotion = rEmotion;
+          recordInfo?.whiteText = whiteText;
+          recordInfo?.diaryDateTime = diaryDateTime;
+        }
+
+        recordInfo?.save();
+        Navigator.pop(context, 'save');
+        //
+      }
     }
 
     return AppFramework(
@@ -73,22 +154,30 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               ],
                             ),
                             SpaceHeight(height: 5),
-                            Row(
-                              children: [
-                                DashContainer(
-                                  height: 60,
-                                  text: '감정',
-                                  borderType: BorderType.Circle,
-                                  radius: 100,
-                                  onTap: onTapEmptyEmotion,
-                                ),
-                              ],
-                            ),
+                            emotion == ''
+                                ? Row(
+                                    children: [
+                                      DashContainer(
+                                        height: 50,
+                                        text: '감정',
+                                        borderType: BorderType.Circle,
+                                        radius: 100,
+                                        onTap: onTapEmotion,
+                                      ),
+                                    ],
+                                  )
+                                : InkWell(
+                                    onTap: onTapEmotion,
+                                    child: SvgPicture.asset(
+                                      'assets/svgs/$emotion.svg',
+                                      height: 50,
+                                    ),
+                                  ),
                             SpaceHeight(height: 10),
                             CommonText(
                               text: dateTimeFormatter(
                                 format: 'yyyy년 M월 d일',
-                                dateTime: importDateTime,
+                                dateTime: importDateTime ?? DateTime.now(),
                               ),
                               size: 12,
                               isCenter: true,
@@ -98,7 +187,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                             CommonText(
                               text: dateTimeFormatter(
                                 format: 'EE요일',
-                                dateTime: importDateTime,
+                                dateTime: importDateTime ?? DateTime.now(),
                               ),
                               size: 12,
                               isCenter: true,
@@ -113,10 +202,13 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               textInputAction: TextInputAction.newline,
                               style: const TextStyle(fontSize: 13),
                               decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: '오늘 다이어트를 하면서 어땠는지 기록해보아요 :D',
-                                  hintStyle:
-                                      TextStyle(color: Colors.grey.shade300)),
+                                border: InputBorder.none,
+                                hintText: '오늘 다이어트를 하면서 어땠는지 기록해보아요 :D',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey.shade300,
+                                ),
+                              ),
+                              onChanged: onChanged,
                             )
                           ],
                         ),
@@ -125,10 +217,10 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                   ),
                 ),
                 BottomSubmitButton(
-                  padding: EdgeInsets.all(0),
-                  isEnabled: true,
+                  padding: const EdgeInsets.all(0),
+                  isEnabled: isEnabledButton,
                   text: '작성 완료',
-                  onPressed: onPressed,
+                  onPressed: onTapCompleted,
                 ),
               ],
             ),

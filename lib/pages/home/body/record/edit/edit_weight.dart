@@ -77,12 +77,12 @@ class _EditWeightState extends State<EditWeight> {
       await showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (dContext) {
+        builder: (buildContext) {
           onClick(BottomNavigationEnum enumId) async {
-            dContext
+            buildContext
                 .read<BottomNavigationProvider>()
                 .setBottomNavigation(enumId: enumId);
-            closeDialog(dContext);
+            closeDialog(buildContext);
           }
 
           return NativeAdDialog(

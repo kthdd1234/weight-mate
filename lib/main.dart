@@ -1,6 +1,7 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/add/pages/add_plan_list.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_app_weight_management/repositories/record_repository.dar
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/themes.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -73,7 +75,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _authStatus = 'Unknown';
-  late Box<UserBox> userBox;
+  // UserBox? user;
+  Box<UserBox>? userBox;
 
   @override
   void initState() {
@@ -82,6 +85,7 @@ class _MyAppState extends State<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await initAppTrackingPlugin();
     });
+
     super.initState();
   }
 
@@ -107,10 +111,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    UserBox? userProfile = userBox.get('userProfile');
-    String initialRoute = userProfile?.userId == null
+    UserBox? user = userBox?.get('userProfile');
+    String initialRoute = user?.userId == null
         ? '/add-start-screen'
-        : userProfile?.screenLockPasswords == null
+        : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
 
@@ -134,7 +138,7 @@ class _MyAppState extends State<MyApp> {
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
         '/home-page': (context) => const HomePage(),
         '/screen-lock': (context) => const ScreenLockPage(),
-        '/enter-screen-lock': (context) => const EnterScreenLockPage(),
+        '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
         '/partial-delete-page': (context) => const PatialDeletePage(),
         '/diary-write-page': (context) => const DiaryWritePage(),
@@ -142,3 +146,13 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+// AddContainer(
+//             body: Center(
+//               child: Image.asset('assets/images/MATE.png', width: 150),
+//             ),
+//             isNotBack: true,
+//             isCenter: true,
+//             buttonEnabled: false,
+//             bottomSubmitButtonText: '',
+//           )
