@@ -83,7 +83,9 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       });
     }
 
-    log('${MediaQuery.of(context).size.height}');
+    onTapPictureClear() {
+      //
+    }
 
     return AppFramework(
       widget: Scaffold(
@@ -98,13 +100,19 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
               text: '사진 슬라이드로 보기',
               onTap: () => onNavigatorPage(index: 0, isAutoPlay: true),
             ),
+            // SpaceWidth(width: tinySpace),
+            // CommonTag(
+            //   color: 'whitePink',
+            //   text: '사진 정리하기',
+            //   onTap: onTapPictureClear,
+            // ),
             SpaceWidth(width: tinySpace),
             CommonTag(
               color: isRecent ? 'whiteBlue' : 'whiteRed',
               text: isRecent ? '최신순' : '과거순',
               onTap: onTapFilter,
             ),
-            SpaceWidth(width: smallSpace),
+            SpaceWidth(width: tinySpace),
           ],
         ),
         body: Column(

@@ -232,6 +232,10 @@ final tagColors = {
     'bgColor': Colors.red.shade300,
     'textColor': Colors.white,
   },
+  'whitePink': {
+    'bgColor': Colors.pink.shade300,
+    'textColor': Colors.white,
+  },
 };
 
 List<FilterClass> openClassList = [

@@ -146,7 +146,7 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      initialRoute: '/add-start-screen', // initialRoute
+      initialRoute: initialRoute, // initialRoute
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-info': (context) => const AddBodyInfo(),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
@@ -98,10 +99,11 @@ class CommonTitle extends StatelessWidget {
         context.watch<HistoryFilterProvider>().value();
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
+    String locale = context.locale.toString();
 
     String title = [
-      dateTimeFormatter(format: 'yyyy년 MM월', dateTime: titleDateTime),
-      dateTimeFormatter(format: 'yyyy년', dateTime: historyDateTime),
+      ym(locale: locale, dateTime: titleDateTime),
+      y(locale: locale, dateTime: historyDateTime),
       '체중 변화',
       '설정'
     ][index];
@@ -213,6 +215,7 @@ class CommonTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CommonText(
+            isNotTr: isRecord || isHistory,
             text: title,
             size: 20,
             rightIcon: rightIconList[index],

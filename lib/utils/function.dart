@@ -246,6 +246,14 @@ showAlarmBottomSheet({
   );
 }
 
+ym({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMM(locale).format(dateTime);
+}
+
+y({required String locale, required DateTime dateTime}) {
+  return DateFormat.y(locale).format(dateTime);
+}
+
 dateTimeFormatter({required String format, required DateTime dateTime}) {
   DateFormat formatter = DateFormat(format, 'ko');
   String strDateTime = formatter.format(dateTime);
