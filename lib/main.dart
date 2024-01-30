@@ -119,6 +119,7 @@ class _MyAppState extends State<MyApp> {
             : '/enter-screen-lock';
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

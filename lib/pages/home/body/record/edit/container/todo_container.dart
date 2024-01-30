@@ -342,6 +342,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
   Widget build(BuildContext context) {
     onTapChangeOrder() {
       showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return ChangeOrderBottomSheet(
@@ -565,7 +566,7 @@ class _ChangeOrderBottomSheetState extends State<ChangeOrderBottomSheet> {
 
     return CommonBottomSheet(
       title: '${widget.title} 목표',
-      height: MediaQuery.of(context).size.height / 1.5,
+      height: 530,
       contents: Column(
         children: [
           Row(
@@ -1050,14 +1051,14 @@ class LifeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     onTapChangeOrder() {
       showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
         context: context,
-        builder: (context) {
-          return ChangeOrderBottomSheet(
-            type: type,
-            title: title,
-            planList: planList,
-          );
-        },
+        builder: (context) => ChangeOrderBottomSheet(
+          type: type,
+          title: title,
+          planList: planList,
+        ),
       );
     }
 
@@ -1157,15 +1158,25 @@ class GoalList extends StatelessWidget {
       eDiet: user.dietOrderList,
       eExercise: user.exerciseOrderList,
       eLife: user.lifeOrderList,
-    }[type]!;
+    }[type];
 
-    onTapRemove(PlanBox planInfo) {
+    onTapRemove(PlanBox planInfo) async {
       if (planInfo.alarmId != null) {
         NotificationService().deleteAlarm(planInfo.alarmId!);
       }
 
       planRepository.planBox.delete(planInfo.id);
-      orderList.remove(planInfo.id);
+      orderList?.remove(planInfo.id);
+
+      if (planList.length < 2) {
+        if (type == eDiet) {
+          user.dietOrderList = [];
+        } else if (type == eExercise) {
+          user.exerciseOrderList = [];
+        } else if (type == eLife) {
+          user.lifeOrderList = [];
+        }
+      }
 
       user.save();
     }
@@ -1184,8 +1195,8 @@ class GoalList extends StatelessWidget {
     }
 
     planList.sort((itemA, itemB) {
-      int indexA = orderList.indexOf(itemA.id);
-      int indexB = orderList.indexOf(itemB.id);
+      int indexA = orderList?.indexOf(itemA.id) ?? 0;
+      int indexB = orderList?.indexOf(itemB.id) ?? 0;
 
       return indexA.compareTo(indexB);
     });
