@@ -23,10 +23,7 @@ class PatialDeletePage extends StatefulWidget {
 class _PatialDeletePageState extends State<PatialDeletePage> {
   @override
   void initState() {
-    String? passwords = userRepository.user.screenLockPasswords;
-    AppLifecycleReactor(context: context, passwords: passwords)
-        .listenToAppStateChanges();
-
+    AppLifecycleReactor(context: context).listenToAppStateChanges();
     super.initState();
   }
 

@@ -1,29 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/add/add_container.dart';
-import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
-import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -184,9 +177,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     requestInAppReview();
 
-    String? passwords = userRepository.user.screenLockPasswords;
-    AppLifecycleReactor(context: context, passwords: passwords)
-        .listenToAppStateChanges();
+    AppLifecycleReactor(context: context).listenToAppStateChanges();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();

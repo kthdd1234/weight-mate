@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -290,10 +291,9 @@ class historyImageClass {
 }
 
 class AppLifecycleReactor {
-  AppLifecycleReactor({required this.context, this.passwords});
+  AppLifecycleReactor({required this.context});
 
   BuildContext context;
-  String? passwords;
 
   void listenToAppStateChanges() {
     AppStateEventNotifier.startListening();
@@ -302,7 +302,9 @@ class AppLifecycleReactor {
   }
 
   void _onAppStateChanged(AppState appState) async {
-    if (appState == AppState.background && passwords != null) {
+    String? passwords = userRepository.user.screenLockPasswords;
+
+    if (appState == AppState.foreground && passwords != null) {
       try {
         Navigator.of(context).push(
           MaterialPageRoute(

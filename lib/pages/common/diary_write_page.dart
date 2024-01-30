@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
@@ -27,17 +25,17 @@ class DiaryWritePage extends StatefulWidget {
 }
 
 class _DiaryWritePageState extends State<DiaryWritePage> {
+  TextEditingController controller = TextEditingController();
+  FocusNode focusNode = FocusNode();
   DateTime? importDateTime;
   RecordBox? recordInfo;
-  TextEditingController controller = TextEditingController();
   bool isEnabledButton = false;
   String emotion = '';
 
   @override
   void initState() {
     String? passwords = userRepository.user.screenLockPasswords;
-    AppLifecycleReactor(context: context, passwords: passwords)
-        .listenToAppStateChanges();
+    AppLifecycleReactor(context: context).listenToAppStateChanges();
 
     super.initState();
   }
@@ -149,7 +147,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                 CommonTag(
                                   color: 'orange',
                                   text: '키보드 내리기',
-                                  onTap: () => FocusScope.of(context).unfocus(),
+                                  onTap: () => focusNode.unfocus(),
                                 ),
                               ],
                             ),
@@ -195,6 +193,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                             ),
                             SpaceHeight(height: 10),
                             TextFormField(
+                              focusNode: focusNode,
                               controller: controller,
                               autofocus: true,
                               maxLines: null,

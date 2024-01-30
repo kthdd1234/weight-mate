@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';

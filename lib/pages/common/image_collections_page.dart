@@ -50,10 +50,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 
     fileItemList = itemList.reversed.toList();
 
-    String? passwords = userRepository.user.screenLockPasswords;
-    AppLifecycleReactor(context: context, passwords: passwords)
-        .listenToAppStateChanges();
-
+    AppLifecycleReactor(context: context).listenToAppStateChanges();
     super.initState();
   }
 
