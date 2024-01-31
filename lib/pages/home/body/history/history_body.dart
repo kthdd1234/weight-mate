@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -41,11 +42,7 @@ class HistoryBody extends StatelessWidget {
 
         if (recordList.isNotEmpty) {
           for (var i = 0; i < recordList.length; i++) {
-            if (i == 1) {
-              recordList.insert(1, RecordBox(createDateTime: DateTime(1000)));
-            }
-
-            if (i != 0 && i % 6 == 0) {
+            if (i != 0 && i % 7 == 0) {
               recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
             }
           }
@@ -53,7 +50,6 @@ class HistoryBody extends StatelessWidget {
 
         return Column(
           children: [
-            SpaceHeight(height: regularSapce),
             CommonAppBar(id: id),
             SpaceHeight(height: smallSpace),
             Expanded(

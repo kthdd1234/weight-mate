@@ -1,3 +1,7 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
@@ -6,12 +10,14 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -31,31 +37,42 @@ class EditDiary extends StatefulWidget {
 }
 
 class _EditDiaryState extends State<EditDiary> {
-  TextEditingController textController = TextEditingController();
-  bool isStartDiary = false;
-  bool isShowInput = false;
-
   @override
   Widget build(BuildContext context) {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     String fDiary = FILITER.diary.toString();
     UserBox user = userRepository.user;
-
     bool? isDisplay = user.displayList?.contains(fDiary) == true;
     bool? isOpen = user.filterList?.contains(fDiary) == true;
-
     Box<RecordBox> recordBox = recordRepository.recordBox;
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
 
-    onTapEditDiary() {
-      setState(() {
-        textController.text = recordInfo?.whiteText ?? '';
-        isStartDiary = true;
-        isShowInput = true;
-      });
+    onTapWriteDiary() async {
+      final result = await Navigator.pushNamed(context, '/diary-write-page');
+
+      if (result == 'save') {
+        onClick(BottomNavigationEnum enumId) async {
+          context
+              .read<BottomNavigationProvider>()
+              .setBottomNavigation(enumId: enumId);
+          closeDialog(context);
+        }
+
+        await showDialog(
+          context: context,
+          builder: (context) => NativeAdDialog(
+            loadingText: '일기 데이터 저장 중...',
+            title: '📝 일기 작성 완료!',
+            leftText: '히스토리',
+            rightText: '그래프',
+            onLeftClick: () => onClick(BottomNavigationEnum.history),
+            onRightClick: () => onClick(BottomNavigationEnum.graph),
+          ),
+        );
+      }
     }
 
     onTapEmtion(String selectedEmotion) {
@@ -91,37 +108,6 @@ class _EditDiaryState extends State<EditDiary> {
       );
     }
 
-    onEditingComplete() async {
-      if (textController.text != '') {
-        DateTime now = DateTime.now();
-        DateTime diaryDateTime = DateTime(
-          importDateTime.year,
-          importDateTime.month,
-          importDateTime.day,
-          now.hour,
-          now.minute,
-        );
-
-        if (recordInfo == null) {
-          await recordBox.put(
-            recordKey,
-            RecordBox(
-              createDateTime: diaryDateTime,
-              diaryDateTime: diaryDateTime,
-              whiteText: textController.text,
-            ),
-          );
-        } else {
-          recordInfo.whiteText = textController.text;
-          recordInfo.diaryDateTime = diaryDateTime;
-        }
-
-        recordInfo?.save();
-      }
-
-      setState(() => isShowInput = false);
-    }
-
     onTapOpen() {
       isOpen ? user.filterList?.remove(fDiary) : user.filterList?.add(fDiary);
       user.save();
@@ -134,10 +120,6 @@ class _EditDiaryState extends State<EditDiary> {
         recordInfo?.save();
       }
 
-      setState(() {
-        isStartDiary = false;
-        isShowInput = false;
-      });
       closeDialog(context);
     }
 
@@ -165,7 +147,7 @@ class _EditDiaryState extends State<EditDiary> {
                   title: '내용 수정',
                   onTap: () {
                     closeDialog(context);
-                    onTapEditDiary();
+                    onTapWriteDiary();
                   },
                 ),
                 SpaceWidth(width: tinySpace),
@@ -189,118 +171,123 @@ class _EditDiaryState extends State<EditDiary> {
       );
     }
 
+    emotionList;
+
+    List<TagClass> tags = [
+      TagClass(
+        text: recordInfo?.whiteText != null
+            ? timeToString(recordInfo?.diaryDateTime)
+            : '미작성',
+        color: 'orange',
+        isHide: isOpen,
+        onTap: onTapOpen,
+      ),
+      TagClass(
+        text: emotion != null
+            ? emotionList.firstWhere((item) => item.emotion == emotion).name
+            : '감정 기록',
+        color: 'orange',
+        onTap: onTapOpenEmotion,
+      ),
+      TagClass(
+        icon: isOpen
+            ? Icons.keyboard_arrow_down_rounded
+            : Icons.keyboard_arrow_right_rounded,
+        color: 'orange',
+        onTap: onTapOpen,
+      )
+    ];
+
     return isDisplay
-        ? Column(
-            children: [
-              ContentsBox(
-                contentsWidget: Column(
-                  children: [
-                    TitleContainer(
-                      isDivider: isOpen,
-                      title: '일기',
-                      icon: Icons.auto_fix_high,
-                      tags: [
-                        TagClass(
-                          text: recordInfo?.diaryDateTime != null
-                              ? timeToString(recordInfo?.diaryDateTime)
-                              : '미작성',
-                          color: 'orange',
-                          isHide: isOpen,
-                          onTap: onTapOpen,
-                        ),
-                        TagClass(
-                          text: '감정 기록',
-                          color: 'orange',
-                          onTap: onTapOpenEmotion,
-                        ),
-                        TagClass(
-                          icon: isOpen
-                              ? Icons.keyboard_arrow_down_rounded
-                              : Icons.keyboard_arrow_right_rounded,
-                          color: 'orange',
-                          onTap: onTapOpen,
-                        )
-                      ],
-                      onTap: onTapOpen,
-                    ),
-                    isOpen
-                        ? Column(
-                            children: [
-                              DiaryTitle(
-                                importDateTime: importDateTime,
-                                emotion: emotion,
-                                onTapMore: onTapMore,
-                                onTapEmotion: onTapOpenEmotion,
-                              ),
-                              isShowInput
-                                  ? TextFormField(
-                                      autofocus: true,
-                                      textInputAction: TextInputAction.done,
-                                      controller: textController,
-                                      maxLength: 200,
-                                      maxLines: null,
-                                      minLines: null,
-                                      onEditingComplete: onEditingComplete,
-                                    )
-                                  : recordInfo?.whiteText != null
-                                      ? Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SpaceHeight(height: smallSpace),
-                                            InkWell(
-                                              onTap: onTapEditDiary,
-                                              child: Text(
-                                                recordInfo?.whiteText ?? '',
-                                                style: const TextStyle(
-                                                  fontSize: 13,
-                                                  color: themeColor,
+        ? SizedBox(
+            child: Column(
+              children: [
+                ContentsBox(
+                  contentsWidget: Column(
+                    children: [
+                      TitleContainer(
+                        isDivider: isOpen,
+                        title: '일기',
+                        icon: Icons.auto_fix_high,
+                        tags: tags,
+                        onTap: onTapOpen,
+                      ),
+                      isOpen
+                          ? recordInfo?.whiteText == null &&
+                                  recordInfo?.emotion == null
+                              ? DiaryWriteButton(onTap: onTapWriteDiary)
+                              : Column(
+                                  children: [
+                                    DiaryTitle(
+                                      importDateTime: importDateTime,
+                                      emotion: emotion,
+                                      onTapMore: onTapMore,
+                                      onTapEmotion: onTapOpenEmotion,
+                                    ),
+                                    SpaceHeight(height: smallSpace),
+                                    recordInfo?.whiteText == null
+                                        ? DiaryWriteButton(
+                                            onTap: onTapWriteDiary,
+                                          )
+                                        : InkWell(
+                                            onTap: onTapMore,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  recordInfo!.whiteText!,
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                    color: themeColor,
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                            SpaceHeight(height: smallSpace),
-                                            CommonText(
-                                              text: recordInfo?.diaryDateTime !=
-                                                      null
-                                                  ? timeToString(
-                                                      recordInfo!.diaryDateTime,
-                                                    )
-                                                  : '',
-                                              size: 12,
-                                              color: Colors.grey,
-                                            ),
-                                          ],
-                                        )
-                                      : Column(
-                                          children: [
-                                            SpaceHeight(height: smallSpace),
-                                            InkWell(
-                                              onTap: onTapEditDiary,
-                                              child: ContentsBox(
-                                                padding: const EdgeInsets.all(
-                                                    smallSpace),
-                                                imgUrl:
-                                                    'assets/images/t-16.png',
-                                                contentsWidget: CommonText(
-                                                  text: '일기 작성하기',
-                                                  size: 14,
-                                                  isCenter: true,
-                                                  isBold: true,
-                                                  color: Colors.white,
+                                                SpaceHeight(height: smallSpace),
+                                                CommonText(
+                                                  size: 12,
+                                                  color: Colors.grey,
+                                                  text: timeToString(
+                                                    recordInfo.diaryDateTime,
+                                                  ),
                                                 ),
-                                              ),
+                                              ],
                                             ),
-                                          ],
-                                        )
-                            ],
-                          )
-                        : const EmptyArea(),
-                  ],
+                                          ),
+                                  ],
+                                )
+                          : const EmptyArea(),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           )
         : const EmptyArea();
+  }
+}
+
+class DiaryWriteButton extends StatelessWidget {
+  DiaryWriteButton({super.key, required this.onTap});
+
+  Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: ContentsBox(
+        borderRadius: 7,
+        padding: const EdgeInsets.all(14),
+        imgUrl: 'assets/images/t-16.png',
+        contentsWidget: CommonText(
+          text: '일기 작성하기',
+          size: 14,
+          isCenter: true,
+          isBold: true,
+          color: Colors.white,
+        ),
+      ),
+    );
   }
 }
 
@@ -457,66 +444,3 @@ class EmotionModal extends StatelessWidget {
     );
   }
 }
-
-// Row(
-//                           children: [
-//                             recordInfo?.whiteText != null
-//                                 ? Stack(
-//                                     children: [
-//                                       CommonText(
-//                                         text:
-//                                             '${'📌'}${recordInfo!.whiteText!}',
-//                                         size: 14,
-//                                         isWidth: true,
-//                                         onTap: onTap,
-//                                       ),
-//                                       CloseIcon(
-//                                         isEdit: isEdit,
-//                                         onTapRemove: onTapRemove,
-//                                         pos: '',
-//                                       )
-//                                     ],
-//                                   )
-//                                 : DashContainer(
-//                                     height: 40,
-//                                     text: '한줄 메모',
-//                                     borderType: BorderType.RRect,
-//                                     radius: 5,
-//                                     onTap: onTap,
-//                                   ),
-//                           ],
-//                         )
-
-// isEdit
-//         ? isContainDiary
-//             ? Column(
-//                 children: [
-//                   SpaceHeight(height: smallSpace),
-//                   isShowInput
-//                       ? TextFormField(
-//                           controller: textController,
-//                           autofocus: true,
-//                           style: Theme.of(context).textTheme.bodyMedium,
-//                           keyboardType: TextInputType.text,
-//                           maxLength: 150,
-//                           textInputAction: TextInputAction.done,
-//                           minLines: null,
-//                           maxLines: null,
-//                           decoration: const InputDecoration(
-//                             contentPadding: EdgeInsets.symmetric(
-//                               vertical: tinySpace,
-//                             ),
-//                           ),
-//                           onEditingComplete: onEditingComplete,
-//                         )
-//                       : ,
-//                 ],
-//               )
-//             : const EmptyArea()
-//         : recordInfo?.whiteText != null
-//             ? Text(recordInfo!.whiteText!,
-//                 style: const TextStyle(
-//                   color: themeColor,
-//                   fontSize: 13,
-//                 ))
-//             : const EmptyArea();

@@ -9,11 +9,23 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/widget/history_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 
-class PatialDeletePage extends StatelessWidget {
+class PatialDeletePage extends StatefulWidget {
   const PatialDeletePage({super.key});
+
+  @override
+  State<PatialDeletePage> createState() => _PatialDeletePageState();
+}
+
+class _PatialDeletePageState extends State<PatialDeletePage> {
+  @override
+  void initState() {
+    AppLifecycleReactor(context: context).listenToAppStateChanges();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

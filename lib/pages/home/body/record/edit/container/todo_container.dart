@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
 import 'dart:developer';
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -13,8 +12,6 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box_exp.dart';
-import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -25,7 +22,6 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -81,7 +77,6 @@ class _TodoContainerState extends State<TodoContainer> {
     Map<String, Color> tagColor = tagColors[widget.color]!;
     Color mainColor = tagColor['textColor']!;
     Color bgColor = tagColor['bgColor']!;
-
     bool isLife = widget.filterId == FILITER.lifeStyle.toString();
 
     onCheckBox({required dynamic id, required bool newValue}) async {
@@ -238,10 +233,6 @@ class _TodoContainerState extends State<TodoContainer> {
       ).toString();
     }
 
-    onTapActionPercent() {
-      //
-    }
-
     onTapOpen() {
       isOpen
           ? user.filterList?.remove(widget.filterId)
@@ -249,64 +240,17 @@ class _TodoContainerState extends State<TodoContainer> {
       user.save();
     }
 
-    TagClass commonTag = TagClass(
-      icon: isOpen
-          ? Icons.keyboard_arrow_down_rounded
-          : Icons.keyboard_arrow_right_rounded,
-      color: widget.color,
-      onTap: onTapOpen,
-    );
-
-    List<TagClass> dietExerciseTags = [
-      TagClass(
-        text: '기록 ${onActionList(
-              actions: actions,
-              type: widget.type,
-              onRecordUpdate: onRecordComplete,
-            )?.length ?? 0}개',
-        color: widget.color,
-        isHide: isOpen,
-        onTap: onTapOpen,
-      ),
-      TagClass(
-        text: '목표 ${planList.length}개',
-        color: widget.color,
-        isHide: isOpen,
-        onTap: onTapOpen,
-      ),
-      commonTag
-    ];
-
-    List<TagClass> lifeTags = [
-      TagClass(
-        text: '목표 ${planList.length}개',
-        color: widget.color,
-        isHide: isOpen,
-        onTap: onTapOpen,
-      ),
-      TagClass(
-        text: '실천율 ${actionPercent()}%',
-        color: widget.color,
-        onTap: onTapActionPercent,
-      ),
-      commonTag
-    ];
-
     return isDisplay
         ? Column(
             children: [
               ContentsBox(
                 contentsWidget: Column(
                   children: [
-                    TitleContainer(
-                      isDivider: isOpen,
-                      title: widget.title,
-                      icon: widget.icon,
-                      tags: isLife ? lifeTags : dietExerciseTags,
-                      onTap: onTapOpen,
-                    ),
                     isLife
                         ? LifeContainer(
+                            icon: widget.icon,
+                            colorName: widget.color,
+                            actionPercent: actionPercent(),
                             type: widget.type,
                             isOpen: isOpen,
                             title: widget.title,
@@ -315,8 +259,12 @@ class _TodoContainerState extends State<TodoContainer> {
                             planList: planList,
                             onCheckBox: onCheckBox,
                             onGoalComplete: onGoalComplete,
+                            onTapOpen: onTapOpen,
                           )
                         : DietExerciseContainer(
+                            title: widget.title,
+                            colorName: widget.color,
+                            icon: widget.icon,
                             type: widget.type,
                             isOpen: isOpen,
                             bgColor: bgColor,
@@ -326,6 +274,7 @@ class _TodoContainerState extends State<TodoContainer> {
                             onCheckBox: onCheckBox,
                             onGoalComplete: onGoalComplete,
                             onRecordComplete: onRecordComplete,
+                            onTapOpen: onTapOpen,
                           )
                   ],
                 ),
@@ -338,25 +287,29 @@ class _TodoContainerState extends State<TodoContainer> {
 }
 
 class DietExerciseContainer extends StatefulWidget {
-  DietExerciseContainer({
-    super.key,
-    required this.type,
-    required this.isOpen,
-    required this.bgColor,
-    required this.actions,
-    required this.mainColor,
-    required this.planList,
-    required this.onCheckBox,
-    required this.onGoalComplete,
-    required this.onRecordComplete,
-  });
+  DietExerciseContainer(
+      {super.key,
+      required this.title,
+      required this.colorName,
+      required this.icon,
+      required this.type,
+      required this.isOpen,
+      required this.bgColor,
+      required this.actions,
+      required this.mainColor,
+      required this.planList,
+      required this.onCheckBox,
+      required this.onGoalComplete,
+      required this.onRecordComplete,
+      required this.onTapOpen});
 
-  String type;
+  String title, type, colorName;
   bool isOpen;
   Color bgColor;
   List<Map<String, dynamic>>? actions;
   Color mainColor;
   List<PlanBox> planList;
+  IconData icon;
   Function({required dynamic id, required bool newValue}) onCheckBox;
   Function({
     required String completedType,
@@ -376,6 +329,7 @@ class DietExerciseContainer extends StatefulWidget {
     required DateTime actionDateTime,
     required String title,
   }) onRecordComplete;
+  Function() onTapOpen;
 
   @override
   State<DietExerciseContainer> createState() => _DietExerciseContainerState();
@@ -386,10 +340,56 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
 
   @override
   Widget build(BuildContext context) {
+    onTapChangeOrder() {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return ChangeOrderBottomSheet(
+            title: widget.title,
+            planList: widget.planList,
+            type: widget.type,
+          );
+        },
+      );
+    }
+
+    List<TagClass> tags = [
+      TagClass(
+        text: '순서 변경',
+        color: widget.colorName,
+        isHide: widget.isOpen == false
+            ? true
+            : selectedSegment == SegmentedTypes.record,
+        onTap: onTapChangeOrder,
+      ),
+      TagClass(
+        text: '기록 ${onActionList(
+              actions: widget.actions,
+              type: widget.type,
+              onRecordUpdate: widget.onRecordComplete,
+            )?.length ?? 0}개',
+        color: widget.colorName,
+        isHide: widget.isOpen,
+        onTap: widget.onTapOpen,
+      ),
+      TagClass(
+        text: '목표 ${widget.planList.length}개',
+        color: widget.colorName,
+        isHide: widget.isOpen,
+        onTap: widget.onTapOpen,
+      ),
+      TagClass(
+        icon: widget.isOpen
+            ? Icons.keyboard_arrow_down_rounded
+            : Icons.keyboard_arrow_right_rounded,
+        color: widget.colorName,
+        onTap: widget.onTapOpen,
+      )
+    ];
+
     onSegmentedChanged(SegmentedTypes? segmented) {
-      setState(() {
-        selectedSegment = segmented!;
-      });
+      setState(() => selectedSegment = segmented!);
     }
 
     bool isRecord = selectedSegment == SegmentedTypes.record;
@@ -412,51 +412,193 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
       ),
     };
 
-    return widget.isOpen
-        ? Column(
-            children: [
-              DefaultSegmented(
-                selectedSegment: selectedSegment,
-                children: children,
-                backgroundColor: dialogBackgroundColor,
-                thumbColor: Colors.white,
-                onSegmentedChanged: onSegmentedChanged,
+    return Column(
+      children: [
+        TitleContainer(
+          isDivider: widget.isOpen,
+          title: widget.title,
+          icon: widget.icon,
+          tags: tags,
+          onTap: widget.onTapOpen,
+        ),
+        widget.isOpen
+            ? Column(
+                children: [
+                  DefaultSegmented(
+                    selectedSegment: selectedSegment,
+                    children: children,
+                    backgroundColor: dialogBackgroundColor,
+                    thumbColor: Colors.white,
+                    onSegmentedChanged: onSegmentedChanged,
+                  ),
+                  SpaceHeight(height: regularSapce),
+                  isRecord
+                      ? Column(
+                          children: [
+                            RecordList(
+                              actionList: actionList,
+                              onRecordUpdate: widget.onRecordComplete,
+                            ),
+                            RecordAdd(
+                              type: widget.type,
+                              onRecordAdd: widget.onRecordComplete,
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            GoalList(
+                              type: widget.type,
+                              actions: widget.actions,
+                              planList: widget.planList,
+                              mainColor: widget.mainColor,
+                              onCheckBox: widget.onCheckBox,
+                              onGoalUpdate: widget.onGoalComplete,
+                            ),
+                            GoalAdd(
+                              type: widget.type,
+                              title: '목표',
+                              mainColor: widget.mainColor,
+                              onTapGoalAdd: widget.onGoalComplete,
+                            ),
+                          ],
+                        ),
+                ],
+              )
+            : const EmptyArea()
+      ],
+    );
+  }
+}
+
+class ChangeOrderBottomSheet extends StatefulWidget {
+  ChangeOrderBottomSheet({
+    super.key,
+    required this.type,
+    required this.title,
+    required this.planList,
+  });
+
+  List<PlanBox> planList;
+  String title, type;
+
+  @override
+  State<ChangeOrderBottomSheet> createState() => _ChangeOrderBottomSheetState();
+}
+
+class _ChangeOrderBottomSheetState extends State<ChangeOrderBottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String>? orderList = {
+      eDiet: user.dietOrderList,
+      eExercise: user.exerciseOrderList,
+      eLife: user.lifeOrderList,
+    }[widget.type]!;
+
+    widget.planList.sort((itemA, itemB) {
+      int indexA = orderList.indexOf(itemA.id);
+      int indexB = orderList.indexOf(itemB.id);
+
+      return indexA.compareTo(indexB);
+    });
+
+    Widget planItem(index) {
+      return Padding(
+        key: Key(widget.planList[index].id),
+        padding: const EdgeInsets.only(bottom: 10),
+        child: Row(
+          children: [
+            GoalName(
+              moreIcon: Icons.drag_indicator_rounded,
+              planInfo: widget.planList[index],
+              isChcked: false,
+              actionCount: onActionCount(
+                recordRepository.recordList,
+                widget.planList[index].id,
               ),
-              SpaceHeight(height: regularSapce),
-              isRecord
-                  ? Column(
-                      children: [
-                        RecordList(
-                          actionList: actionList,
-                          onRecordUpdate: widget.onRecordComplete,
-                        ),
-                        RecordAdd(
-                          type: widget.type,
-                          onRecordAdd: widget.onRecordComplete,
-                        ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        GoalList(
-                          type: widget.type,
-                          actions: widget.actions,
-                          planList: widget.planList,
-                          mainColor: widget.mainColor,
-                          onCheckBox: widget.onCheckBox,
-                          onGoalUpdate: widget.onGoalComplete,
-                        ),
-                        GoalAdd(
-                          type: widget.type,
-                          title: '목표',
-                          mainColor: widget.mainColor,
-                          onTapGoalAdd: widget.onGoalComplete,
-                        ),
-                      ],
-                    ),
+              color: themeColor,
+              onTapMore: () {},
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget proxyDecorator(
+      Widget child,
+      int index,
+      Animation<double> animation,
+    ) {
+      return AnimatedBuilder(
+        animation: animation,
+        builder: (BuildContext context, Widget? child) {
+          final double animValue = Curves.easeInOut.transform(animation.value);
+          final double scale = lerpDouble(1, 1.02, animValue)!;
+          return Transform.scale(
+            scale: scale,
+            child: Card(
+              margin: const EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+              color: const Color(0xffF9F9FC),
+              elevation: 0.0,
+              child: planItem(index),
+            ),
+          );
+        },
+        child: child,
+      );
+    }
+
+    onReorder(int oldIndex, int newIndex) {
+      String oldId = widget.planList[oldIndex].id;
+      String targetId = uuid();
+
+      orderList[oldIndex] = targetId;
+      orderList.insert(newIndex, oldId);
+      orderList.remove(targetId);
+
+      user.save();
+      setState(() {});
+    }
+
+    return CommonBottomSheet(
+      title: '${widget.title} 목표',
+      height: 530,
+      contents: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              CommonIcon(
+                icon: Icons.drag_indicator,
+                size: 14,
+                color: themeColor,
+              ),
+              CommonText(
+                text: '버튼으로 순서를 변경해보세요',
+                size: 12,
+                isBold: true,
+              ),
             ],
-          )
-        : const EmptyArea();
+          ),
+          SpaceHeight(height: 10),
+          ContentsBox(
+              height: 390,
+              contentsWidget: ReorderableListView(
+                shrinkWrap: true,
+                proxyDecorator: proxyDecorator,
+                onReorder: onReorder,
+                children: List.generate(
+                  widget.planList.length,
+                  (int index) => planItem(index),
+                ),
+              )),
+        ],
+      ),
+    );
   }
 }
 
@@ -609,8 +751,10 @@ class _RecordNameState extends State<RecordName> {
                       children: [
                         Text(
                           widget.name,
-                          style:
-                              const TextStyle(color: themeColor, fontSize: 15),
+                          style: const TextStyle(
+                            color: themeColor,
+                            fontSize: 15,
+                          ),
                         ),
                         SpaceHeight(height: 3),
                         CommonText(
@@ -869,6 +1013,9 @@ class CategoryList extends StatelessWidget {
 class LifeContainer extends StatelessWidget {
   LifeContainer({
     super.key,
+    required this.colorName,
+    required this.icon,
+    required this.actionPercent,
     required this.type,
     required this.isOpen,
     required this.title,
@@ -877,14 +1024,15 @@ class LifeContainer extends StatelessWidget {
     required this.planList,
     required this.onCheckBox,
     required this.onGoalComplete,
+    required this.onTapOpen,
   });
 
-  String type;
+  String type, title, colorName, actionPercent;
   bool isOpen;
-  String title;
   List<Map<String, dynamic>>? actions;
   Color mainColor;
   List<PlanBox> planList;
+  IconData icon;
   Function({required dynamic id, required bool newValue}) onCheckBox;
   Function({
     required String completedType,
@@ -897,29 +1045,81 @@ class LifeContainer extends StatelessWidget {
     bool? isAlarm,
     String? priority,
   }) onGoalComplete;
+  Function() onTapOpen;
 
   @override
   Widget build(BuildContext context) {
-    return isOpen
-        ? Column(
-            children: [
-              GoalList(
-                type: type,
-                actions: actions,
-                mainColor: mainColor,
-                planList: planList,
-                onCheckBox: onCheckBox,
-                onGoalUpdate: onGoalComplete,
-              ),
-              GoalAdd(
-                type: type,
-                title: title,
-                mainColor: mainColor,
-                onTapGoalAdd: onGoalComplete,
-              ),
-            ],
-          )
-        : const EmptyArea();
+    onTapChangeOrder() {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
+        context: context,
+        builder: (context) => ChangeOrderBottomSheet(
+          type: type,
+          title: title,
+          planList: planList,
+        ),
+      );
+    }
+
+    List<TagClass> lifeTags = [
+      TagClass(
+        text: '순서 변경',
+        isHide: !isOpen,
+        color: colorName,
+        onTap: onTapChangeOrder,
+      ),
+      TagClass(
+        text: '목표 ${planList.length}개',
+        color: colorName,
+        isHide: isOpen,
+        onTap: onTapOpen,
+      ),
+      TagClass(
+        text: '실천율 $actionPercent%',
+        color: colorName,
+        onTap: () => null,
+      ),
+      TagClass(
+        icon: isOpen
+            ? Icons.keyboard_arrow_down_rounded
+            : Icons.keyboard_arrow_right_rounded,
+        color: colorName,
+        onTap: onTapOpen,
+      ),
+    ];
+
+    return Column(
+      children: [
+        TitleContainer(
+          isDivider: isOpen,
+          title: title,
+          icon: icon,
+          tags: lifeTags,
+          onTap: onTapOpen,
+        ),
+        isOpen
+            ? Column(
+                children: [
+                  GoalList(
+                    type: type,
+                    actions: actions,
+                    mainColor: mainColor,
+                    planList: planList,
+                    onCheckBox: onCheckBox,
+                    onGoalUpdate: onGoalComplete,
+                  ),
+                  GoalAdd(
+                    type: type,
+                    title: title,
+                    mainColor: mainColor,
+                    onTapGoalAdd: onGoalComplete,
+                  ),
+                ],
+              )
+            : const EmptyArea()
+      ],
+    );
   }
 }
 
@@ -958,22 +1158,25 @@ class GoalList extends StatelessWidget {
       eDiet: user.dietOrderList,
       eExercise: user.exerciseOrderList,
       eLife: user.lifeOrderList,
-    }[type]!;
+    }[type];
 
-    planList.sort((itemA, itemB) {
-      int indexA = orderList.indexOf(itemA.id);
-      int indexB = orderList.indexOf(itemB.id);
-
-      return indexA.compareTo(indexB);
-    });
-
-    onTapRemove(PlanBox planInfo) {
+    onTapRemove(PlanBox planInfo) async {
       if (planInfo.alarmId != null) {
         NotificationService().deleteAlarm(planInfo.alarmId!);
       }
 
       planRepository.planBox.delete(planInfo.id);
-      orderList.remove(planInfo.id);
+      orderList?.remove(planInfo.id);
+
+      if (planList.length < 2) {
+        if (type == eDiet) {
+          user.dietOrderList = [];
+        } else if (type == eExercise) {
+          user.exerciseOrderList = [];
+        } else if (type == eLife) {
+          user.lifeOrderList = [];
+        }
+      }
 
       user.save();
     }
@@ -983,7 +1186,7 @@ class GoalList extends StatelessWidget {
         return {'id': null, 'actionDateTime': null};
       }
 
-      final action = actions!.firstWhere(
+      Map<String, dynamic> action = actions!.firstWhere(
         (element) => element['id'] == planId,
         orElse: () => {'id': null, 'actionDateTime': null},
       );
@@ -991,86 +1194,64 @@ class GoalList extends StatelessWidget {
       return action;
     }
 
-    Widget item(index) {
-      return InkWell(
-        key: Key(planList[index].id),
-        child: Column(
-          children: [
-            Dismiss(
-              id: planList[index].id,
-              onDismiss: () => onTapRemove(planList[index]),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CommonCheckBox(
-                    id: planList[index].id,
-                    isCheck: action(planList[index].id)['id'] != null,
-                    checkColor: mainColor,
-                    onTap: onCheckBox,
-                  ),
-                  GoalName(
-                    type: type,
-                    planInfo: planList[index],
-                    color: mainColor,
-                    isChcked: action(planList[index].id)['id'] != null,
-                    onGoalUpdate: onGoalUpdate,
-                    onTapRemove: onTapRemove,
-                  ),
-                ],
+    planList.sort((itemA, itemB) {
+      int indexA = orderList?.indexOf(itemA.id) ?? 0;
+      int indexB = orderList?.indexOf(itemB.id) ?? 0;
+
+      return indexA.compareTo(indexB);
+    });
+
+    planList.sort((itemA, itemB) {
+      bool isCheckedA = action(itemA.id)['id'] != null;
+      bool isCheckedB = action(itemB.id)['id'] != null;
+
+      return (isCheckedA == isCheckedB ? 0 : (isCheckedB ? 1 : -1));
+    });
+
+    return Column(
+      children: planList
+          .map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Dismiss(
+                id: item.id,
+                onDismiss: () => onTapRemove(item),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonCheckBox(
+                      id: item.id,
+                      isCheck: action(item.id)['id'] != null,
+                      checkColor: mainColor,
+                      onTap: onCheckBox,
+                    ),
+                    GoalItem(
+                      type: type,
+                      planInfo: item,
+                      color: mainColor,
+                      isChcked: action(item.id)['id'] != null,
+                      onGoalUpdate: onGoalUpdate,
+                      onTapRemove: onTapRemove,
+                    ),
+                  ],
+                ),
               ),
             ),
-            SpaceHeight(height: 10)
-          ],
-        ),
-      );
-    }
-
-    Widget proxyDecorator(
-        Widget child, int index, Animation<double> animation) {
-      return AnimatedBuilder(
-        animation: animation,
-        builder: (BuildContext context, Widget? child) {
-          final double animValue = Curves.easeInOut.transform(animation.value);
-          final double scale = lerpDouble(1, 1.02, animValue)!;
-          return Transform.scale(
-            scale: scale,
-            child: Card(
-              margin: const EdgeInsets.all(0),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(7),
-              ),
-              color: const Color(0xffF9F9FC),
-              elevation: 0.0,
-              child: item(index),
-            ),
-          );
-        },
-        child: child,
-      );
-    }
-
-    onReorder(int oldIndex, int newIndex) {
-      String oldId = planList[oldIndex].id;
-      String targetId = uuid();
-
-      orderList[oldIndex] = targetId;
-      orderList.insert(newIndex, oldId);
-      orderList.remove(targetId);
-
-      user.save();
-    }
-
-    return ReorderableListView(
-      shrinkWrap: true,
-      proxyDecorator: proxyDecorator,
-      onReorder: onReorder,
-      children: List.generate(planList.length, (int index) => item(index)),
+          )
+          .toList(),
     );
+
+    // ReorderableListView(
+    //   shrinkWrap: true,
+    //   proxyDecorator: proxyDecorator,
+    //   onReorder: onReorder,
+    //   children: List.generate(planList.length, (int index) => item(index)),
+    // );
   }
 }
 
-class GoalName extends StatefulWidget {
-  GoalName({
+class GoalItem extends StatefulWidget {
+  GoalItem({
     required this.type,
     required this.planInfo,
     required this.isChcked,
@@ -1101,10 +1282,10 @@ class GoalName extends StatefulWidget {
   Function(PlanBox) onTapRemove;
 
   @override
-  State<GoalName> createState() => _GoalNameState();
+  State<GoalItem> createState() => _GoalItemState();
 }
 
-class _GoalNameState extends State<GoalName> {
+class _GoalItemState extends State<GoalItem> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
 
@@ -1157,86 +1338,100 @@ class _GoalNameState extends State<GoalName> {
       );
     }
 
-    onActionCount() {
-      int count = 0;
-
-      recordRepository.recordList.forEach((record) {
-        final actionList = record.actions;
-
-        if (actionList != null) {
-          actionList.forEach((action) {
-            if (action['id'] == widget.planInfo.id) {
-              count += 1;
-            }
-          });
-        }
-      });
-
-      return count;
-    }
-
     return isShowInput
         ? TodoInput(
             controller: textController,
             onEditingComplete: onEditingComplete,
           )
-        : Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () => onTapMore(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            widget.planInfo.name,
-                            style: TextStyle(
-                              fontSize: widget.fontSize ?? 15,
-                              color: widget.textColor ?? themeColor,
-                              decorationColor: widget.color,
-                              decorationThickness: 1,
-                              decoration: widget.isChcked
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                            ),
-                          ),
-                        ),
-                        SpaceHeight(height: 3),
-                        Row(
-                          children: [
-                            widget.planInfo.isAlarm
-                                ? CommonText(
-                                    text:
-                                        '${timeToString(widget.planInfo.alarmTime)} 알림, ',
-                                    size: 11,
-                                    color: Colors.grey,
-                                  )
-                                : const EmptyArea(),
-                            CommonText(
-                              text: '실천 ${onActionCount()}회',
-                              size: 11,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      ],
+        : GoalName(
+            color: widget.color,
+            moreIcon: Icons.more_horiz,
+            planInfo: widget.planInfo,
+            isChcked: widget.isChcked,
+            actionCount: onActionCount(
+              recordRepository.recordList,
+              widget.planInfo.id,
+            ),
+            onTapMore: onTapMore,
+          );
+  }
+}
+
+class GoalName extends StatelessWidget {
+  GoalName({
+    super.key,
+    required this.moreIcon,
+    required this.planInfo,
+    required this.isChcked,
+    required this.actionCount,
+    required this.color,
+    required this.onTapMore,
+  });
+
+  IconData moreIcon;
+  PlanBox planInfo;
+  bool isChcked;
+  int actionCount;
+  Color color;
+  Function() onTapMore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: GestureDetector(
+              onTap: onTapMore,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Text(
+                      planInfo.name,
+                      style: TextStyle(
+                        fontSize: 15,
+                        color: themeColor,
+                        decorationColor: color,
+                        decorationThickness: 1,
+                        decoration:
+                            isChcked ? TextDecoration.lineThrough : null,
+                      ),
                     ),
                   ),
-                ),
-                SpaceWidth(width: regularSapce),
-                CommonIcon(
-                  icon: Icons.more_horiz,
-                  size: 22,
-                  color: Colors.grey,
-                  onTap: onTapMore,
-                ),
-              ],
+                  SpaceHeight(height: 3),
+                  Row(
+                    children: [
+                      planInfo.isAlarm
+                          ? CommonText(
+                              text: '${timeToString(planInfo.alarmTime)} 알림, ',
+                              size: 11,
+                              color: Colors.grey,
+                            )
+                          : const EmptyArea(),
+                      CommonText(
+                        text: '실천 $actionCount회',
+                        size: 11,
+                        color: Colors.grey,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          );
+          ),
+          SpaceWidth(width: regularSapce),
+          CommonIcon(
+            icon: moreIcon,
+            size: 22,
+            color: Colors.grey,
+            onTap: onTapMore,
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -1281,20 +1476,20 @@ class _GoalAddState extends State<GoalAdd> {
     }
 
     onEditingComplete() {
-      String id = uuid();
-
       if (textController.text != '') {
+        String id = uuid();
+
         widget.onTapGoalAdd(
           completedType: '추가',
           id: id,
           text: textController.text,
           newValue: isChecked,
         );
+
+        orderList.add(id);
       }
 
-      orderList.add(id);
       user.save();
-
       setState(() {
         isShowInput = false;
         isChecked = false;
@@ -1372,7 +1567,7 @@ class TodoInput extends StatelessWidget {
         onEditingComplete: onEditingComplete,
         onTapOutside: (_) {
           FocusScope.of(context).unfocus();
-          onEditingComplete();
+          // onEditingComplete();
         },
       ),
     );

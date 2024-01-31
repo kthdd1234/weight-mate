@@ -2,17 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/screen_lock_page.dart';
-import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
-import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
 import '../../model/user_box/user_box.dart';
 
 class EnterScreenLockPage extends StatefulWidget {
-  const EnterScreenLockPage({super.key});
+  EnterScreenLockPage({super.key, this.isPop});
+
+  bool? isPop;
 
   @override
   State<EnterScreenLockPage> createState() => _EnterScreenLockPageState();
@@ -58,23 +56,13 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
 
               if (count == 4) {
                 if (userPasswords.join() == inputPasswords.join()) {
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    '/home-page',
-                    (route) => false,
-                  );
-
-                  if (recordInfo?.weight == null) {
-                    DateTime now = DateTime.now();
-
-                    context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-                    context
-                        .read<ImportDateTimeProvider>()
-                        .setImportDateTime(now);
-                    context
-                        .read<HistoryDateTimeProvider>()
-                        .setHistoryDateTime(now);
-                  }
+                  widget.isPop == true
+                      ? Navigator.pop(context)
+                      : Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          '/home-page',
+                          (route) => false,
+                        );
                 } else {
                   isError = true;
                   inputPasswords = ['', '', '', ''];

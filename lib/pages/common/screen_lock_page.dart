@@ -1,9 +1,7 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -167,76 +165,62 @@ class ScreenLockContents extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: list
             .map((index) => GestureDetector(
-                      onTap: () => onTap(index),
-                      child: Container(
-                        margin: const EdgeInsets.all(10),
-                        child: CircleAvatar(
-                          radius: 35,
-                          backgroundColor: typeBackgroundColor,
-                          child: CommonText(
-                            text: text(index),
-                            size: index == 10 || index == 12 ? 12 : 14,
-                            isBold: true,
-                            isCenter: true,
-                          ),
-                        ),
+                  onTap: () => onTap(index),
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    child: CircleAvatar(
+                      radius: 35,
+                      backgroundColor: typeBackgroundColor,
+                      child: CommonText(
+                        text: text(index),
+                        size: index == 10 || index == 12 ? 12 : 14,
+                        isBold: true,
+                        isCenter: true,
                       ),
-                    )
-
-                // TextIcon(
-                //   padding: 30,
-                //   backgroundColor: typeBackgroundColor,
-                //   text: index == 10
-                //       ? '취소'
-                //       : index == 12
-                //           ? '지우기'
-                //           : index.toString(),
-                //   borderRadius: 1000,
-                //   textColor: isExit == false
-                //       ? index == 9
-                //           ? Colors.transparent
-                //           : themeColor
-                //       : themeColor,
-                //   fontSize: 14,
-                //   onTap: () => onTap(index),
-                // ),
-                )
+                    ),
+                  ),
+                ))
             .toList(),
       );
     }
 
     return SafeArea(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            passwordMsg,
-            style: const TextStyle(
-              color: themeColor,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SpaceHeight(height: regularSapce),
-          Row(
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
-            children: passwordWidgets(),
-          ),
-          Column(
             children: [
+              Text(
+                passwordMsg,
+                style: const TextStyle(
+                  color: themeColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               SpaceHeight(height: regularSapce),
-              Text(passwordErrMsg, style: const TextStyle(color: Colors.red)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: passwordWidgets(),
+              ),
+              Column(
+                children: [
+                  SpaceHeight(height: regularSapce),
+                  Text(passwordErrMsg,
+                      style: const TextStyle(color: Colors.red)),
+                ],
+              ),
+              SpaceHeight(height: 60),
+              Column(children: [
+                wRow(lists[0]),
+                wRow(lists[1]),
+                wRow(lists[2]),
+                wRow(lists[3])
+              ])
             ],
           ),
-          SpaceHeight(height: 60),
-          Column(children: [
-            wRow(lists[0]),
-            wRow(lists[1]),
-            wRow(lists[2]),
-            wRow(lists[3])
-          ])
-        ],
+        ),
       ),
     );
   }

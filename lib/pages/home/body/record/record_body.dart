@@ -36,7 +36,6 @@ class RecordBody extends StatelessWidget {
       builder: (context, values, child) {
         return Column(
           children: [
-            SpaceHeight(height: regularSapce),
             CommonAppBar(id: id),
             Expanded(
               child: Padding(

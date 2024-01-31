@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
@@ -375,15 +378,21 @@ bmi({required double tall, required double? weight}) {
   return bmiToFixed;
 }
 
-loadNativeAd(String adUnitId) {
+NativeAd loadNativeAd({
+  required String adUnitId,
+  required Function() onAdLoaded,
+  required Function() onAdFailedToLoad,
+}) {
   return NativeAd(
     adUnitId: adUnitId,
     listener: NativeAdListener(
       onAdLoaded: (adLoaded) {
         log('$adLoaded loaded~~~!!');
+        onAdLoaded();
       },
       onAdFailedToLoad: (ad, error) {
-        debugPrint('$NativeAd failed to load: $error');
+        log('$NativeAd failed to load: $error');
+        onAdFailedToLoad();
         ad.dispose();
       },
     ),
@@ -437,4 +446,22 @@ List<Widget>? onActionList({
       .toList();
 
   return renderList;
+}
+
+onActionCount(List<RecordBox> recordList, String planId) {
+  int count = 0;
+
+  recordList.forEach((record) {
+    final actionList = record.actions;
+
+    if (actionList != null) {
+      actionList.forEach((action) {
+        if (action['id'] == planId) {
+          count += 1;
+        }
+      });
+    }
+  });
+
+  return count;
 }

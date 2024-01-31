@@ -1,8 +1,13 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:privacy_screen/privacy_screen.dart';
 
 class UserInfoClass {
   UserInfoClass({
@@ -306,4 +311,33 @@ class WeightButtonClass {
   String? text, imgNumber;
   Map<String, String>? nameArgs;
   Function()? onTap;
+}
+
+class AppLifecycleReactor {
+  AppLifecycleReactor({required this.context});
+
+  BuildContext context;
+
+  void listenToAppStateChanges() {
+    AppStateEventNotifier.startListening();
+    AppStateEventNotifier.appStateStream
+        .forEach((state) => _onAppStateChanged(state));
+  }
+
+  void _onAppStateChanged(AppState appState) async {
+    String? passwords = userRepository.user.screenLockPasswords;
+
+    if (appState == AppState.foreground && passwords != null) {
+      try {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => EnterScreenLockPage(isPop: true),
+            fullscreenDialog: true,
+          ),
+        );
+      } catch (e) {
+        log('error => $e');
+      }
+    }
+  }
 }

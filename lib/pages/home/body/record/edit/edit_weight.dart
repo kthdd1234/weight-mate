@@ -6,12 +6,14 @@ import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -69,27 +71,29 @@ class _EditWeightState extends State<EditWeight> {
     UserBox user = userRepository.user;
     bool? isOpen = user.filterList?.contains(fWeight) == true;
 
-    // showAdDialog(String title) {
-    //   showDialog(
-    //     context: context,
-    //     builder: (dContext) {
-    //       onClick(BottomNavigationEnum enumId) async {
-    //         dContext
-    //             .read<BottomNavigationProvider>()
-    //             .setBottomNavigation(enumId: enumId);
-    //         closeDialog(dContext);
-    //       }
+    showAdDialog(String title, String loadingText) async {
+      await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (buildContext) {
+          onClick(BottomNavigationEnum enumId) async {
+            buildContext
+                .read<BottomNavigationProvider>()
+                .setBottomNavigation(enumId: enumId);
+            closeDialog(buildContext);
+          }
 
-    //       return NativeAdDialog(
-    //         title: title,
-    //         leftText: '히스토리 보기',
-    //         rightText: '그래프 보기',
-    //         onLeftClick: () => onClick(BottomNavigationEnum.history),
-    //         onRightClick: () => onClick(BottomNavigationEnum.graph),
-    //       );
-    //     },
-    //   );
-    // }
+          return NativeAdDialog(
+            loadingText: loadingText,
+            title: title,
+            leftText: '히스토리',
+            rightText: '그래프',
+            onLeftClick: () => onClick(BottomNavigationEnum.history),
+            onRightClick: () => onClick(BottomNavigationEnum.graph),
+          );
+        },
+      );
+    }
 
     onErrorText() {
       String? errMsg = handleCheckErrorText(
@@ -164,13 +168,16 @@ class _EditWeightState extends State<EditWeight> {
                 }
 
                 recordInfo?.save();
+
                 onInit();
                 closeDialog(context);
-                // List<RecordBox> recordList =
-                //     recordRepository.recordBox.values.toList();
-                // recordList.where((e) => e.weight != null);
-                // String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
-                // showAdDialog(title);
+
+                List<RecordBox> recordList =
+                    recordRepository.recordBox.values.toList();
+                recordList.where((e) => e.weight != null);
+                String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
+
+                showAdDialog(title, '체중 데이터 저장 중...');
               }
             },
             onCancel: () {
@@ -202,7 +209,7 @@ class _EditWeightState extends State<EditWeight> {
 
                 onInit();
                 closeDialog(context);
-                // showAdDialog('⛳ 목표 체중을 변경했어요!');
+                showAdDialog('⛳ 목표 체중을 변경했어요!', '목표 체중 데이터 저장 중...');
               }
             },
             onCancel: () {
@@ -543,95 +550,95 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
 //     ],
 //   ),
 // )
-    // onTapFilter() {
-    //   showDialog(
-    //     context: context,
-    //     builder: (context) {
-    //       return StatefulBuilder(
-    //         builder: ((context, setState) {
-    //           onTapCheckBox({required dynamic id, required bool newValue}) {
-    //             bool isNotWeight = filterClassList.first.id != id;
-    //             bool isFilterList = user.filterList != null;
+// onTapFilter() {
+//   showDialog(
+//     context: context,
+//     builder: (context) {
+//       return StatefulBuilder(
+//         builder: ((context, setState) {
+//           onTapCheckBox({required dynamic id, required bool newValue}) {
+//             bool isNotWeight = filterClassList.first.id != id;
+//             bool isFilterList = user.filterList != null;
 
-    //             if (isNotWeight && isFilterList) {
-    //               newValue
-    //                   ? user.filterList!.add(id)
-    //                   : user.filterList!.remove(id);
-    //               user.save();
+//             if (isNotWeight && isFilterList) {
+//               newValue
+//                   ? user.filterList!.add(id)
+//                   : user.filterList!.remove(id);
+//               user.save();
 
-    //               setState(() {});
-    //             }
-    //           }
+//               setState(() {});
+//             }
+//           }
 
-    //           onCheckBox(String filterId) {
-    //             List<String>? filterList = user.filterList;
-    //             bool isWeight = filterClassList.first.id == filterId;
+//           onCheckBox(String filterId) {
+//             List<String>? filterList = user.filterList;
+//             bool isWeight = filterClassList.first.id == filterId;
 
-    //             if (isWeight) {
-    //               return true;
-    //             }
+//             if (isWeight) {
+//               return true;
+//             }
 
-    //             return filterList != null
-    //                 ? filterList.contains(filterId)
-    //                 : false;
-    //           }
+//             return filterList != null
+//                 ? filterList.contains(filterId)
+//                 : false;
+//           }
 
-    //           List<Widget> children = filterClassList
-    //               .map((data) => Column(
-    //                     children: [
-    //                       Row(
-    //                         children: [
-    //                           CommonCheckBox(
-    //                             id: data.id,
-    //                             isCheck: onCheckBox(data.id),
-    //                             checkColor: themeColor,
-    //                             onTap: onTapCheckBox,
-    //                           ),
-    //                           CommonText(
-    //                             text: data.name,
-    //                             size: 14,
-    //                             isNotTop: true,
-    //                           ),
-    //                           SpaceWidth(width: 3),
-    //                           filterClassList.first.id == data.id
-    //                               ? CommonText(
-    //                                   text: '(필수)',
-    //                                   size: 10,
-    //                                   color: Colors.red,
-    //                                 )
-    //                               : const EmptyArea()
-    //                         ],
-    //                       ),
-    //                       SpaceHeight(
-    //                         height: filterClassList.last.id == data.id
-    //                             ? 0.0
-    //                             : smallSpace,
-    //                       ),
-    //                     ],
-    //                   ))
-    //               .toList();
+//           List<Widget> children = filterClassList
+//               .map((data) => Column(
+//                     children: [
+//                       Row(
+//                         children: [
+//                           CommonCheckBox(
+//                             id: data.id,
+//                             isCheck: onCheckBox(data.id),
+//                             checkColor: themeColor,
+//                             onTap: onTapCheckBox,
+//                           ),
+//                           CommonText(
+//                             text: data.name,
+//                             size: 14,
+//                             isNotTop: true,
+//                           ),
+//                           SpaceWidth(width: 3),
+//                           filterClassList.first.id == data.id
+//                               ? CommonText(
+//                                   text: '(필수)',
+//                                   size: 10,
+//                                   color: Colors.red,
+//                                 )
+//                               : const EmptyArea()
+//                         ],
+//                       ),
+//                       SpaceHeight(
+//                         height: filterClassList.last.id == data.id
+//                             ? 0.0
+//                             : smallSpace,
+//                       ),
+//                     ],
+//                   ))
+//               .toList();
 
-    //           return Column(
-    //             mainAxisAlignment: MainAxisAlignment.center,
-    //             children: [
-    //               AlertDialog(
-    //                 backgroundColor: dialogBackgroundColor,
-    //                 shape: containerBorderRadious,
-    //                 title: AlertDialogTitleWidget(
-    //                   text: '항목 필터',
-    //                   onTap: () => closeDialog(context),
-    //                 ),
-    //                 content: ContentsBox(
-    //                   contentsWidget: Column(children: children),
-    //                 ),
-    //               ),
-    //             ],
-    //           );
-    //         }),
-    //       );
-    //     },
-    //   );
-    // }
+//           return Column(
+//             mainAxisAlignment: MainAxisAlignment.center,
+//             children: [
+//               AlertDialog(
+//                 backgroundColor: dialogBackgroundColor,
+//                 shape: containerBorderRadious,
+//                 title: AlertDialogTitleWidget(
+//                   text: '항목 필터',
+//                   onTap: () => closeDialog(context),
+//                 ),
+//                 content: ContentsBox(
+//                   contentsWidget: Column(children: children),
+//                 ),
+//               ),
+//             ],
+//           );
+//         }),
+//       );
+//     },
+//   );
+// }
 
 // Row(
 //       children: [
@@ -742,10 +749,10 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
 //       ],
 //     );
 
-        // TagClass(
-        //             text: user.isAlarm
-        //                 ? '${timeToString(user.alarmTime)}'
-        //                 : '알림 없음',
-        //             color: 'indigo',
-        //             onTap: onTapTimeSetting,
-        //           ),
+// TagClass(
+//             text: user.isAlarm
+//                 ? '${timeToString(user.alarmTime)}'
+//                 : '알림 없음',
+//             color: 'indigo',
+//             onTap: onTapTimeSetting,
+//           ),
