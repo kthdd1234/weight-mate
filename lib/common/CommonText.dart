@@ -5,21 +5,23 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class CommonText extends StatelessWidget {
-  CommonText(
-      {super.key,
-      required this.text,
-      required this.size,
-      this.isBold,
-      this.leftIcon,
-      this.rightIcon,
-      this.color,
-      this.decoration,
-      this.isCenter,
-      this.isNotTop,
-      this.onTap,
-      this.isWidth,
-      this.decoColor,
-      this.isNotTr});
+  CommonText({
+    super.key,
+    required this.text,
+    required this.size,
+    this.isBold,
+    this.leftIcon,
+    this.rightIcon,
+    this.color,
+    this.decoration,
+    this.isCenter,
+    this.isNotTop,
+    this.onTap,
+    this.isWidth,
+    this.decoColor,
+    this.isNotTr,
+    this.nameArgs,
+  });
 
   String text;
   double size;
@@ -30,6 +32,7 @@ class CommonText extends StatelessWidget {
   String? decoration;
   bool? isNotTop, isNotTr;
   bool? isWidth;
+  Map<String, String>? nameArgs;
   Function()? onTap;
 
   @override
@@ -56,7 +59,7 @@ class CommonText extends StatelessWidget {
             padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
             child: SizedBox(
               child: Text(
-                isNotTr == true ? text : text.tr(),
+                isNotTr == true ? text : text.tr(namedArgs: nameArgs),
                 style: TextStyle(
                   color: color ?? themeColor,
                   fontSize: size,

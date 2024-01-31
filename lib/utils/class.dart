@@ -259,39 +259,6 @@ class ActionItemClass {
   }
 }
 
-// class ArgmentsTypeClass {
-//   ArgmentsTypeClass({
-//     required this.createDateTime,
-//     required this.planId,
-//     required this.buttonText,
-//     required this.contentsTitleWidget,
-//     this.pageTitle,
-//   });
-
-//   DateTime createDateTime;
-//   String planId, buttonText;
-//   String? pageTitle;
-//   Widget contentsTitleWidget;
-// }
-
-// class PlanPriorityClass {
-//   PlanPriorityClass({
-//     required this.id,
-//     required this.name,
-//     required this.desc,
-//     required this.icon,
-//     required this.order,
-//     required this.bgColor,
-//     required this.textColor,
-//   });
-
-//   PlanPriorityEnum id;
-//   String name, desc;
-//   IconData icon;
-//   int order;
-//   Color bgColor, textColor;
-// }
-
 class SvgClass {
   SvgClass({required this.emotion, required this.name});
   String emotion, name;
@@ -326,4 +293,17 @@ class LanguageItemClass {
   });
 
   String name, languageCode, countryCode;
+}
+
+class WeightButtonClass {
+  WeightButtonClass({
+    this.text,
+    this.imgNumber,
+    this.nameArgs,
+    this.onTap,
+  });
+
+  String? text, imgNumber;
+  Map<String, String>? nameArgs;
+  Function()? onTap;
 }

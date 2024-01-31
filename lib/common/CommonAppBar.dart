@@ -251,7 +251,8 @@ class CommonTitle extends StatelessWidget {
                         ),
                         SpaceWidth(width: tinySpace),
                         CommonTag(
-                          text: '표시 ${displayList?.length ?? 0}',
+                          text: '표시',
+                          nameArgs: {'length': '${displayList?.length ?? 0}'},
                           color: 'whiteIndigo',
                           onTap: onTapFilter,
                         )
@@ -545,7 +546,6 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
           shape: containerBorderRadious,
           title: DialogTitle(
             text: '카테고리 표시',
-            subText: '사용하지 않는 카테고리는 체크 해제 하면 되요 :D',
             onTap: () => closeDialog(context),
           ),
           content: Column(

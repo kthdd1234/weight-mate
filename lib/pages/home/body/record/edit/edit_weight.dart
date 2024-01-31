@@ -1,18 +1,17 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
 import 'dart:math';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -97,7 +96,7 @@ class _EditWeightState extends State<EditWeight> {
         min: weightMin,
         max: weightMax,
         text: textController.text,
-        errMsg: weightErrMsg2,
+        errMsg: weightErrMsg2.tr(),
       );
 
       return errMsg;
@@ -243,16 +242,17 @@ class _EditWeightState extends State<EditWeight> {
                 icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
                 tags: [
                   TagClass(
-                    text: '체중 ${recordInfo?.weight ?? '- '}kg',
+                    text: '체중 kg',
+                    nameArgs: {'weight': '${recordInfo?.weight ?? '- '}'},
                     color: 'indigo',
                     isHide: isOpen,
                     onTap: onTapOpen,
                   ),
                   TagClass(
-                    text: 'BMI ${bmi(
-                      tall: user.tall,
-                      weight: recordInfo?.weight,
-                    )}',
+                    text: 'BMI',
+                    nameArgs: {
+                      'bmi': bmi(tall: user.tall, weight: recordInfo?.weight)
+                    },
                     color: 'indigo',
                     onTap: onTapBMI,
                   ),
@@ -285,6 +285,7 @@ class _EditWeightState extends State<EditWeight> {
                               weight: recordInfo?.weight,
                               goalWeight: user.goalWeight,
                               importDateTime: importDateTime,
+                              locale: context.locale.toString(),
                               onTapWeight: onTapWeight,
                               onTapGoalWeight: onTapGoalWeight,
                             )
@@ -366,8 +367,10 @@ class WeeklyWeightGraph extends StatefulWidget {
     required this.goalWeight,
     required this.onTapWeight,
     required this.onTapGoalWeight,
+    required this.locale,
   });
 
+  String locale;
   DateTime importDateTime;
   double? weight, goalWeight;
   Function() onTapWeight, onTapGoalWeight;
@@ -393,10 +396,11 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
       bool isToday = isCheckToday(subtractDateTime);
       int recordKey = getDateTimeToInt(subtractDateTime);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      String formatterDay =
-          dateTimeFormatter(format: 'd일', dateTime: subtractDateTime);
-      GraphData graphData =
-          GraphData(isToday ? '오늘' : formatterDay, recordInfo?.weight);
+      String day = d(locale: widget.locale, dateTime: subtractDateTime);
+      String formatterDay = isToday
+          ? '오늘'.tr()
+          : d(locale: widget.locale, dateTime: subtractDateTime);
+      GraphData graphData = GraphData(formatterDay, recordInfo?.weight);
 
       if (recordInfo?.weight != null) {
         weightList.add(recordInfo!.weight!);
@@ -425,18 +429,20 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
 
   @override
   Widget build(BuildContext context) {
-    final weightButtonList = [
-      {
-        'text': '현재 체중: ${widget.weight}kg',
-        'number': '22',
-        'onTap': widget.onTapWeight,
-      },
-      {'text': null, 'number': null, 'onTap': null},
-      {
-        'text': '목표 체중: ${widget.goalWeight}kg',
-        'number': '15',
-        'onTap': widget.onTapGoalWeight,
-      }
+    List<WeightButtonClass> weightButtonList = [
+      WeightButtonClass(
+        text: '현재 체중: kg',
+        imgNumber: '22',
+        nameArgs: {'weight': '${widget.weight}'},
+        onTap: widget.onTapWeight,
+      ),
+      WeightButtonClass(),
+      WeightButtonClass(
+        text: '목표 체중: kg',
+        imgNumber: '15',
+        nameArgs: {'weight': '${widget.goalWeight}'},
+        onTap: widget.onTapGoalWeight,
+      ),
     ];
 
     return Column(
@@ -451,10 +457,12 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
               minimum: minimum,
               plotBands: [
                 PlotBand(
+                  dashArray: const [5, 5],
                   borderWidth: 1.0,
                   borderColor: disabledButtonTextColor,
                   isVisible: true,
-                  text: '목표: ${widget.goalWeight}kg',
+                  text: '목표 체중: kg'
+                      .tr(namedArgs: {'weight': '${widget.goalWeight}'}),
                   textStyle: const TextStyle(color: disabledButtonTextColor),
                   start: widget.goalWeight,
                   end: widget.goalWeight,
@@ -489,20 +497,21 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
         Row(
           children: weightButtonList
               .map(
-                (e) => e['text'] != null
+                (button) => button.text != null
                     ? Expanded(
                         child: GestureDetector(
-                        onTap: e['onTap'] as Function(),
+                        onTap: button.onTap,
                         child: ContentsBox(
                           borderRadius: 5,
                           padding: const EdgeInsets.all(smallSpace),
-                          imgUrl: 'assets/images/t-${e['number']}.png',
+                          imgUrl: 'assets/images/t-${button.imgNumber}.png',
                           contentsWidget: CommonText(
-                            text: e['text'] as String,
+                            text: button.text!,
                             size: 13,
                             color: Colors.white,
                             isBold: true,
                             isCenter: true,
+                            nameArgs: button.nameArgs,
                           ),
                         ),
                       ))

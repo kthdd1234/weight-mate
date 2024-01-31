@@ -6,13 +6,14 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TitleContainer extends StatelessWidget {
-  TitleContainer(
-      {super.key,
-      required this.title,
-      required this.icon,
-      required this.tags,
-      required this.isDivider,
-      this.onTap});
+  TitleContainer({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.tags,
+    required this.isDivider,
+    this.onTap,
+  });
 
   String title;
   IconData icon;
@@ -33,6 +34,7 @@ class TitleContainer extends StatelessWidget {
                     onTap: tag.onTap,
                     icon: tag.icon,
                     leftIcon: tag.leftIcon,
+                    nameArgs: tag.nameArgs,
                   )
                 ],
               )
@@ -73,11 +75,13 @@ class TagClass {
     this.icon,
     this.text,
     this.leftIcon,
+    this.nameArgs,
   });
 
   String color;
   String? text;
   IconData? icon, leftIcon;
   bool? isHide;
+  Map<String, String>? nameArgs;
   Function() onTap;
 }
