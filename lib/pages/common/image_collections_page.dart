@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
@@ -156,9 +157,9 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                                     padding: 5,
                                     backgroundColor: themeColor,
                                     backgroundColorOpacity: 0.5,
-                                    text: dateTimeFormatter(
+                                    text: md(
+                                      locale: context.locale.toString(),
                                       dateTime: dateTime,
-                                      format: 'MM월 dd일',
                                     ),
                                     borderRadius: 5,
                                     textColor: typeBackgroundColor,

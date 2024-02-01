@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -50,13 +51,16 @@ class _GraphChartState extends State<GraphChart> {
         borderWidth: 1.0,
         borderColor: disabledButtonTextColor,
         isVisible: true,
-        text: '목표 체중: ${userProfile!.goalWeight}kg',
+        text: '목표 체중: kg'.tr(
+          namedArgs: {"weight": '${userProfile!.goalWeight}'},
+        ),
         textStyle: const TextStyle(color: disabledButtonTextColor),
         start: userProfile.goalWeight,
         end: userProfile.goalWeight,
         dashArray: const <double>[4, 5],
       )
     ];
+    String locale = context.locale.toString();
 
     getRecordInfo(DateTime datatime) {
       return widget.recordBox.get(getDateTimeToInt(datatime));
@@ -76,8 +80,9 @@ class _GraphChartState extends State<GraphChart> {
           days: i,
         );
         RecordBox? recordInfo = getRecordInfo(subtractDateTime);
-        String formatterDay =
-            dateTimeFormatter(format: format, dateTime: subtractDateTime);
+        String formatterDay = format == 'd'
+            ? d(locale: locale, dateTime: subtractDateTime)
+            : m_d(locale: locale, dateTime: subtractDateTime);
         GraphData chartData = GraphData(formatterDay, recordInfo?.weight);
 
         if (recordInfo?.weight != null) {
@@ -116,9 +121,8 @@ class _GraphChartState extends State<GraphChart> {
     List<GraphData> setLineSeriesData() {
       List<GraphData> lineSeriesData = setLineSeriesDateTime(
         count: setCount()!,
-        format: widget.selectedDateTimeSegment == SegmentedTypes.week
-            ? 'd일'
-            : 'M.d',
+        format:
+            widget.selectedDateTimeSegment == SegmentedTypes.week ? 'd' : 'md',
       );
 
       return lineSeriesData;
@@ -164,12 +168,12 @@ class _GraphChartState extends State<GraphChart> {
       });
     }
 
-    String titleDateTime = '${dateTimeFormatter(
+    String titleDateTime = '${md(
+      locale: locale,
       dateTime: widget.startDateTime,
-      format: 'M월 d일',
-    )} ~ ${dateTimeFormatter(
+    )} ~ ${md(
+      locale: locale,
       dateTime: widget.endDateTime,
-      format: 'M월 d일',
     )}';
 
     return Expanded(

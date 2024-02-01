@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -176,13 +177,14 @@ showSnackBar({
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text(text),
+          Text(text).tr(),
           TextButton(
-              onPressed: onPressed,
-              child: Text(
-                buttonName,
-                style: const TextStyle(color: Colors.grey),
-              ))
+            onPressed: onPressed,
+            child: Text(
+              buttonName,
+              style: const TextStyle(color: Colors.grey),
+            ).tr(),
+          )
         ],
       ),
       width: width,
@@ -249,8 +251,20 @@ showAlarmBottomSheet({
   );
 }
 
+ymd({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMMd(locale).format(dateTime);
+}
+
 ym({required String locale, required DateTime dateTime}) {
   return DateFormat.yMMM(locale).format(dateTime);
+}
+
+md({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMd(locale).format(dateTime);
+}
+
+mde({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMEd(locale).format(dateTime);
 }
 
 y({required String locale, required DateTime dateTime}) {
@@ -259,6 +273,22 @@ y({required String locale, required DateTime dateTime}) {
 
 d({required String locale, required DateTime dateTime}) {
   return DateFormat.d(locale).format(dateTime);
+}
+
+e({required String locale, required DateTime dateTime}) {
+  return DateFormat.EEEE(locale).format(dateTime);
+}
+
+hm({required String locale, required DateTime dateTime}) {
+  return DateFormat.jm(locale).format(dateTime);
+}
+
+m_d({required String locale, required DateTime dateTime}) {
+  if (locale == 'ko_KR') {
+    return DateFormat('M.d', 'ko').format(dateTime);
+  }
+
+  return DateFormat.Md(locale).format(dateTime);
 }
 
 dateTimeFormatter({required String format, required DateTime dateTime}) {

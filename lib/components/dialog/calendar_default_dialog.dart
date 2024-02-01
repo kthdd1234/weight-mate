@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -59,8 +60,8 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
           view: DateRangePickerView.month,
           selectionMode: DateRangePickerSelectionMode.single,
           showActionButtons: true,
-          confirmText: '확인',
-          cancelText: '닫기',
+          confirmText: '확인'.tr(),
+          cancelText: '닫기'.tr(),
           maxDate: widget.maxDate,
           minDate: widget.minDate,
           onSubmit: (Object? object) => widget.onSubmit(

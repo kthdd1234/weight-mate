@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
@@ -39,20 +40,17 @@ class HistoryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isAd = recordInfo.createDateTime.year == 1000;
-    int recordKey = getDateTimeToInt(recordInfo.createDateTime);
-    String formatDateTime = dateTimeFormatter(
-      format: 'M월 d일 (E)',
-      dateTime: recordInfo.createDateTime,
+    DateTime createDateTime = recordInfo.createDateTime;
+    bool isAd = createDateTime.year == 1000;
+    int recordKey = getDateTimeToInt(createDateTime);
+    String formatDateTime = mde(
+      locale: context.locale.toString(),
+      dateTime: createDateTime,
     );
 
     onTapEdit() {
-      context
-          .read<ImportDateTimeProvider>()
-          .setImportDateTime(recordInfo.createDateTime);
-      context
-          .read<TitleDateTimeProvider>()
-          .setTitleDateTime(recordInfo.createDateTime);
+      context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
+      context.read<TitleDateTimeProvider>().setTitleDateTime(createDateTime);
       context
           .read<BottomNavigationProvider>()
           .setBottomNavigation(enumId: BottomNavigationEnum.record);
@@ -169,7 +167,8 @@ class HistoryHeader extends StatelessWidget {
                         Row(
                           children: [
                             SvgPicture.asset(
-                                'assets/svgs/${recordInfo?.emotion}.svg'),
+                              'assets/svgs/${recordInfo?.emotion}.svg',
+                            ),
                             SpaceWidth(width: smallSpace)
                           ],
                         ),
@@ -186,7 +185,12 @@ class HistoryHeader extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CommonText(text: formatDateTime, size: 11, isBold: true),
+                      CommonText(
+                        text: formatDateTime,
+                        size: 11,
+                        isBold: true,
+                        isNotTr: true,
+                      ),
                       const Spacer(),
                       isRemoveMode
                           ? const EmptyArea()
@@ -212,7 +216,10 @@ class HistoryHeader extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           CommonText(
-                              text: '${recordInfo?.weight ?? '-'}kg', size: 17),
+                            isNotTr: true,
+                            text: '${recordInfo?.weight ?? '-'}kg',
+                            size: 17,
+                          ),
                           isRemoveMode && recordInfo?.weight != null
                               ? Padding(
                                   padding: const EdgeInsets.only(left: 3),
@@ -220,7 +227,11 @@ class HistoryHeader extends StatelessWidget {
                               : const EmptyArea()
                         ],
                       ),
-                      CommonText(text: bmiValue(), size: 9),
+                      CommonText(
+                        text: bmiValue(),
+                        size: 9,
+                        isNotTr: true,
+                      ),
                     ],
                   ),
                 ],
@@ -554,7 +565,10 @@ class HistoryDiary extends StatelessWidget {
               ),
               SpaceHeight(height: tinySpace),
               Text(
-                timeToString(recordInfo?.diaryDateTime),
+                hm(
+                  locale: context.locale.toString(),
+                  dateTime: recordInfo?.diaryDateTime ?? DateTime.now(),
+                ),
                 style: const TextStyle(color: Colors.grey, fontSize: 11),
               ),
             ],

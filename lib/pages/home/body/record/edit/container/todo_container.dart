@@ -1,6 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
-import 'dart:developer';
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -21,7 +21,6 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -33,10 +32,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-
-String eDiet = PlanTypeEnum.diet.toString();
-String eExercise = PlanTypeEnum.exercise.toString();
-String eLife = PlanTypeEnum.lifestyle.toString();
 
 class TodoContainer extends StatefulWidget {
   TodoContainer({
@@ -364,17 +359,21 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         onTap: onTapChangeOrder,
       ),
       TagClass(
-        text: '기록 ${onActionList(
-              actions: widget.actions,
-              type: widget.type,
-              onRecordUpdate: widget.onRecordComplete,
-            )?.length ?? 0}개',
+        text: '기록 개',
+        nameArgs: {
+          "length": "${onActionList(
+                actions: widget.actions,
+                type: widget.type,
+                onRecordUpdate: widget.onRecordComplete,
+              )?.length ?? 0}"
+        },
         color: widget.colorName,
         isHide: widget.isOpen,
         onTap: widget.onTapOpen,
       ),
       TagClass(
-        text: '목표 ${widget.planList.length}개',
+        text: '목표 개',
+        nameArgs: {"length": "${widget.planList.length}"},
         color: widget.colorName,
         isHide: widget.isOpen,
         onTap: widget.onTapOpen,
@@ -401,12 +400,14 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
 
     Map<SegmentedTypes, Widget> children = {
       SegmentedTypes.record: onSegmentedWidget(
-        title: '기록 ${actionList?.length ?? 0}',
+        title: '기록 ',
+        nameArgs: {'length': '${actionList?.length ?? 0}'},
         type: SegmentedTypes.record,
         selected: selectedSegment,
       ),
       SegmentedTypes.month: onSegmentedWidget(
-        title: '목표 ${widget.planList.length}',
+        title: '목표 ',
+        nameArgs: {'length': '${widget.planList.length}'},
         type: SegmentedTypes.month,
         selected: selectedSegment,
       ),
@@ -565,7 +566,7 @@ class _ChangeOrderBottomSheetState extends State<ChangeOrderBottomSheet> {
     }
 
     return CommonBottomSheet(
-      title: '${widget.title} 목표',
+      title: ' 목표'.tr(namedArgs: {'type': widget.title}),
       height: 530,
       contents: Column(
         children: [
@@ -821,8 +822,10 @@ class Dismiss extends StatelessWidget {
             return AlertDialog(
               shape: containerBorderRadious,
               backgroundColor: dialogBackgroundColor,
-              title: const Text('삭제할까요?',
-                  style: TextStyle(fontSize: 18, color: themeColor)),
+              title: Text(
+                '삭제할까요?'.tr(),
+                style: const TextStyle(fontSize: 18, color: themeColor),
+              ),
               content: Row(
                 children: [
                   ExpandedButtonHori(
@@ -954,7 +957,7 @@ class CategoryBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonBottomSheet(
       title: name,
-      height: eDiet == type ? 200 : 220,
+      height: eDiet == type ? 205 : 220,
       contents: CategoryList(
         selectedTitle: selectedTitle,
         type: type,
@@ -1070,13 +1073,15 @@ class LifeContainer extends StatelessWidget {
         onTap: onTapChangeOrder,
       ),
       TagClass(
-        text: '목표 ${planList.length}개',
+        text: '습관 개',
+        nameArgs: {'length': '${planList.length}'},
         color: colorName,
         isHide: isOpen,
         onTap: onTapOpen,
       ),
       TagClass(
-        text: '실천율 $actionPercent%',
+        text: '실천율',
+        nameArgs: {'percent': actionPercent},
         color: colorName,
         onTap: () => null,
       ),
@@ -1404,15 +1409,22 @@ class GoalName extends StatelessWidget {
                   SpaceHeight(height: 3),
                   Row(
                     children: [
-                      planInfo.isAlarm
+                      planInfo.isAlarm && planInfo.alarmTime != null
                           ? CommonText(
-                              text: '${timeToString(planInfo.alarmTime)} 알림, ',
+                              text: '알림, ',
+                              nameArgs: {
+                                'time': hm(
+                                  dateTime: planInfo.alarmTime!,
+                                  locale: context.locale.toString(),
+                                )
+                              },
                               size: 11,
                               color: Colors.grey,
                             )
                           : const EmptyArea(),
                       CommonText(
-                        text: '실천 $actionCount회',
+                        text: '실천 회',
+                        nameArgs: {'length': '$actionCount'},
                         size: 11,
                         color: Colors.grey,
                       ),
@@ -1767,8 +1779,9 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
       contents: isShowAlarm
           ? AlarmContainer(
               icon: widget.icon,
-              title: '${widget.title} 실천 알림',
-              desc: '매일 정해진 시간에 실천 알림을 드려요.',
+              title: '실천 알림',
+              nameArgs: {'type': widget.title},
+              desc: '매일 실천 알림을 드려요.',
               isEnabled: isEnabled,
               alarmTime: alarmTime,
               onChanged: onChanged,

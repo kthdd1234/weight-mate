@@ -13,12 +13,14 @@ class TitleContainer extends StatelessWidget {
     required this.tags,
     required this.isDivider,
     this.onTap,
+    this.isNotTr,
   });
 
   String title;
   IconData icon;
   List<TagClass> tags;
   bool isDivider;
+  bool? isNotTr;
   Function()? onTap;
 
   @override
@@ -35,6 +37,7 @@ class TitleContainer extends StatelessWidget {
                     icon: tag.icon,
                     leftIcon: tag.leftIcon,
                     nameArgs: tag.nameArgs,
+                    isNotTr: tag.isNotTr,
                   )
                 ],
               )
@@ -76,12 +79,13 @@ class TagClass {
     this.text,
     this.leftIcon,
     this.nameArgs,
+    this.isNotTr,
   });
 
   String color;
   String? text;
   IconData? icon, leftIcon;
-  bool? isHide;
+  bool? isHide, isNotTr;
   Map<String, String>? nameArgs;
   Function() onTap;
 }

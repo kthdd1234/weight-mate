@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
@@ -76,27 +78,26 @@ class DialogTitle extends StatelessWidget {
     super.key,
     required this.text,
     required this.onTap,
-    this.subText,
+    this.nameArgs,
   });
 
   String text;
-  String? subText;
+  Map<String, String>? nameArgs;
   Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          text,
-          style: const TextStyle(fontSize: 18, color: themeColor),
-        ),
-        InkWell(
+        CommonText(text: text, size: 18, nameArgs: nameArgs),
+        CommonIcon(
+          icon: Icons.close,
+          size: 25,
+          color: disabledButtonTextColor,
           onTap: onTap,
-          child: const Icon(Icons.close, color: disabledButtonTextColor),
-        )
+        ),
       ],
     );
   }

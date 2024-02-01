@@ -348,3 +348,7 @@ const TextTheme textTheme = TextTheme(
     fontWeight: FontWeight.w400,
   ),
 );
+
+String newPasswordMsg = '새 비밀번호를 입력해주세요.';
+String confirmPasswordMsg = '비밀번호를 한번 더 입력해주세요.';
+String passwrodErrorMsg1 = '비밀번호가 일치하지 않습니다.';

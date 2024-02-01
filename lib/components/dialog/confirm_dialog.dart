@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -44,12 +45,12 @@ class ConfirmDialog extends StatelessWidget {
       backgroundColor: dialogBackgroundColor,
       title: DialogTitle(text: titleText, onTap: onClose),
       content: SizedBox(
-          height: 195,
+          height: 200,
           child: Column(
             children: [
               ContentsBox(
                 width: width,
-                height: 125,
+                height: 130,
                 contentsWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -59,15 +60,19 @@ class ConfirmDialog extends StatelessWidget {
                         color: themeColor,
                       ),
                       SpaceHeight(height: smallSpace),
-                      Text(
-                        contentText1,
-                        style: TextStyle(color: primaryColor),
+                      CommonText(
+                        text: contentText1,
+                        size: 14,
+                        color: primaryColor,
+                        isCenter: true,
+                      ),
+                      CommonText(
+                        text: contentText2,
+                        size: 14,
+                        color: primaryColor,
+                        isCenter: true,
                       ),
                       SpaceHeight(height: tinySpace),
-                      Text(
-                        contentText2,
-                        style: TextStyle(color: primaryColor),
-                      )
                     ]),
               ),
               SpaceHeight(height: regularSapce),

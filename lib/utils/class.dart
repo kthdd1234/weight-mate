@@ -341,3 +341,16 @@ class AppLifecycleReactor {
     }
   }
 }
+
+class TodoDataClass {
+  TodoDataClass({
+    required this.filterId,
+    required this.color,
+    required this.title,
+    required this.icon,
+  });
+
+  String filterId;
+  String color, title;
+  IconData icon;
+}

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -23,11 +24,11 @@ class OkAndCancelButton extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: onPressedOk,
-          child: Text(okText),
+          child: Text(okText).tr(),
         ),
         TextButton(
           onPressed: onPressedCancel,
-          child: Text(cancelText),
+          child: Text(cancelText).tr(),
         ),
       ],
     );

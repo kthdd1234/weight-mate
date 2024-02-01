@@ -154,27 +154,28 @@ class CommonTitle extends StatelessWidget {
 
     onTapHistoryTitle() {
       showDialog(
-          context: context,
-          builder: (context) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AlertDialog(
-                  backgroundColor: dialogBackgroundColor,
-                  shape: containerBorderRadious,
-                  title: DialogTitle(
-                    text: '선택 년도',
-                    onTap: () => closeDialog(context),
-                  ),
-                  content: DatePicker(
-                    view: DateRangePickerView.decade,
-                    initialSelectedDate: historyDateTime,
-                    onSelectionChanged: onTapHistoryDateTime,
-                  ),
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AlertDialog(
+                backgroundColor: dialogBackgroundColor,
+                shape: containerBorderRadious,
+                title: DialogTitle(
+                  text: '년도 선택',
+                  onTap: () => closeDialog(context),
                 ),
-              ],
-            );
-          });
+                content: DatePicker(
+                  view: DateRangePickerView.decade,
+                  initialSelectedDate: historyDateTime,
+                  onSelectionChanged: onTapHistoryDateTime,
+                ),
+              ),
+            ],
+          );
+        },
+      );
     }
 
     onTapChangeYear() {
@@ -224,6 +225,7 @@ class CommonTitle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CommonText(
+                isNotTr: isRecord || isHistory,
                 text: title,
                 size: 20,
                 rightIcon: rightIconList[index],
@@ -380,6 +382,7 @@ class CalendarBar extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CommonText(
+          isNotTr: true,
           text: isWeight ? '${recordInfo?.weight}kg' : '',
           size: 8,
           color: Colors.black,

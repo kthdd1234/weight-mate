@@ -19,9 +19,11 @@ class NativeAdDialog extends StatefulWidget {
     required this.rightText,
     required this.onLeftClick,
     required this.onRightClick,
+    this.nameArgs,
   });
 
   String loadingText, title, leftText, rightText;
+  Map<String, String>? nameArgs;
   Function() onLeftClick, onRightClick;
 
   @override
@@ -67,6 +69,7 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
             elevation: 0.0,
             title: DialogTitle(
               text: widget.title,
+              nameArgs: widget.nameArgs,
               onTap: () => closeDialog(context),
             ),
             content: Column(

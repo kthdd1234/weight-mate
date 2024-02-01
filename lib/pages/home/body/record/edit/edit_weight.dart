@@ -71,7 +71,11 @@ class _EditWeightState extends State<EditWeight> {
     UserBox user = userRepository.user;
     bool? isOpen = user.filterList?.contains(fWeight) == true;
 
-    showAdDialog(String title, String loadingText) async {
+    showAdDialog({
+      required String title,
+      required String loadingText,
+      Map<String, String>? nameArgs,
+    }) async {
       await showDialog(
         barrierDismissible: false,
         context: context,
@@ -86,6 +90,7 @@ class _EditWeightState extends State<EditWeight> {
           return NativeAdDialog(
             loadingText: loadingText,
             title: title,
+            nameArgs: nameArgs,
             leftText: '히스토리',
             rightText: '그래프',
             onLeftClick: () => onClick(BottomNavigationEnum.history),
@@ -175,9 +180,14 @@ class _EditWeightState extends State<EditWeight> {
                 List<RecordBox> recordList =
                     recordRepository.recordBox.values.toList();
                 recordList.where((e) => e.weight != null);
-                String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
 
-                showAdDialog(title, '체중 데이터 저장 중...');
+                showAdDialog(
+                  title: '👏🏻 일째 기록 했어요!',
+                  loadingText: '체중 데이터 저장 중...',
+                  nameArgs: {
+                    'days': '${recordList.length}',
+                  },
+                );
               }
             },
             onCancel: () {
@@ -209,7 +219,10 @@ class _EditWeightState extends State<EditWeight> {
 
                 onInit();
                 closeDialog(context);
-                showAdDialog('⛳ 목표 체중을 변경했어요!', '목표 체중 데이터 저장 중...');
+                showAdDialog(
+                  title: '⛳ 목표 체중을 변경 했어요!',
+                  loadingText: '목표 체중 데이터 저장 중...',
+                );
               }
             },
             onCancel: () {
@@ -403,7 +416,6 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
       bool isToday = isCheckToday(subtractDateTime);
       int recordKey = getDateTimeToInt(subtractDateTime);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      String day = d(locale: widget.locale, dateTime: subtractDateTime);
       String formatterDay = isToday
           ? '오늘'.tr()
           : d(locale: widget.locale, dateTime: subtractDateTime);

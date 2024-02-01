@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import '../contents_box/contents_box.dart';
@@ -40,7 +41,7 @@ class EmptyTextVerticalArea extends StatelessWidget {
           ),
           SpaceHeight(height: smallSpace),
           Text(
-            title,
+            title.tr(),
             style: TextStyle(
               fontSize: titleSize,
               color: mainColor ?? disEnabledTypeColor,

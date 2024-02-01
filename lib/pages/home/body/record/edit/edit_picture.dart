@@ -19,12 +19,10 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -49,7 +47,11 @@ class EditPicture extends StatelessWidget {
       'right': recordInfo?.rightFile,
       'bottom': recordInfo?.bottomFile,
     };
-    String nativeAdUnitId = context.watch<AdsProvider>().nativeAdUnitId;
+    int pictureLength = [
+      recordInfo?.leftFile,
+      recordInfo?.rightFile,
+      recordInfo?.bottomFile
+    ].whereType<Uint8List>().length;
 
     setFile({required Uint8List? newValue, required String pos}) {
       switch (pos) {
@@ -121,8 +123,8 @@ class EditPicture extends StatelessWidget {
         context: context,
         builder: (context) {
           return NativeAdDialog(
-            loadingText: '사진 데이터 저장 중...',
             title: title,
+            loadingText: '사진 데이터 저장 중...',
             leftText: '사진 확인',
             rightText: '사진 앨범',
             onLeftClick: () =>
@@ -161,7 +163,7 @@ class EditPicture extends StatelessWidget {
         setPickedImage(pos: pos, xFile: xFileData);
 
         Uint8List unit8List = await convertUnit8List(xFileData);
-        showDialogPopup(title: '사진 기록 완료!', binaryData: unit8List);
+        showDialogPopup(title: '🖼️ 사진 기록 완료!', binaryData: unit8List);
       }
     }
 
@@ -238,11 +240,8 @@ class EditPicture extends StatelessWidget {
                       icon: Icons.auto_awesome,
                       tags: [
                         TagClass(
-                          text: '사진 ${[
-                            recordInfo?.leftFile,
-                            recordInfo?.rightFile,
-                            recordInfo?.bottomFile
-                          ].whereType<Uint8List>().length}장',
+                          text: '사진 장',
+                          nameArgs: {'length': '$pictureLength'},
                           color: 'purple',
                           isHide: isOpen,
                           onTap: onTapOpen,
@@ -401,67 +400,3 @@ class CloseIcon extends StatelessWidget {
     );
   }
 }
-
-// class HistoryPicture extends StatelessWidget {
-//   HistoryPicture({
-//     super.key,
-//     required this.leftFile,
-//     required this.rightFile,
-//   });
-
-//   Uint8List? leftFile, rightFile;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     List<Uint8List?> fileList = [leftFile, rightFile];
-
-//     return Column(
-//       children: [
-//         SpaceHeight(height: smallSpace),
-//         Row(
-//           children: [
-//             leftFile != null
-//                 ? DefaultImage(data: leftFile!, height: 150)
-//                 : EmptyArea(),
-//             rightFile != null
-//                 ? DefaultImage(data: rightFile!, height: 150)
-//                 : EmptyArea()
-//           ],
-//         ),
-//         Row(
-//           children: fileList
-//               .map((file) => file != null
-//                   ? Expanded(child: DefaultImage(data: file, height: 150))
-//                   : const EmptyArea())
-//               .toList(),
-//         ),
-//         SpaceHeight(height: smallSpace),
-//       ],
-//     );
-//   }
-// }
-// Column(
-//             children: [
-//               SpaceHeight(height: smallSpace),
-//               Row(
-//                 children: [
-//                   Picture(
-//                     pos: 'left',
-//                     isEdit: false,
-//                     uint8List: leftFile,
-//                     onTapPicture: (_) =>
-//                         onNavigatorImagePullSizePage(binaryData: leftFile!),
-//                   ),
-//                   SpaceWidth(width: tinySpace),
-//                   Picture(
-//                     pos: 'right',
-//                     isEdit: false,
-//                     uint8List: rightFile,
-//                     onTapPicture: (_) =>
-//                         onNavigatorImagePullSizePage(binaryData: rightFile!),
-//                   ),
-//                 ],
-//               ),
-//               SpaceHeight(height: smallSpace),
-//             ],
-//           );

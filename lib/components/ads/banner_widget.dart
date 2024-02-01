@@ -61,6 +61,7 @@ class _BannerWidgetState extends State<BannerWidget> {
         child: SizedBox(
           height: 50,
           child: CommonText(
+            isNotTr: true,
             text: 'Ads',
             size: 12,
             isCenter: true,

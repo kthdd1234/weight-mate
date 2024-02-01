@@ -1,12 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/title_block.dart';
-import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -233,7 +231,7 @@ class GraphDateTimeCustom extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BodySmallText(text: title),
+                  BodySmallText(text: title.tr()),
                   SpaceHeight(height: smallSpace),
                   Text(text),
                 ],
@@ -266,8 +264,8 @@ class GraphDateTimeCustom extends StatelessWidget {
                   type: 'start',
                   icon: Icons.calendar_month,
                   title: '시작일',
-                  text: dateTimeFormatter(
-                    format: 'MM월 dd일',
+                  text: md(
+                    locale: context.locale.toString(),
                     dateTime: startDateTime,
                   ),
                 ),
@@ -279,8 +277,8 @@ class GraphDateTimeCustom extends StatelessWidget {
                   type: 'end',
                   icon: Icons.calendar_month,
                   title: '종료일',
-                  text: dateTimeFormatter(
-                    format: 'MM월 dd일',
+                  text: md(
+                    locale: context.locale.toString(),
                     dateTime: endDateTime,
                   ),
                 ),

@@ -22,12 +22,14 @@ class AlarmContainer extends StatelessWidget {
     required this.onChanged,
     required this.onCompleted,
     required this.onDateTimeChanged,
+    this.nameArgs,
   });
 
   IconData icon;
   String title, desc;
   bool isEnabled;
   DateTime alarmTime;
+  Map<String, String>? nameArgs;
   Function(bool newValue) onChanged;
   Function(DateTime dateTime) onDateTimeChanged;
   Function() onCompleted;
@@ -41,6 +43,7 @@ class AlarmContainer extends StatelessWidget {
           AlarmRow(
             icon: icon,
             title: title,
+            nameArgs: nameArgs,
             iconBackgroundColor: dialogBackgroundColor,
             desc: desc,
             isEnabled: isEnabled,
@@ -125,7 +128,7 @@ class AlarmItemWidget extends StatelessWidget {
 }
 
 class AlarmRow extends StatelessWidget {
-  const AlarmRow({
+  AlarmRow({
     super.key,
     this.icon,
     required this.iconBackgroundColor,
@@ -133,14 +136,16 @@ class AlarmRow extends StatelessWidget {
     required this.desc,
     required this.isEnabled,
     required this.onChanged,
+    this.nameArgs,
   });
 
-  final IconData? icon;
-  final Color iconBackgroundColor;
-  final String title;
-  final String desc;
-  final bool isEnabled;
-  final Function(bool newValue) onChanged;
+  IconData? icon;
+  Color iconBackgroundColor;
+  String title;
+  String desc;
+  bool isEnabled;
+  Map<String, String>? nameArgs;
+  Function(bool newValue) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +170,7 @@ class AlarmRow extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText(text: title, size: 15),
+                CommonText(text: title, size: 15, nameArgs: nameArgs),
                 SpaceHeight(height: 2),
                 CommonText(text: desc, size: 12, color: Colors.grey)
               ],

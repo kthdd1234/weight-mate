@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -36,7 +37,7 @@ class _PatialDeletePageState extends State<PatialDeletePage> {
       widget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('부분 삭제', style: TextStyle(fontSize: 20)),
+          title: Text('부분 삭제'.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
           foregroundColor: themeColor,
           elevation: 0.0,

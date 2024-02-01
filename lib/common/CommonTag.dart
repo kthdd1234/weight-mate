@@ -13,6 +13,7 @@ class CommonTag extends StatelessWidget {
     this.size,
     this.bgColor,
     this.nameArgs,
+    this.isNotTr,
   });
 
   String color;
@@ -21,6 +22,7 @@ class CommonTag extends StatelessWidget {
   double? size;
   Color? bgColor;
   Map<String, String>? nameArgs;
+  bool? isNotTr;
   Function()? onTap;
 
   @override
@@ -45,6 +47,7 @@ class CommonTag extends StatelessWidget {
                 isNotTop: true,
                 leftIcon: leftIcon,
                 nameArgs: nameArgs,
+                isNotTr: isNotTr,
               )
             : Icon(icon, size: 15, color: tagColor['textColor']),
       ),

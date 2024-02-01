@@ -1,4 +1,5 @@
 import 'package:dotted_border/dotted_border.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -34,7 +35,6 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
 
   @override
   void initState() {
-    String? passwords = userRepository.user.screenLockPasswords;
     AppLifecycleReactor(context: context).listenToAppStateChanges();
 
     super.initState();
@@ -122,7 +122,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
       widget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text('일기', style: TextStyle(fontSize: 20)),
+          title: Text('일기'.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
           foregroundColor: themeColor,
           elevation: 0.0,
@@ -173,8 +173,8 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                   ),
                             SpaceHeight(height: 10),
                             CommonText(
-                              text: dateTimeFormatter(
-                                format: 'yyyy년 M월 d일',
+                              text: ymd(
+                                locale: context.locale.toString(),
                                 dateTime: importDateTime ?? DateTime.now(),
                               ),
                               size: 12,
@@ -183,8 +183,8 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                             ),
                             SpaceHeight(height: 3),
                             CommonText(
-                              text: dateTimeFormatter(
-                                format: 'EE요일',
+                              text: e(
+                                locale: context.locale.toString(),
                                 dateTime: importDateTime ?? DateTime.now(),
                               ),
                               size: 12,
@@ -202,7 +202,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               style: const TextStyle(fontSize: 13),
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: '오늘 다이어트를 하면서 어땠는지 기록해보아요 :D',
+                                hintText: '오늘 다이어트를 하면서 어땠는지 기록해보아요 :D'.tr(),
                                 hintStyle: TextStyle(
                                   color: Colors.grey.shade300,
                                 ),
@@ -218,7 +218,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                 BottomSubmitButton(
                   padding: const EdgeInsets.all(0),
                   isEnabled: isEnabledButton,
-                  text: '작성 완료',
+                  text: '작성 완료'.tr(),
                   onPressed: onTapCompleted,
                 ),
               ],

@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
@@ -137,7 +135,7 @@ class _EditDiaryState extends State<EditDiary> {
         context: context,
         builder: (context) {
           return CommonBottomSheet(
-            title: '일기 설정',
+            title: '일기 설정'.tr(),
             height: 220,
             contents: Row(
               children: [
@@ -171,13 +169,15 @@ class _EditDiaryState extends State<EditDiary> {
       );
     }
 
-    emotionList;
-
     List<TagClass> tags = [
       TagClass(
         text: recordInfo?.whiteText != null
-            ? timeToString(recordInfo?.diaryDateTime)
+            ? hm(
+                locale: context.locale.toString(),
+                dateTime: recordInfo?.diaryDateTime ?? DateTime.now(),
+              )
             : '미작성',
+        isNotTr: recordInfo?.whiteText != null,
         color: 'orange',
         isHide: isOpen,
         onTap: onTapOpen,
@@ -244,10 +244,15 @@ class _EditDiaryState extends State<EditDiary> {
                                                 ),
                                                 SpaceHeight(height: smallSpace),
                                                 CommonText(
+                                                  isNotTr: true,
                                                   size: 12,
                                                   color: Colors.grey,
-                                                  text: timeToString(
-                                                    recordInfo.diaryDateTime,
+                                                  text: hm(
+                                                    locale: context.locale
+                                                        .toString(),
+                                                    dateTime: recordInfo
+                                                            .diaryDateTime ??
+                                                        DateTime.now(),
                                                   ),
                                                 ),
                                               ],
@@ -328,18 +333,20 @@ class DiaryTitle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CommonText(
-              text: dateTimeFormatter(
-                format: 'M월 d일',
+              text: md(
+                locale: context.locale.toString(),
                 dateTime: importDateTime,
               ),
+              isNotTr: true,
               size: 13,
               isBold: true,
             ),
             CommonText(
-              text: dateTimeFormatter(
-                format: 'EE요일',
+              text: e(
+                locale: context.locale.toString(),
                 dateTime: importDateTime,
               ),
+              isNotTr: true,
               size: 13,
               color: Colors.grey,
             )
@@ -372,14 +379,15 @@ class EmotionModal extends StatelessWidget {
     onTapCCBY() async {
       await launchUrl(
         Uri(
-            scheme: 'https',
-            host: 'creativecommons.org',
-            path: 'licenses/by/4.0/'),
+          scheme: 'https',
+          host: 'creativecommons.org',
+          path: 'licenses/by/4.0/',
+        ),
       );
     }
 
     return CommonBottomSheet(
-      title: '감정',
+      title: '감정'.tr(),
       height: 560,
       contents: Expanded(
         child: ContentsBox(
@@ -419,6 +427,7 @@ class EmotionModal extends StatelessWidget {
             color: Colors.grey,
           ),
           CommonText(
+            isNotTr: true,
             text: 'streamline',
             color: Colors.grey,
             size: 11,
@@ -427,11 +436,13 @@ class EmotionModal extends StatelessWidget {
             onTap: onTapStreamline,
           ),
           CommonText(
+            isNotTr: true,
             text: ' / ',
             size: 11,
             color: Colors.grey,
           ),
           CommonText(
+            isNotTr: true,
             text: 'CC BY',
             decoration: 'underLine',
             size: 11,

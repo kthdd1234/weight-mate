@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -243,18 +244,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomNavigationBarItem> items = const [
-      BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
+    List<BottomNavigationBarItem> items = [
       BottomNavigationBarItem(
-          icon: Icon(Icons.menu_book_rounded), label: '히스토리'),
+        icon: const Icon(Icons.edit),
+        label: '기록'.tr(),
+      ),
       BottomNavigationBarItem(
-        icon: Padding(
+        icon: const Icon(Icons.menu_book_rounded),
+        label: '히스토리'.tr(),
+      ),
+      BottomNavigationBarItem(
+        icon: const Padding(
           padding: EdgeInsets.only(bottom: 3),
           child: Icon(FontAwesomeIcons.chartLine, size: 17),
         ),
-        label: '그래프',
+        label: '그래프'.tr(),
       ),
-      BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.settings_rounded),
+        label: '설정'.tr(),
+      ),
     ];
 
     BottomNavigationEnum bottomNavitionId =

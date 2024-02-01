@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/ok_and_cancel_button.dart';
@@ -98,7 +99,7 @@ class _InputDialogState extends State<InputDialog> {
 
     return AlertDialog(
       shape: containerBorderRadious,
-      backgroundColor: dialogBackgroundColor,
+      backgroundColor: enableBackgroundColor,
       elevation: 0.0,
       title: DialogTitle(text: widget.title, onTap: onTapClose),
       content: ContentsBox(
@@ -110,7 +111,7 @@ class _InputDialogState extends State<InputDialog> {
               maxLength: item.maxLength,
               prefixIcon: item.prefixIcon,
               suffixText: item.suffixText,
-              hintText: item.hintText,
+              hintText: item.hintText.tr(),
               counterText: '',
               errorText: errorText,
               onChanged: onChanged,

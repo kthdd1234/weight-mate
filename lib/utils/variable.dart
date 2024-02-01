@@ -287,3 +287,28 @@ final languageItemList = [
     countryCode: 'ES',
   ),
 ];
+
+Map<String, TodoDataClass> todoData = {
+  PlanTypeEnum.diet.toString(): TodoDataClass(
+    filterId: FILITER.diet.toString(),
+    color: 'teal',
+    title: '식단',
+    icon: Icons.local_dining,
+  ),
+  PlanTypeEnum.exercise.toString(): TodoDataClass(
+    filterId: FILITER.exercise.toString(),
+    color: 'lightBlue',
+    title: '운동',
+    icon: Icons.fitness_center,
+  ),
+  PlanTypeEnum.lifestyle.toString(): TodoDataClass(
+    filterId: FILITER.lifeStyle.toString(),
+    color: 'brown',
+    title: '습관',
+    icon: Icons.self_improvement,
+  )
+};
+
+String eDiet = PlanTypeEnum.diet.toString();
+String eExercise = PlanTypeEnum.exercise.toString();
+String eLife = PlanTypeEnum.lifestyle.toString();
