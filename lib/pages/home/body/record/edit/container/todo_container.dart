@@ -159,8 +159,10 @@ class _TodoContainerState extends State<TodoContainer> {
           id: alarmId!,
           dateTime: DateTime.now(),
           alarmTime: alarmTime!,
-          title: planNotifyTitle(),
-          body: planNotifyBody(title: widget.title, body: text),
+          title: planNotifyTitle.tr(),
+          body: planNotifyBody.tr(
+            namedArgs: {'title': widget.title.tr(), "body": text},
+          ),
           payload: 'plan',
         );
       }
@@ -566,7 +568,7 @@ class _ChangeOrderBottomSheetState extends State<ChangeOrderBottomSheet> {
     }
 
     return CommonBottomSheet(
-      title: ' 목표'.tr(namedArgs: {'type': widget.title}),
+      title: ' 목표'.tr(namedArgs: {'type': widget.title.tr()}),
       height: 530,
       contents: Column(
         children: [
@@ -829,14 +831,14 @@ class Dismiss extends StatelessWidget {
               content: Row(
                 children: [
                   ExpandedButtonHori(
-                    padding: 12,
+                    padding: const EdgeInsets.all(12),
                     imgUrl: 'assets/images/t-11.png',
                     text: '닫기',
                     onTap: () => Navigator.of(context).pop(false),
                   ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonHori(
-                    padding: 12,
+                    padding: const EdgeInsets.all(12),
                     imgUrl: 'assets/images/t-23.png',
                     text: '삭제',
                     onTap: () {
@@ -987,6 +989,8 @@ class CategoryList extends StatelessWidget {
                 child: Row(
                   children: [
                     ExpandedButtonVerti(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
                       iconSize: eDiet == type ? 21 : 30,
                       titleSize: eDiet == type ? 13 : 15,
                       height: eDiet == type ? 90 : 105,
@@ -1081,6 +1085,7 @@ class LifeContainer extends StatelessWidget {
       ),
       TagClass(
         text: '실천율',
+        isHide: isOpen,
         nameArgs: {'percent': actionPercent},
         color: colorName,
         onTap: () => null,
@@ -1734,14 +1739,18 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
       if (isEnabled) {
         int alarmId = widget.planInfo?.alarmId ?? UniqueKey().hashCode;
 
+        // String title = widget.title.tr();
+
         NotificationService().addNotification(
           id: alarmId,
           dateTime: DateTime.now(),
           alarmTime: alarmTime,
-          title: planNotifyTitle(),
-          body: planNotifyBody(
-            title: widget.title,
-            body: widget.planInfo?.name ?? '',
+          title: planNotifyTitle.tr(),
+          body: planNotifyBody.tr(
+            namedArgs: {
+              'title': widget.title.tr(),
+              "body": widget.planInfo?.name ?? ''
+            },
           ),
           payload: 'plan',
         );
@@ -1801,6 +1810,8 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                 ),
                 SpaceWidth(width: tinySpace),
                 ExpandedButtonVerti(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   mainColor: themeColor,
                   icon: Icons.alarm_rounded,
                   title: '시간 알림',

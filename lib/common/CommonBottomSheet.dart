@@ -19,6 +19,7 @@ class CommonBottomSheet extends StatelessWidget {
     this.isEnabled,
     this.titleLeftWidget,
     this.subContents,
+    this.padding,
   });
 
   String title;
@@ -29,6 +30,7 @@ class CommonBottomSheet extends StatelessWidget {
   bool? isEnabled;
   Function()? onSubmit;
   Widget? titleLeftWidget;
+  EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +45,7 @@ class CommonBottomSheet extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: pagePadding,
+        padding: padding ?? pagePadding,
         child: Column(
           children: [
             Text(

@@ -99,7 +99,7 @@ class _EditDiaryState extends State<EditDiary> {
       showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (BuildContext context) => EmotionModal(
+        builder: (BuildContext context) => EmotionBottomSheet(
           emotion: emotion ?? '',
           onTap: onTapEmtion,
         ),
@@ -157,6 +157,8 @@ class _EditDiaryState extends State<EditDiary> {
                 ),
                 SpaceWidth(width: tinySpace),
                 ExpandedButtonVerti(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                   mainColor: Colors.red,
                   icon: Icons.delete_forever,
                   title: '감정 삭제',
@@ -364,8 +366,8 @@ class DiaryTitle extends StatelessWidget {
   }
 }
 
-class EmotionModal extends StatelessWidget {
-  EmotionModal({super.key, required this.emotion, required this.onTap});
+class EmotionBottomSheet extends StatelessWidget {
+  EmotionBottomSheet({super.key, required this.emotion, required this.onTap});
 
   String emotion;
   Function(String selectedEmotion) onTap;

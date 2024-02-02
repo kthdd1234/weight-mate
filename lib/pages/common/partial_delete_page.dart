@@ -61,7 +61,7 @@ class _PatialDeletePageState extends State<PatialDeletePage> {
                           ),
                           SpaceWidth(width: 3),
                           CommonText(
-                            text: '버튼을 누르면 바로 삭제됩니다. ',
+                            text: '버튼을 누르면 바로 삭제됩니다.',
                             size: 12,
                             isBold: true,
                           ),

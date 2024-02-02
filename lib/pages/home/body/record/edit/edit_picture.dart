@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -175,7 +176,7 @@ class EditPicture extends StatelessWidget {
         backgroundColor: Colors.transparent,
         context: context,
         builder: (context) => CommonBottomSheet(
-          title: '사진 ${isFilePath ? '편집' : '추가'}',
+          title: '사진 ${isFilePath ? '편집' : '추가'}'.tr(),
           height: isFilePath ? 500 : 220,
           contents: Column(
             children: [

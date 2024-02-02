@@ -356,13 +356,13 @@ weightNotifyBody() {
   return '지금 바로 체중을 기록해보세요!';
 }
 
-planNotifyTitle() {
-  return '목표 실천 알림 ⏰';
-}
+const planNotifyTitle = '목표 실천 알림 ⏰';
 
-planNotifyBody({required String title, required String body}) {
-  return '[$title: $body]\n지금 바로 실천해보세요!';
-}
+const planNotifyBody = '지금 바로 실천해보세요!';
+
+// planNotifyBody({required String title, required String body}) {
+//   return '[$title: $body]\n지금 바로 실천해보세요!';
+// }
 
 calculatedGoalWeight({required double goalWeight, required double weight}) {
   double value = goalWeight - weight;

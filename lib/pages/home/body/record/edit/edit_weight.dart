@@ -295,7 +295,7 @@ class _EditWeightState extends State<EditWeight> {
                           maxLength: weightMaxLength,
                           decoration: InputDecoration(
                             suffixText: 'kg',
-                            hintText: weightHintText,
+                            hintText: weightHintText.tr(),
                             errorText: errorText,
                           ),
                           onChanged: onChangedText,

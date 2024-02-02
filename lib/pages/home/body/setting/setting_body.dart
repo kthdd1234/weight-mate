@@ -119,13 +119,15 @@ class _SettingBodyState extends State<SettingBody> {
               onCompleted() {
                 if (isEnabled) {
                   int alarmId = user.alarmId ?? UniqueKey().hashCode;
+                  String title = weightNotifyTitle();
+                  String body = weightNotifyBody();
 
                   NotificationService().addNotification(
                     id: alarmId,
                     dateTime: DateTime.now(),
                     alarmTime: alarmTime,
-                    title: weightNotifyTitle(),
-                    body: weightNotifyBody(),
+                    title: title.tr(),
+                    body: body.tr(),
                     payload: 'weight',
                   );
 

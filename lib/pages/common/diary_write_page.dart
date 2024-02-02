@@ -63,7 +63,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
     onTapEmotion() {
       showModalBottomSheet(
         context: context,
-        builder: (context) => EmotionModal(
+        builder: (context) => EmotionBottomSheet(
           emotion: emotion,
           onTap: (selectedEmotion) {
             setState(() {
