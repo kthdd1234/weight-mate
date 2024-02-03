@@ -3,9 +3,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_alarm_permission.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_plan_list.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_unit.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_plan_list.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
@@ -31,16 +32,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'pages/add/pages/add_body_info.dart';
+import 'pages/onboarding/pages/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
 
 const supportedLocales = [
   Locale('ko', 'KR'),
   Locale('en', 'US'),
-  Locale('de', 'DE'),
   Locale('ja', 'JP'),
-  Locale('es', 'ES'),
-  Locale('fr', 'FR'),
+  // Locale('de', 'DE'),
+  // Locale('es', 'ES'),
+  // Locale('fr', 'FR'),
 ];
 
 UserRepository userRepository = UserRepository();
@@ -148,9 +149,10 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      initialRoute: initialRoute, // initialRoute
+      initialRoute: '/add-start-screen', // initialRoute
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
+        '/add-body-unit': (context) => const AddBodyUnit(),
         '/add-body-info': (context) => const AddBodyInfo(),
         '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),

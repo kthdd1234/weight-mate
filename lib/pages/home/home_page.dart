@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
@@ -19,6 +20,7 @@ import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
@@ -189,6 +191,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();
+
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
       context.read<TitleDateTimeProvider>().setTitleDateTime(now);
       context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
@@ -295,6 +298,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       const SettingBody()
     ];
 
+    floatingActionButton() {
+      DateTime titleDateTime =
+          context.watch<ImportDateTimeProvider>().getImportDateTime();
+      bool isToday = isCheckToday(titleDateTime);
+
+      return bottomNavitionId == BottomNavigationEnum.record && isToday == false
+          ? FloatingActionButton.extended(
+              backgroundColor: themeColor,
+              onPressed: () {
+                DateTime now = DateTime.now();
+
+                context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+                context.read<ImportDateTimeProvider>().setImportDateTime(now);
+              },
+              label: CommonText(
+                text: '오늘로 이동',
+                size: 16,
+                color: Colors.white,
+                isBold: true,
+              ),
+              icon: const Icon(Icons.today, color: Colors.white),
+            )
+          : null;
+    }
+
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.transparent,
@@ -313,6 +341,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             onTap: onBottomNavigation,
           ),
         ),
+        floatingActionButton: floatingActionButton(),
       ),
     );
   }

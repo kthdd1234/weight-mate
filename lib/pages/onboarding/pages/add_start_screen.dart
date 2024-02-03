@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/pages/add/add_container.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class AddStartScreen extends StatelessWidget {
@@ -10,7 +10,7 @@ class AddStartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onPressedStart() {
-      Navigator.pushNamed(context, '/add-body-info');
+      Navigator.pushNamed(context, '/add-body-unit');
     }
 
     return AddContainer(

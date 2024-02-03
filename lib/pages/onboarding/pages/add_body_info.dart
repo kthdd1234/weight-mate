@@ -8,7 +8,7 @@ import 'package:flutter_app_weight_management/components/simple_stepper/simple_s
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
-import 'package:flutter_app_weight_management/pages/add/add_container.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -160,7 +160,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           ),
           child: Column(
             children: [
-              AddTitle(step: 1, title: '키와 체중을 입력해주세요.'),
+              AddTitle(step: 2, title: '키와 체중을 입력해주세요.'),
               ContentsBox(
                 contentsWidget: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,11 +268,7 @@ class ActionBar extends StatelessWidget {
 }
 
 class AddTitle extends StatelessWidget {
-  AddTitle({
-    super.key,
-    required this.step,
-    required this.title,
-  });
+  AddTitle({super.key, required this.step, required this.title});
 
   int step;
   String title;

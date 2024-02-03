@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -111,7 +113,7 @@ class CommonTitle extends StatelessWidget {
 
     bool isRecord = index == 0;
     bool isHistory = index == 1;
-    bool isToday = isCheckToday(titleDateTime);
+    // bool isToday = isCheckToday(titleDateTime);
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -184,13 +186,6 @@ class CommonTitle extends StatelessWidget {
           );
     }
 
-    onTapToday() {
-      DateTime now = DateTime.now();
-
-      context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-      context.read<ImportDateTimeProvider>().setImportDateTime(now);
-    }
-
     onTapFilter() async {
       await showDialog(
         context: context,
@@ -236,14 +231,6 @@ class CommonTitle extends StatelessWidget {
                   isRecord
                       ? Row(
                           children: [
-                            isToday
-                                ? const EmptyArea()
-                                : CommonTag(
-                                    text: '오늘로 이동',
-                                    color: 'whiteBlue',
-                                    onTap: onTapToday,
-                                  ),
-                            SpaceWidth(width: tinySpace),
                             CommonTag(
                               text: availableCalendarMaker[calendarMaker],
                               color: 'whiteIndigo',
@@ -391,9 +378,13 @@ class CalendarBar extends StatelessWidget {
       );
     }
 
-    onPageChanged(dateTime) {
+    onPageChanged(DateTime dateTime) {
+      log('onPageChanged => $dateTime');
+
       context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
     }
+
+    log(' importDateTime => $importDateTime');
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
@@ -403,7 +394,7 @@ class CalendarBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: TableCalendar(
-                locale: 'ko-KR',
+                locale: context.locale.toString(),
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: calendarMaker == CalendarMaker.sticker
                       ? stickerBuilder

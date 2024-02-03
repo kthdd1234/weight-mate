@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls, use_build_context_synchronously
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -8,8 +9,8 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/add/add_container.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_body_info.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_info.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
@@ -33,65 +34,20 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
 
   @override
   Widget build(BuildContext context) {
-    // ImportDateTimeProvider importProvider =
-    //     context.read<ImportDateTimeProvider>();
-    // TitleDateTimeProvider titleDateTimeProvider =
-    //     context.read<TitleDateTimeProvider>();
-    // DietInfoProvider readProvider = context.read<DietInfoProvider>();
     DietInfoProvider dietInfo = context.watch<DietInfoProvider>();
-
-    // onTimeSetting() async {
-    //   bool? isResult = await NotificationService().requestPermission();
-
-    //   if (isResult == true) {
-    //     int newId = UniqueKey().hashCode;
-
-    //     showAlarmBottomSheet(
-    //       context: context,
-    //       initialDateTime: dietInfo.getAlarmTime() ?? DateTime.now(),
-    //       onDateTimeChanged: (DateTime dateTime) {
-    //         readProvider.changeAlarmTime(dateTime);
-    //       },
-    //       onSubmit: () async {
-    //         readProvider.changeIsAlarm(true);
-    //         readProvider.changeAlarmTime(dietInfo.getAlarmTime());
-    //         readProvider.changeAlarmId(dietInfo.getAlarmId() ?? newId);
-
-    //         setState(() => displayAlarmTime = dietInfo.getAlarmTime());
-
-    //         print('${dietInfo.getAlarmTime()}');
-
-    //         NotificationService().addNotification(
-    //           id: dietInfo.getAlarmId() ?? newId,
-    //           dateTime: DateTime.now(),
-    //           alarmTime: dietInfo.getAlarmTime() ?? DateTime.now(),
-    //           title: weightNotifyTitle(),
-    //           body: weightNotifyBody(),
-    //           payload: 'weight',
-    //         );
-
-    //         closeDialog(context);
-    //       },
-    //     );
-    //   } else {
-    //     showDialog(
-    //       context: context,
-    //       builder: (context) => const PermissionPopup(),
-    //     );
-    //   }
-    // }
 
     onCompleted() async {
       DateTime now = DateTime.now();
-      RecordInfoClass recordInfo = dietInfo.getRecordInfo();
       List<String> planItemList = dietInfo.planItemList;
+      UserInfoClass user = dietInfo.getUserInfo();
+      String userId = UniqueKey().hashCode.toString();
       int alarmId = UniqueKey().hashCode;
 
       userRepository.updateUser(
         UserBox(
-          userId: dietInfo.getUserInfo().userId,
-          tall: dietInfo.getUserInfo().tall,
-          goalWeight: dietInfo.getUserInfo().goalWeight,
+          userId: userId,
+          tall: user.tall,
+          goalWeight: user.goalWeight,
           createDateTime: now,
           isAlarm: isWeightAlarm,
           alarmTime: isWeightAlarm ? weightDateTime : null,
@@ -106,8 +62,8 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           id: alarmId,
           dateTime: now,
           alarmTime: weightDateTime,
-          title: weightNotifyTitle(),
-          body: weightNotifyBody(),
+          title: weightNotifyTitle().tr(),
+          body: weightNotifyBody().tr(),
           payload: 'weight',
         );
       }
@@ -115,9 +71,9 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
       await recordRepository.recordBox.put(
         getDateTimeToInt(now),
         RecordBox(
+          weight: user.weight,
           createDateTime: now,
           weightDateTime: now,
-          weight: recordInfo.weight,
         ),
       );
 
@@ -175,7 +131,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
       body: Column(
         children: [
           AddTitle(
-            step: 3,
+            step: 4,
             title: '꾸준한 체중 기록을 위해 알림을 받아 보는 건 어떠세요?',
           ),
           ContentsBox(
@@ -203,28 +159,6 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
               ],
             ),
           )
-          // CommonText(
-          //   text: '정해진 시간에 체중을 기록하는 습관을 만들어드려요 :)',
-          //   size: 13,
-          //   color: themeColor,
-          // ),
-
-          // InkWell(
-          //   onTap: onTimeSetting,
-          //   child: ContentsBox(
-          //     width: 200,
-          //     isBoxShadow: true,
-          //     contentsWidget: CommonText(
-          //       text: dietInfo.getUserInfo().isAlarm
-          //           ? timeToString(displayAlarmTime ?? DateTime.now())
-          //           : '알림 시간 설정하기',
-          //       size: 15,
-          //       isCenter: true,
-          //       isBold: true,
-          //     ),
-          //   ),
-          // ),
-          // SpaceHeight(height: 10),
         ],
       ),
       buttonEnabled: true,

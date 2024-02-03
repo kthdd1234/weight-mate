@@ -348,11 +348,11 @@ dateTimeToTitle(DateTime dateTime) {
   return dateTimeFormatter(format: 'MM월 dd일', dateTime: dateTime);
 }
 
-weightNotifyTitle() {
+String weightNotifyTitle() {
   return '오늘의 체중 기록 알림 📝';
 }
 
-weightNotifyBody() {
+String weightNotifyBody() {
   return '지금 바로 체중을 기록해보세요!';
 }
 
@@ -388,12 +388,12 @@ initDateTime() {
   );
 }
 
-isCheckToday(DateTime date) {
+isCheckToday(DateTime targetDate) {
   final now = DateTime.now();
 
-  return now.year == date.year &&
-      now.month == date.month &&
-      now.day == date.day;
+  return now.year == targetDate.year &&
+      now.month == targetDate.month &&
+      now.day == targetDate.day;
 }
 
 bmi({required double tall, required double? weight}) {

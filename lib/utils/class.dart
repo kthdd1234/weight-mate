@@ -7,66 +7,20 @@ import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_pag
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:privacy_screen/privacy_screen.dart';
 
 class UserInfoClass {
   UserInfoClass({
-    required this.userId,
     required this.tall,
     required this.goalWeight,
-    required this.recordStartDateTime,
-    required this.isAlarm,
-    this.alarmTime,
-    this.alarmId,
+    required this.weight,
+    required this.tallUnit,
+    required this.weightUnit,
   });
 
-  String userId;
   double tall;
+  double weight;
   double goalWeight;
-  DateTime recordStartDateTime;
-  bool isAlarm;
-  DateTime? alarmTime;
-  int? alarmId;
-}
-
-class RecordInfoClass {
-  RecordInfoClass({
-    required this.recordDateTime,
-    this.weight,
-    this.actions,
-    this.memo,
-  });
-
-  DateTime recordDateTime;
-  double? weight;
-  List<String>? actions;
-  String? memo;
-}
-
-class PlanInfoClass {
-  PlanInfoClass({
-    required this.type,
-    required this.title,
-    required this.id,
-    required this.name,
-    required this.priority,
-    required this.isAlarm,
-    this.alarmTime,
-    this.alarmId,
-    required this.createDateTime,
-    required this.planItemList,
-  });
-
-  PlanTypeEnum type;
-  String title;
-  String id;
-  String name;
-  PlanPriorityEnum priority;
-  bool isAlarm;
-  DateTime? alarmTime;
-  int? alarmId;
-  DateTime createDateTime;
-  List<String> planItemList;
+  String tallUnit, weightUnit;
 }
 
 class TextInputClass {
