@@ -51,8 +51,11 @@ class _GraphChartState extends State<GraphChart> {
         borderWidth: 1.0,
         borderColor: disabledButtonTextColor,
         isVisible: true,
-        text: '목표 체중: kg'.tr(
-          namedArgs: {"weight": '${userProfile!.goalWeight}'},
+        text: '목표 체중: '.tr(
+          namedArgs: {
+            "weight": '${userProfile!.goalWeight}',
+            'unit': '${userProfile.weightUnit}'
+          },
         ),
         textStyle: const TextStyle(color: disabledButtonTextColor),
         start: userProfile.goalWeight,
@@ -192,7 +195,7 @@ class _GraphChartState extends State<GraphChart> {
           tooltipBehavior: TooltipBehavior(
             header: '',
             enable: true,
-            format: 'point.x: point.ykg',
+            format: 'point.x: point.y${userProfile.weightUnit}',
           ),
           primaryXAxis: CategoryAxis(),
           primaryYAxis: NumericAxis(

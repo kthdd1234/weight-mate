@@ -22,6 +22,7 @@ enum SegmentedTypes { week, month, threeMonth, sixMonth, custom, goal, record }
 enum MoreSeeItem {
   tall,
   goalWeight,
+  appUnit,
   appAlarm,
   appLock,
   appReset,

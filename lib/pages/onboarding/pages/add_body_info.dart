@@ -7,9 +7,9 @@ import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -33,53 +33,30 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
   @override
   Widget build(BuildContext context) {
+    DietInfoProvider watchProvider = context.watch<DietInfoProvider>();
     DietInfoProvider readProvider = context.read<DietInfoProvider>();
+    UserInfoClass user = watchProvider.getUserInfo();
+    String tallUnit = user.tallUnit;
+    String weightUnit = user.weightUnit;
 
     onChangedValue(TextEditingController controller) {
-      if (double.tryParse(controller.text) == null) {
+      if (isDoubleTryParse(text: controller.text) == false) {
         controller.text = '';
       }
 
       setState(() {});
     }
 
-    setErrorTextTall() {
-      return handleCheckErrorText(
-        text: tallContoller.text == '.' ? '' : tallContoller.text,
-        min: tallMin,
-        max: tallMax,
-        errMsg: tallErrMsg.tr(),
-      );
-    }
-
-    setErrorTextWeight() {
-      return handleCheckErrorText(
-        text: weightContoller.text == '.' ? '' : weightContoller.text,
-        min: weightMin,
-        max: weightMax,
-        errMsg: weightErrMsg.tr(),
-      );
-    }
-
-    setErrorTextGoalWeight() {
-      return handleCheckErrorText(
-        text: goalWeightContoller.text == '.' ? '' : goalWeightContoller.text,
-        min: weightMin,
-        max: weightMax,
-        errMsg: weightErrMsg.tr(),
-      );
-    }
-
     isTall() {
-      return tallContoller.text != '' && setErrorTextTall() == null;
+      return isDoubleTryParse(text: tallContoller.text);
     }
 
     isWeight() {
-      return weightContoller.text != '' && setErrorTextWeight() == null;
+      return isDoubleTryParse(text: weightContoller.text);
     }
 
     isGoalWeight() {
-      return goalWeightContoller.text != '' && setErrorTextGoalWeight() == null;
+      return isDoubleTryParse(text: goalWeightContoller.text);
     }
 
     isComplted() {
@@ -107,7 +84,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       required String suffixText,
       required String counterText,
       required String hintText,
-      required dynamic errorText,
       required Function(String) onChanged,
     }) {
       return Column(
@@ -123,7 +99,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             suffixText: suffixText,
             counterText: counterText,
             hintText: hintText.tr(),
-            errorText: errorText,
             onChanged: onChanged,
           )
         ],
@@ -174,10 +149,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                             title: '키',
                             maxLength: 5,
                             prefixIcon: Icons.accessibility_new_sharp,
-                            suffixText: 'cm',
+                            suffixText: tallUnit,
                             counterText: ' ',
                             hintText: '키',
-                            errorText: setErrorTextTall(),
                             onChanged: (_) => onChangedValue(tallContoller),
                           ),
                         ),
@@ -189,10 +163,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                             title: '체중',
                             maxLength: 4,
                             prefixIcon: Icons.monitor_weight,
-                            suffixText: 'kg',
+                            suffixText: weightUnit,
                             counterText: ' ',
                             hintText: '체중',
-                            errorText: setErrorTextWeight(),
                             onChanged: (_) => onChangedValue(weightContoller),
                           ),
                         ),
@@ -205,10 +178,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                       title: '목표 체중',
                       maxLength: 4,
                       prefixIcon: Icons.flag,
-                      suffixText: 'kg',
+                      suffixText: weightUnit,
                       counterText: ' ',
                       hintText: '목표 체중',
-                      errorText: setErrorTextGoalWeight(),
                       onChanged: (_) => onChangedValue(goalWeightContoller),
                     ),
                   ],

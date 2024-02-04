@@ -54,6 +54,8 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           alarmId: isWeightAlarm ? alarmId : null,
           filterList: initOpenList,
           displayList: initDisplayList,
+          weightUnit: user.weightUnit,
+          tallUnit: user.tallUnit,
         ),
       );
 

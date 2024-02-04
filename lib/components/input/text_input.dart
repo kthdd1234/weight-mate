@@ -4,24 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TextInput extends StatelessWidget {
-  TextInput(
-      {super.key,
-      required this.suffixText,
-      required this.hintText,
-      required this.onChanged,
-      required this.errorText,
-      this.maxLength,
-      this.prefixIcon,
-      this.counterText,
-      this.autofocus,
-      this.controller,
-      this.keyboardType,
-      this.helperText,
-      this.inputBorderType,
-      this.inputHeight,
-      this.contentPadding,
-      this.isMediumSize,
-      this.focusNode});
+  TextInput({
+    super.key,
+    required this.suffixText,
+    required this.hintText,
+    required this.onChanged,
+    this.errorText,
+    this.maxLength,
+    this.prefixIcon,
+    this.counterText,
+    this.autofocus,
+    this.controller,
+    this.keyboardType,
+    this.helperText,
+    this.inputBorderType,
+    this.inputHeight,
+    this.contentPadding,
+    this.isMediumSize,
+    this.focusNode,
+  });
 
   int? maxLength;
   IconData? prefixIcon;

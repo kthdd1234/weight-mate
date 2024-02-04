@@ -297,6 +297,7 @@ class CalendarBar extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
+    String? weightUnit = userRepository.user.weightUnit ?? 'kg';
 
     onDaySelected(selectedDay, _) {
       context.read<ImportDateTimeProvider>().setImportDateTime(selectedDay);
@@ -370,7 +371,7 @@ class CalendarBar extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CommonText(
           isNotTr: true,
-          text: isWeight ? '${recordInfo?.weight}kg' : '',
+          text: isWeight ? '${recordInfo?.weight}$weightUnit' : '',
           size: 8,
           color: Colors.black,
           isCenter: true,
@@ -379,12 +380,8 @@ class CalendarBar extends StatelessWidget {
     }
 
     onPageChanged(DateTime dateTime) {
-      log('onPageChanged => $dateTime');
-
       context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
     }
-
-    log(' importDateTime => $importDateTime');
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,

@@ -375,8 +375,12 @@ class _SettingBodyState extends State<SettingBody> {
       );
     }
 
+    onTapUnit(id) {
+      //
+    }
+
     onTapVersion(id) {
-      // Uri appstoreLink = ;
+      //
     }
 
     List<MoreSeeItemClass> settingItemList = [
@@ -384,7 +388,7 @@ class _SettingBodyState extends State<SettingBody> {
         id: MoreSeeItem.tall,
         icon: 'tall',
         title: '키',
-        value: '${user.tall} cm',
+        value: '${user.tall}${user.tallUnit}',
         color: themeColor,
         onTap: onTapTall,
       ),
@@ -392,9 +396,17 @@ class _SettingBodyState extends State<SettingBody> {
         id: MoreSeeItem.goalWeight,
         icon: 'goal',
         title: '목표 체중',
-        value: '${user.goalWeight} kg',
+        value: '${user.goalWeight}${user.weightUnit}',
         color: themeColor,
         onTap: onTapGoalWeight,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appUnit,
+        icon: '',
+        title: '단위 변경',
+        value: '${user.tallUnit}/${user.weightUnit}',
+        color: themeColor,
+        onTap: onTapUnit,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appLang,

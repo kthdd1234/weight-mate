@@ -6,10 +6,15 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_info.dart';
+import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:provider/provider.dart';
 
 class AddBodyUnit extends StatefulWidget {
-  const AddBodyUnit({super.key});
+  AddBodyUnit({super.key, required this.locale});
+
+  String locale;
 
   @override
   State<AddBodyUnit> createState() => _AddBodyUnitState();
@@ -21,14 +26,23 @@ class _AddBodyUnitState extends State<AddBodyUnit> {
 
   @override
   void initState() {
-    // locale
     super.initState();
+
+    if (isAmericanLocale(locale: widget.locale.toString())) {
+      sTallUnit = 'inch';
+      sWeightUnit = 'lb';
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    DietInfoProvider readProvider = context.read<DietInfoProvider>();
+
     onPressDone() {
-      // Todo
+      readProvider.changeTallUnit(sTallUnit);
+      readProvider.changeWeightUnit(sWeightUnit);
+
+      Navigator.pushNamed(context, '/add-body-info');
     }
 
     onTapButton({
@@ -60,6 +74,7 @@ class _AddBodyUnitState extends State<AddBodyUnit> {
         radious: 5,
         textColor: state == unit ? Colors.white : Colors.grey,
         isBold: state == unit,
+        isNotTr: true,
         onTap: () => onTapButton(
           unit: unit,
           state: state,

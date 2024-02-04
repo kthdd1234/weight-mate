@@ -360,10 +360,6 @@ const planNotifyTitle = '목표 실천 알림 ⏰';
 
 const planNotifyBody = '지금 바로 실천해보세요!';
 
-// planNotifyBody({required String title, required String body}) {
-//   return '[$title: $body]\n지금 바로 실천해보세요!';
-// }
-
 calculatedGoalWeight({required double goalWeight, required double weight}) {
   double value = goalWeight - weight;
   String fixedValue = value.toStringAsFixed(1);
@@ -396,14 +392,38 @@ isCheckToday(DateTime targetDate) {
       now.day == targetDate.day;
 }
 
-bmi({required double tall, required double? weight}) {
+/**
+   센티(cm) = 인치(inch) 곱하기 2.54
+예를 들어, 14.5인치를 센티로 변환하려면
+14.5 × 2.54 = 36.83 센치(cm)입니다.
+
+
+인치(inch) = 센티(cm) 나누기 2.54
+예를 들어, 36.83센치(cm)를 인치로 바꾸면
+36.83 ÷ 2.54 = 14.5 인치(inch)입니다.
+   */
+
+bmi({
+  required double tall,
+  required String? tallUnit,
+  required double? weight,
+  required String? weightUnit,
+}) {
   if (weight == null) {
     return '-';
   }
 
-  final cmToM = tall / 100;
-  final bmi = weight / (cmToM * cmToM);
-  final bmiToFixed = bmi.toStringAsFixed(1);
+  if (tallUnit == 'inch') {
+    tall = (tall * 2.54);
+  }
+
+  if (weightUnit == 'lb') {
+    weight = weight * 0.45;
+  }
+
+  double cmToM = tall / 100;
+  double bmi = weight / (cmToM * cmToM);
+  String bmiToFixed = bmi.toStringAsFixed(1);
 
   return bmiToFixed;
 }
@@ -494,4 +514,14 @@ onActionCount(List<RecordBox> recordList, String planId) {
   });
 
   return count;
+}
+
+isAmericanLocale({required String locale}) {
+  List<String> americanLocales = ['en_US', 'ca_CA', 'gb_GB'];
+
+  return americanLocales.contains(locale);
+}
+
+isDoubleTryParse({required String text}) {
+  return double.tryParse(text) != null;
 }

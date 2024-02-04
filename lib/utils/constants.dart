@@ -114,15 +114,6 @@ const weightMaxLength = 4;
 /// bodyFatMaxLength
 const bodyFatMaxLength = 4;
 
-// tallSuffixText
-const tallSuffixText = 'cm';
-
-// weightSuffixText
-const weightSuffixText = 'kg';
-
-// tallSuffixText
-const bodyFatSuffixText = '%';
-
 /// containerBorderRadious
 final containerBorderRadious =
     RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));

@@ -56,22 +56,28 @@ class _AddPlanListState extends State<AddPlanList> {
                       child: Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CommonIcon(
-                              icon: checkList.contains(e.name)
-                                  ? Icons.check_box_rounded
-                                  : Icons.check_box_outline_blank_rounded,
-                              size: 23,
-                              color: checkList.contains(e.name)
-                                  ? themeColor
-                                  : Colors.grey.shade400,
+                            Expanded(
+                              flex: 0,
+                              child: CommonIcon(
+                                icon: checkList.contains(e.name)
+                                    ? Icons.check_box_rounded
+                                    : Icons.check_box_outline_blank_rounded,
+                                size: 23,
+                                color: checkList.contains(e.name)
+                                    ? themeColor
+                                    : Colors.grey.shade400,
+                              ),
                             ),
                             SpaceWidth(width: 10),
-                            Text(
-                              e.name.tr(),
-                              style: const TextStyle(
-                                fontSize: 15,
-                                color: themeColor,
+                            Expanded(
+                              child: Text(
+                                e.name.tr(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: themeColor,
+                                ),
                               ),
                             )
                           ],

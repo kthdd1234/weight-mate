@@ -5,35 +5,12 @@ import 'package:flutter_app_weight_management/components/button/ok_and_cancel_bu
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-
-Map<MoreSeeItem, TextInputClass> textInputData = {
-  MoreSeeItem.tall: TextInputClass(
-    maxLength: tallMaxLength,
-    hintText: tallHintText,
-    inputTextErr: InputTextErrorClass(
-      min: tallMin,
-      max: tallMax,
-      errMsg: tallErrMsg,
-    ),
-    prefixIcon: tallPrefixIcon,
-    suffixText: tallSuffixText,
-  ),
-  MoreSeeItem.goalWeight: TextInputClass(
-    maxLength: weightMaxLength,
-    hintText: goalWeightHintText,
-    inputTextErr: InputTextErrorClass(
-      min: weightMin,
-      max: weightMax,
-      errMsg: weightErrMsg,
-    ),
-    prefixIcon: goalWeightPrefixIcon,
-    suffixText: weightSuffixText,
-  )
-};
 
 class InputDialog extends StatefulWidget {
   InputDialog({
@@ -67,6 +44,31 @@ class _InputDialogState extends State<InputDialog> {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    Map<MoreSeeItem, TextInputClass> textInputData = {
+      MoreSeeItem.tall: TextInputClass(
+        maxLength: tallMaxLength,
+        hintText: tallHintText,
+        inputTextErr: InputTextErrorClass(
+          min: tallMin,
+          max: tallMax,
+          errMsg: tallErrMsg,
+        ),
+        prefixIcon: tallPrefixIcon,
+        suffixText: user.tallUnit ?? 'cm',
+      ),
+      MoreSeeItem.goalWeight: TextInputClass(
+        maxLength: weightMaxLength,
+        hintText: goalWeightHintText,
+        inputTextErr: InputTextErrorClass(
+          min: weightMin,
+          max: weightMax,
+          errMsg: weightErrMsg,
+        ),
+        prefixIcon: goalWeightPrefixIcon,
+        suffixText: user.weightUnit ?? 'kg',
+      )
+    };
     TextInputClass? item = textInputData[widget.id]!;
 
     setErrorText() {
@@ -113,7 +115,6 @@ class _InputDialogState extends State<InputDialog> {
               suffixText: item.suffixText,
               hintText: item.hintText.tr(),
               counterText: '',
-              errorText: errorText,
               onChanged: onChanged,
               controller: textInputController,
             ),

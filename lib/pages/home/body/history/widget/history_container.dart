@@ -141,7 +141,12 @@ class HistoryHeader extends StatelessWidget {
     UserBox user = userRepository.user;
 
     bmiValue() {
-      return 'BMI ${bmi(tall: user.tall, weight: recordInfo?.weight)}';
+      return 'BMI ${bmi(
+        tall: user.tall,
+        weight: recordInfo?.weight,
+        tallUnit: user.tallUnit,
+        weightUnit: user.weightUnit,
+      )}';
     }
 
     onRemoveEmotion() {
@@ -217,7 +222,8 @@ class HistoryHeader extends StatelessWidget {
                         children: [
                           CommonText(
                             isNotTr: true,
-                            text: '${recordInfo?.weight ?? '-'}kg',
+                            text:
+                                '${recordInfo?.weight ?? '-'}${user.weightUnit}',
                             size: 17,
                           ),
                           isRemoveMode && recordInfo?.weight != null

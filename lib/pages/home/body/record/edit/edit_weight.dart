@@ -25,29 +25,6 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-List<SvgClass> svgData = [
-  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
-  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
-  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
-  SvgClass(emotion: 'kissing-face', name: '신남'),
-  SvgClass(emotion: 'neutral-face', name: '보통'),
-  SvgClass(emotion: 'amazed-face', name: '놀람'),
-  SvgClass(emotion: 'anxious-face', name: '서운'),
-  SvgClass(emotion: 'crying-face', name: '슬픔'),
-  SvgClass(emotion: 'determined-face', name: '다짐'),
-  SvgClass(emotion: 'disappointed-face', name: '실망'),
-  SvgClass(emotion: 'dizzy-face', name: '피곤'),
-  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
-  SvgClass(emotion: 'expressionless-face', name: '고요'),
-  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
-  SvgClass(emotion: 'sneezing-face', name: '아픔'),
-  SvgClass(emotion: 'worried-face', name: '걱정'),
-  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
-  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
-  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
-  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
-];
-
 class EditWeight extends StatefulWidget {
   EditWeight({super.key});
 
@@ -59,7 +36,6 @@ class _EditWeightState extends State<EditWeight> {
   bool isShowInput = false;
   bool isGoalWeight = false;
   TextEditingController textController = TextEditingController();
-  String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -100,17 +76,6 @@ class _EditWeightState extends State<EditWeight> {
       );
     }
 
-    onErrorText() {
-      String? errMsg = handleCheckErrorText(
-        min: weightMin,
-        max: weightMax,
-        text: textController.text,
-        errMsg: weightErrMsg2.tr(),
-      );
-
-      return errMsg;
-    }
-
     onInit() {
       setState(() {
         isShowInput = false;
@@ -122,19 +87,14 @@ class _EditWeightState extends State<EditWeight> {
       context.read<EnabledProvider>().setEnabled(false);
     }
 
-    onValidWeight() {
-      return textController.text != '' && onErrorText() == null;
-    }
-
     onChangedText(_) {
-      bool isParse = double.tryParse(textController.text) == null;
+      bool isParse = isDoubleTryParse(text: textController.text);
 
-      if (isParse) {
+      if (isParse == false) {
         textController.text = '';
       }
 
-      setState(() => errorText = onErrorText());
-      context.read<EnabledProvider>().setEnabled(onValidWeight());
+      context.read<EnabledProvider>().setEnabled(isParse);
     }
 
     onTapWeight() {
@@ -153,7 +113,7 @@ class _EditWeightState extends State<EditWeight> {
         builder: (context) {
           return ButtonModal(
             onCompleted: () {
-              if (onValidWeight()) {
+              if (isDoubleTryParse(text: textController.text)) {
                 DateTime now = DateTime.now();
                 double weight = stringToDouble(textController.text);
 
@@ -213,7 +173,7 @@ class _EditWeightState extends State<EditWeight> {
         builder: (context) {
           return ButtonModal(
             onCompleted: () {
-              if (onValidWeight()) {
+              if (isDoubleTryParse(text: textController.text)) {
                 user.goalWeight = stringToDouble(textController.text);
                 user.save();
 
@@ -262,8 +222,11 @@ class _EditWeightState extends State<EditWeight> {
                 icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
                 tags: [
                   TagClass(
-                    text: '체중 kg',
-                    nameArgs: {'weight': '${recordInfo?.weight ?? '- '}'},
+                    text: '체중 ',
+                    nameArgs: {
+                      'weight': '${recordInfo?.weight ?? '- '}',
+                      'unit': user.weightUnit ?? 'kg'
+                    },
                     color: 'indigo',
                     isHide: isOpen,
                     onTap: onTapOpen,
@@ -271,7 +234,12 @@ class _EditWeightState extends State<EditWeight> {
                   TagClass(
                     text: 'BMI',
                     nameArgs: {
-                      'bmi': bmi(tall: user.tall, weight: recordInfo?.weight)
+                      'bmi': bmi(
+                        tall: user.tall,
+                        weight: recordInfo?.weight,
+                        tallUnit: user.tallUnit,
+                        weightUnit: user.weightUnit,
+                      )
                     },
                     color: 'indigo',
                     onTap: onTapBMI,
@@ -294,9 +262,8 @@ class _EditWeightState extends State<EditWeight> {
                           autofocus: true,
                           maxLength: weightMaxLength,
                           decoration: InputDecoration(
-                            suffixText: 'kg',
+                            suffixText: user.weightUnit,
                             hintText: weightHintText.tr(),
-                            errorText: errorText,
                           ),
                           onChanged: onChangedText,
                         )
@@ -448,18 +415,21 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    String weightUnit = user.weightUnit ?? 'kg';
+
     List<WeightButtonClass> weightButtonList = [
       WeightButtonClass(
-        text: '현재 체중: kg',
+        text: '현재 체중: ',
         imgNumber: '22',
-        nameArgs: {'weight': '${widget.weight}'},
+        nameArgs: {'weight': '${widget.weight}', 'unit': weightUnit},
         onTap: widget.onTapWeight,
       ),
       WeightButtonClass(),
       WeightButtonClass(
-        text: '목표 체중: kg',
+        text: '목표 체중: ',
         imgNumber: '15',
-        nameArgs: {'weight': '${widget.goalWeight}'},
+        nameArgs: {'weight': '${widget.goalWeight}', 'unit': weightUnit},
         onTap: widget.onTapGoalWeight,
       ),
     ];
@@ -480,8 +450,12 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
                   borderWidth: 1.0,
                   borderColor: disabledButtonTextColor,
                   isVisible: true,
-                  text: '목표 체중: kg'
-                      .tr(namedArgs: {'weight': '${widget.goalWeight}'}),
+                  text: '목표 체중: '.tr(
+                    namedArgs: {
+                      'weight': '${widget.goalWeight}',
+                      'unit': weightUnit
+                    },
+                  ),
                   textStyle: const TextStyle(color: disabledButtonTextColor),
                   start: widget.goalWeight,
                   end: widget.goalWeight,
@@ -491,7 +465,7 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
             tooltipBehavior: TooltipBehavior(
               enable: true,
               header: '',
-              format: 'point.x: point.ykg',
+              format: 'point.x: point.y$weightUnit',
             ),
             series: [
               FastLineSeries(

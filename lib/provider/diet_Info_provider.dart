@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 
 class DietInfoProvider with ChangeNotifier {
-  String _tallText = '';
-  String _weightText = '';
-  String _goalWeightText = '';
+  String _tallText = '0.0';
+  String _weightText = '0.0';
+  String _goalWeightText = '0.0';
   List<String> planItemList = [];
   String _tallUnit = '';
   String _weightUnit = '';

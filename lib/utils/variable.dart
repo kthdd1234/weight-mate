@@ -312,3 +312,26 @@ Map<String, TodoDataClass> todoData = {
 String eDiet = PlanTypeEnum.diet.toString();
 String eExercise = PlanTypeEnum.exercise.toString();
 String eLife = PlanTypeEnum.lifestyle.toString();
+
+List<SvgClass> svgData = [
+  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
+  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
+  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
+  SvgClass(emotion: 'kissing-face', name: '신남'),
+  SvgClass(emotion: 'neutral-face', name: '보통'),
+  SvgClass(emotion: 'amazed-face', name: '놀람'),
+  SvgClass(emotion: 'anxious-face', name: '서운'),
+  SvgClass(emotion: 'crying-face', name: '슬픔'),
+  SvgClass(emotion: 'determined-face', name: '다짐'),
+  SvgClass(emotion: 'disappointed-face', name: '실망'),
+  SvgClass(emotion: 'dizzy-face', name: '피곤'),
+  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
+  SvgClass(emotion: 'expressionless-face', name: '고요'),
+  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
+  SvgClass(emotion: 'sneezing-face', name: '아픔'),
+  SvgClass(emotion: 'worried-face', name: '걱정'),
+  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
+  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
+  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
+  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
+];

@@ -92,6 +92,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<String>? exerciseOrderList = user.exerciseOrderList;
     List<String>? lifeOrderList = user.lifeOrderList;
     String? language = user.language;
+    String? weightUnit = user.weightUnit;
+    String? tallUnit = user.tallUnit;
 
     List<PlanBox> planList = planRepository.planBox.values.toList();
 
@@ -158,6 +160,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           : 'en_US';
 
       user.language = localeName;
+    }
+
+    if (tallUnit == null) {
+      user.tallUnit = 'cm';
+    }
+
+    if (weightUnit == null) {
+      user.weightUnit = 'kg';
     }
 
     userRepository.user.save();
