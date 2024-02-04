@@ -584,7 +584,7 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
 
     onAdFailedToLoad() {
       setState(() {
-        isLoaded = true;
+        isLoaded = false;
         nativeAd = null;
       });
     }
