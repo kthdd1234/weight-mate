@@ -33,9 +33,9 @@ class EditWeight extends StatefulWidget {
 }
 
 class _EditWeightState extends State<EditWeight> {
+  TextEditingController textController = TextEditingController();
   bool isShowInput = false;
   bool isGoalWeight = false;
-  TextEditingController textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

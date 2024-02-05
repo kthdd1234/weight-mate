@@ -1,12 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
-import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_info.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -44,7 +42,7 @@ class _AddPlanListState extends State<AddPlanList> {
     return AddContainer(
       body: Column(
         children: [
-          AddTitle(step: 3, title: '꾸준히 달성 할 목표를 모두 골라보세요 :)'),
+          PageTitle(step: 3, title: '꾸준히 달성 할 목표를 모두 골라보세요 :)'),
           ContentsBox(
             height: 430,
             contentsWidget: ListView(

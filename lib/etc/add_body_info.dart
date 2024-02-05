@@ -4,7 +4,6 @@ import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
-import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
@@ -135,7 +134,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           ),
           child: Column(
             children: [
-              AddTitle(step: 2, title: '키와 체중을 입력해주세요.'),
               ContentsBox(
                 contentsWidget: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,27 +233,6 @@ class ActionBar extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class AddTitle extends StatelessWidget {
-  AddTitle({super.key, required this.step, required this.title});
-
-  int step;
-  String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SimpleStepper(step: step),
-        SpaceHeight(height: regularSapce),
-        Text(title, style: const TextStyle(fontSize: 18, color: themeColor))
-            .tr(),
-        SpaceHeight(height: smallSpace),
-      ],
     );
   }
 }

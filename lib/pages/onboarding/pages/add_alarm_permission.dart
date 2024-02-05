@@ -10,9 +10,10 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
-import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_info.dart';
+import 'package:flutter_app_weight_management/etc/add_body_info.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -132,7 +133,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
     return AddContainer(
       body: Column(
         children: [
-          AddTitle(
+          PageTitle(
             step: 4,
             title: '꾸준한 체중 기록을 위해 알림을 받아 보는 건 어떠세요?',
           ),

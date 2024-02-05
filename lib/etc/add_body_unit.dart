@@ -5,7 +5,6 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
-import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_info.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -27,11 +26,6 @@ class _AddBodyUnitState extends State<AddBodyUnit> {
   @override
   void initState() {
     super.initState();
-
-    if (isAmericanLocale(locale: widget.locale.toString())) {
-      sTallUnit = 'inch';
-      sWeightUnit = 'lb';
-    }
   }
 
   @override
@@ -48,13 +42,46 @@ class _AddBodyUnitState extends State<AddBodyUnit> {
     onTapButton({
       required String type,
       required String unit,
-      required String state,
     }) {
       setState(() {
         type == 'tall' ? sTallUnit = unit : sWeightUnit = unit;
       });
     }
 
+    return AddContainer(
+      body: Column(
+        children: [
+          UnitBox(
+            sTallUnit: sTallUnit,
+            sWeightUnit: sWeightUnit,
+            onTap: onTapButton,
+          ),
+        ],
+      ),
+      buttonEnabled: true,
+      onPressedBottomNavigationButton: onPressDone,
+      bottomSubmitButtonText: '완료',
+    );
+  }
+}
+
+class UnitBox extends StatelessWidget {
+  UnitBox({
+    super.key,
+    required this.sTallUnit,
+    required this.sWeightUnit,
+    required this.onTap,
+  });
+
+  final String sTallUnit;
+  final String sWeightUnit;
+  final Function({
+    required String type,
+    required String unit,
+  }) onTap;
+
+  @override
+  Widget build(BuildContext context) {
     unitTitle({required String text}) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 15),
@@ -75,66 +102,48 @@ class _AddBodyUnitState extends State<AddBodyUnit> {
         textColor: state == unit ? Colors.white : Colors.grey,
         isBold: state == unit,
         isNotTr: true,
-        onTap: () => onTapButton(
-          unit: unit,
-          state: state,
-          type: type,
-        ),
+        onTap: () => onTap(unit: unit, type: type),
       );
     }
 
-    return AddContainer(
-      body: Column(
+    return ContentsBox(
+      contentsWidget: Column(
         children: [
-          AddTitle(step: 1, title: '키와 체중의 단위를 선택해주세요.'),
-          ContentsBox(
-            contentsWidget: Column(
-              children: [
-                unitTitle(text: '키 단위'),
-                Row(
-                  children: [
-                    commonButton(
-                      unit: 'cm',
-                      state: sTallUnit,
-                      type: 'tall',
-                    ),
-                    SpaceWidth(width: 5),
-                    commonButton(
-                      unit: 'inch',
-                      state: sTallUnit,
-                      type: 'tall',
-                    )
-                  ],
-                ),
-                SpaceHeight(height: 30),
-                unitTitle(text: '체중 단위'),
-                Row(
-                  children: [
-                    commonButton(
-                      unit: 'kg',
-                      state: sWeightUnit,
-                      type: 'weight',
-                    ),
-                    SpaceWidth(width: 5),
-                    commonButton(
-                      unit: 'lb',
-                      state: sWeightUnit,
-                      type: 'weight',
-                    )
-                  ],
-                ),
-              ],
-            ),
+          unitTitle(text: '키 단위'),
+          Row(
+            children: [
+              commonButton(
+                unit: 'cm',
+                state: sTallUnit,
+                type: 'tall',
+              ),
+              SpaceWidth(width: 5),
+              commonButton(
+                unit: 'inch',
+                state: sTallUnit,
+                type: 'tall',
+              )
+            ],
+          ),
+          SpaceHeight(height: 30),
+          unitTitle(text: '체중 단위'),
+          Row(
+            children: [
+              commonButton(
+                unit: 'kg',
+                state: sWeightUnit,
+                type: 'weight',
+              ),
+              SpaceWidth(width: 5),
+              commonButton(
+                unit: 'lb',
+                state: sWeightUnit,
+                type: 'weight',
+              )
+            ],
           ),
         ],
       ),
-      buttonEnabled: true,
-      onPressedBottomNavigationButton: onPressDone,
-      bottomSubmitButtonText: '완료',
     );
   }
-}
-
-class BodyUnitClass {
-  BodyUnitClass({required unit});
 }

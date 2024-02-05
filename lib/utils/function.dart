@@ -522,6 +522,44 @@ isAmericanLocale({required String locale}) {
   return americanLocales.contains(locale);
 }
 
-isDoubleTryParse({required String text}) {
+bool isDoubleTryParse({required String text}) {
   return double.tryParse(text) != null;
+}
+
+String? convertTall({required String unit, required String tall}) {
+  double? tallValue = double.tryParse(tall);
+
+  if (tallValue != null) {
+    switch (unit) {
+      case 'cm':
+        return (tallValue * 2.54).toStringAsFixed(1);
+
+      case 'inch':
+        return (tallValue / 2.54).toStringAsFixed(2);
+
+      default:
+        return '0.0';
+    }
+  }
+
+  return null;
+}
+
+String? convertWeight({required String unit, required String wegiht}) {
+  double? weightValue = double.tryParse(wegiht);
+
+  if (weightValue != null) {
+    switch (unit) {
+      case 'kg':
+        return (weightValue / 2.2046).toStringAsFixed(1);
+
+      case 'lb':
+        return (weightValue * 2.2046).toStringAsFixed(1);
+
+      default:
+        return '0.0';
+    }
+  }
+
+  return null;
 }

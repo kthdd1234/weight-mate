@@ -375,8 +375,9 @@ class _SettingBodyState extends State<SettingBody> {
       );
     }
 
-    onTapUnit(id) {
-      //
+    onTapUnit(id) async {
+      await Navigator.pushNamed(context, '/body-unit-page');
+      setState(() {});
     }
 
     onTapVersion(id) {
@@ -402,7 +403,7 @@ class _SettingBodyState extends State<SettingBody> {
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appUnit,
-        icon: '',
+        icon: 'ruler',
         title: '단위 변경',
         value: '${user.tallUnit}/${user.weightUnit}',
         color: themeColor,

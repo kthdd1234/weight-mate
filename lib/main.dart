@@ -3,8 +3,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
-import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_unit.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_weight.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_plan_list.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
@@ -32,7 +34,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'pages/onboarding/pages/add_body_info.dart';
+import 'etc/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
 
 const supportedLocales = [
@@ -126,11 +128,11 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     UserBox? user = userBox?.get('userProfile');
     String locale = context.locale.toString();
-    // String initialRoute = user?.userId == null
-    //     ? '/add-start-screen'
-    //     : user?.screenLockPasswords == null
-    //         ? '/home-page'
-    //         : '/enter-screen-lock';
+    String initialRoute = user?.userId == null
+        ? '/add-start-screen'
+        : user?.screenLockPasswords == null
+            ? '/home-page'
+            : '/enter-screen-lock';
 
     final theme = ThemeData(
       primarySwatch: AppColors.primaryMaterialSwatchDark,
@@ -153,8 +155,8 @@ class _MyAppState extends State<MyApp> {
       initialRoute: '/add-start-screen', // initialRoute
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
-        '/add-body-unit': (context) => AddBodyUnit(locale: locale),
-        '/add-body-info': (context) => const AddBodyInfo(),
+        '/add-body-weight': (context) => const AddBodyWeight(),
+        '/add-body-tall': (context) => const AddBodyTall(),
         '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
         '/home-page': (context) => const HomePage(),
@@ -163,6 +165,7 @@ class _MyAppState extends State<MyApp> {
         '/image-collections-page': (context) => const ImageCollectionsPage(),
         '/partial-delete-page': (context) => const PatialDeletePage(),
         '/diary-write-page': (context) => const DiaryWritePage(),
+        '/body-unit-page': (context) => const BodyUnitPage(),
       },
     );
   }

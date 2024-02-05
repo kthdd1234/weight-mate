@@ -170,6 +170,7 @@ flutter:
     - assets/svgs/pencil-square-blue.svg
     - assets/svgs/pencil-square-brown.svg
     - assets/svgs/language.svg
+    - assets/svgs/ruler.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
