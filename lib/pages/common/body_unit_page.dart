@@ -33,10 +33,26 @@ class _BodyUnitPageState extends State<BodyUnitPage> {
       } else if (type == 'weight') {
         List<RecordBox> recordList = recordRepository.recordList.toList();
 
-        recordList.forEach((record) {
-          //
-        });
+        recordList.forEach(
+          (record) {
+            if (record.weight != null) {
+              String? weight = convertWeight(
+                unit: unit,
+                wegiht: '${record.weight}',
+              );
+
+              record.weight = double.tryParse(weight!);
+              record.save();
+            }
+          },
+        );
         user.weightUnit = unit;
+
+        String? goalWeight = convertWeight(
+          unit: unit,
+          wegiht: '${user.goalWeight}',
+        );
+        user.goalWeight = double.tryParse(goalWeight!)!;
       }
 
       user.save();

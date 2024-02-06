@@ -67,20 +67,21 @@ class _SettingBodyState extends State<SettingBody> {
     String? language = user.language;
     String locale = context.locale.toString();
 
-    onWeight(MoreSeeItem itemId) async {
-      await showDialog(
-        context: context,
-        builder: (builder) => WeightDialog(itemId: itemId),
-      );
+    onNavigator({required String type, required String title}) async {
+      await Navigator.pushNamed(context, '/body-info-page', arguments: {
+        'type': type,
+        'title': title,
+      });
+
       setState(() {});
     }
 
     onTapTall(id) {
-      onWeight(id);
+      onNavigator(type: 'tall', title: '키');
     }
 
     onTapGoalWeight(id) {
-      onWeight(id);
+      onNavigator(type: 'goalWeight', title: '목표 체중');
     }
 
     onTapAlarm(id) async {
@@ -146,7 +147,7 @@ class _SettingBodyState extends State<SettingBody> {
 
               return CommonBottomSheet(
                 title: '알림 설정'.tr(),
-                height: 430,
+                height: 650,
                 contents: AlarmContainer(
                   icon: Icons.edit,
                   title: '체중 기록 알림',
@@ -333,7 +334,7 @@ class _SettingBodyState extends State<SettingBody> {
         context: context,
         builder: (context) => CommonBottomSheet(
           title: '언어 변경'.tr(),
-          height: 430,
+          height: 280,
           contents: ContentsBox(
             contentsWidget: ListView(
               shrinkWrap: true,

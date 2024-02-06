@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,13 +8,10 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
-import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -535,7 +530,7 @@ String? convertTall({required String unit, required String tall}) {
         return (tallValue * 2.54).toStringAsFixed(1);
 
       case 'inch':
-        return (tallValue / 2.54).toStringAsFixed(2);
+        return (tallValue / 2.54).toStringAsFixed(1);
 
       default:
         return '0.0';
@@ -551,10 +546,10 @@ String? convertWeight({required String unit, required String wegiht}) {
   if (weightValue != null) {
     switch (unit) {
       case 'kg':
-        return (weightValue / 2.2046).toStringAsFixed(1);
+        return (weightValue / 2.2).toStringAsFixed(1);
 
       case 'lb':
-        return (weightValue * 2.2046).toStringAsFixed(1);
+        return (weightValue * 2.2).toStringAsFixed(1);
 
       default:
         return '0.0';
@@ -562,4 +557,21 @@ String? convertWeight({required String unit, required String wegiht}) {
   }
 
   return null;
+}
+
+bool isShowErorr({required String unit, required double? value}) {
+  if (value == null || value < 1) return true;
+
+  switch (unit) {
+    case 'cm':
+      return value >= cmMax;
+    case 'inch':
+      return value >= inchMax;
+    case 'kg':
+      return value >= kgMax;
+    case 'lb':
+      return value >= lbMax;
+    default:
+      return true;
+  }
 }

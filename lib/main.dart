@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
@@ -127,7 +128,6 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     UserBox? user = userBox?.get('userProfile');
-    String locale = context.locale.toString();
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
         : user?.screenLockPasswords == null
@@ -166,6 +166,7 @@ class _MyAppState extends State<MyApp> {
         '/partial-delete-page': (context) => const PatialDeletePage(),
         '/diary-write-page': (context) => const DiaryWritePage(),
         '/body-unit-page': (context) => const BodyUnitPage(),
+        '/body-info-page': (context) => const BodyInfoPage(),
       },
     );
   }

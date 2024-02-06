@@ -30,11 +30,25 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
   Widget build(BuildContext context) {
     DietInfoProvider readProvider = context.read<DietInfoProvider>();
 
-    onChangedWeight(_) {
-      bool isValid = isDoubleTryParse(text: weightContoller.text) == false ||
-          weightContoller.text == '0';
+    isErrorWeight() {
+      return isShowErorr(
+        unit: sWeightUnit,
+        value: double.tryParse(weightContoller.text),
+      );
+    }
 
-      if (isValid) {
+    isErrorGoalWeight() {
+      return isShowErorr(
+        unit: sWeightUnit,
+        value: double.tryParse(goalWeightContoller.text),
+      );
+    }
+
+    onChangedWeight(_) {
+      bool isInitText = isDoubleTryParse(text: weightContoller.text) == false ||
+          isErrorWeight();
+
+      if (isInitText) {
         weightContoller.text = '';
       }
 
@@ -42,11 +56,11 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
     }
 
     onChangedGoalWeight(_) {
-      bool isValid =
+      bool isInitText =
           isDoubleTryParse(text: goalWeightContoller.text) == false ||
-              goalWeightContoller.text == '0';
+              isErrorGoalWeight();
 
-      if (isValid) {
+      if (isInitText) {
         goalWeightContoller.text = '';
       }
 
@@ -98,12 +112,12 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
 
       bool isWeightDone = isDoubleTryParse(text: weightContoller.text) &&
           weight != null &&
-          weight.length < 6;
+          isErrorWeight() == false;
 
       bool isGoalWeightDone =
           isDoubleTryParse(text: goalWeightContoller.text) &&
               goalWeight != null &&
-              goalWeight.length < 6;
+              isErrorGoalWeight() == false;
 
       return isWeightDone && isGoalWeightDone;
     }
@@ -116,6 +130,7 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
       required IconData prefixIcon,
       required String suffixText,
       required String hintText,
+      required String? helperText,
       required Function(String) onChanged,
     }) {
       return Column(
@@ -129,6 +144,7 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
             prefixIcon: prefixIcon,
             suffixText: suffixText,
             hintText: hintText.tr(),
+            helperText: helperText,
             onChanged: onChanged,
           ),
           SpaceHeight(height: 10)
@@ -144,6 +160,19 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
 
         await Navigator.pushNamed(context, '/add-plan-list');
       }
+    }
+
+    helperMsg() {
+      int max = sWeightUnit == 'kg' ? kgMax.toInt() : lbMax.toInt();
+      return '1 ~ max 의 값을 입력해주세요.'.tr(namedArgs: {'max': '$max'});
+    }
+
+    helperWeightText() {
+      return weightContoller.text == '' ? helperMsg() : null;
+    }
+
+    helperGoalWeightText() {
+      return goalWeightContoller.text == '' ? helperMsg() : null;
     }
 
     return AddContainer(
@@ -176,6 +205,7 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
                       prefixIcon: weightPrefixIcon,
                       suffixText: sWeightUnit,
                       hintText: '현재 체중',
+                      helperText: helperWeightText(),
                       onChanged: onChangedWeight,
                     ),
                     weightInput(
@@ -185,6 +215,7 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
                       controller: goalWeightContoller,
                       prefixIcon: goalWeightPrefixIcon,
                       suffixText: sWeightUnit,
+                      helperText: helperGoalWeightText(),
                       hintText: '목표 체중',
                       onChanged: onChangedGoalWeight,
                     ),

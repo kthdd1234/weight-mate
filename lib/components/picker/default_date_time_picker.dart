@@ -6,8 +6,10 @@ class DefaultTimePicker extends StatelessWidget {
     required this.initialDateTime,
     required this.mode,
     required this.onDateTimeChanged,
+    this.height,
   });
 
+  double? height;
   DateTime initialDateTime;
   Function(DateTime time) onDateTimeChanged;
   CupertinoDatePickerMode mode;
@@ -15,7 +17,7 @@ class DefaultTimePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: height ?? 200,
       padding: const EdgeInsets.only(top: 10.0),
       decoration: BoxDecoration(
         color: CupertinoColors.systemBackground.resolveFrom(context),

@@ -47,6 +47,13 @@ class _EditWeightState extends State<EditWeight> {
     UserBox user = userRepository.user;
     bool? isOpen = user.filterList?.contains(fWeight) == true;
 
+    isError() {
+      return isShowErorr(
+        unit: user.weightUnit ?? 'kg',
+        value: double.tryParse(textController.text),
+      );
+    }
+
     showAdDialog({
       required String title,
       required String loadingText,
@@ -88,13 +95,15 @@ class _EditWeightState extends State<EditWeight> {
     }
 
     onChangedText(_) {
-      bool isParse = isDoubleTryParse(text: textController.text);
+      bool isInitText =
+          isDoubleTryParse(text: textController.text) == false || isError();
 
-      if (isParse == false) {
+      if (isInitText) {
         textController.text = '';
       }
 
-      context.read<EnabledProvider>().setEnabled(isParse);
+      setState(() {});
+      context.read<EnabledProvider>().setEnabled(!isInitText);
     }
 
     onTapWeight() {
@@ -111,7 +120,7 @@ class _EditWeightState extends State<EditWeight> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return ButtonModal(
+          return WeightButtonBottmSheet(
             onCompleted: () {
               if (isDoubleTryParse(text: textController.text)) {
                 DateTime now = DateTime.now();
@@ -144,9 +153,7 @@ class _EditWeightState extends State<EditWeight> {
                 showAdDialog(
                   title: '👏🏻 일째 기록 했어요!',
                   loadingText: '체중 데이터 저장 중...',
-                  nameArgs: {
-                    'days': '${recordList.length}',
-                  },
+                  nameArgs: {'days': '${recordList.length}'},
                 );
               }
             },
@@ -171,7 +178,7 @@ class _EditWeightState extends State<EditWeight> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return ButtonModal(
+          return WeightButtonBottmSheet(
             onCompleted: () {
               if (isDoubleTryParse(text: textController.text)) {
                 user.goalWeight = stringToDouble(textController.text);
@@ -209,6 +216,14 @@ class _EditWeightState extends State<EditWeight> {
       await canLaunchUrl(url)
           ? await launchUrl(url)
           : throw 'Could not launch $url';
+    }
+
+    helperText() {
+      int max = user.weightUnit == 'kg' ? kgMax.toInt() : lbMax.toInt();
+
+      return textController.text == ''
+          ? '1 ~ max 의 값을 입력해주세요.'.tr(namedArgs: {'max': '$max'})
+          : null;
     }
 
     return Column(
@@ -260,10 +275,11 @@ class _EditWeightState extends State<EditWeight> {
                           controller: textController,
                           keyboardType: inputKeyboardType,
                           autofocus: true,
-                          maxLength: weightMaxLength,
+                          maxLength: 5,
                           decoration: InputDecoration(
                             suffixText: user.weightUnit,
                             hintText: weightHintText.tr(),
+                            helperText: helperText(),
                           ),
                           onChanged: onChangedText,
                         )
@@ -300,8 +316,8 @@ class _EditWeightState extends State<EditWeight> {
   }
 }
 
-class ButtonModal extends StatelessWidget {
-  ButtonModal({
+class WeightButtonBottmSheet extends StatelessWidget {
+  WeightButtonBottmSheet({
     super.key,
     required this.onCompleted,
     required this.onCancel,

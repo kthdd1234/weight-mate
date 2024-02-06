@@ -37,6 +37,7 @@ class AlarmContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ContentsBox(
+      // height: 200,
       backgroundColor: Colors.white,
       contentsWidget: Column(
         children: [
@@ -53,6 +54,7 @@ class AlarmContainer extends StatelessWidget {
               ? Column(
                   children: [
                     DefaultTimePicker(
+                      height: 150,
                       initialDateTime: alarmTime,
                       mode: CupertinoDatePickerMode.time,
                       onDateTimeChanged: onDateTimeChanged,

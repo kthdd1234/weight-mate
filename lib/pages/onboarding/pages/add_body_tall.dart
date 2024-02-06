@@ -27,11 +27,18 @@ class _AddBodyTallState extends State<AddBodyTall> {
   Widget build(BuildContext context) {
     DietInfoProvider readProvider = context.read<DietInfoProvider>();
 
-    onChangedTall(_) {
-      bool isValid = isDoubleTryParse(text: tallContoller.text) == false ||
-          tallContoller.text == '0';
+    isError() {
+      return isShowErorr(
+        unit: sTallUnit,
+        value: double.tryParse(tallContoller.text),
+      );
+    }
 
-      if (isValid) {
+    onChangedTall(_) {
+      bool isInitText =
+          isDoubleTryParse(text: tallContoller.text) == false || isError();
+
+      if (isInitText) {
         tallContoller.text = '';
       }
 
@@ -41,14 +48,15 @@ class _AddBodyTallState extends State<AddBodyTall> {
     onTapUnitButton({required String sUnit}) {
       if (sUnit != sTallUnit) {
         String? tall = convertTall(unit: sUnit, tall: tallContoller.text);
+
         if (tall != null) {
-          setState(() {
-            tallContoller.text = tall;
-          });
+          tallContoller.text = tall;
         }
 
-        setState(() => sTallUnit = sUnit);
+        sTallUnit = sUnit;
       }
+
+      setState(() {});
     }
 
     isOnButton() {
@@ -56,7 +64,7 @@ class _AddBodyTallState extends State<AddBodyTall> {
 
       return isDoubleTryParse(text: tallContoller.text) &&
           tall != null &&
-          tall.length < 6;
+          isError() == false;
     }
 
     onPressDone() async {
@@ -76,6 +84,14 @@ class _AddBodyTallState extends State<AddBodyTall> {
         displayDoneButton: false,
         toolbarButtons: [(node) => ActionBar(node: node)],
       );
+    }
+
+    helperText() {
+      int max = sTallUnit == 'cm' ? cmMax.toInt() : inchMax.toInt();
+
+      return tallContoller.text == ''
+          ? '1 ~ max 의 값을 입력해주세요.'.tr(namedArgs: {'max': '$max'})
+          : null;
     }
 
     return AddContainer(
@@ -104,10 +120,11 @@ class _AddBodyTallState extends State<AddBodyTall> {
                     TextInput(
                       autofocus: true,
                       focusNode: tallNode,
+                      maxLength: 5,
                       controller: tallContoller,
-                      maxLength: tallMaxLength,
                       prefixIcon: tallPrefixIcon,
                       suffixText: sTallUnit,
+                      helperText: helperText(),
                       hintText: '키'.tr(),
                       onChanged: onChangedTall,
                     )
