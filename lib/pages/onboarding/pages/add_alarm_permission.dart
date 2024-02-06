@@ -57,6 +57,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           displayList: initDisplayList,
           weightUnit: user.weightUnit,
           tallUnit: user.tallUnit,
+          language: context.locale.toString(),
         ),
       );
 
@@ -94,7 +95,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
               type: planItem.type,
               title: '',
               priority: '',
-              name: planItem.name,
+              name: planItem.name.tr(),
               isAlarm: false,
               createDateTime: now,
             ),

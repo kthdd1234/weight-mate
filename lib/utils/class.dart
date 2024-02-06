@@ -245,13 +245,9 @@ class historyImageClass {
 }
 
 class LanguageItemClass {
-  LanguageItemClass({
-    required this.name,
-    required this.languageCode,
-    required this.countryCode,
-  });
+  LanguageItemClass({required this.name, required this.languageCode});
 
-  String name, languageCode, countryCode;
+  String name, languageCode;
 }
 
 class WeightButtonClass {

@@ -39,9 +39,9 @@ import 'etc/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
 
 const supportedLocales = [
-  Locale('ko', 'KR'),
-  Locale('en', 'US'),
-  Locale('ja', 'JP'),
+  Locale('ko'),
+  Locale('en'),
+  Locale('ja'),
   // Locale('de', 'DE'),
   // Locale('es', 'ES'),
   // Locale('fr', 'FR'),
@@ -76,7 +76,7 @@ void main() async {
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,
-        fallbackLocale: const Locale('en', 'US'),
+        fallbackLocale: const Locale('en'),
         path: 'assets/translations',
         child: const MyApp(),
       ),
@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
 
     final theme = ThemeData(
       primarySwatch: AppColors.primaryMaterialSwatchDark,
-      fontFamily: context.locale != const Locale('ja', 'JP')
+      fontFamily: context.locale != const Locale('ja')
           ? 'cafe24Ohsquareair'
           : 'cafe24SsurroundAir',
       textTheme: textTheme,
@@ -152,7 +152,7 @@ class _MyAppState extends State<MyApp> {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      initialRoute: '/add-start-screen', // initialRoute
+      initialRoute: initialRoute, // initialRoute
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-weight': (context) => const AddBodyWeight(),

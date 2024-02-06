@@ -13,48 +13,6 @@ var dayOfWeek = {
   'Sun': '일'
 };
 
-// var planType = {
-//   PlanTypeEnum.diet.toString(): PlanTypeEnum.diet,
-//   PlanTypeEnum.exercise.toString(): PlanTypeEnum.exercise,
-//   PlanTypeEnum.lifestyle.toString(): PlanTypeEnum.lifestyle,
-// };
-
-// var planPriorityInfos = [
-//   planPrioritys[PlanPriorityEnum.high.toString()],
-//   planPrioritys[PlanPriorityEnum.medium.toString()],
-//   planPrioritys[PlanPriorityEnum.low.toString()],
-// ];
-
-// var planPrioritys = {
-//   PlanPriorityEnum.high.toString(): PlanPriorityClass(
-//     id: PlanPriorityEnum.high,
-//     name: '높음',
-//     desc: 'High',
-//     icon: Icons.looks_one_outlined,
-//     order: 1,
-//     bgColor: Colors.red.shade50,
-//     textColor: Colors.red,
-//   ),
-//   PlanPriorityEnum.medium.toString(): PlanPriorityClass(
-//     id: PlanPriorityEnum.medium,
-//     name: '중간',
-//     desc: 'Medium',
-//     icon: Icons.looks_two_outlined,
-//     order: 2,
-//     bgColor: Colors.indigo.shade50,
-//     textColor: Colors.indigo,
-//   ),
-//   PlanPriorityEnum.low.toString(): PlanPriorityClass(
-//     id: PlanPriorityEnum.low,
-//     name: '낮음',
-//     desc: 'Low',
-//     icon: Icons.looks_3,
-//     order: 3,
-//     bgColor: Colors.blueGrey.shade50,
-//     textColor: Colors.blueGrey,
-//   ),
-// };
-
 Map<String, int> planOrder = {
   PlanTypeEnum.diet.toString(): 0,
   PlanTypeEnum.exercise.toString(): 1,
@@ -254,9 +212,9 @@ final localeNames = [
 ];
 
 final localeDisplayNames = {
-  'ko_KR': '한국어',
-  'en_US': 'English',
-  'ja_JP': '日本語',
+  'ko': '한국어',
+  'en': 'English',
+  'ja': '日本語',
   // 'fr_FR': 'français',
   // 'es_ES': 'espagnol',
   // 'de_DE': 'Deutsch',
@@ -266,32 +224,26 @@ final languageItemList = [
   LanguageItemClass(
     name: '한국어',
     languageCode: 'ko',
-    countryCode: 'KR',
   ),
   LanguageItemClass(
     name: 'English',
     languageCode: 'en',
-    countryCode: 'US',
   ),
   LanguageItemClass(
     name: '日本語',
     languageCode: 'ja',
-    countryCode: 'JP',
   ),
   // LanguageItemClass(
   //   name: 'Deutsch',
   //   languageCode: 'de',
-  //   countryCode: 'DE',
   // ),
   // LanguageItemClass(
   //   name: 'français',
   //   languageCode: 'fr',
-  //   countryCode: 'FR',
   // ),
   // LanguageItemClass(
   //   name: 'espagnol',
   //   languageCode: 'es',
-  //   countryCode: 'ES',
   // ),
 ];
 

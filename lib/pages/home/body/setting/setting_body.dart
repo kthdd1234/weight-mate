@@ -321,9 +321,9 @@ class _SettingBodyState extends State<SettingBody> {
       await canLaunchUrl(url) ? await launchUrl(url) : throw 'launchUrl error';
     }
 
-    onTapLangItem(String languageCode, String countryCode) async {
-      await context.setLocale(Locale(languageCode, countryCode));
-      user.language = '${languageCode}_$countryCode';
+    onTapLangItem(String languageCode) async {
+      await context.setLocale(Locale(languageCode));
+      user.language = languageCode;
       user.save();
 
       closeDialog(context);
@@ -334,19 +334,15 @@ class _SettingBodyState extends State<SettingBody> {
         context: context,
         builder: (context) => CommonBottomSheet(
           title: '언어 변경'.tr(),
-          height: 280,
+          height: 300,
           contents: ContentsBox(
             contentsWidget: ListView(
               shrinkWrap: true,
               children: languageItemList.map((item) {
-                String localeName = '${item.languageCode}_${item.countryCode}';
-                bool isLanguage = language == localeName;
+                bool isLanguage = language == item.languageCode;
 
                 return InkWell(
-                  onTap: () => onTapLangItem(
-                    item.languageCode,
-                    item.countryCode,
-                  ),
+                  onTap: () => onTapLangItem(item.languageCode),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Row(
