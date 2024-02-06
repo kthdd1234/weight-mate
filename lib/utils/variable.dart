@@ -203,9 +203,9 @@ final makerInfo = {
 };
 
 final localeNames = [
-  'ko_KR',
-  'en_US',
-  'ja_JP',
+  'ko',
+  'en',
+  'ja',
   // 'fr_FR',
   // 'es_ES',
   // 'de_DE',
