@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/info/color_text_info.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -17,18 +18,14 @@ class TitleBlock extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            '$text 선택',
+            '$text 선택'.tr(),
             style: const TextStyle(color: themeColor, fontSize: 17),
           ),
-          Row(
-            children: [
-              ColorTextInfo(
-                width: smallSpace,
-                height: smallSpace,
-                text: text,
-                color: color,
-              ),
-            ],
+          ColorTextInfo(
+            width: smallSpace,
+            height: smallSpace,
+            text: text.tr(),
+            color: color,
           )
         ],
       ),

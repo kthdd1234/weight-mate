@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
@@ -85,7 +86,9 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       });
     }
 
-    log('${MediaQuery.of(context).size.height}');
+    onTapPictureClear() {
+      //
+    }
 
     return AppFramework(
       widget: Scaffold(
@@ -100,13 +103,19 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
               text: '사진 슬라이드로 보기',
               onTap: () => onNavigatorPage(index: 0, isAutoPlay: true),
             ),
+            // SpaceWidth(width: tinySpace),
+            // CommonTag(
+            //   color: 'whitePink',
+            //   text: '사진 정리하기',
+            //   onTap: onTapPictureClear,
+            // ),
             SpaceWidth(width: tinySpace),
             CommonTag(
               color: isRecent ? 'whiteBlue' : 'whiteRed',
               text: isRecent ? '최신순' : '과거순',
               onTap: onTapFilter,
             ),
-            SpaceWidth(width: smallSpace),
+            SpaceWidth(width: tinySpace),
           ],
         ),
         body: Column(
@@ -148,9 +157,9 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                                     padding: 5,
                                     backgroundColor: themeColor,
                                     backgroundColorOpacity: 0.5,
-                                    text: dateTimeFormatter(
+                                    text: md(
+                                      locale: context.locale.toString(),
                                       dateTime: dateTime,
-                                      format: 'MM월 dd일',
                                     ),
                                     borderRadius: 5,
                                     textColor: typeBackgroundColor,

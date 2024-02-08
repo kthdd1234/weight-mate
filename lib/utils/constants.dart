@@ -46,8 +46,6 @@ const disabledButtonTextColor = Color(0xFF9A9EAA);
 /// typeBackgroundColor
 const typeBackgroundColor = Color(0xffF9FAFB);
 
-///
-
 /// enabledTypeColor
 const enabledTypeColor = Colors.grey;
 
@@ -61,7 +59,7 @@ const tallMin = 120.0;
 const tallMax = 220.0;
 
 /// weightMin
-const weightMin = 20.0;
+const weightMin = 1.0;
 
 /// weightMax
 const weightMax = 200.0;
@@ -113,15 +111,6 @@ const weightMaxLength = 4;
 
 /// bodyFatMaxLength
 const bodyFatMaxLength = 4;
-
-// tallSuffixText
-const tallSuffixText = 'cm';
-
-// weightSuffixText
-const weightSuffixText = 'kg';
-
-// tallSuffixText
-const bodyFatSuffixText = '%';
 
 /// containerBorderRadious
 final containerBorderRadious =
@@ -232,6 +221,10 @@ final tagColors = {
     'bgColor': Colors.red.shade300,
     'textColor': Colors.white,
   },
+  'whitePink': {
+    'bgColor': Colors.pink.shade300,
+    'textColor': Colors.white,
+  },
 };
 
 List<FilterClass> openClassList = [
@@ -286,3 +279,79 @@ const nextHistoryFilter = {
   HistoryFilter.recent: HistoryFilter.past,
   HistoryFilter.past: HistoryFilter.recent
 };
+
+const TextTheme textTheme = TextTheme(
+  // <-------- headline ----------> //
+  headlineLarge: TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w400,
+  ),
+  headlineMedium: TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.w400,
+  ),
+  headlineSmall: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w400,
+  ),
+
+  // <-------- title ----------> //
+  titleLarge: TextStyle(
+    fontSize: 22,
+    fontWeight: FontWeight.w500,
+  ),
+  titleMedium: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+  ),
+  titleSmall: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+  ),
+
+  // <-------- label ----------> //
+  labelLarge: TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+  ),
+  labelMedium: TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+  ),
+  labelSmall: TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+  ),
+
+  // <-------- body ----------> //
+  bodyLarge: TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  ),
+  bodyMedium: TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  ),
+  bodySmall: TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  ),
+);
+
+String newPasswordMsg = '새 비밀번호를 입력해주세요.';
+
+String confirmPasswordMsg = '비밀번호를 한번 더 입력해주세요.';
+
+String passwrodErrorMsg1 = '비밀번호가 일치하지 않습니다.';
+
+// cmMax
+double cmMax = 300;
+
+// inchMax
+double inchMax = 118;
+
+// kgMax
+double kgMax = 250;
+
+// lbMax
+double lbMax = 550;

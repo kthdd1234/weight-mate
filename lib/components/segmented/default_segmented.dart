@@ -42,10 +42,12 @@ onSegmentedWidget({
   required String title,
   required SegmentedTypes type,
   required SegmentedTypes selected,
+  Map<String, String>? nameArgs,
 }) {
   return CommonText(
     text: title,
     size: 12,
+    nameArgs: nameArgs,
     color: selected == type ? themeColor : Colors.grey,
     isCenter: true,
   );

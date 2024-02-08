@@ -7,66 +7,20 @@ import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_pag
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:privacy_screen/privacy_screen.dart';
 
 class UserInfoClass {
   UserInfoClass({
-    required this.userId,
     required this.tall,
     required this.goalWeight,
-    required this.recordStartDateTime,
-    required this.isAlarm,
-    this.alarmTime,
-    this.alarmId,
+    required this.weight,
+    required this.tallUnit,
+    required this.weightUnit,
   });
 
-  String userId;
   double tall;
+  double weight;
   double goalWeight;
-  DateTime recordStartDateTime;
-  bool isAlarm;
-  DateTime? alarmTime;
-  int? alarmId;
-}
-
-class RecordInfoClass {
-  RecordInfoClass({
-    required this.recordDateTime,
-    this.weight,
-    this.actions,
-    this.memo,
-  });
-
-  DateTime recordDateTime;
-  double? weight;
-  List<String>? actions;
-  String? memo;
-}
-
-class PlanInfoClass {
-  PlanInfoClass({
-    required this.type,
-    required this.title,
-    required this.id,
-    required this.name,
-    required this.priority,
-    required this.isAlarm,
-    this.alarmTime,
-    this.alarmId,
-    required this.createDateTime,
-    required this.planItemList,
-  });
-
-  PlanTypeEnum type;
-  String title;
-  String id;
-  String name;
-  PlanPriorityEnum priority;
-  bool isAlarm;
-  DateTime? alarmTime;
-  int? alarmId;
-  DateTime createDateTime;
-  List<String> planItemList;
+  String tallUnit, weightUnit;
 }
 
 class TextInputClass {
@@ -290,6 +244,25 @@ class historyImageClass {
   Uint8List? unit8List;
 }
 
+class LanguageItemClass {
+  LanguageItemClass({required this.name, required this.languageCode});
+
+  String name, languageCode;
+}
+
+class WeightButtonClass {
+  WeightButtonClass({
+    this.text,
+    this.imgNumber,
+    this.nameArgs,
+    this.onTap,
+  });
+
+  String? text, imgNumber;
+  Map<String, String>? nameArgs;
+  Function()? onTap;
+}
+
 class AppLifecycleReactor {
   AppLifecycleReactor({required this.context});
 
@@ -304,17 +277,28 @@ class AppLifecycleReactor {
   void _onAppStateChanged(AppState appState) async {
     String? passwords = userRepository.user.screenLockPasswords;
 
-    if (appState == AppState.foreground && passwords != null) {
-      try {
+    if (passwords != null) {
+      if (appState == AppState.foreground) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => EnterScreenLockPage(isPop: true),
             fullscreenDialog: true,
           ),
         );
-      } catch (e) {
-        log('error => $e');
       }
     }
   }
+}
+
+class TodoDataClass {
+  TodoDataClass({
+    required this.filterId,
+    required this.color,
+    required this.title,
+    required this.icon,
+  });
+
+  String filterId;
+  String color, title;
+  IconData icon;
 }

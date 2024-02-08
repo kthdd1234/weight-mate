@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
@@ -99,17 +102,17 @@ class CommonTitle extends StatelessWidget {
         context.watch<HistoryFilterProvider>().value();
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
+    String locale = context.locale.toString();
 
     String title = [
-      dateTimeFormatter(format: 'yyyy년 MM월', dateTime: titleDateTime),
-      dateTimeFormatter(format: 'yyyy년', dateTime: historyDateTime),
+      ym(locale: locale, dateTime: titleDateTime),
+      y(locale: locale, dateTime: historyDateTime),
       '체중 변화',
       '설정'
     ][index];
 
     bool isRecord = index == 0;
     bool isHistory = index == 1;
-    bool isToday = isCheckToday(titleDateTime);
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -152,40 +155,34 @@ class CommonTitle extends StatelessWidget {
 
     onTapHistoryTitle() {
       showDialog(
-          context: context,
-          builder: (context) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AlertDialog(
-                  backgroundColor: dialogBackgroundColor,
-                  shape: containerBorderRadious,
-                  title: DialogTitle(
-                    text: '선택 년도',
-                    onTap: () => closeDialog(context),
-                  ),
-                  content: DatePicker(
-                    view: DateRangePickerView.decade,
-                    initialSelectedDate: historyDateTime,
-                    onSelectionChanged: onTapHistoryDateTime,
-                  ),
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AlertDialog(
+                backgroundColor: dialogBackgroundColor,
+                shape: containerBorderRadious,
+                title: DialogTitle(
+                  text: '년도 선택',
+                  onTap: () => closeDialog(context),
                 ),
-              ],
-            );
-          });
+                content: DatePicker(
+                  view: DateRangePickerView.decade,
+                  initialSelectedDate: historyDateTime,
+                  onSelectionChanged: onTapHistoryDateTime,
+                ),
+              ),
+            ],
+          );
+        },
+      );
     }
 
     onTapChangeYear() {
       context.read<HistoryFilterProvider>().setHistoryFilter(
             nextHistoryFilter[historyFilter]!,
           );
-    }
-
-    onTapToday() {
-      DateTime now = DateTime.now();
-
-      context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-      context.read<ImportDateTimeProvider>().setImportDateTime(now);
     }
 
     onTapFilter() async {
@@ -222,6 +219,7 @@ class CommonTitle extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CommonText(
+                isNotTr: isRecord || isHistory,
                 text: title,
                 size: 20,
                 rightIcon: rightIconList[index],
@@ -232,14 +230,6 @@ class CommonTitle extends StatelessWidget {
                   isRecord
                       ? Row(
                           children: [
-                            isToday
-                                ? const EmptyArea()
-                                : CommonTag(
-                                    text: '오늘로 이동',
-                                    color: 'whiteBlue',
-                                    onTap: onTapToday,
-                                  ),
-                            SpaceWidth(width: tinySpace),
                             CommonTag(
                               text: availableCalendarMaker[calendarMaker],
                               color: 'whiteIndigo',
@@ -257,10 +247,13 @@ class CommonTitle extends StatelessWidget {
                             ),
                             SpaceWidth(width: tinySpace),
                             CommonTag(
-                              text: '표시 ${displayList?.length ?? 0}',
+                              text: '표시',
+                              nameArgs: {
+                                'length': '${displayList?.length ?? 0}'
+                              },
                               color: 'whiteIndigo',
                               onTap: onTapFilter,
-                            )
+                            ),
                           ],
                         )
                       : const EmptyArea(),
@@ -303,6 +296,7 @@ class CalendarBar extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
+    String? weightUnit = userRepository.user.weightUnit ?? 'kg';
 
     onDaySelected(selectedDay, _) {
       context.read<ImportDateTimeProvider>().setImportDateTime(selectedDay);
@@ -375,7 +369,8 @@ class CalendarBar extends StatelessWidget {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
         child: CommonText(
-          text: isWeight ? '${recordInfo?.weight}kg' : '',
+          isNotTr: true,
+          text: isWeight ? '${recordInfo?.weight}$weightUnit' : '',
           size: 8,
           color: Colors.black,
           isCenter: true,
@@ -383,7 +378,7 @@ class CalendarBar extends StatelessWidget {
       );
     }
 
-    onPageChanged(dateTime) {
+    onPageChanged(DateTime dateTime) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
     }
 
@@ -395,7 +390,7 @@ class CalendarBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: TableCalendar(
-                locale: 'ko-KR',
+                locale: context.locale.toString(),
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: calendarMaker == CalendarMaker.sticker
                       ? stickerBuilder
@@ -553,7 +548,6 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
           shape: containerBorderRadious,
           title: DialogTitle(
             text: '카테고리 표시',
-            subText: '사용하지 않는 카테고리는 체크 해제 하면 되요 :D',
             onTap: () => closeDialog(context),
           ),
           content: Column(
@@ -563,7 +557,7 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  '사용하지 않는 카테고리는 체크 해제 하세요 :D',
+                  '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
                   style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
                 ),
               )

@@ -33,13 +33,16 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       dietOrderList: fields[13] as List<String>?,
       exerciseOrderList: fields[14] as List<String>?,
       lifeOrderList: fields[15] as List<String>?,
+      language: fields[16] as String?,
+      weightUnit: fields[17] as String?,
+      tallUnit: fields[18] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(16)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -71,7 +74,13 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(14)
       ..write(obj.exerciseOrderList)
       ..writeByte(15)
-      ..write(obj.lifeOrderList);
+      ..write(obj.lifeOrderList)
+      ..writeByte(16)
+      ..write(obj.language)
+      ..writeByte(17)
+      ..write(obj.weightUnit)
+      ..writeByte(18)
+      ..write(obj.tallUnit);
   }
 
   @override

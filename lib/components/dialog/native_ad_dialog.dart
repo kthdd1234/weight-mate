@@ -19,9 +19,11 @@ class NativeAdDialog extends StatefulWidget {
     required this.rightText,
     required this.onLeftClick,
     required this.onRightClick,
+    this.nameArgs,
   });
 
   String loadingText, title, leftText, rightText;
+  Map<String, String>? nameArgs;
   Function() onLeftClick, onRightClick;
 
   @override
@@ -67,6 +69,7 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
             elevation: 0.0,
             title: DialogTitle(
               text: widget.title,
+              nameArgs: widget.nameArgs,
               onTap: () => closeDialog(context),
             ),
             content: Column(
@@ -77,18 +80,24 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
                 Row(
                   children: [
                     ExpandedButtonHori(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
                       imgUrl: 'assets/images/t-23.png',
                       text: widget.leftText,
                       onTap: widget.onLeftClick,
                     ),
                     SpaceWidth(width: tinySpace),
                     ExpandedButtonHori(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
                       imgUrl: 'assets/images/t-11.png',
                       text: widget.rightText,
                       onTap: widget.onRightClick,
                     ),
                     SpaceWidth(width: tinySpace),
                     ExpandedButtonHori(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
                       imgUrl: 'assets/images/t-22.png',
                       text: '창 닫기',
                       onTap: () => closeDialog(context),

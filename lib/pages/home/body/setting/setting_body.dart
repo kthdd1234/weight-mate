@@ -1,13 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -24,6 +25,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,25 +64,24 @@ class _SettingBodyState extends State<SettingBody> {
         context.watch<BottomNavigationProvider>().selectedEnumId;
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
+    String? language = user.language;
+    String locale = context.locale.toString();
 
-    onWeight(MoreSeeItem itemId) async {
-      await showDialog(
-        context: context,
-        builder: (builder) => WeightDialog(itemId: itemId),
-      );
+    onNavigator({required String type, required String title}) async {
+      await Navigator.pushNamed(context, '/body-info-page', arguments: {
+        'type': type,
+        'title': title,
+      });
+
       setState(() {});
     }
 
-    appVersion() {
-      return '1.0.12(14)';
-    }
-
     onTapTall(id) {
-      onWeight(id);
+      onNavigator(type: 'tall', title: '키');
     }
 
     onTapGoalWeight(id) {
-      onWeight(id);
+      onNavigator(type: 'goalWeight', title: '목표 체중');
     }
 
     onTapAlarm(id) async {
@@ -119,13 +120,15 @@ class _SettingBodyState extends State<SettingBody> {
               onCompleted() {
                 if (isEnabled) {
                   int alarmId = user.alarmId ?? UniqueKey().hashCode;
+                  String title = weightNotifyTitle();
+                  String body = weightNotifyBody();
 
                   NotificationService().addNotification(
                     id: alarmId,
                     dateTime: DateTime.now(),
                     alarmTime: alarmTime,
-                    title: weightNotifyTitle(),
-                    body: weightNotifyBody(),
+                    title: title.tr(),
+                    body: body.tr(),
                     payload: 'weight',
                   );
 
@@ -143,12 +146,12 @@ class _SettingBodyState extends State<SettingBody> {
               }
 
               return CommonBottomSheet(
-                title: '알림 설정',
-                height: 430,
+                title: '알림 설정'.tr(),
+                height: 650,
                 contents: AlarmContainer(
                   icon: Icons.edit,
                   title: '체중 기록 알림',
-                  desc: '매일 정해진 시간에 기록 알림을 드려요.',
+                  desc: '매일 체중 기록 알림을 드려요.',
                   isEnabled: isEnabled,
                   alarmTime: alarmTime,
                   onChanged: onChanged,
@@ -185,7 +188,7 @@ class _SettingBodyState extends State<SettingBody> {
         showDialog(
           context: context,
           builder: (context) => ConfirmDialog(
-            width: 300,
+            width: 400,
             titleText: '화면 잠금 해제',
             contentIcon: Icons.lock_open_rounded,
             contentText1: '화면 잠금을 해제할까요?',
@@ -285,7 +288,8 @@ class _SettingBodyState extends State<SettingBody> {
           .catchError(
         (error) {
           String message =
-              "기본 메일 앱을 사용할 수 없기 때문에 앱에서 바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면 친절하게 답변해드릴게요 :)\n\nkthdd1234@gmail.com";
+              "기본 메일 앱을 사용할 수 없기 때문에 앱에서\n바로 문의를 전송하기 어려운 상황입니다.\n\n아래 이메일로 연락주시면\n친절하게 답변해드릴게요 :)\n\nkthdd1234@gmail.com"
+                  .tr();
 
           showCupertinoDialog(
             context: context,
@@ -294,7 +298,7 @@ class _SettingBodyState extends State<SettingBody> {
               actions: [
                 CupertinoDialogAction(
                   isDefaultAction: true,
-                  child: const Text("확인"),
+                  child: const Text("확인").tr(),
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -317,8 +321,64 @@ class _SettingBodyState extends State<SettingBody> {
       await canLaunchUrl(url) ? await launchUrl(url) : throw 'launchUrl error';
     }
 
+    onTapLangItem(String languageCode) async {
+      await context.setLocale(Locale(languageCode));
+      user.language = languageCode;
+      user.save();
+
+      closeDialog(context);
+    }
+
+    onTapLanguage(id) {
+      showModalBottomSheet(
+        context: context,
+        builder: (context) => CommonBottomSheet(
+          title: '언어 변경'.tr(),
+          height: 300,
+          contents: ContentsBox(
+            contentsWidget: ListView(
+              shrinkWrap: true,
+              children: languageItemList.map((item) {
+                bool isLanguage = language == item.languageCode;
+
+                return InkWell(
+                  onTap: () => onTapLangItem(item.languageCode),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          item.name,
+                          style: TextStyle(
+                            fontFamily: 'cafe24SsurroundAir',
+                            fontWeight: isLanguage
+                                ? FontWeight.bold
+                                : FontWeight.normal,
+                            color: isLanguage ? themeColor : Colors.grey,
+                          ),
+                        ),
+                        isLanguage
+                            ? CommonIcon(icon: Icons.task_alt, size: 20)
+                            : const EmptyArea()
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      );
+    }
+
+    onTapUnit(id) async {
+      await Navigator.pushNamed(context, '/body-unit-page');
+      setState(() {});
+    }
+
     onTapVersion(id) {
-      // Uri appstoreLink = ;
+      //
     }
 
     List<MoreSeeItemClass> settingItemList = [
@@ -326,7 +386,7 @@ class _SettingBodyState extends State<SettingBody> {
         id: MoreSeeItem.tall,
         icon: 'tall',
         title: '키',
-        value: '${user.tall} cm',
+        value: '${user.tall}${user.tallUnit}',
         color: themeColor,
         onTap: onTapTall,
       ),
@@ -334,15 +394,34 @@ class _SettingBodyState extends State<SettingBody> {
         id: MoreSeeItem.goalWeight,
         icon: 'goal',
         title: '목표 체중',
-        value: '${user.goalWeight} kg',
+        value: '${user.goalWeight}${user.weightUnit}',
         color: themeColor,
         onTap: onTapGoalWeight,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appUnit,
+        icon: 'ruler',
+        title: '단위 변경',
+        value: '${user.tallUnit}/${user.weightUnit}',
+        color: themeColor,
+        onTap: onTapUnit,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appLang,
+        icon: 'language',
+        title: '언어 변경',
+        value: localeDisplayNames[user.language] ?? 'English',
+        color: themeColor,
+        onTap: onTapLanguage,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appAlarm,
         icon: 'alarm',
         title: '기록 알림',
-        value: '${user.isAlarm ? timeToString(user.alarmTime) : '알림 없음'}',
+        value: '${user.isAlarm ? hm(
+            locale: locale,
+            dateTime: user.alarmTime!,
+          ) : '알림 없음'.tr()}',
         color: user.isAlarm ? themeColor : Colors.grey,
         onTap: onTapAlarm,
       ),
@@ -350,7 +429,7 @@ class _SettingBodyState extends State<SettingBody> {
         id: MoreSeeItem.appLock,
         icon: 'lock',
         title: '화면 잠금',
-        value: isLock ? '화면 잠금 중' : '잠금 없음',
+        value: isLock ? '화면 잠금 중'.tr() : '잠금 없음'.tr(),
         color: isLock ? themeColor : Colors.grey,
         onTap: onTapLock,
       ),
@@ -498,8 +577,6 @@ class MoreSeeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Map<String, Color> tagColor = tagColors[color]!;
-
     return InkWell(
       onTap: () => onTap(id),
       child: Padding(
@@ -520,6 +597,7 @@ class MoreSeeItemWidget extends StatelessWidget {
             Expanded(child: CommonText(text: title, size: 14, isBold: true)),
             value != ''
                 ? CommonText(
+                    isNotTr: true,
                     text: value,
                     size: 13,
                     color: color,

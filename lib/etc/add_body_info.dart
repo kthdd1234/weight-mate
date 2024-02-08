@@ -1,15 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
-import 'package:flutter_app_weight_management/components/simple_stepper/simple_stepper.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/bottom_text.dart';
-import 'package:flutter_app_weight_management/components/text/contents_title_text.dart';
-import 'package:flutter_app_weight_management/pages/add/add_container.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
@@ -33,53 +32,30 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
 
   @override
   Widget build(BuildContext context) {
+    DietInfoProvider watchProvider = context.watch<DietInfoProvider>();
     DietInfoProvider readProvider = context.read<DietInfoProvider>();
+    UserInfoClass user = watchProvider.getUserInfo();
+    String tallUnit = user.tallUnit;
+    String weightUnit = user.weightUnit;
 
     onChangedValue(TextEditingController controller) {
-      if (double.tryParse(controller.text) == null) {
+      if (isDoubleTryParse(text: controller.text) == false) {
         controller.text = '';
       }
 
       setState(() {});
     }
 
-    setErrorTextTall() {
-      return handleCheckErrorText(
-        text: tallContoller.text == '.' ? '' : tallContoller.text,
-        min: tallMin,
-        max: tallMax,
-        errMsg: tallErrMsg,
-      );
-    }
-
-    setErrorTextWeight() {
-      return handleCheckErrorText(
-        text: weightContoller.text == '.' ? '' : weightContoller.text,
-        min: weightMin,
-        max: weightMax,
-        errMsg: weightErrMsg,
-      );
-    }
-
-    setErrorTextGoalWeight() {
-      return handleCheckErrorText(
-        text: goalWeightContoller.text == '.' ? '' : goalWeightContoller.text,
-        min: weightMin,
-        max: weightMax,
-        errMsg: weightErrMsg,
-      );
-    }
-
     isTall() {
-      return tallContoller.text != '' && setErrorTextTall() == null;
+      return isDoubleTryParse(text: tallContoller.text);
     }
 
     isWeight() {
-      return weightContoller.text != '' && setErrorTextWeight() == null;
+      return isDoubleTryParse(text: weightContoller.text);
     }
 
     isGoalWeight() {
-      return goalWeightContoller.text != '' && setErrorTextGoalWeight() == null;
+      return isDoubleTryParse(text: goalWeightContoller.text);
     }
 
     isComplted() {
@@ -107,12 +83,11 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
       required String suffixText,
       required String counterText,
       required String hintText,
-      required dynamic errorText,
       required Function(String) onChanged,
     }) {
       return Column(
         children: [
-          ContentsTitleText(text: title),
+          CommonText(text: title, size: 15, isBold: true),
           SpaceHeight(height: smallSpace),
           TextInput(
             focusNode: focusNode,
@@ -122,8 +97,7 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
             prefixIcon: prefixIcon,
             suffixText: suffixText,
             counterText: counterText,
-            hintText: hintText,
-            errorText: errorText,
+            hintText: hintText.tr(),
             onChanged: onChanged,
           )
         ],
@@ -160,7 +134,6 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
           ),
           child: Column(
             children: [
-              AddTitle(step: 1, title: '키와 체중을 입력해주세요.'),
               ContentsBox(
                 contentsWidget: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,10 +147,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                             title: '키',
                             maxLength: 5,
                             prefixIcon: Icons.accessibility_new_sharp,
-                            suffixText: 'cm',
+                            suffixText: tallUnit,
                             counterText: ' ',
                             hintText: '키',
-                            errorText: setErrorTextTall(),
                             onChanged: (_) => onChangedValue(tallContoller),
                           ),
                         ),
@@ -189,10 +161,9 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                             title: '체중',
                             maxLength: 4,
                             prefixIcon: Icons.monitor_weight,
-                            suffixText: 'kg',
+                            suffixText: weightUnit,
                             counterText: ' ',
                             hintText: '체중',
-                            errorText: setErrorTextWeight(),
                             onChanged: (_) => onChangedValue(weightContoller),
                           ),
                         ),
@@ -205,17 +176,20 @@ class _AddBodyInfoState extends State<AddBodyInfo> {
                       title: '목표 체중',
                       maxLength: 4,
                       prefixIcon: Icons.flag,
-                      suffixText: 'kg',
+                      suffixText: weightUnit,
                       counterText: ' ',
                       hintText: '목표 체중',
-                      errorText: setErrorTextGoalWeight(),
                       onChanged: (_) => onChangedValue(goalWeightContoller),
                     ),
                   ],
                 ),
               ),
               SpaceHeight(height: regularSapce),
-              BottomText(bottomText: '키와 체중은 체질량 지수(BMI)를 계산하는데 사용됩니다.')
+              const Text(
+                '키와 체중은 체질량 지수(BMI)를 계산하는데 사용됩니다.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: themeColor, fontSize: 12),
+              ).tr(),
             ],
           ),
         ),
@@ -240,7 +214,7 @@ class ActionBar extends StatelessWidget {
         child: Row(
           children: [
             CommonButton(
-              text: '취소',
+              text: '닫기',
               fontSize: 18,
               radious: 5,
               bgColor: Colors.white,
@@ -259,29 +233,6 @@ class ActionBar extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class AddTitle extends StatelessWidget {
-  AddTitle({
-    super.key,
-    required this.step,
-    required this.title,
-  });
-
-  int step;
-  String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SimpleStepper(step: step),
-        SpaceHeight(height: regularSapce),
-        CommonText(text: title, size: 18),
-        SpaceHeight(height: smallSpace),
-      ],
     );
   }
 }

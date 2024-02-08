@@ -1,11 +1,15 @@
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_alarm_permission.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_plan_list.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_start_screen.dart';
+import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
+import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_weight.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_plan_list.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
@@ -25,15 +29,23 @@ import 'package:flutter_app_weight_management/repositories/record_repository.dar
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/utils/themes.dart';
+import 'package:flutter_app_weight_management/utils/colors.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
-import 'pages/add/pages/add_body_info.dart';
+import 'etc/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
+
+const supportedLocales = [
+  Locale('ko'),
+  Locale('en'),
+  Locale('ja'),
+  // Locale('de', 'DE'),
+  // Locale('es', 'ES'),
+  // Locale('fr', 'FR'),
+];
 
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
@@ -48,6 +60,7 @@ void main() async {
   await NotificationService().initNotification();
   await NotificationService().initializeTimeZone();
   await MateHive().initializeHive();
+  await EasyLocalization.ensureInitialized();
 
   runApp(
     MultiProvider(
@@ -61,7 +74,12 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
         ChangeNotifierProvider(create: (_) => HistoryDateTimeProvider()),
       ],
-      child: const MyApp(),
+      child: EasyLocalization(
+        supportedLocales: supportedLocales,
+        fallbackLocale: const Locale('en'),
+        path: 'assets/translations',
+        child: const MyApp(),
+      ),
     ),
   );
 }
@@ -75,7 +93,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _authStatus = 'Unknown';
-  // UserBox? user;
   Box<UserBox>? userBox;
 
   @override
@@ -105,12 +122,12 @@ class _MyAppState extends State<MyApp> {
       setState(() => _authStatus = 'error');
     }
 
-    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-    print("UUID: $uuid");
+    await AppTrackingTransparency.getAdvertisingIdentifier();
   }
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
@@ -118,42 +135,41 @@ class _MyAppState extends State<MyApp> {
             ? '/home-page'
             : '/enter-screen-lock';
 
+    ThemeData theme = ThemeData(
+      primarySwatch: AppColors.primaryMaterialSwatchDark,
+      fontFamily: context.locale != const Locale('ja')
+          ? 'cafe24Ohsquareair'
+          : 'cafe24SsurroundAir',
+      textTheme: textTheme,
+      splashColor: Colors.white,
+      brightness: Brightness.light,
+    );
+
+    print('locale => $locale');
+
     return MaterialApp(
+      title: 'weight-mate',
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale('en', ''),
-        Locale('ko', 'KR'),
-      ],
-      theme: AppThemes.lightTheme,
+      theme: theme,
+      locale: context.locale,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
       initialRoute: initialRoute, // initialRoute
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
-        '/add-body-info': (context) => const AddBodyInfo(),
+        '/add-body-weight': (context) => const AddBodyWeight(),
+        '/add-body-tall': (context) => const AddBodyTall(),
         '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
-        '/home-page': (context) => const HomePage(),
+        '/home-page': (context) => HomePage(locale: locale),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
         '/partial-delete-page': (context) => const PatialDeletePage(),
         '/diary-write-page': (context) => const DiaryWritePage(),
+        '/body-unit-page': (context) => const BodyUnitPage(),
+        '/body-info-page': (context) => const BodyInfoPage(),
       },
     );
   }
 }
-
-// AddContainer(
-//             body: Center(
-//               child: Image.asset('assets/images/MATE.png', width: 150),
-//             ),
-//             isNotBack: true,
-//             isCenter: true,
-//             buttonEnabled: false,
-//             bottomSubmitButtonText: '',
-//           )

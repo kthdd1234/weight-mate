@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -16,27 +18,15 @@ class ScreenLockPage extends StatefulWidget {
 }
 
 class _ScreenLockPageState extends State<ScreenLockPage> {
-  late Box<UserBox> userBox;
-
   List<String> newPasswords = ['', '', '', ''];
   List<String> confirmPasswords = ['', '', '', ''];
   bool isConfirmPassword = false;
   bool isErrorPassword = false;
   int count = 0;
 
-  String newPasswordMsg = '새 비밀번호를 입력해주세요.';
-  String confirmPasswordMsg = '비밀번호를 한번 더 입력해주세요.';
-  String passwrodErrorMsg1 = '비밀번호가 일치하지 않습니다.';
-
-  @override
-  void initState() {
-    userBox = Hive.box('userBox');
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    UserBox? userProfile = userBox.get('userProfile');
+    UserBox? user = userRepository.user;
     List<String> passwords =
         isConfirmPassword ? confirmPasswords : newPasswords;
 
@@ -70,8 +60,8 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
                   final confirmPasswordStr = confirmPasswords.join();
 
                   if (newPasswordStr == confirmPasswordStr) {
-                    userProfile?.screenLockPasswords = confirmPasswordStr;
-                    userProfile?.save();
+                    user.screenLockPasswords = confirmPasswordStr;
+                    user.save();
 
                     Navigator.pop(context);
                   }
@@ -97,7 +87,7 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
           backgroundColor: Colors.transparent,
           foregroundColor: themeColor,
           elevation: 0.0,
-          title: const Text('화면 잠금'),
+          title: const Text('화면 잠금').tr(),
         ),
         body: ScreenLockContents(
           passwords: passwords,
@@ -173,6 +163,7 @@ class ScreenLockContents extends StatelessWidget {
                       backgroundColor: typeBackgroundColor,
                       child: CommonText(
                         text: text(index),
+                        isNotTr: !(index == 10 || index == 12),
                         size: index == 10 || index == 12 ? 12 : 14,
                         isBold: true,
                         isCenter: true,
@@ -191,25 +182,23 @@ class ScreenLockContents extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                passwordMsg,
-                style: const TextStyle(
-                  color: themeColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
+              CommonText(
+                text: passwordMsg,
+                size: 15,
+                isBold: true,
+                isCenter: true,
               ),
               SpaceHeight(height: regularSapce),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: passwordWidgets(),
               ),
-              Column(
-                children: [
-                  SpaceHeight(height: regularSapce),
-                  Text(passwordErrMsg,
-                      style: const TextStyle(color: Colors.red)),
-                ],
+              SpaceHeight(height: regularSapce),
+              CommonText(
+                text: passwordErrMsg,
+                size: 14,
+                color: Colors.red,
+                isCenter: true,
               ),
               SpaceHeight(height: 60),
               Column(children: [

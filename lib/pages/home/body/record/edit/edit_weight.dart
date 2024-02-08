@@ -1,9 +1,9 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
 import 'dart:math';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
@@ -13,7 +13,6 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -22,33 +21,9 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-List<SvgClass> svgData = [
-  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
-  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
-  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
-  SvgClass(emotion: 'kissing-face', name: '신남'),
-  SvgClass(emotion: 'neutral-face', name: '보통'),
-  SvgClass(emotion: 'amazed-face', name: '놀람'),
-  SvgClass(emotion: 'anxious-face', name: '서운'),
-  SvgClass(emotion: 'crying-face', name: '슬픔'),
-  SvgClass(emotion: 'determined-face', name: '다짐'),
-  SvgClass(emotion: 'disappointed-face', name: '실망'),
-  SvgClass(emotion: 'dizzy-face', name: '피곤'),
-  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
-  SvgClass(emotion: 'expressionless-face', name: '고요'),
-  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
-  SvgClass(emotion: 'sneezing-face', name: '아픔'),
-  SvgClass(emotion: 'worried-face', name: '걱정'),
-  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
-  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
-  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
-  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
-];
 
 class EditWeight extends StatefulWidget {
   EditWeight({super.key});
@@ -58,10 +33,9 @@ class EditWeight extends StatefulWidget {
 }
 
 class _EditWeightState extends State<EditWeight> {
+  TextEditingController textController = TextEditingController();
   bool isShowInput = false;
   bool isGoalWeight = false;
-  TextEditingController textController = TextEditingController();
-  String? errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +47,18 @@ class _EditWeightState extends State<EditWeight> {
     UserBox user = userRepository.user;
     bool? isOpen = user.filterList?.contains(fWeight) == true;
 
-    showAdDialog(String title, String loadingText) async {
+    isError() {
+      return isShowErorr(
+        unit: user.weightUnit ?? 'kg',
+        value: double.tryParse(textController.text),
+      );
+    }
+
+    showAdDialog({
+      required String title,
+      required String loadingText,
+      Map<String, String>? nameArgs,
+    }) async {
       await showDialog(
         barrierDismissible: false,
         context: context,
@@ -88,6 +73,7 @@ class _EditWeightState extends State<EditWeight> {
           return NativeAdDialog(
             loadingText: loadingText,
             title: title,
+            nameArgs: nameArgs,
             leftText: '히스토리',
             rightText: '그래프',
             onLeftClick: () => onClick(BottomNavigationEnum.history),
@@ -95,17 +81,6 @@ class _EditWeightState extends State<EditWeight> {
           );
         },
       );
-    }
-
-    onErrorText() {
-      String? errMsg = handleCheckErrorText(
-        min: weightMin,
-        max: weightMax,
-        text: textController.text,
-        errMsg: weightErrMsg2,
-      );
-
-      return errMsg;
     }
 
     onInit() {
@@ -119,19 +94,16 @@ class _EditWeightState extends State<EditWeight> {
       context.read<EnabledProvider>().setEnabled(false);
     }
 
-    onValidWeight() {
-      return textController.text != '' && onErrorText() == null;
-    }
-
     onChangedText(_) {
-      bool isParse = double.tryParse(textController.text) == null;
+      bool isInitText =
+          isDoubleTryParse(text: textController.text) == false || isError();
 
-      if (isParse) {
+      if (isInitText) {
         textController.text = '';
       }
 
-      setState(() => errorText = onErrorText());
-      context.read<EnabledProvider>().setEnabled(onValidWeight());
+      setState(() {});
+      context.read<EnabledProvider>().setEnabled(!isInitText);
     }
 
     onTapWeight() {
@@ -148,9 +120,9 @@ class _EditWeightState extends State<EditWeight> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return ButtonModal(
+          return WeightButtonBottmSheet(
             onCompleted: () {
-              if (onValidWeight()) {
+              if (isDoubleTryParse(text: textController.text)) {
                 DateTime now = DateTime.now();
                 double weight = stringToDouble(textController.text);
 
@@ -177,9 +149,12 @@ class _EditWeightState extends State<EditWeight> {
                 List<RecordBox> recordList =
                     recordRepository.recordBox.values.toList();
                 recordList.where((e) => e.weight != null);
-                String title = '👏🏻 ${recordList.length}일째 기록 했어요!';
 
-                showAdDialog(title, '체중 데이터 저장 중...');
+                showAdDialog(
+                  title: '👏🏻 일째 기록 했어요!',
+                  loadingText: '체중 데이터 저장 중...',
+                  nameArgs: {'days': '${recordList.length}'},
+                );
               }
             },
             onCancel: () {
@@ -203,15 +178,18 @@ class _EditWeightState extends State<EditWeight> {
         barrierColor: Colors.transparent,
         context: context,
         builder: (context) {
-          return ButtonModal(
+          return WeightButtonBottmSheet(
             onCompleted: () {
-              if (onValidWeight()) {
+              if (isDoubleTryParse(text: textController.text)) {
                 user.goalWeight = stringToDouble(textController.text);
                 user.save();
 
                 onInit();
                 closeDialog(context);
-                showAdDialog('⛳ 목표 체중을 변경했어요!', '목표 체중 데이터 저장 중...');
+                showAdDialog(
+                  title: '⛳ 목표 체중을 변경 했어요!',
+                  loadingText: '목표 체중 데이터 저장 중...',
+                );
               }
             },
             onCancel: () {
@@ -240,6 +218,14 @@ class _EditWeightState extends State<EditWeight> {
           : throw 'Could not launch $url';
     }
 
+    helperText() {
+      int max = user.weightUnit == 'kg' ? kgMax.toInt() : lbMax.toInt();
+
+      return textController.text == ''
+          ? '1 ~ max 의 값을 입력해주세요.'.tr(namedArgs: {'max': '$max'})
+          : null;
+    }
+
     return Column(
       children: [
         ContentsBox(
@@ -251,16 +237,25 @@ class _EditWeightState extends State<EditWeight> {
                 icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
                 tags: [
                   TagClass(
-                    text: '체중 ${recordInfo?.weight ?? '- '}kg',
+                    text: '체중 ',
+                    nameArgs: {
+                      'weight': '${recordInfo?.weight ?? '- '}',
+                      'unit': user.weightUnit ?? 'kg'
+                    },
                     color: 'indigo',
                     isHide: isOpen,
                     onTap: onTapOpen,
                   ),
                   TagClass(
-                    text: 'BMI ${bmi(
-                      tall: user.tall,
-                      weight: recordInfo?.weight,
-                    )}',
+                    text: 'BMI',
+                    nameArgs: {
+                      'bmi': bmi(
+                        tall: user.tall,
+                        weight: recordInfo?.weight,
+                        tallUnit: user.tallUnit,
+                        weightUnit: user.weightUnit,
+                      )
+                    },
                     color: 'indigo',
                     onTap: onTapBMI,
                   ),
@@ -280,11 +275,11 @@ class _EditWeightState extends State<EditWeight> {
                           controller: textController,
                           keyboardType: inputKeyboardType,
                           autofocus: true,
-                          maxLength: weightMaxLength,
+                          maxLength: 5,
                           decoration: InputDecoration(
-                            suffixText: 'kg',
-                            hintText: weightHintText,
-                            errorText: errorText,
+                            suffixText: user.weightUnit,
+                            hintText: weightHintText.tr(),
+                            helperText: helperText(),
                           ),
                           onChanged: onChangedText,
                         )
@@ -293,6 +288,7 @@ class _EditWeightState extends State<EditWeight> {
                               weight: recordInfo?.weight,
                               goalWeight: user.goalWeight,
                               importDateTime: importDateTime,
+                              locale: context.locale.toString(),
                               onTapWeight: onTapWeight,
                               onTapGoalWeight: onTapGoalWeight,
                             )
@@ -320,8 +316,8 @@ class _EditWeightState extends State<EditWeight> {
   }
 }
 
-class ButtonModal extends StatelessWidget {
-  ButtonModal({
+class WeightButtonBottmSheet extends StatelessWidget {
+  WeightButtonBottmSheet({
     super.key,
     required this.onCompleted,
     required this.onCancel,
@@ -374,8 +370,10 @@ class WeeklyWeightGraph extends StatefulWidget {
     required this.goalWeight,
     required this.onTapWeight,
     required this.onTapGoalWeight,
+    required this.locale,
   });
 
+  String locale;
   DateTime importDateTime;
   double? weight, goalWeight;
   Function() onTapWeight, onTapGoalWeight;
@@ -401,10 +399,10 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
       bool isToday = isCheckToday(subtractDateTime);
       int recordKey = getDateTimeToInt(subtractDateTime);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      String formatterDay =
-          dateTimeFormatter(format: 'd일', dateTime: subtractDateTime);
-      GraphData graphData =
-          GraphData(isToday ? '오늘' : formatterDay, recordInfo?.weight);
+      String formatterDay = isToday
+          ? '오늘'.tr()
+          : d(locale: widget.locale, dateTime: subtractDateTime);
+      GraphData graphData = GraphData(formatterDay, recordInfo?.weight);
 
       if (recordInfo?.weight != null) {
         weightList.add(recordInfo!.weight!);
@@ -433,18 +431,23 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
 
   @override
   Widget build(BuildContext context) {
-    final weightButtonList = [
-      {
-        'text': '현재 체중: ${widget.weight}kg',
-        'number': '22',
-        'onTap': widget.onTapWeight,
-      },
-      {'text': null, 'number': null, 'onTap': null},
-      {
-        'text': '목표 체중: ${widget.goalWeight}kg',
-        'number': '15',
-        'onTap': widget.onTapGoalWeight,
-      }
+    UserBox user = userRepository.user;
+    String weightUnit = user.weightUnit ?? 'kg';
+
+    List<WeightButtonClass> weightButtonList = [
+      WeightButtonClass(
+        text: '현재 체중: ',
+        imgNumber: '22',
+        nameArgs: {'weight': '${widget.weight}', 'unit': weightUnit},
+        onTap: widget.onTapWeight,
+      ),
+      WeightButtonClass(),
+      WeightButtonClass(
+        text: '목표 체중: ',
+        imgNumber: '15',
+        nameArgs: {'weight': '${widget.goalWeight}', 'unit': weightUnit},
+        onTap: widget.onTapGoalWeight,
+      ),
     ];
 
     return Column(
@@ -459,10 +462,16 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
               minimum: minimum,
               plotBands: [
                 PlotBand(
+                  dashArray: const [5, 5],
                   borderWidth: 1.0,
                   borderColor: disabledButtonTextColor,
                   isVisible: true,
-                  text: '목표: ${widget.goalWeight}kg',
+                  text: '목표 체중: '.tr(
+                    namedArgs: {
+                      'weight': '${widget.goalWeight}',
+                      'unit': weightUnit
+                    },
+                  ),
                   textStyle: const TextStyle(color: disabledButtonTextColor),
                   start: widget.goalWeight,
                   end: widget.goalWeight,
@@ -472,7 +481,7 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
             tooltipBehavior: TooltipBehavior(
               enable: true,
               header: '',
-              format: 'point.x: point.ykg',
+              format: 'point.x: point.y$weightUnit',
             ),
             series: [
               FastLineSeries(
@@ -497,20 +506,21 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
         Row(
           children: weightButtonList
               .map(
-                (e) => e['text'] != null
+                (button) => button.text != null
                     ? Expanded(
                         child: GestureDetector(
-                        onTap: e['onTap'] as Function(),
+                        onTap: button.onTap,
                         child: ContentsBox(
                           borderRadius: 5,
                           padding: const EdgeInsets.all(smallSpace),
-                          imgUrl: 'assets/images/t-${e['number']}.png',
+                          imgUrl: 'assets/images/t-${button.imgNumber}.png',
                           contentsWidget: CommonText(
-                            text: e['text'] as String,
+                            text: button.text!,
                             size: 13,
                             color: Colors.white,
                             isBold: true,
                             isCenter: true,
+                            nameArgs: button.nameArgs,
                           ),
                         ),
                       ))

@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 김동현 on 2/7/24.
+  
+*/
+
+"CFBundleDisplayName" = "체중 메이트";
+"CFBundleName" = "체중 메이트";
+"NSCameraUsageDescription" = "눈바디, 식단, 운동 사진을 촬영하기 위해 카메라 접근 권한이 필요합니다.";
+"NSPhotoLibraryUsageDescription" = "눈바디, 식단, 운동 사진을 추가하기 위해 갤러리 접근 권한이 필요합니다.";
+"NSUserTrackingUsageDescription" = "개인에게 최적화된 광고를 제공하기 위해 광고 활동 정보를 수집합니다.";

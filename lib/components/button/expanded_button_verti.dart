@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 
@@ -13,6 +14,7 @@ class ExpandedButtonVerti extends StatelessWidget {
     this.titleSize,
     this.iconSize,
     this.height,
+    this.padding,
   });
 
   IconData icon;
@@ -22,6 +24,7 @@ class ExpandedButtonVerti extends StatelessWidget {
   bool? isBold;
   Function() onTap;
   double? titleSize, iconSize, height;
+  EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class ExpandedButtonVerti extends StatelessWidget {
           isBold: isBold,
           iconSize: iconSize,
           titleSize: titleSize,
+          padding: padding,
         ),
       ),
     );

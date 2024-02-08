@@ -1,14 +1,10 @@
-import 'dart:developer';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/pages/add/add_container.dart';
-import 'package:flutter_app_weight_management/pages/add/pages/add_body_info.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -46,7 +42,7 @@ class _AddPlanListState extends State<AddPlanList> {
     return AddContainer(
       body: Column(
         children: [
-          AddTitle(step: 2, title: '꾸준히 달성 할 목표를 모두 골라봐요 :)'),
+          PageTitle(step: 3, title: '꾸준히 달성 할 목표를 모두 골라보세요 :)'),
           ContentsBox(
             height: 430,
             contentsWidget: ListView(
@@ -55,11 +51,14 @@ class _AddPlanListState extends State<AddPlanList> {
                   .map(
                     (e) => GestureDetector(
                       onTap: () => onCheckBox(id: e.name),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              CommonIcon(
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 0,
+                              child: CommonIcon(
                                 icon: checkList.contains(e.name)
                                     ? Icons.check_box_rounded
                                     : Icons.check_box_outline_blank_rounded,
@@ -68,16 +67,19 @@ class _AddPlanListState extends State<AddPlanList> {
                                     ? themeColor
                                     : Colors.grey.shade400,
                               ),
-                              SpaceWidth(width: 10),
-                              CommonText(
-                                text: e.name,
-                                size: 15,
-                                isNotTop: true,
+                            ),
+                            SpaceWidth(width: 10),
+                            Expanded(
+                              child: Text(
+                                e.name.tr(),
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  color: themeColor,
+                                ),
                               ),
-                            ],
-                          ),
-                          SpaceHeight(height: 20)
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   )

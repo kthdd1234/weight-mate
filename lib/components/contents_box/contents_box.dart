@@ -26,6 +26,7 @@ class ContentsBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: padding ?? pagePadding,
       width: width,
       height: height,
       decoration: BoxDecoration(
@@ -45,10 +46,7 @@ class ContentsBox extends StatelessWidget {
               ]
             : null,
       ),
-      child: Padding(
-        padding: padding ?? pagePadding,
-        child: contentsWidget,
-      ),
+      child: contentsWidget,
     );
   }
 }

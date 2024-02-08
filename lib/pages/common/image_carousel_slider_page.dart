@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
@@ -46,7 +47,7 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
 
     setAppBarTitle() {
       DateTime dateTime = widget.fileItemList[currentPageIndex]['dateTime'];
-      return dateTimeFormatter(format: 'MM월 dd일', dateTime: dateTime);
+      return md(locale: context.locale.toString(), dateTime: dateTime);
     }
 
     onChanged(bool newValue) {
@@ -68,7 +69,7 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
               child: const Text(
                 '자동 재생',
                 style: TextStyle(color: enableBackgroundColor),
-              ),
+              ).tr(),
             ),
             CupertinoSwitch(
               activeColor: enableTextColor,

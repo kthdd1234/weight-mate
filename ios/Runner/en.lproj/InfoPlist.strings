@@ -1,0 +1,13 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 김동현 on 2/7/24.
+  
+*/
+
+"CFBundleDisplayName" = "weight mate";
+"CFBundleName" = "weight mate";
+"NSCameraUsageDescription" = "Camera access is required to take photos of your eyes, body, diet, and exercise.";
+"NSPhotoLibraryUsageDescription" = "Gallery access is required to add eye body, diet, and exercise photos.";
+"NSUserTrackingUsageDescription" = "We collect advertising activity information to provide personalized advertising.";

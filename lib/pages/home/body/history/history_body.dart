@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';

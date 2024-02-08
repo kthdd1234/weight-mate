@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -20,7 +21,7 @@ class ExpandedButtonHori extends StatelessWidget {
   Color? color;
   IconData? icon;
   String text;
-  double? padding;
+  EdgeInsets? padding;
   Function() onTap;
 
   @override
@@ -29,29 +30,16 @@ class ExpandedButtonHori extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: ContentsBox(
-          padding: padding != null ? EdgeInsets.all(padding!) : null,
+          padding: padding ?? pagePadding,
           imgUrl: imgUrl,
           backgroundColor: color,
-          contentsWidget: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              icon != null
-                  ? Row(
-                      children: [
-                        Icon(icon, color: Colors.white, size: 18),
-                        SpaceWidth(width: tinySpace),
-                      ],
-                    )
-                  : const EmptyArea(),
-              Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
+          contentsWidget: CommonText(
+            text: text,
+            size: 14,
+            leftIcon: icon,
+            isBold: true,
+            isCenter: true,
+            color: Colors.white,
           ),
         ),
       ),

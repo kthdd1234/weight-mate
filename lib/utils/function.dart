@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-
 import 'dart:developer';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -9,13 +8,10 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
-import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:intl/intl.dart';
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -176,13 +172,14 @@ showSnackBar({
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Text(text),
+          Text(text).tr(),
           TextButton(
-              onPressed: onPressed,
-              child: Text(
-                buttonName,
-                style: const TextStyle(color: Colors.grey),
-              ))
+            onPressed: onPressed,
+            child: Text(
+              buttonName,
+              style: const TextStyle(color: Colors.grey),
+            ).tr(),
+          )
         ],
       ),
       width: width,
@@ -249,6 +246,46 @@ showAlarmBottomSheet({
   );
 }
 
+ymd({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMMd(locale).format(dateTime);
+}
+
+ym({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMMM(locale).format(dateTime);
+}
+
+md({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMd(locale).format(dateTime);
+}
+
+mde({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMEd(locale).format(dateTime);
+}
+
+y({required String locale, required DateTime dateTime}) {
+  return DateFormat.y(locale).format(dateTime);
+}
+
+d({required String locale, required DateTime dateTime}) {
+  return DateFormat.d(locale).format(dateTime);
+}
+
+e({required String locale, required DateTime dateTime}) {
+  return DateFormat.EEEE(locale).format(dateTime);
+}
+
+hm({required String locale, required DateTime dateTime}) {
+  return DateFormat.jm(locale).format(dateTime);
+}
+
+m_d({required String locale, required DateTime dateTime}) {
+  if (locale == 'ko_KR') {
+    return DateFormat('M.d', 'ko').format(dateTime);
+  }
+
+  return DateFormat.Md(locale).format(dateTime);
+}
+
 dateTimeFormatter({required String format, required DateTime dateTime}) {
   DateFormat formatter = DateFormat(format, 'ko');
   String strDateTime = formatter.format(dateTime);
@@ -306,21 +343,17 @@ dateTimeToTitle(DateTime dateTime) {
   return dateTimeFormatter(format: 'MM월 dd일', dateTime: dateTime);
 }
 
-weightNotifyTitle() {
+String weightNotifyTitle() {
   return '오늘의 체중 기록 알림 📝';
 }
 
-weightNotifyBody() {
+String weightNotifyBody() {
   return '지금 바로 체중을 기록해보세요!';
 }
 
-planNotifyTitle() {
-  return '목표 실천 알림 ⏰';
-}
+const planNotifyTitle = '목표 실천 알림 ⏰';
 
-planNotifyBody({required String title, required String body}) {
-  return '[$title: $body]\n지금 바로 실천해보세요!';
-}
+const planNotifyBody = '지금 바로 실천해보세요!';
 
 calculatedGoalWeight({required double goalWeight, required double weight}) {
   double value = goalWeight - weight;
@@ -346,22 +379,46 @@ initDateTime() {
   );
 }
 
-isCheckToday(DateTime date) {
+isCheckToday(DateTime targetDate) {
   final now = DateTime.now();
 
-  return now.year == date.year &&
-      now.month == date.month &&
-      now.day == date.day;
+  return now.year == targetDate.year &&
+      now.month == targetDate.month &&
+      now.day == targetDate.day;
 }
 
-bmi({required double tall, required double? weight}) {
+/**
+   센티(cm) = 인치(inch) 곱하기 2.54
+예를 들어, 14.5인치를 센티로 변환하려면
+14.5 × 2.54 = 36.83 센치(cm)입니다.
+
+
+인치(inch) = 센티(cm) 나누기 2.54
+예를 들어, 36.83센치(cm)를 인치로 바꾸면
+36.83 ÷ 2.54 = 14.5 인치(inch)입니다.
+   */
+
+bmi({
+  required double tall,
+  required String? tallUnit,
+  required double? weight,
+  required String? weightUnit,
+}) {
   if (weight == null) {
     return '-';
   }
 
-  final cmToM = tall / 100;
-  final bmi = weight / (cmToM * cmToM);
-  final bmiToFixed = bmi.toStringAsFixed(1);
+  if (tallUnit == 'inch') {
+    tall = (tall * 2.54);
+  }
+
+  if (weightUnit == 'lb') {
+    weight = weight * 0.45;
+  }
+
+  double cmToM = tall / 100;
+  double bmi = weight / (cmToM * cmToM);
+  String bmiToFixed = bmi.toStringAsFixed(1);
 
   return bmiToFixed;
 }
@@ -452,4 +509,69 @@ onActionCount(List<RecordBox> recordList, String planId) {
   });
 
   return count;
+}
+
+isAmericanLocale({required String locale}) {
+  List<String> americanLocales = ['en_US', 'ca_CA', 'gb_GB'];
+
+  return americanLocales.contains(locale);
+}
+
+bool isDoubleTryParse({required String text}) {
+  return double.tryParse(text) != null;
+}
+
+String? convertTall({required String unit, required String tall}) {
+  double? tallValue = double.tryParse(tall);
+
+  if (tallValue != null) {
+    switch (unit) {
+      case 'cm':
+        return (tallValue * 2.54).toStringAsFixed(1);
+
+      case 'inch':
+        return (tallValue / 2.54).toStringAsFixed(1);
+
+      default:
+        return '0.0';
+    }
+  }
+
+  return null;
+}
+
+String? convertWeight({required String unit, required String wegiht}) {
+  double? weightValue = double.tryParse(wegiht);
+
+  if (weightValue != null) {
+    switch (unit) {
+      case 'kg':
+        return (weightValue / 2.2).toStringAsFixed(1);
+
+      case 'lb':
+        return (weightValue * 2.2).toStringAsFixed(1);
+
+      default:
+        return '0.0';
+    }
+  }
+
+  return null;
+}
+
+bool isShowErorr({required String unit, required double? value}) {
+  if (value == null || value < 1) return true;
+
+  switch (unit) {
+    case 'cm':
+      return value >= cmMax;
+    case 'inch':
+      return value >= inchMax;
+    case 'kg':
+      return value >= kgMax;
+    case 'lb':
+      return value >= lbMax;
+    default:
+      return true;
+  }
 }

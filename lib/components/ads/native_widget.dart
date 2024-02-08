@@ -35,10 +35,16 @@ class NativeWidget extends StatelessWidget {
 }
 
 class NativeAdLoading extends StatelessWidget {
-  NativeAdLoading({super.key, required this.text, required this.color});
+  NativeAdLoading({
+    super.key,
+    required this.text,
+    required this.color,
+    this.nameArgs,
+  });
 
   String text;
   Color color;
+  Map<String, String>? nameArgs;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +58,7 @@ class NativeAdLoading extends StatelessWidget {
           size: 11,
           isCenter: true,
           color: color,
+          nameArgs: nameArgs,
         )
       ],
     );

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -18,6 +19,8 @@ class CommonText extends StatelessWidget {
     this.onTap,
     this.isWidth,
     this.decoColor,
+    this.isNotTr,
+    this.nameArgs,
   });
 
   String text;
@@ -27,8 +30,9 @@ class CommonText extends StatelessWidget {
   IconData? leftIcon, rightIcon;
   Color? color, decoColor;
   String? decoration;
-  bool? isNotTop;
+  bool? isNotTop, isNotTr;
   bool? isWidth;
+  Map<String, String>? nameArgs;
   Function()? onTap;
 
   @override
@@ -55,7 +59,7 @@ class CommonText extends StatelessWidget {
             padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
             child: SizedBox(
               child: Text(
-                text,
+                isNotTr == true ? text : text.tr(namedArgs: nameArgs),
                 style: TextStyle(
                   color: color ?? themeColor,
                   fontSize: size,
@@ -70,11 +74,7 @@ class CommonText extends StatelessWidget {
           rightIcon != null
               ? Row(children: [
                   SpaceWidth(width: 3),
-                  Icon(
-                    rightIcon,
-                    size: size + 3,
-                    color: color,
-                  ),
+                  Icon(rightIcon, size: size + 3, color: color),
                 ])
               : const EmptyArea()
         ],

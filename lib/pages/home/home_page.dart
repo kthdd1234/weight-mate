@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
@@ -17,6 +20,8 @@ import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
@@ -32,17 +37,16 @@ List<BottomNavigationEnum> bottomIdList = [
 ];
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key, required this.locale});
+
+  String locale;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  // late AppLifecycleReactor _appLifecycleReactor;
-
   bool isActiveCamera = false;
-  // bool isShowMateScreen = false;
 
   @override
   void initState() {
@@ -52,14 +56,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     GdprDialog.instance
         .showDialog(isForTest: false, testDeviceId: '')
         .then((value) {});
-
-    // /** */
-    // AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    // _appLifecycleReactor = AppLifecycleReactor(
-    //   appOpenAdManager: appOpenAdManager,
-    // );
-
-    // _appLifecycleReactor.listenToAppStateChanges();
 
     /** */
     PrivacyScreen.instance.enable(
@@ -86,6 +82,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<String>? dietOrderList = user.dietOrderList;
     List<String>? exerciseOrderList = user.exerciseOrderList;
     List<String>? lifeOrderList = user.lifeOrderList;
+    String? language = user.language;
+    String? weightUnit = user.weightUnit;
+    String? tallUnit = user.tallUnit;
 
     List<PlanBox> planList = planRepository.planBox.values.toList();
 
@@ -146,6 +145,21 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       );
     }
 
+    if (language == null) {
+      String localeName =
+          localeNames.contains(widget.locale) ? widget.locale : 'en';
+
+      user.language = localeName;
+    }
+
+    if (tallUnit == null) {
+      user.tallUnit = 'cm';
+    }
+
+    if (weightUnit == null) {
+      user.weightUnit = 'kg';
+    }
+
     userRepository.user.save();
 
     /** */
@@ -177,6 +191,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();
+
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
       context.read<TitleDateTimeProvider>().setTitleDateTime(now);
       context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
@@ -232,18 +247,26 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomNavigationBarItem> items = const [
-      BottomNavigationBarItem(icon: Icon(Icons.edit), label: '기록'),
+    List<BottomNavigationBarItem> items = [
       BottomNavigationBarItem(
-          icon: Icon(Icons.menu_book_rounded), label: '히스토리'),
+        icon: const Icon(Icons.edit),
+        label: '기록'.tr(),
+      ),
       BottomNavigationBarItem(
-        icon: Padding(
+        icon: const Icon(Icons.menu_book_rounded),
+        label: '히스토리'.tr(),
+      ),
+      BottomNavigationBarItem(
+        icon: const Padding(
           padding: EdgeInsets.only(bottom: 3),
           child: Icon(FontAwesomeIcons.chartLine, size: 17),
         ),
-        label: '그래프',
+        label: '그래프'.tr(),
       ),
-      BottomNavigationBarItem(icon: Icon(Icons.settings_rounded), label: '설정'),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.settings_rounded),
+        label: '설정'.tr(),
+      ),
     ];
 
     BottomNavigationEnum bottomNavitionId =
@@ -275,6 +298,34 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       const SettingBody()
     ];
 
+    floatingActionButton() {
+      DateTime titleDateTime =
+          context.watch<ImportDateTimeProvider>().getImportDateTime();
+      bool isToday = isCheckToday(titleDateTime);
+
+      return bottomNavitionId == BottomNavigationEnum.record && isToday == false
+          ? FloatingActionButton.extended(
+              extendedPadding: const EdgeInsets.all(10),
+              backgroundColor: themeColor,
+              onPressed: () {
+                DateTime now = DateTime.now();
+
+                context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+                context.read<ImportDateTimeProvider>().setImportDateTime(now);
+              },
+              label: CommonText(
+                text: '오늘로 이동',
+                size: 13,
+                color: Colors.white,
+                isBold: true,
+              ),
+            )
+          : null;
+    }
+
+    // weight mate - diet app
+    // weight record for dieting
+
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.transparent,
@@ -293,6 +344,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             onTap: onBottomNavigation,
           ),
         ),
+        floatingActionButton: floatingActionButton(),
       ),
     );
   }
