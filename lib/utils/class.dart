@@ -277,16 +277,14 @@ class AppLifecycleReactor {
   void _onAppStateChanged(AppState appState) async {
     String? passwords = userRepository.user.screenLockPasswords;
 
-    if (appState == AppState.foreground && passwords != null) {
-      try {
+    if (passwords != null) {
+      if (appState == AppState.foreground) {
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => EnterScreenLockPage(isPop: true),
             fullscreenDialog: true,
           ),
         );
-      } catch (e) {
-        log('error => $e');
       }
     }
   }

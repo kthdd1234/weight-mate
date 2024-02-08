@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import '../../model/user_box/user_box.dart';
 
@@ -56,13 +59,11 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
 
               if (count == 4) {
                 if (userPasswords.join() == inputPasswords.join()) {
-                  widget.isPop == true
-                      ? Navigator.pop(context)
-                      : Navigator.pushNamedAndRemoveUntil(
-                          context,
-                          '/home-page',
-                          (route) => false,
-                        );
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    '/home-page',
+                    (route) => false,
+                  );
                 } else {
                   isError = true;
                   inputPasswords = ['', '', '', ''];

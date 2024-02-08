@@ -113,7 +113,6 @@ class CommonTitle extends StatelessWidget {
 
     bool isRecord = index == 0;
     bool isHistory = index == 1;
-    // bool isToday = isCheckToday(titleDateTime);
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);

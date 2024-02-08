@@ -37,7 +37,9 @@ List<BottomNavigationEnum> bottomIdList = [
 ];
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  HomePage({super.key, required this.locale});
+
+  String locale;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -144,9 +146,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (language == null) {
-      String localeName = localeNames.contains(Platform.localeName)
-          ? Platform.localeName
-          : 'en';
+      String localeName =
+          localeNames.contains(widget.locale) ? widget.locale : 'en';
 
       user.language = localeName;
     }
@@ -304,6 +305,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       return bottomNavitionId == BottomNavigationEnum.record && isToday == false
           ? FloatingActionButton.extended(
+              extendedPadding: const EdgeInsets.all(10),
               backgroundColor: themeColor,
               onPressed: () {
                 DateTime now = DateTime.now();
@@ -313,14 +315,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
               },
               label: CommonText(
                 text: '오늘로 이동',
-                size: 16,
+                size: 13,
                 color: Colors.white,
                 isBold: true,
               ),
-              icon: const Icon(Icons.today, color: Colors.white),
             )
           : null;
     }
+
+    // weight mate - diet app
+    // weight record for dieting
 
     return AppFramework(
       widget: Scaffold(

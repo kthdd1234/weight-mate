@@ -127,6 +127,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
@@ -134,7 +135,7 @@ class _MyAppState extends State<MyApp> {
             ? '/home-page'
             : '/enter-screen-lock';
 
-    final theme = ThemeData(
+    ThemeData theme = ThemeData(
       primarySwatch: AppColors.primaryMaterialSwatchDark,
       fontFamily: context.locale != const Locale('ja')
           ? 'cafe24Ohsquareair'
@@ -144,10 +145,11 @@ class _MyAppState extends State<MyApp> {
       brightness: Brightness.light,
     );
 
-    print('locale => ${context.locale}');
+    print('locale => $locale');
 
     return MaterialApp(
       title: 'weight-mate',
+      debugShowCheckedModeBanner: false,
       theme: theme,
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
@@ -159,7 +161,7 @@ class _MyAppState extends State<MyApp> {
         '/add-body-tall': (context) => const AddBodyTall(),
         '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
-        '/home-page': (context) => const HomePage(),
+        '/home-page': (context) => HomePage(locale: locale),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),

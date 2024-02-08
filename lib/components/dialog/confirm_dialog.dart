@@ -41,6 +41,7 @@ class ConfirmDialog extends StatelessWidget {
     }
 
     return AlertDialog(
+      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
       shape: containerBorderRadious,
       backgroundColor: dialogBackgroundColor,
       title: DialogTitle(text: titleText, onTap: onClose),

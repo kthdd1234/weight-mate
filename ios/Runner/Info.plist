@@ -6,10 +6,7 @@
 	<array>
 		<string>ko</string>
 		<string>en</string>
-		<string>de</string>
-		<string>ja</string>
-		<string>es</string>
-		<string>fr</string>
+		<string>ja</string>	
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>

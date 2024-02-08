@@ -188,7 +188,7 @@ class _SettingBodyState extends State<SettingBody> {
         showDialog(
           context: context,
           builder: (context) => ConfirmDialog(
-            width: 300,
+            width: 400,
             titleText: '화면 잠금 해제',
             contentIcon: Icons.lock_open_rounded,
             contentText1: '화면 잠금을 해제할까요?',
@@ -410,7 +410,7 @@ class _SettingBodyState extends State<SettingBody> {
         id: MoreSeeItem.appLang,
         icon: 'language',
         title: '언어 변경',
-        value: localeDisplayNames[user.language]!,
+        value: localeDisplayNames[user.language] ?? 'English',
         color: themeColor,
         onTap: onTapLanguage,
       ),
