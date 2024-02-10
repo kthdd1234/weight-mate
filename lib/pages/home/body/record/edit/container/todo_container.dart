@@ -351,13 +351,29 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
       );
     }
 
+    onHide(SegmentedTypes hideType) {
+      return widget.isOpen == false ? true : selectedSegment == hideType;
+    }
+
+    onTapCollection() async {
+      await Navigator.pushNamed(
+        context,
+        '/todo-chart-page',
+        arguments: {'type': widget.type, 'title': widget.title},
+      );
+    }
+
     List<TagClass> tags = [
+      TagClass(
+        text: '기록 모아보기',
+        color: widget.colorName,
+        isHide: onHide(SegmentedTypes.goal),
+        onTap: onTapCollection,
+      ),
       TagClass(
         text: '순서 변경',
         color: widget.colorName,
-        isHide: widget.isOpen == false
-            ? true
-            : selectedSegment == SegmentedTypes.record,
+        isHide: onHide(SegmentedTypes.record),
         onTap: onTapChangeOrder,
       ),
       TagClass(
@@ -407,10 +423,10 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         type: SegmentedTypes.record,
         selected: selectedSegment,
       ),
-      SegmentedTypes.month: onSegmentedWidget(
+      SegmentedTypes.goal: onSegmentedWidget(
         title: '목표 ',
         nameArgs: {'length': '${widget.planList.length}'},
-        type: SegmentedTypes.month,
+        type: SegmentedTypes.goal,
         selected: selectedSegment,
       ),
     };

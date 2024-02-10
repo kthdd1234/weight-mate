@@ -49,34 +49,6 @@ class DefaultImage extends StatelessWidget {
                 );
         },
       ),
-
-      // Image.memory(
-      //   unit8List,
-      //   filterQuality: FilterQuality.high,
-      //   fit: BoxFit.fill,
-      //   cacheWidth: height.toInt(),
-      //   cacheHeight: height.toInt(),
-      //   width: height,
-      //   height: height,
-      //   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-      //     if (wasSynchronouslyLoaded) return child;
-
-      //     return frame != null
-      //         ? child
-      //         : Shimmer.fromColors(
-      //             baseColor: const Color.fromRGBO(240, 240, 240, 1),
-      //             highlightColor: Colors.white,
-      //             child: Container(
-      //               width: double.infinity,
-      //               height: height,
-      //               decoration: BoxDecoration(
-      //                 borderRadius: BorderRadius.circular(5),
-      //                 color: Colors.grey,
-      //               ),
-      //             ),
-      //           );
-      //   },
-      // ),
     );
   }
 }

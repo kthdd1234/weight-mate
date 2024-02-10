@@ -2,7 +2,13 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -25,20 +31,52 @@ class ImageCarouselSliderPage extends StatefulWidget {
 
 class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
   int currentPageIndex = 0;
-  bool isEnabled = false;
+  bool isAutoPlay = false;
+  bool isWeight = true;
 
   @override
   void initState() {
     currentPageIndex = widget.initPageIndex;
-    isEnabled = widget.isAutoPlay;
+    isAutoPlay = widget.isAutoPlay;
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    DateTime dateTime = widget.fileItemList[currentPageIndex]['dateTime'];
+    int recordKey = getDateTimeToInt(dateTime);
+    RecordBox? record = recordRepository.recordBox.get(recordKey);
+    UserBox? user = userRepository.user;
+    String weight = '${record?.weight ?? '-'}${user.weightUnit}';
+
     List<Widget> items = widget.fileItemList
-        .map((item) => Image.memory(item['binaryData']))
+        .map(
+          (item) => Center(
+            child: Stack(
+              children: [
+                Image.memory(item['file']),
+                isWeight
+                    ? Positioned(
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5),
+                          child: TextIcon(
+                              padding: 5,
+                              backgroundColor: themeColor,
+                              backgroundColorOpacity: 0.5,
+                              text: weight,
+                              borderRadius: 5,
+                              textColor: typeBackgroundColor,
+                              fontSize: 11,
+                              onTap: () => null),
+                        ),
+                      )
+                    : const EmptyArea()
+              ],
+            ),
+          ),
+        )
         .toList();
 
     onPageChanged(int index, _) {
@@ -46,42 +84,64 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
     }
 
     setAppBarTitle() {
-      DateTime dateTime = widget.fileItemList[currentPageIndex]['dateTime'];
       return md(locale: context.locale.toString(), dateTime: dateTime);
     }
 
-    onChanged(bool newValue) {
-      setState(() => isEnabled = newValue);
+    onChangedWeight(bool newValue) {
+      setState(() => isWeight = newValue);
+    }
+
+    onChangedAutoPlay(bool newValue) {
+      setState(() => isAutoPlay = newValue);
     }
 
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
+          centerTitle: false,
           title: Text(setAppBarTitle()),
           leading: const CloseButton(),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           foregroundColor: Colors.white,
           actions: [
-            TextButton(
-              onPressed: () => onChanged(!isEnabled),
-              child: const Text(
-                '자동 재생',
-                style: TextStyle(color: enableBackgroundColor),
-              ).tr(),
+            Column(
+              children: [
+                CupertinoSwitch(
+                  activeColor: enableTextColor,
+                  value: isWeight,
+                  onChanged: onChangedWeight,
+                ),
+                CommonText(
+                  text: '체중 표시',
+                  size: 10,
+                  color: Colors.white,
+                  isBold: true,
+                )
+              ],
             ),
-            CupertinoSwitch(
-              activeColor: enableTextColor,
-              value: isEnabled,
-              onChanged: onChanged,
-            )
+            Column(
+              children: [
+                CupertinoSwitch(
+                  activeColor: enableTextColor,
+                  value: isAutoPlay,
+                  onChanged: onChangedAutoPlay,
+                ),
+                CommonText(
+                  text: '자동 재생',
+                  size: 10,
+                  color: Colors.white,
+                  isBold: true,
+                )
+              ],
+            ),
           ],
         ),
         body: CarouselSlider(
           items: items,
           options: CarouselOptions(
-            autoPlay: isEnabled,
+            autoPlay: isAutoPlay,
             autoPlayInterval: const Duration(seconds: 3),
             initialPage: widget.initPageIndex,
             height: MediaQuery.of(context).size.height,

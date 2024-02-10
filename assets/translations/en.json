@@ -219,5 +219,10 @@
   "현재 체중": "Current weight",
   "1 ~ max 의 값을 입력해주세요.": "Please enter a value between 1 and {max}.",
   "운동 수정": "Edit",
-  "운동 삭제": "Delete"
+  "운동 삭제": "Delete",
+  "체중 표시": "Weight",
+  "삭제 할 사진을 모두 선택해주세요.": "Please select all the pictures you want to delete.",
+  "장 삭제하기": "Delete {length} photos",
+  "취소하기": "Cancle",
+  "장의 사진을 삭제할까요?": "Should I delete {length} photos?"
 }

@@ -209,12 +209,12 @@ class CommonTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         children: [
-          index != 3
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: BannerWidget(),
-                )
-              : const EmptyArea(),
+          // index != 3
+          //     ? Padding(
+          //         padding: const EdgeInsets.only(bottom: 10),
+          //         child: BannerWidget(),
+          //       )
+          //     : const EmptyArea(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

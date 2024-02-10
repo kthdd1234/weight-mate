@@ -147,7 +147,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (language == null) {
       String localeName =
-          localeNames.contains(widget.locale) ? widget.locale : 'en';
+          localeNames.contains(widget.locale) ? widget.locale : 'ko';
 
       user.language = localeName;
     }
