@@ -98,6 +98,17 @@ int getDateTimeToInt(DateTime? dateTime) {
   return int.parse(strDateTime);
 }
 
+mToInt(DateTime? dateTime) {
+  if (dateTime == null) {
+    return 0;
+  }
+
+  DateFormat formatter = DateFormat('yyyyMM');
+  String strDateTime = formatter.format(dateTime);
+
+  return int.parse(strDateTime);
+}
+
 getStrToDateTime(String str) {
   DateTime dateTime = DateFormat('yyyy년 MM월 dd일').parse(str);
   return dateTime;
@@ -262,6 +273,10 @@ mde({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
 
+m({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMM(locale).format(dateTime);
+}
+
 y({required String locale, required DateTime dateTime}) {
   return DateFormat.y(locale).format(dateTime);
 }
@@ -272,6 +287,10 @@ d({required String locale, required DateTime dateTime}) {
 
 e({required String locale, required DateTime dateTime}) {
   return DateFormat.EEEE(locale).format(dateTime);
+}
+
+e_short({required String locale, required DateTime dateTime}) {
+  return DateFormat.E(locale).format(dateTime);
 }
 
 hm({required String locale, required DateTime dateTime}) {

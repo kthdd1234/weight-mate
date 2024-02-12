@@ -284,21 +284,22 @@ class _TodoContainerState extends State<TodoContainer> {
 }
 
 class DietExerciseContainer extends StatefulWidget {
-  DietExerciseContainer(
-      {super.key,
-      required this.title,
-      required this.colorName,
-      required this.icon,
-      required this.type,
-      required this.isOpen,
-      required this.bgColor,
-      required this.actions,
-      required this.mainColor,
-      required this.planList,
-      required this.onCheckBox,
-      required this.onGoalComplete,
-      required this.onRecordComplete,
-      required this.onTapOpen});
+  DietExerciseContainer({
+    super.key,
+    required this.title,
+    required this.colorName,
+    required this.icon,
+    required this.type,
+    required this.isOpen,
+    required this.bgColor,
+    required this.actions,
+    required this.mainColor,
+    required this.planList,
+    required this.onCheckBox,
+    required this.onGoalComplete,
+    required this.onRecordComplete,
+    required this.onTapOpen,
+  });
 
   String title, type, colorName;
   bool isOpen;
@@ -554,6 +555,7 @@ class _ChangeOrderBottomSheetState extends State<ChangeOrderBottomSheet> {
         builder: (BuildContext context, Widget? child) {
           final double animValue = Curves.easeInOut.transform(animation.value);
           final double scale = lerpDouble(1, 1.02, animValue)!;
+
           return Transform.scale(
             scale: scale,
             child: Card(

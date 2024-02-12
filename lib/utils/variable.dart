@@ -176,7 +176,7 @@ final categoryOrders = {
   '스트레칭': 6,
 };
 
-final categoryIcons = {
+Map<String, IconData> categoryIcons = {
   "아침": Icons.light_mode_outlined,
   "점심": Icons.filter_drama_outlined,
   "저녁": Icons.dark_mode_outlined,

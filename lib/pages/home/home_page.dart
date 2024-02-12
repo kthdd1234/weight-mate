@@ -323,9 +323,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           : null;
     }
 
-    // weight mate - diet app
-    // weight record for dieting
-
     return AppFramework(
       widget: Scaffold(
         backgroundColor: Colors.transparent,
