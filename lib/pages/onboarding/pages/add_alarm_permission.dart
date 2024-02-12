@@ -1,4 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls, use_build_context_synchronously
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class AddAlarmPermission extends StatefulWidget {
@@ -116,7 +119,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
 
     onSwitchChanged(bool isEnabled) async {
       if (isEnabled) {
-        bool? isResult = await NotificationService().requestPermission();
+        bool isResult = await NotificationService().permissionNotification;
 
         if (isResult == false) {
           await showDialog(
@@ -125,7 +128,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           );
         }
 
-        setState(() => isWeightAlarm = isResult == true);
+        setState(() => isWeightAlarm = isResult);
       } else {
         setState(() => isWeightAlarm = false);
       }

@@ -63,7 +63,7 @@
   "체중 기록하기": "Record weight",
   "👏🏻 일째 기록 했어요!": "👏🏻 Recorded on day {days}!",
   "체중 데이터 저장 중...": "Saving weight data...",
-  "⛳ 목표 체중을 변경 했어요!": "⛳ Changed my target weight!",
+  "⛳ 목표 체중을 변경 했어요!": "⛳ Changed target weight!",
   "목표 체중 데이터 저장 중...": "Save Target Weight Data...",
   "히스토리": "History",
   "그래프": "Graph",
@@ -224,5 +224,9 @@
   "삭제 할 사진을 모두 선택해주세요.": "Please select all the pictures you want to delete.",
   "장 삭제하기": "Delete {length} photos",
   "취소하기": "Cancle",
-  "장의 사진을 삭제할까요?": "Should I delete {length} photos?"
+  "장의 사진을 삭제할까요?": "Should I delete {length} photos?",
+  "기록 모아보기": "Collection of records",
+  "식단 기록 모아보기": " Collection of diet records",
+  "운동 기록 모아보기": "Collection of exercise records",
+  "기록이 없어요.": "There is no record."
 }

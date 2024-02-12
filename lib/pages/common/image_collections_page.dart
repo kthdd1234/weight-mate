@@ -191,6 +191,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                     setState(() {
                       initClearState.isMode = false;
                       initClearState.selectionList = [];
+                      isRecent = true;
 
                       onInitList();
                     });

@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../utils/constants.dart';
 
 class TodoChartPage extends StatefulWidget {
@@ -37,10 +40,37 @@ class _TodoChartPageState extends State<TodoChartPage> {
       bool isSelectedMonth =
           (mToInt(record?.createDateTime) == selectedMonthKey);
       bool? isRecordAction = record?.actions?.any(
-        (item) => item['isRecord'] == true,
+        (item) => item['isRecord'] == true && item['type'] == type,
       );
 
       return isSelectedMonth && isRecordAction == true;
+    }
+
+    onTapMonthTitle() {
+      showDialog(
+        context: context,
+        builder: (context) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AlertDialog(
+              backgroundColor: dialogBackgroundColor,
+              shape: containerBorderRadious,
+              title: DialogTitle(
+                text: '월 선택',
+                onTap: () => closeDialog(context),
+              ),
+              content: DatePicker(
+                view: DateRangePickerView.year,
+                initialSelectedDate: selectedMonth,
+                onSelectionChanged: (datTimeArgs) {
+                  setState(() => selectedMonth = datTimeArgs.value);
+                  closeDialog(context);
+                },
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     List<RecordBox?> displayRecordList = recordList
@@ -67,7 +97,11 @@ class _TodoChartPageState extends State<TodoChartPage> {
             child: ContentsBox(
               contentsWidget: Column(
                 children: [
-                  RowTitle(type: type, selectedMonth: selectedMonth),
+                  RowTitle(
+                    type: type,
+                    selectedMonth: selectedMonth,
+                    onTap: onTapMonthTitle,
+                  ),
                   Divider(color: Colors.grey.shade200),
                   displayRecordList.isNotEmpty
                       ? Expanded(
@@ -81,12 +115,26 @@ class _TodoChartPageState extends State<TodoChartPage> {
                                 .toList(),
                           ),
                         )
-                      : EmptyTextVerticalArea(
-                          iconSize: 30,
-                          titleSize: 15,
-                          icon: Icons.local_dining_rounded,
-                          title: '기록한 식단이 없어요.',
-                          backgroundColor: Colors.transparent,
+                      : Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CommonIcon(
+                                icon: todoData[type]!.icon,
+                                size: 20,
+                                color: Colors.grey,
+                              ),
+                              SpaceHeight(height: 10),
+                              CommonText(
+                                text: '기록이 없어요.',
+                                size: 15,
+                                isCenter: true,
+                                color: Colors.grey,
+                              ),
+                              SpaceHeight(height: 20),
+                            ],
+                          ),
                         ),
                 ],
               ),
@@ -103,43 +151,58 @@ class RowTitle extends StatelessWidget {
     super.key,
     required this.type,
     required this.selectedMonth,
+    required this.onTap,
   });
 
   String type;
   DateTime selectedMonth;
+  Function() onTap;
 
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    MaterialColor color = categoryColors[type]!;
 
     return Row(
       children: [
         Expanded(
           flex: 0,
-          child: CommonText(
-            text: m(locale: locale, dateTime: selectedMonth),
-            size: 12,
-            isCenter: true,
-            rightIcon: Icons.keyboard_arrow_down_sharp,
+          child: InkWell(
+            onTap: onTap,
+            child: CommonText(
+              isNotTr: true,
+              text: m(locale: locale, dateTime: selectedMonth),
+              size: 12,
+              isCenter: true,
+              rightIcon: Icons.keyboard_arrow_down_sharp,
+            ),
           ),
         ),
         SpaceWidth(width: 10),
-        Expanded(
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: category[type]!
-                  .map((item) => Row(
-                        children: [
-                          SpaceWidth(width: 10),
-                          CommonText(
-                            leftIcon: item['icon'],
-                            text: item['title'],
-                            size: 12,
-                          ),
-                        ],
-                      ))
-                  .toList()),
-        ),
+        locale != 'en'
+            ? Expanded(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: category[type]!
+                        .map((item) => Row(
+                              children: [
+                                SpaceWidth(width: 10),
+                                CommonIcon(
+                                  icon: item['icon'],
+                                  size: 11,
+                                  color: color.shade300,
+                                  bgColor: color.shade50,
+                                ),
+                                SpaceWidth(width: 7),
+                                CommonText(
+                                  text: item['title'],
+                                  size: 12,
+                                ),
+                              ],
+                            ))
+                        .toList()),
+              )
+            : const EmptyArea(),
       ],
     );
   }
@@ -160,6 +223,24 @@ class ColumnContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    List<RecordLabel> recordActionList = actions
+            ?.where(
+                (item1) => item1['isRecord'] == true && item1['type'] == type)
+            .map((item2) => RecordLabel(
+                  title: item2['title'],
+                  text: item2['name'],
+                  icon: categoryIcons[item2['title']]!,
+                  type: type,
+                ))
+            .toList() ??
+        [];
+
+    recordActionList.sort((act1, act2) {
+      int order1 = categoryOrders[act1.title] ?? 0;
+      int order2 = categoryOrders[act2.title] ?? 0;
+
+      return order1.compareTo(order2);
+    });
 
     dateTimeTitle({required String text, required Color color}) {
       return CommonText(
@@ -171,13 +252,9 @@ class ColumnContainer extends StatelessWidget {
       );
     }
 
-    final recordActionList = actions
-            ?.where((item_1) =>
-                item_1['isRecord'] == true && item_1['type'] == type)
-            .map((item_2) => RecordLabel(
-                text: item_2['name'], icon: categoryIcons[item_2['title']]!))
-            .toList() ??
-        [];
+    if (recordActionList.isEmpty) {
+      return const EmptyArea();
+    }
 
     return Column(
       children: [
@@ -187,15 +264,20 @@ class ColumnContainer extends StatelessWidget {
           children: [
             Expanded(
               flex: 0,
-              child: Column(
-                children: [
-                  dateTimeTitle(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 5),
+                child: Column(
+                  children: [
+                    dateTimeTitle(
                       text: d(locale: locale, dateTime: dateTime),
-                      color: themeColor),
-                  dateTimeTitle(
+                      color: themeColor,
+                    ),
+                    dateTimeTitle(
                       text: '(${e_short(locale: locale, dateTime: dateTime)})',
-                      color: Colors.grey)
-                ],
+                      color: Colors.grey,
+                    )
+                  ],
+                ),
               ),
             ),
             SpaceWidth(width: 30),
@@ -209,26 +291,42 @@ class ColumnContainer extends StatelessWidget {
 }
 
 class RecordLabel extends StatelessWidget {
-  RecordLabel({super.key, required this.text, required this.icon});
+  RecordLabel({
+    super.key,
+    required this.title,
+    required this.text,
+    required this.icon,
+    required this.type,
+  });
 
-  String text;
+  String text, type, title;
   IconData icon;
 
   @override
   Widget build(BuildContext context) {
+    MaterialColor color = categoryColors[type]!;
+
     return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 2, right: 5),
-            child: CommonIcon(icon: icon, size: 11),
+            padding: EdgeInsets.only(right: 7),
+            child: CommonIcon(
+              icon: icon,
+              size: 11,
+              color: color.shade300,
+              bgColor: color.shade50,
+            ),
           ),
           Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 11),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(
+                text,
+                style: const TextStyle(fontSize: 11),
+              ),
             ),
           ),
         ],

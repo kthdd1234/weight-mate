@@ -106,6 +106,61 @@ class _EditWeightState extends State<EditWeight> {
       context.read<EnabledProvider>().setEnabled(!isInitText);
     }
 
+    onSaveWeight() {
+      if (isDoubleTryParse(text: textController.text)) {
+        DateTime now = DateTime.now();
+        double weight = stringToDouble(textController.text);
+
+        if (recordInfo == null) {
+          recordRepository.recordBox.put(
+            recordKey,
+            RecordBox(
+              createDateTime: importDateTime,
+              weightDateTime: now,
+              weight: stringToDouble(textController.text),
+            ),
+          );
+        } else {
+          recordInfo.weightDateTime = DateTime.now();
+          recordInfo.weight = weight;
+          recordRepository.recordBox.put(recordKey, recordInfo);
+        }
+
+        recordInfo?.save();
+
+        onInit();
+        closeDialog(context);
+
+        List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+        recordList.where((e) => e.weight != null);
+
+        showAdDialog(
+          title: '👏🏻 일째 기록 했어요!',
+          loadingText: '체중 데이터 저장 중...',
+          nameArgs: {'days': '${recordList.length}'},
+        );
+      }
+    }
+
+    onSaveGoalWeight() {
+      if (isDoubleTryParse(text: textController.text)) {
+        user.goalWeight = stringToDouble(textController.text);
+        user.save();
+
+        onInit();
+        closeDialog(context);
+        showAdDialog(
+          title: '⛳ 목표 체중을 변경 했어요!',
+          loadingText: '목표 체중 데이터 저장 중...',
+        );
+      }
+    }
+
+    onCancel() {
+      onInit();
+      closeDialog(context);
+    }
+
     onTapWeight() {
       setState(() {
         if (recordInfo?.weight != null) {
@@ -121,46 +176,8 @@ class _EditWeightState extends State<EditWeight> {
         context: context,
         builder: (context) {
           return WeightButtonBottmSheet(
-            onCompleted: () {
-              if (isDoubleTryParse(text: textController.text)) {
-                DateTime now = DateTime.now();
-                double weight = stringToDouble(textController.text);
-
-                if (recordInfo == null) {
-                  recordRepository.recordBox.put(
-                    recordKey,
-                    RecordBox(
-                      createDateTime: importDateTime,
-                      weightDateTime: now,
-                      weight: stringToDouble(textController.text),
-                    ),
-                  );
-                } else {
-                  recordInfo.weightDateTime = DateTime.now();
-                  recordInfo.weight = weight;
-                  recordRepository.recordBox.put(recordKey, recordInfo);
-                }
-
-                recordInfo?.save();
-
-                onInit();
-                closeDialog(context);
-
-                List<RecordBox> recordList =
-                    recordRepository.recordBox.values.toList();
-                recordList.where((e) => e.weight != null);
-
-                showAdDialog(
-                  title: '👏🏻 일째 기록 했어요!',
-                  loadingText: '체중 데이터 저장 중...',
-                  nameArgs: {'days': '${recordList.length}'},
-                );
-              }
-            },
-            onCancel: () {
-              onInit();
-              closeDialog(context);
-            },
+            onCompleted: onSaveWeight,
+            onCancel: onCancel,
           );
         },
       ).whenComplete(() => onInit());
@@ -179,23 +196,8 @@ class _EditWeightState extends State<EditWeight> {
         context: context,
         builder: (context) {
           return WeightButtonBottmSheet(
-            onCompleted: () {
-              if (isDoubleTryParse(text: textController.text)) {
-                user.goalWeight = stringToDouble(textController.text);
-                user.save();
-
-                onInit();
-                closeDialog(context);
-                showAdDialog(
-                  title: '⛳ 목표 체중을 변경 했어요!',
-                  loadingText: '목표 체중 데이터 저장 중...',
-                );
-              }
-            },
-            onCancel: () {
-              onInit();
-              closeDialog(context);
-            },
+            onCompleted: onSaveGoalWeight,
+            onCancel: onCancel,
           );
         },
       ).whenComplete(() => onInit());
@@ -282,6 +284,8 @@ class _EditWeightState extends State<EditWeight> {
                             helperText: helperText(),
                           ),
                           onChanged: onChangedText,
+                          onEditingComplete:
+                              isGoalWeight ? onSaveGoalWeight : onSaveWeight,
                         )
                       : recordInfo?.weight != null
                           ? WeeklyWeightGraph(

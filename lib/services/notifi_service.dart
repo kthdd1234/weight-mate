@@ -117,9 +117,16 @@ class NotificationService {
         ?.requestPermissions(alert: true, badge: true, sound: true);
   }
 
+  Future<bool?> requestAndroidPermission() async {
+    return notification
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()
+        ?.requestNotificationsPermission();
+  }
+
   Future<bool> get permissionNotification async {
     if (Platform.isAndroid) {
-      return true;
+      return await requestAndroidPermission() ?? false;
     } else if (Platform.isIOS) {
       return await requestPermission() ?? false;
     }

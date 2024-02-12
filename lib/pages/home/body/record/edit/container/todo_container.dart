@@ -1268,13 +1268,6 @@ class GoalList extends StatelessWidget {
           )
           .toList(),
     );
-
-    // ReorderableListView(
-    //   shrinkWrap: true,
-    //   proxyDecorator: proxyDecorator,
-    //   onReorder: onReorder,
-    //   children: List.generate(planList.length, (int index) => item(index)),
-    // );
   }
 }
 
@@ -1756,8 +1749,6 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
     onCompleted() {
       if (isEnabled) {
         int alarmId = widget.planInfo?.alarmId ?? UniqueKey().hashCode;
-
-        // String title = widget.title.tr();
 
         NotificationService().addNotification(
           id: alarmId,

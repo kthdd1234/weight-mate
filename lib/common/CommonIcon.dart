@@ -8,17 +8,26 @@ class CommonIcon extends StatelessWidget {
     required this.size,
     this.onTap,
     this.color,
+    this.bgColor,
   });
 
   IconData icon;
   double size;
-  Color? color;
+  Color? color, bgColor;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: onTap,
-        child: Icon(icon, size: size, color: color ?? themeColor));
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.all(bgColor != null ? 3 : 0),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(bgColor != null ? 5 : 0),
+        ),
+        child: Icon(icon, size: size, color: color ?? themeColor),
+      ),
+    );
   }
 }
