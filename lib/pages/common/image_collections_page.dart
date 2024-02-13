@@ -116,6 +116,15 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
     }
 
     onTapInitClear(bool isValue) {
+      if (fileItemList.isEmpty) {
+        return showSnackBar(
+          context: context,
+          text: '사진이 없어요.',
+          buttonName: '확인',
+          width: 230,
+        );
+      }
+
       setState(() {
         if (isValue == false) {
           initClearState.isMode = false;
