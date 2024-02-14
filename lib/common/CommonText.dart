@@ -21,6 +21,7 @@ class CommonText extends StatelessWidget {
     this.decoColor,
     this.isNotTr,
     this.nameArgs,
+    this.iconSize,
   });
 
   String text;
@@ -33,6 +34,7 @@ class CommonText extends StatelessWidget {
   bool? isNotTop, isNotTr;
   bool? isWidth;
   Map<String, String>? nameArgs;
+  double? iconSize;
   Function()? onTap;
 
   @override
@@ -51,7 +53,7 @@ class CommonText extends StatelessWidget {
         children: [
           leftIcon != null
               ? Row(children: [
-                  Icon(leftIcon, size: size + 1, color: color),
+                  Icon(leftIcon, size: iconSize ?? size + 1, color: color),
                   SpaceWidth(width: tinySpace)
                 ])
               : const EmptyArea(),
@@ -74,7 +76,7 @@ class CommonText extends StatelessWidget {
           rightIcon != null
               ? Row(children: [
                   SpaceWidth(width: 3),
-                  Icon(rightIcon, size: size + 3, color: color),
+                  Icon(rightIcon, size: iconSize ?? size + 3, color: color),
                 ])
               : const EmptyArea()
         ],

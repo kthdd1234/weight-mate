@@ -228,6 +228,10 @@ class _EditWeightState extends State<EditWeight> {
           : null;
     }
 
+    onTapWeightChart() {
+      Navigator.pushNamed(context, '/weight-chart-page');
+    }
+
     return Column(
       children: [
         ContentsBox(
@@ -248,6 +252,11 @@ class _EditWeightState extends State<EditWeight> {
                     isHide: isOpen,
                     onTap: onTapOpen,
                   ),
+                  TagClass(
+                      text: '통계표 보기',
+                      color: 'indigo',
+                      isHide: !isOpen,
+                      onTap: onTapWeightChart),
                   TagClass(
                     text: 'BMI',
                     nameArgs: {

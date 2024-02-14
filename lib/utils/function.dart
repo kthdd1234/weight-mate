@@ -98,6 +98,17 @@ int getDateTimeToInt(DateTime? dateTime) {
   return int.parse(strDateTime);
 }
 
+yToInt(DateTime? dateTime) {
+  if (dateTime == null) {
+    return 0;
+  }
+
+  DateFormat formatter = DateFormat('yyyy');
+  String strDateTime = formatter.format(dateTime);
+
+  return int.parse(strDateTime);
+}
+
 mToInt(DateTime? dateTime) {
   if (dateTime == null) {
     return 0;
@@ -298,11 +309,15 @@ hm({required String locale, required DateTime dateTime}) {
 }
 
 m_d({required String locale, required DateTime dateTime}) {
-  if (locale == 'ko_KR') {
+  if (locale == 'ko') {
     return DateFormat('M.d', 'ko').format(dateTime);
   }
 
   return DateFormat.Md(locale).format(dateTime);
+}
+
+ymdShort({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMd(locale).format(dateTime);
 }
 
 dateTimeFormatter({required String format, required DateTime dateTime}) {
