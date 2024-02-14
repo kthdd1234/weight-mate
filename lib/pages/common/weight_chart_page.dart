@@ -32,7 +32,7 @@ class _WeightChartPageState extends State<WeightChartPage> {
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
     String? weightUnit = user.weightUnit;
-    List<String> columnTitles = ['기록 날짜', '체중($weightUnit)', '이전과 비교'];
+    List<String> columnTitles = ['기록 날짜', '체중()', '이전과 비교'];
 
     onTapYear() {
       showDialog(
@@ -94,7 +94,11 @@ class _WeightChartPageState extends State<WeightChartPage> {
                 children: [
                   Row(
                     children: columnTitles
-                        .map((title) => RowTitles(title: title))
+                        .map((title) => RowTitles(
+                            title: title,
+                            nameArgs: title == '체중()'
+                                ? {'unit': '$weightUnit'}
+                                : null))
                         .toList(),
                   ),
                   ColumnItemList(
@@ -113,16 +117,17 @@ class _WeightChartPageState extends State<WeightChartPage> {
 }
 
 class RowTitles extends StatelessWidget {
-  RowTitles({super.key, required this.title});
+  RowTitles({super.key, required this.title, this.nameArgs});
 
   String title;
+  Map<String, String>? nameArgs;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: Column(
         children: [
-          CommonText(text: title, size: 13, isCenter: true),
+          CommonText(text: title, size: 13, isCenter: true, nameArgs: nameArgs),
           Divider(color: Colors.grey.shade200),
         ],
       ),

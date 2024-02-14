@@ -228,5 +228,10 @@
   "기록 모아보기": "Collection of records",
   "식단 기록 모아보기": " Collection of diet records",
   "운동 기록 모아보기": "Collection of exercise records",
-  "기록이 없어요.": "There is no record."
+  "기록이 없어요.": "There is no record.",
+  "통계표 보기": "View Statistics",
+  "체중 통계표": "Weight Statistics Table",
+  "기록 날짜": "Record Date",
+  "체중()": "Weight({unit})",
+  "이전과 비교": "Compare"
 }

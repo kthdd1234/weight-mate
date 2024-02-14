@@ -1798,7 +1798,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
           ? AlarmContainer(
               icon: widget.icon,
               title: '실천 알림',
-              nameArgs: {'type': widget.title},
+              nameArgs: {'type': widget.title.tr()},
               desc: '매일 실천 알림을 드려요.',
               isEnabled: isEnabled,
               alarmTime: alarmTime,
