@@ -85,6 +85,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? language = user.language;
     String? weightUnit = user.weightUnit;
     String? tallUnit = user.tallUnit;
+    bool? isShowPreviousGraph = user.isShowPreviousGraph;
 
     List<PlanBox> planList = planRepository.planBox.values.toList();
 
@@ -158,6 +159,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (weightUnit == null) {
       user.weightUnit = 'kg';
+    }
+
+    if (isShowPreviousGraph == null) {
+      user.isShowPreviousGraph = false;
     }
 
     userRepository.user.save();

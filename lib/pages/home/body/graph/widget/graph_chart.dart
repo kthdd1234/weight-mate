@@ -1,5 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_app_weight_management/common/CommonTag.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
@@ -40,12 +46,13 @@ class GraphChart extends StatefulWidget {
 }
 
 class _GraphChartState extends State<GraphChart> {
-  double? weightMinimum, weightMaximum, actionMinimum, actionMaximum;
+  double? weightMinimum, weightMaximum;
   List<RecordBox?> recordInfoList = [];
 
   @override
   Widget build(BuildContext context) {
-    final userProfile = widget.userBox.get('userProfile');
+    final user = userRepository.user;
+    final isShowPreviousGraph = user.isShowPreviousGraph ?? false;
     final plotBandList = <PlotBand>[
       PlotBand(
         borderWidth: 1.0,
@@ -53,13 +60,13 @@ class _GraphChartState extends State<GraphChart> {
         isVisible: true,
         text: '목표 체중: '.tr(
           namedArgs: {
-            "weight": '${userProfile!.goalWeight}',
-            'unit': '${userProfile.weightUnit}'
+            "weight": '${user.goalWeight}',
+            'unit': '${user.weightUnit}'
           },
         ),
         textStyle: const TextStyle(color: disabledButtonTextColor),
-        start: userProfile.goalWeight,
-        end: userProfile.goalWeight,
+        start: user.goalWeight,
+        end: user.goalWeight,
         dashArray: const <double>[4, 5],
       )
     ];
@@ -69,17 +76,31 @@ class _GraphChartState extends State<GraphChart> {
       return widget.recordBox.get(getDateTimeToInt(datatime));
     }
 
-    List<GraphData> setLineSeriesDateTime({
-      required int count,
-      required String format,
-    }) {
-      List<GraphData> lineSeriesData = [];
+    lange() {
+      if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
+        int days = daysBetween(
+          startDateTime: widget.startDateTime,
+          endDateTime: widget.endDateTime,
+        );
+
+        return days;
+      }
+
+      return countInfo[widget.selectedDateTimeSegment]!;
+    }
+
+    onSeriesDateTime({required DateTime endPoint}) {
+      List<GraphData> seriesData = [];
       List<double> weightList = [];
+
+      int count = lange();
+      String format =
+          widget.selectedDateTimeSegment == SegmentedTypes.week ? 'd' : 'md';
 
       for (var i = 0; i <= count; i++) {
         DateTime subtractDateTime = jumpDayDateTime(
           type: jumpDayTypeEnum.subtract,
-          dateTime: widget.endDateTime,
+          dateTime: endPoint,
           days: i,
         );
         RecordBox? recordInfo = getRecordInfo(subtractDateTime);
@@ -92,7 +113,25 @@ class _GraphChartState extends State<GraphChart> {
           weightList.add(recordInfo!.weight!);
         }
 
-        lineSeriesData.add(chartData);
+        seriesData.add(chartData);
+      }
+
+      return [seriesData, weightList];
+    }
+
+    fastLineSeries() {
+      final seriesData = onSeriesDateTime(endPoint: widget.endDateTime);
+      final fastLineSeriesData = seriesData[0] as List<GraphData>;
+      final weightList = seriesData[1] as List<double>;
+
+      if (isShowPreviousGraph == true) {
+        final beforeSeriesData =
+            onSeriesDateTime(endPoint: widget.startDateTime);
+        final beforeFastLineSeriesData = beforeSeriesData[0] as List<GraphData>;
+        final beforeWeightList = beforeSeriesData[1] as List<double>;
+
+        fastLineSeriesData.addAll(beforeFastLineSeriesData);
+        weightList.addAll(beforeWeightList);
       }
 
       setState(() {
@@ -105,36 +144,13 @@ class _GraphChartState extends State<GraphChart> {
         }
       });
 
-      return lineSeriesData.reversed.toList();
+      return fastLineSeriesData.reversed.toList();
     }
 
-    setCount() {
-      if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-        int days = daysBetween(
-          startDateTime: widget.startDateTime,
-          endDateTime: widget.endDateTime,
-        );
-
-        return days;
-      }
-
-      return countInfo[widget.selectedDateTimeSegment];
-    }
-
-    List<GraphData> setLineSeriesData() {
-      List<GraphData> lineSeriesData = setLineSeriesDateTime(
-        count: setCount()!,
-        format:
-            widget.selectedDateTimeSegment == SegmentedTypes.week ? 'd' : 'md',
-      );
-
-      return lineSeriesData;
-    }
-
-    setLineSeries() {
+    setFastLineSeries() {
       return FastLineSeries(
         emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
-        dataSource: setLineSeriesData(),
+        dataSource: fastLineSeries(),
         color: Colors.indigo.shade200,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.y,
@@ -142,7 +158,6 @@ class _GraphChartState extends State<GraphChart> {
           isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
         ),
         dataLabelSettings: DataLabelSettings(
-          showZeroValue: false,
           isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
           useSeriesColor: true,
           textStyle: const TextStyle(
@@ -153,7 +168,7 @@ class _GraphChartState extends State<GraphChart> {
       );
     }
 
-    setLineSeriesData();
+    fastLineSeries();
 
     onPlotAreaSwipe(ChartSwipeDirection direction) {
       setState(() {
@@ -171,7 +186,26 @@ class _GraphChartState extends State<GraphChart> {
       });
     }
 
-    String titleDateTime = '${md(
+    onTapShowPreviousGraph() async {
+      user.isShowPreviousGraph = !isShowPreviousGraph;
+
+      await user.save();
+      setState(() {});
+    }
+
+    String bDataTime = '${md(
+      locale: locale,
+      dateTime: jumpDayDateTime(
+        type: jumpDayTypeEnum.subtract,
+        dateTime: widget.startDateTime,
+        days: lange(),
+      ),
+    )} ~ ${md(
+      locale: locale,
+      dateTime: widget.startDateTime,
+    )}';
+
+    String cDateTime = '${md(
       locale: locale,
       dateTime: widget.startDateTime,
     )} ~ ${md(
@@ -182,29 +216,51 @@ class _GraphChartState extends State<GraphChart> {
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: SfCartesianChart(
-          legend: const Legend(
-            position: LegendPosition.top,
-            alignment: ChartAlignment.center,
-          ),
-          title: ChartTitle(
-            text: titleDateTime,
-            alignment: ChartAlignment.far,
-            textStyle: const TextStyle(fontSize: 10),
-          ),
-          tooltipBehavior: TooltipBehavior(
-            header: '',
-            enable: true,
-            format: 'point.x: point.y${userProfile.weightUnit}',
-          ),
-          primaryXAxis: CategoryAxis(),
-          primaryYAxis: NumericAxis(
-            minimum: weightMinimum,
-            maximum: weightMaximum,
-            plotBands: plotBandList,
-          ),
-          series: [setLineSeries()],
-          onPlotAreaSwipe: onPlotAreaSwipe,
+        child: Column(
+          children: [
+            SpaceHeight(height: 5),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CommonTag(
+                    color: isShowPreviousGraph ? 'whiteIndigo' : 'whiteGrey',
+                    text: isShowPreviousGraph ? bDataTime : '이전 기간 그래프 표시하기',
+                    isNotTr: isShowPreviousGraph,
+                    onTap: onTapShowPreviousGraph,
+                  ),
+                  SpaceWidth(width: 5),
+                  CommonTag(
+                    color: 'whiteIndigo',
+                    text: cDateTime,
+                    isNotTr: true,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: SfCartesianChart(
+                legend: const Legend(
+                  position: LegendPosition.top,
+                  alignment: ChartAlignment.center,
+                ),
+                tooltipBehavior: TooltipBehavior(
+                  header: '',
+                  enable: true,
+                  format: 'point.x: point.y${user.weightUnit}',
+                ),
+                primaryXAxis: CategoryAxis(),
+                primaryYAxis: NumericAxis(
+                  minimum: weightMinimum,
+                  maximum: weightMaximum,
+                  plotBands: plotBandList,
+                ),
+                series: [setFastLineSeries()],
+                onPlotAreaSwipe: onPlotAreaSwipe,
+              ),
+            ),
+          ],
         ),
       ),
     );

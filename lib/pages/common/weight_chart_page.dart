@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
@@ -188,7 +187,9 @@ class ColumnItemList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<RecordBox> recordList = recordRepository.recordBox.values.toList();
-    List<RecordBox> yearList = recordList
+    List<RecordBox> weightList =
+        recordList.where((item) => item.weight != null).toList();
+    List<RecordBox> yearList = weightList
         .where(
             (record) => yToInt(record.createDateTime) == yToInt(selectedYear))
         .toList();

@@ -25,6 +25,7 @@ class UserBox extends HiveObject {
     this.language,
     this.tallUnit,
     this.weightUnit,
+    this.isShowPreviousGraph,
   });
 
   @HiveField(0)
@@ -83,6 +84,9 @@ class UserBox extends HiveObject {
 
   @HiveField(18)
   String? tallUnit;
+
+  @HiveField(19)
+  bool? isShowPreviousGraph;
 
   @override
   String toString() {

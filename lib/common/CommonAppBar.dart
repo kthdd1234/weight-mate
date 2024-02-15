@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
@@ -113,6 +114,7 @@ class CommonTitle extends StatelessWidget {
 
     bool isRecord = index == 0;
     bool isHistory = index == 1;
+    bool isGraph = index == 2;
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -206,7 +208,9 @@ class CommonTitle extends StatelessWidget {
     ];
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: isGraph
+          ? EdgeInsets.fromLTRB(25, 0, 20, 0)
+          : EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         children: [
           // index != 3
@@ -568,3 +572,22 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
     );
   }
 }
+// Column(
+//                           children: [
+//                             Transform.scale(
+//                               scale: 0.8,
+//                               child: CupertinoSwitch(
+//                                 value: true,
+//                                 onChanged: (bool value) {
+//                                   //
+//                                 },
+//                               ),
+//                             ),
+//                             CommonText(
+//                               text: '이전 기간',
+//                               size: 10,
+//                               color: themeColor,
+//                               isBold: true,
+//                             ),
+//                           ],
+//                         )
