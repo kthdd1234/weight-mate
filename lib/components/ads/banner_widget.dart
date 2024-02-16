@@ -1,6 +1,10 @@
+import 'dart:developer';
+
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -16,7 +20,7 @@ class BannerWidget extends StatefulWidget {
 class _BannerWidgetState extends State<BannerWidget> {
   BannerAd? bannerAd;
   bool bannerAdIsLoaded = false;
-  bool isNoAdShow = false;
+  bool isNotAdShow = false;
 
   @override
   void dispose() {
@@ -26,35 +30,49 @@ class _BannerWidgetState extends State<BannerWidget> {
 
   @override
   void didChangeDependencies() {
-    super.didChangeDependencies();
-
     AdsService adsState = Provider.of<AdsProvider>(context).adsState;
-    adsState.initialization.then(
-      (value) => {
-        setState(() {
-          bannerAd = BannerAd(
-            adUnitId: adsState.bannerAdUnitId,
-            size: AdSize.banner,
-            request: const AdRequest(),
-            listener: BannerAdListener(
-              onAdLoaded: (ad) {
-                debugPrint('$NativeAd loaded.');
-                setState(() => bannerAdIsLoaded = true);
-              },
-              onAdFailedToLoad: (ad, error) {
-                debugPrint('$NativeAd failed to load: $error');
-                setState(() => isNoAdShow = true);
-                ad.dispose();
-              },
-            ),
-          )..load();
-        })
-      },
-    );
+
+    checkHideAd() async {
+      bool isHide = await isHideAd();
+
+      setState(() => isNotAdShow = isHide);
+
+      if (isHide == false) {
+        adsState.initialization.then(
+          (value) => {
+            setState(() {
+              bannerAd = BannerAd(
+                adUnitId: adsState.bannerAdUnitId,
+                size: AdSize.banner,
+                request: const AdRequest(),
+                listener: BannerAdListener(
+                  onAdLoaded: (ad) {
+                    debugPrint('$NativeAd loaded.');
+                    setState(() => bannerAdIsLoaded = true);
+                  },
+                  onAdFailedToLoad: (ad, error) {
+                    debugPrint('$NativeAd failed to load: $error');
+                    ad.dispose();
+                  },
+                ),
+              )..load();
+            })
+          },
+        );
+      }
+    }
+
+    checkHideAd();
+
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isNotAdShow) {
+      return SpaceHeight(height: 10);
+    }
+
     if (bannerAdIsLoaded == false) {
       return Padding(
         padding: EdgeInsets.only(top: 5),
@@ -76,4 +94,20 @@ class _BannerWidgetState extends State<BannerWidget> {
       child: SizedBox(height: 50, child: AdWidget(ad: bannerAd!)),
     );
   }
+}
+
+Future<bool> isHideAd() async {
+  TrackingStatus status =
+      await AppTrackingTransparency.trackingAuthorizationStatus;
+
+  if (status == TrackingStatus.authorized) {
+    String advertisingId =
+        await AppTrackingTransparency.getAdvertisingIdentifier();
+
+    if (advertisingId == '5E188ADD-3D54-4140-97F7-AA5FAA0AD3B2') {
+      return true;
+    }
+  }
+
+  return false;
 }

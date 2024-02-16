@@ -367,3 +367,23 @@ double kgMax = 250;
 
 // lbMax
 double lbMax = 550;
+
+List<DayColorClass> dayColors = [
+  DayColorClass(type: "일", color: Colors.red.shade300),
+  DayColorClass(type: "월", color: Colors.orange.shade300),
+  DayColorClass(type: "화", color: Colors.yellow.shade300),
+  DayColorClass(type: "수", color: Colors.green.shade300),
+  DayColorClass(type: "목", color: Colors.blue.shade300),
+  DayColorClass(type: "금", color: Colors.indigo.shade300),
+  DayColorClass(type: "토", color: Colors.purple.shade300),
+];
+
+Map<int, Color> targetColors = {
+  7: Colors.red.shade300,
+  1: Colors.orange.shade300,
+  2: Colors.yellow.shade300,
+  3: Colors.green.shade300,
+  4: Colors.blue.shade300,
+  5: Colors.indigo.shade300,
+  6: Colors.purple.shade300,
+};

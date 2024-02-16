@@ -5,7 +5,6 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -85,7 +84,7 @@ class _TodoChartPageState extends State<TodoChartPage> {
         appBar: AppBar(
           title: Text(
             '$title 기록 모아보기'.tr(),
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(fontSize: 20, color: themeColor),
           ),
           backgroundColor: Colors.transparent,
           foregroundColor: themeColor,

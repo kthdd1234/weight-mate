@@ -22,6 +22,7 @@ class CommonText extends StatelessWidget {
     this.isNotTr,
     this.nameArgs,
     this.iconSize,
+    this.iconColor,
   });
 
   String text;
@@ -29,7 +30,7 @@ class CommonText extends StatelessWidget {
   bool? isCenter;
   bool? isBold;
   IconData? leftIcon, rightIcon;
-  Color? color, decoColor;
+  Color? color, decoColor, iconColor;
   String? decoration;
   bool? isNotTop, isNotTr;
   bool? isWidth;
@@ -53,7 +54,8 @@ class CommonText extends StatelessWidget {
         children: [
           leftIcon != null
               ? Row(children: [
-                  Icon(leftIcon, size: iconSize ?? size + 1, color: color),
+                  Icon(leftIcon,
+                      size: iconSize ?? size + 1, color: iconColor ?? color),
                   SpaceWidth(width: tinySpace)
                 ])
               : const EmptyArea(),

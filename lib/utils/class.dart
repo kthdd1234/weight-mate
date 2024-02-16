@@ -303,13 +303,9 @@ class TodoDataClass {
   IconData icon;
 }
 
-// class ColumnObjClass {
-//   ColumnObjClass({
-//     required this.wDateTime,
-//     required this.wAmountOfChange,
-//     required this.wWeight,
-//     required this.wRecordDateTime,
-//   });
+class DayColorClass {
+  DayColorClass({required this.type, required this.color});
 
-//   Widget wDateTime, wAmountOfChange, wWeight, wRecordDateTime;
-// }
+  String type;
+  Color color;
+}

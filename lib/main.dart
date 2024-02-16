@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
+import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
@@ -172,7 +173,8 @@ class _MyAppState extends State<MyApp> {
         '/body-unit-page': (context) => const BodyUnitPage(),
         '/body-info-page': (context) => const BodyInfoPage(),
         '/todo-chart-page': (context) => const TodoChartPage(),
-        '/weight-chart-page': (context) => const WeightChartPage()
+        '/weight-chart-page': (context) => const WeightChartPage(),
+        '/goal-chart-page': (context) => const GoalChartPage(),
       },
     );
   }

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonButton.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -33,33 +36,45 @@ class NativeAdDialog extends StatefulWidget {
 class _NativeAdDialogState extends State<NativeAdDialog> {
   NativeAd? nativeAd;
   bool isLoaded = false;
+  bool isNotAdShow = false;
 
   @override
   void didChangeDependencies() {
     final adsState = Provider.of<AdsProvider>(context).adsState;
 
-    onLoaded() {
-      setState(() => isLoaded = true);
+    checkHideAd() async {
+      bool isHide = await isHideAd();
+
+      setState(() => isNotAdShow = isHide);
+
+      if (isHide == false) {
+        nativeAd = loadNativeAd(
+          adUnitId: adsState.nativeAdUnitId,
+          onAdLoaded: () {
+            setState(() => isLoaded = true);
+          },
+          onAdFailedToLoad: () {
+            setState(() {
+              nativeAd = null;
+              isLoaded = true;
+            });
+          },
+        );
+      }
     }
 
-    onAdFailedToLoad() {
-      setState(() {
-        nativeAd = null;
-        isLoaded = true;
-      });
-    }
-
-    nativeAd = loadNativeAd(
-      adUnitId: adsState.nativeAdUnitId,
-      onAdLoaded: onLoaded,
-      onAdFailedToLoad: onAdFailedToLoad,
-    );
+    checkHideAd();
 
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isNotAdShow) {
+      closeDialog(context);
+      return const EmptyArea();
+    }
+
     return isLoaded
         ? AlertDialog(
             insetPadding: const EdgeInsets.symmetric(horizontal: 30),

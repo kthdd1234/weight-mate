@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
@@ -593,32 +594,44 @@ class NativeAdContainer extends StatefulWidget {
 class _NativeAdContainerState extends State<NativeAdContainer> {
   NativeAd? nativeAd;
   bool isLoaded = false;
+  bool isNotAdShow = false;
 
   @override
   void didChangeDependencies() {
     final adsState = Provider.of<AdsProvider>(context).adsState;
 
-    onLoaded() {
-      setState(() => isLoaded = true);
+    checkHideAd() async {
+      bool isHide = await isHideAd();
+
+      setState(() => isNotAdShow = isHide);
+
+      if (isHide == false) {
+        nativeAd = loadNativeAd(
+          adUnitId: adsState.nativeAdUnitId,
+          onAdLoaded: () {
+            setState(() => isLoaded = true);
+          },
+          onAdFailedToLoad: () {
+            setState(() {
+              isLoaded = false;
+              nativeAd = null;
+            });
+          },
+        );
+      }
     }
 
-    onAdFailedToLoad() {
-      setState(() {
-        isLoaded = false;
-        nativeAd = null;
-      });
-    }
+    checkHideAd();
 
-    nativeAd = loadNativeAd(
-      adUnitId: adsState.nativeAdUnitId,
-      onAdLoaded: onLoaded,
-      onAdFailedToLoad: onAdFailedToLoad,
-    );
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isNotAdShow) {
+      return const Row(children: []);
+    }
+
     return Column(
       children: [
         CommonText(text: '광고', size: 12, isBold: true),

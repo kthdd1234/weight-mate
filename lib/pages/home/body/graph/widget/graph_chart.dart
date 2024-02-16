@@ -226,7 +226,7 @@ class _GraphChartState extends State<GraphChart> {
                 children: [
                   CommonTag(
                     color: isShowPreviousGraph ? 'whiteIndigo' : 'whiteGrey',
-                    text: isShowPreviousGraph ? bDataTime : '이전 기간 그래프 표시하기',
+                    text: isShowPreviousGraph ? bDataTime : '이전 기간 표시하기',
                     isNotTr: isShowPreviousGraph,
                     onTap: onTapShowPreviousGraph,
                   ),

@@ -609,3 +609,20 @@ bool isShowErorr({required String unit, required double? value}) {
       return true;
   }
 }
+
+weeklyStartDateTime(DateTime dateTime) {
+  if (dateTime.weekday == 7) {
+    return dateTime;
+  }
+
+  return dateTime.subtract(Duration(days: dateTime.weekday));
+}
+
+weeklyEndDateTime(DateTime dateTime) {
+  if (dateTime.weekday == 7) {
+    return dateTime.add(const Duration(days: 6));
+  }
+
+  return dateTime
+      .add(Duration(days: DateTime.daysPerWeek - dateTime.weekday - 1));
+}

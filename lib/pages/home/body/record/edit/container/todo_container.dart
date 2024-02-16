@@ -356,10 +356,18 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
       return widget.isOpen == false ? true : selectedSegment == hideType;
     }
 
-    onTapCollection() async {
+    onTapRecordCollection() async {
       await Navigator.pushNamed(
         context,
         '/todo-chart-page',
+        arguments: {'type': widget.type, 'title': widget.title},
+      );
+    }
+
+    onTapGoalCollection() async {
+      await Navigator.pushNamed(
+        context,
+        '/goal-chart-page',
         arguments: {'type': widget.type, 'title': widget.title},
       );
     }
@@ -369,7 +377,13 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         text: '기록 모아보기',
         color: widget.colorName,
         isHide: onHide(SegmentedTypes.goal),
-        onTap: onTapCollection,
+        onTap: onTapRecordCollection,
+      ),
+      TagClass(
+        text: '체크표 보기',
+        color: widget.colorName,
+        isHide: onHide(SegmentedTypes.record),
+        onTap: onTapGoalCollection,
       ),
       TagClass(
         text: '순서 변경',

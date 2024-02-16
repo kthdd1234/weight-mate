@@ -68,9 +68,9 @@ class _WeightChartPageState extends State<WeightChartPage> {
       widget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('체중 통계표'.tr(), style: const TextStyle(fontSize: 20)),
+          title: Text('체중 통계표'.tr(),
+              style: const TextStyle(fontSize: 20, color: themeColor)),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
           centerTitle: false,
           elevation: 0.0,
           actions: [
