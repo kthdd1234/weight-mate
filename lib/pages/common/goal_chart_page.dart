@@ -6,15 +6,20 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_range_dialog.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/components/picker/custom_date_range_picker.dart';
+import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class GoalChartPage extends StatefulWidget {
   const GoalChartPage({super.key});
@@ -24,17 +29,84 @@ class GoalChartPage extends StatefulWidget {
 }
 
 class _GoalChartPageState extends State<GoalChartPage> {
-  DateTime startDateTime = weeklyStartDateTime(DateTime.now());
-  DateTime endDateTime = weeklyEndDateTime(DateTime.now());
+  SegmentedTypes selectedSegment = SegmentedTypes.week;
 
   @override
   Widget build(BuildContext context) {
-    String locale = context.locale.toString();
     Map<String, String> args =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>;
     String type = args['type']!;
     String title = args['title']!;
 
+    Map<SegmentedTypes, Widget> segmentedChildren = {
+      SegmentedTypes.week: onSegmentedWidget(
+        title: '일주일',
+        type: SegmentedTypes.week,
+        selected: selectedSegment,
+      ),
+      SegmentedTypes.month: onSegmentedWidget(
+        title: '한달',
+        type: SegmentedTypes.month,
+        selected: selectedSegment,
+      ),
+    };
+
+    onSegmentedChanged(SegmentedTypes? type) {
+      setState(() => selectedSegment = type!);
+    }
+
+    return AppFramework(
+      widget: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(
+            '$title 실천표'.tr(),
+            style: const TextStyle(fontSize: 20, color: themeColor),
+          ),
+          backgroundColor: Colors.transparent,
+          centerTitle: false,
+          elevation: 0.0,
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 7),
+                  child: DefaultSegmented(
+                    selectedSegment: selectedSegment,
+                    children: segmentedChildren,
+                    onSegmentedChanged: onSegmentedChanged,
+                  ),
+                ),
+                selectedSegment == SegmentedTypes.week
+                    ? GoalWeeklyContainer(type: type)
+                    : GoalMonthlyContainer()
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class GoalWeeklyContainer extends StatefulWidget {
+  GoalWeeklyContainer({super.key, required this.type});
+
+  String type;
+
+  @override
+  State<GoalWeeklyContainer> createState() => _GoalWeeklyContainerState();
+}
+
+class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
+  DateTime startDateTime = weeklyStartDateTime(DateTime.now());
+  DateTime endDateTime = weeklyEndDateTime(DateTime.now());
+
+  @override
+  Widget build(BuildContext context) {
     onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
       DateTime rangeStartDate = args.value.startDate;
       DateTime sDateTime = weeklyStartDateTime(rangeStartDate);
@@ -48,14 +120,6 @@ class _GoalChartPageState extends State<GoalChartPage> {
       closeDialog(context);
     }
 
-    onSubmit(Object? obj) {
-      //
-    }
-
-    onCancel() {
-      //
-    }
-
     onTapWeeklyDateTime() {
       showDialog(
         context: context,
@@ -63,48 +127,151 @@ class _GoalChartPageState extends State<GoalChartPage> {
           title: '주 선택',
           startAndEndDateTime: [startDateTime, endDateTime],
           onSelectionChanged: onSelectionChanged,
-          onSubmit: onSubmit,
-          onCancel: onCancel,
         ),
       );
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            '$title 체크표'.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
-          ),
-          backgroundColor: Colors.transparent,
-          centerTitle: false,
-          elevation: 0.0,
-          actions: [
-            CommonTag(
-              text:
-                  '${mde(locale: locale, dateTime: startDateTime)} ~ ${mde(locale: locale, dateTime: endDateTime)}',
-              color: 'whiteIndigo',
-              isNotTr: true,
-              onTap: onTapWeeklyDateTime,
+    return Expanded(
+      child: ContentsBox(
+        contentsWidget: Column(
+          children: [
+            const RowColors(),
+            DateTimeTag(
+              startDateTime: startDateTime,
+              endDateTime: endDateTime,
+              onTapWeeklyDateTime: onTapWeeklyDateTime,
             ),
-            SpaceWidth(width: 15),
+            const RowTitles(),
+            ColumnItmeList(type: widget.type, startDateTime: startDateTime),
           ],
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: ContentsBox(
-              contentsWidget: Column(
-                children: [
-                  const RowColors(),
-                  const RowTitles(),
-                  ColumnItmeList(type: type, startDateTime: startDateTime),
-                ],
-              ),
-            ),
+      ),
+    );
+  }
+}
+
+class GoalMonthlyContainer extends StatefulWidget {
+  const GoalMonthlyContainer({super.key});
+
+  @override
+  State<GoalMonthlyContainer> createState() => _GoalMonthlyContainerState();
+}
+
+class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
+  @override
+  Widget build(BuildContext context) {
+    onText({
+      required String text,
+      required double size,
+      required Color color,
+      required int flex,
+    }) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Text(
+          text,
+          style: TextStyle(
+            fontSize: size,
+            color: color,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
+      );
+    }
+
+    return Column(
+      children: [
+        ContentsBox(
+          contentsWidget: Column(
+            children: [
+              RowColors(),
+              SpaceHeight(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  onText(
+                    text: '2023년 9월',
+                    flex: 1,
+                    size: 18,
+                    color: themeColor,
+                  ),
+                  SpaceWidth(width: 20),
+                  onText(
+                    text: '실천 3회',
+                    flex: 0,
+                    size: 12,
+                    color: Colors.grey,
+                  ),
+                ],
+              ),
+              SpaceHeight(height: 15),
+              TableCalendar(
+                headerVisible: false,
+                focusedDay: DateTime.now(),
+                firstDay: DateTime(2000, 1, 1),
+                lastDay: DateTime.now(),
+              ),
+              // Divider(color: Colors.grey.shade300)
+            ],
+          ),
+        )
+      ],
+    );
+  }
+}
+
+// SfDateRangePicker(
+//               controller: _controller,
+//               showNavigationArrow: true,
+//               view: DateRangePickerView.month,
+//               selectionMode: DateRangePickerSelectionMode.range,
+//               selectionColor: Colors.lightBlue.shade100,
+//               startRangeSelectionColor: Colors.lightBlue.shade100,
+//               endRangeSelectionColor: Colors.lightBlue.shade100,
+//               rangeSelectionColor: Colors.lightBlue.shade100,
+//               todayHighlightColor: Colors.transparent,
+//               initialSelectedRange:
+//                   PickerDateRange(_activeDates[0], _activeDates[5]),
+//               onSelectionChanged: selectionChanged,
+//               selectableDayPredicate: predicateCallback,
+//               selectionTextStyle:
+//                   const TextStyle(fontWeight: FontWeight.bold),
+//               rangeTextStyle: const TextStyle(
+//                 fontWeight: FontWeight.bold,
+//                 color: Colors.white,
+//               ),
+//             )
+
+class DateTimeTag extends StatelessWidget {
+  DateTimeTag({
+    super.key,
+    required this.startDateTime,
+    required this.endDateTime,
+    required this.onTapWeeklyDateTime,
+  });
+
+  DateTime startDateTime;
+  DateTime endDateTime;
+  Function() onTapWeeklyDateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          CommonTag(
+            text:
+                '${mde(locale: locale, dateTime: startDateTime)} ~ ${mde(locale: locale, dateTime: endDateTime)}',
+            color: 'whiteIndigo',
+            isNotTr: true,
+            onTap: onTapWeeklyDateTime,
+          ),
+        ],
       ),
     );
   }
@@ -119,7 +286,7 @@ class RowColors extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: dayColors
           .map((item) => Padding(
-                padding: const EdgeInsets.fromLTRB(7, 0, 0, 7),
+                padding: const EdgeInsets.fromLTRB(7, 0, 0, 10),
                 child: CommonText(
                   text: item.type,
                   size: 10,
@@ -142,7 +309,7 @@ class RowTitles extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CommonText(text: '목표', size: 13),
+            CommonText(text: '목표', size: 13, color: Colors.grey),
             Row(
               children: dayColors
                   .map((day) => Padding(
@@ -178,8 +345,9 @@ class ColumnItmeList extends StatelessWidget {
     List<TargetDayClass> targetDays = List.generate(
         dayColors.length,
         (index) => TargetDayClass(
-            color: dayColors[index].color,
-            dateTime: startDateTime.add(Duration(days: index)))).toList();
+              color: dayColors[index].color,
+              dateTime: startDateTime.add(Duration(days: index)),
+            )).toList();
     List<String> orderList = {
       eDiet: user.dietOrderList,
       eExercise: user.exerciseOrderList,
@@ -206,43 +374,46 @@ class ColumnItmeList extends StatelessWidget {
           : dialogBackgroundColor;
     }
 
-    return Column(
-      children: typeList
-          .map((plan) => Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          plan.name,
-                          style: const TextStyle(
-                              fontSize: 11,
-                              color: themeColor,
-                              overflow: TextOverflow.ellipsis),
+    return Expanded(
+      child: ListView(
+        shrinkWrap: true,
+        children: typeList
+            .map((plan) => Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            plan.name,
+                            style: const TextStyle(
+                                fontSize: 11,
+                                color: themeColor,
+                                overflow: TextOverflow.ellipsis),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: targetDays
-                              .map((target) => Padding(
-                                    padding: const EdgeInsets.only(left: 10),
-                                    child: CommonIcon(
-                                      icon: Icons.circle,
-                                      size: 11.6,
-                                      color: onTargetColor(
-                                          planId: plan.id, target: target),
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
-                      )
-                    ],
-                  ),
-                  Divider(color: Colors.grey.shade200)
-                ],
-              ))
-          .toList(),
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: targetDays
+                                .map((target) => Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: CommonIcon(
+                                        icon: Icons.circle,
+                                        size: 11.6,
+                                        color: onTargetColor(
+                                            planId: plan.id, target: target),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                        )
+                      ],
+                    ),
+                    Divider(color: Colors.grey.shade200)
+                  ],
+                ))
+            .toList(),
+      ),
     );
   }
 }

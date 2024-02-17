@@ -73,7 +73,7 @@ class _CalendarCellCustomDialogState extends State<CalendarCellCustomDialog> {
           )
         ],
       ),
-      content: Container(
+      content: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: 500,
         child: Card(

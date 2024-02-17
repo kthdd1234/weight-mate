@@ -380,7 +380,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         onTap: onTapRecordCollection,
       ),
       TagClass(
-        text: '체크표 보기',
+        text: '실천표 보기',
         color: widget.colorName,
         isHide: onHide(SegmentedTypes.record),
         onTap: onTapGoalCollection,

@@ -17,15 +17,11 @@ class CalenderRangeDialog extends StatefulWidget {
     required this.title,
     required this.startAndEndDateTime,
     required this.onSelectionChanged,
-    required this.onSubmit,
-    required this.onCancel,
   });
 
   String title;
   List<DateTime?> startAndEndDateTime;
   Function(DateRangePickerSelectionChangedArgs) onSelectionChanged;
-  Function(Object? object) onSubmit;
-  Function() onCancel;
 
   @override
   State<CalenderRangeDialog> createState() => _CalenderRangeDialogState();
@@ -67,8 +63,6 @@ class _CalenderRangeDialogState extends State<CalenderRangeDialog> {
               view: DateRangePickerView.month,
               selectionMode: DateRangePickerSelectionMode.range,
               onSelectionChanged: widget.onSelectionChanged,
-              onSubmit: widget.onSubmit,
-              onCancel: widget.onCancel,
             ),
           ),
           SpaceHeight(height: 10),
