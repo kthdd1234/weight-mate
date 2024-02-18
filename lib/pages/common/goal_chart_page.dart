@@ -1,10 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_range_dialog.dart';
+import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/picker/custom_date_range_picker.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
@@ -14,6 +16,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -82,7 +85,7 @@ class _GoalChartPageState extends State<GoalChartPage> {
                 ),
                 selectedSegment == SegmentedTypes.week
                     ? GoalWeeklyContainer(type: type)
-                    : GoalMonthlyContainer()
+                    : GoalMonthlyContainer(type: type)
               ],
             ),
           ),
@@ -151,97 +154,134 @@ class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
 }
 
 class GoalMonthlyContainer extends StatefulWidget {
-  const GoalMonthlyContainer({super.key});
+  GoalMonthlyContainer({super.key, required this.type});
+
+  String type;
 
   @override
   State<GoalMonthlyContainer> createState() => _GoalMonthlyContainerState();
 }
 
 class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
+  DateTime selectedMonth = DateTime.now();
+  DateTime seletedDay = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+
     onText({
       required String text,
       required double size,
       required Color color,
-      required int flex,
     }) {
       return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: size,
-            color: color,
-            overflow: TextOverflow.ellipsis,
-          ),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+        child: CommonText(
+          text: text,
+          size: size,
+          color: color,
+          isNotTr: true,
         ),
       );
     }
 
-    return Column(
-      children: [
-        ContentsBox(
-          contentsWidget: Column(
-            children: [
-              RowColors(),
-              SpaceHeight(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  onText(
-                    text: '2023년 9월',
-                    flex: 1,
+    onPageChanged(DateTime dateTime) {
+      setState(() => selectedMonth = dateTime);
+    }
+
+    onDaySelected(sDay, _) {
+      setState(() => seletedDay = sDay);
+    }
+
+    markerBuilder(context, day, events) {
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Dot(size: 5, color: targetColors[day.weekday]!),
+          SpaceWidth(width: 3),
+          CommonText(text: '-', size: 7)
+        ],
+      );
+    }
+
+    return Expanded(
+      child: ContentsBox(
+        contentsWidget: Column(
+          children: [
+            const RowColors(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                onText(
+                    text: ym(locale: locale, dateTime: selectedMonth),
                     size: 18,
-                    color: themeColor,
-                  ),
-                  SpaceWidth(width: 20),
-                  onText(
-                    text: '실천 3회',
-                    flex: 0,
-                    size: 12,
-                    color: Colors.grey,
-                  ),
-                ],
+                    color: themeColor),
+                onText(text: '총 실천 3회'.tr(), size: 12, color: Colors.grey),
+              ],
+            ),
+            SpaceHeight(height: 15),
+            TableCalendar(
+              locale: locale,
+              headerVisible: false,
+              focusedDay: selectedMonth,
+              currentDay: seletedDay,
+              calendarStyle: CalendarStyle(
+                todayDecoration: BoxDecoration(
+                  color: targetColors[seletedDay.weekday]!,
+                  shape: BoxShape.circle,
+                ),
+                todayTextStyle: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              SpaceHeight(height: 15),
-              TableCalendar(
-                headerVisible: false,
-                focusedDay: DateTime.now(),
-                firstDay: DateTime(2000, 1, 1),
-                lastDay: DateTime.now(),
-              ),
-              // Divider(color: Colors.grey.shade300)
-            ],
-          ),
-        )
-      ],
+              firstDay: DateTime(2000, 1, 1),
+              lastDay: DateTime.now(),
+              calendarBuilders: CalendarBuilders(markerBuilder: markerBuilder),
+              onDaySelected: onDaySelected,
+              onPageChanged: onPageChanged,
+            ),
+            SpaceHeight(height: 5),
+            Divider(color: Colors.grey.shade300),
+            SpaceHeight(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                CommonText(
+                  text: d(locale: locale, dateTime: seletedDay) +
+                      ' (${e_short(locale: locale, dateTime: seletedDay)})',
+                  size: 15,
+                  isNotTr: true,
+                ),
+                CommonText(text: '실천 1회', size: 11, color: Colors.grey),
+              ],
+            ),
+            SpaceHeight(height: 15),
+            Column(
+              children: [
+                Row(
+                  children: [
+                    Dot(size: 7, color: targetColors[seletedDay.weekday]!)
+                  ],
+                )
+              ],
+            )
+
+            // Expanded(
+            //   child: EmptyWidget(
+            //     icon: todoData[widget.type]!.icon,
+            //     text: '실천이 없어요.',
+            //   ),
+            // ),
+          ],
+        ),
+      ),
     );
   }
 }
-
-// SfDateRangePicker(
-//               controller: _controller,
-//               showNavigationArrow: true,
-//               view: DateRangePickerView.month,
-//               selectionMode: DateRangePickerSelectionMode.range,
-//               selectionColor: Colors.lightBlue.shade100,
-//               startRangeSelectionColor: Colors.lightBlue.shade100,
-//               endRangeSelectionColor: Colors.lightBlue.shade100,
-//               rangeSelectionColor: Colors.lightBlue.shade100,
-//               todayHighlightColor: Colors.transparent,
-//               initialSelectedRange:
-//                   PickerDateRange(_activeDates[0], _activeDates[5]),
-//               onSelectionChanged: selectionChanged,
-//               selectableDayPredicate: predicateCallback,
-//               selectionTextStyle:
-//                   const TextStyle(fontWeight: FontWeight.bold),
-//               rangeTextStyle: const TextStyle(
-//                 fontWeight: FontWeight.bold,
-//                 color: Colors.white,
-//               ),
-//             )
 
 class DateTimeTag extends StatelessWidget {
   DateTimeTag({
@@ -375,45 +415,52 @@ class ColumnItmeList extends StatelessWidget {
     }
 
     return Expanded(
-      child: ListView(
-        shrinkWrap: true,
-        children: typeList
-            .map((plan) => Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            plan.name,
-                            style: const TextStyle(
-                                fontSize: 11,
-                                color: themeColor,
-                                overflow: TextOverflow.ellipsis),
+      child: typeList.isNotEmpty
+          ? ListView(
+              shrinkWrap: true,
+              children: typeList
+                  .map((plan) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  plan.name,
+                                  style: const TextStyle(
+                                      fontSize: 11,
+                                      color: themeColor,
+                                      overflow: TextOverflow.ellipsis),
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: targetDays
+                                      .map((target) => Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: CommonIcon(
+                                              icon: Icons.circle,
+                                              size: 11.6,
+                                              color: onTargetColor(
+                                                  planId: plan.id,
+                                                  target: target),
+                                            ),
+                                          ))
+                                      .toList(),
+                                ),
+                              )
+                            ],
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: targetDays
-                                .map((target) => Padding(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: CommonIcon(
-                                        icon: Icons.circle,
-                                        size: 11.6,
-                                        color: onTargetColor(
-                                            planId: plan.id, target: target),
-                                      ),
-                                    ))
-                                .toList(),
-                          ),
-                        )
-                      ],
-                    ),
-                    Divider(color: Colors.grey.shade200)
-                  ],
-                ))
-            .toList(),
-      ),
+                          Divider(color: Colors.grey.shade200)
+                        ],
+                      ))
+                  .toList(),
+            )
+          : EmptyWidget(
+              icon: todoData[type]!.icon,
+              text: '${type == eLife ? '습관' : '목표'}가 없어요.',
+            ),
     );
   }
 }

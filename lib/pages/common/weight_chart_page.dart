@@ -289,23 +289,26 @@ class ColumnItemList extends StatelessWidget {
                   );
                 },
               )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CommonIcon(
-                    icon: Icons.monitor_weight,
-                    size: 30,
-                    color: Colors.grey,
-                  ),
-                  SpaceHeight(height: 10),
-                  CommonText(
-                    text: '기록이 없어요.',
-                    size: 15,
-                    isCenter: true,
-                    color: Colors.grey,
-                  )
-                ],
-              ));
+            : EmptyWidget(icon: Icons.monitor_weight, text: '기록이 없어요.'));
+  }
+}
+
+class EmptyWidget extends StatelessWidget {
+  EmptyWidget({super.key, required this.icon, required this.text});
+
+  IconData icon;
+  String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CommonIcon(icon: icon, size: 30, color: Colors.grey),
+        SpaceHeight(height: 10),
+        CommonText(text: text, size: 15, isCenter: true, color: Colors.grey)
+      ],
+    );
   }
 }
