@@ -19,6 +19,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -32,6 +33,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class TodoContainer extends StatefulWidget {
   TodoContainer({
@@ -1365,6 +1367,8 @@ class _GoalItemState extends State<GoalItem> {
 
     onTapMore() {
       showModalBottomSheet(
+        isScrollControlled: true,
+        backgroundColor: Colors.transparent,
         context: context,
         builder: (context) => GoalBottomSheet(
           type: widget.type,
@@ -1724,6 +1728,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
   bool isEnabled = true;
   bool isRequestPermission = false;
   DateTime alarmTime = DateTime.now();
+  DateTime selectedMonth = DateTime.now();
 
   @override
   void initState() {
@@ -1735,6 +1740,8 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+
     onTapAlarm() async {
       bool isPermission = await NotificationService().permissionNotification;
 
@@ -1798,8 +1805,51 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
 
       WidgetsBinding.instance.addPostFrameCallback(
         (timeStamp) {
-          showDialog(context: context, builder: (context) => PermissionPopup());
+          showDialog(
+            context: context,
+            builder: (context) => const PermissionPopup(),
+          );
         },
+      );
+    }
+
+    onPageChanged(DateTime dateTime) {
+      setState(() => selectedMonth = dateTime);
+    }
+
+    markerBuilder(context, DateTime dateTime, focusedDay) {
+      int recordKey = getDateTimeToInt(dateTime);
+      RecordBox? record = recordRepository.recordBox.get(recordKey);
+      List<Map<String, dynamic>> actions = record?.actions ?? [];
+      bool isAction = actions.any(
+        (action) =>
+            action['id'] == widget.id &&
+            action['type'] == widget.type &&
+            action['isRecord'] != true,
+      );
+
+      if (isAction == false) {
+        return null;
+      }
+
+      return Center(
+        child: Container(
+          width: 30,
+          height: 30,
+          decoration: BoxDecoration(
+            color: categoryColors[widget.type]!.shade100,
+            borderRadius: BorderRadius.circular(100),
+          ),
+          child: CommonText(
+            text: '${dateTime.day}',
+            size: 12,
+            isCenter: true,
+            color: Colors.white,
+            isBold: true,
+            isNotTop: true,
+            isNotTr: true,
+          ),
+        ),
       );
     }
 
@@ -1808,12 +1858,10 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
       titleLeftWidget: isShowAlarm
           ? InkWell(
               onTap: onTapBack,
-              child: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-              ),
+              child: const Icon(Icons.arrow_back_ios_new_rounded),
             )
           : null,
-      height: isShowAlarm ? 430 : 220,
+      height: isShowAlarm ? 430 : 630,
       contents: isShowAlarm
           ? AlarmContainer(
               icon: widget.icon,
@@ -1826,35 +1874,70 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
               onDateTimeChanged: onDateTimeChanged,
               onCompleted: onCompleted,
             )
-          : Row(
+          : Column(
               children: [
-                ExpandedButtonVerti(
-                  mainColor: themeColor,
-                  icon: Icons.edit,
-                  title: '목표 수정',
-                  onTap: () {
-                    closeDialog(context);
-                    widget.onTapEdit();
-                  },
+                ContentsBox(
+                  contentsWidget: Column(
+                    children: [
+                      TableCalendarHeader(
+                        locale: locale,
+                        selectedMonth: selectedMonth,
+                        text: '실천'.tr(),
+                        leftIcon: Icons.circle,
+                        textColor: categoryColors[widget.type]!,
+                        iconColor: categoryColors[widget.type]!.shade100,
+                      ),
+                      TableCalendar(
+                        locale: locale,
+                        headerVisible: false,
+                        firstDay: DateTime(2000, 1, 1),
+                        lastDay: DateTime.now(),
+                        calendarStyle: const CalendarStyle(
+                          todayDecoration:
+                              BoxDecoration(color: Colors.transparent),
+                          todayTextStyle: TextStyle(color: Colors.black),
+                        ),
+                        calendarBuilders: CalendarBuilders(
+                          markerBuilder: markerBuilder,
+                        ),
+                        focusedDay: selectedMonth,
+                        onPageChanged: onPageChanged,
+                      ),
+                    ],
+                  ),
                 ),
-                SpaceWidth(width: tinySpace),
-                ExpandedButtonVerti(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                  mainColor: themeColor,
-                  icon: Icons.alarm_rounded,
-                  title: '시간 알림',
-                  onTap: onTapAlarm,
-                ),
-                SpaceWidth(width: tinySpace),
-                ExpandedButtonVerti(
-                  mainColor: Colors.red,
-                  icon: Icons.delete_forever,
-                  title: '목표 삭제',
-                  onTap: () {
-                    closeDialog(context);
-                    widget.onTapRemove(widget.planInfo!);
-                  },
+                SpaceHeight(height: 10),
+                Row(
+                  children: [
+                    ExpandedButtonVerti(
+                      mainColor: themeColor,
+                      icon: Icons.edit,
+                      title: '목표 수정',
+                      onTap: () {
+                        closeDialog(context);
+                        widget.onTapEdit();
+                      },
+                    ),
+                    SpaceWidth(width: tinySpace),
+                    ExpandedButtonVerti(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 10),
+                      mainColor: themeColor,
+                      icon: Icons.alarm_rounded,
+                      title: '시간 알림',
+                      onTap: onTapAlarm,
+                    ),
+                    SpaceWidth(width: tinySpace),
+                    ExpandedButtonVerti(
+                      mainColor: Colors.red,
+                      icon: Icons.delete_forever,
+                      title: '목표 삭제',
+                      onTap: () {
+                        closeDialog(context);
+                        widget.onTapRemove(widget.planInfo!);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

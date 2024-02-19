@@ -248,6 +248,8 @@
   "총 실천 회": "Total Practice {length}",
   "주 선택": "Select week",
   "요일을 선택하면 선택한 요일의 주가 표시됩니다.": "When you select a day, the week for that day will be displayed.",
-  "실천이 없어요": "There is no practice",
-  "목표가 없어요": "No goals"
+  "실천이 없어요": "No practice",
+  "목표가 없어요": "No goals",
+  "습관이 없어요.": "No habits",
+  "실천": "Practice"
 }

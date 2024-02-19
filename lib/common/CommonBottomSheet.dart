@@ -48,12 +48,19 @@ class CommonBottomSheet extends StatelessWidget {
         padding: padding ?? pagePadding,
         child: Column(
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                  fontSize: 15, color: themeColor, fontWeight: FontWeight.bold),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 15,
+                  color: themeColor,
+                  fontWeight: FontWeight.bold,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ),
-            SpaceHeight(height: regularSapce),
+            SpaceHeight(height: 15),
             contents,
             SpaceHeight(height: smallSpace),
             subContents ?? const EmptyArea(),

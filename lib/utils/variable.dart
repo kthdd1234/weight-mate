@@ -189,6 +189,7 @@ Map<String, IconData> categoryIcons = {
 final categoryColors = {
   PlanTypeEnum.diet.toString(): Colors.teal,
   PlanTypeEnum.exercise.toString(): Colors.lightBlue,
+  PlanTypeEnum.lifestyle.toString(): Colors.brown,
 };
 
 final formatInfo = {
