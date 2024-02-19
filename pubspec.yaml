@@ -78,6 +78,7 @@ dependencies:
   home_widget: ^0.4.1
   easy_localization: ^3.0.3
   privacy_screen: ^0.0.6
+  quiver: ^3.2.1
 
 dev_dependencies:
   flutter_test:

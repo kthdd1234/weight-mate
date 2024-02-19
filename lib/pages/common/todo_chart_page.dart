@@ -272,7 +272,7 @@ class ColumnContainer extends StatelessWidget {
                       color: themeColor,
                     ),
                     dateTimeTitle(
-                      text: '(${e_short(locale: locale, dateTime: dateTime)})',
+                      text: '(${eShort(locale: locale, dateTime: dateTime)})',
                       color: Colors.grey,
                     )
                   ],

@@ -8,7 +8,6 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/dialog/calendar_range_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/components/picker/custom_date_range_picker.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -21,6 +20,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:quiver/time.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -63,11 +63,10 @@ class _GoalChartPageState extends State<GoalChartPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(
-            '$title 실천표'.tr(),
+            ' 실천 모아보기'.tr(namedArgs: {'type': title.tr()}),
             style: const TextStyle(fontSize: 20, color: themeColor),
           ),
           backgroundColor: Colors.transparent,
-          centerTitle: false,
           elevation: 0.0,
         ),
         body: SafeArea(
@@ -165,16 +164,67 @@ class GoalMonthlyContainer extends StatefulWidget {
 class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
   DateTime selectedMonth = DateTime.now();
   DateTime seletedDay = DateTime.now();
+  int selectedMonthActionCount = 0;
+
+  List<Map<String, dynamic>> getFilterActions(DateTime dateTime) {
+    int recordKey = getDateTimeToInt(dateTime);
+    RecordBox? record = recordRepository.recordBox.get(recordKey);
+    List<Map<String, dynamic>> actions = record?.actions ?? [];
+    List<Map<String, dynamic>> filterActions = actions
+        .where((action) =>
+            action['isRecord'] != true && action['type'] == widget.type)
+        .toList();
+
+    return filterActions;
+  }
+
+  getActionDayLength({
+    required int year,
+    required int month,
+    required int lastDays,
+  }) {
+    int length = 0;
+
+    for (var day = 1; day <= lastDays; day++) {
+      DateTime dateTime = DateTime(year, month, day);
+      List<Map<String, dynamic>> filterActions = getFilterActions(dateTime);
+      length += filterActions.length;
+    }
+
+    return length;
+  }
+
+  @override
+  void initState() {
+    DateTime now = DateTime.now();
+    selectedMonthActionCount = getActionDayLength(
+      year: now.year,
+      month: now.month,
+      lastDays: daysInMonth(now.year, now.month),
+    );
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
     String locale = context.locale.toString();
+    List<Map<String, dynamic>> filterActions = getFilterActions(seletedDay);
+    List<String> orderList = {
+      eDiet: user.dietOrderList,
+      eExercise: user.exerciseOrderList,
+      eLife: user.lifeOrderList,
+    }[widget.type]!;
 
-    onText({
-      required String text,
-      required double size,
-      required Color color,
-    }) {
+    filterActions.sort((act1, act2) {
+      int order1 = orderList.indexOf(act1['id']);
+      int order2 = orderList.indexOf(act2['id']);
+
+      return order1.compareTo(order2);
+    });
+
+    onText({required String text, required double size, required Color color}) {
       return Padding(
         padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: CommonText(
@@ -187,7 +237,18 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
     }
 
     onPageChanged(DateTime dateTime) {
-      setState(() => selectedMonth = dateTime);
+      int year = dateTime.year;
+      int month = dateTime.month;
+      int days = daysInMonth(year, month);
+
+      setState(() {
+        selectedMonth = dateTime;
+        selectedMonthActionCount = getActionDayLength(
+          year: year,
+          month: month,
+          lastDays: days,
+        );
+      });
     }
 
     onDaySelected(sDay, _) {
@@ -195,12 +256,18 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
     }
 
     markerBuilder(context, day, events) {
+      List<Map<String, dynamic>> filterDayActions = getFilterActions(day);
+
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Dot(size: 5, color: targetColors[day.weekday]!),
           SpaceWidth(width: 3),
-          CommonText(text: '-', size: 7)
+          CommonText(
+              text:
+                  '${filterDayActions.isNotEmpty ? filterDayActions.length : '-'}',
+              size: 8,
+              isNotTr: true)
         ],
       );
     }
@@ -218,7 +285,11 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
                     text: ym(locale: locale, dateTime: selectedMonth),
                     size: 18,
                     color: themeColor),
-                onText(text: '총 실천 3회'.tr(), size: 12, color: Colors.grey),
+                onText(
+                    text: '총 실천 회'
+                        .tr(namedArgs: {'length': "$selectedMonthActionCount"}),
+                    size: 12,
+                    color: Colors.grey),
               ],
             ),
             SpaceHeight(height: 15),
@@ -228,6 +299,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
               focusedDay: selectedMonth,
               currentDay: seletedDay,
               calendarStyle: CalendarStyle(
+                cellMargin: const EdgeInsets.all(10.0),
                 todayDecoration: BoxDecoration(
                   color: targetColors[seletedDay.weekday]!,
                   shape: BoxShape.circle,
@@ -252,31 +324,78 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
               children: [
                 CommonText(
                   text: d(locale: locale, dateTime: seletedDay) +
-                      ' (${e_short(locale: locale, dateTime: seletedDay)})',
+                      ' (${eShort(locale: locale, dateTime: seletedDay)})',
                   size: 15,
                   isNotTr: true,
                 ),
-                CommonText(text: '실천 1회', size: 11, color: Colors.grey),
+                CommonText(
+                  text: '실천 회',
+                  size: 11,
+                  color: Colors.grey,
+                  nameArgs: {'length': '${filterActions.length}'},
+                ),
               ],
             ),
-            SpaceHeight(height: 15),
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Dot(size: 7, color: targetColors[seletedDay.weekday]!)
-                  ],
-                )
-              ],
-            )
-
-            // Expanded(
-            //   child: EmptyWidget(
-            //     icon: todoData[widget.type]!.icon,
-            //     text: '실천이 없어요.',
-            //   ),
-            // ),
+            SpaceHeight(height: 10),
+            filterActions.isNotEmpty
+                ? Expanded(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: filterActions
+                          .map(
+                            (action) => Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  children: [
+                                    VerticalBorder(seletedDay: seletedDay),
+                                    SpaceWidth(width: 7),
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(top: 2),
+                                        child: Text(
+                                          action['name'],
+                                          style: const TextStyle(
+                                              fontSize: 12, color: themeColor),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  )
+                : Expanded(
+                    child: EmptyWidget(
+                      icon: todoData[widget.type]!.icon,
+                      text: '실천이 없어요.',
+                    ),
+                  ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class VerticalBorder extends StatelessWidget {
+  const VerticalBorder({super.key, required this.seletedDay});
+
+  final DateTime seletedDay;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 3,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        color: targetColors[seletedDay.weekday]!,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(2),
+          bottom: Radius.circular(2),
         ),
       ),
     );

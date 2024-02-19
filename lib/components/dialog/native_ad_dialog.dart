@@ -45,9 +45,9 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
     checkHideAd() async {
       bool isHide = await isHideAd();
 
-      setState(() => isNotAdShow = isHide);
-
-      if (isHide == false) {
+      if (isHide == true) {
+        setState(() => isNotAdShow = isHide);
+      } else if (isHide == false) {
         nativeAd = loadNativeAd(
           adUnitId: adsState.nativeAdUnitId,
           onAdLoaded: () {

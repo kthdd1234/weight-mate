@@ -66,9 +66,9 @@ class _CalenderRangeDialogState extends State<CalenderRangeDialog> {
             ),
           ),
           SpaceHeight(height: 10),
-          const Text(
-            '요일을 선택하면 선택한 요일의 주가 표시됩니다.',
-            style: TextStyle(fontSize: 10, color: Colors.grey),
+          Text(
+            '요일을 선택하면 선택한 요일의 주가 표시됩니다.'.tr(),
+            style: const TextStyle(fontSize: 10, color: Colors.grey),
           )
         ],
       ),

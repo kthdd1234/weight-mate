@@ -300,7 +300,7 @@ e({required String locale, required DateTime dateTime}) {
   return DateFormat.EEEE(locale).format(dateTime);
 }
 
-e_short({required String locale, required DateTime dateTime}) {
+eShort({required String locale, required DateTime dateTime}) {
   return DateFormat.E(locale).format(dateTime);
 }
 

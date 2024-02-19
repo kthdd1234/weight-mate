@@ -380,7 +380,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         onTap: onTapRecordCollection,
       ),
       TagClass(
-        text: '실천표 보기',
+        text: '실천 모아보기',
         color: widget.colorName,
         isHide: onHide(SegmentedTypes.record),
         onTap: onTapGoalCollection,
@@ -1101,13 +1101,15 @@ class LifeContainer extends StatelessWidget {
       );
     }
 
+    onTapGoalCollection() async {
+      await Navigator.pushNamed(
+        context,
+        '/goal-chart-page',
+        arguments: {'type': type, 'title': title},
+      );
+    }
+
     List<TagClass> lifeTags = [
-      TagClass(
-        text: '순서 변경',
-        isHide: !isOpen,
-        color: colorName,
-        onTap: onTapChangeOrder,
-      ),
       TagClass(
         text: '습관 개',
         nameArgs: {'length': '${planList.length}'},
@@ -1116,11 +1118,15 @@ class LifeContainer extends StatelessWidget {
         onTap: onTapOpen,
       ),
       TagClass(
-        text: '실천율',
-        isHide: isOpen,
-        nameArgs: {'percent': actionPercent},
+        text: '실천 모아보기',
         color: colorName,
-        onTap: () => null,
+        onTap: onTapGoalCollection,
+      ),
+      TagClass(
+        text: '순서 변경',
+        isHide: !isOpen,
+        color: colorName,
+        onTap: onTapChangeOrder,
       ),
       TagClass(
         icon: isOpen

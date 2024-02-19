@@ -35,9 +35,9 @@ class _BannerWidgetState extends State<BannerWidget> {
     checkHideAd() async {
       bool isHide = await isHideAd();
 
-      setState(() => isNotAdShow = isHide);
-
-      if (isHide == false) {
+      if (isHide == true) {
+        setState(() => isNotAdShow = isHide);
+      } else if (isHide == false) {
         adsState.initialization.then(
           (value) => {
             setState(() {
