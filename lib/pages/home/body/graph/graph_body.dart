@@ -148,7 +148,6 @@ class _GraphBodyState extends State<GraphBody> {
 
     return Column(
       children: [
-        SpaceHeight(height: smallSpace),
         CommonAppBar(id: id),
         GraphChart(
           startDateTime: startDateTime,

@@ -209,16 +209,11 @@ class CommonTitle extends StatelessWidget {
 
     return Padding(
       padding: isGraph
-          ? EdgeInsets.fromLTRB(25, 0, 20, 0)
-          : EdgeInsets.symmetric(horizontal: 25),
+          ? const EdgeInsets.fromLTRB(25, 0, 20, 0)
+          : const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         children: [
-          index != 3
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 10),
-                  child: BannerWidget(),
-                )
-              : const EmptyArea(),
+          index != 3 ? BannerWidget() : const EmptyArea(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -262,12 +257,24 @@ class CommonTitle extends StatelessWidget {
                         )
                       : const EmptyArea(),
                   isHistory
-                      ? CommonTag(
-                          text: historyFilterFormats[historyFilter],
-                          color: historyFilter == HistoryFilter.recent
-                              ? 'whiteBlue'
-                              : 'whiteRed',
-                          onTap: onTapChangeYear,
+                      ? Row(
+                          children: [
+                            CommonTag(
+                              text: historyFilterFormats[historyFilter],
+                              color: historyFilter == HistoryFilter.recent
+                                  ? 'whiteBlue'
+                                  : 'whiteRed',
+                              onTap: onTapChangeYear,
+                            ),
+                            SpaceWidth(width: 5),
+                            CommonTag(text: '리스트', color: 'whiteIndigo'),
+                            SpaceWidth(width: 5),
+                            CommonTag(
+                              text: '표시',
+                              color: 'whiteIndigo',
+                              nameArgs: {'length': '0'},
+                            ),
+                          ],
                         )
                       : const EmptyArea(),
                 ],
@@ -573,22 +580,3 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
     );
   }
 }
-// Column(
-//                           children: [
-//                             Transform.scale(
-//                               scale: 0.8,
-//                               child: CupertinoSwitch(
-//                                 value: true,
-//                                 onChanged: (bool value) {
-//                                   //
-//                                 },
-//                               ),
-//                             ),
-//                             CommonText(
-//                               text: '이전 기간',
-//                               size: 10,
-//                               color: themeColor,
-//                               isBold: true,
-//                             ),
-//                           ],
-//                         )

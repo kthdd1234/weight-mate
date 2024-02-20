@@ -167,38 +167,12 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
   DateTime seletedDay = DateTime.now();
   int selectedMonthActionCount = 0;
 
-  List<Map<String, dynamic>> getFilterActions(DateTime dateTime) {
-    int recordKey = getDateTimeToInt(dateTime);
-    RecordBox? record = recordRepository.recordBox.get(recordKey);
-    List<Map<String, dynamic>> actions = record?.actions ?? [];
-    List<Map<String, dynamic>> filterActions = actions
-        .where((action) =>
-            action['isRecord'] != true && action['type'] == widget.type)
-        .toList();
-
-    return filterActions;
-  }
-
-  getActionDayLength({
-    required int year,
-    required int month,
-    required int lastDays,
-  }) {
-    int length = 0;
-
-    for (var day = 1; day <= lastDays; day++) {
-      DateTime dateTime = DateTime(year, month, day);
-      List<Map<String, dynamic>> filterActions = getFilterActions(dateTime);
-      length += filterActions.length;
-    }
-
-    return length;
-  }
-
   @override
   void initState() {
     DateTime now = DateTime.now();
-    selectedMonthActionCount = getActionDayLength(
+    selectedMonthActionCount = getMonthActionCount(
+      recordBox: recordRepository.recordBox,
+      type: widget.type,
       year: now.year,
       month: now.month,
       lastDays: daysInMonth(now.year, now.month),
@@ -211,7 +185,11 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
     String locale = context.locale.toString();
-    List<Map<String, dynamic>> filterActions = getFilterActions(seletedDay);
+    List<Map<String, dynamic>> filterActions = getFilterActions(
+      dateTime: seletedDay,
+      recordBox: recordRepository.recordBox,
+      type: widget.type,
+    );
     List<String> orderList = {
       eDiet: user.dietOrderList,
       eExercise: user.exerciseOrderList,
@@ -232,10 +210,12 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
 
       setState(() {
         selectedMonth = dateTime;
-        selectedMonthActionCount = getActionDayLength(
+        selectedMonthActionCount = getMonthActionCount(
           year: year,
           month: month,
           lastDays: days,
+          recordBox: recordRepository.recordBox,
+          type: widget.type,
         );
       });
     }
@@ -245,7 +225,11 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
     }
 
     markerBuilder(context, day, events) {
-      List<Map<String, dynamic>> filterDayActions = getFilterActions(day);
+      List<Map<String, dynamic>> filterDayActions = getFilterActions(
+        dateTime: day,
+        recordBox: recordRepository.recordBox,
+        type: widget.type,
+      );
 
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,

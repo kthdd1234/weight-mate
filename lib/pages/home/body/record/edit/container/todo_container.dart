@@ -1422,6 +1422,9 @@ class GoalName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1463,10 +1466,15 @@ class GoalName extends StatelessWidget {
                             )
                           : const EmptyArea(),
                       CommonText(
-                        text: '실천 회',
-                        nameArgs: {'length': '$actionCount'},
+                        text: weekAndMonthActionCount(
+                          importDateTime: importDateTime,
+                          recordBox: recordRepository.recordBox,
+                          type: planInfo.type,
+                          planId: planInfo.id,
+                        ),
                         size: 11,
                         color: Colors.grey,
+                        isNotTr: true,
                       ),
                     ],
                   ),

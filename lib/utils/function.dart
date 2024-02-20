@@ -12,6 +12,8 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:hive/hive.dart';
+import 'package:quiver/time.dart';
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -545,6 +547,87 @@ onActionCount(List<RecordBox> recordList, String planId) {
   return count;
 }
 
+String weekAndMonthActionCount({
+  required DateTime importDateTime,
+  required Box<RecordBox> recordBox,
+  required String type,
+  required String planId,
+}) {
+  DateTime startWeekDateTime = weeklyStartDateTime(importDateTime);
+  DateTime startMonthDateTime =
+      DateTime(importDateTime.year, importDateTime.month, 0);
+  int monthDayLength = daysInMonth(importDateTime.year, importDateTime.month);
+  int weekCount = 0;
+  int monthCount = 0;
+
+  length(DateTime dateTime, String planId) {
+    int recordKey = getDateTimeToInt(dateTime);
+    RecordBox? record = recordBox.get(recordKey);
+    List<Map<String, dynamic>> actions = record?.actions ?? [];
+    List<Map<String, dynamic>> filterActions = actions
+        .where((action) =>
+            action['isRecord'] != true &&
+            action['type'] == type &&
+            action['id'] == planId)
+        .toList();
+
+    return filterActions.length;
+  }
+
+  for (var day = 0; day < 7; day++) {
+    DateTime targetWeekDateTime = startWeekDateTime.add(Duration(days: day));
+    weekCount += length(targetWeekDateTime, planId);
+  }
+
+  for (var day = 0; day < monthDayLength; day++) {
+    DateTime targetMonthDateTime = startMonthDateTime.add(Duration(days: day));
+    monthCount += length(targetMonthDateTime, planId);
+  }
+
+  return '주 회 / 월 회 실천'.tr(namedArgs: {
+    "weekLength": '$weekCount',
+    "monthLength": '$monthCount',
+  });
+}
+
+List<Map<String, dynamic>> getFilterActions({
+  required DateTime dateTime,
+  required Box<RecordBox> recordBox,
+  required String type,
+}) {
+  int recordKey = getDateTimeToInt(dateTime);
+  RecordBox? record = recordBox.get(recordKey);
+  List<Map<String, dynamic>> actions = record?.actions ?? [];
+  List<Map<String, dynamic>> filterActions = actions
+      .where((action) => action['isRecord'] != true && action['type'] == type)
+      .toList();
+
+  return filterActions;
+}
+
+getMonthActionCount({
+  required Box<RecordBox> recordBox,
+  required int year,
+  required int month,
+  required int lastDays,
+  required String type,
+}) {
+  int length = 0;
+
+  for (var day = 1; day <= lastDays; day++) {
+    DateTime dateTime = DateTime(year, month, day);
+    List<Map<String, dynamic>> filterActions = getFilterActions(
+      dateTime: dateTime,
+      recordBox: recordBox,
+      type: type,
+    );
+
+    length += filterActions.length;
+  }
+
+  return length;
+}
+
 isAmericanLocale({required String locale}) {
   List<String> americanLocales = ['en_US', 'ca_CA', 'gb_GB'];
 
@@ -610,7 +693,7 @@ bool isShowErorr({required String unit, required double? value}) {
   }
 }
 
-weeklyStartDateTime(DateTime dateTime) {
+DateTime weeklyStartDateTime(DateTime dateTime) {
   if (dateTime.weekday == 7) {
     return dateTime;
   }
@@ -618,11 +701,12 @@ weeklyStartDateTime(DateTime dateTime) {
   return dateTime.subtract(Duration(days: dateTime.weekday));
 }
 
-weeklyEndDateTime(DateTime dateTime) {
+DateTime weeklyEndDateTime(DateTime dateTime) {
   if (dateTime.weekday == 7) {
     return dateTime.add(const Duration(days: 6));
   }
 
-  return dateTime
-      .add(Duration(days: DateTime.daysPerWeek - dateTime.weekday - 1));
+  return dateTime.add(Duration(
+    days: DateTime.daysPerWeek - dateTime.weekday - 1,
+  ));
 }
