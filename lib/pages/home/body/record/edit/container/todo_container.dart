@@ -1426,12 +1426,12 @@ class GoalName extends StatelessWidget {
         context.watch<ImportDateTimeProvider>().getImportDateTime();
 
     return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: GestureDetector(
-              onTap: onTapMore,
+      child: InkWell(
+        onTap: onTapMore,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1481,15 +1481,15 @@ class GoalName extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          SpaceWidth(width: regularSapce),
-          CommonIcon(
-            icon: moreIcon,
-            size: 22,
-            color: Colors.grey,
-            onTap: onTapMore,
-          ),
-        ],
+            SpaceWidth(width: regularSapce),
+            CommonIcon(
+              icon: moreIcon,
+              size: 22,
+              color: Colors.grey,
+              onTap: onTapMore,
+            ),
+          ],
+        ),
       ),
     );
   }

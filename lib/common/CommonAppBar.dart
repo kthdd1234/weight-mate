@@ -18,6 +18,7 @@ import 'package:flutter_app_weight_management/provider/history_title_date_time_p
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -226,7 +227,14 @@ class CommonTitle extends StatelessWidget {
     onTapRecordFilter() async {
       await showDialog(
         context: context,
-        builder: (context) => const DisplayListContainer(),
+        builder: (context) => const DisplayList(),
+      );
+    }
+
+    onTapHistoryFilter() async {
+      await showDialog(
+        context: context,
+        builder: (context) => const HistoryDisplayList(),
       );
     }
 
@@ -324,7 +332,10 @@ class CommonTitle extends StatelessWidget {
                             CommonTag(
                               text: '표시',
                               color: 'whiteIndigo',
-                              nameArgs: {'length': '0'},
+                              nameArgs: {
+                                'length': '${historyDisplayList?.length ?? 0}'
+                              },
+                              onTap: onTapHistoryFilter,
                             ),
                           ],
                         )
@@ -568,20 +579,20 @@ class DatePicker extends StatelessWidget {
   }
 }
 
-class DisplayListContainer extends StatefulWidget {
-  const DisplayListContainer({super.key});
+class DisplayList extends StatefulWidget {
+  const DisplayList({super.key});
 
   @override
-  State<DisplayListContainer> createState() => _DisplayListContainerState();
+  State<DisplayList> createState() => _DisplayListState();
 }
 
-class _DisplayListContainerState extends State<DisplayListContainer> {
+class _DisplayListState extends State<DisplayList> {
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
 
-    onTapCheckBox({required dynamic id, required bool newValue}) {
+    onTap({required dynamic id, required bool newValue}) {
       bool isNotWeight = displayClassList.first.id != id;
       bool isdisplayList = user.displayList != null;
 
@@ -593,7 +604,7 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
       }
     }
 
-    isCheck(String filterId) {
+    onChecked(String filterId) {
       if (displayClassList.first.id == filterId) {
         return true;
       }
@@ -601,32 +612,78 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
       return displayList != null ? displayList.contains(filterId) : false;
     }
 
-    List<Widget> children = displayClassList
-        .map((data) => Column(
-              children: [
-                Row(
-                  children: [
-                    CommonCheckBox(
-                      id: data.id,
-                      isCheck: isCheck(data.id),
-                      checkColor: themeColor,
-                      onTap: onTapCheckBox,
-                    ),
-                    CommonText(text: data.name, size: 14, isNotTop: true),
-                    SpaceWidth(width: 3),
-                    displayClassList.first.id == data.id
-                        ? CommonText(text: '(필수)', size: 10, color: Colors.red)
-                        : const EmptyArea()
-                  ],
-                ),
-                SpaceHeight(
-                  height:
-                      displayClassList.last.id == data.id ? 0.0 : smallSpace,
-                ),
-              ],
-            ))
-        .toList();
+    return DisplayListContents(
+      bottomText: '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
+      classList: displayClassList,
+      onChecked: onChecked,
+      onTap: onTap,
+    );
+  }
+}
 
+class HistoryDisplayList extends StatefulWidget {
+  const HistoryDisplayList({super.key});
+
+  @override
+  State<HistoryDisplayList> createState() => _HistoryDisplayListState();
+}
+
+class _HistoryDisplayListState extends State<HistoryDisplayList> {
+  @override
+  Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String>? historyDisplayList = user.historyDisplayList;
+
+    onTap({required dynamic id, required bool newValue}) {
+      bool isNotWeight = historyDisplayClassList.first.id != id;
+      bool ishistoryDisplayList = user.historyDisplayList != null;
+
+      if (isNotWeight && ishistoryDisplayList) {
+        newValue
+            ? user.historyDisplayList!.add(id)
+            : user.historyDisplayList!.remove(id);
+
+        user.save();
+
+        setState(() {});
+      }
+    }
+
+    onChecked(String filterId) {
+      if (historyDisplayClassList.first.id == filterId) {
+        return true;
+      }
+
+      return historyDisplayList != null
+          ? historyDisplayList.contains(filterId)
+          : false;
+    }
+
+    return DisplayListContents(
+      bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
+      classList: historyDisplayClassList,
+      onChecked: onChecked,
+      onTap: onTap,
+    );
+  }
+}
+
+class DisplayListContents extends StatelessWidget {
+  DisplayListContents({
+    super.key,
+    required this.bottomText,
+    required this.classList,
+    required this.onChecked,
+    required this.onTap,
+  });
+
+  String bottomText;
+  List<FilterClass> classList;
+  bool Function(String) onChecked;
+  Function({required dynamic id, required bool newValue}) onTap;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -640,11 +697,45 @@ class _DisplayListContainerState extends State<DisplayListContainer> {
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              ContentsBox(contentsWidget: Column(children: children)),
+              ContentsBox(
+                  contentsWidget: Column(
+                children: classList
+                    .map(
+                      (data) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              CommonCheckBox(
+                                id: data.id,
+                                isCheck: onChecked(data.id),
+                                checkColor: themeColor,
+                                onTap: onTap,
+                              ),
+                              CommonText(
+                                text: data.name,
+                                size: 14,
+                                isNotTop: true,
+                              ),
+                              SpaceWidth(width: 3),
+                              classList.first.id == data.id
+                                  ? CommonText(
+                                      text: '(필수)', size: 10, color: Colors.red)
+                                  : const EmptyArea()
+                            ],
+                          ),
+                          SpaceHeight(
+                            height:
+                                classList.last.id == data.id ? 0.0 : smallSpace,
+                          ),
+                        ],
+                      ),
+                    )
+                    .toList(),
+              )),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
                 child: Text(
-                  '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
+                  bottomText,
                   style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
                 ),
               )

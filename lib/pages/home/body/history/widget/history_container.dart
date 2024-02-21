@@ -29,6 +29,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
+String fPicture = FILITER.picture.toString();
+String fDiet = FILITER.diet.toString();
+String fExercise = FILITER.exercise.toString();
+String fLife = FILITER.lifeStyle.toString();
+String fDiary = FILITER.diary.toString();
+
 class HistoryContainer extends StatelessWidget {
   HistoryContainer({
     super.key,
@@ -48,6 +54,12 @@ class HistoryContainer extends StatelessWidget {
       locale: context.locale.toString(),
       dateTime: createDateTime,
     );
+
+    /** 필터 */
+    UserBox user = userRepository.user;
+    List<String> historyDisplayList = user.historyDisplayList ?? [];
+    bool isPicture = historyDisplayList.contains(fPicture);
+    bool isDiary = historyDisplayList.contains(fDiary);
 
     onTapEdit() {
       context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
@@ -105,18 +117,22 @@ class HistoryContainer extends StatelessWidget {
                   recordInfo: recordInfo,
                   onTapMore: onTapMore,
                 ),
-                HistoryPicture(
-                  isRemoveMode: isRemoveMode,
-                  recordInfo: recordInfo,
-                ),
+                isPicture
+                    ? HistoryPicture(
+                        isRemoveMode: isRemoveMode,
+                        recordInfo: recordInfo,
+                      )
+                    : const EmptyArea(),
                 HistoryTodo(
                   isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
                 ),
-                HistoryDiary(
-                  isRemoveMode: isRemoveMode,
-                  recordInfo: recordInfo,
-                ),
+                isDiary
+                    ? HistoryDiary(
+                        isRemoveMode: isRemoveMode,
+                        recordInfo: recordInfo,
+                      )
+                    : const EmptyArea(),
               ],
             ),
           );
@@ -140,6 +156,8 @@ class HistoryHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
+    List<String> historyDisplayList = user.historyDisplayList ?? [];
+    bool isDiary = historyDisplayList.contains(fDiary);
 
     bmiValue() {
       return 'BMI ${bmi(
@@ -165,18 +183,16 @@ class HistoryHeader extends StatelessWidget {
       children: [
         Row(
           children: [
-            recordInfo?.emotion != null
+            recordInfo?.emotion != null && isDiary
                 ? Expanded(
                     flex: 0,
                     child: Stack(
                       children: [
-                        Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/svgs/${recordInfo?.emotion}.svg',
-                            ),
-                            SpaceWidth(width: smallSpace)
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: SvgPicture.asset(
+                            'assets/svgs/${recordInfo?.emotion}.svg',
+                          ),
                         ),
                         isRemoveMode
                             ? RemoveIcon(onTap: onRemoveEmotion)
@@ -234,11 +250,7 @@ class HistoryHeader extends StatelessWidget {
                               : const EmptyArea()
                         ],
                       ),
-                      CommonText(
-                        text: bmiValue(),
-                        size: 9,
-                        isNotTr: true,
-                      ),
+                      CommonText(text: bmiValue(), size: 9, isNotTr: true),
                     ],
                   ),
                 ],
@@ -253,10 +265,7 @@ class HistoryHeader extends StatelessWidget {
 }
 
 class RemoveIcon extends StatelessWidget {
-  RemoveIcon({
-    super.key,
-    required this.onTap,
-  });
+  RemoveIcon({super.key, required this.onTap});
 
   Function() onTap;
 
@@ -433,6 +442,13 @@ class HistoryTodo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+    List<String> historyDisplayList = user.historyDisplayList ?? [];
+
+    bool isDiet = historyDisplayList.contains(fDiet);
+    bool isExercise = historyDisplayList.contains(fExercise);
+    bool isLife = historyDisplayList.contains(fLife);
+
     renderSvg(String path) => SvgPicture.asset('assets/svgs/$path.svg');
 
     Map<String, SvgPicture> planTypeSvgs = {
@@ -453,7 +469,25 @@ class HistoryTodo extends StatelessWidget {
       return planTypeSvgs[type];
     }
 
-    final todoResultList = recordInfo.actions
+    final todoDisplayList = recordInfo.actions?.where((action) {
+      String planType = action['type'];
+
+      bool isDietPlan = planType == eDiet;
+      bool isExercisePlan = planType == eExercise;
+      bool isLifePlan = planType == eLife;
+
+      if (isDietPlan && isDiet) {
+        return true;
+      } else if (isExercisePlan && isExercise) {
+        return true;
+      } else if (isLifePlan && isLife) {
+        return true;
+      }
+
+      return false;
+    });
+
+    final todoResultList = todoDisplayList
         ?.where(
           (action) =>
               getDateTimeToInt(action['actionDateTime']) ==

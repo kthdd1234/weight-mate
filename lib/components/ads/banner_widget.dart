@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
@@ -47,7 +44,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                 request: const AdRequest(),
                 listener: BannerAdListener(
                   onAdLoaded: (ad) {
-                    debugPrint('$NativeAd loaded.');
+                    debugPrint('$ad loaded.');
                     setState(() => bannerAdIsLoaded = true);
                   },
                   onAdFailedToLoad: (ad, error) {

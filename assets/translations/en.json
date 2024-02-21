@@ -252,5 +252,8 @@
   "목표가 없어요": "No goals",
   "습관이 없어요.": "No habits",
   "실천": "Practice",
-  "주 회, 월 회 실천": "Practice {weekLength} times a week"
+  "주 회, 월 회 실천": "Practice {weekLength} times a week",
+  "리스트": "List",
+  "달력": "Calendar",
+  "표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D": "Uncheck any categories you do not want to display :D"
 }
