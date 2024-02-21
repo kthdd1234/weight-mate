@@ -22,7 +22,8 @@ import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
-import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
+import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
@@ -75,7 +76,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EnabledProvider()),
         ChangeNotifierProvider(create: (_) => TitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
-        ChangeNotifierProvider(create: (_) => HistoryDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryTitleDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,

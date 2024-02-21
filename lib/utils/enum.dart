@@ -55,3 +55,5 @@ enum RECORD { edit, history }
 enum CalendarMaker { sticker, weight }
 
 enum HistoryFilter { recent, past }
+
+enum HistoryFormat { list, calendar }

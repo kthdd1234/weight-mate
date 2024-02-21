@@ -584,7 +584,7 @@ String weekAndMonthActionCount({
     monthCount += length(targetMonthDateTime, planId);
   }
 
-  return '주 회 / 월 회 실천'.tr(namedArgs: {
+  return '주 회, 월 회 실천'.tr(namedArgs: {
     "weekLength": '$weekCount',
     "monthLength": '$monthCount',
   });

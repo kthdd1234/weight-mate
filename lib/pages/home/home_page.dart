@@ -1,4 +1,5 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
+import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.d
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
-import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
+import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -86,8 +88,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? weightUnit = user.weightUnit;
     String? tallUnit = user.tallUnit;
     bool? isShowPreviousGraph = user.isShowPreviousGraph;
-
-    List<PlanBox> planList = planRepository.planBox.values.toList();
+    String? historyForamt = user.historyForamt;
+    List<String>? historyDisplayList = user.historyDisplayList;
+    String? historyCalendarForamt = user.historyCalendarFormat;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -106,7 +109,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (dietOrderList == null) {
-      final allOrderList = [
+      List<PlanBox> planList = planRepository.planBox.values.toList();
+      List<Map<String, Object?>> allOrderList = [
         {
           'type': PlanTypeEnum.diet.toString(),
           'list': dietOrderList,
@@ -165,6 +169,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       user.isShowPreviousGraph = false;
     }
 
+    if (historyForamt == null) {
+      user.historyForamt = HistoryFormat.list.toString();
+    }
+
+    if (historyDisplayList == null) {
+      user.historyDisplayList = initHistoryDisplayList;
+    }
+
+    if (historyCalendarForamt == null) {
+      user.historyCalendarFormat = CalendarFormat.week.toString();
+    }
+
     userRepository.user.save();
 
     /** */
@@ -199,56 +215,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
       context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-      context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
+      context
+          .read<HistoryImportDateTimeProvider>()
+          .setHistoryImportDateTime(now);
+      context.read<HistoryTitleDateTimeProvider>().setHistoryTitleDateTime(now);
     });
   }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) async {
-  //   setState(() {});
-
-  //   RecordBox? recordInfo =
-  //       recordRepository.recordBox.get(getDateTimeToInt(DateTime.now()));
-  //   bool isShowScreen = [
-  //     AppLifecycleState.hidden,
-  //     AppLifecycleState.inactive,
-  //     AppLifecycleState.paused
-  //   ].contains(state);
-
-  //   if (isShowScreen) {
-  //     if (isActiveCamera == false) {
-  //       // setState(() => isShowMateScreen = true);
-  //     }
-  //   } else if (state == AppLifecycleState.resumed) {
-  //     if (isActiveCamera == false) {
-  //       if (userRepository.user.screenLockPasswords != null) {
-  //         await Navigator.of(context).push(
-  //           MaterialPageRoute(
-  //             builder: (_) => const EnterScreenLockPage(),
-  //             fullscreenDialog: true,
-  //           ),
-  //         );
-  //       } else {
-  //         if (recordInfo?.weight == null) {
-  //           DateTime now = DateTime.now();
-
-  //           context.read<ImportDateTimeProvider>().setImportDateTime(now);
-  //           context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-  //           context.read<HistoryDateTimeProvider>().setHistoryDateTime(now);
-  //         }
-  //       }
-  //     }
-
-  //     // setState(() => isShowMateScreen = false);
-  //     setState(() => isActiveCamera = false);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -278,13 +250,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         context.watch<BottomNavigationProvider>().selectedEnumId;
 
     onBottomNavigation(int index) {
+      DateTime now = DateTime.now();
       List<BottomNavigationEnum> indexList =
           BottomNavigationEnum.values.toList();
 
       if (index == 0) {
-        DateTime now = DateTime.now();
         context.read<ImportDateTimeProvider>().setImportDateTime(now);
         context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+      } else if (index == 1) {
+        context
+            .read<HistoryImportDateTimeProvider>()
+            .setHistoryImportDateTime(now);
+        context
+            .read<HistoryTitleDateTimeProvider>()
+            .setHistoryTitleDateTime(now);
       }
 
       context
@@ -304,19 +283,36 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     ];
 
     floatingActionButton() {
+      bool isRecord = BottomNavigationEnum.record == bottomNavitionId;
+      bool isHistory = BottomNavigationEnum.history == bottomNavitionId;
+
       DateTime titleDateTime =
           context.watch<ImportDateTimeProvider>().getImportDateTime();
-      bool isToday = isCheckToday(titleDateTime);
+      DateTime histroyTitleDateTime = context
+          .watch<HistoryImportDateTimeProvider>()
+          .getHistoryImportDateTime();
+      bool isToday = isCheckToday(
+        isRecord ? titleDateTime : histroyTitleDateTime,
+      );
 
-      return bottomNavitionId == BottomNavigationEnum.record && isToday == false
+      return (isRecord || isHistory) && !isToday
           ? FloatingActionButton.extended(
               extendedPadding: const EdgeInsets.all(10),
               backgroundColor: themeColor,
               onPressed: () {
                 DateTime now = DateTime.now();
 
-                context.read<TitleDateTimeProvider>().setTitleDateTime(now);
-                context.read<ImportDateTimeProvider>().setImportDateTime(now);
+                if (isRecord) {
+                  context.read<TitleDateTimeProvider>().setTitleDateTime(now);
+                  context.read<ImportDateTimeProvider>().setImportDateTime(now);
+                } else if (isHistory) {
+                  context
+                      .read<HistoryImportDateTimeProvider>()
+                      .setHistoryImportDateTime(now);
+                  context
+                      .read<HistoryTitleDateTimeProvider>()
+                      .setHistoryTitleDateTime(now);
+                }
               },
               label: CommonText(
                 text: '오늘로 이동',

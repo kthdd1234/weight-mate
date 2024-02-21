@@ -257,8 +257,19 @@ List<FilterClass> displayClassList = [
   FilterClass(id: FILITER.diary.toString(), name: '일기'),
 ];
 
+List<FilterClass> historyDisplayClassList = [
+  FilterClass(id: FILITER.weight.toString(), name: '체중'),
+  FilterClass(id: FILITER.picture.toString(), name: '사진'),
+  FilterClass(id: FILITER.diet.toString(), name: '식단'),
+  FilterClass(id: FILITER.exercise.toString(), name: '운동'),
+  FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
+  FilterClass(id: FILITER.diary.toString(), name: '일기'),
+];
+
 List<String> initOpenList = openClassList.map((e) => e.id).toList();
 List<String> initDisplayList = displayClassList.map((e) => e.id).toList();
+List<String> initHistoryDisplayList =
+    historyDisplayClassList.map((e) => e.id).toList();
 
 const availableCalendarFormats = {
   CalendarFormat.week: '1주일',

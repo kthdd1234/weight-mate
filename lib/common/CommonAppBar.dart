@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
@@ -13,7 +12,9 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/provider/history_date_time_provider.dart';
+import 'package:flutter_app_weight_management/pages/home/home_page.dart';
+import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
+import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
@@ -30,24 +31,31 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
 
-class CommonAppBar extends StatefulWidget {
+String eHistoryList = HistoryFormat.list.toString();
+String eHistoryCalendar = HistoryFormat.calendar.toString();
+
+class CommonAppBar extends StatelessWidget {
   CommonAppBar({super.key, required this.id});
 
   BottomNavigationEnum id;
 
   @override
-  State<CommonAppBar> createState() => _CommonAppBarState();
-}
-
-class _CommonAppBarState extends State<CommonAppBar> {
-  @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
     String? calendarFormat = user.calendarFormat;
     String? calendarMaker = user.calendarMaker;
+    String? historyCalendarFormat = user.historyCalendarFormat;
+
+    bool isRecord = id == BottomNavigationEnum.record;
+    bool isHistory = id == BottomNavigationEnum.history;
 
     onFormatChanged(CalendarFormat format) {
-      user.calendarFormat = format.toString();
+      if (isRecord) {
+        user.calendarFormat = format.toString();
+      } else if (isHistory) {
+        user.historyCalendarFormat = format.toString();
+      }
+
       user.save();
     }
 
@@ -59,17 +67,28 @@ class _CommonAppBarState extends State<CommonAppBar> {
     return Column(
       children: [
         CommonTitle(
-          index: widget.id.index,
-          calendarFormat: formatInfo[calendarFormat]!,
-          calendarMaker: makerInfo[calendarMaker]!,
+          index: id.index,
+          calendarFormat:
+              formatInfo[isRecord ? calendarFormat : historyCalendarFormat]!,
+          calendarMaker: makerInfo[
+              isRecord ? calendarMaker : CalendarMaker.sticker.toString()]!,
           onFormatChanged: onFormatChanged,
           onTapMakerType: onTapMakerType,
         ),
         SpaceHeight(height: tinySpace),
-        widget.id.index == 0
+        isRecord
             ? CalendarBar(
+                bottomIndex: id.index,
                 calendarFormat: formatInfo[calendarFormat]!,
                 calendarMaker: makerInfo[calendarMaker]!,
+                onFormatChanged: onFormatChanged,
+              )
+            : const EmptyArea(),
+        (isHistory && user.historyForamt == eHistoryCalendar)
+            ? CalendarBar(
+                bottomIndex: id.index,
+                calendarFormat: formatInfo[historyCalendarFormat]!,
+                calendarMaker: CalendarMaker.sticker,
                 onFormatChanged: onFormatChanged,
               )
             : const EmptyArea(),
@@ -96,18 +115,25 @@ class CommonTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
     DateTime historyDateTime =
-        context.watch<HistoryDateTimeProvider>().dateTime();
+        context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
+
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
-    String locale = context.locale.toString();
+    List<String>? historyDisplayList = user.historyDisplayList;
+    String historyFormat = user.historyForamt ?? eHistoryList;
+    bool isHistoryList = historyFormat == eHistoryList;
 
     String title = [
       ym(locale: locale, dateTime: titleDateTime),
-      y(locale: locale, dateTime: historyDateTime),
+      historyFormat == eHistoryList
+          ? y(locale: locale, dateTime: historyDateTime)
+          : ym(locale: locale, dateTime: historyDateTime),
       '체중 변화',
       '설정'
     ][index];
@@ -127,11 +153,27 @@ class CommonTitle extends StatelessWidget {
     }
 
     onTapHistoryDateTime(args) {
-      context.read<HistoryDateTimeProvider>().setHistoryDateTime(args.value);
+      context
+          .read<HistoryTitleDateTimeProvider>()
+          .setHistoryTitleDateTime(args.value);
+      context
+          .read<HistoryImportDateTimeProvider>()
+          .setHistoryImportDateTime(args.value);
+
+      if (!isHistoryList) {
+        user.historyCalendarFormat = CalendarFormat.month.toString();
+        user.save();
+      }
+
       closeDialog(context);
     }
 
-    onTapRecordTitle() {
+    onShowDialog({
+      required String title,
+      required DateRangePickerView view,
+      required DateTime initialSelectedDate,
+      required Function(DateRangePickerSelectionChangedArgs) onSelectionChanged,
+    }) {
       showDialog(
         context: context,
         builder: (context) => Column(
@@ -141,13 +183,13 @@ class CommonTitle extends StatelessWidget {
               backgroundColor: dialogBackgroundColor,
               shape: containerBorderRadious,
               title: DialogTitle(
-                text: '월 선택',
+                text: title,
                 onTap: () => closeDialog(context),
               ),
               content: DatePicker(
-                view: DateRangePickerView.year,
-                initialSelectedDate: titleDateTime,
-                onSelectionChanged: onTapRecordDateTime,
+                view: view,
+                initialSelectedDate: initialSelectedDate,
+                onSelectionChanged: onSelectionChanged,
               ),
             ),
           ],
@@ -155,29 +197,23 @@ class CommonTitle extends StatelessWidget {
       );
     }
 
+    onTapRecordTitle() {
+      onShowDialog(
+        title: '월 선택',
+        view: DateRangePickerView.year,
+        initialSelectedDate: titleDateTime,
+        onSelectionChanged: onTapRecordDateTime,
+      );
+    }
+
     onTapHistoryTitle() {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              AlertDialog(
-                backgroundColor: dialogBackgroundColor,
-                shape: containerBorderRadious,
-                title: DialogTitle(
-                  text: '년도 선택',
-                  onTap: () => closeDialog(context),
-                ),
-                content: DatePicker(
-                  view: DateRangePickerView.decade,
-                  initialSelectedDate: historyDateTime,
-                  onSelectionChanged: onTapHistoryDateTime,
-                ),
-              ),
-            ],
-          );
-        },
+      onShowDialog(
+        title: isHistoryList ? '년도 선택' : '월 선택',
+        view: isHistoryList
+            ? DateRangePickerView.decade
+            : DateRangePickerView.year,
+        initialSelectedDate: historyDateTime,
+        onSelectionChanged: onTapHistoryDateTime,
       );
     }
 
@@ -187,11 +223,16 @@ class CommonTitle extends StatelessWidget {
           );
     }
 
-    onTapFilter() async {
+    onTapRecordFilter() async {
       await showDialog(
         context: context,
         builder: (context) => const DisplayListContainer(),
       );
+    }
+
+    onTapHistoryFormat() async {
+      user.historyForamt = isHistoryList ? eHistoryCalendar : eHistoryList;
+      await user.save();
     }
 
     List<IconData?> rightIconList = [
@@ -251,7 +292,7 @@ class CommonTitle extends StatelessWidget {
                                 'length': '${displayList?.length ?? 0}'
                               },
                               color: 'whiteIndigo',
-                              onTap: onTapFilter,
+                              onTap: onTapRecordFilter,
                             ),
                           ],
                         )
@@ -260,14 +301,25 @@ class CommonTitle extends StatelessWidget {
                       ? Row(
                           children: [
                             CommonTag(
-                              text: historyFilterFormats[historyFilter],
-                              color: historyFilter == HistoryFilter.recent
-                                  ? 'whiteBlue'
-                                  : 'whiteRed',
-                              onTap: onTapChangeYear,
+                              text: isHistoryList ? '리스트' : '달력',
+                              color: 'whiteIndigo',
+                              onTap: onTapHistoryFormat,
                             ),
                             SpaceWidth(width: 5),
-                            CommonTag(text: '리스트', color: 'whiteIndigo'),
+                            isHistoryList
+                                ? CommonTag(
+                                    text: historyFilterFormats[historyFilter],
+                                    color: "whiteIndigo",
+                                    onTap: onTapChangeYear,
+                                  )
+                                : CommonTag(
+                                    text: availableCalendarFormats[
+                                        calendarFormat],
+                                    color: 'whiteIndigo',
+                                    onTap: () => onFormatChanged(
+                                      nextCalendarFormats[calendarFormat]!,
+                                    ),
+                                  ),
                             SpaceWidth(width: 5),
                             CommonTag(
                               text: '표시',
@@ -294,24 +346,39 @@ String lifeType = PlanTypeEnum.lifestyle.toString();
 class CalendarBar extends StatelessWidget {
   CalendarBar({
     super.key,
+    required this.bottomIndex,
     required this.calendarFormat,
     required this.calendarMaker,
     required this.onFormatChanged,
   });
 
+  int bottomIndex;
   CalendarFormat calendarFormat;
   CalendarMaker calendarMaker;
   Function(CalendarFormat) onFormatChanged;
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
     String? weightUnit = userRepository.user.weightUnit ?? 'kg';
 
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+    DateTime historyImportDateTime = context
+        .watch<HistoryImportDateTimeProvider>()
+        .getHistoryImportDateTime();
+
     onDaySelected(selectedDay, _) {
-      context.read<ImportDateTimeProvider>().setImportDateTime(selectedDay);
-      context.read<TitleDateTimeProvider>().setTitleDateTime(selectedDay);
+      if (bottomIndex == 0) {
+        context.read<ImportDateTimeProvider>().setImportDateTime(selectedDay);
+        context.read<TitleDateTimeProvider>().setTitleDateTime(selectedDay);
+      } else if (bottomIndex == 1) {
+        context
+            .read<HistoryImportDateTimeProvider>()
+            .setHistoryImportDateTime(selectedDay);
+        context
+            .read<HistoryTitleDateTimeProvider>()
+            .setHistoryTitleDateTime(selectedDay);
+      }
     }
 
     nullCheckAction(List<Map<String, dynamic>>? actions, String type) {
@@ -390,7 +457,13 @@ class CalendarBar extends StatelessWidget {
     }
 
     onPageChanged(DateTime dateTime) {
-      context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
+      if (bottomIndex == 0) {
+        context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
+      } else if (bottomIndex == 1) {
+        context
+            .read<HistoryTitleDateTimeProvider>()
+            .setHistoryTitleDateTime(dateTime);
+      }
     }
 
     return MultiValueListenableBuilder(
@@ -426,8 +499,10 @@ class CalendarBar extends StatelessWidget {
                 ),
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.now(),
-                focusedDay: importDateTime,
-                currentDay: importDateTime,
+                focusedDay:
+                    bottomIndex == 0 ? importDateTime : historyImportDateTime,
+                currentDay:
+                    bottomIndex == 0 ? importDateTime : historyImportDateTime,
                 calendarFormat: calendarFormat,
                 availableCalendarFormats: availableCalendarFormats,
                 onDaySelected: onDaySelected,

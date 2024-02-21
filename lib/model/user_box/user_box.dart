@@ -26,6 +26,9 @@ class UserBox extends HiveObject {
     this.tallUnit,
     this.weightUnit,
     this.isShowPreviousGraph,
+    this.historyForamt,
+    this.historyDisplayList,
+    this.historyCalendarFormat,
   });
 
   @HiveField(0)
@@ -87,6 +90,15 @@ class UserBox extends HiveObject {
 
   @HiveField(19)
   bool? isShowPreviousGraph;
+
+  @HiveField(20)
+  String? historyForamt;
+
+  @HiveField(21)
+  List<String>? historyDisplayList;
+
+  @HiveField(22)
+  String? historyCalendarFormat;
 
   @override
   String toString() {
