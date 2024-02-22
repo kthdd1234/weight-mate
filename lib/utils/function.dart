@@ -710,3 +710,7 @@ DateTime weeklyEndDateTime(DateTime dateTime) {
     days: DateTime.daysPerWeek - dateTime.weekday - 1,
   ));
 }
+
+String ampmFormat(int hour) {
+  return hour < 12 ? '오전' : '오후';
+}

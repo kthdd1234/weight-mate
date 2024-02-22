@@ -1,8 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
+import 'dart:developer';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
@@ -892,11 +894,7 @@ class Dismiss extends StatelessWidget {
 }
 
 class RecordAdd extends StatefulWidget {
-  RecordAdd({
-    super.key,
-    required this.type,
-    required this.onRecordAdd,
-  });
+  RecordAdd({super.key, required this.type, required this.onRecordAdd});
 
   String type;
   Function({
@@ -934,6 +932,7 @@ class _RecordAddState extends State<RecordAdd> {
 
       if (name != '') {
         await showModalBottomSheet(
+          isScrollControlled: true,
           context: context,
           builder: (context) {
             return CategoryBottomSheet(
@@ -993,11 +992,17 @@ class CategoryBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return CommonBottomSheet(
       title: name,
-      height: eDiet == type ? 205 : 220,
-      contents: CategoryList(
-        selectedTitle: selectedTitle,
-        type: type,
-        onTap: onTap,
+      height: 600,
+      contents: Column(
+        children: [
+          RecordDateTime(),
+          SpaceHeight(height: 10),
+          CategoryList(
+            selectedTitle: selectedTitle,
+            type: type,
+            onTap: onTap,
+          ),
+        ],
       ),
     );
   }
@@ -1048,6 +1053,182 @@ class CategoryList extends StatelessWidget {
               ),
             )
             .toList());
+  }
+}
+
+class RecordDateTime extends StatefulWidget {
+  const RecordDateTime({super.key});
+
+  @override
+  State<RecordDateTime> createState() => _RecordDateTimeState();
+}
+
+class _RecordDateTimeState extends State<RecordDateTime> {
+  List<String> timeStamps = ['', '', ''];
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime now = DateTime.now();
+    String nowAmpm = ampmFormat(now.hour);
+    String nowHour = hoursFormat[now.hour]!;
+    String nowMinute = '00';
+    bool isEmptyTimeStamps =
+        timeStamps[0] == '' && timeStamps[1] == '' && timeStamps[2] == '';
+
+    onTapAmpm(String ampm) {
+      setState(() {
+        if (isEmptyTimeStamps) {
+          timeStamps[0] = ampm;
+          timeStamps[1] = nowHour;
+          timeStamps[2] = nowMinute;
+        } else {
+          timeStamps[0] = ampm;
+        }
+      });
+    }
+
+    onTapHours(String hour) {
+      setState(() {
+        if (isEmptyTimeStamps) {
+          timeStamps[0] = nowAmpm;
+          timeStamps[1] = hour;
+          timeStamps[2] = nowMinute;
+        } else {
+          timeStamps[1] = hour;
+        }
+      });
+    }
+
+    onTapMinutes(String minute) {
+      setState(() {
+        if (isEmptyTimeStamps) {
+          timeStamps[0] = nowAmpm;
+          timeStamps[1] = nowHour;
+          timeStamps[2] = minute;
+        } else {
+          timeStamps[2] = minute;
+        }
+      });
+    }
+
+    onCommButton({
+      required String type,
+      required String state,
+      required String text,
+      required Function(String) onTap,
+      bool? isLast,
+    }) {
+      return Expanded(
+        flex: 1,
+        child: Row(
+          children: [
+            CommonButton(
+              text: type == 'ampm' ? text.tr() : text,
+              fontSize: 12,
+              textColor: state == text ? Colors.white : Colors.grey,
+              bgColor: state == text ? themeColor : Colors.grey.shade100,
+              isBold: state == text,
+              radious: 7,
+              isNotTr: true,
+              onTap: () => onTap(text),
+            ),
+            SpaceWidth(width: isLast == true ? 0 : 5)
+          ],
+        ),
+      );
+    }
+
+    List<Widget> ampmInfo = ['오전', '오후']
+        .map((text) => onCommButton(
+              type: 'ampm',
+              text: text,
+              isLast: text == '오후',
+              state: timeStamps[0],
+              onTap: onTapAmpm,
+            ))
+        .toList();
+    List<List<Widget>> hoursInfo = [
+      ["1", "2", "3", "4", "5", "6"]
+          .map((text) => onCommButton(
+                type: 'hour',
+                text: text,
+                isLast: text == '6',
+                state: timeStamps[1],
+                onTap: onTapHours,
+              ))
+          .toList(),
+      ["7", "8", "9", "10", "11", "12"]
+          .map((text) => onCommButton(
+                type: 'hour',
+                text: text,
+                isLast: text == '12',
+                state: timeStamps[1],
+                onTap: onTapHours,
+              ))
+          .toList(),
+    ];
+    List<List<Widget>> minutesInfo = [
+      ["00", "05", "10", "15", "20", "25"]
+          .map((text) => onCommButton(
+                type: 'minute',
+                text: text,
+                isLast: text == '25',
+                state: timeStamps[2],
+                onTap: onTapMinutes,
+              ))
+          .toList(),
+      ["30", "35", "40", "45", "50", "55"]
+          .map((text) => onCommButton(
+                type: 'minute',
+                text: text,
+                isLast: text == '55',
+                state: timeStamps[2],
+                onTap: onTapMinutes,
+              ))
+          .toList()
+    ];
+
+    Map<String, Flex> wObj = {
+      "오전/오후": Row(
+        children: ampmInfo,
+      ),
+      "시": Column(
+        children: [
+          Row(children: hoursInfo[0]),
+          SpaceHeight(height: 5),
+          Row(children: hoursInfo[1]),
+        ],
+      ),
+      "분": Column(
+        children: [
+          Row(children: minutesInfo[0]),
+          SpaceHeight(height: 5),
+          Row(children: minutesInfo[1]),
+        ],
+      ),
+    };
+
+    rowItem({required String title}) {
+      return Column(
+        children: [
+          CommonText(text: title, size: 12, isBold: true),
+          SpaceHeight(height: 10),
+          wObj[title]!
+        ],
+      );
+    }
+
+    return ContentsBox(
+      contentsWidget: Column(
+        children: [
+          rowItem(title: '오전/오후'),
+          SpaceHeight(height: 15),
+          rowItem(title: '시'),
+          SpaceHeight(height: 15),
+          rowItem(title: '분'),
+        ],
+      ),
+    );
   }
 }
 
@@ -1627,7 +1808,6 @@ class TodoInput extends StatelessWidget {
         onEditingComplete: onEditingComplete,
         onTapOutside: (_) {
           FocusScope.of(context).unfocus();
-          // onEditingComplete();
         },
       ),
     );
@@ -1667,41 +1847,47 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
 
     return CommonBottomSheet(
       title: widget.name,
-      height: 220,
+      height: 500,
       contents: isCategory
           ? CategoryList(
               selectedTitle: widget.selectedTitle,
               type: widget.type,
               onTap: widget.onTapTitle,
             )
-          : Row(
+          : Column(
               children: [
-                ExpandedButtonVerti(
-                  mainColor: themeColor,
-                  icon: Icons.edit,
-                  title: '${widget.topTitle} 수정',
-                  onTap: () {
-                    closeDialog(context);
-                    widget.onTapEdit();
-                  },
+                ContentsBox(contentsWidget: Row(children: [])),
+                SpaceHeight(height: 10),
+                Row(
+                  children: [
+                    ExpandedButtonVerti(
+                      mainColor: themeColor,
+                      icon: Icons.edit,
+                      title: '${widget.topTitle} 수정',
+                      onTap: () {
+                        closeDialog(context);
+                        widget.onTapEdit();
+                      },
+                    ),
+                    SpaceWidth(width: tinySpace),
+                    ExpandedButtonVerti(
+                      mainColor: themeColor,
+                      icon: Icons.category,
+                      title: '분류 변경',
+                      onTap: onTapChangeCategory,
+                    ),
+                    SpaceWidth(width: tinySpace),
+                    ExpandedButtonVerti(
+                      mainColor: Colors.red,
+                      icon: Icons.delete_forever,
+                      title: '${widget.topTitle} 삭제',
+                      onTap: () {
+                        closeDialog(context);
+                        widget.onTapRemove();
+                      },
+                    )
+                  ],
                 ),
-                SpaceWidth(width: tinySpace),
-                ExpandedButtonVerti(
-                  mainColor: themeColor,
-                  icon: Icons.category,
-                  title: '분류 변경',
-                  onTap: onTapChangeCategory,
-                ),
-                SpaceWidth(width: tinySpace),
-                ExpandedButtonVerti(
-                  mainColor: Colors.red,
-                  icon: Icons.delete_forever,
-                  title: '${widget.topTitle} 삭제',
-                  onTap: () {
-                    closeDialog(context);
-                    widget.onTapRemove();
-                  },
-                )
               ],
             ),
     );
