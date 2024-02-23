@@ -198,11 +198,13 @@ class ActionItemClass {
     required this.actionDateTime,
     required this.createDateTime,
     this.isRecord,
+    this.dietExerciseRecordDateTime,
   });
 
   String id, title, type, name, priority;
   DateTime actionDateTime, createDateTime;
   bool? isRecord;
+  DateTime? dietExerciseRecordDateTime;
 
   setObject() {
     return {
@@ -214,6 +216,7 @@ class ActionItemClass {
       'actionDateTime': actionDateTime,
       'createDateTime': createDateTime,
       'isRecord': isRecord,
+      'dietExerciseRecordDateTime': dietExerciseRecordDateTime
     };
   }
 }

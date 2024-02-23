@@ -2,6 +2,7 @@
 import 'dart:developer';
 import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -11,6 +12,7 @@ import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -178,6 +180,7 @@ class _TodoContainerState extends State<TodoContainer> {
       required String name,
       required DateTime actionDateTime,
       required String title,
+      DateTime? dietExerciseRecordDateTime,
     }) async {
       ActionItemClass actionItem = ActionItemClass(
         id: id,
@@ -188,6 +191,7 @@ class _TodoContainerState extends State<TodoContainer> {
         isRecord: true,
         actionDateTime: actionDateTime,
         createDateTime: actionDateTime,
+        dietExerciseRecordDateTime: dietExerciseRecordDateTime,
       );
 
       if (completedType == '추가') {
@@ -330,6 +334,7 @@ class DietExerciseContainer extends StatefulWidget {
     required String name,
     required DateTime actionDateTime,
     required String title,
+    DateTime? dietExerciseRecordDateTime,
   }) onRecordComplete;
   Function() onTapOpen;
 
@@ -674,16 +679,19 @@ class RecordName extends StatefulWidget {
     required this.topTitle,
     required this.actionDateTime,
     required this.onRecordUpdate,
+    required this.dietExerciseRecordDateTime,
   });
 
   String type, id, name, title, topTitle;
   DateTime actionDateTime;
+  DateTime? dietExerciseRecordDateTime;
   Function({
     required String completedType,
     required String id,
     required String name,
     required DateTime actionDateTime,
     required String title,
+    DateTime? dietExerciseRecordDateTime,
   }) onRecordUpdate;
 
   @override
@@ -702,6 +710,7 @@ class _RecordNameState extends State<RecordName> {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     Box<RecordBox> recordBox = recordRepository.recordBox;
@@ -713,11 +722,24 @@ class _RecordNameState extends State<RecordName> {
       setState(() => isShowInput = true);
     }
 
-    onTapTitle(String selectedTitle) async {
+    onEditTitle(String selectedTitle) async {
+      log(selectedTitle);
       recordInfo?.actions?.forEach(
         (action) {
           if (action['id'] == widget.id) {
             action['title'] = selectedTitle;
+          }
+        },
+      );
+
+      await recordInfo?.save();
+    }
+
+    onEditDietExerciseRecordDateTime(DateTime dateTime) async {
+      recordInfo?.actions?.forEach(
+        (action) {
+          if (action['id'] == widget.id) {
+            action['dietExerciseRecordDateTime'] = dateTime;
           }
         },
       );
@@ -737,6 +759,7 @@ class _RecordNameState extends State<RecordName> {
 
     onTapMore() {
       showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (context) {
           return RecordBottomSheet(
@@ -745,8 +768,10 @@ class _RecordNameState extends State<RecordName> {
             id: widget.id,
             name: widget.name,
             topTitle: widget.topTitle,
+            dietExerciseRecordDateTime: widget.dietExerciseRecordDateTime,
             onTapEdit: onTapEdit,
-            onTapTitle: onTapTitle,
+            onEditTitle: onEditTitle,
+            onEditDietExerciseRecordDateTime: onEditDietExerciseRecordDateTime,
             onTapRemove: onTapRemove,
           );
         },
@@ -761,6 +786,7 @@ class _RecordNameState extends State<RecordName> {
           name: textController.text,
           actionDateTime: widget.actionDateTime,
           title: widget.title,
+          dietExerciseRecordDateTime: widget.dietExerciseRecordDateTime,
         );
       }
 
@@ -784,7 +810,7 @@ class _RecordNameState extends State<RecordName> {
               children: [
                 Expanded(
                   child: InkWell(
-                    onTap: () => onTapMore(),
+                    onTap: onTapMore,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -796,10 +822,15 @@ class _RecordNameState extends State<RecordName> {
                           ),
                         ),
                         SpaceHeight(height: 3),
-                        CommonText(
-                          text: widget.title,
-                          size: 11,
-                          color: Colors.grey,
+                        Row(
+                          children: [
+                            CommonText(
+                              text:
+                                  '${widget.title.tr()}${widget.dietExerciseRecordDateTime != null ? ', ${hm(locale: context.locale.toString(), dateTime: widget.dietExerciseRecordDateTime!)}' : ''}',
+                              size: 11,
+                              color: Colors.grey,
+                            ),
+                          ],
                         )
                       ],
                     ),
@@ -894,7 +925,11 @@ class Dismiss extends StatelessWidget {
 }
 
 class RecordAdd extends StatefulWidget {
-  RecordAdd({super.key, required this.type, required this.onRecordAdd});
+  RecordAdd({
+    super.key,
+    required this.type,
+    required this.onRecordAdd,
+  });
 
   String type;
   Function({
@@ -903,6 +938,7 @@ class RecordAdd extends StatefulWidget {
     required String name,
     required DateTime actionDateTime,
     required String title,
+    DateTime? dietExerciseRecordDateTime,
   }) onRecordAdd;
 
   @override
@@ -915,10 +951,7 @@ class _RecordAddState extends State<RecordAdd> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-
-    onTapAdd() {
+    onAdd() {
       setState(() => isShowInput = true);
     }
 
@@ -935,17 +968,73 @@ class _RecordAddState extends State<RecordAdd> {
           isScrollControlled: true,
           context: context,
           builder: (context) {
-            return CategoryBottomSheet(
-              type: widget.type,
-              name: name,
-              selectedTitle: '',
-              onTap: (String title) {
-                widget.onRecordAdd(
-                  completedType: '추가',
-                  id: uuid(),
+            DateTime importDateTime =
+                context.watch<ImportDateTimeProvider>().getImportDateTime();
+
+            List<String> timeStamps = [
+              ampmFormat(DateTime.now().hour),
+              hourTo12[DateTime.now().hour]!,
+              '00'
+            ];
+
+            return StatefulBuilder(
+              builder: (
+                BuildContext context,
+                void Function(void Function()) setState,
+              ) {
+                UserBox? user = userRepository.user;
+
+                onAmpm(String ampm) {
+                  setState(() => timeStamps[0] = ampm);
+                }
+
+                onHours(String hour) {
+                  setState(() => timeStamps[1] = hour);
+                }
+
+                onMinutes(String minute) {
+                  setState(() => timeStamps[2] = minute);
+                }
+
+                onChangedSwitch(bool isChecked) {
+                  user.isDietExerciseRecordDateTime = isChecked;
+
+                  user.save();
+                  setState(() {});
+                }
+
+                onTapItem(String title) {
+                  DateTime createRecordDateTime = DateTime(
+                    importDateTime.year,
+                    importDateTime.month,
+                    importDateTime.day,
+                    hourTo24(ampm: timeStamps[0], hour: timeStamps[1]),
+                    minuteToInt(minute: timeStamps[2]),
+                  );
+
+                  widget.onRecordAdd(
+                    completedType: '추가',
+                    id: uuid(),
+                    title: title,
+                    name: name,
+                    actionDateTime: importDateTime,
+                    dietExerciseRecordDateTime:
+                        (user.isDietExerciseRecordDateTime == true
+                            ? createRecordDateTime
+                            : null),
+                  );
+                }
+
+                return CategoryBottomSheet(
+                  type: widget.type,
+                  timeStamps: timeStamps,
                   name: name,
-                  actionDateTime: importDateTime,
-                  title: title,
+                  selectedTitle: '',
+                  onAmpm: onAmpm,
+                  onHours: onHours,
+                  onMinutes: onMinutes,
+                  onChangedSwitch: onChangedSwitch,
+                  onTitle: onTapItem,
                 );
               },
             );
@@ -964,7 +1053,7 @@ class _RecordAddState extends State<RecordAdd> {
             ],
           )
         : InkWell(
-            onTap: onTapAdd,
+            onTap: onAdd,
             child: Row(
               children: [
                 SvgPicture.asset('assets/svgs/pencil-square.svg', height: 18),
@@ -981,26 +1070,43 @@ class CategoryBottomSheet extends StatelessWidget {
     super.key,
     required this.type,
     required this.name,
+    required this.timeStamps,
     required this.selectedTitle,
-    required this.onTap,
+    required this.onTitle,
+    required this.onAmpm,
+    required this.onHours,
+    required this.onMinutes,
+    required this.onChangedSwitch,
   });
 
   String type, name, selectedTitle;
-  Function(String title) onTap;
+  List<String> timeStamps;
+  Function(String) onAmpm, onHours, onMinutes, onTitle;
+  Function(bool) onChangedSwitch;
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
+
     return CommonBottomSheet(
       title: name,
-      height: 600,
+      height: user.isDietExerciseRecordDateTime == true ? 555 : 265,
       contents: Column(
         children: [
-          RecordDateTime(),
+          RecordDateTime(
+            isTitle: true,
+            isShowContents: user.isDietExerciseRecordDateTime == true,
+            timeStamps: timeStamps,
+            onAmpm: onAmpm,
+            onHours: onHours,
+            onMinutes: onMinutes,
+            onChangedSwitch: onChangedSwitch,
+          ),
           SpaceHeight(height: 10),
           CategoryList(
-            selectedTitle: selectedTitle,
             type: type,
-            onTap: onTap,
+            selectedTitle: selectedTitle,
+            onTitle: onTitle,
           ),
         ],
       ),
@@ -1012,12 +1118,13 @@ class CategoryList extends StatelessWidget {
   CategoryList({
     super.key,
     required this.type,
-    required this.onTap,
+    required this.onTitle,
     required this.selectedTitle,
   });
 
   String type, selectedTitle;
-  Function(String title) onTap;
+  DateTime? dietExerciseRecordDateTime;
+  Function(String title) onTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -1043,7 +1150,7 @@ class CategoryList extends StatelessWidget {
                       icon: item['icon'],
                       title: item['title'],
                       onTap: () {
-                        onTap(item['title']);
+                        onTitle(item['title']);
                         closeDialog(context);
                       },
                     ),
@@ -1056,60 +1163,26 @@ class CategoryList extends StatelessWidget {
   }
 }
 
-class RecordDateTime extends StatefulWidget {
-  const RecordDateTime({super.key});
+class RecordDateTime extends StatelessWidget {
+  RecordDateTime({
+    super.key,
+    required this.isTitle,
+    required this.isShowContents,
+    required this.timeStamps,
+    required this.onAmpm,
+    required this.onHours,
+    required this.onMinutes,
+    required this.onChangedSwitch,
+  });
 
-  @override
-  State<RecordDateTime> createState() => _RecordDateTimeState();
-}
-
-class _RecordDateTimeState extends State<RecordDateTime> {
-  List<String> timeStamps = ['', '', ''];
+  bool isTitle, isShowContents;
+  List<String> timeStamps;
+  Function(String) onAmpm, onHours, onMinutes;
+  Function(bool) onChangedSwitch;
 
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    String nowAmpm = ampmFormat(now.hour);
-    String nowHour = hoursFormat[now.hour]!;
-    String nowMinute = '00';
-    bool isEmptyTimeStamps =
-        timeStamps[0] == '' && timeStamps[1] == '' && timeStamps[2] == '';
-
-    onTapAmpm(String ampm) {
-      setState(() {
-        if (isEmptyTimeStamps) {
-          timeStamps[0] = ampm;
-          timeStamps[1] = nowHour;
-          timeStamps[2] = nowMinute;
-        } else {
-          timeStamps[0] = ampm;
-        }
-      });
-    }
-
-    onTapHours(String hour) {
-      setState(() {
-        if (isEmptyTimeStamps) {
-          timeStamps[0] = nowAmpm;
-          timeStamps[1] = hour;
-          timeStamps[2] = nowMinute;
-        } else {
-          timeStamps[1] = hour;
-        }
-      });
-    }
-
-    onTapMinutes(String minute) {
-      setState(() {
-        if (isEmptyTimeStamps) {
-          timeStamps[0] = nowAmpm;
-          timeStamps[1] = nowHour;
-          timeStamps[2] = minute;
-        } else {
-          timeStamps[2] = minute;
-        }
-      });
-    }
+    UserBox user = userRepository.user;
 
     onCommButton({
       required String type,
@@ -1126,7 +1199,7 @@ class _RecordDateTimeState extends State<RecordDateTime> {
               text: type == 'ampm' ? text.tr() : text,
               fontSize: 12,
               textColor: state == text ? Colors.white : Colors.grey,
-              bgColor: state == text ? themeColor : Colors.grey.shade100,
+              bgColor: state == text ? themeColor : Colors.grey.shade50,
               isBold: state == text,
               radious: 7,
               isNotTr: true,
@@ -1144,7 +1217,7 @@ class _RecordDateTimeState extends State<RecordDateTime> {
               text: text,
               isLast: text == '오후',
               state: timeStamps[0],
-              onTap: onTapAmpm,
+              onTap: onAmpm,
             ))
         .toList();
     List<List<Widget>> hoursInfo = [
@@ -1154,7 +1227,7 @@ class _RecordDateTimeState extends State<RecordDateTime> {
                 text: text,
                 isLast: text == '6',
                 state: timeStamps[1],
-                onTap: onTapHours,
+                onTap: onHours,
               ))
           .toList(),
       ["7", "8", "9", "10", "11", "12"]
@@ -1163,7 +1236,7 @@ class _RecordDateTimeState extends State<RecordDateTime> {
                 text: text,
                 isLast: text == '12',
                 state: timeStamps[1],
-                onTap: onTapHours,
+                onTap: onHours,
               ))
           .toList(),
     ];
@@ -1174,7 +1247,7 @@ class _RecordDateTimeState extends State<RecordDateTime> {
                 text: text,
                 isLast: text == '25',
                 state: timeStamps[2],
-                onTap: onTapMinutes,
+                onTap: onMinutes,
               ))
           .toList(),
       ["30", "35", "40", "45", "50", "55"]
@@ -1183,15 +1256,13 @@ class _RecordDateTimeState extends State<RecordDateTime> {
                 text: text,
                 isLast: text == '55',
                 state: timeStamps[2],
-                onTap: onTapMinutes,
+                onTap: onMinutes,
               ))
           .toList()
     ];
 
     Map<String, Flex> wObj = {
-      "오전/오후": Row(
-        children: ampmInfo,
-      ),
+      "오전/오후": Row(children: ampmInfo),
       "시": Column(
         children: [
           Row(children: hoursInfo[0]),
@@ -1209,23 +1280,52 @@ class _RecordDateTimeState extends State<RecordDateTime> {
     };
 
     rowItem({required String title}) {
-      return Column(
-        children: [
-          CommonText(text: title, size: 12, isBold: true),
-          SpaceHeight(height: 10),
-          wObj[title]!
-        ],
+      return wObj[title]!;
+    }
+
+    rowTitle() {
+      return Padding(
+        padding: EdgeInsets.only(bottom: isShowContents ? 20 : 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonText(text: '시간도 기록 할까요?', size: 12, isBold: true),
+                SpaceHeight(height: 2),
+                CommonText(
+                  text: '오전/오후, 시, 분 버튼으로 기록해요',
+                  size: 10,
+                  color: Colors.grey,
+                ),
+              ],
+            ),
+            CupertinoSwitch(
+              value: user.isDietExerciseRecordDateTime == true,
+              activeColor: themeColor,
+              onChanged: onChangedSwitch,
+            )
+          ],
+        ),
       );
     }
 
     return ContentsBox(
       contentsWidget: Column(
         children: [
-          rowItem(title: '오전/오후'),
-          SpaceHeight(height: 15),
-          rowItem(title: '시'),
-          SpaceHeight(height: 15),
-          rowItem(title: '분'),
+          isTitle ? rowTitle() : const EmptyArea(),
+          isShowContents == true
+              ? Column(
+                  children: [
+                    rowItem(title: '오전/오후'),
+                    SpaceHeight(height: 25),
+                    rowItem(title: '시'),
+                    SpaceHeight(height: 25),
+                    rowItem(title: '분'),
+                  ],
+                )
+              : const EmptyArea(),
         ],
       ),
     );
@@ -1822,14 +1922,18 @@ class RecordBottomSheet extends StatefulWidget {
     required this.name,
     required this.selectedTitle,
     required this.topTitle,
+    required this.dietExerciseRecordDateTime,
     required this.onTapEdit,
-    required this.onTapTitle,
+    required this.onEditTitle,
+    required this.onEditDietExerciseRecordDateTime,
     required this.onTapRemove,
   });
 
   String type, id, name, topTitle, selectedTitle;
+  DateTime? dietExerciseRecordDateTime;
+  Function(String title) onEditTitle;
+  Function(DateTime) onEditDietExerciseRecordDateTime;
   Function() onTapEdit;
-  Function(String) onTapTitle;
   Function() onTapRemove;
 
   @override
@@ -1837,59 +1941,143 @@ class RecordBottomSheet extends StatefulWidget {
 }
 
 class _RecordBottomSheetState extends State<RecordBottomSheet> {
-  bool isCategory = false;
+  List<String> timeStamps = ['', '', ''];
+  String selectedWidget = 'default';
+
+  @override
+  void initState() {
+    if (widget.dietExerciseRecordDateTime != null) {
+      DateTime dateTime = widget.dietExerciseRecordDateTime!;
+
+      timeStamps[0] = ampmFormat(dateTime.hour);
+      timeStamps[1] = hourTo12[dateTime.hour]!;
+      timeStamps[2] = minuteTo5Min(min: dateTime.minute);
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    onTapChangeCategory() {
-      setState(() => isCategory = true);
-    }
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+    bool isCompleted =
+        timeStamps[0] != '' && timeStamps[1] != '' && timeStamps[2] != '';
 
-    return CommonBottomSheet(
-      title: widget.name,
-      height: 500,
-      contents: isCategory
-          ? CategoryList(
-              selectedTitle: widget.selectedTitle,
-              type: widget.type,
-              onTap: widget.onTapTitle,
-            )
-          : Column(
+    final widgetObj = {
+      'default': {
+        'height': 305.0,
+        'contents': Column(
+          children: [
+            Row(
               children: [
-                ContentsBox(contentsWidget: Row(children: [])),
-                SpaceHeight(height: 10),
-                Row(
-                  children: [
-                    ExpandedButtonVerti(
-                      mainColor: themeColor,
-                      icon: Icons.edit,
-                      title: '${widget.topTitle} 수정',
-                      onTap: () {
-                        closeDialog(context);
-                        widget.onTapEdit();
-                      },
-                    ),
-                    SpaceWidth(width: tinySpace),
-                    ExpandedButtonVerti(
-                      mainColor: themeColor,
-                      icon: Icons.category,
-                      title: '분류 변경',
-                      onTap: onTapChangeCategory,
-                    ),
-                    SpaceWidth(width: tinySpace),
-                    ExpandedButtonVerti(
-                      mainColor: Colors.red,
-                      icon: Icons.delete_forever,
-                      title: '${widget.topTitle} 삭제',
-                      onTap: () {
-                        closeDialog(context);
-                        widget.onTapRemove();
-                      },
-                    )
-                  ],
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.edit,
+                  title: '${widget.topTitle} 수정',
+                  onTap: () {
+                    closeDialog(context);
+                    widget.onTapEdit();
+                  },
+                ),
+                SpaceWidth(width: 7),
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.category,
+                  title: '분류 변경',
+                  onTap: () {
+                    setState(() => selectedWidget = 'category');
+                  },
                 ),
               ],
             ),
+            SpaceHeight(height: 7),
+            Row(
+              children: [
+                ExpandedButtonVerti(
+                  mainColor: themeColor,
+                  icon: Icons.alarm_on_rounded,
+                  title: '기록 시간',
+                  onTap: () {
+                    setState(() => selectedWidget = 'timeSetting');
+                  },
+                ),
+                SpaceWidth(width: 7),
+                ExpandedButtonVerti(
+                  mainColor: Colors.red,
+                  icon: Icons.delete_forever,
+                  title: '${widget.topTitle} 삭제',
+                  onTap: () {
+                    closeDialog(context);
+                    widget.onTapRemove();
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      },
+      'category': {
+        'height': 180.0,
+        'contents': CategoryList(
+          selectedTitle: widget.selectedTitle,
+          type: widget.type,
+          onTitle: widget.onEditTitle,
+        ),
+      },
+      'timeSetting': {
+        'height': 445.0,
+        'contents': Column(
+          children: [
+            RecordDateTime(
+              isTitle: false,
+              isShowContents: true,
+              timeStamps: timeStamps,
+              onAmpm: (String ampm) {
+                setState(() => timeStamps[0] = ampm);
+              },
+              onHours: (String hour) {
+                setState(() => timeStamps[1] = hour);
+              },
+              onMinutes: (String minute) {
+                setState(() => timeStamps[2] = minute);
+              },
+              onChangedSwitch: (_) => null,
+            ),
+            SpaceHeight(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: BottomSubmitButton(
+                    padding: const EdgeInsets.all(0),
+                    isEnabled: isCompleted,
+                    text: '완료'.tr(),
+                    onPressed: () {
+                      if (isCompleted) {
+                        DateTime dateTime = DateTime(
+                          importDateTime.year,
+                          importDateTime.month,
+                          importDateTime.day,
+                          hourTo24(ampm: timeStamps[0], hour: timeStamps[1]),
+                          minuteToInt(minute: timeStamps[2]),
+                        );
+                        widget.onEditDietExerciseRecordDateTime(dateTime);
+                        closeDialog(context);
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      },
+    };
+
+    return CommonBottomSheet(
+      title: widget.name,
+      height: widgetObj[selectedWidget]!['height'] as double,
+      contents: widgetObj[selectedWidget]!['contents'] as Widget,
     );
   }
 }

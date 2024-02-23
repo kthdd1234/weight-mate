@@ -500,6 +500,7 @@ List<Widget>? onActionList({
     required String name,
     required DateTime actionDateTime,
     required String title,
+    DateTime? dietExerciseRecordDateTime,
   }) onRecordUpdate,
 }) {
   final actionList = actions
@@ -514,12 +515,13 @@ List<Widget>? onActionList({
             children: [
               RecordName(
                 type: type,
+                title: item['title'],
+                topTitle: todoData[type]!.title,
                 id: item['id'],
                 name: item['name'],
                 actionDateTime: item['actionDateTime'],
+                dietExerciseRecordDateTime: item['dietExerciseRecordDateTime'],
                 onRecordUpdate: onRecordUpdate,
-                title: item['title'],
-                topTitle: todoData[type]!.title,
               ),
               SpaceHeight(height: 15)
             ],
@@ -713,4 +715,49 @@ DateTime weeklyEndDateTime(DateTime dateTime) {
 
 String ampmFormat(int hour) {
   return hour < 12 ? '오전' : '오후';
+}
+
+int hourTo24({required String ampm, required String hour}) {
+  if (ampm == '오전') {
+    if (hour == '12') {
+      return 24;
+    }
+
+    return int.parse(hour);
+  }
+
+  return {
+    '1': 13,
+    '2': 14,
+    '3': 15,
+    '4': 16,
+    '5': 17,
+    '6': 18,
+    '7': 19,
+    '8': 20,
+    '9': 21,
+    '10': 22,
+    '11': 23,
+    '12': 12,
+  }[hour]!;
+}
+
+minuteToInt({required String minute}) {
+  if (minute == '00') {
+    return 0;
+  } else if (minute == '05') {
+    return 5;
+  }
+
+  return int.parse(minute);
+}
+
+minuteTo5Min({required int min}) {
+  if (min == 0) {
+    return '00';
+  } else if (min == 5) {
+    return '05';
+  }
+
+  return '$min';
 }

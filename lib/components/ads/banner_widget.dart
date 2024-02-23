@@ -106,5 +106,5 @@ Future<bool> isHideAd() async {
     }
   }
 
-  return false;
+  return true;
 }

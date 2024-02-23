@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? historyForamt = user.historyForamt;
     List<String>? historyDisplayList = user.historyDisplayList;
     String? historyCalendarForamt = user.historyCalendarFormat;
+    bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -179,6 +180,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (historyCalendarForamt == null) {
       user.historyCalendarFormat = CalendarFormat.week.toString();
+    }
+
+    if (isDietExerciseRecordDateTime == null) {
+      user.isDietExerciseRecordDateTime = false;
     }
 
     userRepository.user.save();

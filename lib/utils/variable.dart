@@ -296,7 +296,7 @@ List<SvgClass> svgData = [
   SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
 ];
 
-Map<int, String> hoursFormat = {
+Map<int, String> hourTo12 = {
   0: '12',
   1: "1",
   2: '2',

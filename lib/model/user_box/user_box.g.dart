@@ -40,13 +40,14 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       historyForamt: fields[20] as String?,
       historyDisplayList: fields[21] as List<String>?,
       historyCalendarFormat: fields[22] as String?,
+      isDietExerciseRecordDateTime: fields[23] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(23)
+      ..writeByte(24)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -92,7 +93,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(21)
       ..write(obj.historyDisplayList)
       ..writeByte(22)
-      ..write(obj.historyCalendarFormat);
+      ..write(obj.historyCalendarFormat)
+      ..writeByte(23)
+      ..write(obj.isDietExerciseRecordDateTime);
   }
 
   @override
