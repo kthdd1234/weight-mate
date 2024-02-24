@@ -449,29 +449,19 @@ class HistoryTodo extends StatelessWidget {
     bool isExercise = historyDisplayList.contains(fExercise);
     bool isLife = historyDisplayList.contains(fLife);
 
-    renderSvg(String path) => SvgPicture.asset('assets/svgs/$path.svg');
-
-    Map<String, SvgPicture> planTypeSvgs = {
-      PlanTypeEnum.diet.toString(): renderSvg('check-diet'),
-      PlanTypeEnum.exercise.toString(): renderSvg('check-exercise'),
-      PlanTypeEnum.lifestyle.toString(): renderSvg('check-life'),
-    };
-
     onIcon(String type, bool? isRecord, String title) {
-      if (isRecord == true) {
-        return Icon(
-          categoryIcons[title],
-          color: categoryColors[type],
-          size: 15,
-        );
-      }
+      MaterialColor color = categoryColors[type]!;
 
-      return planTypeSvgs[type];
+      return CommonIcon(
+        icon: isRecord == true ? categoryIcons[title]! : Icons.check_rounded,
+        size: 11,
+        color: color.shade300,
+        bgColor: color.shade50,
+      );
     }
 
     final todoDisplayList = recordInfo.actions?.where((action) {
       String planType = action['type'];
-
       bool isDietPlan = planType == eDiet;
       bool isExercisePlan = planType == eExercise;
       bool isLifePlan = planType == eLife;
@@ -495,16 +485,30 @@ class HistoryTodo extends StatelessWidget {
         )
         .toList();
 
-    todoResultList?.sort((A, B) {
-      int itemA = categoryOrders[A['title']] ?? 7;
-      int itemB = categoryOrders[B['title']] ?? 7;
+    todoResultList?.sort((a, b) {
+      DateTime dateTime1 =
+          a['dietExerciseRecordDateTime'] ?? DateTime(3000, 1, 1);
+      DateTime dateTime2 =
+          b['dietExerciseRecordDateTime'] ?? DateTime(3000, 1, 2);
 
-      return itemA.compareTo(itemB);
+      return dateTime1.compareTo(dateTime2);
     });
 
     todoResultList?.sort(
-      (a, b) => planOrder[a['type']]!.compareTo(planOrder[b['type']]!),
+      (A, B) {
+        int itemA = A['isRecord'] == true ? 0 : 1;
+        int itemB = B['isRecord'] == true ? 0 : 1;
+
+        return itemA.compareTo(itemB);
+      },
     );
+
+    todoResultList?.sort((A, B) {
+      int order1 = planOrder[A['type']]!;
+      int order2 = planOrder[B['type']]!;
+
+      return order1.compareTo(order2);
+    });
 
     onTapRemoveAction(String targetId) {
       int? index = recordInfo.actions?.indexWhere(
@@ -535,12 +539,8 @@ class HistoryTodo extends StatelessWidget {
                         : const EmptyArea(),
                     Expanded(
                       flex: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 2),
-                        child: onIcon(data['type'], data['isRecord'],
-                                data['title']) ??
-                            const EmptyArea(),
-                      ),
+                      child:
+                          onIcon(data['type'], data['isRecord'], data['title']),
                     ),
                     SpaceWidth(width: smallSpace),
                     Expanded(

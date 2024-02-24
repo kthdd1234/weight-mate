@@ -710,7 +710,6 @@ class _RecordNameState extends State<RecordName> {
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     Box<RecordBox> recordBox = recordRepository.recordBox;
@@ -1087,10 +1086,19 @@ class CategoryBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
+    bool isRecordDateTime = user.isDietExerciseRecordDateTime == true;
+
+    onHeight() {
+      if (isRecordDateTime) {
+        return type == eDiet ? 560.0 : 565.0;
+      }
+
+      return type == eDiet ? 270.0 : 285.0;
+    }
 
     return CommonBottomSheet(
       title: name,
-      height: user.isDietExerciseRecordDateTime == true ? 555 : 265,
+      height: onHeight(),
       contents: Column(
         children: [
           RecordDateTime(
@@ -1295,7 +1303,7 @@ class RecordDateTime extends StatelessWidget {
                 CommonText(text: '시간도 기록 할까요?', size: 12, isBold: true),
                 SpaceHeight(height: 2),
                 CommonText(
-                  text: '오전/오후, 시, 분 버튼으로 기록해요',
+                  text: '시간 기록 시, 시간순으로 자동 정렬돼요.',
                   size: 10,
                   color: Colors.grey,
                 ),
@@ -1966,7 +1974,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
 
     final widgetObj = {
       'default': {
-        'height': 305.0,
+        'height': 307.0,
         'contents': Column(
           children: [
             Row(
@@ -2018,7 +2026,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
         ),
       },
       'category': {
-        'height': 180.0,
+        'height': 191.0,
         'contents': CategoryList(
           selectedTitle: widget.selectedTitle,
           type: widget.type,
@@ -2026,7 +2034,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
         ),
       },
       'timeSetting': {
-        'height': 445.0,
+        'height': 450.0,
         'contents': Column(
           children: [
             RecordDateTime(

@@ -226,19 +226,23 @@ class ColumnContainer extends StatelessWidget {
             ?.where(
                 (item1) => item1['isRecord'] == true && item1['type'] == type)
             .map((item2) => RecordLabel(
+                  type: type,
                   title: item2['title'],
                   text: item2['name'],
                   icon: categoryIcons[item2['title']]!,
-                  type: type,
+                  dietExerciseRecordDateTime:
+                      item2['dietExerciseRecordDateTime'],
                 ))
             .toList() ??
         [];
 
     recordActionList.sort((act1, act2) {
-      int order1 = categoryOrders[act1.title] ?? 0;
-      int order2 = categoryOrders[act2.title] ?? 0;
+      DateTime dateTime1 =
+          act1.dietExerciseRecordDateTime ?? DateTime(3000, 1, 1);
+      DateTime dateTime2 =
+          act2.dietExerciseRecordDateTime ?? DateTime(3000, 1, 2);
 
-      return order1.compareTo(order2);
+      return dateTime1.compareTo(dateTime2);
     });
 
     dateTimeTitle({required String text, required Color color}) {
@@ -296,13 +300,16 @@ class RecordLabel extends StatelessWidget {
     required this.text,
     required this.icon,
     required this.type,
+    this.dietExerciseRecordDateTime,
   });
 
   String text, type, title;
+  DateTime? dietExerciseRecordDateTime;
   IconData icon;
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     MaterialColor color = categoryColors[type]!;
 
     return Padding(
@@ -311,7 +318,7 @@ class RecordLabel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(right: 7),
+            padding: const EdgeInsets.only(right: 7),
             child: CommonIcon(
               icon: icon,
               size: 11,
@@ -322,9 +329,25 @@ class RecordLabel extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(top: 2),
-              child: Text(
-                text,
-                style: const TextStyle(fontSize: 11),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(text, style: const TextStyle(fontSize: 11)),
+                  dietExerciseRecordDateTime != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: CommonText(
+                            text: hm(
+                              locale: locale,
+                              dateTime: dietExerciseRecordDateTime!,
+                            ),
+                            size: 9,
+                            color: Colors.grey,
+                            isNotTop: true,
+                          ),
+                        )
+                      : const EmptyArea()
+                ],
               ),
             ),
           ),
