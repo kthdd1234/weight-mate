@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
+import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_app_weight_management/provider/history_import_date_time.
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/reload_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
@@ -78,6 +80,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
         ChangeNotifierProvider(create: (_) => HistoryTitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
+        ChangeNotifierProvider(create: (_) => ReloadProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,
@@ -132,19 +135,25 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<ReloadProvider>().isReload;
+
     String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
+
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
         : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
+    String initLocale = context.locale != const Locale('ja')
+        ? 'cafe24Ohsquareair'
+        : 'cafe24SsurroundAir';
+    String fontFamily =
+        user?.fontFamily == null ? initLocale : user!.fontFamily!;
 
     ThemeData theme = ThemeData(
       primarySwatch: AppColors.primaryMaterialSwatchDark,
-      fontFamily: context.locale != const Locale('ja')
-          ? 'cafe24Ohsquareair'
-          : 'cafe24SsurroundAir',
+      fontFamily: fontFamily,
       textTheme: textTheme,
       splashColor: Colors.white,
       brightness: Brightness.light,
@@ -177,6 +186,7 @@ class _MyAppState extends State<MyApp> {
         '/todo-chart-page': (context) => const TodoChartPage(),
         '/weight-chart-page': (context) => const WeightChartPage(),
         '/goal-chart-page': (context) => const GoalChartPage(),
+        '/font-change-page': (context) => const FontChangePage(),
       },
     );
   }

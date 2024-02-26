@@ -30,6 +30,7 @@ class UserBox extends HiveObject {
     this.historyDisplayList,
     this.historyCalendarFormat,
     this.isDietExerciseRecordDateTime,
+    this.fontFamily,
   });
 
   @HiveField(0)
@@ -103,6 +104,9 @@ class UserBox extends HiveObject {
 
   @HiveField(23)
   bool? isDietExerciseRecordDateTime;
+
+  @HiveField(24)
+  String? fontFamily;
 
   @override
   String toString() {

@@ -31,7 +31,8 @@ enum MoreSeeItem {
   appEval,
   appShare,
   developerInp,
-  privacyPolicy
+  privacyPolicy,
+  appFont
 }
 
 enum MoreSeeWidgetTypes { none, arrow, switching }

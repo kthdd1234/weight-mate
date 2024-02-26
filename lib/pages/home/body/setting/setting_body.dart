@@ -33,6 +33,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:timezone/timezone.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingBody extends StatefulWidget {
@@ -60,12 +61,16 @@ class _SettingBodyState extends State<SettingBody> {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     BottomNavigationEnum bodyId =
         context.watch<BottomNavigationProvider>().selectedEnumId;
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
     String? language = user.language;
-    String locale = context.locale.toString();
+    String? fontFamily = user.fontFamily;
+    String fontName = fontFamilyList
+            .firstWhere((item) => item['fontFamily'] == fontFamily)['name'] ??
+        '카페24 아네모네 에어';
 
     onNavigator({required String type, required String title}) async {
       await Navigator.pushNamed(context, '/body-info-page', arguments: {
@@ -351,7 +356,9 @@ class _SettingBodyState extends State<SettingBody> {
                         Text(
                           item.name,
                           style: TextStyle(
-                            fontFamily: 'cafe24SsurroundAir',
+                            fontFamily: locale == 'ja'
+                                ? 'cafe24SsurroundAir'
+                                : fontFamily,
                             fontWeight: isLanguage
                                 ? FontWeight.bold
                                 : FontWeight.normal,
@@ -370,6 +377,11 @@ class _SettingBodyState extends State<SettingBody> {
           ),
         ),
       );
+    }
+
+    onTapFont(id) async {
+      await Navigator.pushNamed(context, '/font-change-page');
+      setState(() {});
     }
 
     onTapUnit(id) async {
@@ -405,6 +417,14 @@ class _SettingBodyState extends State<SettingBody> {
         value: '${user.tallUnit}/${user.weightUnit}',
         color: themeColor,
         onTap: onTapUnit,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appFont,
+        icon: 'font',
+        title: '글꼴 변경',
+        value: fontName.tr(),
+        color: themeColor,
+        onTap: onTapFont,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appLang,
@@ -484,6 +504,12 @@ class _SettingBodyState extends State<SettingBody> {
         onTap: onTapVersion,
       ),
     ];
+
+    if (locale == 'ja') {
+      settingItemList = settingItemList
+          .where((item) => item.id != MoreSeeItem.appFont)
+          .toList();
+    }
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,

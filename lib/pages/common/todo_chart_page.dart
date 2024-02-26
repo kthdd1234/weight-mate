@@ -236,6 +236,9 @@ class ColumnContainer extends StatelessWidget {
             .toList() ??
         [];
 
+    recordActionList.sort((itemA, itemB) =>
+        categoryOrders[itemA.title]!.compareTo(categoryOrders[itemB.title]!));
+
     recordActionList.sort((act1, act2) {
       DateTime dateTime1 =
           act1.dietExerciseRecordDateTime ?? DateTime(3000, 1, 1);
@@ -344,6 +347,7 @@ class RecordLabel extends StatelessWidget {
                             size: 9,
                             color: Colors.grey,
                             isNotTop: true,
+                            isNotTr: true,
                           ),
                         )
                       : const EmptyArea()

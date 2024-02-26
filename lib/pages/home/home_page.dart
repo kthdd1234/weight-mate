@@ -1,6 +1,4 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
-import 'dart:developer';
-import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -92,6 +90,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<String>? historyDisplayList = user.historyDisplayList;
     String? historyCalendarForamt = user.historyCalendarFormat;
     bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
+    String? fontFamily = user.fontFamily;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -184,6 +183,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (isDietExerciseRecordDateTime == null) {
       user.isDietExerciseRecordDateTime = false;
+    }
+
+    if (fontFamily == null) {
+      user.fontFamily = 'cafe24Ohsquareair';
     }
 
     userRepository.user.save();

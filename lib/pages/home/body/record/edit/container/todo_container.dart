@@ -828,6 +828,7 @@ class _RecordNameState extends State<RecordName> {
                                   '${widget.title.tr()}${widget.dietExerciseRecordDateTime != null ? ', ${hm(locale: context.locale.toString(), dateTime: widget.dietExerciseRecordDateTime!)}' : ''}',
                               size: 11,
                               color: Colors.grey,
+                              isNotTr: true,
                             ),
                           ],
                         )
@@ -2005,7 +2006,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
                 ExpandedButtonVerti(
                   mainColor: themeColor,
                   icon: Icons.alarm_on_rounded,
-                  title: '기록 시간',
+                  title: '시간 기록',
                   onTap: () {
                     setState(() => selectedWidget = 'timeSetting');
                   },

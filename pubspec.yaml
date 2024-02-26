@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.0.10+33
+version: 2.0.11+34
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -172,6 +172,7 @@ flutter:
     - assets/svgs/pencil-square-brown.svg
     - assets/svgs/language.svg
     - assets/svgs/ruler.svg
+    - assets/svgs/font.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -185,58 +186,65 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: HapinessSans
+    - family: Cafe24Syongsyong
       fonts:
-        - asset: assets/fonts/happiness-sans/Happiness-Sans-Title.ttf
-          weight: 400
-        - asset: assets/fonts/happiness-sans/Happiness-Sans-Regular.ttf
-          weight: 500
-        - asset: assets/fonts/happiness-sans/Happiness-Sans-Bold.ttf
-          weight: 700
-
-    - family: ImcreSoojin
-      fonts:
-        - asset: assets/fonts/ImcreSoojin/ImcreSoojin.ttf
+        - asset: assets/fonts/Cafe24Syongsyong/Cafe24Syongsyong.ttf
           weight: 400
 
-    - family: HSSaemaul-regular
+    - family: 온글잎 밑미
       fonts:
-        - asset: assets/fonts/HSSaemaul-regular/HSSaemaul-Regular.ttf
+        - asset: assets/fonts/온글잎 밑미/온글잎 밑미.ttf
           weight: 400
-    - family: SUIT
-      fonts:
-        - asset: assets/fonts/SUIT/SUIT-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/SUIT/SUIT-ExtraLight.ttf
-          weight: 200
-        - asset: assets/fonts/SUIT/SUIT-Light.ttf
-          weight: 300
-        - asset: assets/fonts/SUIT/SUIT-Regular.ttf
-          weight: 400
-        - asset: assets/fonts/SUIT/SUIT-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/SUIT/SUIT-SemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/SUIT/SUIT-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/SUIT/SUIT-ExtraBold.ttf
-          weight: 800
-        - asset: assets/fonts/SUIT/SUIT-Heavy.ttf
-          weight: 900
 
-    - family: cafe24Ssurround
-      fonts:
-        - asset: assets/fonts/cafe24Ssurround/Cafe24Ssurround.ttf
-          weight: 400
     - family: cafe24SsurroundAir
       fonts:
         - asset: assets/fonts/cafe24Ssurround/Cafe24SsurroundAir.ttf
           weight: 400
+
     - family: cafe24Ohsquareair
       fonts:
         - asset: assets/fonts/cafe24Ssurround/Cafe24Ohsquareair.ttf
           weight: 400
 
+    - family: Cafe24Dongdong
+      fonts:
+        - asset: assets/fonts/Cafe24Dongdong/Cafe24Dongdong.ttf
+          weight: 400
+
+    - family: Cafe24Ssukssuk
+      fonts:
+        - asset: assets/fonts/Cafe24Ssukssuk/Cafe24Ssukssuk.ttf
+          weight: 400
+
+    - family: KyoboHandwriting2022khn
+      fonts:
+        - asset: assets/fonts/KyoboHandwriting2022khn/KyoboHandwriting2022khn.ttf
+          weight: 400
+
+    - family: 꼬마나비체
+      fonts:
+        - asset: assets/fonts/꼬마나비체/꼬마나비체.ttf
+          weight: 400
+
+    - family: 봉숭아틴트체
+      fonts:
+        - asset: assets/fonts/봉숭아틴트체/봉숭아틴트체.ttf
+          weight: 400
+
+    - family: TDTDTadakTadak
+      fonts:
+        - asset: assets/fonts/TDTDTadakTadak/TDTDTadakTadak.ttf
+          weight: 400
+
+    - family: omyu pretty
+      fonts:
+        - asset: assets/fonts/omyu pretty/omyu pretty.ttf
+          weight: 400
+
+    - family: KOTRA HOPE
+      fonts:
+        - asset: assets/fonts/KOTRA HOPE/KOTRA HOPE.ttf
+          weight: 400
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

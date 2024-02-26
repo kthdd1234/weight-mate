@@ -507,8 +507,8 @@ List<Widget>? onActionList({
       ?.where((item) => type == item['type'] && item['isRecord'] != null)
       .toList();
 
-  // actionList?.sort((itemA, itemB) => categoryOrders[itemA['title']]!
-  //     .compareTo(categoryOrders[itemB['title']]!));
+  actionList?.sort((itemA, itemB) => categoryOrders[itemA['title']]!
+      .compareTo(categoryOrders[itemB['title']]!));
 
   actionList?.sort((itemA, itemB) {
     DateTime dateTime1 =
