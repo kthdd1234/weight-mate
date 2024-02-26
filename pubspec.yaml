@@ -245,6 +245,21 @@ flutter:
       fonts:
         - asset: assets/fonts/KOTRA HOPE/KOTRA HOPE.ttf
           weight: 400
+
+    - family: CookieRun
+      fonts:
+        - asset: assets/fonts/CookieRun/CookieRun.ttf
+          weight: 400
+
+    - family: SingleDay
+      fonts:
+        - asset: assets/fonts/SingleDay/SingleDay.ttf
+          weight: 400
+
+    - family: IM_Hyemin
+      fonts:
+        - asset: assets/fonts/IM_Hyemin/IM_Hyemin.ttf
+          weight: 400
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

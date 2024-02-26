@@ -345,6 +345,18 @@ List<Map<String, String>> fontFamilyList = [
     "name": "카페24 쑥쑥",
   },
   {
+    "fontFamily": "CookieRun",
+    "name": "쿠키런",
+  },
+  {
+    "fontFamily": "SingleDay",
+    "name": "싱글데이",
+  },
+  {
+    "fontFamily": "IM_Hyemin",
+    "name": "IM 혜민",
+  },
+  {
     "fontFamily": "온글잎 밑미",
     "name": "밑미 폰트",
   },
