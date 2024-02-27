@@ -40,6 +40,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'etc/add_body_info.dart';
 import 'pages/common/screen_lock_page.dart';
