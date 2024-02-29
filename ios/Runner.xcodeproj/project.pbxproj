@@ -176,12 +176,28 @@
 		D3E8A2CA2B8D9C44008184DD /* weight_mate_widget */ = {
 			isa = PBXGroup;
 			children = (
+				D3E8A34A2B908A1F008184DD /* View */,
+				D3E8A3472B9089AC008184DD /* Memory */,
 				D3E8A2CB2B8D9C44008184DD /* weight_mate_widgetBundle.swift */,
 				D3E8A2CD2B8D9C44008184DD /* weight_mate_widget.swift */,
 				D3E8A2CF2B8D9C47008184DD /* Assets.xcassets */,
 				D3E8A2D12B8D9C47008184DD /* Info.plist */,
 			);
 			path = weight_mate_widget;
+			sourceTree = "<group>";
+		};
+		D3E8A3472B9089AC008184DD /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Memory;
+			sourceTree = "<group>";
+		};
+		D3E8A34A2B908A1F008184DD /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		F0141A8D50CADE5A1C278A6C /* Pods */ = {

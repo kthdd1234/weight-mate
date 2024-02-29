@@ -16,6 +16,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/contai
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -127,17 +128,19 @@ class _EditWeightState extends State<EditWeight> {
         }
 
         recordInfo?.save();
+        HomeWidgetService().updateWidgetFun(data: {'weight': '$weight'});
 
         onInit();
         closeDialog(context);
 
         List<RecordBox> recordList = recordRepository.recordBox.values.toList();
-        recordList.where((e) => e.weight != null);
+        List<RecordBox> weightList =
+            recordList.where((e) => e.weight != null).toList();
 
         showAdDialog(
           title: '👏🏻 일째 기록 했어요!',
           loadingText: '체중 데이터 저장 중...',
-          nameArgs: {'days': '${recordList.length}'},
+          nameArgs: {'days': '${weightList.length}'},
         );
       }
     }
