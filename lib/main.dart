@@ -121,13 +121,13 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> initAppTrackingPlugin() async {
     try {
-      final TrackingStatus status =
+      TrackingStatus status =
           await AppTrackingTransparency.trackingAuthorizationStatus;
 
       setState(() => _authStatus = '$status');
 
       if (status == TrackingStatus.notDetermined) {
-        final TrackingStatus status =
+        TrackingStatus status =
             await AppTrackingTransparency.requestTrackingAuthorization();
         setState(() => _authStatus = '$status');
       }
