@@ -9,3 +9,9 @@ public var lightBlueIconColor: Color = Color(red: 79/255, green: 195/255, blue: 
 
 public var brwonBgColor: Color = Color(red: 239/255, green: 235/255, blue: 233/255)
 public var brwonIconColor: Color = Color(red: 161/255, green: 136/255, blue: 127/255)
+
+public var dietColors = ["background": tealBgColor, "icon": tealIconColor]
+public var exerciseColors = ["background": lightBlueBgColor, "icon": lightBlueIconColor]
+public var lifeColors = ["background": brwonBgColor, "icon": brwonIconColor]
+
+public var todoTypeColors = ["diet": dietColors, "exercise": exerciseColors, "life": lifeColors]

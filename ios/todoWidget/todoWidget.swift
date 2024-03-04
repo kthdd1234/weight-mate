@@ -1,10 +1,3 @@
-//
-//  todoWidget.swift
-//  todoWidget
-//
-//  Created by 김동현 on 3/2/24.
-//
-
 import WidgetKit
 import SwiftUI
 
@@ -41,15 +34,40 @@ struct SimpleEntry: TimelineEntry {
 
 struct todoWidgetEntryView : View {
     var entry: Provider.Entry
+    
+    @Environment(\.widgetFamily) var wFamily
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            HeaderCell(title: "식단 기록", secondary: "3.02 (토)")
-            VStack(alignment: .leading, spacing: 15) {
-                IconTextCell(name: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국")
-                IconTextCell(name: "짬뽕 한 그릇, 단무지, 무말랭이")
-                IconTextCell(name: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국")
-            }.padding(.top, 5)
+            if isWidgetSizeSmallMedium(family: wFamily) {
+                Spacer()
+            } // 3 이상일 조건 통과
+            HeaderCell(title: "식단", secondary: "3.02 (토)")
+//          EmptyCell(svgName: "empty-record", text: "식단 기록하기")
+            VStack(alignment: .leading, spacing: 12) {
+                IconTextCell(
+                    text: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국",
+                    systemName: systemName(type: "diet", key: "morning"),
+                    iconColor: iconColor(type: "diet"),
+                    bgColor: bgColor(type: "diet")
+                )
+                IconTextCell(
+                    text: "짬뽕 한 그릇, 단무지, 무말랭이",
+                    systemName: systemName(type: "diet", key: "lunch"),
+                    iconColor: iconColor(type: "diet"),
+                    bgColor: bgColor(type: "diet")
+                )
+                IconTextCell(
+                    text: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국",
+                    systemName: systemName(type: "diet", key: "dinner"),
+                    iconColor: iconColor(type: "diet"),
+                    bgColor: bgColor(type: "diet")
+                )
+             
+                if isWidgetSizeSmallMedium(family: wFamily) {
+                    SecondaryCell(text: "+ 이외 2개의 기록", font: .caption2).padding(.leading, 3)
+                }
+            }
             Spacer()
         }
         .containerBackground(for: .widget) {
@@ -65,8 +83,8 @@ struct todoWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             todoWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("식단 기록")
+        .description("오늘의 식단을 빠르게 기록 할 수 있어요.")
     }
 }
 

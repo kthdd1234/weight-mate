@@ -1,7 +1,6 @@
 import WidgetKit
 import SwiftUI
 
-
 public var widgetGroupId = "group.weight-mate-widget"
 
 struct Provider: TimelineProvider {
@@ -54,14 +53,15 @@ struct weightMateWidget: Widget {
                 weightMateWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("체중 기록")
-        .description("오늘의 체중을 빠르게 기록할 수 있어요.")
+        .description("오늘의 체중을 빠르게 기록 할 수 있어요.")
         .supportedFamilies([.systemSmall])
     }
 }
 
 struct WeightMateWidget_Previews: PreviewProvider {
     static var previews: some View {
-        weightMateWidgetEntryView(entry: SimpleEntry(date: Date(), weight: "Example Weight")).previewContext(WidgetPreviewContext(family: .systemSmall))
+        weightMateWidgetEntryView(entry: SimpleEntry(date: Date(), weight: "Example Weight"))
+            .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
 
