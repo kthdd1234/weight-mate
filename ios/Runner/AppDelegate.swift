@@ -2,6 +2,7 @@ import UIKit
 import Flutter
 import flutter_local_notifications
 import home_widget
+import workmanager
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -15,6 +16,12 @@ import home_widget
 
     if #available(iOS 10.0, *) {
       UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
+    }
+
+    UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(60 * 15))
+
+    WorkmanagerPlugin.setPluginRegistrantCallback { registry in
+      GeneratedPluginRegistrant.register(with: registry)
     }
 
     if #available(iOS 17, *) {
