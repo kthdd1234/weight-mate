@@ -1,6 +1,8 @@
 import Foundation
 import SwiftUI
 
+public var themeColor: Color = Color(red: 58/255, green: 61/255, blue: 118/255)
+
 public var tealBgColor : Color = Color(red: 224/255, green: 242/255, blue: 241/255)
 public var tealIconColor : Color = Color(red: 77/255, green: 182/255, blue: 172/255)
 

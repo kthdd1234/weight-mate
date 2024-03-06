@@ -8,26 +8,30 @@ struct IconTextCell: View {
     
     var body: some View {
         HStack() {
-            IconCell(systemName: systemName, iconColor: iconColor, bgColor: bgColor)
-            TextCell(text: text, font: .footnote, isBold: false)
+            IconBoxCell(systemName: systemName, iconColor: iconColor, bgColor: bgColor)
+            TextCell(text: text, font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil)
         }
     }
 }
 
-struct IconCell: View {
+struct IconBoxCell: View {
     var systemName: String
     var iconColor: Color
     var bgColor: Color
     
     var body: some View {
-            Image(systemName: systemName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 10, height: 10)
-                .padding(3)
-                .foregroundColor(iconColor)
-                .background(bgColor)
-                .cornerRadius(3)
+        Image(systemName: systemName)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: 10, height: 10)
+            .padding(3)
+            .foregroundColor(iconColor)
+            .background(bgColor)
+            .overlay {
+                RoundedRectangle(cornerRadius: 5)
+                    .stroke(iconColor, lineWidth: 0.5)
+            }
+            
     }
 }
 

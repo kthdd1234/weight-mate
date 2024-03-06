@@ -68,14 +68,24 @@
 		D35D70912B95B60F00F9C455 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
 		D35D70922B95B61100F9C455 /* SvgTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70552B9307AA00F9C455 /* SvgTextCell.swift */; };
 		D35D70932B95B61700F9C455 /* IconTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70622B93162100F9C455 /* IconTextCell.swift */; };
-		D35D70962B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* ToggleStateIntent.swift */; };
-		D35D70972B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* ToggleStateIntent.swift */; };
-		D35D70982B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* ToggleStateIntent.swift */; };
-		D35D70992B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* ToggleStateIntent.swift */; };
+		D35D70962B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
+		D35D70972B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
+		D35D70982B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
+		D35D70992B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
 		D35D709B2B95DF3100F9C455 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
 		D35D709C2B95DF3100F9C455 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
 		D35D709D2B95DF3100F9C455 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
 		D35D709E2B95DF3100F9C455 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
+		D35D70A12B96CF7300F9C455 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D35D70A22B96CF7300F9C455 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D35D70A32B96CF7300F9C455 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D35D70A42B96CF7300F9C455 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D35D70A52B96D3E900F9C455 /* GoalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D707F2B959F3F00F9C455 /* GoalWidget.swift */; };
+		D35D70AB2B96D8BE00F9C455 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
+		D35D70AD2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
+		D35D70AE2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
+		D35D70AF2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
+		D35D70B02B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
 		D3E8A3582B91C2BF008184DD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
 		D3E8A3592B91C2BF008184DD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
 		D3E8A35C2B91C2C0008184DD /* weightMateWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8A35B2B91C2C0008184DD /* weightMateWidgetBundle.swift */; };
@@ -183,8 +193,12 @@
 		D35D707F2B959F3F00F9C455 /* GoalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWidget.swift; sourceTree = "<group>"; };
 		D35D70812B959F4200F9C455 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D35D70832B959F4200F9C455 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D35D70952B95DA3300F9C455 /* ToggleStateIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleStateIntent.swift; sourceTree = "<group>"; };
+		D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundIntentWidget.swift; sourceTree = "<group>"; };
 		D35D709A2B95DF3100F9C455 /* vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vars.swift; sourceTree = "<group>"; };
+		D35D70A02B96CF7300F9C455 /* IconCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCell.swift; sourceTree = "<group>"; };
+		D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTextButtonCell.swift; sourceTree = "<group>"; };
+		D35D70B12B986F9400F9C455 /* todoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = todoWidgetExtension.entitlements; sourceTree = "<group>"; };
+		D35D70B22B986FAF00F9C455 /* GoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoalWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D3DDE3322A5D219A00C6F0FA /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
 		D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -273,6 +287,8 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				D35D70B22B986FAF00F9C455 /* GoalWidgetExtension.entitlements */,
+				D35D70B12B986F9400F9C455 /* todoWidgetExtension.entitlements */,
 				D35D706F2B94AED200F9C455 /* CommonFunc */,
 				D35D70662B943FDF00F9C455 /* CommonVariable */,
 				D35D70592B93094200F9C455 /* CommonWIdget */,
@@ -338,6 +354,8 @@
 				D35D70552B9307AA00F9C455 /* SvgTextCell.swift */,
 				D35D705E2B93105400F9C455 /* HeaderCell.swift */,
 				D35D70622B93162100F9C455 /* IconTextCell.swift */,
+				D35D70A02B96CF7300F9C455 /* IconCell.swift */,
+				D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */,
 			);
 			path = CommonCell;
 			sourceTree = "<group>";
@@ -346,7 +364,7 @@
 			isa = PBXGroup;
 			children = (
 				D35D705A2B93097400F9C455 /* BackgroundWidget.swift */,
-				D35D70952B95DA3300F9C455 /* ToggleStateIntent.swift */,
+				D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */,
 			);
 			path = CommonWIdget;
 			sourceTree = "<group>";
@@ -726,8 +744,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D35D70962B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */,
+				D35D70962B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
+				D35D70A52B96D3E900F9C455 /* GoalWidget.swift in Sources */,
 				D35D704A2B92FD9600F9C455 /* TextCell.swift in Sources */,
 				D35D70632B93162100F9C455 /* IconTextCell.swift in Sources */,
 				D35D70682B94401000F9C455 /* colors.swift in Sources */,
@@ -737,6 +756,8 @@
 				D35D705F2B93105400F9C455 /* HeaderCell.swift in Sources */,
 				D35D70522B9306C000F9C455 /* EmptyCell.swift in Sources */,
 				D35D705B2B93097400F9C455 /* BackgroundWidget.swift in Sources */,
+				D35D70AD2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
+				D35D70A12B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70562B9307AA00F9C455 /* SvgTextCell.swift in Sources */,
 				D35D706C2B94472F00F9C455 /* icons.swift in Sources */,
 				D35D709B2B95DF3100F9C455 /* vars.swift in Sources */,
@@ -747,7 +768,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D35D70982B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */,
+				D35D70982B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */,
 				D35D703B2B92F94600F9C455 /* todoWidgetBundle.swift in Sources */,
 				D35D704C2B92FD9600F9C455 /* TextCell.swift in Sources */,
 				D35D70652B93162100F9C455 /* IconTextCell.swift in Sources */,
@@ -758,7 +779,9 @@
 				D35D70612B93105400F9C455 /* HeaderCell.swift in Sources */,
 				D35D70542B9306C000F9C455 /* EmptyCell.swift in Sources */,
 				D35D705D2B93097400F9C455 /* BackgroundWidget.swift in Sources */,
+				D35D70A32B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70582B9307AA00F9C455 /* SvgTextCell.swift in Sources */,
+				D35D70AF2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D706E2B94472F00F9C455 /* icons.swift in Sources */,
 				D35D709D2B95DF3100F9C455 /* vars.swift in Sources */,
 			);
@@ -773,14 +796,17 @@
 				D35D708F2B95B60500F9C455 /* colors.swift in Sources */,
 				D35D708C2B95B41700F9C455 /* HeaderCell.swift in Sources */,
 				D35D708B2B95AE4200F9C455 /* BackgroundWidget.swift in Sources */,
+				D35D70AB2B96D8BE00F9C455 /* func.swift in Sources */,
 				D35D709E2B95DF3100F9C455 /* vars.swift in Sources */,
 				D35D70802B959F3F00F9C455 /* GoalWidget.swift in Sources */,
 				D35D70902B95B60D00F9C455 /* SecondaryCell.swift in Sources */,
+				D35D70A42B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70922B95B61100F9C455 /* SvgTextCell.swift in Sources */,
 				D35D707E2B959F3F00F9C455 /* GoalWidgetBundle.swift in Sources */,
 				D35D70912B95B60F00F9C455 /* EmptyCell.swift in Sources */,
+				D35D70B02B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D70932B95B61700F9C455 /* IconTextCell.swift in Sources */,
-				D35D70992B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */,
+				D35D70992B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -788,7 +814,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D35D70972B95DA3300F9C455 /* ToggleStateIntent.swift in Sources */,
+				D35D70972B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */,
 				D3E8A35E2B91C2C0008184DD /* weightMateWidget.swift in Sources */,
 				D35D704B2B92FD9600F9C455 /* TextCell.swift in Sources */,
 				D35D70642B93162100F9C455 /* IconTextCell.swift in Sources */,
@@ -799,7 +825,9 @@
 				D35D70602B93105400F9C455 /* HeaderCell.swift in Sources */,
 				D35D70532B9306C000F9C455 /* EmptyCell.swift in Sources */,
 				D35D705C2B93097400F9C455 /* BackgroundWidget.swift in Sources */,
+				D35D70A22B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70572B9307AA00F9C455 /* SvgTextCell.swift in Sources */,
+				D35D70AE2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D706D2B94472F00F9C455 /* icons.swift in Sources */,
 				D35D709C2B95DF3100F9C455 /* vars.swift in Sources */,
 			);
@@ -1140,6 +1168,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = todoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1184,6 +1213,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = todoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1225,6 +1255,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = todoWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1266,6 +1297,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = GoalWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1310,6 +1342,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = GoalWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1351,6 +1384,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = GoalWidgetExtension.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

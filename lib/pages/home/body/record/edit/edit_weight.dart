@@ -128,7 +128,6 @@ class _EditWeightState extends State<EditWeight> {
         }
 
         recordInfo?.save();
-        HomeWidgetService().updateWidgetFun(data: {'weight': '$weight'});
 
         onInit();
         closeDialog(context);

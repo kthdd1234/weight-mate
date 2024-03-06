@@ -38,13 +38,13 @@ struct todoWidgetEntryView : View {
     @Environment(\.widgetFamily) var wFamily
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading) {
             if isWidgetSizeSmallMedium(family: wFamily) {
                 Spacer()
-            } // 3 이상일 조건 통과
-            HeaderCell(title: "식단", secondary: "3.02 (토)")
+            }
+            HeaderCell(title: "오늘의 식단 기록", secondary: isWidgetSizeMediumLarge(family: wFamily) ? "3.15 (화)" : "")
 //          EmptyCell(svgName: "empty-record", text: "식단 기록하기")
-            VStack(alignment: .leading, spacing: 12) {
+            VStack(alignment: .leading, spacing: 15) {
                 IconTextCell(
                     text: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국",
                     systemName: systemName(type: "diet", key: "morning"),
@@ -64,9 +64,9 @@ struct todoWidgetEntryView : View {
                     bgColor: bgColor(type: "diet")
                 )
              
-                if isWidgetSizeSmallMedium(family: wFamily) {
-                    SecondaryCell(text: "+ 이외 2개의 기록", font: .caption2).padding(.leading, 3)
-                }
+//                if isWidgetSizeSmallMedium(family: wFamily) {
+//                    SecondaryCell(text: "+ 이외 2개의 기록", font: .caption2).padding(.leading, 3)
+//                }
             }
             Spacer()
         }

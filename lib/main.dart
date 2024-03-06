@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
@@ -38,6 +41,7 @@ import 'package:flutter_app_weight_management/services/home_widget_service.dart'
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -101,7 +105,7 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _authStatus = 'Unknown';
   Box<UserBox>? userBox;
 
@@ -110,32 +114,52 @@ class _MyAppState extends State<MyApp> {
     userBox = Hive.box('userBox');
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      await initAppTrackingPlugin();
+      try {
+        TrackingStatus status =
+            await AppTrackingTransparency.trackingAuthorizationStatus;
+
+        setState(() => _authStatus = '$status');
+
+        if (status == TrackingStatus.notDetermined) {
+          TrackingStatus status =
+              await AppTrackingTransparency.requestTrackingAuthorization();
+          setState(() => _authStatus = '$status');
+        }
+      } on PlatformException {
+        setState(() => _authStatus = 'error');
+      }
+
+      await AppTrackingTransparency.getAdvertisingIdentifier();
     });
 
-    /** */
     HomeWidgetService().initializeHomeWidget();
 
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
-  Future<void> initAppTrackingPlugin() async {
-    try {
-      TrackingStatus status =
-          await AppTrackingTransparency.trackingAuthorizationStatus;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    log('AppLifecycleState =>> $state');
+    bool isBackground = state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached;
 
-      setState(() => _authStatus = '$status');
+    if (isBackground) {
+      DateTime now = DateTime.now();
+      int recordKey = getDateTimeToInt(now);
+      RecordBox? record = recordRepository.recordBox.get(recordKey);
+      HomeWidgetService()
+          .updateWidgetFun(data: {'weight': '${record?.weight ?? ""}'});
 
-      if (status == TrackingStatus.notDetermined) {
-        TrackingStatus status =
-            await AppTrackingTransparency.requestTrackingAuthorization();
-        setState(() => _authStatus = '$status');
-      }
-    } on PlatformException {
-      setState(() => _authStatus = 'error');
+      // onActionList
+      // onPlanList
     }
+  }
 
-    await AppTrackingTransparency.getAdvertisingIdentifier();
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override

@@ -23,6 +23,15 @@ func iconColor(type: String) -> Color {
     return color
 }
 
+func isWidgetSizeMediumLarge(family: WidgetFamily) -> Bool {
+    if(family == .systemMedium || family == .systemLarge){
+        return true
+    }
+    
+    return false
+}
+
+
 func isWidgetSizeSmallMedium(family: WidgetFamily) -> Bool {
     if(family == .systemSmall || family == .systemMedium){
         return true

@@ -15,9 +15,9 @@ struct SvgTextCell: View {
     var body: some View {
         HStack {
             SvgCell(name: svgName)
-            TextCell(text: title, font: .footnote, isBold: false)
+            TextCell(text: title, font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil)
             Spacer()
-            TextCell(text: value, font: .footnote, isBold: true)
+            TextCell(text: value, font: .footnote, isBold: true, isLineThrough: nil, lineThroughColor: nil)
         }
     }
 }

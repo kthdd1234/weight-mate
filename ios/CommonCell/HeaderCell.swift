@@ -1,10 +1,3 @@
-//
-//  HeaderCell.swift
-//  Runner
-//
-//  Created by 김동현 on 3/2/24.
-//
-
 import SwiftUI
 
 struct HeaderCell: View {
@@ -13,7 +6,7 @@ struct HeaderCell: View {
     
     var body: some View {
             HStack(){
-                TextCell(text: title, font: .headline, isBold: true)
+                TextCell(text: title, font: .subheadline, isBold: true, isLineThrough: false, lineThroughColor: nil)
                 Spacer()
                 SecondaryCell(text: secondary, font: .caption2)
             }.padding(.bottom, 10)
