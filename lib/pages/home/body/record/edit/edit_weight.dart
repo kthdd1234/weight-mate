@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
-import 'dart:developer';
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +12,6 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/eventListenerWeight.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
@@ -23,12 +21,10 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
-import 'package:home_widget/home_widget.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-String fWeight = FILITER.weight.toString();
 
 class EditWeight extends StatefulWidget {
   EditWeight({super.key});
@@ -237,17 +233,6 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
-    onWidgetMsg(Object? data) async {
-      bool isClosedWeight = user.filterList?.contains(fWeight) != true;
-
-      if (isClosedWeight) {
-        user.filterList?.add(fWeight);
-        await user.save();
-      }
-
-      onTapWeight();
-    }
-
     return Column(
       children: [
         ContentsBox(
@@ -296,7 +281,6 @@ class _EditWeightState extends State<EditWeight> {
                 ],
                 onTap: onTapOpen,
               ),
-              EventListenerWeight(onWidgetMsg: onWidgetMsg),
               isOpen
                   ? isShowInput
                       ? TextFormField(

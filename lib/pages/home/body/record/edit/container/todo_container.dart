@@ -931,11 +931,7 @@ class Dismiss extends StatelessWidget {
 }
 
 class RecordAdd extends StatefulWidget {
-  RecordAdd({
-    super.key,
-    required this.type,
-    required this.onRecordAdd,
-  });
+  RecordAdd({super.key, required this.type, required this.onRecordAdd});
 
   String type;
   Function({
@@ -954,6 +950,11 @@ class RecordAdd extends StatefulWidget {
 class _RecordAddState extends State<RecordAdd> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1046,6 +1047,12 @@ class _RecordAddState extends State<RecordAdd> {
             );
           },
         );
+      }
+    }
+
+    onRecordMsg(String? wType) {
+      if (wType == widget.type) {
+        //
       }
     }
 

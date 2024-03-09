@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -24,7 +26,6 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
   RecordBox? recordInfo;
   bool isError = false;
   int count = 0;
-  String? clickedWidget;
 
   @override
   void initState() {
@@ -33,26 +34,12 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
     UserBox? userProfile = userBox.get('userProfile');
     DateTime now = DateTime.now();
     int recordKey = getDateTimeToInt(now);
-
     recordInfo = recordBox.get(recordKey);
 
     if (userProfile == null) return;
     userPasswords = userProfile.screenLockPasswords!.split('');
 
     super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    events.on(wPasswordType,
-        (String widget) => setState(() => clickedWidget = widget));
-    super.didChangeDependencies();
-  }
-
-  @override
-  void dispose() {
-    events.off(type: wPasswordType);
-    super.dispose();
   }
 
   @override
@@ -79,11 +66,6 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
                     '/home-page',
                     (route) => false,
                   );
-
-                  if (clickedWidget != null) {
-                    events.emit(clickedWidget!, true);
-                    // Todo Test!
-                  }
                 } else {
                   isError = true;
                   inputPasswords = ['', '', '', ''];

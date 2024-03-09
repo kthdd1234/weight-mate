@@ -59,4 +59,4 @@ enum HistoryFilter { recent, past }
 
 enum HistoryFormat { list, calendar }
 
-enum WidgetType { weight, password, todo, goal }
+enum WidgetType { weight, password, record, goal }

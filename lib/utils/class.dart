@@ -284,7 +284,7 @@ class AppLifecycleReactor {
       if (appState == AppState.foreground) {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (context) => EnterScreenLockPage(isPop: true),
+            builder: (context) => EnterScreenLockPage(),
             fullscreenDialog: true,
           ),
         );

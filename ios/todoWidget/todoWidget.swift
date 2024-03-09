@@ -66,13 +66,10 @@ struct todoWidgetEntryView : View {
                     bgColor: bgColor(type: "diet"),
                     fontFamily: ""
                 )
-             
-//                if isWidgetSizeSmallMedium(family: wFamily) {
-//                    SecondaryCell(text: "+ 이외 2개의 기록", font: .caption2).padding(.leading, 3)
-//                }
             }
             Spacer()
         }
+        .widgetURL(URL(string: "://message?message=null&homeWidget"))
         .containerBackground(for: .widget) {
             BackgroundWidget()
         }

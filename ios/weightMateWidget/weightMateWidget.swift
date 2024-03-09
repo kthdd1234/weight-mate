@@ -9,7 +9,7 @@ struct Provider: TimelineProvider {
     func getSnapshot(in context: Context, completion: @escaping (WeightEntry) -> ()) {
         let data = UserDefaults.init(suiteName: widgetGroupId)
         
-        let headerTitle = data?.string(forKey: "headerTitle") ?? ""
+        let headerTitle = data?.string(forKey: "headerTitle") ?? "오늘의 체중"
         let today = data?.string(forKey: "today") ?? ""
         let weightTitle = data?.string(forKey: "weightTitle") ?? "체중"
         let weight = data?.string(forKey: "weight") ?? "-"
@@ -45,6 +45,7 @@ struct WeightEntry: TimelineEntry {
     let goalWeight: String
     let emptyWeightTitle: String
     let fontFamily: String
+    let isEmpty: String
 }
 
 struct weightMateWidgetEntryView : View {

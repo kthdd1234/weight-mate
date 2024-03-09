@@ -1,6 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
-
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +11,7 @@ import 'package:flutter_app_weight_management/pages/common/font_change_page.dart
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_weight.dart';
@@ -157,19 +156,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    UserBox? user = userBox?.get('userProfile');
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    if (state == AppLifecycleState.resumed) {
-      setState(() {});
-    }
-
-    if (isBackground) {
+    if (isBackground && user != null) {
       DateTime now = DateTime.now();
       UserBox user = userRepository.user;
       int recordKey = getDateTimeToInt(now);
       RecordBox? record = recordRepository.recordBox.get(recordKey);
-
       String headerTitle = "오늘의 체중".tr();
       String today = mde(locale: user.language!, dateTime: now);
       String weightTitle = "체중".tr();
@@ -186,8 +181,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       String emptyWeightTitle = "체중 기록하기".tr();
       String fontFamily = '${user.fontFamily}';
 
-      print('fontFamily => $fontFamily');
-
       Map<String, String> weightObj = {
         "headerTitle": headerTitle,
         "today": today,
@@ -198,7 +191,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         "goalWeightTitle": goalWeightTitle,
         "goalWeight": goalWeight,
         "emptyWeightTitle": emptyWeightTitle,
-        "fontFamily": fontFamily
+        "fontFamily": fontFamily,
+        "isEmpty": record?.weight == null ? "empty" : "show",
       };
 
       HomeWidgetService().updateWeightWidget(data: weightObj);
@@ -217,19 +211,40 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   launchedFromHomeWidget(Uri? uri) async {
-    UserBox user = userRepository.user;
+    UserBox? user = userBox?.get('userProfile');
+    String? scheme = uri?.scheme;
+    List<String>? filterList = user?.filterList;
 
-    if (uri?.scheme == 'weight') {
-      if (user.screenLockPasswords != null) {
-        events.emit(wPasswordType, wWeightType);
-      } else {
-        context
-            .read<BottomNavigationProvider>()
-            .setBottomNavigation(enumId: BottomNavigationEnum.record);
-        await Future.delayed(const Duration(milliseconds: 500));
+    if (user != null && uri != null) {
+      context
+          .read<BottomNavigationProvider>()
+          .setBottomNavigation(enumId: BottomNavigationEnum.record);
 
-        events.emit(wWeightType, true);
+      switch (scheme) {
+        case 'weight':
+          bool isOpen = filterList?.contains(fWeight) == true;
+          if (isOpen == false) user.filterList?.add(fWeight);
+
+          break;
+        case 'diet':
+          bool isOpen = filterList?.contains(fDiet) == true;
+          if (isOpen == false) user.filterList?.add(fDiet);
+
+          break;
+        case 'exercise':
+          bool isOpen = filterList?.contains(fExercise) == true;
+          if (isOpen == false) user.filterList?.add(fExercise);
+
+          break;
+        case 'life':
+          bool isOpen = filterList?.contains(fLife) == true;
+          if (isOpen == false) user.filterList?.add(fLife);
+
+          break;
+        default:
       }
+
+      await user.save();
     }
   }
 

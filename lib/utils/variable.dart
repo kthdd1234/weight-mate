@@ -386,7 +386,7 @@ List<Map<String, String>> fontFamilyList = [
   },
 ];
 
-String wWeightType = WidgetType.weight.toString();
-String wPasswordType = WidgetType.password.toString();
-String wTodoType = WidgetType.todo.toString();
-String wGoalType = WidgetType.goal.toString();
+String fWeight = FILITER.weight.toString();
+String fDiet = FILITER.diet.toString();
+String fExercise = FILITER.exercise.toString();
+String fLife = FILITER.lifeStyle.toString();
