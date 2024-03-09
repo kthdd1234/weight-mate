@@ -20,7 +20,7 @@ struct BackgroundIntentWidget: AppIntent  {
      
     public func perform() async throws -> some IntentResult {
       await HomeWidgetBackgroundWorker.run(
-        url: URL(string: "weightMateWidget://\(planId)"),
+        url: URL(string: "weightMateWidget://planChecked?planChecked=\(planId)"),
         appGroup: widgetGroupId
       )
 
@@ -28,3 +28,6 @@ struct BackgroundIntentWidget: AppIntent  {
     }
 }
 
+@available(iOS 16, *)
+@available(iOSApplicationExtension, unavailable)
+extension BackgroundIntentWidget: ForegroundContinuableIntent {}

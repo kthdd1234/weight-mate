@@ -42,26 +42,29 @@ struct todoWidgetEntryView : View {
             if isWidgetSizeSmallMedium(family: wFamily) {
                 Spacer()
             }
-            HeaderCell(title: "오늘의 식단 기록", secondary: isWidgetSizeMediumLarge(family: wFamily) ? "3.15 (화)" : "")
+            HeaderCell(title: "오늘의 식단 기록", secondary: isWidgetSizeMediumLarge(family: wFamily) ? "3.15 (화)" : "", fontFamily: "")
 //          EmptyCell(svgName: "empty-record", text: "식단 기록하기")
             VStack(alignment: .leading, spacing: 15) {
                 IconTextCell(
                     text: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국",
                     systemName: systemName(type: "diet", key: "morning"),
                     iconColor: iconColor(type: "diet"),
-                    bgColor: bgColor(type: "diet")
+                    bgColor: bgColor(type: "diet"),
+                    fontFamily: ""
                 )
                 IconTextCell(
                     text: "짬뽕 한 그릇, 단무지, 무말랭이",
                     systemName: systemName(type: "diet", key: "lunch"),
                     iconColor: iconColor(type: "diet"),
-                    bgColor: bgColor(type: "diet")
+                    bgColor: bgColor(type: "diet"),
+                    fontFamily: ""
                 )
                 IconTextCell(
                     text: "밥 한공기, 양념 갈비, 마늘, 김치, 콩나물 국",
                     systemName: systemName(type: "diet", key: "dinner"),
                     iconColor: iconColor(type: "diet"),
-                    bgColor: bgColor(type: "diet")
+                    bgColor: bgColor(type: "diet"),
+                    fontFamily: ""
                 )
              
 //                if isWidgetSizeSmallMedium(family: wFamily) {

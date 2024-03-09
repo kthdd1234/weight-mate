@@ -11,13 +11,14 @@ struct SvgTextCell: View {
     let svgName: String
     let title: String
     let value: String
+    let fontFamily: String
     
     var body: some View {
         HStack {
             SvgCell(name: svgName)
-            TextCell(text: title, font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil)
+            TextCell(text: title, font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil ,fontFamily: fontFamily)
             Spacer()
-            TextCell(text: value, font: .footnote, isBold: true, isLineThrough: nil, lineThroughColor: nil)
+            TextCell(text: value, font: .footnote, isBold: true, isLineThrough: nil, lineThroughColor: nil, fontFamily: fontFamily)
         }
     }
 }

@@ -80,6 +80,7 @@ dependencies:
   privacy_screen: ^0.0.6
   quiver: ^3.2.1
   workmanager: ^0.5.2
+  events_emitter: ^0.5.2
 
 dev_dependencies:
   flutter_test:
@@ -199,12 +200,12 @@ flutter:
 
     - family: cafe24SsurroundAir
       fonts:
-        - asset: assets/fonts/cafe24Ssurround/Cafe24SsurroundAir.ttf
+        - asset: assets/fonts/cafe24SsurroundAir/cafe24SsurroundAir.ttf
           weight: 400
 
     - family: cafe24Ohsquareair
       fonts:
-        - asset: assets/fonts/cafe24Ssurround/Cafe24Ohsquareair.ttf
+        - asset: assets/fonts/cafe24Ohsquareair/cafe24Ohsquareair.ttf
           weight: 400
 
     - family: Cafe24Dongdong
@@ -215,11 +216,6 @@ flutter:
     - family: Cafe24Ssukssuk
       fonts:
         - asset: assets/fonts/Cafe24Ssukssuk/Cafe24Ssukssuk.ttf
-          weight: 400
-
-    - family: KyoboHandwriting2022khn
-      fonts:
-        - asset: assets/fonts/KyoboHandwriting2022khn/KyoboHandwriting2022khn.ttf
           weight: 400
 
     - family: 꼬마나비체
@@ -252,14 +248,19 @@ flutter:
         - asset: assets/fonts/CookieRun/CookieRun.ttf
           weight: 400
 
+    - family: IM_Hyemin
+      fonts:
+        - asset: assets/fonts/IM_Hyemin/IM_Hyemin.ttf
+          weight: 400
+
     - family: SingleDay
       fonts:
         - asset: assets/fonts/SingleDay/SingleDay.ttf
           weight: 400
 
-    - family: IM_Hyemin
+    - family: KyoboHandwriting2022khn
       fonts:
-        - asset: assets/fonts/IM_Hyemin/IM_Hyemin.ttf
+        - asset: assets/fonts/KyoboHandwriting2022khn/KyoboHandwriting2022khn.ttf
           weight: 400
   #
   # For details regarding fonts from package dependencies,

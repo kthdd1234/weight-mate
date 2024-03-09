@@ -11,9 +11,10 @@ public var disabledColor : Color = Color(red: 128/255, green: 128/255, blue: 128
 struct SecondaryCell: View {
     let text: String
     let font: Font
+    let fontFamily: String
     
     var body: some View  {
-        Text(text).font(font)
+        Text(text).font(Font.custom(fontFamily, size: 10))
             .foregroundColor(.gray)
             .lineLimit(1)
     }

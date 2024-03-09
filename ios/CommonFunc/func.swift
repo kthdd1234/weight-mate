@@ -39,3 +39,8 @@ func isWidgetSizeSmallMedium(family: WidgetFamily) -> Bool {
     
     return false
 }
+
+func initCutomFont(fontFamily: String) -> Void {
+   let result = CTFontManagerRegisterFontsForURL(bundle.appending(path: "assets/fonts/\(fontFamily)/\(fontFamily).ttf") as CFURL, CTFontManagerScope.process, nil)
+   print("initCutomFont result ==>> \(result)")
+}

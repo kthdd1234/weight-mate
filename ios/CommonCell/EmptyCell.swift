@@ -10,6 +10,7 @@ import SwiftUI
 struct EmptyCell: View {
     let svgName: String
     let text: String
+    let fontFamily: String
     
     var body: some View {
         VStack(alignment: .center, spacing: 10, content: {
@@ -17,7 +18,7 @@ struct EmptyCell: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 30, height: 30)
-            SecondaryCell(text: text, font: .caption)
+            SecondaryCell(text: text, font: .caption, fontFamily: fontFamily)
         }).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
     }
 }

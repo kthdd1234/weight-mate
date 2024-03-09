@@ -2,13 +2,25 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), weight: "Placeholder weight")
+    func placeholder(in context: Context) -> WeightEntry {
+        WeightEntry(date: Date(), headerTitle: "", today: "", weightTitle: "", weight: "", bmiTitle: "", bmi: "", goalWeightTitle: "", goalWeight: "", emptyWeightTitle: "", fontFamily: "")
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
+    func getSnapshot(in context: Context, completion: @escaping (WeightEntry) -> ()) {
         let data = UserDefaults.init(suiteName: widgetGroupId)
-        let entry = SimpleEntry(date: Date(), weight: data?.string(forKey: "weight") ?? "-")
+        
+        let headerTitle = data?.string(forKey: "headerTitle") ?? ""
+        let today = data?.string(forKey: "today") ?? ""
+        let weightTitle = data?.string(forKey: "weightTitle") ?? "체중"
+        let weight = data?.string(forKey: "weight") ?? "-"
+        let bmiTitle = data?.string(forKey: "bmiTitle") ?? "BMI"
+        let bmi = data?.string(forKey: "bmi") ?? "0.0"
+        let goalWeightTitle = data?.string(forKey: "goalWeightTitle") ?? "목표 체중"
+        let goalWeight = data?.string(forKey: "goalWeight") ?? "-"
+        let emptyWeightTitle = data?.string(forKey: "emptyWeightTitle") ?? ""
+        let fontFamily = data?.string(forKey: "fontFamily") ?? "cafe24Ohsquareair"
+        
+        let entry = WeightEntry(date: Date(), headerTitle: headerTitle, today: today, weightTitle: weightTitle, weight: weight, bmiTitle: bmiTitle, bmi: bmi, goalWeightTitle: goalWeightTitle, goalWeight: goalWeight, emptyWeightTitle: emptyWeightTitle, fontFamily: fontFamily)
         
         completion(entry)
     }
@@ -21,27 +33,46 @@ struct Provider: TimelineProvider {
     }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct WeightEntry: TimelineEntry {
     let date: Date
+    let headerTitle: String
+    let today: String
+    let weightTitle: String
     let weight: String
+    let bmiTitle: String
+    let bmi: String
+    let goalWeightTitle: String
+    let goalWeight: String
+    let emptyWeightTitle: String
+    let fontFamily: String
 }
 
 struct weightMateWidgetEntryView : View {
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var wFamily
+    
+    init(entry: Provider.Entry){
+        self.entry = entry
+        initCutomFont(fontFamily: entry.fontFamily)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Spacer()
-            HeaderCell(title: "오늘의 체중", secondary: isWidgetSizeMediumLarge(family: wFamily) ? "3.15 (화)" : "")
-//            EmptyCell(svgName: "empty-weight", text: "체중 기록하기")
-            VStack(alignment: .leading, spacing: 15) {
-                SvgTextCell(svgName: "weight", title: "체중", value: entry.weight)
-                SvgTextCell(svgName: "bmi", title: "BMI", value: "24.1")
-                SvgTextCell(svgName: "flag", title: "목표체중", value: "4.3kg")
-            }.frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+            HeaderCell(title: entry.headerTitle, secondary: isWidgetSizeMediumLarge(family: wFamily) ? entry.today : "", fontFamily: entry.fontFamily)
+          
+            if entry.weight != "" {
+                VStack(alignment: .leading, spacing: 15) {
+                    SvgTextCell(svgName: "weight", title: entry.weightTitle, value: entry.weight, fontFamily: entry.fontFamily)
+                    SvgTextCell(svgName: "bmi", title: entry.bmiTitle, value: entry.bmi, fontFamily: entry.fontFamily)
+                    SvgTextCell(svgName: "flag", title: entry.goalWeightTitle, value: entry.goalWeight, fontFamily: entry.fontFamily)
+                }.frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+            } else {
+                EmptyCell(svgName: "empty-weight", text: entry.emptyWeightTitle, fontFamily: entry.fontFamily)
+            }
         }
+        .widgetURL(URL(string: "weight://message?message=null&homeWidget"))
         .containerBackground(for: .widget) {
             BackgroundWidget()
         }
@@ -63,7 +94,7 @@ struct weightMateWidget: Widget {
 
 struct WeightMateWidget_Previews: PreviewProvider {
     static var previews: some View {
-        weightMateWidgetEntryView(entry: SimpleEntry(date: Date(), weight: "Example Weight"))
+        weightMateWidgetEntryView(entry: WeightEntry(date: Date(), headerTitle: "오늘의 체중", today: "", weightTitle: "체중", weight: "-", bmiTitle: "BMI", bmi: "0.0", goalWeightTitle: "목표 체중", goalWeight: "-", emptyWeightTitle: "체중 기록하기", fontFamily: ""))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
@@ -71,5 +102,5 @@ struct WeightMateWidget_Previews: PreviewProvider {
 #Preview(as: .systemSmall) {
     weightMateWidget()
 } timeline: {
-    SimpleEntry(date: .now, weight: "야미")
+    WeightEntry(date: .now, headerTitle: "", today: "", weightTitle: "", weight: "", bmiTitle: "", bmi: "",  goalWeightTitle: "", goalWeight: "", emptyWeightTitle: "", fontFamily: "")
 }

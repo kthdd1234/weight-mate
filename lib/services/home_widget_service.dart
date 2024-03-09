@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:home_widget/home_widget.dart';
 
 class HomeWidgetService {
@@ -7,11 +9,15 @@ class HomeWidgetService {
     HomeWidget.setAppGroupId(appGroupId);
   }
 
-  updateWidgetFun({required Map<String, dynamic> data}) async {
+  interactiveWidgetCallback() {
+    // HomeWidget.registerInteractivityCallback(interactiveCallback);
+  }
+
+  updateWeightWidget({required Map<String, String> data}) async {
     data.forEach((key, value) async {
       await HomeWidget.saveWidgetData<String>(key, value);
     });
-    await HomeWidget.updateWidget(iOSName: "weightMateWidget");
-    return;
+
+    return await HomeWidget.updateWidget(iOSName: "weightMateWidget");
   }
 }

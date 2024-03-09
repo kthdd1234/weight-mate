@@ -82,10 +82,6 @@
 		D35D70A42B96CF7300F9C455 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
 		D35D70A52B96D3E900F9C455 /* GoalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D707F2B959F3F00F9C455 /* GoalWidget.swift */; };
 		D35D70AB2B96D8BE00F9C455 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
-		D35D70AD2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
-		D35D70AE2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
-		D35D70AF2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
-		D35D70B02B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */; };
 		D3E8A3582B91C2BF008184DD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
 		D3E8A3592B91C2BF008184DD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
 		D3E8A35C2B91C2C0008184DD /* weightMateWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E8A35B2B91C2C0008184DD /* weightMateWidgetBundle.swift */; };
@@ -196,7 +192,6 @@
 		D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundIntentWidget.swift; sourceTree = "<group>"; };
 		D35D709A2B95DF3100F9C455 /* vars.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = vars.swift; sourceTree = "<group>"; };
 		D35D70A02B96CF7300F9C455 /* IconCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCell.swift; sourceTree = "<group>"; };
-		D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTextButtonCell.swift; sourceTree = "<group>"; };
 		D35D70B12B986F9400F9C455 /* todoWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = todoWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D35D70B22B986FAF00F9C455 /* GoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = GoalWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D3DDE3322A5D219A00C6F0FA /* Runner.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Runner.entitlements; sourceTree = "<group>"; };
@@ -355,7 +350,6 @@
 				D35D705E2B93105400F9C455 /* HeaderCell.swift */,
 				D35D70622B93162100F9C455 /* IconTextCell.swift */,
 				D35D70A02B96CF7300F9C455 /* IconCell.swift */,
-				D35D70AC2B96D96B00F9C455 /* IconTextButtonCell.swift */,
 			);
 			path = CommonCell;
 			sourceTree = "<group>";
@@ -756,7 +750,6 @@
 				D35D705F2B93105400F9C455 /* HeaderCell.swift in Sources */,
 				D35D70522B9306C000F9C455 /* EmptyCell.swift in Sources */,
 				D35D705B2B93097400F9C455 /* BackgroundWidget.swift in Sources */,
-				D35D70AD2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D70A12B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70562B9307AA00F9C455 /* SvgTextCell.swift in Sources */,
 				D35D706C2B94472F00F9C455 /* icons.swift in Sources */,
@@ -781,7 +774,6 @@
 				D35D705D2B93097400F9C455 /* BackgroundWidget.swift in Sources */,
 				D35D70A32B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70582B9307AA00F9C455 /* SvgTextCell.swift in Sources */,
-				D35D70AF2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D706E2B94472F00F9C455 /* icons.swift in Sources */,
 				D35D709D2B95DF3100F9C455 /* vars.swift in Sources */,
 			);
@@ -804,7 +796,6 @@
 				D35D70922B95B61100F9C455 /* SvgTextCell.swift in Sources */,
 				D35D707E2B959F3F00F9C455 /* GoalWidgetBundle.swift in Sources */,
 				D35D70912B95B60F00F9C455 /* EmptyCell.swift in Sources */,
-				D35D70B02B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D70932B95B61700F9C455 /* IconTextCell.swift in Sources */,
 				D35D70992B95DA3300F9C455 /* BackgroundIntentWidget.swift in Sources */,
 			);
@@ -827,7 +818,6 @@
 				D35D705C2B93097400F9C455 /* BackgroundWidget.swift in Sources */,
 				D35D70A22B96CF7300F9C455 /* IconCell.swift in Sources */,
 				D35D70572B9307AA00F9C455 /* SvgTextCell.swift in Sources */,
-				D35D70AE2B96D96B00F9C455 /* IconTextButtonCell.swift in Sources */,
 				D35D706D2B94472F00F9C455 /* icons.swift in Sources */,
 				D35D709C2B95DF3100F9C455 /* vars.swift in Sources */,
 			);
@@ -950,7 +940,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "체중 메이트";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1097,7 +1087,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "체중 메이트";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1134,7 +1124,7 @@
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "체중 메이트";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

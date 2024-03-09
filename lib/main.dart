@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -41,13 +42,15 @@ import 'package:flutter_app_weight_management/services/home_widget_service.dart'
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
-import 'etc/add_body_info.dart';
+import 'package:events_emitter/events_emitter.dart';
 import 'pages/common/screen_lock_page.dart';
 
 const supportedLocales = [
@@ -62,6 +65,8 @@ const supportedLocales = [
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
+
+EventEmitter events = EventEmitter();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -98,6 +103,11 @@ void main() async {
   );
 }
 
+@pragma("vm:entry-point")
+Future<void> interactiveCallback(Uri? data) async {
+  log('Uri => $data');
+}
+
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -132,24 +142,66 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await AppTrackingTransparency.getAdvertisingIdentifier();
     });
 
-    HomeWidgetService().initializeHomeWidget();
+    HomeWidget.setAppGroupId('group.weight-mate-widget');
+    HomeWidget.registerInteractivityCallback(interactiveCallback);
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    log('AppLifecycleState =>> $state');
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
+    if (state == AppLifecycleState.resumed) {
+      setState(() {});
+    }
+
     if (isBackground) {
       DateTime now = DateTime.now();
+      UserBox user = userRepository.user;
       int recordKey = getDateTimeToInt(now);
       RecordBox? record = recordRepository.recordBox.get(recordKey);
-      HomeWidgetService()
-          .updateWidgetFun(data: {'weight': '${record?.weight ?? ""}'});
+
+      String headerTitle = "오늘의 체중".tr();
+      String today = mde(locale: user.language!, dateTime: now);
+      String weightTitle = "체중".tr();
+      String weight = '${record?.weight ?? ""}${user.weightUnit}';
+      String bmiTitle = "BMI";
+      String bMI = bmi(
+        tall: user.tall,
+        tallUnit: user.tallUnit,
+        weight: record?.weight,
+        weightUnit: user.weightUnit,
+      );
+      String goalWeightTitle = "목표 체중".tr();
+      String goalWeight = '${user.goalWeight}${user.weightUnit}';
+      String emptyWeightTitle = "체중 기록하기".tr();
+      String fontFamily = '${user.fontFamily}';
+
+      print('fontFamily => $fontFamily');
+
+      Map<String, String> weightObj = {
+        "headerTitle": headerTitle,
+        "today": today,
+        "weightTitle": weightTitle,
+        "weight": weight,
+        "bmiTitle": bmiTitle,
+        "bmi": bMI,
+        "goalWeightTitle": goalWeightTitle,
+        "goalWeight": goalWeight,
+        "emptyWeightTitle": emptyWeightTitle,
+        "fontFamily": fontFamily
+      };
+
+      HomeWidgetService().updateWeightWidget(data: weightObj);
 
       // onActionList
       // onPlanList
@@ -157,9 +209,28 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
+    HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
+  }
+
+  launchedFromHomeWidget(Uri? uri) async {
+    UserBox user = userRepository.user;
+
+    if (uri?.scheme == 'weight') {
+      if (user.screenLockPasswords != null) {
+        events.emit(wPasswordType, wWeightType);
+      } else {
+        context
+            .read<BottomNavigationProvider>()
+            .setBottomNavigation(enumId: BottomNavigationEnum.record);
+        await Future.delayed(const Duration(milliseconds: 500));
+
+        events.emit(wWeightType, true);
+      }
+    }
   }
 
   @override

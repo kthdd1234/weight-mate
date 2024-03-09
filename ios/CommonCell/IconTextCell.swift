@@ -5,11 +5,12 @@ struct IconTextCell: View {
     let systemName: String
     let iconColor: Color
     let bgColor: Color
+    let fontFamily: String
     
     var body: some View {
         HStack() {
             IconBoxCell(systemName: systemName, iconColor: iconColor, bgColor: bgColor)
-            TextCell(text: text, font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil)
+            TextCell(text: text, font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil, fontFamily: fontFamily)
         }
     }
 }

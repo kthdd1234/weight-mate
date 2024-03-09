@@ -42,7 +42,7 @@ struct GoalWidgetEntryView : View {
             if isWidgetSizeSmallMedium(family: wFamily) {
                 Spacer()
             }
-            HeaderCell(title: "오늘의 식단 목표", secondary: isWidgetSizeMediumLarge(family: wFamily) ? "3.15 (화)" : "")
+            HeaderCell(title: "오늘의 식단 목표", secondary: isWidgetSizeMediumLarge(family: wFamily) ? "3.15 (화)" : "", fontFamily: "Cafe24Dongdong")
 //          EmptyCell(svgName: "empty-goal", text: "목표 추가하기")
             VStack(alignment: .leading, spacing: 15) {
                 HStack() {
@@ -50,19 +50,19 @@ struct GoalWidgetEntryView : View {
 //                        IconBoxCell(systemName: "checkmark", iconColor: iconColor(type: "diet"), bgColor: bgColor(type: "diet"))
                         IconBoxCell(systemName: "", iconColor: iconColor(type: "diet"), bgColor: bgColor(type: "diet"))
                     }.buttonStyle(.plain)
-                    TextCell(text: "🍎 아침에 사과 1개, 계란 3개 먹기", font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil)
+                    TextCell(text: "🍎 아침에 사과 1개, 계란 3개 먹기", font: .footnote, isBold: false, isLineThrough: nil, lineThroughColor: nil, fontFamily: "Cafe24Dongdong")
                 }
                 HStack() {
                     Button (intent: BackgroundIntentWidget(planId: "")) {
                         IconBoxCell(systemName: "checkmark", iconColor: iconColor(type: "diet"), bgColor: bgColor(type: "diet"))
                     }.buttonStyle(.plain)
-                    TextCell(text: "🍜 라면 안먹기", font: .footnote, isBold: false, isLineThrough: true, lineThroughColor: iconColor(type: "diet"))
+                    TextCell(text: "🍜 라면 안먹기", font: .footnote, isBold: false, isLineThrough: true, lineThroughColor: iconColor(type: "diet"), fontFamily: "Cafe24Dongdong")
                 }
                 HStack() {
                     Button (intent: BackgroundIntentWidget(planId: "")) {
                         IconBoxCell(systemName: "checkmark", iconColor: iconColor(type: "diet"), bgColor: bgColor(type: "diet"))
                     }.buttonStyle(.plain)
-                    TextCell(text: "🍚 밥은 최대한 천천히 먹기", font: .footnote, isBold: false, isLineThrough: true, lineThroughColor: iconColor(type: "diet"))
+                    TextCell(text: "🍚 밥은 최대한 천천히 먹기", font: .footnote, isBold: false, isLineThrough: true, lineThroughColor: iconColor(type: "diet"), fontFamily: "Cafe24Dongdong")
                 }
 
             }

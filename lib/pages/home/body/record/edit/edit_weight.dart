@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
+import 'dart:developer';
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -12,19 +13,22 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/eventListenerWeight.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+String fWeight = FILITER.weight.toString();
 
 class EditWeight extends StatefulWidget {
   EditWeight({super.key});
@@ -40,7 +44,6 @@ class _EditWeightState extends State<EditWeight> {
 
   @override
   Widget build(BuildContext context) {
-    String fWeight = FILITER.weight.toString();
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     int recordKey = getDateTimeToInt(importDateTime);
@@ -234,6 +237,17 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
+    onWidgetMsg(Object? data) async {
+      bool isClosedWeight = user.filterList?.contains(fWeight) != true;
+
+      if (isClosedWeight) {
+        user.filterList?.add(fWeight);
+        await user.save();
+      }
+
+      onTapWeight();
+    }
+
     return Column(
       children: [
         ContentsBox(
@@ -282,6 +296,7 @@ class _EditWeightState extends State<EditWeight> {
                 ],
                 onTap: onTapOpen,
               ),
+              EventListenerWeight(onWidgetMsg: onWidgetMsg),
               isOpen
                   ? isShowInput
                       ? TextFormField(
@@ -547,229 +562,3 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
     );
   }
 }
-// ContentsBox(
-//   padding: const EdgeInsets.all(smallSpace),
-//   backgroundColor: Colors.indigo.shade50,
-//   borderRadius: tinySpace,
-//   contentsWidget: Row(
-//     children: [
-//       CircularIcon(
-//         size: 40,
-//         borderRadius: 10,
-//         icon: Icons.keyboard_alt_outlined,
-//         backgroundColor: Colors.white,
-//       ),
-//       CupertinoSwitch(
-//         activeColor: themeColor,
-//         value: false,
-//         onChanged: (_) {},
-//       )
-//     ],
-//   ),
-// )
-// onTapFilter() {
-//   showDialog(
-//     context: context,
-//     builder: (context) {
-//       return StatefulBuilder(
-//         builder: ((context, setState) {
-//           onTapCheckBox({required dynamic id, required bool newValue}) {
-//             bool isNotWeight = filterClassList.first.id != id;
-//             bool isFilterList = user.filterList != null;
-
-//             if (isNotWeight && isFilterList) {
-//               newValue
-//                   ? user.filterList!.add(id)
-//                   : user.filterList!.remove(id);
-//               user.save();
-
-//               setState(() {});
-//             }
-//           }
-
-//           onCheckBox(String filterId) {
-//             List<String>? filterList = user.filterList;
-//             bool isWeight = filterClassList.first.id == filterId;
-
-//             if (isWeight) {
-//               return true;
-//             }
-
-//             return filterList != null
-//                 ? filterList.contains(filterId)
-//                 : false;
-//           }
-
-//           List<Widget> children = filterClassList
-//               .map((data) => Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           CommonCheckBox(
-//                             id: data.id,
-//                             isCheck: onCheckBox(data.id),
-//                             checkColor: themeColor,
-//                             onTap: onTapCheckBox,
-//                           ),
-//                           CommonText(
-//                             text: data.name,
-//                             size: 14,
-//                             isNotTop: true,
-//                           ),
-//                           SpaceWidth(width: 3),
-//                           filterClassList.first.id == data.id
-//                               ? CommonText(
-//                                   text: '(필수)',
-//                                   size: 10,
-//                                   color: Colors.red,
-//                                 )
-//                               : const EmptyArea()
-//                         ],
-//                       ),
-//                       SpaceHeight(
-//                         height: filterClassList.last.id == data.id
-//                             ? 0.0
-//                             : smallSpace,
-//                       ),
-//                     ],
-//                   ))
-//               .toList();
-
-//           return Column(
-//             mainAxisAlignment: MainAxisAlignment.center,
-//             children: [
-//               AlertDialog(
-//                 backgroundColor: dialogBackgroundColor,
-//                 shape: containerBorderRadious,
-//                 title: AlertDialogTitleWidget(
-//                   text: '항목 필터',
-//                   onTap: () => closeDialog(context),
-//                 ),
-//                 content: ContentsBox(
-//                   contentsWidget: Column(children: children),
-//                 ),
-//               ),
-//             ],
-//           );
-//         }),
-//       );
-//     },
-//   );
-// }
-
-// Row(
-//       children: [
-//         Expanded(
-//           flex: 4,
-//           child: Container(
-//             child: Column(
-//               crossAxisAlignment: CrossAxisAlignment.start,
-//               children: [
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     CommonText(
-//                       text: '12월 31일 일요일',
-//                       size: isEdit ? 14 : 12,
-//                       isBold: true,
-//                       rightIcon:
-//                           isEdit ? Icons.keyboard_arrow_down_rounded : null,
-//                     ),
-//                     isEdit
-//                         ? CommonText(
-//                             text: '필터',
-//                             size: 13,
-//                             color: themeColor,
-//                             leftIcon: Icons.filter_list_sharp,
-//                             onTap: onTapFilter,
-//                           )
-//                         : CommonIcon(
-//                             icon: Icons.more_vert,
-//                             size: 14,
-//                             color: Colors.grey,
-//                           ),
-//                   ],
-//                 ),
-//                 SpaceHeight(height: 7.5),
-//                 Row(
-//                   children: [
-//                     isEdit
-//                         ? isShowInput
-//                             ? Expanded(
-//                                 child: SizedBox(
-//                                 height: 25,
-//                                 child: TextFormField(
-//                                   keyboardType: inputKeyboardType,
-//                                   controller: textController,
-//                                   maxLength: 4,
-//                                   autofocus: true,
-//                                   style: Theme.of(context).textTheme.bodyMedium,
-//                                   decoration:
-//                                       const InputDecoration(counterText: ''),
-//                                   onChanged: onChangedText,
-//                                 ),
-//                               ))
-//                             : recordInfo?.weight != null
-//                                 ? Expanded(
-//                                     child: Row(
-//                                       mainAxisAlignment:
-//                                           MainAxisAlignment.spaceBetween,
-//                                       crossAxisAlignment:
-//                                           CrossAxisAlignment.end,
-//                                       children: [
-//                                         CommonText(
-//                                           text:
-//                                               '${recordInfo?.weight ?? '0.0'}kg',
-//                                           size: 18,
-//                                           onTap: onTapWeight,
-//                                         ),
-//                                         CommonText(
-//                                           text: 'BMI ${onBMI()}',
-//                                           size: 10,
-//                                           color: Colors.grey,
-//                                           onTap: onTapBMI,
-//                                         ),
-//                                       ],
-//                                     ),
-//                                   )
-//                                 : DashContainer(
-//                                     height: 40,
-//                                     text: '체중 입력',
-//                                     borderType: BorderType.RRect,
-//                                     radius: 10,
-//                                     onTap: onTapWeight,
-//                                   )
-//                         : Expanded(
-//                             child: Row(
-//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                               crossAxisAlignment: CrossAxisAlignment.end,
-//                               children: [
-//                                 CommonText(
-//                                   text: '${recordInfo?.weight ?? '--'}kg',
-//                                   size: 15,
-//                                 ),
-//                                 CommonText(
-//                                   text:
-//                                       'BMI ${recordInfo?.weight != null ? onBMI() : '--'}',
-//                                   size: 9,
-//                                   color: Colors.grey,
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           ),
-//         ),
-//       ],
-//     );
-
-// TagClass(
-//             text: user.isAlarm
-//                 ? '${timeToString(user.alarmTime)}'
-//                 : '알림 없음',
-//             color: 'indigo',
-//             onTap: onTapTimeSetting,
-//           ),

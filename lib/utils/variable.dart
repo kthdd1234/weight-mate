@@ -385,3 +385,8 @@ List<Map<String, String>> fontFamilyList = [
     "name": "교보 손글씨",
   },
 ];
+
+String wWeightType = WidgetType.weight.toString();
+String wPasswordType = WidgetType.password.toString();
+String wTodoType = WidgetType.todo.toString();
+String wGoalType = WidgetType.goal.toString();
