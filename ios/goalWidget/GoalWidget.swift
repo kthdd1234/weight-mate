@@ -82,8 +82,8 @@ struct GoalWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             GoalWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("식단 목표")
-        .description("오늘 실천 할 목표를 확인할 수 있어요.")
+        .configurationDisplayName("위젯 기능 준비 중입니다.") //  식단 목표
+        .description("위젯 기능 준비 중이라 제대로 작동하지 않아요.") // 오늘 실천 할 목표를 확인할 수 있어요.
     }
 }
 

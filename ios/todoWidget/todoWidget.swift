@@ -83,8 +83,8 @@ struct todoWidget: Widget {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
             todoWidgetEntryView(entry: entry)
         }
-        .configurationDisplayName("식단 기록")
-        .description("오늘의 식단을 빠르게 기록 할 수 있어요.")
+        .configurationDisplayName("위젯 기능 준비 중입니다.") // 식단 기록
+        .description("위젯 기능 준비 중이라 제대로 작동하지 않아요.") // 오늘의 식단을 빠르게 기록 할 수 있어요.
     }
 }
 
