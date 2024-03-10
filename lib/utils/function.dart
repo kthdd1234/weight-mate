@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -489,6 +490,46 @@ NativeAd loadNativeAd({
       ),
     ),
   )..load();
+}
+
+onAction({
+  required List<Map<String, dynamic>>? actions,
+  required String planId,
+}) {
+  if (actions == null) {
+    return {'id': null, 'actionDateTime': null};
+  }
+
+  Map<String, dynamic> action = actions.firstWhere(
+    (element) => element['id'] == planId,
+    orElse: () => {'id': null, 'actionDateTime': null},
+  );
+
+  return action;
+}
+
+List<PlanBox> onPlanList({
+  required List<PlanBox> planList,
+  List<String>? orderList,
+  List<Map<String, dynamic>>? actions,
+}) {
+  planList.sort((itemA, itemB) {
+    int indexA = orderList?.indexOf(itemA.id) ?? 0;
+    int indexB = orderList?.indexOf(itemB.id) ?? 0;
+
+    return indexA.compareTo(indexB);
+  });
+
+  planList.sort((itemA, itemB) {
+    bool isCheckedA =
+        onAction(actions: actions, planId: itemA.id)['id'] != null;
+    bool isCheckedB =
+        onAction(actions: actions, planId: itemB.id)['id'] != null;
+
+    return (isCheckedA == isCheckedB ? 0 : (isCheckedB ? 1 : -1));
+  });
+
+  return planList;
 }
 
 List<Widget>? onActionList({

@@ -385,3 +385,8 @@ List<Map<String, String>> fontFamilyList = [
     "name": "교보 손글씨",
   },
 ];
+
+String fWeight = FILITER.weight.toString();
+String fDiet = FILITER.diet.toString();
+String fExercise = FILITER.exercise.toString();
+String fLife = FILITER.lifeStyle.toString();

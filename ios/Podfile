@@ -32,12 +32,26 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
-  # target 'RunnerTests' do
-  #   inherit! :search_paths
-  # end
+  pod 'home_widget', :path => '.symlinks/plugins/home_widget/ios'
+
+  target 'weightMateWidgetExtension' do
+    inherit! :search_paths
+  end
+  target 'todoWidgetExtension' do
+    inherit! :search_paths
+  end
+  target 'GoalWidgetExtension' do
+    inherit! :search_paths
+  end
+
 end
 
 post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings['CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED'] = 'YES'
+    config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO-$(inherited)'
+  end
+
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
   end

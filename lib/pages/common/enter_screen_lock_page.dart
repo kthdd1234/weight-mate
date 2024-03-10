@@ -2,11 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
 import '../../model/user_box/user_box.dart';
 
@@ -30,9 +31,10 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
   void initState() {
     Box<UserBox> userBox = Hive.box('userBox');
     Box<RecordBox> recordBox = Hive.box('recordBox');
-
     UserBox? userProfile = userBox.get('userProfile');
-    recordInfo = recordBox.get(getDateTimeToInt(DateTime.now()));
+    DateTime now = DateTime.now();
+    int recordKey = getDateTimeToInt(now);
+    recordInfo = recordBox.get(recordKey);
 
     if (userProfile == null) return;
     userPasswords = userProfile.screenLockPasswords!.split('');

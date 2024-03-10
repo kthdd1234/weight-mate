@@ -35,6 +35,7 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -58,6 +59,11 @@ class TodoContainer extends StatefulWidget {
 
 class _TodoContainerState extends State<TodoContainer> {
   bool isShowInput = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -925,11 +931,7 @@ class Dismiss extends StatelessWidget {
 }
 
 class RecordAdd extends StatefulWidget {
-  RecordAdd({
-    super.key,
-    required this.type,
-    required this.onRecordAdd,
-  });
+  RecordAdd({super.key, required this.type, required this.onRecordAdd});
 
   String type;
   Function({
@@ -948,6 +950,11 @@ class RecordAdd extends StatefulWidget {
 class _RecordAddState extends State<RecordAdd> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1040,6 +1047,12 @@ class _RecordAddState extends State<RecordAdd> {
             );
           },
         );
+      }
+    }
+
+    onRecordMsg(String? wType) {
+      if (wType == widget.type) {
+        //
       }
     }
 
@@ -1521,35 +1534,39 @@ class GoalList extends StatelessWidget {
       user.save();
     }
 
-    action(String planId) {
-      if (actions == null) {
-        return {'id': null, 'actionDateTime': null};
-      }
+    // action(String planId) {
+    //   if (actions == null) {
+    //     return {'id': null, 'actionDateTime': null};
+    //   }
 
-      Map<String, dynamic> action = actions!.firstWhere(
-        (element) => element['id'] == planId,
-        orElse: () => {'id': null, 'actionDateTime': null},
-      );
+    //   Map<String, dynamic> action = actions!.firstWhere(
+    //     (element) => element['id'] == planId,
+    //     orElse: () => {'id': null, 'actionDateTime': null},
+    //   );
 
-      return action;
-    }
+    //   return action;
+    // }
 
-    planList.sort((itemA, itemB) {
-      int indexA = orderList?.indexOf(itemA.id) ?? 0;
-      int indexB = orderList?.indexOf(itemB.id) ?? 0;
+    // planList.sort((itemA, itemB) {
+    //   int indexA = orderList?.indexOf(itemA.id) ?? 0;
+    //   int indexB = orderList?.indexOf(itemB.id) ?? 0;
 
-      return indexA.compareTo(indexB);
-    });
+    //   return indexA.compareTo(indexB);
+    // });
 
-    planList.sort((itemA, itemB) {
-      bool isCheckedA = action(itemA.id)['id'] != null;
-      bool isCheckedB = action(itemB.id)['id'] != null;
+    // planList.sort((itemA, itemB) {
+    //   bool isCheckedA = action(itemA.id)['id'] != null;
+    //   bool isCheckedB = action(itemB.id)['id'] != null;
 
-      return (isCheckedA == isCheckedB ? 0 : (isCheckedB ? 1 : -1));
-    });
+    //   return (isCheckedA == isCheckedB ? 0 : (isCheckedB ? 1 : -1));
+    // });
 
     return Column(
-      children: planList
+      children: onPlanList(
+        planList: planList,
+        orderList: orderList,
+        actions: actions,
+      )
           .map(
             (item) => Padding(
               padding: const EdgeInsets.only(bottom: 10),
@@ -1561,7 +1578,9 @@ class GoalList extends StatelessWidget {
                   children: [
                     CommonCheckBox(
                       id: item.id,
-                      isCheck: action(item.id)['id'] != null,
+                      isCheck:
+                          onAction(actions: actions, planId: item.id)['id'] !=
+                              null,
                       checkColor: mainColor,
                       onTap: onCheckBox,
                     ),
@@ -1569,7 +1588,9 @@ class GoalList extends StatelessWidget {
                       type: type,
                       planInfo: item,
                       color: mainColor,
-                      isChcked: action(item.id)['id'] != null,
+                      isChcked:
+                          onAction(actions: actions, planId: item.id)['id'] !=
+                              null,
                       onGoalUpdate: onGoalUpdate,
                       onTapRemove: onTapRemove,
                     ),
