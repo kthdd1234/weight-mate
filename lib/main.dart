@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -139,15 +141,14 @@ class _MyAppState extends State<MyApp> {
 
     String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
+    bool isNotJapan = context.locale != const Locale('ja');
 
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
         : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
-    String initLocale = context.locale != const Locale('ja')
-        ? 'cafe24Ohsquareair'
-        : 'cafe24SsurroundAir';
+    String initLocale = isNotJapan ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
     String fontFamily =
         user?.fontFamily == null ? initLocale : user!.fontFamily!;
 

@@ -566,7 +566,7 @@ String weekAndMonthActionCount({
 }) {
   DateTime startWeekDateTime = weeklyStartDateTime(importDateTime);
   DateTime startMonthDateTime =
-      DateTime(importDateTime.year, importDateTime.month, 0);
+      DateTime(importDateTime.year, importDateTime.month, 1);
   int monthDayLength = daysInMonth(importDateTime.year, importDateTime.month);
   int weekCount = 0;
   int monthCount = 0;
@@ -729,7 +729,7 @@ String ampmFormat(int hour) {
 int hourTo24({required String ampm, required String hour}) {
   if (ampm == '오전') {
     if (hour == '12') {
-      return 24;
+      return 0;
     }
 
     return int.parse(hour);

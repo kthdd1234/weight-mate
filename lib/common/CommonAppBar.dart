@@ -262,7 +262,8 @@ class CommonTitle extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         children: [
-          index != 3 ? BannerWidget() : const EmptyArea(),
+          // index != 3 ? BannerWidget() : const EmptyArea(),
+          SpaceHeight(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

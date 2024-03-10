@@ -1,4 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -170,7 +172,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (historyForamt == null) {
-      user.historyForamt = HistoryFormat.list.toString();
+      user.historyForamt = HistoryFormat.calendar.toString();
     }
 
     if (historyDisplayList == null) {
@@ -186,7 +188,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (fontFamily == null) {
-      user.fontFamily = 'cafe24Ohsquareair';
+      user.fontFamily =
+          widget.locale != 'ja' ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
     }
 
     userRepository.user.save();

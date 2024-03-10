@@ -64,13 +64,13 @@ class HistoryListView extends StatelessWidget {
         ? recordList.reversed.toList()
         : recordList;
 
-    if (recordList.isNotEmpty) {
-      for (var i = 0; i < recordList.length; i++) {
-        if (i != 0 && i % 6 == 0) {
-          recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
-        }
-      }
-    }
+    // if (recordList.isNotEmpty) {
+    //   for (var i = 0; i < recordList.length; i++) {
+    //     if (i != 0 && i % 6 == 0) {
+    //       recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
+    //     }
+    //   }
+    // }
 
     return Expanded(
       child: recordList.isEmpty

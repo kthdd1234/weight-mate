@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -505,12 +506,6 @@ class _SettingBodyState extends State<SettingBody> {
       ),
     ];
 
-    if (locale == 'ja') {
-      settingItemList = settingItemList
-          .where((item) => item.id != MoreSeeItem.appFont)
-          .toList();
-    }
-
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
@@ -529,7 +524,6 @@ class _SettingBodyState extends State<SettingBody> {
 
         return Column(
           children: [
-            SpaceHeight(height: regularSapce),
             CommonAppBar(id: bodyId),
             Expanded(child: ListView(children: children))
           ],
