@@ -37,7 +37,6 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
-import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -47,7 +46,7 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:home_widget/home_widget.dart';
+// import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:events_emitter/events_emitter.dart';
 import 'pages/common/screen_lock_page.dart';
@@ -141,8 +140,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await AppTrackingTransparency.getAdvertisingIdentifier();
     });
 
-    HomeWidget.setAppGroupId('group.weight-mate-widget');
-    HomeWidget.registerInteractivityCallback(interactiveCallback);
+    // HomeWidget.setAppGroupId('group.weight-mate-widget');
+    // HomeWidget.registerInteractivityCallback(interactiveCallback);
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -195,7 +194,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         "isEmpty": record?.weight == null ? "empty" : "show",
       };
 
-      HomeWidgetService().updateWeightWidget(data: weightObj);
+      // HomeWidgetService().updateWeightWidget(data: weightObj);
 
       // onActionList
       // onPlanList
@@ -206,8 +205,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
-    HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
+    // HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
+    // HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
   }
 
   launchedFromHomeWidget(Uri? uri) async {
