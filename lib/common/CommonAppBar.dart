@@ -31,6 +31,7 @@ import 'package:multi_value_listenable_builder/multi_value_listenable_builder.da
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
+import 'package:workmanager/workmanager.dart';
 
 String eHistoryList = HistoryFormat.list.toString();
 String eHistoryCalendar = HistoryFormat.calendar.toString();
@@ -61,6 +62,11 @@ class CommonAppBar extends StatelessWidget {
     }
 
     onTapMakerType(CalendarMaker maker) {
+      Workmanager().registerPeriodicTask(
+        '1',
+        'widgetBackgroundUpdate',
+        frequency: const Duration(minutes: 15),
+      );
       user.calendarMaker = maker.toString();
       user.save();
     }

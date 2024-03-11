@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -36,6 +38,7 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -46,8 +49,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
+import 'package:home_widget/home_widget_callback_dispatcher.dart';
 import 'package:provider/provider.dart';
-import 'package:events_emitter/events_emitter.dart';
+import 'package:workmanager/workmanager.dart';
 import 'pages/common/screen_lock_page.dart';
 
 const List<Locale> supportedLocales = [
@@ -59,7 +63,62 @@ UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
 
-EventEmitter events = EventEmitter();
+updateWeightWidget() {
+  DateTime now = DateTime.now();
+  UserBox user = userRepository.user;
+  int recordKey = getDateTimeToInt(now);
+  RecordBox? record = recordRepository.recordBox.get(recordKey);
+  String headerTitle = "오늘의 체중".tr();
+  String today = mde(locale: user.language!, dateTime: now);
+  String weightTitle = "체중".tr();
+  String weight = '${record?.weight ?? ""}${user.weightUnit}';
+  String bmiTitle = "BMI";
+  String bMI = bmi(
+    tall: user.tall,
+    tallUnit: user.tallUnit,
+    weight: record?.weight,
+    weightUnit: user.weightUnit,
+  );
+  String goalWeightTitle = "목표 체중".tr();
+  String goalWeight = '${user.goalWeight}${user.weightUnit}';
+  String emptyWeightTitle = "체중 기록하기".tr();
+  String fontFamily = '${user.fontFamily}';
+
+  Map<String, String> weightObj = {
+    "headerTitle": headerTitle,
+    "today": today,
+    "weightTitle": weightTitle,
+    "weight": weight,
+    "bmiTitle": bmiTitle,
+    "bmi": bMI,
+    "goalWeightTitle": goalWeightTitle,
+    "goalWeight": goalWeight,
+    "emptyWeightTitle": emptyWeightTitle,
+    "fontFamily": fontFamily,
+    "isEmpty": record?.weight == null ? "empty" : "show",
+  };
+
+  HomeWidgetService().updateWeightWidget(data: weightObj);
+}
+
+@pragma("vm:entry-point")
+Future<void> interactiveCallback(Uri? data) async {
+  log('Uri => $data');
+}
+
+@pragma("vm:entry-point")
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) {
+    debugPrint("Workmanager task ==>> $task");
+    switch (task) {
+      case Workmanager.iOSBackgroundTask:
+        stderr.writeln("The iOS background fetch was triggered");
+        break;
+    }
+    return Future.wait<bool?>([updateWeightWidget()])
+        .then((value) => value.contains(false));
+  });
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,6 +130,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await MateHive().initializeHive();
   await EasyLocalization.ensureInitialized();
+  await Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
 
   runApp(
     MultiProvider(
@@ -94,11 +154,6 @@ void main() async {
       ),
     ),
   );
-}
-
-@pragma("vm:entry-point")
-Future<void> interactiveCallback(Uri? data) async {
-  log('Uri => $data');
 }
 
 class MyApp extends StatefulWidget {
@@ -135,8 +190,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await AppTrackingTransparency.getAdvertisingIdentifier();
     });
 
-    // HomeWidget.setAppGroupId('group.weight-mate-widget');
-    // HomeWidget.registerInteractivityCallback(interactiveCallback);
+    HomeWidget.setAppGroupId('group.weight-mate-widget');
+    HomeWidget.registerInteractivityCallback(interactiveCallback);
 
     WidgetsBinding.instance.addObserver(this);
     super.initState();
@@ -155,44 +210,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         state == AppLifecycleState.detached;
 
     if (isBackground && user != null) {
-      DateTime now = DateTime.now();
-      UserBox user = userRepository.user;
-      int recordKey = getDateTimeToInt(now);
-      RecordBox? record = recordRepository.recordBox.get(recordKey);
-      String headerTitle = "오늘의 체중".tr();
-      String today = mde(locale: user.language!, dateTime: now);
-      String weightTitle = "체중".tr();
-      String weight = '${record?.weight ?? ""}${user.weightUnit}';
-      String bmiTitle = "BMI";
-      String bMI = bmi(
-        tall: user.tall,
-        tallUnit: user.tallUnit,
-        weight: record?.weight,
-        weightUnit: user.weightUnit,
-      );
-      String goalWeightTitle = "목표 체중".tr();
-      String goalWeight = '${user.goalWeight}${user.weightUnit}';
-      String emptyWeightTitle = "체중 기록하기".tr();
-      String fontFamily = '${user.fontFamily}';
-
-      Map<String, String> weightObj = {
-        "headerTitle": headerTitle,
-        "today": today,
-        "weightTitle": weightTitle,
-        "weight": weight,
-        "bmiTitle": bmiTitle,
-        "bmi": bMI,
-        "goalWeightTitle": goalWeightTitle,
-        "goalWeight": goalWeight,
-        "emptyWeightTitle": emptyWeightTitle,
-        "fontFamily": fontFamily,
-        "isEmpty": record?.weight == null ? "empty" : "show",
-      };
-
-      // HomeWidgetService().updateWeightWidget(data: weightObj);
-
-      // onActionList
-      // onPlanList
+      updateWeightWidget();
     }
   }
 
@@ -200,8 +218,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
-    // HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
+    HomeWidget.initiallyLaunchedFromHomeWidget().then(launchedFromHomeWidget);
+    HomeWidget.widgetClicked.listen(launchedFromHomeWidget);
   }
 
   launchedFromHomeWidget(Uri? uri) async {

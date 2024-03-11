@@ -30,6 +30,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:workmanager/workmanager.dart';
 
 List<BottomNavigationEnum> bottomIdList = [
   BottomNavigationEnum.record,

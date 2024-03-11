@@ -1,10 +1,3 @@
-//
-//  IconCell.swift
-//  Runner
-//
-//  Created by 김동현 on 3/5/24.
-//
-
 import SwiftUI
 
 struct IconCell: View {

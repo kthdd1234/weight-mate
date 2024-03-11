@@ -15,6 +15,63 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
+		D31007CF2B9E8C5E00FFE286 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
+		D31007D02B9E8C5E00FFE286 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
+		D31007D32B9E8C5E00FFE286 /* weightWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31007D22B9E8C5E00FFE286 /* weightWidgetBundle.swift */; };
+		D31007D52B9E8C5E00FFE286 /* weightWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31007D42B9E8C5E00FFE286 /* weightWidget.swift */; };
+		D31007D72B9E8C6200FFE286 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D31007D62B9E8C6200FFE286 /* Assets.xcassets */; };
+		D31007DB2B9E8C6200FFE286 /* weightWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D31007CE2B9E8C5E00FFE286 /* weightWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D31007E62B9E8DD100FFE286 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
+		D31007E72B9E8DD100FFE286 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
+		D31007EA2B9E8DD100FFE286 /* dietRecordWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31007E92B9E8DD100FFE286 /* dietRecordWidgetBundle.swift */; };
+		D31007EC2B9E8DD100FFE286 /* dietRecordWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31007EB2B9E8DD100FFE286 /* dietRecordWidget.swift */; };
+		D31007EE2B9E8DD300FFE286 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D31007ED2B9E8DD300FFE286 /* Assets.xcassets */; };
+		D31007F22B9E8DD300FFE286 /* dietRecordWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D31007E52B9E8DD100FFE286 /* dietRecordWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D31007FD2B9E8E6700FFE286 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
+		D31007FE2B9E8E6700FFE286 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
+		D31008012B9E8E6700FFE286 /* exerciseRecordWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31008002B9E8E6700FFE286 /* exerciseRecordWidgetBundle.swift */; };
+		D31008032B9E8E6700FFE286 /* exerciseRecordWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31008022B9E8E6700FFE286 /* exerciseRecordWidget.swift */; };
+		D31008052B9E8E6900FFE286 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D31008042B9E8E6900FFE286 /* Assets.xcassets */; };
+		D31008092B9E8E6900FFE286 /* exerciseRecordWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D31007FC2B9E8E6700FFE286 /* exerciseRecordWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D310085D2B9E924500FFE286 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
+		D310085E2B9E924600FFE286 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
+		D310085F2B9E924600FFE286 /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
+		D31008632B9E92ED00FFE286 /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70672B94401000F9C455 /* colors.swift */; };
+		D31008642B9E92ED00FFE286 /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70672B94401000F9C455 /* colors.swift */; };
+		D31008652B9E92ED00FFE286 /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70672B94401000F9C455 /* colors.swift */; };
+		D31008692B9E92F300FFE286 /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D706B2B94472F00F9C455 /* icons.swift */; };
+		D310086A2B9E92F300FFE286 /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D706B2B94472F00F9C455 /* icons.swift */; };
+		D310086B2B9E92F300FFE286 /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D706B2B94472F00F9C455 /* icons.swift */; };
+		D31008702B9E92F900FFE286 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
+		D31008712B9E92F900FFE286 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
+		D31008722B9E92FA00FFE286 /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
+		D31008762B9E930100FFE286 /* BackgroundWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705A2B93097400F9C455 /* BackgroundWidget.swift */; };
+		D31008772B9E930200FFE286 /* BackgroundWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705A2B93097400F9C455 /* BackgroundWidget.swift */; };
+		D31008782B9E930200FFE286 /* BackgroundWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705A2B93097400F9C455 /* BackgroundWidget.swift */; };
+		D310087D2B9E930600FFE286 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
+		D310087E2B9E930700FFE286 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
+		D310087F2B9E930700FFE286 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
+		D31008832B9E930E00FFE286 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
+		D31008842B9E930E00FFE286 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
+		D31008852B9E930F00FFE286 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
+		D31008892B9E931300FFE286 /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
+		D310088A2B9E931300FFE286 /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
+		D310088B2B9E931400FFE286 /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
+		D310088F2B9E931700FFE286 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
+		D31008902B9E931700FFE286 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
+		D31008912B9E931800FFE286 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
+		D31008952B9E931C00FFE286 /* SvgTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70552B9307AA00F9C455 /* SvgTextCell.swift */; };
+		D31008962B9E931D00FFE286 /* SvgTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70552B9307AA00F9C455 /* SvgTextCell.swift */; };
+		D31008982B9E931E00FFE286 /* SvgTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70552B9307AA00F9C455 /* SvgTextCell.swift */; };
+		D310089B2B9E932400FFE286 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705E2B93105400F9C455 /* HeaderCell.swift */; };
+		D310089C2B9E932500FFE286 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705E2B93105400F9C455 /* HeaderCell.swift */; };
+		D310089D2B9E932500FFE286 /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705E2B93105400F9C455 /* HeaderCell.swift */; };
+		D31008A12B9E932900FFE286 /* IconTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70622B93162100F9C455 /* IconTextCell.swift */; };
+		D31008A22B9E932900FFE286 /* IconTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70622B93162100F9C455 /* IconTextCell.swift */; };
+		D31008A32B9E932A00FFE286 /* IconTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70622B93162100F9C455 /* IconTextCell.swift */; };
+		D31008A72B9E932E00FFE286 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D31008A82B9E932E00FFE286 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D31008A92B9E932E00FFE286 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
 		D33B25E82B9DE12200392237 /* BackgroundIntentWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70952B95DA3300F9C455 /* BackgroundIntentWidget.swift */; };
 		D35D704A2B92FD9600F9C455 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
 		D35D704E2B92FEC100F9C455 /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
@@ -30,6 +87,30 @@
 		D35D70A12B96CF7300F9C455 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
 		D3F098E72B73196A00CBF52B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D3F098E92B73196A00CBF52B /* InfoPlist.strings */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D31007D92B9E8C6200FFE286 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D31007CD2B9E8C5E00FFE286;
+			remoteInfo = weightWidgetExtension;
+		};
+		D31007F02B9E8DD300FFE286 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D31007E42B9E8DD100FFE286;
+			remoteInfo = dietRecordWidgetExtension;
+		};
+		D31008072B9E8E6900FFE286 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D31007FB2B9E8E6700FFE286;
+			remoteInfo = exerciseRecordWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		9705A1C41CF9048500538489 /* Embed Frameworks */ = {
@@ -48,6 +129,9 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				D31007DB2B9E8C6200FFE286 /* weightWidgetExtension.appex in Embed Foundation Extensions */,
+				D31007F22B9E8DD300FFE286 /* dietRecordWidgetExtension.appex in Embed Foundation Extensions */,
+				D31008092B9E8E6900FFE286 /* exerciseRecordWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -73,6 +157,24 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D31007CE2B9E8C5E00FFE286 /* weightWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = weightWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D31007D22B9E8C5E00FFE286 /* weightWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weightWidgetBundle.swift; sourceTree = "<group>"; };
+		D31007D42B9E8C5E00FFE286 /* weightWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weightWidget.swift; sourceTree = "<group>"; };
+		D31007D62B9E8C6200FFE286 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D31007D82B9E8C6200FFE286 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D31007E02B9E8CCF00FFE286 /* weightWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = weightWidgetExtension.entitlements; sourceTree = "<group>"; };
+		D31007E52B9E8DD100FFE286 /* dietRecordWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = dietRecordWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D31007E92B9E8DD100FFE286 /* dietRecordWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dietRecordWidgetBundle.swift; sourceTree = "<group>"; };
+		D31007EB2B9E8DD100FFE286 /* dietRecordWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dietRecordWidget.swift; sourceTree = "<group>"; };
+		D31007ED2B9E8DD300FFE286 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D31007EF2B9E8DD300FFE286 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D31007F72B9E8DDD00FFE286 /* dietRecordWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = dietRecordWidgetExtension.entitlements; sourceTree = "<group>"; };
+		D31007FC2B9E8E6700FFE286 /* exerciseRecordWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = exerciseRecordWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D31008002B9E8E6700FFE286 /* exerciseRecordWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exerciseRecordWidgetBundle.swift; sourceTree = "<group>"; };
+		D31008022B9E8E6700FFE286 /* exerciseRecordWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exerciseRecordWidget.swift; sourceTree = "<group>"; };
+		D31008042B9E8E6900FFE286 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D31008062B9E8E6900FFE286 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D31008562B9E8FE600FFE286 /* exerciseRecordWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = exerciseRecordWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D35D70492B92FD9600F9C455 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
 		D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryCell.swift; sourceTree = "<group>"; };
 		D35D70512B9306C000F9C455 /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
@@ -103,6 +205,33 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D31007CB2B9E8C5E00FFE286 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31007D02B9E8C5E00FFE286 /* SwiftUI.framework in Frameworks */,
+				D31007CF2B9E8C5E00FFE286 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007E22B9E8DD100FFE286 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31007E72B9E8DD100FFE286 /* SwiftUI.framework in Frameworks */,
+				D31007E62B9E8DD100FFE286 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007F92B9E8E6700FFE286 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31007FE2B9E8E6700FFE286 /* SwiftUI.framework in Frameworks */,
+				D31007FD2B9E8E6700FFE286 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -130,12 +259,18 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				D31008562B9E8FE600FFE286 /* exerciseRecordWidgetExtension.entitlements */,
+				D31007F72B9E8DDD00FFE286 /* dietRecordWidgetExtension.entitlements */,
+				D31007E02B9E8CCF00FFE286 /* weightWidgetExtension.entitlements */,
 				D35D706F2B94AED200F9C455 /* CommonFunc */,
 				D35D70662B943FDF00F9C455 /* CommonVariable */,
 				D35D70592B93094200F9C455 /* CommonWIdget */,
 				D35D70482B92FD3D00F9C455 /* CommonCell */,
 				9740EEB11CF90186004384FC /* Flutter */,
 				97C146F01CF9000F007C117D /* Runner */,
+				D31007D12B9E8C5E00FFE286 /* weightWidget */,
+				D31007E82B9E8DD100FFE286 /* dietRecordWidget */,
+				D31007FF2B9E8E6700FFE286 /* exerciseRecordWidget */,
 				97C146EF1CF9000F007C117D /* Products */,
 				F0141A8D50CADE5A1C278A6C /* Pods */,
 				61A6365C79F8589DFA46995E /* GoogleService-Info.plist */,
@@ -147,6 +282,9 @@
 			isa = PBXGroup;
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
+				D31007CE2B9E8C5E00FFE286 /* weightWidgetExtension.appex */,
+				D31007E52B9E8DD100FFE286 /* dietRecordWidgetExtension.appex */,
+				D31007FC2B9E8E6700FFE286 /* exerciseRecordWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -166,6 +304,39 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		D31007D12B9E8C5E00FFE286 /* weightWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D31007D22B9E8C5E00FFE286 /* weightWidgetBundle.swift */,
+				D31007D42B9E8C5E00FFE286 /* weightWidget.swift */,
+				D31007D62B9E8C6200FFE286 /* Assets.xcassets */,
+				D31007D82B9E8C6200FFE286 /* Info.plist */,
+			);
+			path = weightWidget;
+			sourceTree = "<group>";
+		};
+		D31007E82B9E8DD100FFE286 /* dietRecordWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D31007E92B9E8DD100FFE286 /* dietRecordWidgetBundle.swift */,
+				D31007EB2B9E8DD100FFE286 /* dietRecordWidget.swift */,
+				D31007ED2B9E8DD300FFE286 /* Assets.xcassets */,
+				D31007EF2B9E8DD300FFE286 /* Info.plist */,
+			);
+			path = dietRecordWidget;
+			sourceTree = "<group>";
+		};
+		D31007FF2B9E8E6700FFE286 /* exerciseRecordWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D31008002B9E8E6700FFE286 /* exerciseRecordWidgetBundle.swift */,
+				D31008022B9E8E6700FFE286 /* exerciseRecordWidget.swift */,
+				D31008042B9E8E6900FFE286 /* Assets.xcassets */,
+				D31008062B9E8E6900FFE286 /* Info.plist */,
+			);
+			path = exerciseRecordWidget;
 			sourceTree = "<group>";
 		};
 		D35D70482B92FD3D00F9C455 /* CommonCell */ = {
@@ -239,11 +410,65 @@
 			buildRules = (
 			);
 			dependencies = (
+				D31007DA2B9E8C6200FFE286 /* PBXTargetDependency */,
+				D31007F12B9E8DD300FFE286 /* PBXTargetDependency */,
+				D31008082B9E8E6900FFE286 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D31007CD2B9E8C5E00FFE286 /* weightWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D31007DF2B9E8C6200FFE286 /* Build configuration list for PBXNativeTarget "weightWidgetExtension" */;
+			buildPhases = (
+				D31007CA2B9E8C5E00FFE286 /* Sources */,
+				D31007CB2B9E8C5E00FFE286 /* Frameworks */,
+				D31007CC2B9E8C5E00FFE286 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = weightWidgetExtension;
+			productName = weightWidgetExtension;
+			productReference = D31007CE2B9E8C5E00FFE286 /* weightWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D31007E42B9E8DD100FFE286 /* dietRecordWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D31007F32B9E8DD300FFE286 /* Build configuration list for PBXNativeTarget "dietRecordWidgetExtension" */;
+			buildPhases = (
+				D31007E12B9E8DD100FFE286 /* Sources */,
+				D31007E22B9E8DD100FFE286 /* Frameworks */,
+				D31007E32B9E8DD100FFE286 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = dietRecordWidgetExtension;
+			productName = dietRecordWidgetExtension;
+			productReference = D31007E52B9E8DD100FFE286 /* dietRecordWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D31007FB2B9E8E6700FFE286 /* exerciseRecordWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D310080A2B9E8E6900FFE286 /* Build configuration list for PBXNativeTarget "exerciseRecordWidgetExtension" */;
+			buildPhases = (
+				D31007F82B9E8E6700FFE286 /* Sources */,
+				D31007F92B9E8E6700FFE286 /* Frameworks */,
+				D31007FA2B9E8E6700FFE286 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = exerciseRecordWidgetExtension;
+			productName = exerciseRecordWidgetExtension;
+			productReference = D31007FC2B9E8E6700FFE286 /* exerciseRecordWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -251,13 +476,22 @@
 		97C146E61CF9000F007C117D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1520;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1430;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 1100;
+					};
+					D31007CD2B9E8C5E00FFE286 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					D31007E42B9E8DD100FFE286 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					D31007FB2B9E8E6700FFE286 = {
+						CreatedOnToolsVersion = 15.3;
 					};
 				};
 			};
@@ -277,6 +511,9 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
+				D31007CD2B9E8C5E00FFE286 /* weightWidgetExtension */,
+				D31007E42B9E8DD100FFE286 /* dietRecordWidgetExtension */,
+				D31007FB2B9E8E6700FFE286 /* exerciseRecordWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -292,6 +529,30 @@
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				976B2E732CB0435287011F8B /* GoogleService-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007CC2B9E8C5E00FFE286 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31007D72B9E8C6200FFE286 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007E32B9E8DD100FFE286 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31007EE2B9E8DD300FFE286 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007FA2B9E8E6700FFE286 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31008052B9E8E6900FFE286 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,7 +654,91 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D31007CA2B9E8C5E00FFE286 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D31008892B9E931300FFE286 /* SecondaryCell.swift in Sources */,
+				D31007D32B9E8C5E00FFE286 /* weightWidgetBundle.swift in Sources */,
+				D31008632B9E92ED00FFE286 /* colors.swift in Sources */,
+				D31007D52B9E8C5E00FFE286 /* weightWidget.swift in Sources */,
+				D310089B2B9E932400FFE286 /* HeaderCell.swift in Sources */,
+				D31008A12B9E932900FFE286 /* IconTextCell.swift in Sources */,
+				D31008692B9E92F300FFE286 /* icons.swift in Sources */,
+				D31008952B9E931C00FFE286 /* SvgTextCell.swift in Sources */,
+				D31008832B9E930E00FFE286 /* TextCell.swift in Sources */,
+				D310088F2B9E931700FFE286 /* EmptyCell.swift in Sources */,
+				D310085D2B9E924500FFE286 /* func.swift in Sources */,
+				D31008A72B9E932E00FFE286 /* IconCell.swift in Sources */,
+				D310087D2B9E930600FFE286 /* BackgroundIntentWidget.swift in Sources */,
+				D31008762B9E930100FFE286 /* BackgroundWidget.swift in Sources */,
+				D31008702B9E92F900FFE286 /* vars.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007E12B9E8DD100FFE286 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D310088A2B9E931300FFE286 /* SecondaryCell.swift in Sources */,
+				D31007EC2B9E8DD100FFE286 /* dietRecordWidget.swift in Sources */,
+				D31008642B9E92ED00FFE286 /* colors.swift in Sources */,
+				D31007EA2B9E8DD100FFE286 /* dietRecordWidgetBundle.swift in Sources */,
+				D310089C2B9E932500FFE286 /* HeaderCell.swift in Sources */,
+				D31008A22B9E932900FFE286 /* IconTextCell.swift in Sources */,
+				D310086A2B9E92F300FFE286 /* icons.swift in Sources */,
+				D31008962B9E931D00FFE286 /* SvgTextCell.swift in Sources */,
+				D31008842B9E930E00FFE286 /* TextCell.swift in Sources */,
+				D31008912B9E931800FFE286 /* EmptyCell.swift in Sources */,
+				D310085E2B9E924600FFE286 /* func.swift in Sources */,
+				D31008A82B9E932E00FFE286 /* IconCell.swift in Sources */,
+				D310087E2B9E930700FFE286 /* BackgroundIntentWidget.swift in Sources */,
+				D31008772B9E930200FFE286 /* BackgroundWidget.swift in Sources */,
+				D31008712B9E92F900FFE286 /* vars.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D31007F82B9E8E6700FFE286 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D310088B2B9E931400FFE286 /* SecondaryCell.swift in Sources */,
+				D31008032B9E8E6700FFE286 /* exerciseRecordWidget.swift in Sources */,
+				D31008652B9E92ED00FFE286 /* colors.swift in Sources */,
+				D31008012B9E8E6700FFE286 /* exerciseRecordWidgetBundle.swift in Sources */,
+				D310089D2B9E932500FFE286 /* HeaderCell.swift in Sources */,
+				D31008A32B9E932A00FFE286 /* IconTextCell.swift in Sources */,
+				D310086B2B9E92F300FFE286 /* icons.swift in Sources */,
+				D31008982B9E931E00FFE286 /* SvgTextCell.swift in Sources */,
+				D31008852B9E930F00FFE286 /* TextCell.swift in Sources */,
+				D31008902B9E931700FFE286 /* EmptyCell.swift in Sources */,
+				D310085F2B9E924600FFE286 /* func.swift in Sources */,
+				D31008A92B9E932E00FFE286 /* IconCell.swift in Sources */,
+				D310087F2B9E930700FFE286 /* BackgroundIntentWidget.swift in Sources */,
+				D31008782B9E930200FFE286 /* BackgroundWidget.swift in Sources */,
+				D31008722B9E92FA00FFE286 /* vars.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D31007DA2B9E8C6200FFE286 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D31007CD2B9E8C5E00FFE286 /* weightWidgetExtension */;
+			targetProxy = D31007D92B9E8C6200FFE286 /* PBXContainerItemProxy */;
+		};
+		D31007F12B9E8DD300FFE286 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D31007E42B9E8DD100FFE286 /* dietRecordWidgetExtension */;
+			targetProxy = D31007F02B9E8DD300FFE286 /* PBXContainerItemProxy */;
+		};
+		D31008082B9E8E6900FFE286 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D31007FB2B9E8E6700FFE286 /* exerciseRecordWidgetExtension */;
+			targetProxy = D31008072B9E8E6900FFE286 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
@@ -697,6 +1042,384 @@
 			};
 			name = Release;
 		};
+		D31007DC2B9E8C6200FFE286 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = weightWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = weightWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = weightWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.weightWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D31007DD2B9E8C6200FFE286 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = weightWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = weightWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = weightWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.weightWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D31007DE2B9E8C6200FFE286 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = weightWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = weightWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = weightWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.weightWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		D31007F42B9E8DD300FFE286 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = dietRecordWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = dietRecordWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = dietRecordWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.dietRecordWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D31007F52B9E8DD300FFE286 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = dietRecordWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = dietRecordWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = dietRecordWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.dietRecordWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D31007F62B9E8DD300FFE286 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = dietRecordWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = dietRecordWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = dietRecordWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.dietRecordWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		D310080B2B9E8E6900FFE286 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = exerciseRecordWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = exerciseRecordWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = exerciseRecordWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.exerciseRecordWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D310080C2B9E8E6900FFE286 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = exerciseRecordWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = exerciseRecordWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = exerciseRecordWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.exerciseRecordWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D310080D2B9E8E6900FFE286 /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = exerciseRecordWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = exerciseRecordWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = exerciseRecordWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.exerciseRecordWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -716,6 +1439,36 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D31007DF2B9E8C6200FFE286 /* Build configuration list for PBXNativeTarget "weightWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D31007DC2B9E8C6200FFE286 /* Debug */,
+				D31007DD2B9E8C6200FFE286 /* Release */,
+				D31007DE2B9E8C6200FFE286 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D31007F32B9E8DD300FFE286 /* Build configuration list for PBXNativeTarget "dietRecordWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D31007F42B9E8DD300FFE286 /* Debug */,
+				D31007F52B9E8DD300FFE286 /* Release */,
+				D31007F62B9E8DD300FFE286 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D310080A2B9E8E6900FFE286 /* Build configuration list for PBXNativeTarget "exerciseRecordWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D310080B2B9E8E6900FFE286 /* Debug */,
+				D310080C2B9E8E6900FFE286 /* Release */,
+				D310080D2B9E8E6900FFE286 /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
