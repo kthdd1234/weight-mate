@@ -80,6 +80,8 @@ dependencies:
   quiver: ^3.2.1
   workmanager: ^0.5.2
   events_emitter: ^0.5.2
+  home_widget: ^0.4.1
+  flutter_widgetkit: ^1.0.3
 
 dev_dependencies:
   flutter_test:

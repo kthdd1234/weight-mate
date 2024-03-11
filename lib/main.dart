@@ -11,7 +11,6 @@ import 'package:flutter_app_weight_management/pages/common/font_change_page.dart
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_weight.dart';
@@ -46,20 +45,16 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-// import 'package:home_widget/home_widget.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:events_emitter/events_emitter.dart';
 import 'pages/common/screen_lock_page.dart';
 
-const supportedLocales = [
+const List<Locale> supportedLocales = [
   Locale('ko'),
   Locale('en'),
-  Locale('ja'),
-  // Locale('de', 'DE'),
-  // Locale('es', 'ES'),
-  // Locale('fr', 'FR'),
+  Locale('ja')
 ];
-
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
