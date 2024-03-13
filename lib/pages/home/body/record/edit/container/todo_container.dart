@@ -682,7 +682,7 @@ class RecordName extends StatefulWidget {
     required this.title,
     required this.topTitle,
     required this.actionDateTime,
-    required this.onRecordUpdate,
+    this.onRecordUpdate,
     required this.dietExerciseRecordDateTime,
   });
 
@@ -696,7 +696,7 @@ class RecordName extends StatefulWidget {
     required DateTime actionDateTime,
     required String title,
     DateTime? dietExerciseRecordDateTime,
-  }) onRecordUpdate;
+  })? onRecordUpdate;
 
   @override
   State<RecordName> createState() => _RecordNameState();
@@ -782,8 +782,8 @@ class _RecordNameState extends State<RecordName> {
     }
 
     onEditingComplete() {
-      if (textController.text != '') {
-        widget.onRecordUpdate(
+      if (textController.text != '' && widget.onRecordUpdate != null) {
+        widget.onRecordUpdate!(
           completedType: '수정',
           id: widget.id,
           name: textController.text,

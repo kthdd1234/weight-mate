@@ -1,54 +1,80 @@
-//
-//  exerciseRecordWidget.swift
-//  exerciseRecordWidget
-//
-//  Created by 김동현 on 3/11/24.
-//
-
 import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date(), emoji: "😀")
+    func placeholder(in context: Context) -> ExerciseRecordEntry {
+        ExerciseRecordEntry(date: .now, erHeaderTitle: "", erToday: "", erFontFamily: "", erEmptyTitle: "", erIsEmpty: "", erRenderCellList: "")
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date(), emoji: "😀")
+    func getSnapshot(in context: Context, completion: @escaping (ExerciseRecordEntry) -> ()) {
+        let data = UserDefaults.init(suiteName: widgetGroupId)
+        
+        let erHeaderTitle = data?.string(forKey: "erHeaderTitle") ?? "오늘의 운동 기록"
+        let erToday = data?.string(forKey: "erToday") ?? ""
+        let erFontFamily = data?.string(forKey: "erFontFamily") ?? "cafe24Ohsquareair"
+        let erIsEmpty = data?.string(forKey: "erIsEmpty") ?? "empty"
+        let erEmptyTitle = data?.string(forKey: "erEmptyTitle") ?? "운동 기록하기"
+        let erRenderCellList = data?.string(forKey: "erRenderCellList") ?? ""
+        
+        let entry = ExerciseRecordEntry(date: Date(), erHeaderTitle: erHeaderTitle, erToday: erToday, erFontFamily: erFontFamily, erEmptyTitle: erEmptyTitle, erIsEmpty: erIsEmpty, erRenderCellList: erRenderCellList)
+        
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate, emoji: "😀")
-            entries.append(entry)
+            getSnapshot(in: context) { (entry) in
+            let timeline = Timeline(entries: [entry], policy: .atEnd)
+            completion(timeline)
         }
-
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
     }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct ExerciseRecordEntry: TimelineEntry {
     let date: Date
-    let emoji: String
+    let erHeaderTitle: String
+    let erToday: String
+    let erFontFamily: String
+    let erEmptyTitle: String
+    let erIsEmpty: String
+    let erRenderCellList: String
 }
 
 struct exerciseRecordWidgetEntryView : View {
     var entry: Provider.Entry
+    
+    @Environment(\.widgetFamily) var wFamily
+    @State var itemRenderList: [ItemModel]
+    
+    init(entry: Provider.Entry){
+        self.entry = entry
+        self.itemRenderList = loadJson(json: entry.erRenderCellList)
+        
+        initCutomFont(fontFamily: entry.erFontFamily)
+    }
 
     var body: some View {
-        VStack {
-            Text("Time:")
-            Text(entry.date, style: .time)
-
-            Text("Emoji:")
-            Text(entry.emoji)
+        VStack(alignment: .leading) {
+            HeaderCell(title: entry.erHeaderTitle, secondary: isWidgetSizeMediumLarge(family: wFamily) ? entry.erToday : "", fontFamily: entry.erFontFamily).padding(.top, 5)
+            if entry.erIsEmpty != "empty" {
+                VStack(alignment: .leading, spacing: 15) {
+                    ForEach(wItemList(family: wFamily, list: itemRenderList)) { item in
+                        IconTextCell(
+                            text: item.name,
+                            systemName: systemName(type: item.type, key: item.title),
+                            iconColor: iconColor(type: item.type),
+                            bgColor: bgColor(type: item.type),
+                            fontFamily: entry.erFontFamily
+                        )
+                    }
+                }
+                Spacer()
+            } else {
+                EmptyCell(svgName: "empty-record", text: entry.erEmptyTitle, fontFamily: entry.erFontFamily)
+            }
+        }
+        .widgetURL(URL(string: "exercise://message?message=record&homeWidget"))
+        .containerBackground(for: .widget) {
+                BackgroundWidget()
         }
     }
 }
@@ -58,23 +84,15 @@ struct exerciseRecordWidget: Widget {
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            if #available(iOS 17.0, *) {
                 exerciseRecordWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
-            } else {
-                exerciseRecordWidgetEntryView(entry: entry)
-                    .padding()
-                    .background()
-            }
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("운동 기록")
+        .description("오늘의 운동 기록을 한눈에 확인 할 수 있어요.")
     }
 }
 
 #Preview(as: .systemSmall) {
     exerciseRecordWidget()
 } timeline: {
-    SimpleEntry(date: .now, emoji: "😀")
-    SimpleEntry(date: .now, emoji: "🤩")
+    ExerciseRecordEntry(date: .now, erHeaderTitle: "오늘의 식단 기록", erToday: "", erFontFamily: "", erEmptyTitle: "식단 기록하기", erIsEmpty: "empty", erRenderCellList: "")
 }

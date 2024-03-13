@@ -312,3 +312,21 @@ class DayColorClass {
   String type;
   Color color;
 }
+
+class WidgetItemClass {
+  final String id;
+  final String type;
+  final String title;
+  final String name;
+
+  WidgetItemClass(this.id, this.type, this.title, this.name);
+
+  WidgetItemClass.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        type = json['type'] as String,
+        title = json['title'] as String,
+        name = json['name'] as String;
+
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'type': type, 'title': title, 'name': name};
+}

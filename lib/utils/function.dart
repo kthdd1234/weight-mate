@@ -532,19 +532,11 @@ List<PlanBox> onPlanList({
   return planList;
 }
 
-List<Widget>? onActionList({
+List<Map<String, dynamic>>? onOrderList({
   required List<Map<String, dynamic>>? actions,
   required String type,
-  required Function({
-    required String completedType,
-    required String id,
-    required String name,
-    required DateTime actionDateTime,
-    required String title,
-    DateTime? dietExerciseRecordDateTime,
-  }) onRecordUpdate,
 }) {
-  final actionList = actions
+  List<Map<String, dynamic>>? actionList = actions
       ?.where((item) => type == item['type'] && item['isRecord'] != null)
       .toList();
 
@@ -560,21 +552,34 @@ List<Widget>? onActionList({
     return dateTime1.compareTo(dateTime2);
   });
 
-  final renderList = actionList
-      ?.map((item) => Column(
-            children: [
-              RecordName(
-                type: type,
-                title: item['title'],
-                topTitle: todoData[type]!.title,
-                id: item['id'],
-                name: item['name'],
-                actionDateTime: item['actionDateTime'],
-                dietExerciseRecordDateTime: item['dietExerciseRecordDateTime'],
-                onRecordUpdate: onRecordUpdate,
-              ),
-              SpaceHeight(height: 15)
-            ],
+  return actionList;
+}
+
+List<Padding>? onActionList({
+  required List<Map<String, dynamic>>? actions,
+  required String type,
+  required Function({
+    required String completedType,
+    required String id,
+    required String name,
+    required DateTime actionDateTime,
+    required String title,
+    DateTime? dietExerciseRecordDateTime,
+  })? onRecordUpdate,
+}) {
+  List<Padding>? renderList = onOrderList(actions: actions, type: type)
+      ?.map((item) => Padding(
+            padding: const EdgeInsets.only(bottom: 15),
+            child: RecordName(
+              type: type,
+              title: item['title'],
+              topTitle: todoData[type]!.title,
+              id: item['id'],
+              name: item['name'],
+              actionDateTime: item['actionDateTime'],
+              dietExerciseRecordDateTime: item['dietExerciseRecordDateTime'],
+              onRecordUpdate: onRecordUpdate,
+            ),
           ))
       .toList();
 

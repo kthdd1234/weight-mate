@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
@@ -43,13 +42,11 @@ import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
-import 'package:home_widget/home_widget_callback_dispatcher.dart';
 import 'package:provider/provider.dart';
 import 'package:workmanager/workmanager.dart';
 import 'pages/common/screen_lock_page.dart';
@@ -63,44 +60,6 @@ UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
 
-updateWeightWidget() {
-  DateTime now = DateTime.now();
-  UserBox user = userRepository.user;
-  int recordKey = getDateTimeToInt(now);
-  RecordBox? record = recordRepository.recordBox.get(recordKey);
-  String headerTitle = "오늘의 체중".tr();
-  String today = mde(locale: user.language!, dateTime: now);
-  String weightTitle = "체중".tr();
-  String weight = '${record?.weight ?? ""}${user.weightUnit}';
-  String bmiTitle = "BMI";
-  String bMI = bmi(
-    tall: user.tall,
-    tallUnit: user.tallUnit,
-    weight: record?.weight,
-    weightUnit: user.weightUnit,
-  );
-  String goalWeightTitle = "목표 체중".tr();
-  String goalWeight = '${user.goalWeight}${user.weightUnit}';
-  String emptyWeightTitle = "체중 기록하기".tr();
-  String fontFamily = '${user.fontFamily}';
-
-  Map<String, String> weightObj = {
-    "headerTitle": headerTitle,
-    "today": today,
-    "weightTitle": weightTitle,
-    "weight": weight,
-    "bmiTitle": bmiTitle,
-    "bmi": bMI,
-    "goalWeightTitle": goalWeightTitle,
-    "goalWeight": goalWeight,
-    "emptyWeightTitle": emptyWeightTitle,
-    "fontFamily": fontFamily,
-    "isEmpty": record?.weight == null ? "empty" : "show",
-  };
-
-  HomeWidgetService().updateWeightWidget(data: weightObj);
-}
-
 @pragma("vm:entry-point")
 Future<void> interactiveCallback(Uri? data) async {
   log('Uri => $data');
@@ -109,14 +68,18 @@ Future<void> interactiveCallback(Uri? data) async {
 @pragma("vm:entry-point")
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
-    debugPrint("Workmanager task ==>> $task");
+    HomeWidgetService().updateWeight();
+    HomeWidgetService().updateDietRecord();
+    HomeWidgetService().updateExerciseRecord();
+
     switch (task) {
       case Workmanager.iOSBackgroundTask:
         stderr.writeln("The iOS background fetch was triggered");
         break;
     }
-    return Future.wait<bool?>([updateWeightWidget()])
-        .then((value) => value.contains(false));
+
+    bool success = true;
+    return Future.value(success);
   });
 }
 
@@ -204,13 +167,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     UserBox? user = userBox?.get('userProfile');
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
     if (isBackground && user != null) {
-      updateWeightWidget();
+      await HomeWidgetService().updateWeight();
+      await HomeWidgetService().updateDietRecord();
+      await HomeWidgetService().updateExerciseRecord();
     }
   }
 

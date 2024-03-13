@@ -91,7 +91,7 @@ struct weightWidget: Widget {
             weightWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("체중 기록")
-        .description("오늘의 체중을 빠르게 기록 할 수 있어요.")
+        .description("오늘의 체중을 한눈에 확인할 수 있어요.")
         .supportedFamilies([.systemSmall, .systemMedium])
     }
 }

@@ -279,5 +279,9 @@
   "쿠키런": "CookieRun",
   "싱글데이": "SingleDay",
   "IM 혜민": "IM Hyemin",
-  "오늘의 체중": "Today's weight"
+  "오늘의 체중": "Today's weight",
+  "오늘의 식단 기록": "Today's diet record",
+  "식단 기록하기": "Recording a Diet",
+  "오늘의 운동 기록": "Today's exercise record",
+  "운동 기록하기": "Recording a exercise"
 }

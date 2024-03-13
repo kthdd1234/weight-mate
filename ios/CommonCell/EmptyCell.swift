@@ -11,8 +11,11 @@ struct EmptyCell: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 30, height: 30)
-//            SecondaryCell(text: text, font: .caption, fontFamily: fontFamily)
-            TextCell(text: text, font: .caption2, isBold: false, isLineThrough: nil, lineThroughColor: nil, fontFamily: fontFamily)
+            Text(text)
+                .fontWeight(.regular)
+                .font(Font.custom(fontFamily, size: 12))
+                .foregroundColor(emptyColor)
+                .lineLimit(1)
         }).frame(maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/, maxHeight: .infinity)
     }
 }
