@@ -62,3 +62,11 @@ func wItemList (family: WidgetFamily, list: [ItemModel]) -> [ItemModel] {
     
     return Array(list.prefix(10))
 }
+
+func wGoalList (family: WidgetFamily, list: [GoalModel]) -> [GoalModel] {
+    if isWidgetSizeSmallMedium(family: family) {
+        return Array(list.prefix(3))
+    }
+    
+    return Array(list.prefix(10))
+}

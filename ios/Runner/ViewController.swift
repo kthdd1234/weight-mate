@@ -1,39 +1,39 @@
-import UIKit
-import BackgroundTasks
+// import UIKit
+// import BackgroundTasks
 
-class ViewController: UIViewController {
-    let taskId = "com.kthdd.weightMate.backgroundTask"
+// class ViewController: UIViewController {
+//     let taskId = "com.kthdd.weightMate.backgroundTask"
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+//     override func viewDidLoad() {
+//         super.viewDidLoad()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-            self.schedule()
-        })
+//         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+//             self.schedule()
+//         })
         
-        schedule()
-    }
+//         schedule()
+//     }
     
-    private func schedule() {
-        // Manual Test: e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.kthdd.weightMate.backgroundTask"]
-        BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: taskId)
-        BGTaskScheduler.shared.getPendingTaskRequests { requests in
-            print("\(requests.count) BGTasks pending...")
+//     private func schedule() {
+//         // Manual Test: e -l objc -- (void)[[BGTaskScheduler sharedScheduler] _simulateLaunchForTaskWithIdentifier:@"com.kthdd.weightMate.backgroundTask"]
+//         BGTaskScheduler.shared.cancel(taskRequestWithIdentifier: taskId)
+//         BGTaskScheduler.shared.getPendingTaskRequests { requests in
+//             print("\(requests.count) BGTasks pending...")
             
-            guard requests.isEmpty else {
-                return
-            }
+//             guard requests.isEmpty else {
+//                 return
+//             }
             
-            // Submit a task to be scheduled
-            do {
-                let newTask = BGProcessingTaskRequest(identifier: self.taskId)
-                newTask.earliestBeginDate = Date().addingTimeInterval(86400 * 3)
-                try BGTaskScheduler.shared.submit(newTask)
-                print("Task scheduled")
-            } catch  {
-                // ignore
-                print("Failed to schedule; \(error)")
-            }
-        }
-    }
-}
+//             // Submit a task to be scheduled
+//             do {
+//                 let newTask = BGProcessingTaskRequest(identifier: self.taskId)
+//                 newTask.earliestBeginDate = Date().addingTimeInterval(86400 * 3)
+//                 try BGTaskScheduler.shared.submit(newTask)
+//                 print("Task scheduled")
+//             } catch  {
+//                 // ignore
+//                 print("Failed to schedule; \(error)")
+//             }
+//         }
+//     }
+// }

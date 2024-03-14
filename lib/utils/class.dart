@@ -330,3 +330,21 @@ class WidgetItemClass {
   Map<String, dynamic> toJson() =>
       {'id': id, 'type': type, 'title': title, 'name': name};
 }
+
+class WidgetPlanClass {
+  final String id;
+  final String type;
+  final String name;
+  final bool isChecked;
+
+  WidgetPlanClass(this.id, this.type, this.name, this.isChecked);
+
+  WidgetPlanClass.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        type = json['type'] as String,
+        name = json['name'] as String,
+        isChecked = json['isChecked'] as bool;
+
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'type': type, 'name': name, 'isChecked': isChecked};
+}

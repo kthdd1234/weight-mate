@@ -3,7 +3,6 @@ import Flutter
 import flutter_local_notifications
 import home_widget
 import workmanager
-import BackgroundTasks
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
@@ -49,16 +48,16 @@ import BackgroundTasks
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
     
-    private func handleTask(task: BGProcessingTask) {
-        let count = UserDefaults.standard.integer(forKey: "task_run_count")
-        UserDefaults.standard.set(count + 1, forKey: "task_run_count")
+    // private func handleTask(task: BGProcessingTask) {
+    //     let count = UserDefaults.standard.integer(forKey: "task_run_count")
+    //     UserDefaults.standard.set(count + 1, forKey: "task_run_count")
         
-        task.expirationHandler = {
-            // Cancel network call
-        }
+    //     task.expirationHandler = {
+    //         // Cancel network call
+    //     }
         
-        task.setTaskCompleted(success: true)
-    }
+    //     task.setTaskCompleted(success: true)
+    // }
 }
 
 

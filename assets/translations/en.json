@@ -257,7 +257,7 @@
   "달력": "Calendar",
   "표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D": "Uncheck any categories you do not want to display :D",
   "시간도 기록 할까요?": "Shall we record the time?",
-  "시간 기록 시, 시간순으로 자동 정렬돼요.": "When recording time, it's automatically sorted in chronological order.",
+  "시간 기록 시, 시간순으로 자동 정렬돼요.": "Record it in AM/PM, hour, minute.",
   "시간 기록": "Time record",
   "오전": "AM",
   "오후": "PM",
@@ -283,5 +283,10 @@
   "오늘의 식단 기록": "Today's diet record",
   "식단 기록하기": "Recording a Diet",
   "오늘의 운동 기록": "Today's exercise record",
-  "운동 기록하기": "Recording a exercise"
+  "운동 기록하기": "Recording a exercise",
+  "오늘의 식단 목표": "Today's diet goal",
+  "오늘의 운동 목표": "Today's exercise goal",
+  "오늘의 습관": "Today's habit",
+  "목표 추가하기": "Add a goal",
+  "습관 추가하기": "Add habits"
 }

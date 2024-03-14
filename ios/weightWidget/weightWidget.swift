@@ -78,7 +78,7 @@ struct weightWidgetEntryView : View {
           }
           .widgetURL(URL(string: "weight://message?message=null&homeWidget"))
           .containerBackground(for: .widget) {
-              BackgroundWidget()
+              BackgroundCell()
           }
       }
 }

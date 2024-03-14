@@ -43,11 +43,11 @@ struct dietGoalWidgetEntryView : View {
     var entry: Provider.Entry
     
     @Environment(\.widgetFamily) var wFamily
-//    @State var itemRenderList: [ItemModel]
+    @State var goalRenderList: [GoalModel]
     
     init(entry: Provider.Entry){
         self.entry = entry
-//        self.itemRenderList = loadJson(json: entry.dgRenderCellList)
+        self.goalRenderList = loadJson(json: entry.dgRenderCellList)
         
         initCutomFont(fontFamily: entry.dgFontFamily)
     }
@@ -58,15 +58,9 @@ struct dietGoalWidgetEntryView : View {
             
             if entry.dgIsEmpty != "empty" {
                 VStack(alignment: .leading, spacing: 15) {
-//                    ForEach(wItemList(family: wFamily, list: itemRenderList)) { item in
-//                        IconTextCell(
-//                            text: item.name,
-//                            systemName: systemName(type: item.type, key: item.title),
-//                            iconColor: iconColor(type: item.type),
-//                            bgColor: bgColor(type: item.type),
-//                            fontFamily: entry.drFontFamily
-//                        )
-//                    }
+                    ForEach(wGoalList(family: wFamily, list: goalRenderList)) { item in
+                        CheckedIntentCell(item: item, fontFamily: entry.dgFontFamily, schema: "diet")
+                    }
                 }
                 Spacer()
             } else {
@@ -75,7 +69,7 @@ struct dietGoalWidgetEntryView : View {
         }
         .widgetURL(URL(string: "diet://message?message=goal&homeWidget"))
         .containerBackground(for: .widget) {
-                BackgroundWidget()
+            BackgroundCell()
         }
     }
 }

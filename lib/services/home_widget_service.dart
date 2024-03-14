@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:hive/hive.dart';
 import 'package:home_widget/home_widget.dart';
 
 class HomeWidgetService {
@@ -20,7 +23,7 @@ class HomeWidgetService {
       await HomeWidget.saveWidgetData<String>(key, value);
     });
 
-    log('data => $data');
+    // log('data => $data');
 
     return await HomeWidget.updateWidget(iOSName: widgetName);
   }
@@ -133,6 +136,46 @@ class HomeWidgetService {
       widgetName: "exerciseRecordWidget",
     );
   }
+
+  Future<bool?> updateDietGoal() async {
+    await Hive.openBox<UserBox>(MateHiveBox.userBox);
+
+    DateTime now = DateTime.now();
+    UserBox user = Hive.box<UserBox>(MateHiveBox.userBox).get('userProfile')!;
+    int recordKey = getDateTimeToInt(now);
+    List<PlanBox> list = planRepository.planBox.values
+        .where((plan) => plan.type == eDiet)
+        .toList();
+    RecordBox? record = recordRepository.recordBox.get(recordKey);
+    List<Map<String, dynamic>>? actions = record?.actions;
+    List<String>? dietOrderList = user.dietOrderList;
+
+    String dgHeaderTitle = "오늘의 식단 목표".tr();
+    String dgToday = mde(locale: user.language!, dateTime: now);
+    String dgFontFamily = '${user.fontFamily}';
+    String dgEmptyTitle = "목표 추가하기".tr();
+    List<PlanBox> planList = onPlanList(
+      planList: list,
+      orderList: dietOrderList,
+      actions: record?.actions,
+    );
+    List<WidgetPlanClass> widgetPlanList = planList
+        .map((plan) => WidgetPlanClass(plan.id, plan.type, plan.name,
+            onAction(actions: actions, planId: plan.id)['id'] != null))
+        .toList();
+    String dgRenderCellList = jsonEncode(widgetPlanList);
+
+    Map<String, String> dietGoalObj = {
+      "dgHeaderTitle": dgHeaderTitle,
+      "dgToday": dgToday,
+      "dgFontFamily": dgFontFamily,
+      "dgEmptyTitle": dgEmptyTitle,
+      "dgIsEmpty": planList.isEmpty ? "empty" : "show",
+      "dgRenderCellList": dgRenderCellList,
+    };
+
+    return updateWidget(data: dietGoalObj, widgetName: "dietGoalWidget");
+  }
 }
 
- // onPlanList
+//  onPlanList

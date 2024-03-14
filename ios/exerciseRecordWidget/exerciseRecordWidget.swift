@@ -74,7 +74,7 @@ struct exerciseRecordWidgetEntryView : View {
         }
         .widgetURL(URL(string: "exercise://message?message=record&homeWidget"))
         .containerBackground(for: .widget) {
-                BackgroundWidget()
+            BackgroundCell()
         }
     }
 }

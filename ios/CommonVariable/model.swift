@@ -13,3 +13,10 @@ struct ItemModel: Hashable, Codable, Identifiable {
     var title: String
     var name: String
 }
+
+struct GoalModel: Hashable, Codable, Identifiable {
+    var id: String
+    var type: String
+    var name: String
+    var isChecked: Bool
+}

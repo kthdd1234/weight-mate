@@ -74,7 +74,7 @@ struct dietRecordWidgetEntryView : View {
         }
         .widgetURL(URL(string: "diet://message?message=record&homeWidget"))
         .containerBackground(for: .widget) {
-                BackgroundWidget()
+            BackgroundCell()
         }
     }
 }

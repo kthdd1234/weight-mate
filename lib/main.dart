@@ -61,16 +61,12 @@ RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
 
 @pragma("vm:entry-point")
-Future<void> interactiveCallback(Uri? data) async {
-  log('Uri => $data');
-}
-
-@pragma("vm:entry-point")
 void callbackDispatcher() {
   Workmanager().executeTask((task, inputData) {
     HomeWidgetService().updateWeight();
     HomeWidgetService().updateDietRecord();
     HomeWidgetService().updateExerciseRecord();
+    HomeWidgetService().updateDietGoal();
 
     switch (task) {
       case Workmanager.iOSBackgroundTask:
@@ -88,12 +84,13 @@ void main() async {
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
 
+  await MateHive().initializeHive();
   await dotenv.load(fileName: ".env");
   await NotificationService().initNotification();
   await NotificationService().initializeTimeZone();
-  await MateHive().initializeHive();
   await EasyLocalization.ensureInitialized();
   await Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
+  await HomeWidget.setAppGroupId('group.weight-mate-widget');
 
   runApp(
     MultiProvider(
@@ -132,6 +129,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void initState() {
+    super.initState();
+
     userBox = Hive.box('userBox');
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -149,15 +148,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       } on PlatformException {
         setState(() => _authStatus = 'error');
       }
-
-      await AppTrackingTransparency.getAdvertisingIdentifier();
     });
 
-    HomeWidget.setAppGroupId('group.weight-mate-widget');
-    HomeWidget.registerInteractivityCallback(interactiveCallback);
-
     WidgetsBinding.instance.addObserver(this);
-    super.initState();
   }
 
   @override
@@ -176,6 +169,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await HomeWidgetService().updateWeight();
       await HomeWidgetService().updateDietRecord();
       await HomeWidgetService().updateExerciseRecord();
+      await HomeWidgetService().updateDietGoal();
     }
   }
 
@@ -216,8 +210,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         case 'life':
           bool isOpen = filterList?.contains(fLife) == true;
           if (isOpen == false) user.filterList?.add(fLife);
-
           break;
+
         default:
       }
 
@@ -282,3 +276,29 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 }
+
+// @pragma("vm:entry-point")
+// Future<void> interactiveCallback(Uri? uri) async {
+//   await MateHive().initializeHive();
+//   await NotificationService().initializeTimeZone();
+//   await EasyLocalization.ensureInitialized();
+//   await initializeDateFormatting('ko');
+
+//   DateTime now = DateTime.now();
+
+//   String? scheme = uri?.scheme;
+//   String? planId = uri?.queryParameters['planId'];
+//   String? newValue = uri?.queryParameters['newValue'];
+
+//   switch (scheme) {
+//     case 'diet':
+//       log('planId => $planId');
+
+//       onCheckBox(id: planId, newValue: newValue == 'true', importDateTime: now);
+//       HomeWidgetService().updateDietGoal();
+
+//       break;
+//     default:
+//   }
+// }
+//  await HomeWidget.registerInteractivityCallback(interactiveCallback);

@@ -3,12 +3,15 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -815,4 +818,72 @@ minuteTo5Min({required int min}) {
   }
 
   return '$min';
+}
+
+onCheckBox({
+  required dynamic id,
+  required bool newValue,
+  required DateTime importDateTime,
+}) async {
+  Box<PlanBox> planBox = planRepository.planBox;
+  Box<RecordBox> recordBox = recordRepository.recordBox;
+
+  log('요기까지 오는지 체크');
+
+  int recordKey = getDateTimeToInt(importDateTime);
+  RecordBox? recordInfo = recordBox.get(recordKey);
+
+  PlanBox? planInfo = planBox.get(id);
+  DateTime now = DateTime.now();
+  DateTime actionDateTime = DateTime(
+    importDateTime.year,
+    importDateTime.month,
+    importDateTime.day,
+    now.hour,
+    now.minute,
+  );
+
+  if (planInfo == null) return;
+
+  ActionItemClass actionItem = ActionItemClass(
+    id: id,
+    title: planInfo.title,
+    type: planInfo.type,
+    name: planInfo.name,
+    priority: planInfo.priority,
+    actionDateTime: actionDateTime,
+    createDateTime: planInfo.createDateTime,
+  );
+
+  // 체크 on
+  if (newValue == true) {
+    HapticFeedback.mediumImpact();
+
+    if (recordInfo == null) {
+      await recordBox.put(
+        recordKey,
+        RecordBox(
+          createDateTime: importDateTime,
+          actions: [actionItem.setObject()],
+        ),
+      );
+    } else {
+      recordInfo.actions == null
+          ? recordInfo.actions = [actionItem.setObject()]
+          : recordInfo.actions!.add(actionItem.setObject());
+    }
+  }
+
+  // 체크 off
+  if (newValue == false) {
+    recordInfo!.actions!.removeWhere((element) => element['id'] == id);
+
+    if (recordInfo.actions!.isEmpty) {
+      recordInfo.actions = null;
+    }
+  }
+
+  log('요기까지 오는지 체크');
+
+  await recordInfo?.save();
 }

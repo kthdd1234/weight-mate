@@ -84,60 +84,6 @@ class _TodoContainerState extends State<TodoContainer> {
     Color bgColor = tagColor['bgColor']!;
     bool isLife = widget.filterId == FILITER.lifeStyle.toString();
 
-    onCheckBox({required dynamic id, required bool newValue}) async {
-      PlanBox? planInfo = planBox.get(id);
-      DateTime now = DateTime.now();
-      DateTime actionDateTime = DateTime(
-        importDateTime.year,
-        importDateTime.month,
-        importDateTime.day,
-        now.hour,
-        now.minute,
-      );
-
-      if (planInfo == null) return;
-
-      ActionItemClass actionItem = ActionItemClass(
-        id: id,
-        title: planInfo.title,
-        type: planInfo.type,
-        name: planInfo.name,
-        priority: planInfo.priority,
-        actionDateTime: actionDateTime,
-        createDateTime: planInfo.createDateTime,
-      );
-
-      // 체크 on
-      if (newValue == true) {
-        HapticFeedback.mediumImpact();
-
-        if (recordInfo == null) {
-          await recordBox.put(
-            recordKey,
-            RecordBox(
-              createDateTime: importDateTime,
-              actions: [actionItem.setObject()],
-            ),
-          );
-        } else {
-          recordInfo.actions == null
-              ? recordInfo.actions = [actionItem.setObject()]
-              : recordInfo.actions!.add(actionItem.setObject());
-        }
-      }
-
-      // 체크 off
-      if (newValue == false) {
-        recordInfo!.actions!.removeWhere((element) => element['id'] == id);
-
-        if (recordInfo.actions!.isEmpty) {
-          recordInfo.actions = null;
-        }
-      }
-
-      await recordInfo?.save();
-    }
-
     onGoalComplete({
       required String completedType,
       required dynamic id,
@@ -266,7 +212,15 @@ class _TodoContainerState extends State<TodoContainer> {
                             actions: actions,
                             mainColor: mainColor,
                             planList: planList,
-                            onCheckBox: onCheckBox,
+                            onCheckBox: ({
+                              required dynamic id,
+                              required bool newValue,
+                            }) =>
+                                onCheckBox(
+                              id: id,
+                              newValue: newValue,
+                              importDateTime: importDateTime,
+                            ),
                             onGoalComplete: onGoalComplete,
                             onTapOpen: onTapOpen,
                           )
@@ -280,7 +234,15 @@ class _TodoContainerState extends State<TodoContainer> {
                             actions: actions,
                             mainColor: mainColor,
                             planList: planList,
-                            onCheckBox: onCheckBox,
+                            onCheckBox: ({
+                              required dynamic id,
+                              required bool newValue,
+                            }) =>
+                                onCheckBox(
+                              id: id,
+                              newValue: newValue,
+                              importDateTime: importDateTime,
+                            ),
                             onGoalComplete: onGoalComplete,
                             onRecordComplete: onRecordComplete,
                             onTapOpen: onTapOpen,
@@ -1045,12 +1007,6 @@ class _RecordAddState extends State<RecordAdd> {
             );
           },
         );
-      }
-    }
-
-    onRecordMsg(String? wType) {
-      if (wType == widget.type) {
-        //
       }
     }
 
@@ -1866,7 +1822,10 @@ class _GoalAddState extends State<GoalAdd> {
       });
     }
 
-    onCheckBox({required dynamic id, required bool newValue}) {
+    onCheckBox({
+      required dynamic id,
+      required bool newValue,
+    }) {
       if (!isShowInput) {
         return setState(() => isShowInput = true);
       }
