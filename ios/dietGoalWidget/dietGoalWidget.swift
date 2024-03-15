@@ -82,7 +82,7 @@ struct dietGoalWidget: Widget {
                 dietGoalWidgetEntryView(entry: entry)
         }
         .configurationDisplayName("식단 목표")
-        .description("오늘의 식단 목표를 한눈에 확인할 수 있어요.")
+        .description("오늘의 식단 목표를 한눈에 확인 할 수 있어요.")
     }
 }
 

@@ -47,6 +47,46 @@
 		D302F8082BA2867D00335F1F /* BackgroundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F8032BA2867D00335F1F /* BackgroundCell.swift */; };
 		D302F8092BA2909800335F1F /* dietGoalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F7E12BA1A3F100335F1F /* dietGoalWidget.swift */; };
 		D302F80A2BA2AB6D00335F1F /* CheckedIntentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F7FD2BA2817400335F1F /* CheckedIntentCell.swift */; };
+		D302F8282BA329FA00335F1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
+		D302F8292BA329FA00335F1F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
+		D302F82C2BA329FA00335F1F /* lifeGoalWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F82B2BA329FA00335F1F /* lifeGoalWidgetBundle.swift */; };
+		D302F82E2BA329FA00335F1F /* lifeGoalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F82D2BA329FA00335F1F /* lifeGoalWidget.swift */; };
+		D302F8302BA329FD00335F1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D302F82F2BA329FD00335F1F /* Assets.xcassets */; };
+		D302F8342BA329FD00335F1F /* lifeGoalWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D302F8272BA329FA00335F1F /* lifeGoalWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D302F8392BA32A0B00335F1F /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
+		D302F83B2BA32A1200335F1F /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70672B94401000F9C455 /* colors.swift */; };
+		D302F83D2BA32A1500335F1F /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D706B2B94472F00F9C455 /* icons.swift */; };
+		D302F83F2BA32A1900335F1F /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
+		D302F8412BA32A1D00335F1F /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F7C72BA0ADA000335F1F /* model.swift */; };
+		D302F8432BA32A2200335F1F /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
+		D302F8452BA32A2500335F1F /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
+		D302F8472BA32A2A00335F1F /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
+		D302F8492BA32A2D00335F1F /* SvgTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70552B9307AA00F9C455 /* SvgTextCell.swift */; };
+		D302F84B2BA32A3000335F1F /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705E2B93105400F9C455 /* HeaderCell.swift */; };
+		D302F84D2BA32A3300335F1F /* IconTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70622B93162100F9C455 /* IconTextCell.swift */; };
+		D302F84F2BA32A3600335F1F /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D302F8512BA32A4000335F1F /* CheckedIntentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F7FD2BA2817400335F1F /* CheckedIntentCell.swift */; };
+		D302F8532BA32A4300335F1F /* BackgroundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F8032BA2867D00335F1F /* BackgroundCell.swift */; };
+		D302F8812BA3369F00335F1F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
+		D302F8822BA3369F00335F1F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
+		D302F8852BA3369F00335F1F /* exerciseGoalWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F8842BA3369F00335F1F /* exerciseGoalWidgetBundle.swift */; };
+		D302F8872BA3369F00335F1F /* exerciseGoalWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F8862BA3369F00335F1F /* exerciseGoalWidget.swift */; };
+		D302F8892BA336A200335F1F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D302F8882BA336A200335F1F /* Assets.xcassets */; };
+		D302F88D2BA336A200335F1F /* exerciseGoalWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D302F8802BA3369F00335F1F /* exerciseGoalWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D302F8922BA3389000335F1F /* func.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70702B94AEEB00F9C455 /* func.swift */; };
+		D302F8932BA3389600335F1F /* colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70672B94401000F9C455 /* colors.swift */; };
+		D302F8942BA3389900335F1F /* icons.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D706B2B94472F00F9C455 /* icons.swift */; };
+		D302F8952BA3389C00335F1F /* vars.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D709A2B95DF3100F9C455 /* vars.swift */; };
+		D302F8962BA3389E00335F1F /* model.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F7C72BA0ADA000335F1F /* model.swift */; };
+		D302F8972BA338A300335F1F /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
+		D302F8982BA338A500335F1F /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
+		D302F8992BA338A700335F1F /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
+		D302F89A2BA338AA00335F1F /* SvgTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70552B9307AA00F9C455 /* SvgTextCell.swift */; };
+		D302F89B2BA338AC00335F1F /* HeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D705E2B93105400F9C455 /* HeaderCell.swift */; };
+		D302F89C2BA338AE00335F1F /* IconTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70622B93162100F9C455 /* IconTextCell.swift */; };
+		D302F89D2BA338B000335F1F /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D302F89E2BA338B400335F1F /* CheckedIntentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F7FD2BA2817400335F1F /* CheckedIntentCell.swift */; };
+		D302F89F2BA338B600335F1F /* BackgroundCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D302F8032BA2867D00335F1F /* BackgroundCell.swift */; };
 		D31007CF2B9E8C5E00FFE286 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */; };
 		D31007D02B9E8C5E00FFE286 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */; };
 		D31007D32B9E8C5E00FFE286 /* weightWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = D31007D22B9E8C5E00FFE286 /* weightWidgetBundle.swift */; };
@@ -120,6 +160,20 @@
 			remoteGlobalIDString = D302F7DA2BA1A3F000335F1F;
 			remoteInfo = dietGoalWidgetExtension;
 		};
+		D302F8322BA329FD00335F1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D302F8262BA329FA00335F1F;
+			remoteInfo = lifeGoalWidgetExtension;
+		};
+		D302F88B2BA336A200335F1F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D302F87F2BA3369F00335F1F;
+			remoteInfo = exerciseGoalWidgetExtension;
+		};
 		D31007D92B9E8C6200FFE286 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
@@ -161,6 +215,8 @@
 			dstSubfolderSpec = 13;
 			files = (
 				D31007DB2B9E8C6200FFE286 /* weightWidgetExtension.appex in Embed Foundation Extensions */,
+				D302F88D2BA336A200335F1F /* exerciseGoalWidgetExtension.appex in Embed Foundation Extensions */,
+				D302F8342BA329FD00335F1F /* lifeGoalWidgetExtension.appex in Embed Foundation Extensions */,
 				D31007F22B9E8DD300FFE286 /* dietRecordWidgetExtension.appex in Embed Foundation Extensions */,
 				D31008092B9E8E6900FFE286 /* exerciseRecordWidgetExtension.appex in Embed Foundation Extensions */,
 				D302F7E82BA1A3F400335F1F /* dietGoalWidgetExtension.appex in Embed Foundation Extensions */,
@@ -203,6 +259,18 @@
 		D302F7FC2BA1F17300335F1F /* dietGoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = dietGoalWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D302F7FD2BA2817400335F1F /* CheckedIntentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedIntentCell.swift; sourceTree = "<group>"; };
 		D302F8032BA2867D00335F1F /* BackgroundCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCell.swift; sourceTree = "<group>"; };
+		D302F8272BA329FA00335F1F /* lifeGoalWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = lifeGoalWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D302F82B2BA329FA00335F1F /* lifeGoalWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lifeGoalWidgetBundle.swift; sourceTree = "<group>"; };
+		D302F82D2BA329FA00335F1F /* lifeGoalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = lifeGoalWidget.swift; sourceTree = "<group>"; };
+		D302F82F2BA329FD00335F1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D302F8312BA329FD00335F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D302F8552BA333C400335F1F /* lifeGoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = lifeGoalWidgetExtension.entitlements; sourceTree = "<group>"; };
+		D302F8802BA3369F00335F1F /* exerciseGoalWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = exerciseGoalWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		D302F8842BA3369F00335F1F /* exerciseGoalWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exerciseGoalWidgetBundle.swift; sourceTree = "<group>"; };
+		D302F8862BA3369F00335F1F /* exerciseGoalWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exerciseGoalWidget.swift; sourceTree = "<group>"; };
+		D302F8882BA336A200335F1F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D302F88A2BA336A200335F1F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D302F8A02BA33AB900335F1F /* exerciseGoalWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = exerciseGoalWidgetExtension.entitlements; sourceTree = "<group>"; };
 		D31007CE2B9E8C5E00FFE286 /* weightWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = weightWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		D31007D22B9E8C5E00FFE286 /* weightWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weightWidgetBundle.swift; sourceTree = "<group>"; };
 		D31007D42B9E8C5E00FFE286 /* weightWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weightWidget.swift; sourceTree = "<group>"; };
@@ -256,6 +324,24 @@
 				D302F7DD2BA1A3F100335F1F /* SwiftUI.framework in Frameworks */,
 				D302F7DC2BA1A3F100335F1F /* WidgetKit.framework in Frameworks */,
 				25B5D731D0F72CDBFF94DEC7 /* Pods_dietGoalWidgetExtension.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D302F8242BA329FA00335F1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D302F8292BA329FA00335F1F /* SwiftUI.framework in Frameworks */,
+				D302F8282BA329FA00335F1F /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D302F87D2BA3369F00335F1F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D302F8822BA3369F00335F1F /* SwiftUI.framework in Frameworks */,
+				D302F8812BA3369F00335F1F /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +400,8 @@
 		97C146E51CF9000F007C117D = {
 			isa = PBXGroup;
 			children = (
+				D302F8A02BA33AB900335F1F /* exerciseGoalWidgetExtension.entitlements */,
+				D302F8552BA333C400335F1F /* lifeGoalWidgetExtension.entitlements */,
 				D31007E02B9E8CCF00FFE286 /* weightWidgetExtension.entitlements */,
 				D31007F72B9E8DDD00FFE286 /* dietRecordWidgetExtension.entitlements */,
 				D31008562B9E8FE600FFE286 /* exerciseRecordWidgetExtension.entitlements */,
@@ -327,6 +415,8 @@
 				D31007FF2B9E8E6700FFE286 /* exerciseRecordWidget */,
 				D302F7DE2BA1A3F100335F1F /* dietGoalWidget */,
 				D31007D12B9E8C5E00FFE286 /* weightWidget */,
+				D302F82A2BA329FA00335F1F /* lifeGoalWidget */,
+				D302F8832BA3369F00335F1F /* exerciseGoalWidget */,
 				97C146EF1CF9000F007C117D /* Products */,
 				F0141A8D50CADE5A1C278A6C /* Pods */,
 				61A6365C79F8589DFA46995E /* GoogleService-Info.plist */,
@@ -342,6 +432,8 @@
 				D31007E52B9E8DD100FFE286 /* dietRecordWidgetExtension.appex */,
 				D31007FC2B9E8E6700FFE286 /* exerciseRecordWidgetExtension.appex */,
 				D302F7DB2BA1A3F000335F1F /* dietGoalWidgetExtension.appex */,
+				D302F8272BA329FA00335F1F /* lifeGoalWidgetExtension.appex */,
+				D302F8802BA3369F00335F1F /* exerciseGoalWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -373,6 +465,28 @@
 				D302F7E52BA1A3F400335F1F /* Info.plist */,
 			);
 			path = dietGoalWidget;
+			sourceTree = "<group>";
+		};
+		D302F82A2BA329FA00335F1F /* lifeGoalWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D302F82B2BA329FA00335F1F /* lifeGoalWidgetBundle.swift */,
+				D302F82D2BA329FA00335F1F /* lifeGoalWidget.swift */,
+				D302F82F2BA329FD00335F1F /* Assets.xcassets */,
+				D302F8312BA329FD00335F1F /* Info.plist */,
+			);
+			path = lifeGoalWidget;
+			sourceTree = "<group>";
+		};
+		D302F8832BA3369F00335F1F /* exerciseGoalWidget */ = {
+			isa = PBXGroup;
+			children = (
+				D302F8842BA3369F00335F1F /* exerciseGoalWidgetBundle.swift */,
+				D302F8862BA3369F00335F1F /* exerciseGoalWidget.swift */,
+				D302F8882BA336A200335F1F /* Assets.xcassets */,
+				D302F88A2BA336A200335F1F /* Info.plist */,
+			);
+			path = exerciseGoalWidget;
 			sourceTree = "<group>";
 		};
 		D31007D12B9E8C5E00FFE286 /* weightWidget */ = {
@@ -481,6 +595,8 @@
 				D31007F12B9E8DD300FFE286 /* PBXTargetDependency */,
 				D31008082B9E8E6900FFE286 /* PBXTargetDependency */,
 				D302F7E72BA1A3F400335F1F /* PBXTargetDependency */,
+				D302F8332BA329FD00335F1F /* PBXTargetDependency */,
+				D302F88C2BA336A200335F1F /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
@@ -503,6 +619,40 @@
 			name = dietGoalWidgetExtension;
 			productName = dietGoalWidgetExtension;
 			productReference = D302F7DB2BA1A3F000335F1F /* dietGoalWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D302F8262BA329FA00335F1F /* lifeGoalWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D302F8352BA329FD00335F1F /* Build configuration list for PBXNativeTarget "lifeGoalWidgetExtension" */;
+			buildPhases = (
+				D302F8232BA329FA00335F1F /* Sources */,
+				D302F8242BA329FA00335F1F /* Frameworks */,
+				D302F8252BA329FA00335F1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = lifeGoalWidgetExtension;
+			productName = lifeGoalWidgetExtension;
+			productReference = D302F8272BA329FA00335F1F /* lifeGoalWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		D302F87F2BA3369F00335F1F /* exerciseGoalWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D302F88E2BA336A200335F1F /* Build configuration list for PBXNativeTarget "exerciseGoalWidgetExtension" */;
+			buildPhases = (
+				D302F87C2BA3369F00335F1F /* Sources */,
+				D302F87D2BA3369F00335F1F /* Frameworks */,
+				D302F87E2BA3369F00335F1F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = exerciseGoalWidgetExtension;
+			productName = exerciseGoalWidgetExtension;
+			productReference = D302F8802BA3369F00335F1F /* exerciseGoalWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 		D31007CD2B9E8C5E00FFE286 /* weightWidgetExtension */ = {
@@ -573,6 +723,12 @@
 					D302F7DA2BA1A3F000335F1F = {
 						CreatedOnToolsVersion = 15.3;
 					};
+					D302F8262BA329FA00335F1F = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					D302F87F2BA3369F00335F1F = {
+						CreatedOnToolsVersion = 15.3;
+					};
 					D31007CD2B9E8C5E00FFE286 = {
 						CreatedOnToolsVersion = 15.3;
 					};
@@ -600,10 +756,12 @@
 			projectRoot = "";
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
-				D31007CD2B9E8C5E00FFE286 /* weightWidgetExtension */,
-				D31007E42B9E8DD100FFE286 /* dietRecordWidgetExtension */,
+				D302F8262BA329FA00335F1F /* lifeGoalWidgetExtension */,
 				D31007FB2B9E8E6700FFE286 /* exerciseRecordWidgetExtension */,
+				D302F87F2BA3369F00335F1F /* exerciseGoalWidgetExtension */,
 				D302F7DA2BA1A3F000335F1F /* dietGoalWidgetExtension */,
+				D31007E42B9E8DD100FFE286 /* dietRecordWidgetExtension */,
+				D31007CD2B9E8C5E00FFE286 /* weightWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -627,6 +785,22 @@
 			buildActionMask = 2147483647;
 			files = (
 				D302F7E42BA1A3F400335F1F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D302F8252BA329FA00335F1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D302F8302BA329FD00335F1F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D302F87E2BA3369F00335F1F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D302F8892BA336A200335F1F /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -817,6 +991,52 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D302F8232BA329FA00335F1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D302F82E2BA329FA00335F1F /* lifeGoalWidget.swift in Sources */,
+				D302F83B2BA32A1200335F1F /* colors.swift in Sources */,
+				D302F82C2BA329FA00335F1F /* lifeGoalWidgetBundle.swift in Sources */,
+				D302F83D2BA32A1500335F1F /* icons.swift in Sources */,
+				D302F84B2BA32A3000335F1F /* HeaderCell.swift in Sources */,
+				D302F84D2BA32A3300335F1F /* IconTextCell.swift in Sources */,
+				D302F8392BA32A0B00335F1F /* func.swift in Sources */,
+				D302F8412BA32A1D00335F1F /* model.swift in Sources */,
+				D302F84F2BA32A3600335F1F /* IconCell.swift in Sources */,
+				D302F8432BA32A2200335F1F /* TextCell.swift in Sources */,
+				D302F83F2BA32A1900335F1F /* vars.swift in Sources */,
+				D302F8452BA32A2500335F1F /* SecondaryCell.swift in Sources */,
+				D302F8512BA32A4000335F1F /* CheckedIntentCell.swift in Sources */,
+				D302F8492BA32A2D00335F1F /* SvgTextCell.swift in Sources */,
+				D302F8472BA32A2A00335F1F /* EmptyCell.swift in Sources */,
+				D302F8532BA32A4300335F1F /* BackgroundCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D302F87C2BA3369F00335F1F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D302F8872BA3369F00335F1F /* exerciseGoalWidget.swift in Sources */,
+				D302F8932BA3389600335F1F /* colors.swift in Sources */,
+				D302F8852BA3369F00335F1F /* exerciseGoalWidgetBundle.swift in Sources */,
+				D302F8942BA3389900335F1F /* icons.swift in Sources */,
+				D302F89B2BA338AC00335F1F /* HeaderCell.swift in Sources */,
+				D302F89C2BA338AE00335F1F /* IconTextCell.swift in Sources */,
+				D302F8922BA3389000335F1F /* func.swift in Sources */,
+				D302F8962BA3389E00335F1F /* model.swift in Sources */,
+				D302F89D2BA338B000335F1F /* IconCell.swift in Sources */,
+				D302F8972BA338A300335F1F /* TextCell.swift in Sources */,
+				D302F8952BA3389C00335F1F /* vars.swift in Sources */,
+				D302F8982BA338A500335F1F /* SecondaryCell.swift in Sources */,
+				D302F89E2BA338B400335F1F /* CheckedIntentCell.swift in Sources */,
+				D302F89A2BA338AA00335F1F /* SvgTextCell.swift in Sources */,
+				D302F8992BA338A700335F1F /* EmptyCell.swift in Sources */,
+				D302F89F2BA338B600335F1F /* BackgroundCell.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D31007CA2B9E8C5E00FFE286 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -890,6 +1110,16 @@
 			isa = PBXTargetDependency;
 			target = D302F7DA2BA1A3F000335F1F /* dietGoalWidgetExtension */;
 			targetProxy = D302F7E62BA1A3F400335F1F /* PBXContainerItemProxy */;
+		};
+		D302F8332BA329FD00335F1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D302F8262BA329FA00335F1F /* lifeGoalWidgetExtension */;
+			targetProxy = D302F8322BA329FD00335F1F /* PBXContainerItemProxy */;
+		};
+		D302F88C2BA336A200335F1F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D302F87F2BA3369F00335F1F /* exerciseGoalWidgetExtension */;
+			targetProxy = D302F88B2BA336A200335F1F /* PBXContainerItemProxy */;
 		};
 		D31007DA2B9E8C6200FFE286 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1345,6 +1575,258 @@
 			};
 			name = Profile;
 		};
+		D302F8362BA329FD00335F1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = lifeGoalWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = lifeGoalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = lifeGoalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.lifeGoalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D302F8372BA329FD00335F1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = lifeGoalWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = lifeGoalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = lifeGoalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.lifeGoalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D302F8382BA329FD00335F1F /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = lifeGoalWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = lifeGoalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = lifeGoalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.lifeGoalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
+		D302F88F2BA336A200335F1F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = exerciseGoalWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = exerciseGoalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = exerciseGoalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.exerciseGoalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D302F8902BA336A200335F1F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = exerciseGoalWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = exerciseGoalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = exerciseGoalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.exerciseGoalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D302F8912BA336A200335F1F /* Profile */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = exerciseGoalWidgetExtension.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = WLJ373955X;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = exerciseGoalWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = exerciseGoalWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.kthdd.weightMate.exerciseGoalWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
+		};
 		D31007DC2B9E8C6200FFE286 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1755,6 +2237,26 @@
 				D302F7E92BA1A3F400335F1F /* Debug */,
 				D302F7EA2BA1A3F400335F1F /* Release */,
 				D302F7EB2BA1A3F400335F1F /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D302F8352BA329FD00335F1F /* Build configuration list for PBXNativeTarget "lifeGoalWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D302F8362BA329FD00335F1F /* Debug */,
+				D302F8372BA329FD00335F1F /* Release */,
+				D302F8382BA329FD00335F1F /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D302F88E2BA336A200335F1F /* Build configuration list for PBXNativeTarget "exerciseGoalWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D302F88F2BA336A200335F1F /* Debug */,
+				D302F8902BA336A200335F1F /* Release */,
+				D302F8912BA336A200335F1F /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

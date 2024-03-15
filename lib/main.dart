@@ -170,6 +170,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await HomeWidgetService().updateDietRecord();
       await HomeWidgetService().updateExerciseRecord();
       await HomeWidgetService().updateDietGoal();
+      await HomeWidgetService().updateExerciseGoal();
+      await HomeWidgetService().updateLifeGoal();
     }
   }
 

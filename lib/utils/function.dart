@@ -828,8 +828,6 @@ onCheckBox({
   Box<PlanBox> planBox = planRepository.planBox;
   Box<RecordBox> recordBox = recordRepository.recordBox;
 
-  log('요기까지 오는지 체크');
-
   int recordKey = getDateTimeToInt(importDateTime);
   RecordBox? recordInfo = recordBox.get(recordKey);
 
@@ -882,8 +880,6 @@ onCheckBox({
       recordInfo.actions = null;
     }
   }
-
-  log('요기까지 오는지 체크');
 
   await recordInfo?.save();
 }

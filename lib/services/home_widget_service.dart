@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:hive/hive.dart';
 import 'package:home_widget/home_widget.dart';
 
 class HomeWidgetService {
@@ -138,10 +135,8 @@ class HomeWidgetService {
   }
 
   Future<bool?> updateDietGoal() async {
-    await Hive.openBox<UserBox>(MateHiveBox.userBox);
-
     DateTime now = DateTime.now();
-    UserBox user = Hive.box<UserBox>(MateHiveBox.userBox).get('userProfile')!;
+    UserBox user = userRepository.user;
     int recordKey = getDateTimeToInt(now);
     List<PlanBox> list = planRepository.planBox.values
         .where((plan) => plan.type == eDiet)
@@ -175,6 +170,85 @@ class HomeWidgetService {
     };
 
     return updateWidget(data: dietGoalObj, widgetName: "dietGoalWidget");
+  }
+
+  Future<bool?> updateExerciseGoal() async {
+    DateTime now = DateTime.now();
+    UserBox user = userRepository.user;
+    int recordKey = getDateTimeToInt(now);
+    List<PlanBox> list = planRepository.planBox.values
+        .where((plan) => plan.type == eExercise)
+        .toList();
+    RecordBox? record = recordRepository.recordBox.get(recordKey);
+    List<Map<String, dynamic>>? actions = record?.actions;
+    List<String>? exerciseOrderList = user.exerciseOrderList;
+
+    String egHeaderTitle = "오늘의 운동 목표".tr();
+    String egToday = mde(locale: user.language!, dateTime: now);
+    String egFontFamily = '${user.fontFamily}';
+    String egEmptyTitle = "목표 추가하기".tr();
+    List<PlanBox> planList = onPlanList(
+      planList: list,
+      orderList: exerciseOrderList,
+      actions: record?.actions,
+    );
+    List<WidgetPlanClass> widgetPlanList = planList
+        .map((plan) => WidgetPlanClass(plan.id, plan.type, plan.name,
+            onAction(actions: actions, planId: plan.id)['id'] != null))
+        .toList();
+    String egRenderCellList = jsonEncode(widgetPlanList);
+
+    Map<String, String> exerciseGoalObj = {
+      "egHeaderTitle": egHeaderTitle,
+      "egToday": egToday,
+      "egFontFamily": egFontFamily,
+      "egEmptyTitle": egEmptyTitle,
+      "egIsEmpty": planList.isEmpty ? "empty" : "show",
+      "egRenderCellList": egRenderCellList,
+    };
+
+    return updateWidget(
+      data: exerciseGoalObj,
+      widgetName: "exerciseGoalWidget",
+    );
+  }
+
+  Future<bool?> updateLifeGoal() async {
+    DateTime now = DateTime.now();
+    UserBox user = userRepository.user;
+    int recordKey = getDateTimeToInt(now);
+    List<PlanBox> list = planRepository.planBox.values
+        .where((plan) => plan.type == eLife)
+        .toList();
+    RecordBox? record = recordRepository.recordBox.get(recordKey);
+    List<Map<String, dynamic>>? actions = record?.actions;
+    List<String>? lifeOrderList = user.lifeOrderList;
+
+    String lgHeaderTitle = "오늘의 습관".tr();
+    String lgToday = mde(locale: user.language!, dateTime: now);
+    String lgFontFamily = '${user.fontFamily}';
+    String lgEmptyTitle = "습관 추가하기".tr();
+    List<PlanBox> planList = onPlanList(
+      planList: list,
+      orderList: lifeOrderList,
+      actions: record?.actions,
+    );
+    List<WidgetPlanClass> widgetPlanList = planList
+        .map((plan) => WidgetPlanClass(plan.id, plan.type, plan.name,
+            onAction(actions: actions, planId: plan.id)['id'] != null))
+        .toList();
+    String lgRenderCellList = jsonEncode(widgetPlanList);
+
+    Map<String, String> lifeGoalObj = {
+      "lgHeaderTitle": lgHeaderTitle,
+      "lgToday": lgToday,
+      "lgFontFamily": lgFontFamily,
+      "lgEmptyTitle": lgEmptyTitle,
+      "lgIsEmpty": planList.isEmpty ? "empty" : "show",
+      "lgRenderCellList": lgRenderCellList,
+    };
+
+    return updateWidget(data: lifeGoalObj, widgetName: "lifeGoalWidget");
   }
 }
 
