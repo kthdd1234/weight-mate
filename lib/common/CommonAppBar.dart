@@ -62,11 +62,6 @@ class CommonAppBar extends StatelessWidget {
     }
 
     onTapMakerType(CalendarMaker maker) {
-      Workmanager().registerPeriodicTask(
-        '1',
-        'widgetBackgroundUpdate',
-        frequency: const Duration(minutes: 15),
-      );
       user.calendarMaker = maker.toString();
       user.save();
     }
