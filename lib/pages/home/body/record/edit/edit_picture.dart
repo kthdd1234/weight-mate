@@ -118,23 +118,23 @@ class EditPicture extends StatelessWidget {
       return xFileData;
     }
 
-    showDialogPopup({required String title, required Uint8List binaryData}) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return NativeAdDialog(
-            title: title,
-            loadingText: '사진 데이터 저장 중...',
-            leftText: '사진 확인',
-            rightText: '사진 앨범',
-            onLeftClick: () =>
-                onNavigatorImagePullSizePage(binaryData: binaryData),
-            onRightClick: onNavigatorImageCollectionsPage,
-          );
-        },
-      );
-    }
+    // showDialogPopup({required String title, required Uint8List binaryData}) {
+    //   showDialog(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (context) {
+    //       return NativeAdDialog(
+    //         title: title,
+    //         loadingText: '사진 데이터 저장 중...',
+    //         leftText: '사진 확인',
+    //         rightText: '사진 앨범',
+    //         onLeftClick: () =>
+    //             onNavigatorImagePullSizePage(binaryData: binaryData),
+    //         onRightClick: onNavigatorImageCollectionsPage,
+    //       );
+    //     },
+    //   );
+    // }
 
     setPickedImage({required String pos, required XFile? xFile}) async {
       if (xFile == null) return;
@@ -163,8 +163,8 @@ class EditPicture extends StatelessWidget {
       if (xFileData != null) {
         setPickedImage(pos: pos, xFile: xFileData);
 
-        Uint8List unit8List = await convertUnit8List(xFileData);
-        showDialogPopup(title: '🖼️ 사진 기록 완료!', binaryData: unit8List);
+        // Uint8List unit8List = await convertUnit8List(xFileData);
+        // showDialogPopup(title: '🖼️ 사진 기록 완료!', binaryData: unit8List);
       }
     }
 

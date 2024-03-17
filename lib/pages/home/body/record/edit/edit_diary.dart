@@ -49,29 +49,29 @@ class _EditDiaryState extends State<EditDiary> {
     String? emotion = recordInfo?.emotion;
 
     onTapWriteDiary() async {
-      // Navigator.pushNamed(context, '/diary-write-page');
-      final result = await Navigator.pushNamed(context, '/diary-write-page');
+      await Navigator.pushNamed(context, '/diary-write-page');
+      // final result = await Navigator.pushNamed(context, '/diary-write-page');
 
-      if (result == 'save') {
-        onClick(BottomNavigationEnum enumId) async {
-          context
-              .read<BottomNavigationProvider>()
-              .setBottomNavigation(enumId: enumId);
-          closeDialog(context);
-        }
+      // if (result == 'save') {
+      //   onClick(BottomNavigationEnum enumId) async {
+      //     context
+      //         .read<BottomNavigationProvider>()
+      //         .setBottomNavigation(enumId: enumId);
+      //     closeDialog(context);
+      //   }
 
-        await showDialog(
-          context: context,
-          builder: (context) => NativeAdDialog(
-            loadingText: '일기 데이터 저장 중...',
-            title: '📝 일기 작성 완료!',
-            leftText: '히스토리',
-            rightText: '그래프',
-            onLeftClick: () => onClick(BottomNavigationEnum.history),
-            onRightClick: () => onClick(BottomNavigationEnum.graph),
-          ),
-        );
-      }
+      //   await showDialog(
+      //     context: context,
+      //     builder: (context) => NativeAdDialog(
+      //       loadingText: '일기 데이터 저장 중...',
+      //       title: '📝 일기 작성 완료!',
+      //       leftText: '히스토리',
+      //       rightText: '그래프',
+      //       onLeftClick: () => onClick(BottomNavigationEnum.history),
+      //       onRightClick: () => onClick(BottomNavigationEnum.graph),
+      //     ),
+      //   );
+      // }
     }
 
     onTapEmtion(String selectedEmotion) {

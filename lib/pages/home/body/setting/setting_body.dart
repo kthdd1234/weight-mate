@@ -524,7 +524,6 @@ class _SettingBodyState extends State<SettingBody> {
 
         return Column(
           children: [
-            SpaceHeight(height: 10),
             CommonAppBar(id: bodyId),
             Expanded(child: ListView(children: children))
           ],
