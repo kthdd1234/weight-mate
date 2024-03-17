@@ -234,6 +234,10 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
+    onTapWeightAnalyze() {
+      Navigator.pushNamed(context, '/weight-analyze-page');
+    }
+
     return Column(
       children: [
         ContentsBox(
@@ -255,11 +259,6 @@ class _EditWeightState extends State<EditWeight> {
                     onTap: onTapOpen,
                   ),
                   TagClass(
-                      text: '통계표 보기',
-                      color: 'indigo',
-                      isHide: !isOpen,
-                      onTap: onTapWeightChart),
-                  TagClass(
                     text: 'BMI',
                     nameArgs: {
                       'bmi': bmi(
@@ -269,8 +268,21 @@ class _EditWeightState extends State<EditWeight> {
                         weightUnit: user.weightUnit,
                       )
                     },
+                    isHide: isOpen,
                     color: 'indigo',
                     onTap: onTapBMI,
+                  ),
+                  TagClass(
+                    text: '통계표 보기',
+                    color: 'indigo',
+                    isHide: !isOpen,
+                    onTap: onTapWeightChart,
+                  ),
+                  TagClass(
+                    text: '분석표 보기',
+                    color: 'indigo',
+                    isHide: !isOpen,
+                    onTap: onTapWeightAnalyze,
                   ),
                   TagClass(
                     icon: isOpen
