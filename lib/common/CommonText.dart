@@ -60,7 +60,7 @@ class CommonText extends StatelessWidget {
                 ])
               : const EmptyArea(),
           Padding(
-            padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
+            padding: EdgeInsets.only(top: leftIcon == null ? 0 : 2),
             child: SizedBox(
               child: Text(
                 isNotTr == true ? text : text.tr(namedArgs: nameArgs),

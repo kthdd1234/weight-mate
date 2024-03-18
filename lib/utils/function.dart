@@ -322,6 +322,10 @@ m_d({required String locale, required DateTime dateTime}) {
   return DateFormat.Md(locale).format(dateTime);
 }
 
+ymdeShort({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMEd(locale).format(dateTime);
+}
+
 ymdShort({required String locale, required DateTime dateTime}) {
   return DateFormat.yMd(locale).format(dateTime);
 }
@@ -395,12 +399,12 @@ const planNotifyTitle = '목표 실천 알림 ⏰';
 
 const planNotifyBody = '지금 바로 실천해보세요!';
 
-calculatedGoalWeight({required double goalWeight, required double weight}) {
-  double value = goalWeight - weight;
+calculatedWeight({required double fWeight, required double lWeight}) {
+  double value = fWeight - lWeight;
   String fixedValue = value.toStringAsFixed(1);
-  String operator = goalWeight == weight
+  String operator = fWeight == lWeight
       ? ''
-      : goalWeight > weight
+      : fWeight > lWeight
           ? '+'
           : '';
 
