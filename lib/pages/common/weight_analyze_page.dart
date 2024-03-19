@@ -1,10 +1,12 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -12,8 +14,10 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class WeightAnalyzePage extends StatelessWidget {
   const WeightAnalyzePage({super.key});
@@ -24,24 +28,13 @@ class WeightAnalyzePage extends StatelessWidget {
     UserBox user = userRepository.user;
     double? goalWeight = user.goalWeight;
     String unit = user.weightUnit ?? 'kg';
-    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
 
     List<Widget> analyzeWidgetList = [
-      CompareToFirst(locale: locale, unit: unit, recordList: recordList),
-      CompareToGoal(
-        locale: locale,
-        unit: unit,
-        recordList: recordList,
-        goalWeight: goalWeight,
-      ),
-      MonthAnalysis(),
-      YearAnalysis()
+      MonthAnalysis(locale: locale, unit: unit),
+      YearAnalysis(locale: locale, unit: unit),
+      CompareToFirst(locale: locale, unit: unit),
+      CompareToGoal(locale: locale, unit: unit, goalWeight: goalWeight),
     ];
-
-    if (recordList.isEmpty) {
-      // todo
-      // return EmptyTextArea(text: text, icon: icon, topHeight: topHeight, downHeight: downHeight, onTap: onTap);
-    }
 
     return AppFramework(
       widget: Scaffold(
@@ -69,33 +62,21 @@ class WeightAnalyzePage extends StatelessWidget {
 }
 
 class CompareToFirst extends StatelessWidget {
-  CompareToFirst({
-    super.key,
-    required this.unit,
-    required this.recordList,
-    required this.locale,
-  });
+  CompareToFirst({super.key, required this.unit, required this.locale});
 
   String locale, unit;
-  List<RecordBox> recordList;
 
   @override
   Widget build(BuildContext context) {
+    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+
     RecordBox first = recordList.firstWhere((record) => record.weight != null);
     RecordBox last = recordList.lastWhere((record) => record.weight != null);
 
-    double? firstWeight = first.weight;
-    double? lastWeight = last.weight;
-    DateTime? firstDateTime = first.weightDateTime;
-    DateTime? lastDateTime = last.weightDateTime;
-
-    weightResult() {
-      if (firstWeight == null || lastWeight == null) {
-        return '-$unit';
-      }
-
-      return '${calculatedWeight(fWeight: firstWeight, lWeight: lastWeight)}$unit';
-    }
+    double firstWeight = first.weight ?? 0;
+    double lastWeight = last.weight ?? 0;
+    DateTime firstDateTime = first.createDateTime;
+    DateTime lastDateTime = last.createDateTime;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -105,21 +86,18 @@ class CompareToFirst extends StatelessWidget {
             CompareItemTitle(title: '처음과 비교', svg: "start-icon"),
             CompareItemCell(
               title: '처음 기록한 체중',
-              subTitle: firstDateTime != null
-                  ? ymdeShort(locale: locale, dateTime: firstDateTime)
-                  : '-',
-              text: '${firstWeight ?? '-'}$unit',
+              subTitle: ymdeShort(locale: locale, dateTime: firstDateTime),
+              text: '$firstWeight$unit',
             ),
             CompareItemCell(
               title: '마지막으로 기록한 체중',
-              subTitle: lastDateTime != null
-                  ? ymdeShort(locale: locale, dateTime: lastDateTime)
-                  : '-',
-              text: '${lastWeight ?? '-'}$unit',
+              subTitle: ymdeShort(locale: locale, dateTime: lastDateTime),
+              text: '$lastWeight$unit',
             ),
             CompareItemCell(
               title: '처음과 비교 했을 때 변화',
-              text: weightResult(),
+              text:
+                  '${calculatedWeight(fWeight: lastWeight, lWeight: firstWeight)}$unit',
               isNotDivider: true,
             )
           ],
@@ -134,30 +112,19 @@ class CompareToGoal extends StatelessWidget {
     super.key,
     required this.unit,
     required this.goalWeight,
-    required this.recordList,
     required this.locale,
   });
 
   double? goalWeight;
   String locale, unit;
-  List<RecordBox> recordList;
 
   @override
   Widget build(BuildContext context) {
-    RecordBox first = recordList.firstWhere((record) => record.weight != null);
+    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+
     RecordBox last = recordList.lastWhere((record) => record.weight != null);
-
-    double? lastWeight = last.weight;
-    DateTime? firstDateTime = first.weightDateTime;
-    DateTime? lastDateTime = last.weightDateTime;
-
-    weightResult() {
-      if (goalWeight == null || lastWeight == null) {
-        return '-$unit';
-      }
-
-      return '${calculatedWeight(fWeight: lastWeight, lWeight: goalWeight!)}$unit';
-    }
+    double lastWeight = last.weight ?? 0;
+    DateTime? lastDateTime = last.createDateTime;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
@@ -167,18 +134,17 @@ class CompareToGoal extends StatelessWidget {
             CompareItemTitle(title: '목표와 비교', svg: "flag-icon"),
             CompareItemCell(
               title: '목표 체중',
-              text: '${goalWeight ?? '-'}$unit',
+              text: '$goalWeight$unit',
             ),
             CompareItemCell(
               title: '마지막으로 기록한 체중',
-              subTitle: lastDateTime != null
-                  ? ymdeShort(locale: locale, dateTime: lastDateTime)
-                  : '-',
-              text: '58.3kg',
+              subTitle: ymdeShort(locale: locale, dateTime: lastDateTime),
+              text: '$lastWeight$unit',
             ),
             CompareItemCell(
               title: '목표까지',
-              text: weightResult(),
+              text:
+                  '${calculatedWeight(fWeight: goalWeight!, lWeight: lastWeight)}$unit',
               isNotDivider: true,
             )
           ],
@@ -188,34 +154,92 @@ class CompareToGoal extends StatelessWidget {
   }
 }
 
-class MonthAnalysis extends StatelessWidget {
-  const MonthAnalysis({super.key});
+class MonthAnalysis extends StatefulWidget {
+  MonthAnalysis({super.key, required this.locale, required this.unit});
+
+  String locale, unit;
+
+  @override
+  State<MonthAnalysis> createState() => _MonthAnalysisState();
+}
+
+class _MonthAnalysisState extends State<MonthAnalysis> {
+  DateTime seletedDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
+    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+
+    String month = m(locale: widget.locale, dateTime: seletedDateTime);
+    List<RecordBox> seletedRecordList = recordList.where((record) {
+      bool isYear = record.createDateTime.year == seletedDateTime.year;
+      bool isMonth = record.createDateTime.month == seletedDateTime.month;
+      bool isWeight = record.weight != null;
+
+      return isYear && isMonth && isWeight;
+    }).toList();
+
+    onShowCalendar() {
+      onShowDialog(
+        context: context,
+        title: '월 선택',
+        view: DateRangePickerView.year,
+        initialSelectedDate: seletedDateTime,
+        onSelectionChanged: (args) {
+          setState(() => seletedDateTime = args.value);
+          closeDialog(context);
+        },
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ContentsBox(
         contentsWidget: Column(
           children: [
             CompareItemTitle(
-              title: '3월 분석',
+              title: ' 분석',
               svg: "calendar-icon",
-              subTitle: "3월",
+              subTitle: month,
+              nameArgs: {"date": month},
+              onShowCalendar: onShowCalendar,
             ),
-            CompareItemCell(
-              title: '평균 체중',
-              text: '54.3kg',
-            ),
-            CompareItemCell(
-              title: '최고 체중',
-              text: '58.3kg',
-            ),
-            CompareItemCell(
-              title: '최저 체중',
-              text: '-2.1kg',
-              isNotDivider: true,
-            )
+            seletedRecordList.isNotEmpty
+                ? Column(
+                    children: [
+                      CompareItemCell(
+                        title: '평균 체중',
+                        text:
+                            '${avgRecordFunc(list: seletedRecordList)}${widget.unit}',
+                      ),
+                      CompareItemCell(
+                        title: '최고 체중',
+                        text:
+                            '${maxRecordFunc(list: seletedRecordList).weight}${widget.unit}',
+                        subTitle: ymdeShort(
+                          locale: widget.locale,
+                          dateTime: maxRecordFunc(list: seletedRecordList)
+                              .createDateTime,
+                        ),
+                      ),
+                      CompareItemCell(
+                        title: '최저 체중',
+                        text:
+                            '${minRecordFunc(list: seletedRecordList).weight}${widget.unit}',
+                        subTitle: ymdeShort(
+                          locale: widget.locale,
+                          dateTime: minRecordFunc(list: seletedRecordList)
+                              .createDateTime,
+                        ),
+                        isNotDivider: true,
+                      )
+                    ],
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: EmptyWidget(
+                        icon: Icons.monitor_weight, text: "기록이 없어요."),
+                  )
           ],
         ),
       ),
@@ -223,33 +247,95 @@ class MonthAnalysis extends StatelessWidget {
   }
 }
 
-class YearAnalysis extends StatelessWidget {
-  const YearAnalysis({super.key});
+class YearAnalysis extends StatefulWidget {
+  YearAnalysis({super.key, required this.locale, required this.unit});
+
+  String locale, unit;
+
+  @override
+  State<YearAnalysis> createState() => _YearAnalysisState();
+}
+
+class _YearAnalysisState extends State<YearAnalysis> {
+  DateTime seletedDateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return ContentsBox(
-      contentsWidget: Column(
-        children: [
-          CompareItemTitle(
-            title: '2024년 분석',
-            svg: "chart-icon",
-            subTitle: "2024년",
-          ),
-          CompareItemCell(
-            title: '평균 체중',
-            text: '54.3kg',
-          ),
-          CompareItemCell(
-            title: '최고 체중',
-            text: '58.3kg',
-          ),
-          CompareItemCell(
-            title: '최저 체중',
-            text: '-2.1kg',
-            isNotDivider: true,
-          )
-        ],
+    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+
+    String year = y(locale: widget.locale, dateTime: seletedDateTime);
+    List<RecordBox> seletedRecordList = recordList.where((record) {
+      bool isYear = record.createDateTime.year == seletedDateTime.year;
+      bool isWeight = record.weight != null;
+
+      return isYear && isWeight;
+    }).toList();
+
+    onShowCalendar() {
+      onShowDialog(
+        context: context,
+        title: '년도 선택',
+        view: DateRangePickerView.decade,
+        initialSelectedDate: seletedDateTime,
+        onSelectionChanged: (args) {
+          setState(() => seletedDateTime = args.value);
+          closeDialog(context);
+        },
+      );
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: ContentsBox(
+        contentsWidget: Column(
+          children: [
+            CompareItemTitle(
+              title: ' 분석',
+              svg: "chart-icon",
+              subTitle: year,
+              nameArgs: {"date": year},
+              onShowCalendar: onShowCalendar,
+            ),
+            seletedRecordList.isNotEmpty
+                ? Column(
+                    children: [
+                      CompareItemCell(
+                        title: '평균 체중',
+                        text:
+                            '${avgRecordFunc(list: seletedRecordList)}${widget.unit}',
+                      ),
+                      CompareItemCell(
+                        title: '최고 체중',
+                        text:
+                            '${maxRecordFunc(list: seletedRecordList).weight}${widget.unit}',
+                        subTitle: ymdeShort(
+                          locale: widget.locale,
+                          dateTime: maxRecordFunc(list: seletedRecordList)
+                              .createDateTime,
+                        ),
+                      ),
+                      CompareItemCell(
+                        title: '최저 체중',
+                        text:
+                            '${minRecordFunc(list: seletedRecordList).weight}${widget.unit}',
+                        subTitle: ymdeShort(
+                          locale: widget.locale,
+                          dateTime: minRecordFunc(list: seletedRecordList)
+                              .createDateTime,
+                        ),
+                        isNotDivider: true,
+                      )
+                    ],
+                  )
+                : Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: EmptyWidget(
+                      icon: Icons.monitor_weight,
+                      text: "기록이 없어요.",
+                    ),
+                  )
+          ],
+        ),
       ),
     );
   }
@@ -261,10 +347,14 @@ class CompareItemTitle extends StatelessWidget {
     required this.title,
     required this.svg,
     this.subTitle,
+    this.nameArgs,
+    this.onShowCalendar,
   });
 
   String title, svg;
   String? subTitle;
+  Map<String, String>? nameArgs;
+  Function()? onShowCalendar;
 
   @override
   Widget build(BuildContext context) {
@@ -277,24 +367,32 @@ class CompareItemTitle extends StatelessWidget {
             children: [
               CommonSvg(width: 15, name: svg),
               SpaceWidth(width: 5),
-              CommonText(text: title, size: 14, isBold: true),
+              CommonText(
+                text: title,
+                size: 14,
+                isBold: true,
+                nameArgs: nameArgs,
+              ),
             ],
           ),
           subTitle != null
-              ? Row(
-                  children: [
-                    CommonIcon(
-                      icon: Icons.keyboard_arrow_down_rounded,
-                      size: 14,
-                      color: Colors.grey,
-                    ),
-                    CommonText(
-                      color: Colors.grey,
-                      text: subTitle!,
-                      size: 12,
-                      isNotTr: true,
-                    ),
-                  ],
+              ? InkWell(
+                  onTap: onShowCalendar,
+                  child: Row(
+                    children: [
+                      CommonIcon(
+                        icon: Icons.keyboard_arrow_down_rounded,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
+                      CommonText(
+                        color: Colors.grey,
+                        text: subTitle!,
+                        size: 12,
+                        isNotTr: true,
+                      ),
+                    ],
+                  ),
                 )
               : const EmptyArea()
         ],
@@ -326,11 +424,16 @@ class CompareItemCell extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CommonText(text: title, size: 12),
-                CommonText(text: subTitle ?? '', size: 10, color: Colors.grey),
+                CommonText(
+                  text: subTitle ?? '',
+                  size: 10,
+                  color: Colors.grey,
+                  isNotTr: true,
+                ),
               ],
             ),
             SpaceHeight(height: 5),
-            CommonText(text: text, size: 15),
+            CommonText(text: text, size: 15, isNotTr: true),
           ],
         ),
         isNotDivider == true
@@ -340,8 +443,6 @@ class CompareItemCell extends StatelessWidget {
     );
   }
 }
-
-
 
 /** 처음과 비교
  * 처음 기록한 체중                         2023.7.15 (수)

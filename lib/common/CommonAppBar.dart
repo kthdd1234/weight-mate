@@ -1,18 +1,14 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -31,7 +27,6 @@ import 'package:multi_value_listenable_builder/multi_value_listenable_builder.da
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 
 String eHistoryList = HistoryFormat.list.toString();
 String eHistoryCalendar = HistoryFormat.calendar.toString();
@@ -170,37 +165,9 @@ class CommonTitle extends StatelessWidget {
       closeDialog(context);
     }
 
-    onShowDialog({
-      required String title,
-      required DateRangePickerView view,
-      required DateTime initialSelectedDate,
-      required Function(DateRangePickerSelectionChangedArgs) onSelectionChanged,
-    }) {
-      showDialog(
-        context: context,
-        builder: (context) => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AlertDialog(
-              backgroundColor: dialogBackgroundColor,
-              shape: containerBorderRadious,
-              title: DialogTitle(
-                text: title,
-                onTap: () => closeDialog(context),
-              ),
-              content: DatePicker(
-                view: view,
-                initialSelectedDate: initialSelectedDate,
-                onSelectionChanged: onSelectionChanged,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     onTapRecordTitle() {
       onShowDialog(
+        context: context,
         title: '월 선택',
         view: DateRangePickerView.year,
         initialSelectedDate: titleDateTime,
@@ -210,6 +177,7 @@ class CommonTitle extends StatelessWidget {
 
     onTapHistoryTitle() {
       onShowDialog(
+        context: context,
         title: isHistoryList ? '년도 선택' : '월 선택',
         view: isHistoryList
             ? DateRangePickerView.decade

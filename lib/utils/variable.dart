@@ -345,8 +345,8 @@ List<Map<String, String>> fontFamilyList = [
     "name": "카페24 쑥쑥",
   },
   {
-    "fontFamily": "CookieRun",
-    "name": "쿠키런",
+    "fontFamily": "KyoboHandwriting2022khn",
+    "name": "교보 손글씨",
   },
   {
     "fontFamily": "SingleDay",
@@ -355,6 +355,14 @@ List<Map<String, String>> fontFamilyList = [
   {
     "fontFamily": "IM_Hyemin",
     "name": "IM 혜민",
+  },
+  {
+    "fontFamily": "TDTDTadakTadak",
+    "name": "타닥타닥체",
+  },
+  {
+    "fontFamily": "omyu pretty",
+    "name": "오뮤 다예쁨체",
   },
   {
     "fontFamily": "온글잎 밑미",
@@ -369,20 +377,12 @@ List<Map<String, String>> fontFamilyList = [
     "name": "봉숭아틴트체",
   },
   {
-    "fontFamily": "TDTDTadakTadak",
-    "name": "타닥타닥체",
-  },
-  {
-    "fontFamily": "omyu pretty",
-    "name": "오뮤 다예쁨체",
-  },
-  {
     "fontFamily": "KOTRA HOPE",
     "name": "코트라 희망체",
   },
   {
-    "fontFamily": "KyoboHandwriting2022khn",
-    "name": "교보 손글씨",
+    "fontFamily": "CookieRun",
+    "name": "쿠키런",
   },
 ];
 

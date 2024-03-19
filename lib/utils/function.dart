@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:quiver/time.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -886,4 +888,51 @@ onCheckBox({
   }
 
   await recordInfo?.save();
+}
+
+onShowDialog({
+  required BuildContext context,
+  required String title,
+  required DateRangePickerView view,
+  required DateTime initialSelectedDate,
+  required Function(DateRangePickerSelectionChangedArgs) onSelectionChanged,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: title,
+            onTap: () => closeDialog(context),
+          ),
+          content: DatePicker(
+            view: view,
+            initialSelectedDate: initialSelectedDate,
+            onSelectionChanged: onSelectionChanged,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+String avgRecordFunc({required List<RecordBox> list}) {
+  double sum = 0;
+  list.forEach((record) => sum += record.weight!);
+
+  return (sum / list.length).toStringAsFixed(1);
+}
+
+RecordBox maxRecordFunc({required List<RecordBox> list}) {
+  return list.reduce((recordA, recordB) =>
+      recordA.weight! > recordB.weight! ? recordA : recordB);
+}
+
+RecordBox minRecordFunc({required List<RecordBox> list}) {
+  return list.reduce((recordA, recordB) =>
+      recordA.weight! < recordB.weight! ? recordA : recordB);
 }

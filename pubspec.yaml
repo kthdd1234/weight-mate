@@ -265,8 +265,9 @@ flutter:
 
     - family: KyoboHandwriting2022khn
       fonts:
-        - asset: assets/fonts/KyoboHandwriting2022khn/KyoboHandwriting2022khn.ttf
+        - asset: assets/fonts/KyoboHandwriting2019/KyoboHandwriting2019.ttf
           weight: 400
+
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +85,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
       });
     }
 
-    onTapCompleted() {
+    onTapCompleted() async {
       if (isEnabledButton) {
         DateTime now = DateTime.now();
         DateTime diaryDateTime = DateTime(
@@ -112,7 +114,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
           recordInfo?.diaryDateTime = diaryDateTime;
         }
 
-        recordInfo?.save();
+        await recordInfo?.save();
         Navigator.pop(context, 'save');
         //
       }

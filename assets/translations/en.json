@@ -229,7 +229,7 @@
   "식단 기록 모아보기": "Collection of diet records",
   "운동 기록 모아보기": "Collection of exercise records",
   "기록이 없어요.": "There is no record.",
-  "통계표 보기": "View Statistics",
+  "통계표 보기": "Statistics",
   "체중 통계표": "Weight Statistics Table",
   "기록 날짜": "Record Date",
   "체중()": "Weight({unit})",
@@ -288,5 +288,17 @@
   "오늘의 운동 목표": "Today's exercise goal",
   "오늘의 습관": "Today's habit",
   "목표 추가하기": "Add a goal",
-  "습관 추가하기": "Add habits"
+  "습관 추가하기": "Add habits",
+  "분석표 보기": "Analysis",
+  "체중 분석표": "Weight Analysis Table",
+  " 분석": "{date} analysis",
+  "평균 체중": "Average weight",
+  "최고 체중": "Highest weight",
+  "최저 체중": "Lowest weight",
+  "처음과 비교": "Compare to the beginning",
+  "처음 기록한 체중": "First recorded weight",
+  "마지막으로 기록한 체중": "Last recorded weight",
+  "처음과 비교 했을 때 변화": "Changes compared to the beginning",
+  "목표와 비교": "Compare to goals",
+  "목표까지": "To the goal"
 }
