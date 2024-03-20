@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -583,6 +585,7 @@ class _DisplayListState extends State<DisplayList> {
     }
 
     return DisplayListContents(
+      isRequiredWeight: true,
       bottomText: '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
       classList: displayClassList,
       onChecked: onChecked,
@@ -605,10 +608,9 @@ class _HistoryDisplayListState extends State<HistoryDisplayList> {
     List<String>? historyDisplayList = user.historyDisplayList;
 
     onTap({required dynamic id, required bool newValue}) {
-      bool isNotWeight = historyDisplayClassList.first.id != id;
       bool ishistoryDisplayList = user.historyDisplayList != null;
 
-      if (isNotWeight && ishistoryDisplayList) {
+      if (ishistoryDisplayList) {
         newValue
             ? user.historyDisplayList!.add(id)
             : user.historyDisplayList!.remove(id);
@@ -620,16 +622,13 @@ class _HistoryDisplayListState extends State<HistoryDisplayList> {
     }
 
     onChecked(String filterId) {
-      if (historyDisplayClassList.first.id == filterId) {
-        return true;
-      }
-
       return historyDisplayList != null
           ? historyDisplayList.contains(filterId)
           : false;
     }
 
     return DisplayListContents(
+      isRequiredWeight: false,
       bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
       classList: historyDisplayClassList,
       onChecked: onChecked,
@@ -641,12 +640,14 @@ class _HistoryDisplayListState extends State<HistoryDisplayList> {
 class DisplayListContents extends StatelessWidget {
   DisplayListContents({
     super.key,
+    required this.isRequiredWeight,
     required this.bottomText,
     required this.classList,
     required this.onChecked,
     required this.onTap,
   });
 
+  bool isRequiredWeight;
   String bottomText;
   List<FilterClass> classList;
   bool Function(String) onChecked;
@@ -687,9 +688,12 @@ class DisplayListContents extends StatelessWidget {
                                 isNotTop: true,
                               ),
                               SpaceWidth(width: 3),
-                              classList.first.id == data.id
+                              classList.first.id == data.id && isRequiredWeight
                                   ? CommonText(
-                                      text: '(필수)', size: 10, color: Colors.red)
+                                      text: '(필수)',
+                                      size: 10,
+                                      color: Colors.red,
+                                    )
                                   : const EmptyArea()
                             ],
                           ),

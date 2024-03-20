@@ -47,13 +47,11 @@ class HistoryContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     DateTime createDateTime = recordInfo.createDateTime;
     bool isAd = createDateTime.year == 1000;
     int recordKey = getDateTimeToInt(createDateTime);
-    String formatDateTime = mde(
-      locale: context.locale.toString(),
-      dateTime: createDateTime,
-    );
+    String formatDateTime = mde(locale: locale, dateTime: createDateTime);
 
     /** 필터 */
     UserBox user = userRepository.user;
@@ -112,6 +110,8 @@ class HistoryContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HistoryHeader(
+                  locale: locale,
+                  createDateTime: createDateTime,
                   formatDateTime: formatDateTime,
                   isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
@@ -142,12 +142,16 @@ class HistoryContainer extends StatelessWidget {
 class HistoryHeader extends StatelessWidget {
   HistoryHeader({
     super.key,
+    required this.locale,
+    required this.createDateTime,
     required this.formatDateTime,
     required this.recordInfo,
     required this.isRemoveMode,
     required this.onTapMore,
   });
 
+  String locale;
+  DateTime createDateTime;
   String formatDateTime;
   RecordBox? recordInfo;
   bool isRemoveMode;
@@ -157,6 +161,7 @@ class HistoryHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
     List<String> historyDisplayList = user.historyDisplayList ?? [];
+    bool isWeight = historyDisplayList.contains(fWeight);
     bool isDiary = historyDisplayList.contains(fDiary);
 
     bmiValue() {
@@ -208,7 +213,9 @@ class HistoryHeader extends StatelessWidget {
                   Row(
                     children: [
                       CommonText(
-                        text: formatDateTime,
+                        text: isWeight
+                            ? formatDateTime
+                            : md(locale: locale, dateTime: createDateTime),
                         size: 11,
                         isBold: true,
                         isNotTr: true,
@@ -239,9 +246,10 @@ class HistoryHeader extends StatelessWidget {
                         children: [
                           CommonText(
                             isNotTr: true,
-                            text:
-                                '${recordInfo?.weight ?? '-'}${user.weightUnit}',
-                            size: 17,
+                            text: isWeight
+                                ? '${recordInfo?.weight ?? '-'}${user.weightUnit}'
+                                : e(locale: locale, dateTime: createDateTime),
+                            size: isWeight ? 17 : 12,
                           ),
                           isRemoveMode && recordInfo?.weight != null
                               ? Padding(
@@ -250,7 +258,10 @@ class HistoryHeader extends StatelessWidget {
                               : const EmptyArea()
                         ],
                       ),
-                      CommonText(text: bmiValue(), size: 9, isNotTr: true),
+                      CommonText(
+                          text: isWeight ? bmiValue() : '',
+                          size: 9,
+                          isNotTr: true),
                     ],
                   ),
                 ],
@@ -258,7 +269,7 @@ class HistoryHeader extends StatelessWidget {
             )
           ],
         ),
-        SpaceHeight(height: 15),
+        // SpaceHeight(height: 10),
       ],
     );
   }
@@ -425,7 +436,7 @@ class HistoryPicture extends StatelessWidget {
     }
 
     return fileList.isNotEmpty
-        ? Column(children: [imageList(), SpaceHeight(height: 15)])
+        ? Column(children: [SpaceHeight(height: 10), imageList()])
         : const EmptyArea();
   }
 }
@@ -524,6 +535,7 @@ class HistoryTodo extends StatelessWidget {
     final todoWidgetList = todoResultList
         ?.map((data) => Column(
               children: [
+                SpaceHeight(height: 10),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -552,7 +564,6 @@ class HistoryTodo extends StatelessWidget {
                     ),
                   ],
                 ),
-                SpaceHeight(height: 10),
               ],
             ))
         .toList();
@@ -585,6 +596,7 @@ class HistoryDiary extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SpaceHeight(height: 10),
               Row(
                 children: [
                   Expanded(

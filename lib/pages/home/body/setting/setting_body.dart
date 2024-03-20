@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -34,7 +32,6 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:timezone/timezone.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingBody extends StatefulWidget {
@@ -390,11 +387,24 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
+    onTapPremium(id) async {
+      await Navigator.pushNamed(context, '/premium-page');
+      setState(() {});
+    }
+
     onTapVersion(id) {
       //
     }
 
     List<MoreSeeItemClass> settingItemList = [
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.premium,
+      //   icon: 'crown',
+      //   title: '프리미엄',
+      //   value: 'premium',
+      //   color: themeColor,
+      //   onTap: onTapPremium,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',
@@ -597,6 +607,38 @@ class MoreSeeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    wValue() {
+      if (value == 'premium') {
+        return Container(
+            decoration: BoxDecoration(
+              image: const DecorationImage(
+                  image: AssetImage("assets/images/t-23.png"), //23 15
+                  fit: BoxFit.cover),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+            child: CommonText(
+              text: '업그레이드',
+              color: Colors.white,
+              size: 12,
+              isCenter: true,
+              isBold: true,
+            ));
+      }
+
+      return value != ''
+          ? CommonText(
+              isNotTr: true,
+              text: value,
+              size: 13,
+              color: color,
+              rightIcon: MoreSeeItem.appVersion != id
+                  ? Icons.chevron_right_rounded
+                  : null,
+            )
+          : const EmptyArea();
+    }
+
     return InkWell(
       onTap: () => onTap(id),
       child: Padding(
@@ -615,17 +657,7 @@ class MoreSeeItemWidget extends StatelessWidget {
             ),
             SpaceWidth(width: regularSapce),
             Expanded(child: CommonText(text: title, size: 14, isBold: true)),
-            value != ''
-                ? CommonText(
-                    isNotTr: true,
-                    text: value,
-                    size: 13,
-                    color: color,
-                    rightIcon: MoreSeeItem.appVersion != id
-                        ? Icons.chevron_right_rounded
-                        : null,
-                  )
-                : const EmptyArea(),
+            wValue()
           ],
         ),
       ),

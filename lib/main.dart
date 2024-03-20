@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
@@ -275,6 +276,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/goal-chart-page': (context) => const GoalChartPage(),
         '/font-change-page': (context) => const FontChangePage(),
         '/weight-analyze-page': (context) => const WeightAnalyzePage(),
+        '/premium-page': (context) => const PremiumPage(),
       },
     );
   }

@@ -20,6 +20,7 @@ enum BottomNavigationEnum { record, history, graph, setting }
 enum SegmentedTypes { week, month, threeMonth, sixMonth, custom, goal, record }
 
 enum MoreSeeItem {
+  premium,
   tall,
   goalWeight,
   appUnit,
