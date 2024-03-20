@@ -47,11 +47,13 @@ class EditPicture extends StatelessWidget {
       'left': recordInfo?.leftFile,
       'right': recordInfo?.rightFile,
       'bottom': recordInfo?.bottomFile,
+      'top': recordInfo?.topFile,
     };
     int pictureLength = [
       recordInfo?.leftFile,
       recordInfo?.rightFile,
-      recordInfo?.bottomFile
+      recordInfo?.bottomFile,
+      recordInfo?.topFile
     ].whereType<Uint8List>().length;
 
     setFile({required Uint8List? newValue, required String pos}) {
@@ -64,6 +66,9 @@ class EditPicture extends StatelessWidget {
           break;
         case 'bottom':
           recordInfo?.bottomFile = newValue;
+          break;
+        case 'top':
+          recordInfo?.topFile = newValue;
           break;
         default:
       }
@@ -274,7 +279,7 @@ class EditPicture extends StatelessWidget {
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
-                                  SpaceWidth(width: 5),
+                                  SpaceWidth(width: 7),
                                   PictureContainer(
                                     file: fileInfo['right'],
                                     pos: 'right',
@@ -284,9 +289,27 @@ class EditPicture extends StatelessWidget {
                                 ],
                               ),
                               SpaceHeight(height: 7),
+                              Row(
+                                children: [
+                                  PictureContainer(
+                                    file: fileInfo['bottom'],
+                                    pos: 'bottom',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                  SpaceWidth(width: 7),
+                                  PictureContainer(
+                                    file: fileInfo['top'],
+                                    pos: 'top',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                ],
+                              ),
+                              SpaceHeight(height: 7),
                               CommonText(
                                 leftIcon: Icons.info_outline,
-                                text: '추가한 사진은 앱 내에 저장돼요.',
+                                text: '사진은 앱 내 저장 공간에 저장돼요.',
                                 size: 10,
                                 color: Colors.grey,
                               )

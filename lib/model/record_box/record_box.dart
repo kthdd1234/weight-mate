@@ -17,6 +17,7 @@ class RecordBox extends HiveObject {
     this.whiteText,
     this.emotion,
     this.bottomFile,
+    this.topFile,
   });
 
   @HiveField(0)
@@ -51,4 +52,7 @@ class RecordBox extends HiveObject {
 
   @HiveField(10)
   Uint8List? bottomFile;
+
+  @HiveField(11)
+  Uint8List? topFile;
 }

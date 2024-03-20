@@ -389,7 +389,8 @@ class CalendarBar extends StatelessWidget {
       String? picture = colorName(
         (recordInfo?.leftFile ??
             recordInfo?.rightFile ??
-            recordInfo?.bottomFile),
+            recordInfo?.bottomFile ??
+            recordInfo?.topFile),
         'purple',
       );
       String? diet = colorName(

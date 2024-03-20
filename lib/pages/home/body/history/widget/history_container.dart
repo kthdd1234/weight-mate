@@ -346,6 +346,7 @@ class HistoryPicture extends StatelessWidget {
       historyImageClass(pos: 'left', unit8List: recordInfo?.leftFile),
       historyImageClass(pos: 'right', unit8List: recordInfo?.rightFile),
       historyImageClass(pos: 'bottom', unit8List: recordInfo?.bottomFile),
+      historyImageClass(pos: 'top', unit8List: recordInfo?.topFile),
     ];
     List<historyImageClass> fileList = [];
 
@@ -389,6 +390,8 @@ class HistoryPicture extends StatelessWidget {
                               recordInfo?.rightFile = null;
                             } else if (data.pos == 'bottom') {
                               recordInfo?.bottomFile = null;
+                            } else if (data.pos == 'top') {
+                              recordInfo?.topFile = null;
                             }
 
                             recordInfo?.save();
@@ -412,7 +415,7 @@ class HistoryPicture extends StatelessWidget {
           return Row(
             children: [
               image(fileList[0], 150),
-              SpaceWidth(width: tinySpace),
+              SpaceWidth(width: 7),
               image(fileList[1], 150)
             ],
           );
@@ -428,6 +431,22 @@ class HistoryPicture extends StatelessWidget {
               ),
               SpaceHeight(height: tinySpace),
               Row(children: [image(fileList[2], 150)])
+            ],
+          );
+        case 4:
+          return Column(
+            children: [
+              Row(children: [
+                image(fileList[0], 150),
+                SpaceWidth(width: tinySpace),
+                image(fileList[1], 150)
+              ]),
+              SpaceHeight(height: tinySpace),
+              Row(children: [
+                image(fileList[2], 150),
+                SpaceWidth(width: tinySpace),
+                image(fileList[3], 150),
+              ])
             ],
           );
         default:
@@ -568,7 +587,10 @@ class HistoryTodo extends StatelessWidget {
             ))
         .toList();
 
-    return Column(children: todoWidgetList ?? []);
+    return Padding(
+      padding: const EdgeInsets.only(top: 5),
+      child: Column(children: todoWidgetList ?? []),
+    );
   }
 }
 
