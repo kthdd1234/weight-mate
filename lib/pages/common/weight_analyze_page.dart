@@ -69,9 +69,12 @@ class CompareToFirst extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+    DateTime now = DateTime.now();
 
-    RecordBox first = recordList.firstWhere((record) => record.weight != null);
-    RecordBox last = recordList.lastWhere((record) => record.weight != null);
+    RecordBox first = recordList.firstWhere((record) => record.weight != null,
+        orElse: () => RecordBox(createDateTime: now));
+    RecordBox last = recordList.lastWhere((record) => record.weight != null,
+        orElse: () => RecordBox(createDateTime: now));
 
     double firstWeight = first.weight ?? 0;
     double lastWeight = last.weight ?? 0;
@@ -121,8 +124,10 @@ class CompareToGoal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+    DateTime now = DateTime.now();
 
-    RecordBox last = recordList.lastWhere((record) => record.weight != null);
+    RecordBox last = recordList.lastWhere((record) => record.weight != null,
+        orElse: () => RecordBox(createDateTime: now));
     double lastWeight = last.weight ?? 0;
     DateTime? lastDateTime = last.createDateTime;
 
