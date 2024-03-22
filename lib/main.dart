@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/app_data_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
@@ -82,6 +83,7 @@ void callbackDispatcher() {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
 
@@ -277,6 +279,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/font-change-page': (context) => const FontChangePage(),
         '/weight-analyze-page': (context) => const WeightAnalyzePage(),
         '/premium-page': (context) => const PremiumPage(),
+        '/app-data-page': (context) => const AppDataPage(),
       },
     );
   }

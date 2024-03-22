@@ -31,6 +31,7 @@ enum MoreSeeItem {
   appVersion,
   appEval,
   appShare,
+  appData,
   developerInp,
   privacyPolicy,
   appFont

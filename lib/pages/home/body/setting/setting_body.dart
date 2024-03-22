@@ -392,19 +392,24 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
+    onTapData(id) async {
+      await Navigator.pushNamed(context, '/app-data-page');
+      setState(() {});
+    }
+
     onTapVersion(id) {
       //
     }
 
     List<MoreSeeItemClass> settingItemList = [
-      // MoreSeeItemClass(
-      //   id: MoreSeeItem.premium,
-      //   icon: 'crown',
-      //   title: '프리미엄',
-      //   value: 'premium',
-      //   color: themeColor,
-      //   onTap: onTapPremium,
-      // ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.premium,
+        icon: 'crown',
+        title: '프리미엄',
+        value: 'premium',
+        color: themeColor,
+        onTap: onTapPremium,
+      ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',
@@ -463,6 +468,14 @@ class _SettingBodyState extends State<SettingBody> {
         value: isLock ? '화면 잠금 중'.tr() : '잠금 없음'.tr(),
         color: isLock ? themeColor : Colors.grey,
         onTap: onTapLock,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appData,
+        icon: 'database',
+        title: '데이터 백업/복원',
+        value: '',
+        color: Colors.transparent,
+        onTap: onTapData,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appReset,

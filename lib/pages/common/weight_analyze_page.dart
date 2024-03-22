@@ -86,7 +86,7 @@ class CompareToFirst extends StatelessWidget {
       child: ContentsBox(
         contentsWidget: Column(
           children: [
-            CompareItemTitle(title: '처음과 비교', svg: "start-icon"),
+            ContentsTitle(title: '처음과 비교', svg: "start-icon"),
             CompareItemCell(
               title: '처음 기록한 체중',
               subTitle: ymdeShort(locale: locale, dateTime: firstDateTime),
@@ -136,7 +136,7 @@ class CompareToGoal extends StatelessWidget {
       child: ContentsBox(
         contentsWidget: Column(
           children: [
-            CompareItemTitle(title: '목표와 비교', svg: "flag-icon"),
+            ContentsTitle(title: '목표와 비교', svg: "flag-icon"),
             CompareItemCell(
               title: '목표 체중',
               text: '$goalWeight$unit',
@@ -202,7 +202,7 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
       child: ContentsBox(
         contentsWidget: Column(
           children: [
-            CompareItemTitle(
+            ContentsTitle(
               title: ' 분석',
               svg: "calendar-icon",
               subTitle: month,
@@ -294,7 +294,7 @@ class _YearAnalysisState extends State<YearAnalysis> {
       child: ContentsBox(
         contentsWidget: Column(
           children: [
-            CompareItemTitle(
+            ContentsTitle(
               title: ' 분석',
               svg: "chart-icon",
               subTitle: year,
@@ -346,8 +346,8 @@ class _YearAnalysisState extends State<YearAnalysis> {
   }
 }
 
-class CompareItemTitle extends StatelessWidget {
-  CompareItemTitle({
+class ContentsTitle extends StatelessWidget {
+  ContentsTitle({
     super.key,
     required this.title,
     required this.svg,

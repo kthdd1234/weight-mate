@@ -82,6 +82,7 @@ dependencies:
   events_emitter: ^0.5.2
   home_widget: ^0.4.1
   flutter_widgetkit: ^1.0.3
+  icloud_storage: ^2.2.0
 
 dev_dependencies:
   flutter_test:
@@ -181,6 +182,9 @@ flutter:
     - assets/svgs/calendar-icon.svg
     - assets/svgs/chart-icon.svg
     - assets/svgs/crown.svg
+    - assets/svgs/database.svg
+    - assets/svgs/icloud.svg
+    - assets/svgs/cloud-data.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
