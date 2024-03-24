@@ -83,6 +83,10 @@ dependencies:
   home_widget: ^0.4.1
   flutter_widgetkit: ^1.0.3
   icloud_storage: ^2.2.0
+  googleapis: ^13.1.0
+  googleapis_auth: ^1.5.1
+  google_sign_in: ^6.2.1
+  extension_google_sign_in_as_googleapis_auth: ^2.0.12
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:developer';
+import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -20,6 +20,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:quiver/time.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'dart:io' as fa;
+import 'package:googleapis/drive/v3.dart' as ga;
+import 'package:path/path.dart' as p;
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -935,4 +938,37 @@ RecordBox maxRecordFunc({required List<RecordBox> list}) {
 RecordBox minRecordFunc({required List<RecordBox> list}) {
   return list.reduce((recordA, recordB) =>
       recordA.weight! < recordB.weight! ? recordA : recordB);
+}
+
+Future<ga.File?> backupHiveBox<T>(String boxName) async {
+  final box = await Hive.openBox<T>(boxName);
+  final boxPath = box.path;
+  await box.close();
+
+  if (boxPath == null) return null;
+
+  File(boxPath).copy('$boxPath/db_backup.hive');
+  fa.File file = fa.File("$boxPath/db_backup.hive");
+
+  ga.File fileToUpload = ga.File();
+  DateTime now = DateTime.now();
+
+  fileToUpload.name =
+      "${now.toIso8601String()}_${p.basename(file.absolute.path)}";
+
+  return fileToUpload;
+}
+
+Future<void> restoreHiveBox<T>(String boxName) async {
+  final box = await Hive.openBox<T>(boxName);
+  final boxPath = box.path;
+  await box.close();
+
+  if (boxPath == null) return;
+
+  try {
+    File('$boxPath/db_backup.hive').copy(boxPath);
+  } finally {
+    await Hive.openBox<T>(boxName);
+  }
 }

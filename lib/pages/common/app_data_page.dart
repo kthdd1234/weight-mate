@@ -1,9 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/data/google_drive.dart';
-import 'package:flutter_app_weight_management/components/data/i_cloud.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 
 class AppDataPage extends StatelessWidget {
   const AppDataPage({super.key});
@@ -23,6 +21,7 @@ class AppDataPage extends StatelessWidget {
             padding: EdgeInsets.all(15),
             child: Column(
               children: [
+                // const ICloudContainer(),
                 GoogleDriveContainer(),
               ],
             ),
@@ -32,5 +31,3 @@ class AppDataPage extends StatelessWidget {
     );
   }
 }
-
-                // const ICloudContainer(),

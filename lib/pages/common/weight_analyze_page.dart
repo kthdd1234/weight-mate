@@ -371,7 +371,7 @@ class ContentsTitle extends StatelessWidget {
           Row(
             children: [
               CommonSvg(width: 15, name: svg),
-              SpaceWidth(width: 5),
+              SpaceWidth(width: 7),
               CommonText(
                 text: title,
                 size: 14,

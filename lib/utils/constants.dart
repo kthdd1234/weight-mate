@@ -398,3 +398,6 @@ Map<int, Color> targetColors = {
   5: Colors.indigo.shade300,
   6: Colors.purple.shade300,
 };
+
+const iosClientId =
+    '439063728742-rjjrri2ki846u9bmgg49atp5vd8hlb81.apps.googleusercontent.com';
