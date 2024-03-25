@@ -1,12 +1,12 @@
-import 'dart:developer';
+import 'dart:io' as fa;
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:googleapis/drive/v3.dart' as ga;
 
 class UserInfoClass {
   UserInfoClass({
@@ -347,4 +347,11 @@ class WidgetPlanClass {
 
   Map<String, dynamic> toJson() =>
       {'id': id, 'type': type, 'name': name, 'isChecked': isChecked};
+}
+
+class FileClass {
+  FileClass({required this.fileToUpload, required this.file});
+
+  ga.File fileToUpload;
+  fa.File file;
 }

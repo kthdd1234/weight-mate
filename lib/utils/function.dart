@@ -940,7 +940,7 @@ RecordBox minRecordFunc({required List<RecordBox> list}) {
       recordA.weight! < recordB.weight! ? recordA : recordB);
 }
 
-Future<ga.File?> backupHiveBox<T>(String boxName) async {
+Future<FileClass?> backupHiveBox<T>(String boxName) async {
   final box = await Hive.openBox<T>(boxName);
   final boxPath = box.path;
   await box.close();
@@ -956,7 +956,7 @@ Future<ga.File?> backupHiveBox<T>(String boxName) async {
   fileToUpload.name =
       "${now.toIso8601String()}_${p.basename(file.absolute.path)}";
 
-  return fileToUpload;
+  return FileClass(fileToUpload: fileToUpload, file: file);
 }
 
 Future<void> restoreHiveBox<T>(String boxName) async {

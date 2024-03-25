@@ -471,7 +471,7 @@ class _SettingBodyState extends State<SettingBody> {
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appData,
-        icon: 'database',
+        icon: 'cloud-data',
         title: '데이터 백업/복원',
         value: '',
         color: Colors.transparent,
@@ -625,7 +625,7 @@ class MoreSeeItemWidget extends StatelessWidget {
         return Container(
             decoration: BoxDecoration(
               image: const DecorationImage(
-                  image: AssetImage("assets/images/t-23.png"), //23 15
+                  image: AssetImage("assets/images/t-23.png"),
                   fit: BoxFit.cover),
               borderRadius: BorderRadius.circular(5),
             ),

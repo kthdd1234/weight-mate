@@ -186,9 +186,10 @@ flutter:
     - assets/svgs/calendar-icon.svg
     - assets/svgs/chart-icon.svg
     - assets/svgs/crown.svg
-    - assets/svgs/database.svg
-    - assets/svgs/icloud.svg
     - assets/svgs/cloud-data.svg
+    - assets/svgs/cloud-backup.svg
+    - assets/svgs/cloud-restore.svg
+    - assets/svgs/google-drive.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
