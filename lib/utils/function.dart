@@ -11,7 +11,9 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
+import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -941,22 +943,23 @@ RecordBox minRecordFunc({required List<RecordBox> list}) {
 }
 
 Future<FileClass?> backupHiveBox<T>(String boxName) async {
-  final box = await Hive.openBox<T>(boxName);
+  final box = Hive.box(boxName);
   final boxPath = box.path;
-  await box.close();
 
   if (boxPath == null) return null;
 
-  File(boxPath).copy('$boxPath/db_backup.hive');
-  fa.File file = fa.File("$boxPath/db_backup.hive");
+  log('boxPath => $boxPath');
 
-  ga.File fileToUpload = ga.File();
-  DateTime now = DateTime.now();
+  File(boxPath).copy('db_backup.hive');
+  // fa.File file = fa.File("$boxPath/db_backup.hive");
 
-  fileToUpload.name =
-      "${now.toIso8601String()}_${p.basename(file.absolute.path)}";
+  // ga.File fileToUpload = ga.File();
+  // DateTime now = DateTime.now();
 
-  return FileClass(fileToUpload: fileToUpload, file: file);
+  // fileToUpload.name =
+  //     "${now.toIso8601String()}_${p.basename(file.absolute.path)}";
+
+  // return FileClass(fileToUpload: fileToUpload, file: file);
 }
 
 Future<void> restoreHiveBox<T>(String boxName) async {
