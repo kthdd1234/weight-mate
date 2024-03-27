@@ -1,7 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
+import 'package:googleapis/drive/v3.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io' as io;
 import 'package:path/path.dart' as path;
@@ -14,12 +18,18 @@ class GoogleDriveAppData {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: iosClientId,
-        scopes: [drive.DriveApi.driveAppdataScope],
+        scopes: [
+          drive.DriveApi.driveAppdataScope,
+          drive.DriveApi.driveFileScope,
+        ],
       );
-      googleUser =
-          await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
+
+      googleUser = await googleSignIn.signInSilently(reAuthenticate: true) ??
+          await googleSignIn.signIn();
     } catch (e) {
       debugPrint(e.toString());
+
+      return null;
     }
 
     return googleUser;
@@ -40,14 +50,17 @@ class GoogleDriveAppData {
       GoogleAuthClient client = GoogleAuthClient(headers);
       driveApi = drive.DriveApi(client);
     } catch (e) {
-      debugPrint(e.toString());
+      final apiError = e as DetailedApiRequestError;
+
+      // return apiError.status;
+      return null;
     }
 
     return driveApi;
   }
 
   /// upload file to google drive
-  Future<drive.File?> uploadDriveFile({
+  Future<DriveFileClass> uploadDriveFile({
     required drive.DriveApi driveApi,
     required io.File file,
     String? driveFileId,
@@ -79,10 +92,13 @@ class GoogleDriveAppData {
         );
       }
 
-      return response;
+      return DriveFileClass(driveFile: response);
     } catch (e) {
-      debugPrint(e.toString());
-      return null;
+      final apiError = e as DetailedApiRequestError;
+
+      debugPrint('error => ${e.toString()}');
+
+      return DriveFileClass(errorCode: apiError.status);
     }
   }
 
@@ -122,7 +138,7 @@ class GoogleDriveAppData {
     try {
       drive.FileList fileList = await driveApi.files.list(
         spaces: 'appDataFolder',
-        $fields: 'fields(id, name, modifiedTime)',
+        $fields: 'files(id, name, modifiedTime)',
       );
       List<drive.File>? files = fileList.files;
       drive.File? driveFile = files?.firstWhere(

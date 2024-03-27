@@ -1,18 +1,26 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls, use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/services/google_drive_service.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:hive/hive.dart';
@@ -28,22 +36,65 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
   final GoogleDriveAppData _googleDriveAppData = GoogleDriveAppData();
   GoogleSignInAccount? _googleUser;
   drive.DriveApi? _driveApi;
-  Map<String, String?> _fileInfo = {"id": null, "name": null};
+
+  Future<DateTime?> backupDateTime() async {
+    final driveFile = await _googleDriveAppData.getDriveFile(
+      _driveApi!,
+      'userbox.hive',
+    );
+
+    return driveFile?.modifiedTime?.toLocal();
+  }
+
+  Future<void> googleDriveLogin() async {
+    String locale = context.locale.toString();
+    UserBox user = userRepository.user;
+
+    _googleUser = await _googleDriveAppData.signInGoogle();
+
+    if (_googleUser != null) {
+      _driveApi = await _googleDriveAppData.getDriveApi(_googleUser!);
+
+      if (user.googleDriveInfo == null) {
+        user.googleDriveInfo = {
+          "backupDateTime": ymdeHm(
+            locale: locale,
+            dateTime: await backupDateTime(),
+          ),
+          MateHiveBox.userBox: null,
+          MateHiveBox.recordBox: null,
+          MateHiveBox.planBox: null,
+        };
+      } else {
+        user.googleDriveInfo!['backupDateTime'] = ymdeHm(
+          locale: locale,
+          dateTime: await backupDateTime(),
+        );
+      }
+
+      await user.save();
+    }
+
+    setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() async {
+    await googleDriveLogin();
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const introText =
+    String locale = context.locale.toString();
+    UserBox user = userRepository.user;
+    Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
+    String introText =
         '구글 드라이브에 앱의 데이터를 주기적으로 백업하면 핸드폰을 바꾸거나 앱 삭제 후 다시 설치 했을 때도 기존의 데이터를 복구 할 수 있어요.';
-    const loginText = 'Google 로그인 후 데이터 백업 또는 복원을 해주세요.';
+    String loginText = 'Google 로그인 후 데이터 백업 또는 복원을 해주세요.';
 
     onLogin() async {
-      _googleUser = await _googleDriveAppData.signInGoogle();
-
-      if (_googleUser != null) {
-        _driveApi = await _googleDriveAppData.getDriveApi(_googleUser!);
-      }
-
-      setState(() {});
+      await googleDriveLogin();
     }
 
     onLogout() async {
@@ -51,33 +102,88 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
 
       _googleUser = null;
       _driveApi = null;
-      _fileInfo = {"id": null, "name": null};
 
       setState(() {});
     }
 
     onBackup() async {
       Box<UserBox> userBox = await Hive.openBox<UserBox>(MateHiveBox.userBox);
+      Box<RecordBox> recordBox =
+          await Hive.openBox<RecordBox>(MateHiveBox.recordBox);
+      Box<PlanBox> planBox = await Hive.openBox<PlanBox>(MateHiveBox.planBox);
+
       File userFile = File(userBox.path!);
+      File recordFile = File(recordBox.path!);
+      File planFile = File(planBox.path!);
 
-      if (_driveApi != null) {
-        final uploadfile = await _googleDriveAppData.uploadDriveFile(
-          driveApi: _driveApi!,
-          file: userFile,
-          driveFileId: _fileInfo['id'],
-        );
+      await showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => LoadingDialog(
+          text: '구글 드라이브에 백업 중..\n(앱에 데이터가 많을 경우 시간이 오래 걸려요)',
+          color: Colors.white,
+        ),
+      );
 
-        _fileInfo = {"id": uploadfile?.id, "name": uploadfile?.name};
+      try {
+        if (_driveApi != null) {
+          DriveFileClass dUser = await _googleDriveAppData.uploadDriveFile(
+            driveApi: _driveApi!,
+            file: userFile,
+            driveFileId: googleDriveInfo![MateHiveBox.userBox],
+          );
+          DriveFileClass dRecord = await _googleDriveAppData.uploadDriveFile(
+            driveApi: _driveApi!,
+            file: recordFile,
+            driveFileId: googleDriveInfo[MateHiveBox.recordBox],
+          );
+          DriveFileClass dPlan = await _googleDriveAppData.uploadDriveFile(
+            driveApi: _driveApi!,
+            file: planFile,
+            driveFileId: googleDriveInfo[MateHiveBox.planBox],
+          );
 
-        log('uploadfile => ${uploadfile?.id}');
+          if (dUser.errorCode == 401) {
+            log('401 에러 발생! => $dUser');
 
-        setState(() {});
+            await onLogout();
+            await onLogin();
+            await onBackup();
+
+            return;
+          }
+
+          if (googleDriveInfo[MateHiveBox.userBox] == null) {
+            googleDriveInfo[MateHiveBox.userBox] = dUser.driveFile?.id;
+          }
+
+          if (googleDriveInfo[MateHiveBox.recordBox] == null) {
+            googleDriveInfo[MateHiveBox.recordBox] = dRecord.driveFile?.id;
+          }
+
+          if (googleDriveInfo[MateHiveBox.planBox] == null) {
+            googleDriveInfo[MateHiveBox.planBox] = dPlan.driveFile?.id;
+          }
+
+          googleDriveInfo['backupDateTime'] = ymdeHm(
+            locale: locale,
+            dateTime: await backupDateTime(),
+          );
+
+          await user.save();
+
+          setState(() {});
+        }
+      } finally {
+        closeDialog(context);
       }
     }
 
     onRestore() {
       //
     }
+
+    log('googleDriveInfo => ${user.googleDriveInfo}');
 
     return ContentsBox(
       contentsWidget: Column(
@@ -99,7 +205,8 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
                   ? Center(child: TextData(text: loginText))
                   : GoogleDriveInfo(
                       email: _googleUser!.email,
-                      backupDateTime: '2024.3.19 오후 11:15',
+                      backupDateTime:
+                          googleDriveInfo?['backupDateTime'] ?? '없음',
                     ),
             ),
           ),
@@ -234,9 +341,9 @@ class GoogleDriveInfo extends StatelessWidget {
   }
 }
 
-  // showSnackBar(String text) {
-  //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
-  // }
+// showSnackBar(String text) {
+//   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+// }
 
 // try {
 //   final GoogleSignIn googleSignIn = GoogleSignIn(

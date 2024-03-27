@@ -122,6 +122,6 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
               ],
             ),
           )
-        : NativeAdLoading(text: widget.loadingText, color: Colors.white);
+        : LoadingDialog(text: widget.loadingText, color: Colors.white);
   }
 }

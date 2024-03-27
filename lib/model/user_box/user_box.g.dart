@@ -22,33 +22,34 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       goalWeight: fields[2] as double,
       createDateTime: fields[3] as DateTime,
       isAlarm: fields[4] as bool,
+      planViewType: fields[8] as String?,
       alarmTime: fields[5] as DateTime?,
       alarmId: fields[6] as int?,
       screenLockPasswords: fields[7] as String?,
-      planViewType: fields[8] as String?,
-      filterList: fields[9] as List<String>?,
-      displayList: fields[10] as List<String>?,
-      calendarMaker: fields[11] as String?,
+      filterList: (fields[9] as List?)?.cast<String>(),
+      displayList: (fields[10] as List?)?.cast<String>(),
       calendarFormat: fields[12] as String?,
-      dietOrderList: fields[13] as List<String>?,
-      exerciseOrderList: fields[14] as List<String>?,
-      lifeOrderList: fields[15] as List<String>?,
+      calendarMaker: fields[11] as String?,
+      dietOrderList: (fields[13] as List?)?.cast<String>(),
+      exerciseOrderList: (fields[14] as List?)?.cast<String>(),
+      lifeOrderList: (fields[15] as List?)?.cast<String>(),
       language: fields[16] as String?,
-      weightUnit: fields[17] as String?,
       tallUnit: fields[18] as String?,
+      weightUnit: fields[17] as String?,
       isShowPreviousGraph: fields[19] as bool?,
       historyForamt: fields[20] as String?,
-      historyDisplayList: fields[21] as List<String>?,
+      historyDisplayList: (fields[21] as List?)?.cast<String>(),
       historyCalendarFormat: fields[22] as String?,
       isDietExerciseRecordDateTime: fields[23] as bool?,
       fontFamily: fields[24] as String?,
+      googleDriveInfo: (fields[25] as Map?)?.cast<String, dynamic>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(25)
+      ..writeByte(26)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -98,7 +99,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(23)
       ..write(obj.isDietExerciseRecordDateTime)
       ..writeByte(24)
-      ..write(obj.fontFamily);
+      ..write(obj.fontFamily)
+      ..writeByte(25)
+      ..write(obj.googleDriveInfo);
   }
 
   @override

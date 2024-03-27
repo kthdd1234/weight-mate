@@ -708,7 +708,7 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
             ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd)
             : SizedBox(
                 height: 340,
-                child: NativeAdLoading(text: '', color: Colors.transparent),
+                child: LoadingDialog(text: '', color: Colors.transparent),
               )
       ],
     );

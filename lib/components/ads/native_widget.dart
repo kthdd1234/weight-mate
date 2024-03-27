@@ -34,8 +34,8 @@ class NativeWidget extends StatelessWidget {
   }
 }
 
-class NativeAdLoading extends StatelessWidget {
-  NativeAdLoading({
+class LoadingDialog extends StatelessWidget {
+  LoadingDialog({
     super.key,
     required this.text,
     required this.color,

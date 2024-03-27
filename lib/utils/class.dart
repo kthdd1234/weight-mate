@@ -1,4 +1,4 @@
-import 'dart:io' as fa;
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -6,7 +6,7 @@ import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_pag
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:googleapis/drive/v3.dart' as ga;
+import 'package:googleapis/drive/v3.dart' as drive;
 
 class UserInfoClass {
   UserInfoClass({
@@ -349,9 +349,17 @@ class WidgetPlanClass {
       {'id': id, 'type': type, 'name': name, 'isChecked': isChecked};
 }
 
-class FileClass {
-  FileClass({required this.fileToUpload, required this.file});
+class DriveFileClass {
+  DriveFileClass({this.driveFile, this.errorCode});
 
-  ga.File fileToUpload;
-  fa.File file;
+  drive.File? driveFile;
+  int? errorCode;
+}
+
+class HiveBoxFileClass {
+  HiveBoxFileClass({required this.name, required this.file, this.fileId});
+
+  String name;
+  File file;
+  String? fileId;
 }
