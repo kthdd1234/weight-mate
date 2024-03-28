@@ -50,7 +50,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 import 'pages/common/screen_lock_page.dart';
 
 const List<Locale> supportedLocales = [
@@ -61,25 +60,6 @@ const List<Locale> supportedLocales = [
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
-
-@pragma("vm:entry-point")
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) {
-    HomeWidgetService().updateWeight();
-    HomeWidgetService().updateDietRecord();
-    HomeWidgetService().updateExerciseRecord();
-    HomeWidgetService().updateDietGoal();
-
-    switch (task) {
-      case Workmanager.iOSBackgroundTask:
-        stderr.writeln("The iOS background fetch was triggered");
-        break;
-    }
-
-    bool success = true;
-    return Future.value(success);
-  });
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,7 +72,6 @@ void main() async {
   await NotificationService().initNotification();
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: kDebugMode);
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
 
   runApp(
@@ -284,29 +263,3 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     );
   }
 }
-
-// @pragma("vm:entry-point")
-// Future<void> interactiveCallback(Uri? uri) async {
-//   await MateHive().initializeHive();
-//   await NotificationService().initializeTimeZone();
-//   await EasyLocalization.ensureInitialized();
-//   await initializeDateFormatting('ko');
-
-//   DateTime now = DateTime.now();
-
-//   String? scheme = uri?.scheme;
-//   String? planId = uri?.queryParameters['planId'];
-//   String? newValue = uri?.queryParameters['newValue'];
-
-//   switch (scheme) {
-//     case 'diet':
-//       log('planId => $planId');
-
-//       onCheckBox(id: planId, newValue: newValue == 'true', importDateTime: now);
-//       HomeWidgetService().updateDietGoal();
-
-//       break;
-//     default:
-//   }
-// }
-//  await HomeWidget.registerInteractivityCallback(interactiveCallback);

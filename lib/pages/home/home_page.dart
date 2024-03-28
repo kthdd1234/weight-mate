@@ -18,6 +18,7 @@ import 'package:flutter_app_weight_management/provider/history_title_date_time_p
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -30,7 +31,6 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:workmanager/workmanager.dart';
 
 List<BottomNavigationEnum> bottomIdList = [
   BottomNavigationEnum.record,
@@ -94,6 +94,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? historyCalendarForamt = user.historyCalendarFormat;
     bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
     String? fontFamily = user.fontFamily;
+    Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -191,6 +192,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     if (fontFamily == null) {
       user.fontFamily =
           widget.locale != 'ja' ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
+    }
+
+    if (googleDriveInfo == null) {
+      user.googleDriveInfo = {
+        "isLogin": false,
+        "backupDateTime": null,
+        MateHiveBox.userBox: null,
+        MateHiveBox.recordBox: null,
+        MateHiveBox.planBox: null,
+      };
     }
 
     userRepository.user.save();

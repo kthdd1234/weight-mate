@@ -94,20 +94,22 @@ class GoogleDriveAppData {
 
       return DriveFileClass(driveFile: response);
     } catch (e) {
-      final apiError = e as DetailedApiRequestError;
+      debugPrint(e.toString());
 
-      debugPrint('error => ${e.toString()}');
-
-      return DriveFileClass(errorCode: apiError.status);
+      return DriveFileClass(errorCode: 0);
     }
   }
 
   /// download file from google drive
   Future<io.File?> restoreDriveFile({
     required drive.DriveApi driveApi,
-    required drive.File driveFile,
+    required drive.File? driveFile,
     required String targetLocalPath,
   }) async {
+    if (driveFile == null) {
+      return null;
+    }
+
     try {
       drive.Media media = await driveApi.files.get(
         driveFile.id!,

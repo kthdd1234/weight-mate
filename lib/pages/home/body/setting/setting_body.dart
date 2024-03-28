@@ -472,7 +472,7 @@ class _SettingBodyState extends State<SettingBody> {
       MoreSeeItemClass(
         id: MoreSeeItem.appData,
         icon: 'cloud-data',
-        title: '구글 드라이브 백업/복원',
+        title: '데이터 백업/복원',
         value: '',
         color: Colors.transparent,
         onTap: onTapData,

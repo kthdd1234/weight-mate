@@ -356,10 +356,12 @@ class DriveFileClass {
   int? errorCode;
 }
 
-class HiveBoxFileClass {
-  HiveBoxFileClass({required this.name, required this.file, this.fileId});
+class HiveBoxPathsClass {
+  HiveBoxPathsClass({
+    required this.userBoxPath,
+    required this.recordBoxPath,
+    required this.planBoxPath,
+  });
 
-  String name;
-  File file;
-  String? fileId;
+  String userBoxPath, recordBoxPath, planBoxPath;
 }
