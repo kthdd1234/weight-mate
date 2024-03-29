@@ -33,19 +33,18 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>체중 메이트</string>
+				<string>com.googleusercontent.apps.439063728742-rjjrri2ki846u9bmgg49atp5vd8hlb81</string>
 			</array>
 		</dict>
-		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>GADApplicationIdentifier</key>
 	<string>ca-app-pub-6804308271128440~3459280855</string>
+	<key>GIDClientID</key>
+	<string>768457556313-hoqht8792obcrm59720d8m1d8m1dabic.apps.googleusercontent.com</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>

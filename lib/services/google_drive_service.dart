@@ -18,10 +18,7 @@ class GoogleDriveAppData {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn(
         clientId: iosClientId,
-        scopes: [
-          drive.DriveApi.driveAppdataScope,
-          drive.DriveApi.driveFileScope,
-        ],
+        scopes: [drive.DriveApi.driveFileScope],
       );
 
       googleUser = await googleSignIn.signInSilently(reAuthenticate: true) ??

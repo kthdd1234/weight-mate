@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>768457556313-hoqht8792obcrm59720d8m1d8m1dabic.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.768457556313-hoqht8792obcrm59720d8m1d8m1dabic</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBOgAYbM9ubQOCV-9xJe2T0CUNrSDIniAg</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.kthdd.weightMate</string>
+	<string>com.example.flutterAppWeightManagement</string>
 	<key>PROJECT_ID</key>
 	<string>weight-mate-project</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:768457556313:ios:55097bf7ada231d885cc48</string>
+	<string>1:768457556313:ios:5b6ce273aeabafff85cc48</string>
 </dict>
 </plist>

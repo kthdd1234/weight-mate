@@ -195,13 +195,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (googleDriveInfo == null) {
-      user.googleDriveInfo = {
-        "isLogin": false,
-        "backupDateTime": null,
-        MateHiveBox.userBox: null,
-        MateHiveBox.recordBox: null,
-        MateHiveBox.planBox: null,
-      };
+      user.googleDriveInfo = {"isLogin": false, "backupDateTime": null};
     }
 
     userRepository.user.save();

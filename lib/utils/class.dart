@@ -365,3 +365,13 @@ class HiveBoxPathsClass {
 
   String userBoxPath, recordBoxPath, planBoxPath;
 }
+
+class DriveFileIdsClass {
+  DriveFileIdsClass({
+    required this.userFileId,
+    required this.recordFileId,
+    required this.planFileId,
+  });
+
+  String? userFileId, recordFileId, planFileId;
+}

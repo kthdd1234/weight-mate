@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "768457556313",
+    "project_id": "weight-mate-project",
+    "storage_bucket": "weight-mate-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768457556313:android:e5c0bcd11e7b049485cc48",
+        "android_client_info": {
+          "package_name": "com.kthdd.weightMate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXOt99A6Q4Gw1RVgSLWfatRB-k_f2HdKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

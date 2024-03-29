@@ -51,6 +51,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'pages/common/screen_lock_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 const List<Locale> supportedLocales = [
   Locale('ko'),
@@ -66,6 +68,11 @@ void main() async {
 
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
+
+  await Firebase.initializeApp(
+    name: 'weight-mate',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await MateHive().initializeHive();
   await dotenv.load(fileName: ".env");
