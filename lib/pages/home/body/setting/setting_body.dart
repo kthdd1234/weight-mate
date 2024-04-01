@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/Premium_benefits.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -388,7 +389,16 @@ class _SettingBodyState extends State<SettingBody> {
     }
 
     onTapPremium(id) async {
-      await Navigator.pushNamed(context, '/premium-page');
+      // await Navigator.pushNamed(context, '/premium-page');
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => CommonBottomSheet(
+          title: '프리미엄 혜택',
+          height: 500,
+          contents: const PremiumBenefits(),
+        ),
+      );
       setState(() {});
     }
 

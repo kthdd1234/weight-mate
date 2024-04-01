@@ -48,9 +48,10 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
         await _googleDriveAppData.getDriveFile(driveApi, 'planbox.hive');
 
     return DriveFileIdsClass(
-        userFileId: userFileId?.id,
-        recordFileId: recordFileId?.id,
-        planFileId: planFileId?.id);
+      userFileId: userFileId?.id,
+      recordFileId: recordFileId?.id,
+      planFileId: planFileId?.id,
+    );
   }
 
   Future<HiveBoxPathsClass> getHiveBoxPaths() async {

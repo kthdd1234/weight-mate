@@ -375,3 +375,13 @@ class DriveFileIdsClass {
 
   String? userFileId, recordFileId, planFileId;
 }
+
+class PremiumBenefitsClass {
+  PremiumBenefitsClass({
+    required this.svgName,
+    required this.title,
+    required this.subTitle,
+  });
+
+  String svgName, title, subTitle;
+}

@@ -87,6 +87,7 @@ dependencies:
   path: ^1.8.3
   restart_app: ^1.2.1
   firebase_core: ^2.27.0
+  in_app_purchase: ^3.1.13
 
 dev_dependencies:
   flutter_test:
@@ -190,6 +191,10 @@ flutter:
     - assets/svgs/cloud-backup.svg
     - assets/svgs/cloud-restore.svg
     - assets/svgs/google-drive.svg
+    - assets/svgs/premium-free.svg
+    - assets/svgs/premium-category-detail.svg
+    - assets/svgs/premium-no-ads.svg
+    - assets/svgs/premium-photos-four.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
