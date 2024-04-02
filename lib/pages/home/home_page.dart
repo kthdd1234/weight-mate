@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
     String? fontFamily = user.fontFamily;
     Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
+    bool? isDietExerciseRecordDateTime2 = user.isDietExerciseRecordDateTime2;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -187,6 +188,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (isDietExerciseRecordDateTime == null) {
       user.isDietExerciseRecordDateTime = false;
+    }
+
+    if (isDietExerciseRecordDateTime2 == null) {
+      user.isDietExerciseRecordDateTime2 = false;
     }
 
     if (fontFamily == null) {

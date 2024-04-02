@@ -412,14 +412,14 @@ class _SettingBodyState extends State<SettingBody> {
     }
 
     List<MoreSeeItemClass> settingItemList = [
-      MoreSeeItemClass(
-        id: MoreSeeItem.premium,
-        icon: 'crown',
-        title: '프리미엄',
-        value: 'premium',
-        color: themeColor,
-        onTap: onTapPremium,
-      ),
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.premium,
+      //   icon: 'crown',
+      //   title: '프리미엄',
+      //   value: 'premium',
+      //   color: themeColor,
+      //   onTap: onTapPremium,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',

@@ -32,6 +32,7 @@ class UserBox extends HiveObject {
     this.isDietExerciseRecordDateTime,
     this.fontFamily,
     this.googleDriveInfo,
+    this.isDietExerciseRecordDateTime2,
   });
 
   @HiveField(0)
@@ -111,6 +112,9 @@ class UserBox extends HiveObject {
 
   @HiveField(25)
   Map<String, dynamic>? googleDriveInfo;
+
+  @HiveField(26)
+  bool? isDietExerciseRecordDateTime2;
 
   @override
   String toString() {
