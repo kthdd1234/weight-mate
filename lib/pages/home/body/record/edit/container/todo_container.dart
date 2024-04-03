@@ -700,16 +700,11 @@ class _RecordNameState extends State<RecordName> {
       await recordInfo?.save();
     }
 
-    onEditDietExerciseRecordDateTime(
-        {required DateTime dateTime, required String type}) async {
+    onEditDietExerciseRecordDateTime(DateTime dateTime) async {
       recordInfo?.actions?.forEach(
         (action) {
           if (action['id'] == widget.id) {
-            if (eDiet == type) {
-              action['dietExerciseRecordDateTime'] = dateTime;
-            } else if (eExercise == type) {
-              action['dietExerciseRecordDateTime2'] = dateTime;
-            }
+            action['dietExerciseRecordDateTime'] = dateTime;
           }
         },
       );
@@ -923,12 +918,6 @@ class _RecordAddState extends State<RecordAdd> {
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    bool isRecordDateTime = {
-      eDiet: user.isDietExerciseRecordDateTime == true,
-      eExercise: user.isDietExerciseRecordDateTime2 == true,
-    }[widget.type]!;
-
     onAdd() {
       setState(() => isShowInput = true);
     }
@@ -961,6 +950,10 @@ class _RecordAddState extends State<RecordAdd> {
                 void Function(void Function()) setState,
               ) {
                 UserBox? user = userRepository.user;
+                bool isRecordDateTime = {
+                  eDiet: user.isDietExerciseRecordDateTime == true,
+                  eExercise: user.isDietExerciseRecordDateTime2 == true,
+                }[widget.type]!;
 
                 onAmpm(String ampm) {
                   setState(() => timeStamps[0] = ampm);
@@ -974,8 +967,10 @@ class _RecordAddState extends State<RecordAdd> {
                   setState(() => timeStamps[2] = minute);
                 }
 
-                onChangedSwitch(
-                    {required bool isChecked, required String type}) {
+                onChangedSwitch({
+                  required bool isChecked,
+                  required String type,
+                }) {
                   if (eDiet == type) {
                     user.isDietExerciseRecordDateTime = isChecked;
                   } else if (eExercise == type) {
@@ -1178,8 +1173,6 @@ class RecordDateTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // UserBox user = userRepository.user;
-
     onCommButton({
       required String category,
       required String state,
@@ -1508,33 +1501,6 @@ class GoalList extends StatelessWidget {
 
       user.save();
     }
-
-    // action(String planId) {
-    //   if (actions == null) {
-    //     return {'id': null, 'actionDateTime': null};
-    //   }
-
-    //   Map<String, dynamic> action = actions!.firstWhere(
-    //     (element) => element['id'] == planId,
-    //     orElse: () => {'id': null, 'actionDateTime': null},
-    //   );
-
-    //   return action;
-    // }
-
-    // planList.sort((itemA, itemB) {
-    //   int indexA = orderList?.indexOf(itemA.id) ?? 0;
-    //   int indexB = orderList?.indexOf(itemB.id) ?? 0;
-
-    //   return indexA.compareTo(indexB);
-    // });
-
-    // planList.sort((itemA, itemB) {
-    //   bool isCheckedA = action(itemA.id)['id'] != null;
-    //   bool isCheckedB = action(itemB.id)['id'] != null;
-
-    //   return (isCheckedA == isCheckedB ? 0 : (isCheckedB ? 1 : -1));
-    // });
 
     return Column(
       children: onPlanList(
@@ -1940,8 +1906,7 @@ class RecordBottomSheet extends StatefulWidget {
   String type, id, name, topTitle, selectedTitle;
   DateTime? dietExerciseRecordDateTime;
   Function(String title) onEditTitle;
-  Function({required DateTime dateTime, required String type})
-      onEditDietExerciseRecordDateTime;
+  Function(DateTime dateTime) onEditDietExerciseRecordDateTime;
   Function() onTapEdit;
   Function() onTapRemove;
 
@@ -2072,8 +2037,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
                           hourTo24(ampm: timeStamps[0], hour: timeStamps[1]),
                           minuteToInt(minute: timeStamps[2]),
                         );
-                        widget.onEditDietExerciseRecordDateTime(
-                            dateTime: dateTime, type: widget.type);
+                        widget.onEditDietExerciseRecordDateTime(dateTime);
                         closeDialog(context);
                       }
                     },

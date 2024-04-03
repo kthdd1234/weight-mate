@@ -173,9 +173,11 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
 
           await user.save();
           setState(() {});
+
+          closeDialog(context);
         }
-      } finally {
-        closeDialog(context);
+      } catch (e) {
+        showSnackBar(context: context, text: "에러 발생 ㅠㅠ!", buttonName: "확인");
       }
     }
 
@@ -225,10 +227,7 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
             targetLocalPath: hiveBoxPaths.planBoxPath,
           );
         }
-      } finally {
         closeDialog(context);
-
-        restartApp() async => await Restart.restartApp();
 
         await showDialog(
           barrierDismissible: false,
@@ -239,10 +238,12 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
             contentIcon: Icons.restart_alt_rounded,
             contentText1: "데이터 복원이 완료 됐어요.",
             contentText2: "앱을 완전히 종료한 후 다시 시작해주세요.",
-            onPressedOk: restartApp,
-            onPressedCancel: restartApp,
+            onPressedOk: () async => await Restart.restartApp(),
+            onPressedCancel: () async => await Restart.restartApp(),
           ),
         );
+      } catch (e) {
+        showSnackBar(context: context, text: '에러 발생 ㅠㅠ!', buttonName: "확인");
       }
     }
 

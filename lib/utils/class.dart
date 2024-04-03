@@ -216,7 +216,7 @@ class ActionItemClass {
       'actionDateTime': actionDateTime,
       'createDateTime': createDateTime,
       'isRecord': isRecord,
-      'dietExerciseRecordDateTime': dietExerciseRecordDateTime
+      'dietExerciseRecordDateTime': dietExerciseRecordDateTime,
     };
   }
 }
