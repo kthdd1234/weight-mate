@@ -38,7 +38,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
   syncfusion_flutter_datepicker: ^23.2.7
-  uuid: ^4.2.2
+  uuid: ^3.0.7
   syncfusion_flutter_charts: ^23.2.7
   hive: ^2.2.3
   hive_flutter: ^1.1.0
@@ -83,11 +83,14 @@ dependencies:
   googleapis_auth: ^1.5.1
   google_sign_in: ^6.2.1
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
-  http: ^1.2.0
+  http: ^1.1.0
   path: ^1.8.3
   restart_app: ^1.2.1
   firebase_core: ^2.27.0
   in_app_purchase: ^3.1.13
+  firebase_auth: ^4.17.8
+  cloud_firestore: ^4.15.8
+  app_store_server_sdk: ^1.2.5
 
 dev_dependencies:
   flutter_test:

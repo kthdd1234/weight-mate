@@ -1,7 +1,6 @@
-import 'dart:io';
+import 'dart:async';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -39,6 +38,7 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/services/auth_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
@@ -73,6 +73,7 @@ void main() async {
     name: 'weight-mate',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // await AuthService().getOrCreateUser();
 
   await MateHive().initializeHive();
   await dotenv.load(fileName: ".env");
@@ -94,6 +95,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryTitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
+        Provider.value(value: AuthService())
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,
