@@ -44,13 +44,14 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       fontFamily: fields[24] as String?,
       googleDriveInfo: (fields[25] as Map?)?.cast<String, dynamic>(),
       isDietExerciseRecordDateTime2: fields[26] as bool?,
+      customerInfoJson: (fields[27] as Map?)?.cast<String, dynamic>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(27)
+      ..writeByte(28)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -104,7 +105,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(25)
       ..write(obj.googleDriveInfo)
       ..writeByte(26)
-      ..write(obj.isDietExerciseRecordDateTime2);
+      ..write(obj.isDietExerciseRecordDateTime2)
+      ..writeByte(27)
+      ..write(obj.customerInfoJson);
   }
 
   @override

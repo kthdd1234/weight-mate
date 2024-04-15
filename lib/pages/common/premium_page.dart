@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
@@ -9,15 +10,12 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/services/auth_service.dart';
-import 'package:flutter_app_weight_management/services/iap_service.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
-import 'package:provider/provider.dart';
-// import 'package:app_store_server_sdk/app_store_server_sdk.dart';
-
-List<String> _productIds = <String>["premium_wm"];
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 class PremiumPage extends StatefulWidget {
   const PremiumPage({super.key});
@@ -27,88 +25,86 @@ class PremiumPage extends StatefulWidget {
 }
 
 class _PremiumPageState extends State<PremiumPage> {
-  final InAppPurchase _inAppPurchase = InAppPurchase.instance;
-  bool _isAvailable = false;
-  String? _notice;
-  ProductDetails? _productDetail;
-  late StreamSubscription<List<PurchaseDetails>> _iapSubscription;
+  Package? package;
 
   @override
   void initState() {
-    initStoreInfo();
-    initPurchaseUpdated();
+    initIAP() async {
+      try {
+        Offerings offerings = await Purchases.getOfferings();
+        List<Package>? availablePackages =
+            offerings.getOffering(entitlement_identifier)?.availablePackages;
+
+        log('뭐고 =>> $availablePackages');
+
+        if (availablePackages != null && availablePackages.isNotEmpty) {
+          setState(() => package = availablePackages[0]);
+        }
+      } on PlatformException catch (e) {
+        log('PlatformException =>> $e');
+      }
+    }
+
+    initCustomer() async {
+      try {
+        CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+        log('customerInfo =>> ${customerInfo.originalAppUserId}');
+      } on PlatformException catch (e) {
+        log('PlatformException =>> $e');
+      }
+    }
+
+    initIAP();
+    initCustomer();
 
     super.initState();
   }
 
-  Future<void> initStoreInfo() async {
-    final bool isAvailable = await _inAppPurchase.isAvailable();
-    setState(() => _isAvailable = isAvailable);
-
-    if (!_isAvailable) {
-      setState(() => _notice = "There are no upgrades at this time");
-      return;
-    }
-
-    setState(() {
-      _notice = "There is a connection to the store";
-    });
-
-    // get IAP
-    ProductDetailsResponse productDetailsResponse =
-        await _inAppPurchase.queryProductDetails(_productIds.toSet());
-
-    if (productDetailsResponse.error != null) {
-      setState(() {
-        _notice = "There was a problem connecting to the store";
-      });
-    } else if (productDetailsResponse.productDetails.isEmpty) {
-      setState(() {
-        _notice = "There are no upgrades at this time";
-      });
-    }
-
-    setState(() {
-      for (var product in productDetailsResponse.productDetails) {
-        if (product.id == 'premium_wm') _productDetail = product;
-      }
-    });
-  }
-
-  initPurchaseUpdated() {
-    Stream purchaseUpdated = InAppPurchase.instance.purchaseStream;
-
-    _iapSubscription = purchaseUpdated.listen((purchaseDetailsList) {
-      print('Purchase stream started');
-      IAPService(context.read<AuthService>().currentUser!.uid)
-          .listenToPurchaseUpdated(purchaseDetailsList);
-    }, onDone: () {
-      _iapSubscription.cancel();
-    }, onError: (e) {
-      _iapSubscription.cancel();
-    }) as StreamSubscription<List<PurchaseDetails>>;
-  }
-
   @override
   Widget build(BuildContext context) {
-    onPurchase() async {
-      if (_productDetail != null) {
-        PurchaseParam purchaseParam = PurchaseParam(
-          productDetails: _productDetail!,
-        );
+    UserBox user = userRepository.user;
+    Map<String, dynamic>? customerInfoJson = user.customerInfoJson;
 
-        await InAppPurchase.instance.buyNonConsumable(
-          purchaseParam: purchaseParam,
-        );
+    // todo
+
+    onPurchase() async {
+      try {
+        if (package != null) {
+          CustomerInfo customerInfo = await Purchases.purchasePackage(package!);
+          bool isActive =
+              customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+                  true;
+
+          if (isActive) {
+            log('isActive!! => ${customerInfo.toJson()}');
+
+            user.customerInfoJson = customerInfo.toJson();
+            await user.save();
+          }
+        }
+      } on PlatformException catch (e) {
+        log('e =>> ${e.toString()}');
+
+        var errorCode = PurchasesErrorHelper.getErrorCode(e);
+        if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
+          log('errorCode =>> $errorCode');
+        }
       }
     }
 
     onRestore() async {
-      print('_productDetail =>>');
-      await InAppPurchase.instance.restorePurchases();
-    }
+      try {
+        CustomerInfo customerInfo = await Purchases.restorePurchases();
+        Map<String, dynamic> customerInfoJson = customerInfo.toJson();
+        user.customerInfoJson = customerInfoJson;
 
-    log('_notice => $_notice');
+        log('onRestore!! customerInfo.toJson => ${customerInfo.toJson()}');
+
+        await user.save();
+      } on PlatformException catch (e) {
+        log('e =>> ${e.toString()}');
+      }
+    }
 
     List<Widget> premiumBenefitsWidgetList = premiumBenefitsClassList
         .map(
@@ -176,7 +172,8 @@ class _PremiumPageState extends State<PremiumPage> {
                             borderRadius: 5,
                             padding: const EdgeInsets.symmetric(vertical: 15),
                             imgUrl: 'assets/images/t-15.png',
-                            text: '구매하기 (${_productDetail?.price})',
+                            text:
+                                '구매하기 (${package?.storeProduct.priceString ?? 'none'})',
                             onTap: onPurchase,
                           )
                         ],

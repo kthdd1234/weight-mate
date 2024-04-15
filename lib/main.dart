@@ -53,12 +53,17 @@ import 'package:provider/provider.dart';
 import 'pages/common/screen_lock_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 const List<Locale> supportedLocales = [
   Locale('ko'),
   Locale('en'),
   Locale('ja')
 ];
+
+final _configuration =
+    PurchasesConfiguration('appl_vjYFXCKiODqbJjabYlqJnmlIMPj');
+
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
 PlanRepository planRepository = PlanRepository();
@@ -69,18 +74,18 @@ void main() async {
   final initMobileAds = MobileAds.instance.initialize();
   final adsState = AdsService(initialization: initMobileAds);
 
+  await Purchases.configure(_configuration);
   await Firebase.initializeApp(
     name: 'weight-mate',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // await AuthService().getOrCreateUser();
-
   await MateHive().initializeHive();
   await dotenv.load(fileName: ".env");
   await NotificationService().initNotification();
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
+  await AuthService().getOrCreateUser();
 
   runApp(
     MultiProvider(
@@ -95,7 +100,6 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryTitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
-        Provider.value(value: AuthService())
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,

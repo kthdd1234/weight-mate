@@ -83,14 +83,15 @@ dependencies:
   googleapis_auth: ^1.5.1
   google_sign_in: ^6.2.1
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
-  http: ^1.1.0
   path: ^1.8.3
   restart_app: ^1.2.1
   firebase_core: ^2.27.0
   in_app_purchase: ^3.1.13
   firebase_auth: ^4.17.8
   cloud_firestore: ^4.15.8
-  app_store_server_sdk: ^1.2.5
+  cloud_functions: ^4.6.8
+  http: ^1.2.0
+  purchases_flutter: ^6.26.0
 
 dev_dependencies:
   flutter_test:

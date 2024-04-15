@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:app_store_server_sdk/app_store_server_sdk.dart';
 
 /// 5.0
 const double tinySpace = 5.0;
@@ -403,9 +402,4 @@ Map<int, Color> targetColors = {
 const iosClientId =
     '439063728742-rjjrri2ki846u9bmgg49atp5vd8hlb81.apps.googleusercontent.com';
 
-final iTunesAPI = ITunesApi(
-  ITunesHttpClient(
-    ITunesEnvironment.sandbox(),
-    loggingEnabled: true,
-  ),
-);
+const entitlement_identifier = 'premium';

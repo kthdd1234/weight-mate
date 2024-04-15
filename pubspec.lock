@@ -41,14 +41,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
-  app_store_server_sdk:
-    dependency: "direct main"
-    description:
-      name: app_store_server_sdk
-      sha256: ed596091fc25a8698bb0c531bea85b8b18f2fd819c658b77d162eee7b0502b20
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.8"
   app_tracking_transparency:
     dependency: "direct main"
     description:
@@ -73,14 +65,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.2"
-  asn1lib:
-    dependency: transitive
-    description:
-      name: asn1lib
-      sha256: c9c85fedbe2188b95133cbe960e16f5f448860f7133330e272edbbca5893ddc6
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.5.2"
   async:
     dependency: transitive
     description:
@@ -225,6 +209,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.10.8"
+  cloud_functions:
+    dependency: "direct main"
+    description:
+      name: cloud_functions
+      sha256: "25e2d24041233a86e62df6dfa82e506760ae42070486c5c09143b7fdf8c0f85a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.6.8"
+  cloud_functions_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_functions_platform_interface
+      sha256: "4fad722fd2bf41ac1a318d12c5bdd1cc01ab69e372e8300d54e0cc6cd765a759"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.5.19"
+  cloud_functions_web:
+    dependency: transitive
+    description:
+      name: cloud_functions_web
+      sha256: "3bf4959d0795e2731aadc70d2ae4e9b5edc03a0e2e5939449c649ab8e04d4e1a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.7.2"
   code_builder:
     dependency: transitive
     description:
@@ -265,14 +273,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
-  crypto_keys:
-    dependency: transitive
-    description:
-      name: crypto_keys
-      sha256: acc19abf34623d990a0e8aec69463d74a824c31f137128f42e2810befc509ad0
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.0+1"
   csslib:
     dependency: transitive
     description:
@@ -581,6 +581,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "10.7.0"
+  freezed_annotation:
+    dependency: transitive
+    description:
+      name: freezed_annotation
+      sha256: c3fd9336eb55a38cc1bbd79ab17573113a8deccd0ecbbf926cca3c62803b5c2d
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.1"
   frontend_server_client:
     dependency: transitive
     description:
@@ -893,14 +901,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
-  jose:
-    dependency: transitive
-    description:
-      name: jose
-      sha256: "7955ec5d131960104e81fbf151abacb9d835c16c9e793ed394b2809f28b2198d"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.4"
   js:
     dependency: transitive
     description:
@@ -1229,6 +1229,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.3"
+  purchases_flutter:
+    dependency: "direct main"
+    description:
+      name: purchases_flutter
+      sha256: "4a818d3f50a657837dcd3b4e1f62303ec4f85e413fed633d24f0e37df183d7b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.26.0"
   quiver:
     dependency: "direct main"
     description:
@@ -1706,14 +1714,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
-  x509:
-    dependency: transitive
-    description:
-      name: x509
-      sha256: "3262dc9a7d45b0876f886c01bfc7d5e765704f7dfd31f8cf5224fc875c17a6c6"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.2.4+2"
   xdg_directories:
     dependency: transitive
     description:

@@ -33,6 +33,7 @@ class UserBox extends HiveObject {
     this.fontFamily,
     this.googleDriveInfo,
     this.isDietExerciseRecordDateTime2,
+    this.customerInfoJson,
   });
 
   @HiveField(0)
@@ -115,6 +116,9 @@ class UserBox extends HiveObject {
 
   @HiveField(26)
   bool? isDietExerciseRecordDateTime2;
+
+  @HiveField(27)
+  Map<String, dynamic>? customerInfoJson;
 
   @override
   String toString() {
