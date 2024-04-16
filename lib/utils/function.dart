@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:developer';
 import 'dart:io';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,20 +12,17 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
-import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:quiver/time.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-import 'dart:io' as fa;
-import 'package:googleapis/drive/v3.dart' as ga;
-import 'package:path/path.dart' as p;
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -962,4 +960,37 @@ Future<void> restoreHiveBox<T>(String boxName) async {
   } finally {
     await Hive.openBox<T>(boxName);
   }
+}
+
+Future<bool> isPurchasePremium() async {
+  CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+  return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+      true;
+}
+
+Future<bool> isPurchaseRestore() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.restorePurchases();
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
+
+Future<bool> isHideAd() async {
+  TrackingStatus trackingStatus =
+      await AppTrackingTransparency.trackingAuthorizationStatus;
+  String advertisingId =
+      await AppTrackingTransparency.getAdvertisingIdentifier();
+  bool isAuthorized = trackingStatus == TrackingStatus.authorized;
+  bool isMyAdvertisingId =
+      advertisingId == '5E188ADD-3D54-4140-97F7-AA5FAA0AD3B2';
+
+  if (isAuthorized && isMyAdvertisingId) {
+    return false;
+  }
+
+  return false;
 }

@@ -1,6 +1,10 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
@@ -26,6 +30,48 @@ class WeightChartPage extends StatefulWidget {
 class _WeightChartPageState extends State<WeightChartPage> {
   DateTime selectedYear = DateTime.now();
   bool isRecent = true;
+  bool isPremium = false;
+
+  @override
+  void initState() {
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
+
+    super.initState();
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+  //     showCupertinoModalPopup(
+  //         context: context,
+  //         builder: (_) => Scaffold(
+  //               appBar: AppBar(
+  //                 backgroundColor: Colors.transparent,
+  //               ),
+  //               backgroundColor: Colors.transparent,
+  //               body: BackdropFilter(
+  //                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+  //                   child: Center(
+  //                     child: Container(
+  //                       width: MediaQuery.of(context).size.width - 20,
+  //                       height: 200,
+  //                       color: Colors.orange,
+  //                       child: Center(
+  //                           child: Text(
+  //                         "Second Screen",
+  //                       )),
+  //                     ),
+  //                   )),
+  //             ));
+  //   });
+
+  //   super.didChangeDependencies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +114,10 @@ class _WeightChartPageState extends State<WeightChartPage> {
       widget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('체중 통계표'.tr(),
-              style: const TextStyle(fontSize: 20, color: themeColor)),
+          title: Text(
+            '체중 통계표'.tr(),
+            style: const TextStyle(fontSize: 20, color: themeColor),
+          ),
           backgroundColor: Colors.transparent,
           centerTitle: false,
           elevation: 0.0,
@@ -88,25 +136,30 @@ class _WeightChartPageState extends State<WeightChartPage> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: ContentsBox(
-              contentsWidget: Column(
-                children: [
-                  Row(
-                    children: columnTitles
-                        .map((title) => RowTitles(
-                            title: title,
-                            nameArgs: title == '체중()'
-                                ? {'unit': '$weightUnit'}
-                                : null))
-                        .toList(),
+            child: Stack(
+              children: [
+                ContentsBox(
+                  contentsWidget: Column(
+                    children: [
+                      Row(
+                        children: columnTitles
+                            .map((title) => RowTitles(
+                                title: title,
+                                nameArgs: title == '체중()'
+                                    ? {'unit': '$weightUnit'}
+                                    : null))
+                            .toList(),
+                      ),
+                      ColumnItemList(
+                        weightUnit: weightUnit,
+                        selectedYear: selectedYear,
+                        isRecent: isRecent,
+                      )
+                    ],
                   ),
-                  ColumnItemList(
-                    weightUnit: weightUnit,
-                    selectedYear: selectedYear,
-                    isRecent: isRecent,
-                  )
-                ],
-              ),
+                ),
+                CommonBlur(isBlur: isPremium),
+              ],
             ),
           ),
         ),

@@ -11,6 +11,7 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -54,6 +55,7 @@ class _SettingBodyState extends State<SettingBody> {
     }
 
     getInfo();
+
     super.initState();
   }
 
@@ -602,7 +604,7 @@ class WeightDialog extends StatelessWidget {
   }
 }
 
-class MoreSeeItemWidget extends StatelessWidget {
+class MoreSeeItemWidget extends StatefulWidget {
   MoreSeeItemWidget({
     super.key,
     required this.id,
@@ -619,9 +621,28 @@ class MoreSeeItemWidget extends StatelessWidget {
   Function(MoreSeeItem id) onTap;
 
   @override
+  State<MoreSeeItemWidget> createState() => _MoreSeeItemWidgetState();
+}
+
+class _MoreSeeItemWidgetState extends State<MoreSeeItemWidget> {
+  String premiumText = '';
+
+  @override
+  void initState() {
+    getPremium() async {
+      premiumText = await isPurchasePremium() ? '구매 완료' : '업그레이드';
+      setState(() {});
+    }
+
+    getPremium();
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     wValue() {
-      if (value == 'premium') {
+      if (widget.value == 'premium') {
         return Container(
             decoration: BoxDecoration(
               image: const DecorationImage(
@@ -631,21 +652,21 @@ class MoreSeeItemWidget extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
             child: CommonText(
-              text: '업그레이드',
+              text: premiumText,
               color: Colors.white,
-              size: 12,
+              size: 11,
               isCenter: true,
               isBold: true,
             ));
       }
 
-      return value != ''
+      return widget.value != ''
           ? CommonText(
               isNotTr: true,
-              text: value,
+              text: widget.value,
               size: 13,
-              color: color,
-              rightIcon: MoreSeeItem.appVersion != id
+              color: widget.color,
+              rightIcon: MoreSeeItem.appVersion != widget.id
                   ? Icons.chevron_right_rounded
                   : null,
             )
@@ -653,7 +674,7 @@ class MoreSeeItemWidget extends StatelessWidget {
     }
 
     return InkWell(
-      onTap: () => onTap(id),
+      onTap: () => widget.onTap(widget.id),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 15),
         child: Row(
@@ -666,11 +687,13 @@ class MoreSeeItemWidget extends StatelessWidget {
                 ),
               ),
               padding: const EdgeInsets.all(6),
-              child: SvgPicture.asset('assets/svgs/$icon.svg', height: 17),
+              child: SvgPicture.asset('assets/svgs/${widget.icon}.svg',
+                  height: 17),
             ),
             SpaceWidth(width: regularSapce),
-            Expanded(child: CommonText(text: title, size: 14, isBold: true)),
-            wValue()
+            Expanded(
+                child: CommonText(text: widget.title, size: 14, isBold: true)),
+            wValue(),
           ],
         ),
       ),

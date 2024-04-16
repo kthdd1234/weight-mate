@@ -199,6 +199,7 @@ flutter:
     - assets/svgs/premium-category-detail.svg
     - assets/svgs/premium-no-ads.svg
     - assets/svgs/premium-photos-four.svg
+    - assets/svgs/premium-badge.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

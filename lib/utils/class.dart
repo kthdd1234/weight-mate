@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -280,15 +281,19 @@ class AppLifecycleReactor {
   void _onAppStateChanged(AppState appState) async {
     String? passwords = userRepository.user.screenLockPasswords;
 
-    if (passwords != null) {
-      if (appState == AppState.foreground) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => EnterScreenLockPage(),
-            fullscreenDialog: true,
-          ),
-        );
+    try {
+      if (passwords != null) {
+        if (appState == AppState.foreground) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EnterScreenLockPage(),
+              fullscreenDialog: true,
+            ),
+          );
+        }
       }
+    } catch (e) {
+      log('e => $e');
     }
   }
 }

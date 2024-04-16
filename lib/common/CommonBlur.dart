@@ -1,0 +1,56 @@
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonSvg.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+
+class CommonBlur extends StatelessWidget {
+  CommonBlur({super.key, required this.isBlur});
+
+  bool isBlur;
+
+  @override
+  Widget build(BuildContext context) {
+    onPremium() {
+      Navigator.pushNamed(context, '/premium-page');
+    }
+
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CommonSvg(name: 'crown', width: 40),
+          SpaceHeight(height: 15),
+          CommonText(
+            text: 'Premium',
+            size: 18,
+            isBold: true,
+            isCenter: true,
+          ),
+          SpaceHeight(height: 5),
+          CommonText(
+            text: '프리미엄을 구매한 분들에게만 제공되는 기능이에요.',
+            size: 15,
+            isCenter: true,
+          ),
+          SpaceHeight(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Row(
+              children: [
+                ExpandedButtonHori(
+                  borderRadius: 30,
+                  imgUrl: 'assets/images/t-23.png',
+                  text: '프리미엄 구매 페이지로 이동',
+                  onTap: onPremium,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}

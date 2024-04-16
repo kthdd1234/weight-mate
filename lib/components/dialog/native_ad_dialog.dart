@@ -109,14 +109,6 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
                       text: widget.rightText,
                       onTap: widget.onRightClick,
                     ),
-                    SpaceWidth(width: tinySpace),
-                    ExpandedButtonHori(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 10),
-                      imgUrl: 'assets/images/t-22.png',
-                      text: '창 닫기',
-                      onTap: () => closeDialog(context),
-                    ),
                   ],
                 ),
               ],

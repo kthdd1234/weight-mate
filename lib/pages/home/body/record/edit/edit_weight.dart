@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -35,6 +36,18 @@ class _EditWeightState extends State<EditWeight> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
   bool isGoalWeight = false;
+  bool isPremium = false;
+
+  @override
+  void initState() {
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,34 +65,37 @@ class _EditWeightState extends State<EditWeight> {
       );
     }
 
-    // showAdDialog({
-    //   required String title,
-    //   required String loadingText,
-    //   Map<String, String>? nameArgs,
-    // }) async {
-    //   await showDialog(
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (buildContext) {
-    //       onClick(BottomNavigationEnum enumId) async {
-    //         buildContext
-    //             .read<BottomNavigationProvider>()
-    //             .setBottomNavigation(enumId: enumId);
-    //         closeDialog(buildContext);
-    //       }
+    showAdDialog({
+      required String title,
+      required String loadingText,
+      Map<String, String>? nameArgs,
+    }) async {
+      if (isPremium == false) {
+        await showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (buildContext) {
+            onLeftClick() {
+              Navigator.pushNamed(context, '/premium-page');
+            }
 
-    //       return NativeAdDialog(
-    //         loadingText: loadingText,
-    //         title: title,
-    //         nameArgs: nameArgs,
-    //         leftText: '히스토리',
-    //         rightText: '그래프',
-    //         onLeftClick: () => onClick(BottomNavigationEnum.history),
-    //         onRightClick: () => onClick(BottomNavigationEnum.graph),
-    //       );
-    //     },
-    //   );
-    // }
+            onRightClick() {
+              closeDialog(context);
+            }
+
+            return NativeAdDialog(
+              loadingText: loadingText,
+              title: title,
+              nameArgs: nameArgs,
+              leftText: '광고 제거',
+              rightText: '광고 닫기',
+              onLeftClick: onLeftClick,
+              onRightClick: onRightClick,
+            );
+          },
+        );
+      }
+    }
 
     onInit() {
       setState(() {
@@ -129,15 +145,15 @@ class _EditWeightState extends State<EditWeight> {
         onInit();
         closeDialog(context);
 
-        // List<RecordBox> recordList = recordRepository.recordBox.values.toList();
-        // List<RecordBox> weightList =
-        //     recordList.where((e) => e.weight != null).toList();
+        List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+        List<RecordBox> weightList =
+            recordList.where((e) => e.weight != null).toList();
 
-        // showAdDialog(
-        //   title: '👏🏻 일째 기록 했어요!',
-        //   loadingText: '체중 데이터 저장 중...',
-        //   nameArgs: {'days': '${weightList.length}'},
-        // );
+        showAdDialog(
+          title: '👏🏻 일째 기록 했어요!',
+          loadingText: '광고 불러오는 중...',
+          nameArgs: {'days': '${weightList.length}'},
+        );
       }
     }
 
@@ -149,10 +165,10 @@ class _EditWeightState extends State<EditWeight> {
         onInit();
         closeDialog(context);
 
-        // showAdDialog(
-        //   title: '⛳ 목표 체중을 변경 했어요!',
-        //   loadingText: '목표 체중 데이터 저장 중...',
-        // );
+        showAdDialog(
+          title: '⛳ 목표 체중을 변경 했어요!',
+          loadingText: '광고 불러오는 중...',
+        );
       }
     }
 

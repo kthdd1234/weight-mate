@@ -1,9 +1,8 @@
-import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
@@ -60,19 +59,14 @@ class _BannerWidgetState extends State<BannerWidget> {
     }
 
     checkHideAd();
-
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (isNotAdShow) {
-      return SpaceHeight(height: 10);
-    }
-
     if (bannerAdIsLoaded == false) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+        padding: const EdgeInsets.fromLTRB(0, 5, 0, 7),
         child: SizedBox(
           height: 50,
           child: CommonText(
@@ -87,24 +81,8 @@ class _BannerWidgetState extends State<BannerWidget> {
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 7),
       child: SizedBox(height: 50, child: AdWidget(ad: bannerAd!)),
     );
   }
-}
-
-Future<bool> isHideAd() async {
-  TrackingStatus status =
-      await AppTrackingTransparency.trackingAuthorizationStatus;
-
-  if (status == TrackingStatus.authorized) {
-    String advertisingId =
-        await AppTrackingTransparency.getAdvertisingIdentifier();
-
-    if (advertisingId == '5E188ADD-3D54-4140-97F7-AA5FAA0AD3B2') {
-      return true;
-    }
-  }
-
-  return false;
 }

@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -96,7 +97,7 @@ class CommonAppBar extends StatelessWidget {
   }
 }
 
-class CommonTitle extends StatelessWidget {
+class CommonTitle extends StatefulWidget {
   CommonTitle({
     super.key,
     required this.index,
@@ -111,6 +112,19 @@ class CommonTitle extends StatelessWidget {
   CalendarMaker calendarMaker;
   Function(CalendarFormat) onFormatChanged;
   Function(CalendarMaker) onTapMakerType;
+
+  @override
+  State<CommonTitle> createState() => _CommonTitleState();
+}
+
+class _CommonTitleState extends State<CommonTitle> {
+  bool isPurchase = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,11 +149,11 @@ class CommonTitle extends StatelessWidget {
           : ym(locale: locale, dateTime: historyDateTime),
       '체중 변화',
       '설정'
-    ][index];
+    ][widget.index];
 
-    bool isRecord = index == 0;
-    bool isHistory = index == 1;
-    bool isGraph = index == 2;
+    bool isRecord = widget.index == 0;
+    bool isHistory = widget.index == 1;
+    bool isGraph = widget.index == 2;
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -214,6 +228,12 @@ class CommonTitle extends StatelessWidget {
       await user.save();
     }
 
+    onShowBannerAd() {
+      return widget.index != 3 && isPurchase == true
+          ? BannerWidget()
+          : SpaceHeight(height: 10);
+    }
+
     List<IconData?> rightIconList = [
       Icons.keyboard_arrow_down_rounded,
       Icons.keyboard_arrow_down_rounded,
@@ -233,8 +253,7 @@ class CommonTitle extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         children: [
-          // index != 3 ? BannerWidget() : const EmptyArea(),
-          SpaceHeight(height: 10),
+          onShowBannerAd(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -242,8 +261,8 @@ class CommonTitle extends StatelessWidget {
                 isNotTr: isRecord || isHistory,
                 text: title,
                 size: 20,
-                rightIcon: rightIconList[index],
-                onTap: onTapList[index],
+                rightIcon: rightIconList[widget.index],
+                onTap: onTapList[widget.index],
               ),
               Row(
                 children: [
@@ -251,18 +270,20 @@ class CommonTitle extends StatelessWidget {
                       ? Row(
                           children: [
                             CommonTag(
-                              text: availableCalendarMaker[calendarMaker],
+                              text:
+                                  availableCalendarMaker[widget.calendarMaker],
                               color: 'whiteIndigo',
-                              onTap: () => onTapMakerType(
-                                nextCalendarMaker[calendarMaker]!,
+                              onTap: () => widget.onTapMakerType(
+                                nextCalendarMaker[widget.calendarMaker]!,
                               ),
                             ),
                             SpaceWidth(width: tinySpace),
                             CommonTag(
-                              text: availableCalendarFormats[calendarFormat],
+                              text: availableCalendarFormats[
+                                  widget.calendarFormat],
                               color: 'whiteIndigo',
-                              onTap: () => onFormatChanged(
-                                nextCalendarFormats[calendarFormat]!,
+                              onTap: () => widget.onFormatChanged(
+                                nextCalendarFormats[widget.calendarFormat]!,
                               ),
                             ),
                             SpaceWidth(width: tinySpace),
@@ -294,10 +315,11 @@ class CommonTitle extends StatelessWidget {
                                   )
                                 : CommonTag(
                                     text: availableCalendarFormats[
-                                        calendarFormat],
+                                        widget.calendarFormat],
                                     color: 'whiteIndigo',
-                                    onTap: () => onFormatChanged(
-                                      nextCalendarFormats[calendarFormat]!,
+                                    onTap: () => widget.onFormatChanged(
+                                      nextCalendarFormats[
+                                          widget.calendarFormat]!,
                                     ),
                                   ),
                             SpaceWidth(width: 5),
