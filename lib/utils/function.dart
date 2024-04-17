@@ -964,8 +964,10 @@ Future<void> restoreHiveBox<T>(String boxName) async {
 
 Future<bool> isPurchasePremium() async {
   CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-  return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-      true;
+
+  return false;
+  // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+  //     true;
 }
 
 Future<bool> isPurchaseRestore() async {

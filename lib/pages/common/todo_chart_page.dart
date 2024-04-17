@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -25,6 +26,18 @@ class TodoChartPage extends StatefulWidget {
 
 class _TodoChartPageState extends State<TodoChartPage> {
   DateTime selectedMonth = DateTime.now();
+  bool isPremium = false;
+
+  @override
+  void initState() {
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,50 +106,55 @@ class _TodoChartPageState extends State<TodoChartPage> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: ContentsBox(
-              contentsWidget: Column(
-                children: [
-                  RowTitle(
-                    type: type,
-                    selectedMonth: selectedMonth,
-                    onTap: onTapMonthTitle,
+            child: Stack(
+              children: [
+                ContentsBox(
+                  contentsWidget: Column(
+                    children: [
+                      RowTitle(
+                        type: type,
+                        selectedMonth: selectedMonth,
+                        onTap: onTapMonthTitle,
+                      ),
+                      Divider(color: Colors.grey.shade200),
+                      displayRecordList.isNotEmpty
+                          ? Expanded(
+                              child: ListView(
+                                children: displayRecordList
+                                    .map((record) => ColumnContainer(
+                                          dateTime: record!.createDateTime,
+                                          type: type,
+                                          actions: record.actions,
+                                        ))
+                                    .toList(),
+                              ),
+                            )
+                          : Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CommonIcon(
+                                    icon: todoData[type]!.icon,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                  SpaceHeight(height: 10),
+                                  CommonText(
+                                    text: '기록이 없어요.',
+                                    size: 15,
+                                    isCenter: true,
+                                    color: Colors.grey,
+                                  ),
+                                  SpaceHeight(height: 20),
+                                ],
+                              ),
+                            ),
+                    ],
                   ),
-                  Divider(color: Colors.grey.shade200),
-                  displayRecordList.isNotEmpty
-                      ? Expanded(
-                          child: ListView(
-                            children: displayRecordList
-                                .map((record) => ColumnContainer(
-                                      dateTime: record!.createDateTime,
-                                      type: type,
-                                      actions: record.actions,
-                                    ))
-                                .toList(),
-                          ),
-                        )
-                      : Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CommonIcon(
-                                icon: todoData[type]!.icon,
-                                size: 20,
-                                color: Colors.grey,
-                              ),
-                              SpaceHeight(height: 10),
-                              CommonText(
-                                text: '기록이 없어요.',
-                                size: 15,
-                                isCenter: true,
-                                color: Colors.grey,
-                              ),
-                              SpaceHeight(height: 20),
-                            ],
-                          ),
-                        ),
-                ],
-              ),
+                ),
+                CommonBlur(isBlur: isPremium),
+              ],
             ),
           ),
         ),

@@ -118,11 +118,16 @@ class CommonTitle extends StatefulWidget {
 }
 
 class _CommonTitleState extends State<CommonTitle> {
-  bool isPurchase = false;
+  bool isPremium = false;
 
   @override
   void initState() {
-    // TODO: implement initState
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
     super.initState();
   }
 
@@ -229,7 +234,7 @@ class _CommonTitleState extends State<CommonTitle> {
     }
 
     onShowBannerAd() {
-      return widget.index != 3 && isPurchase == true
+      return widget.index != 3 && isPremium == false
           ? BannerWidget()
           : SpaceHeight(height: 10);
     }

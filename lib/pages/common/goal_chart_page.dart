@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -34,6 +33,18 @@ class GoalChartPage extends StatefulWidget {
 
 class _GoalChartPageState extends State<GoalChartPage> {
   SegmentedTypes selectedSegment = SegmentedTypes.week;
+  bool isPremium = false;
+
+  @override
+  void initState() {
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +94,13 @@ class _GoalChartPageState extends State<GoalChartPage> {
                     onSegmentedChanged: onSegmentedChanged,
                   ),
                 ),
-                selectedSegment == SegmentedTypes.week
-                    ? GoalWeeklyContainer(type: type)
-                    : GoalMonthlyContainer(type: type)
+                Stack(
+                  children: [
+                    selectedSegment == SegmentedTypes.week
+                        ? GoalWeeklyContainer(type: type)
+                        : GoalMonthlyContainer(type: type),
+                  ],
+                ),
               ],
             ),
           ),

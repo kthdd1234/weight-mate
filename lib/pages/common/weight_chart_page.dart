@@ -44,35 +44,6 @@ class _WeightChartPageState extends State<WeightChartPage> {
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //     showCupertinoModalPopup(
-  //         context: context,
-  //         builder: (_) => Scaffold(
-  //               appBar: AppBar(
-  //                 backgroundColor: Colors.transparent,
-  //               ),
-  //               backgroundColor: Colors.transparent,
-  //               body: BackdropFilter(
-  //                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-  //                   child: Center(
-  //                     child: Container(
-  //                       width: MediaQuery.of(context).size.width - 20,
-  //                       height: 200,
-  //                       color: Colors.orange,
-  //                       child: Center(
-  //                           child: Text(
-  //                         "Second Screen",
-  //                       )),
-  //                     ),
-  //                   )),
-  //             ));
-  //   });
-
-  //   super.didChangeDependencies();
-  // }
-
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;

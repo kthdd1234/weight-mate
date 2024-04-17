@@ -1,8 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -19,8 +18,26 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class WeightAnalyzePage extends StatelessWidget {
+class WeightAnalyzePage extends StatefulWidget {
   const WeightAnalyzePage({super.key});
+
+  @override
+  State<WeightAnalyzePage> createState() => _WeightAnalyzePageState();
+}
+
+class _WeightAnalyzePageState extends State<WeightAnalyzePage> {
+  bool isPremium = false;
+
+  @override
+  void initState() {
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +45,7 @@ class WeightAnalyzePage extends StatelessWidget {
     UserBox user = userRepository.user;
     double? goalWeight = user.goalWeight;
     String unit = user.weightUnit ?? 'kg';
+    bool isPremium = false;
 
     List<Widget> analyzeWidgetList = [
       MonthAnalysis(locale: locale, unit: unit),
@@ -50,9 +68,14 @@ class WeightAnalyzePage extends StatelessWidget {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: ListView.builder(
-              itemBuilder: ((context, index) => analyzeWidgetList[index]),
-              itemCount: analyzeWidgetList.length,
+            child: Stack(
+              children: [
+                ListView.builder(
+                  itemBuilder: ((context, index) => analyzeWidgetList[index]),
+                  itemCount: analyzeWidgetList.length,
+                ),
+                CommonBlur(isBlur: isPremium),
+              ],
             ),
           ),
         ),
