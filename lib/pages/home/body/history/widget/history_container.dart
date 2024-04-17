@@ -34,6 +34,8 @@ String fDiet = FILITER.diet.toString();
 String fExercise = FILITER.exercise.toString();
 String fLife = FILITER.lifeStyle.toString();
 String fDiary = FILITER.diary.toString();
+String fDiet_2 = FILITER.diet_2.toString();
+String fExercise_2 = FILITER.exercise_2.toString();
 
 class HistoryContainer extends StatelessWidget {
   HistoryContainer({
@@ -184,92 +186,85 @@ class HistoryHeader extends StatelessWidget {
       recordInfo?.save();
     }
 
-    return Column(
+    return Row(
       children: [
-        Row(
-          children: [
-            recordInfo?.emotion != null && isDiary
-                ? Expanded(
-                    flex: 0,
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: SvgPicture.asset(
-                            'assets/svgs/${recordInfo?.emotion}.svg',
-                          ),
-                        ),
-                        isRemoveMode
-                            ? RemoveIcon(onTap: onRemoveEmotion)
-                            : const EmptyArea()
-                      ],
+        recordInfo?.emotion != null && isDiary
+            ? Expanded(
+                flex: 0,
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: SvgPicture.asset(
+                        'assets/svgs/${recordInfo?.emotion}.svg',
+                      ),
                     ),
-                  )
-                : const EmptyArea(),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                    isRemoveMode
+                        ? RemoveIcon(onTap: onRemoveEmotion)
+                        : const EmptyArea()
+                  ],
+                ),
+              )
+            : const EmptyArea(),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      CommonText(
-                        text: isWeight
-                            ? formatDateTime
-                            : md(locale: locale, dateTime: createDateTime),
-                        size: 11,
-                        isBold: true,
-                        isNotTr: true,
-                      ),
-                      const Spacer(),
-                      isRemoveMode
-                          ? const EmptyArea()
-                          : InkWell(
+                  CommonText(
+                    text: isWeight
+                        ? formatDateTime
+                        : md(locale: locale, dateTime: createDateTime),
+                    size: 11,
+                    isBold: true,
+                    isNotTr: true,
+                  ),
+                  const Spacer(),
+                  isRemoveMode
+                      ? const EmptyArea()
+                      : InkWell(
+                          onTap: onTapMore,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: CommonIcon(
+                              icon: Icons.more_vert_rounded,
+                              size: 16,
                               onTap: onTapMore,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: CommonIcon(
-                                  icon: Icons.more_vert_rounded,
-                                  size: 16,
-                                  onTap: onTapMore,
-                                ),
-                              ),
-                            )
-                    ],
-                  ),
-                  SpaceHeight(height: 2),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          CommonText(
-                            isNotTr: true,
-                            text: isWeight
-                                ? '${recordInfo?.weight ?? '-'}${user.weightUnit}'
-                                : e(locale: locale, dateTime: createDateTime),
-                            size: isWeight ? 17 : 12,
+                            ),
                           ),
-                          isRemoveMode && recordInfo?.weight != null
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 3),
-                                  child: RemoveIcon(onTap: onTapRemoveWegiht))
-                              : const EmptyArea()
-                        ],
-                      ),
-                      CommonText(
-                          text: isWeight ? bmiValue() : '',
-                          size: 9,
-                          isNotTr: true),
-                    ],
-                  ),
+                        )
                 ],
               ),
-            )
-          ],
-        ),
-        // SpaceHeight(height: 10),
+              SpaceHeight(height: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      CommonText(
+                        isNotTr: true,
+                        text: isWeight
+                            ? '${recordInfo?.weight ?? '-'}${user.weightUnit}'
+                            : e(locale: locale, dateTime: createDateTime),
+                        size: isWeight ? 17 : 12,
+                      ),
+                      isRemoveMode && recordInfo?.weight != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(left: 3),
+                              child: RemoveIcon(onTap: onTapRemoveWegiht))
+                          : const EmptyArea()
+                    ],
+                  ),
+                  CommonText(
+                      text: isWeight ? bmiValue() : '', size: 9, isNotTr: true),
+                ],
+              ),
+            ],
+          ),
+        )
       ],
     );
   }
@@ -475,9 +470,11 @@ class HistoryTodo extends StatelessWidget {
     UserBox user = userRepository.user;
     List<String> historyDisplayList = user.historyDisplayList ?? [];
 
-    bool isDiet = historyDisplayList.contains(fDiet);
-    bool isExercise = historyDisplayList.contains(fExercise);
-    bool isLife = historyDisplayList.contains(fLife);
+    bool isContainDietRecord = historyDisplayList.contains(fDiet);
+    bool isContainExerciseRecord = historyDisplayList.contains(fExercise);
+    bool isContainDietGoal = historyDisplayList.contains(fDiet_2);
+    bool isContainExerciseGoal = historyDisplayList.contains(fExercise_2);
+    bool isContainLife = historyDisplayList.contains(fLife);
 
     onIcon(String type, bool? isRecord, String title) {
       MaterialColor color = categoryColors[type]!;
@@ -492,15 +489,24 @@ class HistoryTodo extends StatelessWidget {
 
     final todoDisplayList = recordInfo.actions?.where((action) {
       String planType = action['type'];
-      bool isDietPlan = planType == eDiet;
-      bool isExercisePlan = planType == eExercise;
-      bool isLifePlan = planType == eLife;
 
-      if (isDietPlan && isDiet) {
+      bool isTypeDietRecord = planType == eDiet && action['isRecord'] == true;
+      bool isTypeExerciseRecord =
+          planType == eExercise && action['isRecord'] == true;
+      bool isTypeDietGoal = planType == eDiet && action['isRecord'] == null;
+      bool isTypeExerciseGoal =
+          planType == eExercise && action['isRecord'] == null;
+      bool isTypeLife = planType == eLife;
+
+      if (isTypeDietRecord && isContainDietRecord) {
         return true;
-      } else if (isExercisePlan && isExercise) {
+      } else if (isTypeExerciseRecord && isContainExerciseRecord) {
         return true;
-      } else if (isLifePlan && isLife) {
+      } else if (isTypeDietGoal && isContainDietGoal) {
+        return true;
+      } else if (isTypeExerciseGoal && isContainExerciseGoal) {
+        return true;
+      } else if (isTypeLife && isContainLife) {
         return true;
       }
 

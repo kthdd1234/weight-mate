@@ -320,5 +320,9 @@
   "복원 완료": "Restored",
   "데이터 복원이 완료 됐어요.": "Data Restoration Completed",
   "앱을 완전히 종료한 후 다시 시작해주세요.": "Please completely shut down the app and restart it.",
-  "없음": "None"
+  "없음": "None",
+  "식단 (기록)": "Diet (Record)",
+  "식단 (목표)": "Diet (Goal)",
+  "운동 (기록)": "Exercise (Record)",
+  "운동 (목표)": "Exercise (Goal)"
 }
