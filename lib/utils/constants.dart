@@ -260,8 +260,10 @@ List<FilterClass> displayClassList = [
 List<FilterClass> historyDisplayClassList = [
   FilterClass(id: FILITER.weight.toString(), name: '체중'),
   FilterClass(id: FILITER.picture.toString(), name: '사진'),
-  FilterClass(id: FILITER.diet.toString(), name: '식단'),
-  FilterClass(id: FILITER.exercise.toString(), name: '운동'),
+  FilterClass(id: FILITER.diet.toString(), name: '식단 (기록)'),
+  FilterClass(id: FILITER.diet_2.toString(), name: '식단 (목표)'),
+  FilterClass(id: FILITER.exercise.toString(), name: '운동 (기록)'),
+  FilterClass(id: FILITER.exercise_2.toString(), name: '운동 (목표)'),
   FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
   FilterClass(id: FILITER.diary.toString(), name: '일기'),
 ];
