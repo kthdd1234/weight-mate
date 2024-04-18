@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/app_data_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
+import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
@@ -262,7 +263,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
         '/partial-delete-page': (context) => const PatialDeletePage(),
-        '/diary-write-page': (context) => const DiaryWritePage(),
+        '/diary-write-page': (context) => DiaryWritePage(),
         '/body-unit-page': (context) => const BodyUnitPage(),
         '/body-info-page': (context) => const BodyInfoPage(),
         '/todo-chart-page': (context) => const TodoChartPage(),
@@ -272,6 +273,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/weight-analyze-page': (context) => const WeightAnalyzePage(),
         '/premium-page': (context) => const PremiumPage(),
         '/app-data-page': (context) => const AppDataPage(),
+        '/diary-collection-page': (context) => const DiaryCollectionPage(),
       },
     );
   }

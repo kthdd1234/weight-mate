@@ -996,3 +996,34 @@ Future<bool> isHideAd() async {
 
   return false;
 }
+
+showDialogDateTimeYear({
+  required BuildContext context,
+  required DateTime initialSelectedDate,
+  required Function(DateTime dateTime) onDateTime,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: '년도 선택',
+            onTap: () => closeDialog(context),
+          ),
+          content: DatePicker(
+            view: DateRangePickerView.decade,
+            initialSelectedDate: initialSelectedDate,
+            onSelectionChanged: (datTimeArgs) {
+              onDateTime(datTimeArgs.value);
+              closeDialog(context);
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+}

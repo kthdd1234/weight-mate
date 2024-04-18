@@ -14,6 +14,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -49,7 +50,13 @@ class _EditDiaryState extends State<EditDiary> {
     String? emotion = recordInfo?.emotion;
 
     onTapWriteDiary() async {
-      await Navigator.pushNamed(context, '/diary-write-page');
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) =>
+              DiaryWritePage(dateTime: importDateTime),
+        ),
+      );
       // final result = await Navigator.pushNamed(context, '/diary-write-page');
 
       // if (result == 'save') {
@@ -172,6 +179,10 @@ class _EditDiaryState extends State<EditDiary> {
       );
     }
 
+    onTapDiaryCollection() {
+      Navigator.pushNamed(context, '/diary-collection-page');
+    }
+
     List<TagClass> tags = [
       TagClass(
         text: recordInfo?.whiteText != null
@@ -186,11 +197,9 @@ class _EditDiaryState extends State<EditDiary> {
         onTap: onTapOpen,
       ),
       TagClass(
-        text: emotion != null
-            ? emotionList.firstWhere((item) => item.emotion == emotion).name
-            : '감정 기록',
+        text: '일기 모아보기',
         color: 'orange',
-        onTap: onTapOpenEmotion,
+        onTap: onTapDiaryCollection,
       ),
       TagClass(
         icon: isOpen
