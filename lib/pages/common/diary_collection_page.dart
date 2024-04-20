@@ -1,10 +1,14 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/area/empty_text_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
@@ -14,8 +18,10 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:provider/provider.dart';
 
 class DiaryCollectionPage extends StatefulWidget {
   const DiaryCollectionPage({super.key});
@@ -38,6 +44,7 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
         .toList();
     List<RecordBox> orderList =
         isRecent ? selectedRecordList.reversed.toList() : selectedRecordList;
+    bool isPremium = context.watch<PremiumProvider>().premiumValue();
 
     onTapYear() {
       showDialogDateTimeYear(
@@ -51,6 +58,35 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
 
     onTapOrder() {
       setState(() => isRecent = !isRecent);
+    }
+
+    onEdit(DateTime dateTime) async {
+      closeDialog(context);
+
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (BuildContext context) => DiaryWritePage(
+            dateTime: dateTime,
+          ),
+        ),
+      );
+
+      setState(() => {});
+    }
+
+    onRemove(DateTime dateTime) async {
+      int recordKey = getDateTimeToInt(dateTime);
+      RecordBox? record = recordRepository.recordBox.get(recordKey);
+
+      record?.emotion = null;
+      record?.whiteText = null;
+      record?.diaryDateTime = null;
+
+      await record?.save();
+
+      setState(() => {});
+      closeDialog(context);
     }
 
     return AppFramework(
@@ -76,29 +112,34 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
             padding: const EdgeInsets.all(15),
             child: Stack(
               children: [
-                ListView(
-                  children: orderList
-                      .map(
-                        (item) => Padding(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          child: ContentsBox(
-                            contentsWidget: Column(
-                              children: [
-                                DiaryItemTitle(
-                                  dateTime: item.createDateTime,
-                                  emotion: item.emotion,
+                orderList.isNotEmpty
+                    ? ListView(
+                        children: orderList
+                            .map(
+                              (item) => Padding(
+                                padding: const EdgeInsets.only(bottom: 10),
+                                child: ContentsBox(
+                                  contentsWidget: Column(
+                                    children: [
+                                      DiaryItemTitle(
+                                        dateTime: item.createDateTime,
+                                        emotion: item.emotion,
+                                        onEdit: onEdit,
+                                        onRemove: onRemove,
+                                      ),
+                                      DiaryItemContent(
+                                        whiteText: item.whiteText,
+                                        whiteDateTime: item.diaryDateTime,
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                                DiaryItemContent(
-                                  whiteText: item.whiteText,
-                                  whiteDateTime: item.diaryDateTime,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
+                              ),
+                            )
+                            .toList(),
                       )
-                      .toList(),
-                )
+                    : EmptyWidget(icon: Icons.edit, text: "기록이 없어요."),
+                CommonBlur()
               ],
             ),
           ),
@@ -109,31 +150,22 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
 }
 
 class DiaryItemTitle extends StatelessWidget {
-  DiaryItemTitle({super.key, required this.dateTime, this.emotion});
+  DiaryItemTitle({
+    super.key,
+    required this.dateTime,
+    required this.onEdit,
+    required this.onRemove,
+    this.emotion,
+  });
 
   DateTime dateTime;
   String? emotion;
+  Function(DateTime) onEdit;
+  Function(DateTime) onRemove;
 
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-
-    onEdit() async {
-      closeDialog(context);
-
-      await Navigator.push(
-        context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) => DiaryWritePage(
-            dateTime: dateTime,
-          ),
-        ),
-      );
-    }
-
-    onRemove() {
-      closeDialog(context);
-    }
 
     onTapMore() {
       showModalBottomSheet(
@@ -147,14 +179,14 @@ class DiaryItemTitle extends StatelessWidget {
                 mainColor: themeColor,
                 icon: Icons.edit,
                 title: '일기 수정',
-                onTap: onEdit,
+                onTap: () => onEdit(dateTime),
               ),
               SpaceWidth(width: 5),
               ExpandedButtonVerti(
                 mainColor: Colors.red,
                 icon: Icons.delete,
                 title: '일기 삭제',
-                onTap: onRemove,
+                onTap: () => onRemove(dateTime),
               )
             ],
           ),

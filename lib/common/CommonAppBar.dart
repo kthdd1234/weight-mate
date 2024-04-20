@@ -16,6 +16,7 @@ import 'package:flutter_app_weight_management/provider/history_import_date_time.
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -118,18 +119,18 @@ class CommonTitle extends StatefulWidget {
 }
 
 class _CommonTitleState extends State<CommonTitle> {
-  bool isPremium = false;
+  // bool isPremium = false;
 
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
+  // @override
+  // void initState() {
+  //   initPremium() async {
+  //     isPremium = await isPurchasePremium();
+  //     setState(() {});
+  //   }
 
-    initPremium();
-    super.initState();
-  }
+  //   initPremium();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +141,7 @@ class _CommonTitleState extends State<CommonTitle> {
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
+    bool isPremium = context.watch<PremiumProvider>().premiumValue();
 
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;

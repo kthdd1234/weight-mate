@@ -16,10 +16,12 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:provider/provider.dart';
 import 'package:quiver/time.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -33,18 +35,6 @@ class GoalChartPage extends StatefulWidget {
 
 class _GoalChartPageState extends State<GoalChartPage> {
   SegmentedTypes selectedSegment = SegmentedTypes.week;
-  bool isPremium = false;
-
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
-    initPremium();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,19 +109,6 @@ class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
   DateTime startDateTime = weeklyStartDateTime(DateTime.now());
   DateTime endDateTime = weeklyEndDateTime(DateTime.now());
 
-  bool isPremium = false;
-
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
-    initPremium();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -175,7 +152,7 @@ class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
               ],
             ),
           ),
-          CommonBlur(isBlur: true)
+          CommonBlur()
         ],
       ),
     );
@@ -390,7 +367,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
               ],
             ),
           ),
-          CommonBlur(isBlur: isPremium)
+          CommonBlur()
         ],
       ),
     );

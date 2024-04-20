@@ -18,26 +18,8 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class WeightAnalyzePage extends StatefulWidget {
+class WeightAnalyzePage extends StatelessWidget {
   const WeightAnalyzePage({super.key});
-
-  @override
-  State<WeightAnalyzePage> createState() => _WeightAnalyzePageState();
-}
-
-class _WeightAnalyzePageState extends State<WeightAnalyzePage> {
-  bool isPremium = false;
-
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
-    initPremium();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +27,6 @@ class _WeightAnalyzePageState extends State<WeightAnalyzePage> {
     UserBox user = userRepository.user;
     double? goalWeight = user.goalWeight;
     String unit = user.weightUnit ?? 'kg';
-    bool isPremium = false;
 
     List<Widget> analyzeWidgetList = [
       MonthAnalysis(locale: locale, unit: unit),
@@ -74,7 +55,7 @@ class _WeightAnalyzePageState extends State<WeightAnalyzePage> {
                   itemBuilder: ((context, index) => analyzeWidgetList[index]),
                   itemCount: analyzeWidgetList.length,
                 ),
-                CommonBlur(isBlur: isPremium),
+                CommonBlur(),
               ],
             ),
           ),

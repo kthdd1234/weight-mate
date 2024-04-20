@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +11,11 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class PremiumPage extends StatefulWidget {
@@ -22,7 +26,6 @@ class PremiumPage extends StatefulWidget {
 }
 
 class _PremiumPageState extends State<PremiumPage> {
-  bool isPremium = false;
   Package? package;
 
   @override
@@ -41,24 +44,19 @@ class _PremiumPageState extends State<PremiumPage> {
       }
     }
 
-    initPurchase() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
     initIAP();
-    initPurchase();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
     onPurchase() async {
       try {
         if (package != null) {
-          isPremium = await isPurchasePremium();
-          setState(() {});
+          bool isPurchaseResult = await isPurchasePremium();
+          context.read<PremiumProvider>().setPremiumValue(isPurchaseResult);
         }
       } on PlatformException catch (e) {
         log('e =>> ${e.toString()}');
@@ -71,8 +69,8 @@ class _PremiumPageState extends State<PremiumPage> {
     }
 
     onRestore() async {
-      isPremium = await isPurchaseRestore();
-      setState(() {});
+      bool isRestorePremium = await isPurchaseRestore();
+      context.read<PremiumProvider>().setPremiumValue(isRestorePremium);
     }
 
     List<Widget> premiumBenefitsWidgetList = premiumBenefitsClassList

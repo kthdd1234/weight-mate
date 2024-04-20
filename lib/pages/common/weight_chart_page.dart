@@ -1,11 +1,6 @@
-import 'dart:ui';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
-import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -18,7 +13,6 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class WeightChartPage extends StatefulWidget {
   const WeightChartPage({super.key});
@@ -109,7 +103,7 @@ class _WeightChartPageState extends State<WeightChartPage> {
                     ],
                   ),
                 ),
-                CommonBlur(isBlur: isPremium),
+                CommonBlur(),
               ],
             ),
           ),

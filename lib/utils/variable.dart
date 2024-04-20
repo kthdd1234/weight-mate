@@ -349,12 +349,12 @@ List<Map<String, String>> fontFamilyList = [
     "name": "교보 손글씨",
   },
   {
-    "fontFamily": "SingleDay",
-    "name": "싱글데이",
-  },
-  {
     "fontFamily": "IM_Hyemin",
     "name": "IM 혜민",
+  },
+  {
+    "fontFamily": "SingleDay",
+    "name": "싱글데이",
   },
   {
     "fontFamily": "TDTDTadakTadak",

@@ -965,9 +965,8 @@ Future<void> restoreHiveBox<T>(String boxName) async {
 Future<bool> isPurchasePremium() async {
   CustomerInfo customerInfo = await Purchases.getCustomerInfo();
 
-  return false;
-  // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-  //     true;
+  return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+      true;
 }
 
 Future<bool> isPurchaseRestore() async {
@@ -997,12 +996,12 @@ Future<bool> isHideAd() async {
   return false;
 }
 
-showDialogDateTimeYear({
+Future<void> showDialogDateTimeYear({
   required BuildContext context,
   required DateTime initialSelectedDate,
   required Function(DateTime dateTime) onDateTime,
-}) {
-  showDialog(
+}) async {
+  await showDialog(
     context: context,
     builder: (context) => Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -1026,4 +1025,6 @@ showDialogDateTimeYear({
       ],
     ),
   );
+
+  return;
 }

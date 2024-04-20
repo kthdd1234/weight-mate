@@ -36,18 +36,6 @@ class _EditWeightState extends State<EditWeight> {
   TextEditingController textController = TextEditingController();
   bool isShowInput = false;
   bool isGoalWeight = false;
-  // bool isPremium = false;
-
-  // @override
-  // void initState() {
-  //   initPremium() async {
-  //     isPremium = await isPurchasePremium();
-  //     setState(() {});
-  //   }
-
-  //   initPremium();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {

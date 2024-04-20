@@ -15,6 +15,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/record_body
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -50,6 +51,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   bool isActiveCamera = false;
+  // @override
+  // void initState() {
+  //   initPremium() async {
+  //     isPremium = await isPurchasePremium();
+  //     setState(() {});
+  //   }
+
+  //   initPremium();
+  //   super.initState();
+  // }
 
   @override
   void initState() {
@@ -241,6 +252,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           .read<HistoryImportDateTimeProvider>()
           .setHistoryImportDateTime(now);
       context.read<HistoryTitleDateTimeProvider>().setHistoryTitleDateTime(now);
+
+      pp() async {
+        bool isPremium = await isPurchasePremium();
+        context.read<PremiumProvider>().setPremiumValue(isPremium);
+      }
+
+      pp();
     });
   }
 

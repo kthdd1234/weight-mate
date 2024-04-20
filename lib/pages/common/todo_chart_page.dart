@@ -26,18 +26,6 @@ class TodoChartPage extends StatefulWidget {
 
 class _TodoChartPageState extends State<TodoChartPage> {
   DateTime selectedMonth = DateTime.now();
-  bool isPremium = false;
-
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
-    initPremium();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +141,7 @@ class _TodoChartPageState extends State<TodoChartPage> {
                     ],
                   ),
                 ),
-                CommonBlur(isBlur: isPremium),
+                CommonBlur(),
               ],
             ),
           ),
