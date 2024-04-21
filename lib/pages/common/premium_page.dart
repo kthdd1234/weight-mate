@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
@@ -53,17 +54,27 @@ class _PremiumPageState extends State<PremiumPage> {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onPurchase() async {
-      try {
-        if (package != null) {
-          bool isPurchaseResult = await isPurchasePremium();
-          context.read<PremiumProvider>().setPremiumValue(isPurchaseResult);
-        }
-      } on PlatformException catch (e) {
-        log('e =>> ${e.toString()}');
+      if (package != null) {
+        try {
+          showDialog(
+            context: context,
+            builder: (context) => LoadingDialog(
+              text: '데이터 불러오는 중...',
+              color: Colors.white,
+            ),
+          );
 
-        PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
-        if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
-          log('errorCode =>> $errorCode');
+          bool isPurchaseResult = await setPurchasePremium(package!);
+          context.read<PremiumProvider>().setPremiumValue(isPurchaseResult);
+        } on PlatformException catch (e) {
+          log('e =>> ${e.toString()}');
+          PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
+
+          if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
+            log('errorCode =>> $errorCode');
+          }
+        } finally {
+          closeDialog(context);
         }
       }
     }
@@ -149,8 +160,12 @@ class _PremiumPageState extends State<PremiumPage> {
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 15),
                                   imgUrl: 'assets/images/t-15.png',
-                                  text:
-                                      '구매하기 (${package?.storeProduct.priceString ?? 'none'})',
+                                  text: '구매하기',
+                                  nameArgs: {
+                                    "price":
+                                        package?.storeProduct.priceString ??
+                                            '없음'
+                                  },
                                   onTap: onPurchase,
                                 )
                         ],

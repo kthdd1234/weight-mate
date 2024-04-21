@@ -405,7 +405,7 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
     svgName: 'premium-category-detail',
     title: '좀 더 자세한 통계 기능을 제공해드려요',
-    subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등 ',
+    subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-photos-four',

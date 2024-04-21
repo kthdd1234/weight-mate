@@ -50,18 +50,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  bool isActiveCamera = false;
-  // @override
-  // void initState() {
-  //   initPremium() async {
-  //     isPremium = await isPurchasePremium();
-  //     setState(() {});
-  //   }
-
-  //   initPremium();
-  //   super.initState();
-  // }
-
   @override
   void initState() {
     super.initState();
@@ -311,15 +299,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           .setBottomNavigation(enumId: indexList[index]);
     }
 
-    setActiveCamera(bool newValue) {
-      setState(() => isActiveCamera = newValue);
-    }
-
-    List<Widget> bodyList = [
-      RecordBody(setActiveCamera: setActiveCamera),
-      const HistoryBody(),
-      const GraphBody(),
-      const SettingBody()
+    List<Widget> bodyList = const [
+      RecordBody(),
+      HistoryBody(),
+      GraphBody(),
+      SettingBody()
     ];
 
     floatingActionButton() {

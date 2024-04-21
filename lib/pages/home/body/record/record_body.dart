@@ -22,9 +22,7 @@ List<ValueListenable<Box<HiveObject>>> valueListenables = [
 ];
 
 class RecordBody extends StatelessWidget {
-  RecordBody({super.key, required this.setActiveCamera});
-
-  Function(bool isActive) setActiveCamera;
+  const RecordBody({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,7 @@ class RecordBody extends StatelessWidget {
                   children: [
                     SpaceHeight(height: smallSpace),
                     EditWeight(),
-                    EditPicture(setActiveCamera: setActiveCamera),
+                    EditPicture(),
                     EditTodo(),
                     EditDiary(),
                   ],

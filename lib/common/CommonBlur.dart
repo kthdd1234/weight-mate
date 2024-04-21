@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -32,14 +33,18 @@ class CommonBlur extends StatelessWidget {
                   size: 18,
                   isBold: true,
                   isCenter: true,
+                  isNotTr: true,
                 ),
                 SpaceHeight(height: 5),
-                CommonText(
-                  text: '프리미엄을 구매한 분들에게만 제공되는 기능이에요.',
-                  size: 15,
-                  isCenter: true,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: const Text(
+                    '프리미엄을 구매한 분들에게만 제공되는 기능이에요.',
+                    style: TextStyle(fontSize: 14),
+                    textAlign: TextAlign.center,
+                  ).tr(),
                 ),
-                SpaceHeight(height: 15),
+                SpaceHeight(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Row(

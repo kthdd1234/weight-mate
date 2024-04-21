@@ -962,18 +962,36 @@ Future<void> restoreHiveBox<T>(String boxName) async {
   }
 }
 
-Future<bool> isPurchasePremium() async {
-  CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+Future<bool> setPurchasePremium(Package package) async {
+  try {
+    CustomerInfo customerInfo = await Purchases.purchasePackage(package);
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
 
-  return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-      true;
+Future<bool> isPurchasePremium() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
 }
 
 Future<bool> isPurchaseRestore() async {
   try {
     CustomerInfo customerInfo = await Purchases.restorePurchases();
-    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-        true;
+    bool isActive =
+        customerInfo.entitlements.all[entitlement_identifier]?.isActive == true;
+
+    log('customerInfo.isActive => $isActive');
+    return isActive;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;

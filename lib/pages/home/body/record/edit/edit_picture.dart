@@ -25,6 +25,7 @@ import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -32,28 +33,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
-class EditPicture extends StatefulWidget {
-  EditPicture({super.key, required this.setActiveCamera});
-
-  Function(bool newValue) setActiveCamera;
-
-  @override
-  State<EditPicture> createState() => _EditPictureState();
-}
-
-class _EditPictureState extends State<EditPicture> {
-  bool isPremium = false;
-
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
-    initPremium();
-    super.initState();
-  }
+class EditPicture extends StatelessWidget {
+  const EditPicture({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +58,7 @@ class _EditPictureState extends State<EditPicture> {
       recordInfo?.bottomFile,
       recordInfo?.topFile
     ].whereType<Uint8List>().length;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     setFile({required Uint8List? newValue, required String pos}) {
       switch (pos) {
@@ -121,7 +103,6 @@ class _EditPictureState extends State<EditPicture> {
       required String pos,
     }) async {
       XFile? xFileData;
-      widget.setActiveCamera(true);
 
       await ImagePicker().pickImage(source: source).then(
         (xFile) async {
@@ -212,18 +193,21 @@ class _EditPictureState extends State<EditPicture> {
               onTap: () => closeDialog(context),
             ),
             content: SizedBox(
-              height: 160,
+              width: MediaQuery.of(context).size.width,
+              height: 166,
               child: Column(
                 children: [
                   ContentsBox(
                     contentsWidget: Column(
                       children: [
-                        CommonText(text: '프리미엄 구매시', size: 14, isCenter: true),
+                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
+                        SpaceHeight(height: 3),
                         CommonText(
                           text: '사진을 4장까지 추가 할 수 있어요.',
                           size: 14,
                           isCenter: true,
                         ),
+                        SpaceHeight(height: 3),
                         CommonText(
                             text: '(미구매 시 1장까지만 추가 가능)',
                             size: 14,
