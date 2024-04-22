@@ -194,8 +194,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (fontFamily == null) {
-      user.fontFamily =
-          widget.locale != 'ja' ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
+      user.fontFamily = initFontFamily;
     }
 
     if (googleDriveInfo == null) {

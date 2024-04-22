@@ -67,10 +67,9 @@ class _SettingBodyState extends State<SettingBody> {
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
     String? language = user.language;
-    String? fontFamily = user.fontFamily;
-    String fontName = fontFamilyList
-            .firstWhere((item) => item['fontFamily'] == fontFamily)['name'] ??
-        '카페24 아네모네 에어';
+    String fontFamily = user.fontFamily ?? initFontFamily;
+    String validFontFamily = getFontFamily(fontFamily);
+    String fontName = getFontName(validFontFamily);
 
     onNavigator({required String type, required String title}) async {
       await Navigator.pushNamed(context, '/body-info-page', arguments: {
@@ -356,9 +355,7 @@ class _SettingBodyState extends State<SettingBody> {
                         Text(
                           item.name,
                           style: TextStyle(
-                            fontFamily: locale == 'ja'
-                                ? 'cafe24SsurroundAir'
-                                : fontFamily,
+                            fontFamily: fontFamily,
                             fontWeight: isLanguage
                                 ? FontWeight.bold
                                 : FontWeight.normal,

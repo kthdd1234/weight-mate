@@ -19,42 +19,38 @@ class _BannerWidgetState extends State<BannerWidget> {
   bool isNotAdShow = false;
 
   @override
-  void dispose() {
-    bannerAd = null;
-    super.dispose();
-  }
-
-  @override
   void didChangeDependencies() {
     AdsService adsState = Provider.of<AdsProvider>(context).adsState;
 
     checkHideAd() async {
       bool isHide = await isHideAd();
 
-      if (isHide == true) {
-        setState(() => isNotAdShow = isHide);
-      } else if (isHide == false) {
-        adsState.initialization.then(
-          (value) => {
-            setState(() {
-              bannerAd = BannerAd(
-                adUnitId: adsState.bannerAdUnitId,
-                size: AdSize.banner,
-                request: const AdRequest(),
-                listener: BannerAdListener(
-                  onAdLoaded: (ad) {
-                    debugPrint('$ad loaded.');
-                    setState(() => bannerAdIsLoaded = true);
-                  },
-                  onAdFailedToLoad: (ad, error) {
-                    debugPrint('$NativeAd failed to load: $error');
-                    ad.dispose();
-                  },
-                ),
-              )..load();
-            })
-          },
-        );
+      if (mounted) {
+        if (isHide == true) {
+          setState(() => isNotAdShow = isHide);
+        } else if (isHide == false) {
+          adsState.initialization.then(
+            (value) => {
+              setState(() {
+                bannerAd = BannerAd(
+                  adUnitId: adsState.bannerAdUnitId,
+                  size: AdSize.banner,
+                  request: const AdRequest(),
+                  listener: BannerAdListener(
+                    onAdLoaded: (ad) {
+                      debugPrint('$ad loaded.');
+                      setState(() => bannerAdIsLoaded = true);
+                    },
+                    onAdFailedToLoad: (ad, error) {
+                      debugPrint('$NativeAd failed to load: $error');
+                      ad.dispose();
+                    },
+                  ),
+                )..load();
+              })
+            },
+          );
+        }
       }
     }
 

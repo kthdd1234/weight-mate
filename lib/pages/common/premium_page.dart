@@ -159,7 +159,7 @@ class _PremiumPageState extends State<PremiumPage> {
                                   borderRadius: 5,
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 15),
-                                  imgUrl: 'assets/images/t-15.png',
+                                  imgUrl: 'assets/images/t-23.png',
                                   text: '구매하기',
                                   nameArgs: {
                                     "price":

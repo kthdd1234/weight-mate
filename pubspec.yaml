@@ -86,10 +86,6 @@ dependencies:
   path: ^1.8.3
   restart_app: ^1.2.1
   firebase_core: ^2.27.0
-  in_app_purchase: ^3.1.13
-  firebase_auth: ^4.17.8
-  cloud_firestore: ^4.15.8
-  cloud_functions: ^4.6.8
   http: ^1.2.0
   purchases_flutter: ^6.26.0
 
@@ -121,27 +117,8 @@ flutter:
     - .env
     - assets/images/Cloudy_Apple.png
     - assets/images/MATE.png
-    - assets/images/t-1.png
-    - assets/images/t-2.png
-    - assets/images/t-3.png
-    - assets/images/t-4.png
-    - assets/images/t-5.png
-    - assets/images/t-6.png
-    - assets/images/t-7.png
-    - assets/images/t-8.png
-    - assets/images/t-9.png
-    - assets/images/t-10.png
     - assets/images/t-11.png
-    - assets/images/t-12.png
-    - assets/images/t-13.png
-    - assets/images/t-14.png
-    - assets/images/t-15.png
     - assets/images/t-16.png
-    - assets/images/t-17.png
-    - assets/images/t-18.png
-    - assets/images/t-19.png
-    - assets/images/t-20.png
-    - assets/images/t-21.png
     - assets/images/t-22.png
     - assets/images/t-23.png
     - assets/images/splash-mate.png
@@ -218,16 +195,6 @@ flutter:
         - asset: assets/fonts/Cafe24Syongsyong/Cafe24Syongsyong.ttf
           weight: 400
 
-    - family: 온글잎 밑미
-      fonts:
-        - asset: assets/fonts/온글잎 밑미/온글잎 밑미.ttf
-          weight: 400
-
-    - family: cafe24SsurroundAir
-      fonts:
-        - asset: assets/fonts/cafe24SsurroundAir/cafe24SsurroundAir.ttf
-          weight: 400
-
     - family: cafe24Ohsquareair
       fonts:
         - asset: assets/fonts/cafe24Ohsquareair/cafe24Ohsquareair.ttf
@@ -243,42 +210,15 @@ flutter:
         - asset: assets/fonts/Cafe24Ssukssuk/Cafe24Ssukssuk.ttf
           weight: 400
 
-    - family: 꼬마나비체
-      fonts:
-        - asset: assets/fonts/꼬마나비체/꼬마나비체.ttf
-          weight: 400
-
-    - family: 봉숭아틴트체
-      fonts:
-        - asset: assets/fonts/봉숭아틴트체/봉숭아틴트체.ttf
-          weight: 400
-
     - family: TDTDTadakTadak
       fonts:
         - asset: assets/fonts/TDTDTadakTadak/TDTDTadakTadak.ttf
-          weight: 400
-
-    - family: omyu pretty
-      fonts:
-        - asset: assets/fonts/omyu pretty/omyu pretty.ttf
-          weight: 400
-
-    - family: KOTRA HOPE
-      fonts:
-        - asset: assets/fonts/KOTRA HOPE/KOTRA HOPE.ttf
-          weight: 400
-
-    - family: CookieRun
-      fonts:
-        - asset: assets/fonts/CookieRun/CookieRun.ttf
           weight: 400
 
     - family: IM_Hyemin
       fonts:
         - asset: assets/fonts/IM_Hyemin/IM_Hyemin-regular.ttf
           weight: 400
-        - asset: assets/fonts/IM_Hyemin/IM_Hyemin-bold.ttf
-          weight: 700
 
     - family: SingleDay
       fonts:

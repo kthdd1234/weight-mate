@@ -119,19 +119,6 @@ class CommonTitle extends StatefulWidget {
 }
 
 class _CommonTitleState extends State<CommonTitle> {
-  // bool isPremium = false;
-
-  // @override
-  // void initState() {
-  //   initPremium() async {
-  //     isPremium = await isPurchasePremium();
-  //     setState(() {});
-  //   }
-
-  //   initPremium();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();

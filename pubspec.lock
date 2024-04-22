@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "67.0.0"
-  _flutterfire_internals:
-    dependency: transitive
-    description:
-      name: _flutterfire_internals
-      sha256: "4eec93681221723a686ad580c2e7d960e1017cf1a4e0a263c2573c2c6b0bf5cd"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.25"
   analyzer:
     dependency: transitive
     description:
@@ -185,54 +177,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
-  cloud_firestore:
-    dependency: "direct main"
-    description:
-      name: cloud_firestore
-      sha256: "31cfa4d65d6e9ea837234fffe121304034c30c9214c06207b4a35867e3757900"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.15.8"
-  cloud_firestore_platform_interface:
-    dependency: transitive
-    description:
-      name: cloud_firestore_platform_interface
-      sha256: a0097a26569b015faf8142e159e855241609ea9a1738b5fd1c40bfe8411b41a0
-      url: "https://pub.dev"
-    source: hosted
-    version: "6.1.9"
-  cloud_firestore_web:
-    dependency: transitive
-    description:
-      name: cloud_firestore_web
-      sha256: ed680ece29a5750985119c09cdc276b460c3a2fa80e8c12f9b7241f6b4a7ca16
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.10.8"
-  cloud_functions:
-    dependency: "direct main"
-    description:
-      name: cloud_functions
-      sha256: "25e2d24041233a86e62df6dfa82e506760ae42070486c5c09143b7fdf8c0f85a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.6.8"
-  cloud_functions_platform_interface:
-    dependency: transitive
-    description:
-      name: cloud_functions_platform_interface
-      sha256: "4fad722fd2bf41ac1a318d12c5bdd1cc01ab69e372e8300d54e0cc6cd765a759"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.5.19"
-  cloud_functions_web:
-    dependency: transitive
-    description:
-      name: cloud_functions_web
-      sha256: "3bf4959d0795e2731aadc70d2ae4e9b5edc03a0e2e5939449c649ab8e04d4e1a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.7.2"
   code_builder:
     dependency: transitive
     description:
@@ -409,30 +353,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
-  firebase_auth:
-    dependency: "direct main"
-    description:
-      name: firebase_auth
-      sha256: "17b841e1b000c3441b8ffceca88f468e078d0443db9643e77541bdfb7a3fd16b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.17.8"
-  firebase_auth_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_auth_platform_interface
-      sha256: f294ceef40409a36c819a14280ca864fe487b44033e5276443377c66cb448310
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.1.8"
-  firebase_auth_web:
-    dependency: transitive
-    description:
-      name: firebase_auth_web
-      sha256: "1f231da900fe7ff9f2974f8adcbdb3363c410c24725978afa5dc33e1e7e62e06"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.9.8"
   firebase_core:
     dependency: "direct main"
     description:
@@ -829,38 +749,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.1+1"
-  in_app_purchase:
-    dependency: "direct main"
-    description:
-      name: in_app_purchase
-      sha256: def70fbaa2a274f4d835677459f6f7afc5469de912438f86076e51cbd4cbd5b4
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.13"
-  in_app_purchase_android:
-    dependency: transitive
-    description:
-      name: in_app_purchase_android
-      sha256: ce57f16f612d6f1c6680e333251ec3c4dbbb40826543c9d356763351062c5f8f
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.2+1"
-  in_app_purchase_platform_interface:
-    dependency: transitive
-    description:
-      name: in_app_purchase_platform_interface
-      sha256: "412efce2b9238c5ace4f057acad43f793ed06880e366d26ae322e796cadb051a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.7"
-  in_app_purchase_storekit:
-    dependency: transitive
-    description:
-      name: in_app_purchase_storekit
-      sha256: e0f860e760488dbd666e0f27e239d128cba744607fc62434dc76c19d1c292439
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.3.13+1"
   in_app_review:
     dependency: "direct main"
     description:

@@ -46,6 +46,7 @@ import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -87,7 +88,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  await AuthService().getOrCreateUser();
+  // await AuthService().getOrCreateUser();
 
   runApp(
     MultiProvider(
@@ -137,6 +138,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             await AppTrackingTransparency.trackingAuthorizationStatus;
 
         setState(() => _authStatus = '$status');
+
+        print('TrackingStatus => $status');
 
         if (status == TrackingStatus.notDetermined) {
           TrackingStatus status =
@@ -225,16 +228,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
-    bool isNotJapan = context.locale != const Locale('ja');
 
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
         : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
-    String initLocale = isNotJapan ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
-    String fontFamily =
-        user?.fontFamily == null ? initLocale : user!.fontFamily!;
+
+    String fontFamily = user?.fontFamily == null
+        ? initFontFamily
+        : getFontFamily(user!.fontFamily!);
 
     ThemeData theme = ThemeData(
       primarySwatch: AppColors.primaryMaterialSwatchDark,

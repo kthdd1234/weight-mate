@@ -323,66 +323,41 @@ Map<int, String> hourTo12 = {
   23: '11',
 };
 
+String initFontFamily = 'IM_Hyemin';
+String initFontName = 'IM 혜민';
+
 List<Map<String, String>> fontFamilyList = [
   {
-    "fontFamily": "cafe24Ohsquareair",
-    "name": "카페24 아네모네 에어",
-  },
-  {
-    "fontFamily": "cafe24SsurroundAir",
-    "name": "카페24 써라운드 에어",
-  },
-  {
-    "fontFamily": "Cafe24Syongsyong",
-    "name": "카페24 숑숑",
-  },
-  {
-    "fontFamily": "Cafe24Dongdong",
-    "name": "카페24 동동",
-  },
-  {
-    "fontFamily": "Cafe24Ssukssuk",
-    "name": "카페24 쑥쑥",
+    "fontFamily": "IM_Hyemin",
+    "name": "IM 혜민",
   },
   {
     "fontFamily": "KyoboHandwriting2022khn",
     "name": "교보 손글씨",
   },
   {
-    "fontFamily": "IM_Hyemin",
-    "name": "IM 혜민",
+    "fontFamily": "TDTDTadakTadak",
+    "name": "타닥타닥체",
   },
   {
     "fontFamily": "SingleDay",
     "name": "싱글데이",
   },
   {
-    "fontFamily": "TDTDTadakTadak",
-    "name": "타닥타닥체",
+    "fontFamily": "Cafe24Dongdong",
+    "name": "카페24 동동",
   },
   {
-    "fontFamily": "omyu pretty",
-    "name": "오뮤 다예쁨체",
+    "fontFamily": "Cafe24Syongsyong",
+    "name": "카페24 숑숑",
   },
   {
-    "fontFamily": "온글잎 밑미",
-    "name": "밑미 폰트",
+    "fontFamily": "Cafe24Ssukssuk",
+    "name": "카페24 쑥쑥",
   },
   {
-    "fontFamily": "꼬마나비체",
-    "name": "꼬마나비체",
-  },
-  {
-    "fontFamily": "봉숭아틴트체",
-    "name": "봉숭아틴트체",
-  },
-  {
-    "fontFamily": "KOTRA HOPE",
-    "name": "코트라 희망체",
-  },
-  {
-    "fontFamily": "CookieRun",
-    "name": "쿠키런",
+    "fontFamily": "cafe24Ohsquareair",
+    "name": "카페24 아네모네 에어",
   },
 ];
 

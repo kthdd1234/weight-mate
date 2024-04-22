@@ -1046,3 +1046,15 @@ Future<void> showDialogDateTimeYear({
 
   return;
 }
+
+String getFontFamily(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamily : initFontFamily;
+}
+
+String getFontName(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
+}
