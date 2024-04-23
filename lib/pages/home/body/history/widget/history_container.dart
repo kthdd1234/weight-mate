@@ -479,11 +479,14 @@ class HistoryTodo extends StatelessWidget {
     onIcon(String type, bool? isRecord, String title) {
       MaterialColor color = categoryColors[type]!;
 
-      return CommonIcon(
-        icon: isRecord == true ? categoryIcons[title]! : Icons.check_rounded,
-        size: 11,
-        color: color.shade300,
-        bgColor: color.shade50,
+      return Padding(
+        padding: const EdgeInsets.only(top: 2),
+        child: CommonIcon(
+          icon: isRecord == true ? categoryIcons[title]! : Icons.check_rounded,
+          size: 11,
+          color: color.shade300,
+          bgColor: color.shade50,
+        ),
       );
     }
 

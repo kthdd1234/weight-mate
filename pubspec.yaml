@@ -217,7 +217,7 @@ flutter:
 
     - family: IM_Hyemin
       fonts:
-        - asset: assets/fonts/IM_Hyemin/IM_Hyemin-regular.ttf
+        - asset: assets/fonts/IM_Hyemin/IM_Hyemin.ttf
           weight: 400
 
     - family: SingleDay
