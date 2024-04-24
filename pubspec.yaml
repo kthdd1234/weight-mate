@@ -177,6 +177,14 @@ flutter:
     - assets/svgs/premium-no-ads.svg
     - assets/svgs/premium-photos-four.svg
     - assets/svgs/premium-badge.svg
+    - assets/svgs/Drooling-Face-1--Streamline-Emoji.svg
+    - assets/svgs/Face-Savoring-Food--Streamline-Emoji.svg
+    - assets/svgs/Full-Moon-Face--Streamline-Emoji.svg
+    - assets/svgs/Hushed-Face-1--Streamline-Emoji.svg
+    - assets/svgs/Nauseated-Face-2--Streamline-Emoji.svg
+    - assets/svgs/Pouting-Face--Streamline-Emoji.svg
+    - assets/svgs/Smiling-Face-With-Sunglasses--Streamline-Emoji.svg
+    - assets/svgs/Winking-Face--Streamline-Emoji.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

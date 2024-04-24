@@ -237,6 +237,10 @@ final tagColors = {
     'bgColor': Colors.blueGrey.shade400,
     'textColor': Colors.white,
   },
+  'peach': {
+    'bgColor': const Color.fromRGBO(255, 231, 217, 100),
+    'textColor': const Color.fromRGBO(255, 170, 84, 100),
+  }
 };
 
 List<FilterClass> openClassList = [

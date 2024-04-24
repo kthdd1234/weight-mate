@@ -44,7 +44,7 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
         .toList();
     List<RecordBox> orderList =
         isRecent ? selectedRecordList.reversed.toList() : selectedRecordList;
-    bool isPremium = context.watch<PremiumProvider>().premiumValue();
+    // bool isPremium = context.watch<PremiumProvider>().premiumValue();
 
     onTapYear() {
       showDialogDateTimeYear(

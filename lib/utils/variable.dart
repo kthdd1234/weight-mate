@@ -40,6 +40,15 @@ List<SvgClass> emotionList = [
   SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
   SvgClass(emotion: 'loudly-crying-face', name: '감동'),
   SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
+  SvgClass(emotion: 'Face-Savoring-Food--Streamline-Emoji', name: '재미'),
+  SvgClass(emotion: 'Full-Moon-Face--Streamline-Emoji', name: '기대'),
+  SvgClass(emotion: 'Hushed-Face-1--Streamline-Emoji', name: '의아'),
+  SvgClass(emotion: 'Nauseated-Face-2--Streamline-Emoji', name: '살찜'),
+  SvgClass(emotion: 'Pouting-Face--Streamline-Emoji', name: '억울'),
+  SvgClass(
+      emotion: 'Smiling-Face-With-Sunglasses--Streamline-Emoji', name: '당당'),
+  SvgClass(emotion: 'Winking-Face--Streamline-Emoji', name: '친근'),
+  SvgClass(emotion: 'Drooling-Face-1--Streamline-Emoji', name: '상쾌'),
 ];
 
 List<PlanItemClass> initPlanItemList = [
@@ -273,28 +282,36 @@ String eDiet = PlanTypeEnum.diet.toString();
 String eExercise = PlanTypeEnum.exercise.toString();
 String eLife = PlanTypeEnum.lifestyle.toString();
 
-List<SvgClass> svgData = [
-  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
-  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
-  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
-  SvgClass(emotion: 'kissing-face', name: '신남'),
-  SvgClass(emotion: 'neutral-face', name: '보통'),
-  SvgClass(emotion: 'amazed-face', name: '놀람'),
-  SvgClass(emotion: 'anxious-face', name: '서운'),
-  SvgClass(emotion: 'crying-face', name: '슬픔'),
-  SvgClass(emotion: 'determined-face', name: '다짐'),
-  SvgClass(emotion: 'disappointed-face', name: '실망'),
-  SvgClass(emotion: 'dizzy-face', name: '피곤'),
-  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
-  SvgClass(emotion: 'expressionless-face', name: '고요'),
-  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
-  SvgClass(emotion: 'sneezing-face', name: '아픔'),
-  SvgClass(emotion: 'worried-face', name: '걱정'),
-  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
-  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
-  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
-  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
-];
+// List<SvgClass> svgData = [
+//   SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
+//   SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
+//   SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
+//   SvgClass(emotion: 'kissing-face', name: '신남'),
+//   SvgClass(emotion: 'neutral-face', name: '보통'),
+//   SvgClass(emotion: 'amazed-face', name: '놀람'),
+//   SvgClass(emotion: 'anxious-face', name: '서운'),
+//   SvgClass(emotion: 'crying-face', name: '슬픔'),
+//   SvgClass(emotion: 'determined-face', name: '다짐'),
+//   SvgClass(emotion: 'disappointed-face', name: '실망'),
+//   SvgClass(emotion: 'dizzy-face', name: '피곤'),
+//   SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
+//   SvgClass(emotion: 'expressionless-face', name: '고요'),
+//   SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
+//   SvgClass(emotion: 'sneezing-face', name: '아픔'),
+//   SvgClass(emotion: 'worried-face', name: '걱정'),
+//   SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
+//   SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
+//   SvgClass(emotion: 'loudly-crying-face', name: '감동'),
+//   SvgClass(emotion: 'Drooling-Face-1--Streamline-Emoji', name: '해탈'),
+//   SvgClass(emotion: 'Face-Savoring-Food--Streamline-Emoji', name: '?'),
+//   SvgClass(emotion: 'Full-Moon-Face--Streamline-Emoji', name: '?'),
+//   SvgClass(emotion: 'Hushed-Face-1--Streamline-Emoji', name: '?'),
+//   SvgClass(emotion: 'Nauseated-Face-2--Streamline-Emoji', name: '?'),
+//   SvgClass(emotion: 'Pouting-Face--Streamline-Emoji', name: '?'),
+//   SvgClass(
+//       emotion: 'Smiling-Face-With-Sunglasses--Streamline-Emoji', name: '?'),
+//   SvgClass(emotion: 'Winking-Face--Streamline-Emoji', name: '?'),
+// ];
 
 Map<int, String> hourTo12 = {
   0: '12',
