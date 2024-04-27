@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "768457556313-cqf7k8qkt0qas6fnhmfodjjsc1h5u14u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kthdd.weightMate",
+            "certificate_hash": "e33635f0c7a5b0ffa39ae25208abf63785f84dfc"
+          }
+        },
+        {
           "client_id": "768457556313-ungbl5teb8idj579kibjmh64908g23vb.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -65,7 +66,7 @@ const List<Locale> supportedLocales = [
 ];
 
 final _configuration =
-    PurchasesConfiguration('appl_vjYFXCKiODqbJjabYlqJnmlIMPj');
+    PurchasesConfiguration(Platform.isIOS ? appleApiKey : googleApiKey);
 
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();

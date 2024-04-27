@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -17,7 +18,8 @@ class GoogleDriveAppData {
 
     try {
       GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: iosClientId,
+        clientId: Platform.isIOS ? iosClientId : null,
+        serverClientId: Platform.isAndroid ? androidClientId : null,
         scopes: [drive.DriveApi.driveAppdataScope],
       );
 

@@ -408,4 +408,11 @@ Map<int, Color> targetColors = {
 const iosClientId =
     '439063728742-rjjrri2ki846u9bmgg49atp5vd8hlb81.apps.googleusercontent.com';
 
+const androidClientId =
+    '768457556313-cqf7k8qkt0qas6fnhmfodjjsc1h5u14u.apps.googleusercontent.com';
+
 const entitlement_identifier = 'premium';
+
+const appleApiKey = 'appl_vjYFXCKiODqbJjabYlqJnmlIMPj';
+
+const googleApiKey = 'goog_LDFEImiXcwlPvisZerLvLkxrSxo';
