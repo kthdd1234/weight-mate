@@ -328,6 +328,13 @@ class _CommonTitleState extends State<CommonTitle> {
                           ],
                         )
                       : const EmptyArea(),
+                  isGraph
+                      ? CommonTag(
+                          text: '기본 모드',
+                          color: 'whiteIndigo',
+                          onTap: () => null,
+                        )
+                      : const EmptyArea(),
                 ],
               )
             ],
@@ -337,10 +344,6 @@ class _CommonTitleState extends State<CommonTitle> {
     );
   }
 }
-
-String dietType = PlanTypeEnum.diet.toString();
-String exerciseType = PlanTypeEnum.exercise.toString();
-String lifeType = PlanTypeEnum.lifestyle.toString();
 
 class CalendarBar extends StatelessWidget {
   CalendarBar({
@@ -358,13 +361,14 @@ class CalendarBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     String? weightUnit = userRepository.user.weightUnit ?? 'kg';
-
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     DateTime historyImportDateTime = context
         .watch<HistoryImportDateTimeProvider>()
         .getHistoryImportDateTime();
+    bool isOneMonth = calendarFormat == CalendarFormat.month;
 
     onDaySelected(selectedDay, _) {
       if (bottomIndex == 0) {
@@ -410,15 +414,15 @@ class CalendarBar extends StatelessWidget {
         'purple',
       );
       String? diet = colorName(
-        nullCheckAction(actions, dietType),
+        nullCheckAction(actions, eDiet),
         'teal',
       );
       String? exercise = colorName(
-        nullCheckAction(actions, exerciseType),
+        nullCheckAction(actions, eExercise),
         'lightBlue',
       );
       String? life = colorName(
-        nullCheckAction(actions, lifeType),
+        nullCheckAction(actions, eLife),
         'brown',
       );
       String? diary = colorName(
@@ -444,16 +448,26 @@ class CalendarBar extends StatelessWidget {
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       bool? isWeight = recordInfo?.weight != null;
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CommonText(
-          isNotTr: true,
-          text: isWeight ? '${recordInfo?.weight}$weightUnit' : '',
-          size: 8,
-          color: Colors.black,
-          isCenter: true,
-        ),
-      );
+      return isWeight
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 1),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade300,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: CommonText(
+                  text: '${recordInfo?.weight}$weightUnit',
+                  size: 8.5,
+                  color: Colors.white,
+                  isCenter: true,
+                  isNotTr: true,
+                  isBold: true,
+                ),
+              ),
+            )
+          : const EmptyArea();
     }
 
     onPageChanged(DateTime dateTime) {
