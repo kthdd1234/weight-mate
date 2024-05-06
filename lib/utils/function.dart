@@ -340,6 +340,10 @@ ymdeShort({required String locale, required DateTime dateTime}) {
 }
 
 ymdShort({required String locale, required DateTime dateTime}) {
+  if (locale == 'ko') {
+    return DateFormat('yyyy. M. d', 'ko').format(dateTime);
+  }
+
   return DateFormat.yMd(locale).format(dateTime);
 }
 

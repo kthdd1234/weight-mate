@@ -405,3 +405,6 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
   ),
 ];
+
+String eGraphDefault = graphType.Default.toString();
+String eGraphCustom = graphType.Custom.toString();

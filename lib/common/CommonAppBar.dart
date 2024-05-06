@@ -122,6 +122,7 @@ class _CommonTitleState extends State<CommonTitle> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    UserBox user = userRepository.user;
 
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
     DateTime historyDateTime =
@@ -129,13 +130,10 @@ class _CommonTitleState extends State<CommonTitle> {
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
     bool isPremium = context.watch<PremiumProvider>().premiumValue();
-
-    UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
-
     String title = [
       ym(locale: locale, dateTime: titleDateTime),
       historyFormat == eHistoryList
@@ -144,6 +142,7 @@ class _CommonTitleState extends State<CommonTitle> {
       '체중 변화',
       '설정'
     ][widget.index];
+    String graphType = user.graphType ?? eGraphDefault;
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
@@ -226,6 +225,11 @@ class _CommonTitleState extends State<CommonTitle> {
       return widget.index != 3 && isPremium == false
           ? BannerWidget()
           : SpaceHeight(height: 10);
+    }
+
+    onTapGraphMode(String type) async {
+      user.graphType = type;
+      await user.save();
     }
 
     List<IconData?> rightIconList = [
@@ -330,9 +334,15 @@ class _CommonTitleState extends State<CommonTitle> {
                       : const EmptyArea(),
                   isGraph
                       ? CommonTag(
-                          text: '기본 모드',
+                          text: graphType == eGraphDefault ? '기본 모드' : '커스텀 모드',
                           color: 'whiteIndigo',
-                          onTap: () => null,
+                          onTap: () => onTapGraphMode(
+                            graphType == eGraphDefault
+                                ? eGraphCustom
+                                : eGraphDefault,
+                          ),
+
+                          //  onTapGraphMode
                         )
                       : const EmptyArea(),
                 ],
@@ -368,7 +378,6 @@ class CalendarBar extends StatelessWidget {
     DateTime historyImportDateTime = context
         .watch<HistoryImportDateTimeProvider>()
         .getHistoryImportDateTime();
-    bool isOneMonth = calendarFormat == CalendarFormat.month;
 
     onDaySelected(selectedDay, _) {
       if (bottomIndex == 0) {
@@ -488,7 +497,7 @@ class CalendarBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: TableCalendar(
-                locale: context.locale.toString(),
+                locale: locale,
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: calendarMaker == CalendarMaker.sticker
                       ? stickerBuilder

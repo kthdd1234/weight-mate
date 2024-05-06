@@ -185,6 +185,8 @@ flutter:
     - assets/svgs/Pouting-Face--Streamline-Emoji.svg
     - assets/svgs/Smiling-Face-With-Sunglasses--Streamline-Emoji.svg
     - assets/svgs/Winking-Face--Streamline-Emoji.svg
+    - assets/svgs/arrow-start.svg
+    - assets/svgs/arrow-end.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

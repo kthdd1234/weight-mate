@@ -51,6 +51,7 @@ class _GraphChartState extends State<GraphChart> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.locale.toString();
     final user = userRepository.user;
     final isShowPreviousGraph = user.isShowPreviousGraph ?? false;
     final plotBandList = <PlotBand>[
@@ -70,21 +71,20 @@ class _GraphChartState extends State<GraphChart> {
         dashArray: const <double>[4, 5],
       )
     ];
-    String locale = context.locale.toString();
 
     getRecordInfo(DateTime datatime) {
       return widget.recordBox.get(getDateTimeToInt(datatime));
     }
 
     lange() {
-      if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-        int days = daysBetween(
-          startDateTime: widget.startDateTime,
-          endDateTime: widget.endDateTime,
-        );
+      // if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
+      //   int days = daysBetween(
+      //     startDateTime: widget.startDateTime,
+      //     endDateTime: widget.endDateTime,
+      //   );
 
-        return days;
-      }
+      //   return days;
+      // }
 
       return countInfo[widget.selectedDateTimeSegment]!;
     }
@@ -186,29 +186,37 @@ class _GraphChartState extends State<GraphChart> {
       });
     }
 
-    onTapShowPreviousGraph() async {
-      user.isShowPreviousGraph = !isShowPreviousGraph;
+    // onTapShowPreviousGraph() async {
+    //   user.isShowPreviousGraph = !isShowPreviousGraph;
 
-      await user.save();
-      setState(() {});
-    }
+    //   await user.save();
+    //   setState(() {});
+    // }
 
-    String bDataTime = '${md(
-      locale: locale,
-      dateTime: jumpDayDateTime(
-        type: jumpDayTypeEnum.subtract,
-        dateTime: widget.startDateTime,
-        days: lange(),
-      ),
-    )} ~ ${md(
+    // String bDataTime = '${md(
+    //   locale: locale,
+    //   dateTime: jumpDayDateTime(
+    //     type: jumpDayTypeEnum.subtract,
+    //     dateTime: widget.startDateTime,
+    //     days: lange(),
+    //   ),
+    // )} ~ ${md(
+    //   locale: locale,
+    //   dateTime: widget.startDateTime,
+    // )}';
+
+    // String cDateTime = '${md(
+    //   locale: locale,
+    //   dateTime: widget.startDateTime,
+    // )} ~ ${md(
+    //   locale: locale,
+    //   dateTime: widget.endDateTime,
+    // )}';
+
+    String ymdDateTime = '${ymd(
       locale: locale,
       dateTime: widget.startDateTime,
-    )}';
-
-    String cDateTime = '${md(
-      locale: locale,
-      dateTime: widget.startDateTime,
-    )} ~ ${md(
+    )} ~ ${ymd(
       locale: locale,
       dateTime: widget.endDateTime,
     )}';
@@ -224,18 +232,23 @@ class _GraphChartState extends State<GraphChart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  CommonTag(
-                    color: isShowPreviousGraph ? 'whiteIndigo' : 'whiteGrey',
-                    text: isShowPreviousGraph ? bDataTime : '이전 기간 표시하기',
-                    isNotTr: isShowPreviousGraph,
-                    onTap: onTapShowPreviousGraph,
-                  ),
-                  SpaceWidth(width: 5),
-                  CommonTag(
-                    color: 'whiteIndigo',
-                    text: cDateTime,
-                    isNotTr: true,
-                  ),
+                  // CommonTag(
+                  //   color: isShowPreviousGraph ? 'whiteIndigo' : 'whiteGrey',
+                  //   text: isShowPreviousGraph ? '' : '이전 기간 표시하기',
+                  //   isNotTr: isShowPreviousGraph,
+                  //   onTap: onTapShowPreviousGraph,
+                  // ),
+                  // SpaceWidth(width: 5),
+                  // CommonTag(
+                  //   color: 'whiteIndigo',
+                  //   text: ymdDateTime,
+                  //   isNotTr: true,
+                  // ),
+                  CommonText(
+                    text: ymdDateTime,
+                    size: 12,
+                    color: Colors.grey.shade700,
+                  )
                 ],
               ),
             ),

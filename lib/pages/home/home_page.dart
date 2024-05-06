@@ -95,6 +95,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? fontFamily = user.fontFamily;
     Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
     bool? isDietExerciseRecordDateTime2 = user.isDietExerciseRecordDateTime2;
+    String? graphType = user.graphType;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -199,6 +200,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (googleDriveInfo == null) {
       user.googleDriveInfo = {"isLogin": false, "backupDateTime": null};
+    }
+
+    if (graphType == null) {
+      user.graphType = eGraphDefault;
     }
 
     userRepository.user.save();

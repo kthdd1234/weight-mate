@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/common/CommonSvg.dart';
+import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/title_block.dart';
+import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -13,12 +18,15 @@ import 'package:flutter_app_weight_management/components/text/body_small_text.da
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
+import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 
 final countInfo = {
@@ -26,7 +34,7 @@ final countInfo = {
   SegmentedTypes.month: 29,
   SegmentedTypes.threeMonth: 89,
   SegmentedTypes.sixMonth: 179,
-  SegmentedTypes.custom: 0,
+  SegmentedTypes.oneYear: 364,
 };
 
 class GraphBody extends StatefulWidget {
@@ -86,19 +94,15 @@ class _GraphBodyState extends State<GraphBody> {
         type: SegmentedTypes.sixMonth,
         selected: selectedDateTimeSegment,
       ),
-      SegmentedTypes.custom: onSegmentedWidget(
-        title: '날짜 선택',
-        type: SegmentedTypes.custom,
+      SegmentedTypes.oneYear: onSegmentedWidget(
+        title: '1년',
+        type: SegmentedTypes.oneYear,
         selected: selectedDateTimeSegment,
       ),
     };
 
     setChartSwipeDirectionStart() {
       setState(() {
-        if (selectedDateTimeSegment == SegmentedTypes.custom) {
-          return;
-        }
-
         endDateTime = startDateTime;
         startDateTime = jumpDayDateTime(
           type: jumpDayTypeEnum.subtract,
@@ -110,10 +114,11 @@ class _GraphBodyState extends State<GraphBody> {
 
     setChartSwipeDirectionEnd() {
       setState(() {
-        if (selectedDateTimeSegment == SegmentedTypes.custom) {
-          return;
-        } else if (getDateTimeToInt(endDateTime) >=
-            getDateTimeToInt(DateTime.now())) {
+        // if (selectedDateTimeSegment == SegmentedTypes.custom) {
+        //   return;
+        // } else
+
+        if (getDateTimeToInt(endDateTime) >= getDateTimeToInt(DateTime.now())) {
           // ignore: void_checks
           return showSnackBar(
             context: context,
@@ -140,44 +145,63 @@ class _GraphBodyState extends State<GraphBody> {
 
     onSubmit({type, object}) {
       setState(() {
-        type == 'start' ? startDateTime = object : endDateTime = object;
+        type == 'start'
+            ? startDateTime = object.value
+            : endDateTime = object.value;
       });
+
+      log('object => $object');
 
       closeDialog(context);
     }
 
-    return Column(
-      children: [
-        CommonAppBar(id: id),
-        GraphChart(
-          startDateTime: startDateTime,
-          endDateTime: endDateTime,
-          recordBox: recordBox,
-          userBox: userBox,
-          selectedDateTimeSegment: selectedDateTimeSegment,
-          setChartSwipeDirectionStart: setChartSwipeDirectionStart,
-          setChartSwipeDirectionEnd: setChartSwipeDirectionEnd,
-        ),
-        selectedDateTimeSegment == SegmentedTypes.custom
-            ? GraphDateTimeCustom(
+    return MultiValueListenableBuilder(
+      valueListenables: valueListenables,
+      builder: (context, values, child) {
+        UserBox? user = userBox.get('userProfile');
+        String? graphType = user?.graphType ?? eGraphDefault;
+
+        return Padding(
+          padding: const EdgeInsets.only(bottom: tinySpace),
+          child: Column(
+            children: [
+              CommonAppBar(id: id),
+              GraphChart(
                 startDateTime: startDateTime,
                 endDateTime: endDateTime,
-                onSubmit: onSubmit,
-              )
-            : const EmptyArea(),
-        SpaceHeight(height: smallSpace),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: DefaultSegmented(
-            selectedSegment: selectedDateTimeSegment,
-            children: dateTimeChildren,
-            backgroundColor: typeBackgroundColor,
-            thumbColor: dialogBackgroundColor,
-            onSegmentedChanged: onSegmentedDateTimeChanged,
+                recordBox: recordBox,
+                userBox: userBox,
+                selectedDateTimeSegment: selectedDateTimeSegment,
+                setChartSwipeDirectionStart: setChartSwipeDirectionStart,
+                setChartSwipeDirectionEnd: setChartSwipeDirectionEnd,
+              ),
+              graphType == eGraphDefault
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: DefaultSegmented(
+                        selectedSegment: selectedDateTimeSegment,
+                        children: dateTimeChildren,
+                        backgroundColor: typeBackgroundColor,
+                        thumbColor: dialogBackgroundColor,
+                        onSegmentedChanged: onSegmentedDateTimeChanged,
+                      ),
+                    )
+                  : GraphDateTimeCustom(
+                      startDateTime: startDateTime,
+                      endDateTime: endDateTime,
+                      onSubmit: onSubmit,
+                    ),
+              selectedDateTimeSegment == SegmentedTypes.custom
+                  ? GraphDateTimeCustom(
+                      startDateTime: startDateTime,
+                      endDateTime: endDateTime,
+                      onSubmit: onSubmit,
+                    )
+                  : const EmptyArea(),
+            ],
           ),
-        ),
-        SpaceHeight(height: tinySpace),
-      ],
+        );
+      },
     );
   }
 }
@@ -198,15 +222,18 @@ class GraphDateTimeCustom extends StatelessWidget {
     onTap({
       required String type,
       required DateTime dateTime,
+      required MaterialColor backgroundColor,
+      required MaterialColor selectionColor,
     }) {
       showDialog(
         context: context,
         builder: (BuildContext context) => CalendarDefaultDialog(
+          selectionColor: selectionColor,
+          backgroundColor: backgroundColor,
           type: type,
-          titleWidgets: TitleBlock(type: type),
+          titleWidgets: TitleBlock(type: type, color: selectionColor),
           initialDateTime: dateTime,
           onSubmit: onSubmit,
-          onCancel: () => closeDialog(context),
           maxDate: type == 'start' ? endDateTime : null,
           minDate: type == 'end' ? startDateTime : null,
         ),
@@ -216,32 +243,38 @@ class GraphDateTimeCustom extends StatelessWidget {
     contentsBoxWidget({
       required DateTime dateTime,
       required String type,
-      required IconData icon,
       required String text,
       required String title,
+      required String svg,
+      required MaterialColor color,
     }) {
       return InkWell(
-        onTap: () => onTap(type: type, dateTime: dateTime),
+        onTap: () => onTap(
+            type: type,
+            dateTime: dateTime,
+            selectionColor: color,
+            backgroundColor: color),
         child: ContentsBox(
           backgroundColor: typeBackgroundColor,
           contentsWidget: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BodySmallText(text: title.tr()),
-                  SpaceHeight(height: smallSpace),
-                  Text(text),
+                  Row(
+                    children: [
+                      CommonText(text: title, size: 12),
+                      SpaceWidth(width: 5),
+                      Dot(size: 8, color: color.shade200),
+                    ],
+                  ),
+                  SpaceHeight(height: 2),
+                  CommonText(text: text, size: 13, isNotTr: true)
                 ],
               ),
-              CircularIcon(
-                icon: icon,
-                size: 40,
-                borderRadius: 40,
-                backgroundColor: dialogBackgroundColor,
-                onTap: (id) => onTap(type: type, dateTime: dateTime),
-              )
+              CommonSvg(name: svg, width: 40),
             ],
           ),
         ),
@@ -261,9 +294,10 @@ class GraphDateTimeCustom extends StatelessWidget {
                 child: contentsBoxWidget(
                   dateTime: startDateTime,
                   type: 'start',
-                  icon: Icons.calendar_month,
+                  svg: 'arrow-start',
                   title: '시작일',
-                  text: md(
+                  color: Colors.blue,
+                  text: ymdShort(
                     locale: context.locale.toString(),
                     dateTime: startDateTime,
                   ),
@@ -274,9 +308,10 @@ class GraphDateTimeCustom extends StatelessWidget {
                 child: contentsBoxWidget(
                   dateTime: endDateTime,
                   type: 'end',
-                  icon: Icons.calendar_month,
+                  svg: 'arrow-end',
                   title: '종료일',
-                  text: md(
+                  color: Colors.red,
+                  text: ymdShort(
                     locale: context.locale.toString(),
                     dateTime: endDateTime,
                   ),
