@@ -46,13 +46,15 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       isDietExerciseRecordDateTime2: fields[26] as bool?,
       customerInfoJson: (fields[27] as Map?)?.cast<String, dynamic>(),
       graphType: fields[28] as String?,
+      cutomGraphStartDateTime: fields[29] as DateTime?,
+      cutomGraphEndDateTime: fields[30] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(29)
+      ..writeByte(31)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -110,7 +112,11 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(27)
       ..write(obj.customerInfoJson)
       ..writeByte(28)
-      ..write(obj.graphType);
+      ..write(obj.graphType)
+      ..writeByte(29)
+      ..write(obj.cutomGraphStartDateTime)
+      ..writeByte(30)
+      ..write(obj.cutomGraphEndDateTime);
   }
 
   @override

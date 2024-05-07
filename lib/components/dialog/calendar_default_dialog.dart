@@ -10,9 +10,9 @@ class CalendarDefaultDialog extends StatefulWidget {
     required this.type,
     required this.titleWidgets,
     required this.initialDateTime,
-    required this.onSubmit,
     required this.backgroundColor,
     required this.selectionColor,
+    required this.onSubmit,
     this.maxDate,
     this.minDate,
   });
@@ -21,9 +21,9 @@ class CalendarDefaultDialog extends StatefulWidget {
   Widget titleWidgets;
   MaterialColor backgroundColor, selectionColor;
   DateTime? initialDateTime;
-  Function({String type, Object? object}) onSubmit;
   DateTime? maxDate;
   DateTime? minDate;
+  Function(DateTime dateTime, String type) onSubmit;
 
   @override
   State<CalendarDefaultDialog> createState() => _CalendarDefaultDialogState();
@@ -64,10 +64,7 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
           maxDate: widget.maxDate,
           minDate: widget.minDate,
           onSelectionChanged: (DateRangePickerSelectionChangedArgs? object) =>
-              widget.onSubmit(
-            type: widget.type,
-            object: object,
-          ),
+              widget.onSubmit(object!.value, widget.type),
           // onSubmit: (Object? object) => widget.onSubmit(
           //   type: widget.type,
           //   object: object,

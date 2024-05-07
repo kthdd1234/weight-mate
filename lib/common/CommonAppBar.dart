@@ -143,6 +143,7 @@ class _CommonTitleState extends State<CommonTitle> {
       '설정'
     ][widget.index];
     String graphType = user.graphType ?? eGraphDefault;
+    bool? isShowPreviousGraph = user.isShowPreviousGraph == true;
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
@@ -229,6 +230,11 @@ class _CommonTitleState extends State<CommonTitle> {
 
     onTapGraphMode(String type) async {
       user.graphType = type;
+      await user.save();
+    }
+
+    onTapPreviousGraph() async {
+      user.isShowPreviousGraph = !isShowPreviousGraph;
       await user.save();
     }
 
@@ -333,16 +339,31 @@ class _CommonTitleState extends State<CommonTitle> {
                         )
                       : const EmptyArea(),
                   isGraph
-                      ? CommonTag(
-                          text: graphType == eGraphDefault ? '기본 모드' : '커스텀 모드',
-                          color: 'whiteIndigo',
-                          onTap: () => onTapGraphMode(
+                      ? Row(
+                          children: [
                             graphType == eGraphDefault
-                                ? eGraphCustom
-                                : eGraphDefault,
-                          ),
-
-                          //  onTapGraphMode
+                                ? CommonTag(
+                                    text:
+                                        '이전 기간 ${isShowPreviousGraph ? '' : '미'}표시',
+                                    color: isShowPreviousGraph
+                                        ? 'whiteIndigo'
+                                        : 'whiteGrey',
+                                    onTap: onTapPreviousGraph,
+                                  )
+                                : const EmptyArea(),
+                            SpaceWidth(width: 5),
+                            CommonTag(
+                              text: graphType == eGraphDefault
+                                  ? '기본 모드'
+                                  : '커스텀 모드',
+                              color: 'whiteIndigo',
+                              onTap: () => onTapGraphMode(
+                                graphType == eGraphDefault
+                                    ? eGraphCustom
+                                    : eGraphDefault,
+                              ),
+                            ),
+                          ],
                         )
                       : const EmptyArea(),
                 ],

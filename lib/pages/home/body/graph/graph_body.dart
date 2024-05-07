@@ -1,20 +1,16 @@
 import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/title_block.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/components/text/body_small_text.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -46,7 +42,6 @@ class GraphBody extends StatefulWidget {
 
 class _GraphBodyState extends State<GraphBody> {
   late DateTime startDateTime, endDateTime;
-
   SegmentedTypes selectedDateTimeSegment = SegmentedTypes.week;
 
   setTitleDateTime() {
@@ -143,23 +138,14 @@ class _GraphBodyState extends State<GraphBody> {
       });
     }
 
-    onSubmit({type, object}) {
-      setState(() {
-        type == 'start'
-            ? startDateTime = object.value
-            : endDateTime = object.value;
-      });
-
-      log('object => $object');
-
-      closeDialog(context);
-    }
-
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
-        UserBox? user = userBox.get('userProfile');
-        String? graphType = user?.graphType ?? eGraphDefault;
+        DateTime now = DateTime.now();
+        UserBox? user = userRepository.user;
+        String? graphType = user.graphType ?? eGraphDefault;
+        DateTime? customStartDateTime = user.cutomGraphStartDateTime ?? now;
+        DateTime? customEndDateTime = user.cutomGraphEndDateTime ?? now;
 
         return Padding(
           padding: const EdgeInsets.only(bottom: tinySpace),
@@ -167,10 +153,15 @@ class _GraphBodyState extends State<GraphBody> {
             children: [
               CommonAppBar(id: id),
               GraphChart(
-                startDateTime: startDateTime,
-                endDateTime: endDateTime,
-                recordBox: recordBox,
                 userBox: userBox,
+                recordBox: recordBox,
+                graphType: graphType,
+                startDateTime: graphType == eGraphDefault
+                    ? startDateTime
+                    : customStartDateTime,
+                endDateTime: graphType == eGraphDefault
+                    ? endDateTime
+                    : customEndDateTime,
                 selectedDateTimeSegment: selectedDateTimeSegment,
                 setChartSwipeDirectionStart: setChartSwipeDirectionStart,
                 setChartSwipeDirectionEnd: setChartSwipeDirectionEnd,
@@ -187,17 +178,9 @@ class _GraphBodyState extends State<GraphBody> {
                       ),
                     )
                   : GraphDateTimeCustom(
-                      startDateTime: startDateTime,
-                      endDateTime: endDateTime,
-                      onSubmit: onSubmit,
+                      startDateTime: customStartDateTime,
+                      endDateTime: customEndDateTime,
                     ),
-              selectedDateTimeSegment == SegmentedTypes.custom
-                  ? GraphDateTimeCustom(
-                      startDateTime: startDateTime,
-                      endDateTime: endDateTime,
-                      onSubmit: onSubmit,
-                    )
-                  : const EmptyArea(),
             ],
           ),
         );
@@ -211,14 +194,24 @@ class GraphDateTimeCustom extends StatelessWidget {
     super.key,
     required this.startDateTime,
     required this.endDateTime,
-    required this.onSubmit,
   });
 
   DateTime startDateTime, endDateTime;
-  Function({String? type, Object? object}) onSubmit;
 
   @override
   Widget build(BuildContext context) {
+    UserBox? user = userRepository.user;
+
+    onSubmit(DateTime dateTime, String type) async {
+      bool isStart = type == 'start';
+      isStart
+          ? user.cutomGraphStartDateTime = dateTime
+          : user.cutomGraphEndDateTime = dateTime;
+
+      await user.save();
+      closeDialog(context);
+    }
+
     onTap({
       required String type,
       required DateTime dateTime,
@@ -233,9 +226,9 @@ class GraphDateTimeCustom extends StatelessWidget {
           type: type,
           titleWidgets: TitleBlock(type: type, color: selectionColor),
           initialDateTime: dateTime,
-          onSubmit: onSubmit,
           maxDate: type == 'start' ? endDateTime : null,
           minDate: type == 'end' ? startDateTime : null,
+          onSubmit: onSubmit,
         ),
       );
     }
@@ -265,9 +258,9 @@ class GraphDateTimeCustom extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      CommonText(text: title, size: 12),
-                      SpaceWidth(width: 5),
                       Dot(size: 8, color: color.shade200),
+                      SpaceWidth(width: 5),
+                      CommonText(text: title, size: 12),
                     ],
                   ),
                   SpaceHeight(height: 2),

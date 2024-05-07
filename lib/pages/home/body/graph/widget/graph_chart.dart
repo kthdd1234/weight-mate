@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.d
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math';
@@ -26,6 +28,7 @@ class GraphData {
 class GraphChart extends StatefulWidget {
   GraphChart({
     super.key,
+    required this.graphType,
     required this.selectedDateTimeSegment,
     required this.recordBox,
     required this.userBox,
@@ -35,6 +38,7 @@ class GraphChart extends StatefulWidget {
     required this.setChartSwipeDirectionEnd,
   });
 
+  String graphType;
   SegmentedTypes selectedDateTimeSegment;
   Box<RecordBox> recordBox;
   Box<UserBox> userBox;
@@ -51,10 +55,10 @@ class _GraphChartState extends State<GraphChart> {
 
   @override
   Widget build(BuildContext context) {
-    final locale = context.locale.toString();
-    final user = userRepository.user;
-    final isShowPreviousGraph = user.isShowPreviousGraph ?? false;
-    final plotBandList = <PlotBand>[
+    String locale = context.locale.toString();
+    UserBox user = userRepository.user;
+    bool isShowPreviousGraph = user.isShowPreviousGraph ?? false;
+    List<PlotBand> plotBandList = <PlotBand>[
       PlotBand(
         borderWidth: 1.0,
         borderColor: disabledButtonTextColor,
@@ -73,18 +77,19 @@ class _GraphChartState extends State<GraphChart> {
     ];
 
     getRecordInfo(DateTime datatime) {
-      return widget.recordBox.get(getDateTimeToInt(datatime));
+      int recordKey = getDateTimeToInt(datatime);
+      return widget.recordBox.get(recordKey);
     }
 
     lange() {
-      // if (widget.selectedDateTimeSegment == SegmentedTypes.custom) {
-      //   int days = daysBetween(
-      //     startDateTime: widget.startDateTime,
-      //     endDateTime: widget.endDateTime,
-      //   );
+      if (widget.graphType == eGraphCustom) {
+        int days = daysBetween(
+          startDateTime: widget.startDateTime,
+          endDateTime: widget.endDateTime,
+        );
 
-      //   return days;
-      // }
+        return days;
+      }
 
       return countInfo[widget.selectedDateTimeSegment]!;
     }
@@ -232,18 +237,6 @@ class _GraphChartState extends State<GraphChart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // CommonTag(
-                  //   color: isShowPreviousGraph ? 'whiteIndigo' : 'whiteGrey',
-                  //   text: isShowPreviousGraph ? '' : '이전 기간 표시하기',
-                  //   isNotTr: isShowPreviousGraph,
-                  //   onTap: onTapShowPreviousGraph,
-                  // ),
-                  // SpaceWidth(width: 5),
-                  // CommonTag(
-                  //   color: 'whiteIndigo',
-                  //   text: ymdDateTime,
-                  //   isNotTr: true,
-                  // ),
                   CommonText(
                     text: ymdDateTime,
                     size: 12,
