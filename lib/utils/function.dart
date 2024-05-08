@@ -335,6 +335,13 @@ m_d({required String locale, required DateTime dateTime}) {
   return DateFormat.Md(locale).format(dateTime);
 }
 
+yyyyUnderMd({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nM.d' : 'M.d\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
 ymdeShort({required String locale, required DateTime dateTime}) {
   return DateFormat.yMEd(locale).format(dateTime);
 }

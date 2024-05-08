@@ -1,11 +1,7 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -57,7 +53,9 @@ class _GraphChartState extends State<GraphChart> {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
     UserBox user = userRepository.user;
-    bool isShowPreviousGraph = user.isShowPreviousGraph ?? false;
+    bool isShowPreviousGraph = user.isShowPreviousGraph == true;
+    bool isGraphDefault = user.graphType == eGraphDefault;
+    bool isGraphCustom = user.graphType == eGraphCustom;
     List<PlotBand> plotBandList = <PlotBand>[
       PlotBand(
         borderWidth: 1.0,
@@ -75,6 +73,8 @@ class _GraphChartState extends State<GraphChart> {
         dashArray: const <double>[4, 5],
       )
     ];
+    bool isWeek = widget.selectedDateTimeSegment == SegmentedTypes.week ||
+        widget.selectedDateTimeSegment == SegmentedTypes.twoWeek;
 
     getRecordInfo(DateTime datatime) {
       int recordKey = getDateTimeToInt(datatime);
@@ -99,8 +99,6 @@ class _GraphChartState extends State<GraphChart> {
       List<double> weightList = [];
 
       int count = lange();
-      String format =
-          widget.selectedDateTimeSegment == SegmentedTypes.week ? 'd' : 'md';
 
       for (var i = 0; i <= count; i++) {
         DateTime subtractDateTime = jumpDayDateTime(
@@ -108,10 +106,13 @@ class _GraphChartState extends State<GraphChart> {
           dateTime: endPoint,
           days: i,
         );
+
         RecordBox? recordInfo = getRecordInfo(subtractDateTime);
-        String formatterDay = format == 'd'
+        String formatterDay = isWeek && isGraphDefault
             ? d(locale: locale, dateTime: subtractDateTime)
-            : m_d(locale: locale, dateTime: subtractDateTime);
+            : isGraphCustom
+                ? yyyyUnderMd(locale: locale, dateTime: subtractDateTime)
+                : m_d(locale: locale, dateTime: subtractDateTime);
         GraphData chartData = GraphData(formatterDay, recordInfo?.weight);
 
         if (recordInfo?.weight != null) {
@@ -153,17 +154,17 @@ class _GraphChartState extends State<GraphChart> {
     }
 
     setFastLineSeries() {
+      bool isVisible = isWeek && isGraphDefault;
+
       return FastLineSeries(
         emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
         dataSource: fastLineSeries(),
         color: Colors.indigo.shade200,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.y,
-        markerSettings: MarkerSettings(
-          isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
-        ),
+        markerSettings: MarkerSettings(isVisible: isVisible),
         dataLabelSettings: DataLabelSettings(
-          isVisible: widget.selectedDateTimeSegment == SegmentedTypes.week,
+          isVisible: isVisible,
           useSeriesColor: true,
           textStyle: const TextStyle(
             color: Colors.white,
@@ -191,13 +192,6 @@ class _GraphChartState extends State<GraphChart> {
       });
     }
 
-    // onTapShowPreviousGraph() async {
-    //   user.isShowPreviousGraph = !isShowPreviousGraph;
-
-    //   await user.save();
-    //   setState(() {});
-    // }
-
     // String bDataTime = '${md(
     //   locale: locale,
     //   dateTime: jumpDayDateTime(
@@ -218,14 +212,6 @@ class _GraphChartState extends State<GraphChart> {
     //   dateTime: widget.endDateTime,
     // )}';
 
-    String ymdDateTime = '${ymd(
-      locale: locale,
-      dateTime: widget.startDateTime,
-    )} ~ ${ymd(
-      locale: locale,
-      dateTime: widget.endDateTime,
-    )}';
-
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -238,7 +224,13 @@ class _GraphChartState extends State<GraphChart> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   CommonText(
-                    text: ymdDateTime,
+                    text: '${ymd(
+                      locale: locale,
+                      dateTime: widget.startDateTime,
+                    )} ~ ${ymd(
+                      locale: locale,
+                      dateTime: widget.endDateTime,
+                    )}',
                     size: 12,
                     color: Colors.grey.shade700,
                   )

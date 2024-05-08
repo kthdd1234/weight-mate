@@ -25,8 +25,9 @@ import 'package:hive/hive.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 
-final countInfo = {
+Map<SegmentedTypes, int> countInfo = {
   SegmentedTypes.week: 6,
+  SegmentedTypes.twoWeek: 13,
   SegmentedTypes.month: 29,
   SegmentedTypes.threeMonth: 89,
   SegmentedTypes.sixMonth: 179,
@@ -74,8 +75,13 @@ class _GraphBodyState extends State<GraphBody> {
         type: SegmentedTypes.week,
         selected: selectedDateTimeSegment,
       ),
+      SegmentedTypes.twoWeek: onSegmentedWidget(
+        title: '2주',
+        type: SegmentedTypes.twoWeek,
+        selected: selectedDateTimeSegment,
+      ),
       SegmentedTypes.month: onSegmentedWidget(
-        title: '한달',
+        title: '1개월',
         type: SegmentedTypes.month,
         selected: selectedDateTimeSegment,
       ),

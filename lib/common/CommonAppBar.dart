@@ -341,17 +341,17 @@ class _CommonTitleState extends State<CommonTitle> {
                   isGraph
                       ? Row(
                           children: [
-                            graphType == eGraphDefault
-                                ? CommonTag(
-                                    text:
-                                        '이전 기간 ${isShowPreviousGraph ? '' : '미'}표시',
-                                    color: isShowPreviousGraph
-                                        ? 'whiteIndigo'
-                                        : 'whiteGrey',
-                                    onTap: onTapPreviousGraph,
-                                  )
-                                : const EmptyArea(),
-                            SpaceWidth(width: 5),
+                            // graphType == eGraphDefault
+                            //     ? CommonTag(
+                            //         text:
+                            //             '이전 기간 ${isShowPreviousGraph ? '' : '미'}표시',
+                            //         color: isShowPreviousGraph
+                            //             ? 'whiteIndigo'
+                            //             : 'whiteGrey',
+                            //         onTap: onTapPreviousGraph,
+                            //       )
+                            //     : const EmptyArea(),
+                            // SpaceWidth(width: 5),
                             CommonTag(
                               text: graphType == eGraphDefault
                                   ? '기본 모드'

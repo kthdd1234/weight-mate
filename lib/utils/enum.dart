@@ -19,6 +19,7 @@ enum BottomNavigationEnum { record, history, graph, setting }
 
 enum SegmentedTypes {
   week,
+  twoWeek,
   month,
   threeMonth,
   sixMonth,
