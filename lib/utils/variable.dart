@@ -282,37 +282,6 @@ String eDiet = PlanTypeEnum.diet.toString();
 String eExercise = PlanTypeEnum.exercise.toString();
 String eLife = PlanTypeEnum.lifestyle.toString();
 
-// List<SvgClass> svgData = [
-//   SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
-//   SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
-//   SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
-//   SvgClass(emotion: 'kissing-face', name: '신남'),
-//   SvgClass(emotion: 'neutral-face', name: '보통'),
-//   SvgClass(emotion: 'amazed-face', name: '놀람'),
-//   SvgClass(emotion: 'anxious-face', name: '서운'),
-//   SvgClass(emotion: 'crying-face', name: '슬픔'),
-//   SvgClass(emotion: 'determined-face', name: '다짐'),
-//   SvgClass(emotion: 'disappointed-face', name: '실망'),
-//   SvgClass(emotion: 'dizzy-face', name: '피곤'),
-//   SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
-//   SvgClass(emotion: 'expressionless-face', name: '고요'),
-//   SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
-//   SvgClass(emotion: 'sneezing-face', name: '아픔'),
-//   SvgClass(emotion: 'worried-face', name: '걱정'),
-//   SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
-//   SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
-//   SvgClass(emotion: 'loudly-crying-face', name: '감동'),
-//   SvgClass(emotion: 'Drooling-Face-1--Streamline-Emoji', name: '해탈'),
-//   SvgClass(emotion: 'Face-Savoring-Food--Streamline-Emoji', name: '?'),
-//   SvgClass(emotion: 'Full-Moon-Face--Streamline-Emoji', name: '?'),
-//   SvgClass(emotion: 'Hushed-Face-1--Streamline-Emoji', name: '?'),
-//   SvgClass(emotion: 'Nauseated-Face-2--Streamline-Emoji', name: '?'),
-//   SvgClass(emotion: 'Pouting-Face--Streamline-Emoji', name: '?'),
-//   SvgClass(
-//       emotion: 'Smiling-Face-With-Sunglasses--Streamline-Emoji', name: '?'),
-//   SvgClass(emotion: 'Winking-Face--Streamline-Emoji', name: '?'),
-// ];
-
 Map<int, String> hourTo12 = {
   0: '12',
   1: "1",
@@ -404,7 +373,30 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     title: '사진을 최대 4장까지 추가 할 수 있어요',
     subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
   ),
+  PremiumBenefitsClass(
+    svgName: 'custom-graph',
+    title: '체중 그래프에서 원하는 기간을 설정할 수 있어요',
+    subTitle: '시작일/종료일을 설정해서 원하는 기간을 한눈에 보세요!',
+  ),
 ];
 
 String eGraphDefault = graphType.Default.toString();
 String eGraphCustom = graphType.Custom.toString();
+
+String baseAssetsPath(String path) {
+  return 'assets/images/$path.png';
+}
+
+String exDiary = baseAssetsPath('ex_diary');
+String exDietCollection = baseAssetsPath('ex_diet_collection');
+String exDietMonth = baseAssetsPath('ex_diet_month');
+String exDietWeek = baseAssetsPath('ex_diet_week');
+String exExerciseMonth = baseAssetsPath('ex_exercise_month');
+String exExerciseWeek = baseAssetsPath('ex_exercise_week');
+String exExercise = baseAssetsPath('ex_life_month');
+String exLifeWeek = baseAssetsPath('ex_life_week');
+String exWeightAnalylize = baseAssetsPath('ex_weight_analylize');
+String exWeightChart = baseAssetsPath('ex_weight_chart');
+String exWeightCustom = baseAssetsPath('ex_weight_custom');
+String exWeightMonthly = baseAssetsPath('ex_weight_monthly');
+String exWeightYearly = baseAssetsPath('ex_weight_yearly');

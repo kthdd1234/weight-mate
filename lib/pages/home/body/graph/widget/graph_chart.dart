@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -13,13 +14,6 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:math';
-
-class GraphData {
-  GraphData(this.x, this.y);
-
-  final String x;
-  final double? y;
-}
 
 class GraphChart extends StatefulWidget {
   GraphChart({
@@ -192,26 +186,6 @@ class _GraphChartState extends State<GraphChart> {
       });
     }
 
-    // String bDataTime = '${md(
-    //   locale: locale,
-    //   dateTime: jumpDayDateTime(
-    //     type: jumpDayTypeEnum.subtract,
-    //     dateTime: widget.startDateTime,
-    //     days: lange(),
-    //   ),
-    // )} ~ ${md(
-    //   locale: locale,
-    //   dateTime: widget.startDateTime,
-    // )}';
-
-    // String cDateTime = '${md(
-    //   locale: locale,
-    //   dateTime: widget.startDateTime,
-    // )} ~ ${md(
-    //   locale: locale,
-    //   dateTime: widget.endDateTime,
-    // )}';
-
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -233,6 +207,7 @@ class _GraphChartState extends State<GraphChart> {
                     )}',
                     size: 12,
                     color: Colors.grey.shade700,
+                    isNotTr: true,
                   )
                 ],
               ),

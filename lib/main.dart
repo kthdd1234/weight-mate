@@ -11,6 +11,7 @@ import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/common/max_min_avg_graph_page.dart';
 import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
@@ -89,7 +90,6 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  // await AuthService().getOrCreateUser();
 
   runApp(
     MultiProvider(
@@ -280,6 +280,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/premium-page': (context) => const PremiumPage(),
         '/app-data-page': (context) => const AppDataPage(),
         '/diary-collection-page': (context) => const DiaryCollectionPage(),
+        '/max-min-avg-graph-page': (context) => const MaxMinAvgGraphPage(),
       },
     );
   }

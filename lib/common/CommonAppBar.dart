@@ -8,6 +8,7 @@ import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -143,7 +144,6 @@ class _CommonTitleState extends State<CommonTitle> {
       '설정'
     ][widget.index];
     String graphType = user.graphType ?? eGraphDefault;
-    bool? isShowPreviousGraph = user.isShowPreviousGraph == true;
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
@@ -228,13 +228,69 @@ class _CommonTitleState extends State<CommonTitle> {
           : SpaceHeight(height: 10);
     }
 
-    onTapGraphMode(String type) async {
-      user.graphType = type;
-      await user.save();
+    onTapCutomModeImage() {
+      //
     }
 
-    onTapPreviousGraph() async {
-      user.isShowPreviousGraph = !isShowPreviousGraph;
+    onTapGraphMode(String type) async {
+      if (type == eGraphCustom && isPremium == false) {
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+            shape: containerBorderRadious,
+            backgroundColor: dialogBackgroundColor,
+            title: DialogTitle(
+              text: "커스텀 모드 제한",
+              onTap: () => closeDialog(context),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 170,
+              child: Column(
+                children: [
+                  ContentsBox(
+                    contentsWidget: Column(
+                      children: [
+                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                          text: '커스텀 모드를 이용할 수 있어요.',
+                          size: 14,
+                          isCenter: true,
+                        ),
+                        SpaceHeight(height: 10),
+                        CommonText(
+                          text: '커스텀 모드 예시 이미지',
+                          size: 12,
+                          isCenter: true,
+                          color: Colors.grey,
+                          onTap: onTapCutomModeImage,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SpaceHeight(height: 10),
+                  Row(
+                    children: [
+                      ExpandedButtonHori(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        imgUrl: 'assets/images/t-23.png',
+                        text: '프리미엄 구매 페이지로 이동',
+                        onTap: () {
+                          Navigator.pushNamed(context, '/premium-page');
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
+      user.graphType = type;
       await user.save();
     }
 
@@ -339,31 +395,14 @@ class _CommonTitleState extends State<CommonTitle> {
                         )
                       : const EmptyArea(),
                   isGraph
-                      ? Row(
-                          children: [
-                            // graphType == eGraphDefault
-                            //     ? CommonTag(
-                            //         text:
-                            //             '이전 기간 ${isShowPreviousGraph ? '' : '미'}표시',
-                            //         color: isShowPreviousGraph
-                            //             ? 'whiteIndigo'
-                            //             : 'whiteGrey',
-                            //         onTap: onTapPreviousGraph,
-                            //       )
-                            //     : const EmptyArea(),
-                            // SpaceWidth(width: 5),
-                            CommonTag(
-                              text: graphType == eGraphDefault
-                                  ? '기본 모드'
-                                  : '커스텀 모드',
-                              color: 'whiteIndigo',
-                              onTap: () => onTapGraphMode(
-                                graphType == eGraphDefault
-                                    ? eGraphCustom
-                                    : eGraphDefault,
-                              ),
-                            ),
-                          ],
+                      ? CommonTag(
+                          text: graphType == eGraphDefault ? '기본 모드' : '커스텀 모드',
+                          color: 'whiteIndigo',
+                          onTap: () => onTapGraphMode(
+                            graphType == eGraphDefault
+                                ? eGraphCustom
+                                : eGraphDefault,
+                          ),
                         )
                       : const EmptyArea(),
                 ],

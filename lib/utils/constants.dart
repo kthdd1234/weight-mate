@@ -415,9 +415,4 @@ const entitlement_identifier = 'premium';
 
 const appleApiKey = 'appl_vjYFXCKiODqbJjabYlqJnmlIMPj';
 
-const googleApiKey = 'goog_LDFEImiXcwlPvisZerLvLkxrSxo';
-
-const initConditionItemList = [
-  '잠을 잘 못잤어요 🥱',
-  '아침에 개운하게 일어났어요 🥱',
-];
+const googleApiKey = 'goog_hZufqNCKtbHhktACjnimKTANXzD';

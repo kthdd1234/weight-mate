@@ -341,7 +341,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
                                                 child: Text(
                                                   action['name'],
                                                   style: const TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize: 13,
                                                     color: themeColor,
                                                   ),
                                                 ),
@@ -607,7 +607,7 @@ class ColumnItmeList extends StatelessWidget {
                                 child: Text(
                                   plan.name,
                                   style: const TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 12,
                                     color: themeColor,
                                     overflow: TextOverflow.ellipsis,
                                   ),

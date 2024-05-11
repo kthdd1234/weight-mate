@@ -34,7 +34,6 @@ class _WeightChartPageState extends State<WeightChartPage> {
     }
 
     initPremium();
-
     super.initState();
   }
 

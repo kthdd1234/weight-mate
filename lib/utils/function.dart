@@ -342,6 +342,13 @@ yyyyUnderMd({required String locale, required DateTime dateTime}) {
   ).format(dateTime);
 }
 
+yyyyUnderM({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nMMMM' : 'M\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
 ymdeShort({required String locale, required DateTime dateTime}) {
   return DateFormat.yMEd(locale).format(dateTime);
 }
@@ -989,6 +996,7 @@ Future<bool> isPurchasePremium() async {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
         true;
+    // return true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;

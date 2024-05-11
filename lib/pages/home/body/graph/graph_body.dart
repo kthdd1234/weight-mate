@@ -115,10 +115,6 @@ class _GraphBodyState extends State<GraphBody> {
 
     setChartSwipeDirectionEnd() {
       setState(() {
-        // if (selectedDateTimeSegment == SegmentedTypes.custom) {
-        //   return;
-        // } else
-
         if (getDateTimeToInt(endDateTime) >= getDateTimeToInt(DateTime.now())) {
           // ignore: void_checks
           return showSnackBar(

@@ -390,3 +390,29 @@ class PremiumBenefitsClass {
 
   String svgName, title, subTitle;
 }
+
+class GraphData {
+  GraphData(this.x, this.y);
+
+  final String x;
+  final double? y;
+}
+
+class StackGraphData {
+  StackGraphData(this.x, this.y);
+
+  final String x;
+  final double? y;
+}
+
+class DataSourceClass {
+  DataSourceClass({
+    required this.title,
+    required this.max,
+    required this.avg,
+    required this.min,
+  });
+
+  String title;
+  List<StackGraphData> max, avg, min;
+}
