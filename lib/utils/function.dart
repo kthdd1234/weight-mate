@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -1076,4 +1077,20 @@ String getFontName(String fontFamily) {
   int idx = fontFamilyList
       .indexWhere((element) => element['fontFamily'] == fontFamily);
   return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
+}
+
+navigatorExamplePage({
+  required BuildContext context,
+  required String title,
+  required String assetName,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ExampleImagePage(
+        title: title,
+        assetName: assetName,
+      ),
+    ),
+  );
 }

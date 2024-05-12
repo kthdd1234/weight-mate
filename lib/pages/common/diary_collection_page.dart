@@ -21,6 +21,7 @@ import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dar
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:provider/provider.dart';
 
 class DiaryCollectionPage extends StatefulWidget {

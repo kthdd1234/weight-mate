@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/components/button/expanded_button_
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
@@ -228,10 +229,6 @@ class _CommonTitleState extends State<CommonTitle> {
           : SpaceHeight(height: 10);
     }
 
-    onTapCutomModeImage() {
-      //
-    }
-
     onTapGraphMode(String type) async {
       if (type == eGraphCustom && isPremium == false) {
         return showDialog(
@@ -246,7 +243,7 @@ class _CommonTitleState extends State<CommonTitle> {
             ),
             content: SizedBox(
               width: MediaQuery.of(context).size.width,
-              height: 170,
+              height: 145,
               child: Column(
                 children: [
                   ContentsBox(
@@ -258,14 +255,6 @@ class _CommonTitleState extends State<CommonTitle> {
                           text: '커스텀 모드를 이용할 수 있어요.',
                           size: 14,
                           isCenter: true,
-                        ),
-                        SpaceHeight(height: 10),
-                        CommonText(
-                          text: '커스텀 모드 예시 이미지',
-                          size: 12,
-                          isCenter: true,
-                          color: Colors.grey,
-                          onTap: onTapCutomModeImage,
                         ),
                       ],
                     ),

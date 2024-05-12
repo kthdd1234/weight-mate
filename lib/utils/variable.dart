@@ -383,20 +383,16 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
 String eGraphDefault = graphType.Default.toString();
 String eGraphCustom = graphType.Custom.toString();
 
-String baseAssetsPath(String path) {
-  return 'assets/images/$path.png';
-}
+// String baseAssetsPath(String path) {
+//   return 'assets/images/$path.png';
+// }
 
-String exDiary = baseAssetsPath('ex_diary');
-String exDietCollection = baseAssetsPath('ex_diet_collection');
-String exDietMonth = baseAssetsPath('ex_diet_month');
-String exDietWeek = baseAssetsPath('ex_diet_week');
-String exExerciseMonth = baseAssetsPath('ex_exercise_month');
-String exExerciseWeek = baseAssetsPath('ex_exercise_week');
-String exExercise = baseAssetsPath('ex_life_month');
-String exLifeWeek = baseAssetsPath('ex_life_week');
-String exWeightAnalylize = baseAssetsPath('ex_weight_analylize');
-String exWeightChart = baseAssetsPath('ex_weight_chart');
-String exWeightCustom = baseAssetsPath('ex_weight_custom');
-String exWeightMonthly = baseAssetsPath('ex_weight_monthly');
-String exWeightYearly = baseAssetsPath('ex_weight_yearly');
+// String exDiary = baseAssetsPath('ex_diary');
+// String exDietCollection = baseAssetsPath('ex_diet_collection');
+// String exDietWeek = baseAssetsPath('ex_diet_week');
+// String exExerciseCollection = baseAssetsPath('ex_exercise_collection');
+// String exExerciseWeek = baseAssetsPath('ex_exercise_week');
+// String exLifeWeek = baseAssetsPath('ex_life_week');
+// String exWeightAnalylize = baseAssetsPath('ex_weight_analylize');
+// String exWeightChart = baseAssetsPath('ex_weight_chart');
+// String exWeightCustom = baseAssetsPath('ex_weight_custom');

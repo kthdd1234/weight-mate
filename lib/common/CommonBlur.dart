@@ -7,6 +7,7 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class CommonBlur extends StatelessWidget {
@@ -57,7 +58,7 @@ class CommonBlur extends StatelessWidget {
                       )
                     ],
                   ),
-                )
+                ),
               ],
             ),
           )
