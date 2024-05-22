@@ -43,6 +43,7 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/auth_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';

@@ -116,7 +116,7 @@ class _PremiumPageState extends State<PremiumPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text(
-            '광고 없애기'.tr(),
+            '프리미엄'.tr(),
             style: const TextStyle(fontSize: 20, color: themeColor),
           ),
           backgroundColor: Colors.transparent,
