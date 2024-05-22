@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -335,11 +336,29 @@ m_d({required String locale, required DateTime dateTime}) {
   return DateFormat.Md(locale).format(dateTime);
 }
 
+yyyyUnderMd({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nM.d' : 'M.d\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
+yyyyUnderM({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nMMMM' : 'M\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
 ymdeShort({required String locale, required DateTime dateTime}) {
   return DateFormat.yMEd(locale).format(dateTime);
 }
 
 ymdShort({required String locale, required DateTime dateTime}) {
+  if (locale == 'ko') {
+    return DateFormat('yyyy. M. d', 'ko').format(dateTime);
+  }
+
   return DateFormat.yMd(locale).format(dateTime);
 }
 
@@ -989,8 +1008,6 @@ Future<bool> isPurchaseRestore() async {
     CustomerInfo customerInfo = await Purchases.restorePurchases();
     bool isActive =
         customerInfo.entitlements.all[entitlement_identifier]?.isActive == true;
-
-    log('customerInfo.isActive => $isActive');
     return isActive;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
@@ -1057,4 +1074,20 @@ String getFontName(String fontFamily) {
   int idx = fontFamilyList
       .indexWhere((element) => element['fontFamily'] == fontFamily);
   return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
+}
+
+navigatorExamplePage({
+  required BuildContext context,
+  required String title,
+  required String assetName,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ExampleImagePage(
+        title: title,
+        assetName: assetName,
+      ),
+    ),
+  );
 }

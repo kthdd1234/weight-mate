@@ -1,7 +1,5 @@
 import 'dart:typed_data';
-import 'package:cached_memory_image/cached_memory_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:shimmer/shimmer.dart';
 
 extension ImageExtension on num {

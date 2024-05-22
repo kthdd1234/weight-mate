@@ -17,7 +17,17 @@ enum RecordIconTypes {
 
 enum BottomNavigationEnum { record, history, graph, setting }
 
-enum SegmentedTypes { week, month, threeMonth, sixMonth, custom, goal, record }
+enum SegmentedTypes {
+  week,
+  twoWeek,
+  month,
+  threeMonth,
+  sixMonth,
+  oneYear,
+  custom,
+  goal,
+  record
+}
 
 enum MoreSeeItem {
   premium,
@@ -72,3 +82,5 @@ enum HistoryFilter { recent, past }
 enum HistoryFormat { list, calendar }
 
 enum WidgetType { weight, password, record, goal }
+
+enum graphType { Default, Custom }

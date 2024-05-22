@@ -1,11 +1,15 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
+import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -14,8 +18,11 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class WeightAnalyzePage extends StatelessWidget {
@@ -39,12 +46,12 @@ class WeightAnalyzePage extends StatelessWidget {
       widget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
           title: Text(
             '체중 분석표'.tr(),
             style: const TextStyle(fontSize: 20, color: themeColor),
           ),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
         ),
         body: SafeArea(
           child: Padding(
@@ -106,7 +113,7 @@ class CompareToFirst extends StatelessWidget {
               text:
                   '${calculatedWeight(fWeight: lastWeight, lWeight: firstWeight)}$unit',
               isNotDivider: true,
-            )
+            ),
           ],
         ),
       ),
@@ -201,6 +208,52 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
       );
     }
 
+    onTapSixMonthGraphButton() {
+      List<StackGraphData> max = [];
+      List<StackGraphData> avg = [];
+      List<StackGraphData> min = [];
+
+      for (var i = 0; i < 6; i++) {
+        DateTime monthDt = Jiffy.now().subtract(months: i).dateTime;
+        String ymDtStr = ym(locale: widget.locale, dateTime: monthDt);
+        List<RecordBox> ymRecordList = recordList
+            .where((record) =>
+                ymDtStr ==
+                    ym(
+                        locale: widget.locale,
+                        dateTime: record.createDateTime) &&
+                record.weight != null)
+            .toList();
+
+        if (ymRecordList.isNotEmpty) {
+          double? maxWeight = maxRecordFunc(list: ymRecordList).weight;
+          double? avgWeight =
+              double.tryParse(avgRecordFunc(list: ymRecordList));
+          double? minWeight = minRecordFunc(list: ymRecordList).weight;
+
+          String x = yyyyUnderM(locale: widget.locale, dateTime: monthDt);
+          StackGraphData maxData = StackGraphData(x, maxWeight);
+          StackGraphData avgData = StackGraphData(x, avgWeight);
+          StackGraphData minData = StackGraphData(x, minWeight);
+
+          max.add(maxData);
+          avg.add(avgData);
+          min.add(minData);
+        }
+      }
+
+      Navigator.pushNamed(
+        context,
+        '/max-min-avg-graph-page',
+        arguments: DataSourceClass(
+          title: '월간 비교 그래프',
+          max: max.reversed.toList(),
+          avg: avg.reversed.toList(),
+          min: min.reversed.toList(),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ContentsBox(
@@ -241,6 +294,11 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
                               .createDateTime,
                         ),
                         isNotDivider: true,
+                      ),
+                      GraphCompareButton(
+                        text: '월간 비교 그래프',
+                        imgNumber: 11,
+                        onTap: onTapSixMonthGraphButton,
                       )
                     ],
                   )
@@ -251,6 +309,37 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
                   )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class GraphCompareButton extends StatelessWidget {
+  GraphCompareButton({
+    super.key,
+    required this.text,
+    required this.imgNumber,
+    required this.onTap,
+  });
+
+  String text;
+  int imgNumber;
+  Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Row(
+        children: [
+          ExpandedButtonHori(
+            padding: const EdgeInsets.symmetric(vertical: 12.5),
+            text: text,
+            imgUrl: 'assets/images/t-$imgNumber.png',
+            borderRadius: 5,
+            onTap: onTap,
+          )
+        ],
       ),
     );
   }
@@ -290,6 +379,49 @@ class _YearAnalysisState extends State<YearAnalysis> {
           setState(() => seletedDateTime = args.value);
           closeDialog(context);
         },
+      );
+    }
+
+    onTapOneYearGraphButton() {
+      List<StackGraphData> max = [];
+      List<StackGraphData> avg = [];
+      List<StackGraphData> min = [];
+
+      for (var i = 0; i < 6; i++) {
+        DateTime monthDt = Jiffy.now().subtract(years: i).dateTime;
+        String yDtStr = y(locale: widget.locale, dateTime: monthDt);
+        List<RecordBox> yRecordList = recordList
+            .where((record) =>
+                yDtStr ==
+                    y(locale: widget.locale, dateTime: record.createDateTime) &&
+                record.weight != null)
+            .toList();
+
+        if (yRecordList.isNotEmpty) {
+          double? maxWeight = maxRecordFunc(list: yRecordList).weight;
+          double? avgWeight = double.tryParse(avgRecordFunc(list: yRecordList));
+          double? minWeight = minRecordFunc(list: yRecordList).weight;
+
+          String x = y(locale: widget.locale, dateTime: monthDt);
+          StackGraphData maxData = StackGraphData(x, maxWeight);
+          StackGraphData avgData = StackGraphData(x, avgWeight);
+          StackGraphData minData = StackGraphData(x, minWeight);
+
+          max.add(maxData);
+          avg.add(avgData);
+          min.add(minData);
+        }
+      }
+
+      Navigator.pushNamed(
+        context,
+        '/max-min-avg-graph-page',
+        arguments: DataSourceClass(
+          title: '연간 비교 그래프',
+          max: max.reversed.toList(),
+          avg: avg.reversed.toList(),
+          min: min.reversed.toList(),
+        ),
       );
     }
 
@@ -333,6 +465,11 @@ class _YearAnalysisState extends State<YearAnalysis> {
                               .createDateTime,
                         ),
                         isNotDivider: true,
+                      ),
+                      GraphCompareButton(
+                        text: '연간 비교 그래프',
+                        imgNumber: 24,
+                        onTap: onTapOneYearGraphButton,
                       )
                     ],
                   )

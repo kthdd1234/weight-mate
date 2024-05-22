@@ -34,6 +34,7 @@ class _PremiumPageState extends State<PremiumPage> {
     initIAP() async {
       try {
         Offerings offerings = await Purchases.getOfferings();
+
         List<Package>? availablePackages =
             offerings.getOffering(entitlement_identifier)?.availablePackages;
 

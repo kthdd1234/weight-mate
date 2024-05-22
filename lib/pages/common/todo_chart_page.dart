@@ -322,7 +322,7 @@ class RecordLabel extends StatelessWidget {
     MaterialColor color = categoryColors[type]!;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -336,29 +336,26 @@ class RecordLabel extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(text, style: const TextStyle(fontSize: 11)),
-                  dietExerciseRecordDateTime != null
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: CommonText(
-                            text: hm(
-                              locale: locale,
-                              dateTime: dietExerciseRecordDateTime!,
-                            ),
-                            size: 9,
-                            color: Colors.grey,
-                            isNotTop: true,
-                            isNotTr: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(text, style: const TextStyle(fontSize: 13)),
+                dietExerciseRecordDateTime != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: CommonText(
+                          text: hm(
+                            locale: locale,
+                            dateTime: dietExerciseRecordDateTime!,
                           ),
-                        )
-                      : const EmptyArea()
-                ],
-              ),
+                          size: 10,
+                          color: Colors.grey,
+                          isNotTop: true,
+                          isNotTr: true,
+                        ),
+                      )
+                    : const EmptyArea()
+              ],
             ),
           ),
         ],
