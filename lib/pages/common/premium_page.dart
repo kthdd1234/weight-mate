@@ -34,6 +34,7 @@ class _PremiumPageState extends State<PremiumPage> {
     initIAP() async {
       try {
         Offerings offerings = await Purchases.getOfferings();
+
         List<Package>? availablePackages =
             offerings.getOffering(entitlement_identifier)?.availablePackages;
 
@@ -100,7 +101,7 @@ class _PremiumPageState extends State<PremiumPage> {
                     CommonText(
                       text: item.subTitle,
                       size: 11,
-                      color: Colors.grey.shade400,
+                      color: Colors.grey,
                     ),
                   ],
                 )
@@ -159,7 +160,7 @@ class _PremiumPageState extends State<PremiumPage> {
                                   borderRadius: 5,
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 15),
-                                  imgUrl: 'assets/images/t-15.png',
+                                  imgUrl: 'assets/images/t-23.png',
                                   text: '구매하기',
                                   nameArgs: {
                                     "price":

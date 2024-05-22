@@ -16,12 +16,10 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
-import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:provider/provider.dart';
 import 'package:quiver/time.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -341,7 +339,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
                                                 child: Text(
                                                   action['name'],
                                                   style: const TextStyle(
-                                                    fontSize: 12,
+                                                    fontSize: 13,
                                                     color: themeColor,
                                                   ),
                                                 ),
@@ -607,7 +605,7 @@ class ColumnItmeList extends StatelessWidget {
                                 child: Text(
                                   plan.name,
                                   style: const TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 12,
                                     color: themeColor,
                                     overflow: TextOverflow.ellipsis,
                                   ),

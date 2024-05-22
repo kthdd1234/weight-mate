@@ -922,7 +922,7 @@ class _RecordAddState extends State<RecordAdd> {
       setState(() => isShowInput = true);
     }
 
-    onEditingComplete() async {
+    onEditingComplete(bool? isFasting) async {
       String name = textController.text;
 
       setState(() {
@@ -1005,6 +1005,7 @@ class _RecordAddState extends State<RecordAdd> {
                   type: widget.type,
                   timeStamps: timeStamps,
                   name: name,
+                  isFasting: isFasting,
                   selectedTitle: '',
                   onAmpm: onAmpm,
                   onHours: onHours,
@@ -1019,24 +1020,56 @@ class _RecordAddState extends State<RecordAdd> {
       }
     }
 
+    onFasting() {
+      textController.text = '단식 했어요'.tr();
+
+      onEditingComplete(true);
+      setState(() {});
+    }
+
     return isShowInput
         ? Row(
             children: [
               TodoInput(
                 controller: textController,
-                onEditingComplete: onEditingComplete,
+                onEditingComplete: () => onEditingComplete(null),
               ),
             ],
           )
-        : InkWell(
-            onTap: onAdd,
-            child: Row(
-              children: [
-                SvgPicture.asset('assets/svgs/pencil-square.svg', height: 18),
-                SpaceWidth(width: 7),
-                CommonText(text: '기록 추가', size: 15, color: Colors.grey),
-              ],
-            ),
+        : Column(
+            children: [
+              Row(
+                children: [
+                  CommonButton(
+                    text: '+ 기록 추가하기',
+                    fontSize: 13,
+                    isBold: true,
+                    height: 50,
+                    bgColor: widget.type == eDiet
+                        ? dietBgButtonColor
+                        : exerciseBgButtonColor,
+                    radious: 7,
+                    textColor: widget.type == eDiet
+                        ? dietTextButtonColor
+                        : exerciseTextButtonColor,
+                    onTap: onAdd,
+                  ),
+                  SpaceWidth(width: widget.type == eDiet ? 5 : 0),
+                  widget.type == eDiet
+                      ? CommonButton(
+                          text: '단식 했어요',
+                          fontSize: 13,
+                          isBold: true,
+                          height: 50,
+                          bgColor: const Color.fromARGB(255, 233, 247, 247),
+                          radious: 7,
+                          textColor: Colors.teal.shade300,
+                          onTap: onFasting,
+                        )
+                      : const EmptyArea()
+                ],
+              )
+            ],
           );
   }
 }
@@ -1053,10 +1086,12 @@ class CategoryBottomSheet extends StatelessWidget {
     required this.onHours,
     required this.onMinutes,
     required this.onChangedSwitch,
+    this.isFasting,
   });
 
   String type, name, selectedTitle;
   List<String> timeStamps;
+  bool? isFasting;
   Function(String) onAmpm, onHours, onMinutes, onTitle;
   Function({required bool isChecked, required String type}) onChangedSwitch;
 
@@ -1084,6 +1119,7 @@ class CategoryBottomSheet extends StatelessWidget {
           RecordDateTime(
             type: type,
             isTitle: true,
+            isFasting: isFasting,
             isRecordDateTime: isRecordDateTime,
             timeStamps: timeStamps,
             onAmpm: onAmpm,
@@ -1094,6 +1130,7 @@ class CategoryBottomSheet extends StatelessWidget {
           SpaceHeight(height: 10),
           CategoryList(
             type: type,
+            isFasting: isFasting,
             selectedTitle: selectedTitle,
             onTitle: onTitle,
           ),
@@ -1109,16 +1146,23 @@ class CategoryList extends StatelessWidget {
     required this.type,
     required this.onTitle,
     required this.selectedTitle,
+    this.isFasting,
   });
 
   String type, selectedTitle;
   DateTime? dietExerciseRecordDateTime;
+  bool? isFasting;
   Function(String title) onTitle;
+
+  // fastingCategory
 
   @override
   Widget build(BuildContext context) {
+    final children =
+        isFasting == true ? fastingCategory[type]! : category[type]!;
+
     return Row(
-        children: category[type]!
+        children: children
             .map(
               (item) => Expanded(
                 child: Row(
@@ -1163,10 +1207,12 @@ class RecordDateTime extends StatelessWidget {
     required this.onHours,
     required this.onMinutes,
     required this.onChangedSwitch,
+    this.isFasting,
   });
 
   String type;
   bool isTitle, isRecordDateTime;
+  bool? isFasting;
   List<String> timeStamps;
   Function(String) onAmpm, onHours, onMinutes;
   Function({required bool isChecked, required String type}) onChangedSwitch;
@@ -1281,7 +1327,11 @@ class RecordDateTime extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText(text: '시간도 기록 할까요?', size: 12, isBold: true),
+                CommonText(
+                    text:
+                        isFasting == true ? '단식 시작 시간도 기록할까요?' : '시간도 기록 할까요?',
+                    size: 12,
+                    isBold: true),
                 SpaceHeight(height: 2),
                 CommonText(
                   text: '시간 기록 시, 시간순으로 자동 정렬돼요.',
@@ -1827,21 +1877,25 @@ class _GoalAddState extends State<GoalAdd> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CommonCheckBox(
-            id: isShowInput ? uuid() : 'disabled',
-            isCheck: isChecked,
-            checkColor: isChecked ? widget.mainColor : Colors.grey,
-            isDisabled: !isShowInput,
-            onTap: onCheckBox,
-          ),
+          isShowInput
+              ? CommonCheckBox(
+                  id: uuid(),
+                  isCheck: isChecked,
+                  checkColor: isChecked ? widget.mainColor : Colors.grey,
+                  onTap: onCheckBox,
+                )
+              : const EmptyArea(),
           !isShowInput
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: CommonText(
-                    text: '${widget.title} 추가',
-                    size: 15,
-                    color: Colors.grey,
-                  ),
+              ? CommonButton(
+                  topPadding: 5,
+                  text: '+ ${widget.title} 추가하기',
+                  isBold: true,
+                  height: 50,
+                  fontSize: 13,
+                  bgColor: goalButtonColors[widget.type]!['bgColor']!,
+                  radious: 7,
+                  textColor: goalButtonColors[widget.type]!['textColor']!,
+                  onTap: onTap,
                 )
               : TodoInput(
                   controller: textController,

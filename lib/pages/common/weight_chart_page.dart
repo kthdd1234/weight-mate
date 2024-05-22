@@ -13,6 +13,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class WeightChartPage extends StatefulWidget {
   const WeightChartPage({super.key});
@@ -34,7 +35,6 @@ class _WeightChartPageState extends State<WeightChartPage> {
     }
 
     initPremium();
-
     super.initState();
   }
 

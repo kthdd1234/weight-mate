@@ -52,38 +52,6 @@ class _EditWeightState extends State<EditWeight> {
       );
     }
 
-    // showAdDialog({
-    //   required String title,
-    //   required String loadingText,
-    //   Map<String, String>? nameArgs,
-    // }) async {
-    //   if (isPremium == false) {
-    //     await showDialog(
-    //       barrierDismissible: false,
-    //       context: context,
-    //       builder: (buildContext) {
-    //         onLeftClick() {
-    //           Navigator.pushNamed(context, '/premium-page');
-    //         }
-
-    //         onRightClick() {
-    //           closeDialog(context);
-    //         }
-
-    //         return NativeAdDialog(
-    //           loadingText: loadingText,
-    //           title: title,
-    //           nameArgs: nameArgs,
-    //           leftText: '광고 제거',
-    //           rightText: '광고 닫기',
-    //           onLeftClick: onLeftClick,
-    //           onRightClick: onRightClick,
-    //         );
-    //       },
-    //     );
-    //   }
-    // }
-
     onInit() {
       setState(() {
         isShowInput = false;
@@ -131,16 +99,6 @@ class _EditWeightState extends State<EditWeight> {
 
         onInit();
         closeDialog(context);
-
-        // List<RecordBox> recordList = recordRepository.recordBox.values.toList();
-        // List<RecordBox> weightList =
-        //     recordList.where((e) => e.weight != null).toList();
-
-        // showAdDialog(
-        //   title: '👏🏻 일째 기록 했어요!',
-        //   loadingText: '광고 불러오는 중...',
-        //   nameArgs: {'days': '${weightList.length}'},
-        // );
       }
     }
 
@@ -151,11 +109,6 @@ class _EditWeightState extends State<EditWeight> {
 
         onInit();
         closeDialog(context);
-
-        // showAdDialog(
-        //   title: '⛳ 목표 체중을 변경 했어요!',
-        //   loadingText: '광고 불러오는 중...',
-        // );
       }
     }
 
@@ -472,7 +425,7 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
       WeightButtonClass(),
       WeightButtonClass(
         text: '목표 체중: ',
-        imgNumber: '15',
+        imgNumber: '23',
         nameArgs: {'weight': '${widget.goalWeight}', 'unit': weightUnit},
         onTap: widget.onTapGoalWeight,
       ),

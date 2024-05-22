@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
@@ -45,6 +46,8 @@ class HomeWidgetService {
     String goalWeight = '${user.goalWeight}${user.weightUnit}';
     String emptyWeightTitle = "체중 기록하기".tr();
     String fontFamily = '${user.fontFamily}';
+
+    log('fontFamily => $fontFamily');
 
     Map<String, String> weightObj = {
       "headerTitle": headerTitle,

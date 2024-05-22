@@ -8,9 +8,11 @@ import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
@@ -119,22 +121,10 @@ class CommonTitle extends StatefulWidget {
 }
 
 class _CommonTitleState extends State<CommonTitle> {
-  // bool isPremium = false;
-
-  // @override
-  // void initState() {
-  //   initPremium() async {
-  //     isPremium = await isPurchasePremium();
-  //     setState(() {});
-  //   }
-
-  //   initPremium();
-  //   super.initState();
-  // }
-
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    UserBox user = userRepository.user;
 
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
     DateTime historyDateTime =
@@ -142,13 +132,10 @@ class _CommonTitleState extends State<CommonTitle> {
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
     bool isPremium = context.watch<PremiumProvider>().premiumValue();
-
-    UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
-
     String title = [
       ym(locale: locale, dateTime: titleDateTime),
       historyFormat == eHistoryList
@@ -157,6 +144,7 @@ class _CommonTitleState extends State<CommonTitle> {
       '체중 변화',
       '설정'
     ][widget.index];
+    String graphType = user.graphType ?? eGraphDefault;
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
@@ -239,6 +227,60 @@ class _CommonTitleState extends State<CommonTitle> {
       return widget.index != 3 && isPremium == false
           ? BannerWidget()
           : SpaceHeight(height: 10);
+    }
+
+    onTapGraphMode(String type) async {
+      if (type == eGraphCustom && isPremium == false) {
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+            shape: containerBorderRadious,
+            backgroundColor: dialogBackgroundColor,
+            title: DialogTitle(
+              text: "커스텀 모드 제한",
+              onTap: () => closeDialog(context),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 145,
+              child: Column(
+                children: [
+                  ContentsBox(
+                    contentsWidget: Column(
+                      children: [
+                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                          text: '커스텀 모드를 이용할 수 있어요.',
+                          size: 14,
+                          isCenter: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SpaceHeight(height: 10),
+                  Row(
+                    children: [
+                      ExpandedButtonHori(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        imgUrl: 'assets/images/t-23.png',
+                        text: '프리미엄 구매 페이지로 이동',
+                        onTap: () {
+                          Navigator.pushNamed(context, '/premium-page');
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
+      user.graphType = type;
+      await user.save();
     }
 
     List<IconData?> rightIconList = [
@@ -341,6 +383,17 @@ class _CommonTitleState extends State<CommonTitle> {
                           ],
                         )
                       : const EmptyArea(),
+                  isGraph
+                      ? CommonTag(
+                          text: graphType == eGraphDefault ? '기본 모드' : '커스텀 모드',
+                          color: 'whiteIndigo',
+                          onTap: () => onTapGraphMode(
+                            graphType == eGraphDefault
+                                ? eGraphCustom
+                                : eGraphDefault,
+                          ),
+                        )
+                      : const EmptyArea(),
                 ],
               )
             ],
@@ -350,10 +403,6 @@ class _CommonTitleState extends State<CommonTitle> {
     );
   }
 }
-
-String dietType = PlanTypeEnum.diet.toString();
-String exerciseType = PlanTypeEnum.exercise.toString();
-String lifeType = PlanTypeEnum.lifestyle.toString();
 
 class CalendarBar extends StatelessWidget {
   CalendarBar({
@@ -371,8 +420,8 @@ class CalendarBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     String? weightUnit = userRepository.user.weightUnit ?? 'kg';
-
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     DateTime historyImportDateTime = context
@@ -423,15 +472,15 @@ class CalendarBar extends StatelessWidget {
         'purple',
       );
       String? diet = colorName(
-        nullCheckAction(actions, dietType),
+        nullCheckAction(actions, eDiet),
         'teal',
       );
       String? exercise = colorName(
-        nullCheckAction(actions, exerciseType),
+        nullCheckAction(actions, eExercise),
         'lightBlue',
       );
       String? life = colorName(
-        nullCheckAction(actions, lifeType),
+        nullCheckAction(actions, eLife),
         'brown',
       );
       String? diary = colorName(
@@ -457,16 +506,26 @@ class CalendarBar extends StatelessWidget {
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       bool? isWeight = recordInfo?.weight != null;
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CommonText(
-          isNotTr: true,
-          text: isWeight ? '${recordInfo?.weight}$weightUnit' : '',
-          size: 8,
-          color: Colors.black,
-          isCenter: true,
-        ),
-      );
+      return isWeight
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 1),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade300,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: CommonText(
+                  text: '${recordInfo?.weight}$weightUnit',
+                  size: 8.5,
+                  color: Colors.white,
+                  isCenter: true,
+                  isNotTr: true,
+                  isBold: true,
+                ),
+              ),
+            )
+          : const EmptyArea();
     }
 
     onPageChanged(DateTime dateTime) {
@@ -487,7 +546,7 @@ class CalendarBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: TableCalendar(
-                locale: context.locale.toString(),
+                locale: locale,
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: calendarMaker == CalendarMaker.sticker
                       ? stickerBuilder

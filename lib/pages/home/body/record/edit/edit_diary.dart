@@ -28,14 +28,9 @@ import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class EditDiary extends StatefulWidget {
-  EditDiary({super.key});
+class EditDiary extends StatelessWidget {
+  const EditDiary({super.key});
 
-  @override
-  State<EditDiary> createState() => _EditDiaryState();
-}
-
-class _EditDiaryState extends State<EditDiary> {
   @override
   Widget build(BuildContext context) {
     DateTime importDateTime =
@@ -421,7 +416,7 @@ class EmotionBottomSheet extends StatelessWidget {
                     SvgPicture.asset(svgPath, height: 40),
                     SpaceHeight(height: tinySpace),
                     data.emotion == emotion
-                        ? CommonTag(color: 'orange', text: data.name)
+                        ? CommonTag(color: 'peach', text: data.name)
                         : CommonText(text: data.name, size: 12, isCenter: true),
                   ],
                 ),

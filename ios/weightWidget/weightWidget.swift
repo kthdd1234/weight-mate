@@ -63,8 +63,7 @@ struct weightWidgetEntryView : View {
 
     var body: some View {
           VStack(alignment: .leading, spacing: 0) {
-              Spacer()
-              HeaderCell(title: entry.headerTitle, secondary: isWidgetSizeMediumLarge(family: wFamily) ? entry.today : "", fontFamily: entry.fontFamily)
+              HeaderCell(title: entry.headerTitle, secondary: isWidgetSizeMediumLarge(family: wFamily) ? entry.today : "", fontFamily: entry.fontFamily).padding(.top, 5)
             
               if entry.isEmpty != "empty" {
                   VStack(alignment: .leading, spacing: 15) {
