@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
 
@@ -137,6 +138,24 @@ List<PlanItemClass> initPlanItemList = [
     name: '🥛 배고플 때 우유 한 잔 마시기',
   ),
 ];
+
+Map<String, List<Map<String, dynamic>>> fastingCategory = {
+  PlanTypeEnum.diet.toString(): [
+    {
+      'icon': categoryIcons['아침'],
+      'title': "아침",
+    },
+    {
+      'icon': categoryIcons['점심'],
+      'title': "점심",
+    },
+    {
+      'icon': categoryIcons['저녁'],
+      'title': "저녁",
+      'last': true,
+    },
+  ],
+};
 
 Map<String, List<Map<String, dynamic>>> category = {
   PlanTypeEnum.diet.toString(): [
@@ -363,25 +382,41 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     title: '모든 화면에서 광고가 나오지 않아요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
-  PremiumBenefitsClass(
-    svgName: 'premium-category-detail',
-    title: '좀 더 자세한 통계 기능을 제공해드려요',
-    subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등',
-  ),
-  PremiumBenefitsClass(
-    svgName: 'premium-photos-four',
-    title: '사진을 최대 4장까지 추가 할 수 있어요',
-    subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
-  ),
-  PremiumBenefitsClass(
-    svgName: 'custom-graph',
-    title: '체중 그래프에서 원하는 기간을 설정할 수 있어요',
-    subTitle: '시작일/종료일을 설정해서 원하는 기간을 한눈에 보세요!',
-  ),
+  // PremiumBenefitsClass(
+  //   svgName: 'premium-category-detail',
+  //   title: '좀 더 자세한 통계 기능을 제공해드려요',
+  //   subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등',
+  // ),
+  // PremiumBenefitsClass(
+  //   svgName: 'premium-photos-four',
+  //   title: '사진을 최대 4장까지 추가 할 수 있어요',
+  //   subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
+  // ),
+  // PremiumBenefitsClass(
+  //   svgName: 'custom-graph',
+  //   title: '체중 그래프에서 원하는 기간을 설정할 수 있어요',
+  //   subTitle: '시작일/종료일을 설정해서 원하는 기간을 한눈에 보세요!',
+  // ),
 ];
 
 String eGraphDefault = graphType.Default.toString();
+
 String eGraphCustom = graphType.Custom.toString();
+
+final goalButtonColors = {
+  eDiet: {
+    'bgColor': dietBgButtonColor,
+    'textColor': dietTextButtonColor,
+  },
+  eExercise: {
+    'bgColor': exerciseBgButtonColor,
+    'textColor': exerciseTextButtonColor,
+  },
+  eLife: {
+    'bgColor': lifeBgButtonColor,
+    'textColor': lifeTextButtonColor,
+  }
+};
 
 // String baseAssetsPath(String path) {
 //   return 'assets/images/$path.png';

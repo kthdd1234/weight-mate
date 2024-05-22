@@ -81,10 +81,7 @@ void main() async {
   final adsState = AdsService(initialization: initMobileAds);
 
   await Purchases.configure(_configuration);
-  await Firebase.initializeApp(
-    name: 'weight-mate',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await MateHive().initializeHive();
   await dotenv.load(fileName: ".env");
   await NotificationService().initNotification();

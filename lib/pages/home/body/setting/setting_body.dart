@@ -404,7 +404,7 @@ class _SettingBodyState extends State<SettingBody> {
       MoreSeeItemClass(
         id: MoreSeeItem.premium,
         icon: 'crown',
-        title: '프리미엄',
+        title: '광고 없애기',
         value: 'premium',
         color: themeColor,
         onTap: onTapPremium,
@@ -632,7 +632,7 @@ class MoreSeeItemWidget extends StatelessWidget {
             ),
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
             child: CommonText(
-              text: isPremium ? '구매 완료' : '업그레이드',
+              text: isPremium ? '구매 완료' : '프리미엄',
               color: Colors.white,
               size: 11,
               isCenter: true,

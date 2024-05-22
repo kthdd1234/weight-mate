@@ -258,7 +258,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> items = [
       BottomNavigationBarItem(
-        icon: const Icon(Icons.edit),
+        icon: const Icon(Icons.edit_rounded),
         label: '기록'.tr(),
       ),
       BottomNavigationBarItem(
@@ -365,8 +365,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             elevation: 0,
             currentIndex: bottomNavitionId.index,
             selectedItemColor: themeColor,
-            unselectedItemColor: const Color(0xFF151515),
-            backgroundColor: Colors.red,
+            unselectedItemColor: themeColor,
             onTap: onBottomNavigation,
           ),
         ),
