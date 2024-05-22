@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
 
@@ -40,6 +41,15 @@ List<SvgClass> emotionList = [
   SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
   SvgClass(emotion: 'loudly-crying-face', name: '감동'),
   SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
+  SvgClass(emotion: 'Face-Savoring-Food--Streamline-Emoji', name: '재미'),
+  SvgClass(emotion: 'Full-Moon-Face--Streamline-Emoji', name: '기대'),
+  SvgClass(emotion: 'Hushed-Face-1--Streamline-Emoji', name: '의아'),
+  SvgClass(emotion: 'Nauseated-Face-2--Streamline-Emoji', name: '살찜'),
+  SvgClass(emotion: 'Pouting-Face--Streamline-Emoji', name: '억울'),
+  SvgClass(
+      emotion: 'Smiling-Face-With-Sunglasses--Streamline-Emoji', name: '당당'),
+  SvgClass(emotion: 'Winking-Face--Streamline-Emoji', name: '친근'),
+  SvgClass(emotion: 'Drooling-Face-1--Streamline-Emoji', name: '상쾌'),
 ];
 
 List<PlanItemClass> initPlanItemList = [
@@ -128,6 +138,24 @@ List<PlanItemClass> initPlanItemList = [
     name: '🥛 배고플 때 우유 한 잔 마시기',
   ),
 ];
+
+Map<String, List<Map<String, dynamic>>> fastingCategory = {
+  PlanTypeEnum.diet.toString(): [
+    {
+      'icon': categoryIcons['아침'],
+      'title': "아침",
+    },
+    {
+      'icon': categoryIcons['점심'],
+      'title': "점심",
+    },
+    {
+      'icon': categoryIcons['저녁'],
+      'title': "저녁",
+      'last': true,
+    },
+  ],
+};
 
 Map<String, List<Map<String, dynamic>>> category = {
   PlanTypeEnum.diet.toString(): [
@@ -273,29 +301,6 @@ String eDiet = PlanTypeEnum.diet.toString();
 String eExercise = PlanTypeEnum.exercise.toString();
 String eLife = PlanTypeEnum.lifestyle.toString();
 
-List<SvgClass> svgData = [
-  SvgClass(emotion: 'slightly-smiling-face', name: '흐뭇'),
-  SvgClass(emotion: 'grinning-face-with-smiling-eyes', name: '기쁨'),
-  SvgClass(emotion: 'grinning-squinting-face', name: '짜릿'),
-  SvgClass(emotion: 'kissing-face', name: '신남'),
-  SvgClass(emotion: 'neutral-face', name: '보통'),
-  SvgClass(emotion: 'amazed-face', name: '놀람'),
-  SvgClass(emotion: 'anxious-face', name: '서운'),
-  SvgClass(emotion: 'crying-face', name: '슬픔'),
-  SvgClass(emotion: 'determined-face', name: '다짐'),
-  SvgClass(emotion: 'disappointed-face', name: '실망'),
-  SvgClass(emotion: 'dizzy-face', name: '피곤'),
-  SvgClass(emotion: 'grinning-face-with-sweat', name: '다행'),
-  SvgClass(emotion: 'expressionless-face', name: '고요'),
-  SvgClass(emotion: 'face-blowing-a-kiss', name: '사랑'),
-  SvgClass(emotion: 'sneezing-face', name: '아픔'),
-  SvgClass(emotion: 'worried-face', name: '걱정'),
-  SvgClass(emotion: 'winking-face-with-tongue', name: '장난'),
-  SvgClass(emotion: 'face-with-steam-from-nose', name: '화남'),
-  SvgClass(emotion: 'loudly-crying-face', name: '감동'),
-  SvgClass(emotion: 'smiling-face-with-halo', name: '해탈'),
-];
-
 Map<int, String> hourTo12 = {
   0: '12',
   1: "1",
@@ -323,66 +328,41 @@ Map<int, String> hourTo12 = {
   23: '11',
 };
 
+String initFontFamily = 'IM_Hyemin';
+String initFontName = 'IM 혜민';
+
 List<Map<String, String>> fontFamilyList = [
   {
-    "fontFamily": "cafe24Ohsquareair",
-    "name": "카페24 아네모네 에어",
-  },
-  {
-    "fontFamily": "cafe24SsurroundAir",
-    "name": "카페24 써라운드 에어",
-  },
-  {
-    "fontFamily": "Cafe24Syongsyong",
-    "name": "카페24 숑숑",
-  },
-  {
-    "fontFamily": "Cafe24Dongdong",
-    "name": "카페24 동동",
-  },
-  {
-    "fontFamily": "Cafe24Ssukssuk",
-    "name": "카페24 쑥쑥",
+    "fontFamily": "IM_Hyemin",
+    "name": "IM 혜민",
   },
   {
     "fontFamily": "KyoboHandwriting2022khn",
     "name": "교보 손글씨",
   },
   {
-    "fontFamily": "SingleDay",
-    "name": "싱글데이",
-  },
-  {
-    "fontFamily": "IM_Hyemin",
-    "name": "IM 혜민",
-  },
-  {
     "fontFamily": "TDTDTadakTadak",
     "name": "타닥타닥체",
   },
   {
-    "fontFamily": "omyu pretty",
-    "name": "오뮤 다예쁨체",
+    "fontFamily": "SingleDay",
+    "name": "싱글데이",
   },
   {
-    "fontFamily": "온글잎 밑미",
-    "name": "밑미 폰트",
+    "fontFamily": "Cafe24Dongdong",
+    "name": "카페24 동동",
   },
   {
-    "fontFamily": "꼬마나비체",
-    "name": "꼬마나비체",
+    "fontFamily": "Cafe24Syongsyong",
+    "name": "카페24 숑숑",
   },
   {
-    "fontFamily": "봉숭아틴트체",
-    "name": "봉숭아틴트체",
+    "fontFamily": "Cafe24Ssukssuk",
+    "name": "카페24 쑥쑥",
   },
   {
-    "fontFamily": "KOTRA HOPE",
-    "name": "코트라 희망체",
-  },
-  {
-    "fontFamily": "CookieRun",
-    "name": "쿠키런",
+    "fontFamily": "cafe24Ohsquareair",
+    "name": "카페24 아네모네 에어",
   },
 ];
 
@@ -405,11 +385,49 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
     svgName: 'premium-category-detail',
     title: '좀 더 자세한 통계 기능을 제공해드려요',
-    subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등 ',
+    subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-photos-four',
     title: '사진을 최대 4장까지 추가 할 수 있어요',
     subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
   ),
+  PremiumBenefitsClass(
+    svgName: 'custom-graph',
+    title: '체중 그래프에서 원하는 기간을 설정할 수 있어요',
+    subTitle: '시작일/종료일을 설정해서 원하는 기간을 한눈에 보세요!',
+  ),
 ];
+
+String eGraphDefault = graphType.Default.toString();
+
+String eGraphCustom = graphType.Custom.toString();
+
+final goalButtonColors = {
+  eDiet: {
+    'bgColor': dietBgButtonColor,
+    'textColor': dietTextButtonColor,
+  },
+  eExercise: {
+    'bgColor': exerciseBgButtonColor,
+    'textColor': exerciseTextButtonColor,
+  },
+  eLife: {
+    'bgColor': lifeBgButtonColor,
+    'textColor': lifeTextButtonColor,
+  }
+};
+
+// String baseAssetsPath(String path) {
+//   return 'assets/images/$path.png';
+// }
+
+// String exDiary = baseAssetsPath('ex_diary');
+// String exDietCollection = baseAssetsPath('ex_diet_collection');
+// String exDietWeek = baseAssetsPath('ex_diet_week');
+// String exExerciseCollection = baseAssetsPath('ex_exercise_collection');
+// String exExerciseWeek = baseAssetsPath('ex_exercise_week');
+// String exLifeWeek = baseAssetsPath('ex_life_week');
+// String exWeightAnalylize = baseAssetsPath('ex_weight_analylize');
+// String exWeightChart = baseAssetsPath('ex_weight_chart');
+// String exWeightCustom = baseAssetsPath('ex_weight_custom');

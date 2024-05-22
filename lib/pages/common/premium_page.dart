@@ -1,17 +1,22 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:provider/provider.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 class PremiumPage extends StatefulWidget {
@@ -22,7 +27,6 @@ class PremiumPage extends StatefulWidget {
 }
 
 class _PremiumPageState extends State<PremiumPage> {
-  bool isPremium = false;
   Package? package;
 
   @override
@@ -30,6 +34,7 @@ class _PremiumPageState extends State<PremiumPage> {
     initIAP() async {
       try {
         Offerings offerings = await Purchases.getOfferings();
+
         List<Package>? availablePackages =
             offerings.getOffering(entitlement_identifier)?.availablePackages;
 
@@ -41,38 +46,43 @@ class _PremiumPageState extends State<PremiumPage> {
       }
     }
 
-    initPurchase() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
     initIAP();
-    initPurchase();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    onPurchase() async {
-      try {
-        if (package != null) {
-          isPremium = await isPurchasePremium();
-          setState(() {});
-        }
-      } on PlatformException catch (e) {
-        log('e =>> ${e.toString()}');
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
-        PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
-        if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
-          log('errorCode =>> $errorCode');
+    onPurchase() async {
+      if (package != null) {
+        try {
+          showDialog(
+            context: context,
+            builder: (context) => LoadingDialog(
+              text: '데이터 불러오는 중...',
+              color: Colors.white,
+            ),
+          );
+
+          bool isPurchaseResult = await setPurchasePremium(package!);
+          context.read<PremiumProvider>().setPremiumValue(isPurchaseResult);
+        } on PlatformException catch (e) {
+          log('e =>> ${e.toString()}');
+          PurchasesErrorCode errorCode = PurchasesErrorHelper.getErrorCode(e);
+
+          if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
+            log('errorCode =>> $errorCode');
+          }
+        } finally {
+          closeDialog(context);
         }
       }
     }
 
     onRestore() async {
-      isPremium = await isPurchaseRestore();
-      setState(() {});
+      bool isRestorePremium = await isPurchaseRestore();
+      context.read<PremiumProvider>().setPremiumValue(isRestorePremium);
     }
 
     List<Widget> premiumBenefitsWidgetList = premiumBenefitsClassList
@@ -91,7 +101,7 @@ class _PremiumPageState extends State<PremiumPage> {
                     CommonText(
                       text: item.subTitle,
                       size: 11,
-                      color: Colors.grey.shade400,
+                      color: Colors.grey,
                     ),
                   ],
                 )
@@ -150,9 +160,13 @@ class _PremiumPageState extends State<PremiumPage> {
                                   borderRadius: 5,
                                   padding:
                                       const EdgeInsets.symmetric(vertical: 15),
-                                  imgUrl: 'assets/images/t-15.png',
-                                  text:
-                                      '구매하기 (${package?.storeProduct.priceString ?? 'none'})',
+                                  imgUrl: 'assets/images/t-23.png',
+                                  text: '구매하기',
+                                  nameArgs: {
+                                    "price":
+                                        package?.storeProduct.priceString ??
+                                            '없음'
+                                  },
                                   onTap: onPurchase,
                                 )
                         ],

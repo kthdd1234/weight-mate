@@ -562,7 +562,6 @@ class HistoryTodo extends StatelessWidget {
               children: [
                 SpaceHeight(height: 10),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     isRemoveMode
                         ? Expanded(

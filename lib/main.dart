@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +8,11 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/app_data_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
+import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/common/max_min_avg_graph_page.dart';
 import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
 import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
@@ -31,6 +35,7 @@ import 'package:flutter_app_weight_management/provider/history_import_date_time.
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/reload_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
@@ -38,12 +43,14 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/auth_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -62,7 +69,7 @@ const List<Locale> supportedLocales = [
 ];
 
 final _configuration =
-    PurchasesConfiguration('appl_vjYFXCKiODqbJjabYlqJnmlIMPj');
+    PurchasesConfiguration(Platform.isIOS ? appleApiKey : googleApiKey);
 
 UserRepository userRepository = UserRepository();
 RecordRepository recordRepository = RecordRepository();
@@ -75,17 +82,13 @@ void main() async {
   final adsState = AdsService(initialization: initMobileAds);
 
   await Purchases.configure(_configuration);
-  await Firebase.initializeApp(
-    name: 'weight-mate',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await MateHive().initializeHive();
   await dotenv.load(fileName: ".env");
   await NotificationService().initNotification();
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  await AuthService().getOrCreateUser();
 
   runApp(
     MultiProvider(
@@ -100,6 +103,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryTitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
+        ChangeNotifierProvider(create: (_) => PremiumProvider()),
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,
@@ -134,6 +138,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             await AppTrackingTransparency.trackingAuthorizationStatus;
 
         setState(() => _authStatus = '$status');
+
+        print('TrackingStatus => $status');
 
         if (status == TrackingStatus.notDetermined) {
           TrackingStatus status =
@@ -222,16 +228,16 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
     String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
-    bool isNotJapan = context.locale != const Locale('ja');
 
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
         : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
-    String initLocale = isNotJapan ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
-    String fontFamily =
-        user?.fontFamily == null ? initLocale : user!.fontFamily!;
+
+    String fontFamily = user?.fontFamily == null
+        ? initFontFamily
+        : getFontFamily(user!.fontFamily!);
 
     ThemeData theme = ThemeData(
       primarySwatch: AppColors.primaryMaterialSwatchDark,
@@ -262,7 +268,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
         '/partial-delete-page': (context) => const PatialDeletePage(),
-        '/diary-write-page': (context) => const DiaryWritePage(),
+        '/diary-write-page': (context) => DiaryWritePage(),
         '/body-unit-page': (context) => const BodyUnitPage(),
         '/body-info-page': (context) => const BodyInfoPage(),
         '/todo-chart-page': (context) => const TodoChartPage(),
@@ -272,6 +278,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/weight-analyze-page': (context) => const WeightAnalyzePage(),
         '/premium-page': (context) => const PremiumPage(),
         '/app-data-page': (context) => const AppDataPage(),
+        '/diary-collection-page': (context) => const DiaryCollectionPage(),
+        '/max-min-avg-graph-page': (context) => const MaxMinAvgGraphPage(),
       },
     );
   }

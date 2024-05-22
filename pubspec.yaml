@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.0.16+40
+version: 2.0.19+44
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -86,12 +86,10 @@ dependencies:
   path: ^1.8.3
   restart_app: ^1.2.1
   firebase_core: ^2.27.0
-  in_app_purchase: ^3.1.13
-  firebase_auth: ^4.17.8
-  cloud_firestore: ^4.15.8
-  cloud_functions: ^4.6.8
   http: ^1.2.0
   purchases_flutter: ^6.26.0
+  jiffy: ^6.2.1
+  firebase_auth: ^4.17.8
 
 dev_dependencies:
   flutter_test:
@@ -121,30 +119,11 @@ flutter:
     - .env
     - assets/images/Cloudy_Apple.png
     - assets/images/MATE.png
-    - assets/images/t-1.png
-    - assets/images/t-2.png
-    - assets/images/t-3.png
-    - assets/images/t-4.png
-    - assets/images/t-5.png
-    - assets/images/t-6.png
-    - assets/images/t-7.png
-    - assets/images/t-8.png
-    - assets/images/t-9.png
-    - assets/images/t-10.png
     - assets/images/t-11.png
-    - assets/images/t-12.png
-    - assets/images/t-13.png
-    - assets/images/t-14.png
-    - assets/images/t-15.png
     - assets/images/t-16.png
-    - assets/images/t-17.png
-    - assets/images/t-18.png
-    - assets/images/t-19.png
-    - assets/images/t-20.png
-    - assets/images/t-21.png
     - assets/images/t-22.png
     - assets/images/t-23.png
-    - assets/images/splash-mate.png
+    - assets/images/t-24.png
     - assets/svgs/amazed-face.svg
     - assets/svgs/anxious-face.svg
     - assets/svgs/crying-face.svg
@@ -200,6 +179,17 @@ flutter:
     - assets/svgs/premium-no-ads.svg
     - assets/svgs/premium-photos-four.svg
     - assets/svgs/premium-badge.svg
+    - assets/svgs/Drooling-Face-1--Streamline-Emoji.svg
+    - assets/svgs/Face-Savoring-Food--Streamline-Emoji.svg
+    - assets/svgs/Full-Moon-Face--Streamline-Emoji.svg
+    - assets/svgs/Hushed-Face-1--Streamline-Emoji.svg
+    - assets/svgs/Nauseated-Face-2--Streamline-Emoji.svg
+    - assets/svgs/Pouting-Face--Streamline-Emoji.svg
+    - assets/svgs/Smiling-Face-With-Sunglasses--Streamline-Emoji.svg
+    - assets/svgs/Winking-Face--Streamline-Emoji.svg
+    - assets/svgs/arrow-start.svg
+    - assets/svgs/arrow-end.svg
+    - assets/svgs/custom-graph.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -218,16 +208,6 @@ flutter:
         - asset: assets/fonts/Cafe24Syongsyong/Cafe24Syongsyong.ttf
           weight: 400
 
-    - family: 온글잎 밑미
-      fonts:
-        - asset: assets/fonts/온글잎 밑미/온글잎 밑미.ttf
-          weight: 400
-
-    - family: cafe24SsurroundAir
-      fonts:
-        - asset: assets/fonts/cafe24SsurroundAir/cafe24SsurroundAir.ttf
-          weight: 400
-
     - family: cafe24Ohsquareair
       fonts:
         - asset: assets/fonts/cafe24Ohsquareair/cafe24Ohsquareair.ttf
@@ -243,34 +223,9 @@ flutter:
         - asset: assets/fonts/Cafe24Ssukssuk/Cafe24Ssukssuk.ttf
           weight: 400
 
-    - family: 꼬마나비체
-      fonts:
-        - asset: assets/fonts/꼬마나비체/꼬마나비체.ttf
-          weight: 400
-
-    - family: 봉숭아틴트체
-      fonts:
-        - asset: assets/fonts/봉숭아틴트체/봉숭아틴트체.ttf
-          weight: 400
-
     - family: TDTDTadakTadak
       fonts:
         - asset: assets/fonts/TDTDTadakTadak/TDTDTadakTadak.ttf
-          weight: 400
-
-    - family: omyu pretty
-      fonts:
-        - asset: assets/fonts/omyu pretty/omyu pretty.ttf
-          weight: 400
-
-    - family: KOTRA HOPE
-      fonts:
-        - asset: assets/fonts/KOTRA HOPE/KOTRA HOPE.ttf
-          weight: 400
-
-    - family: CookieRun
-      fonts:
-        - asset: assets/fonts/CookieRun/CookieRun.ttf
           weight: 400
 
     - family: IM_Hyemin

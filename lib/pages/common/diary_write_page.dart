@@ -21,7 +21,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class DiaryWritePage extends StatefulWidget {
-  const DiaryWritePage({super.key});
+  DiaryWritePage({super.key, this.dateTime});
+
+  DateTime? dateTime;
 
   @override
   State<DiaryWritePage> createState() => _DiaryWritePageState();
@@ -30,25 +32,24 @@ class DiaryWritePage extends StatefulWidget {
 class _DiaryWritePageState extends State<DiaryWritePage> {
   TextEditingController controller = TextEditingController();
   FocusNode focusNode = FocusNode();
-  DateTime? importDateTime;
+  DateTime? targetDateTime;
   RecordBox? recordInfo;
   bool isEnabledButton = false;
   String emotion = '';
 
-  @override
-  void initState() {
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
+  // @override
+  // void initState() {
+  //   AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {
     setState(() {
-      importDateTime =
-          context.watch<ImportDateTimeProvider>().getImportDateTime();
+      targetDateTime = widget.dateTime ?? DateTime.now();
       recordInfo =
-          recordRepository.recordBox.get(getDateTimeToInt(importDateTime));
+          recordRepository.recordBox.get(getDateTimeToInt(targetDateTime));
       controller.text = recordInfo?.whiteText ?? '';
       emotion = recordInfo?.emotion ?? '';
 
@@ -89,9 +90,9 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
       if (isEnabledButton) {
         DateTime now = DateTime.now();
         DateTime diaryDateTime = DateTime(
-          importDateTime!.year,
-          importDateTime!.month,
-          importDateTime!.day,
+          targetDateTime!.year,
+          targetDateTime!.month,
+          targetDateTime!.day,
           now.hour,
           now.minute,
         );
@@ -100,7 +101,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
 
         if (recordInfo == null) {
           recordRepository.updateRecord(
-            key: getDateTimeToInt(importDateTime),
+            key: getDateTimeToInt(targetDateTime),
             record: RecordBox(
               createDateTime: diaryDateTime,
               diaryDateTime: diaryDateTime,
@@ -177,7 +178,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                             CommonText(
                               text: ymd(
                                 locale: context.locale.toString(),
-                                dateTime: importDateTime ?? DateTime.now(),
+                                dateTime: targetDateTime ?? DateTime.now(),
                               ),
                               size: 12,
                               isNotTr: true,
@@ -188,7 +189,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                             CommonText(
                               text: e(
                                 locale: context.locale.toString(),
-                                dateTime: importDateTime ?? DateTime.now(),
+                                dateTime: targetDateTime ?? DateTime.now(),
                               ),
                               size: 12,
                               isNotTr: true,

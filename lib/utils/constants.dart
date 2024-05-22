@@ -155,6 +155,24 @@ const enableBackgroundColor = Color(0xffEDE8FF);
 /// appTextColor
 const appTextColor = Color(0xffE0B1F6);
 
+/// dietBgButtonColor
+const dietBgButtonColor = Color.fromARGB(255, 233, 247, 247);
+
+/// exerciseBgButtonColor
+const exerciseBgButtonColor = Color.fromARGB(255, 234, 251, 255);
+
+/// lifeBgButtonColor
+const lifeBgButtonColor = Color.fromARGB(255, 242, 239, 237);
+
+/// dietTextButtonColor
+final dietTextButtonColor = Colors.teal.shade300;
+
+/// exerciseTextButtonColor
+final exerciseTextButtonColor = Colors.lightBlue.shade300;
+
+/// lifeTextButtonColor
+final lifeTextButtonColor = Colors.brown.shade300;
+
 /// tagColors
 final tagColors = {
   'default': {
@@ -237,6 +255,10 @@ final tagColors = {
     'bgColor': Colors.blueGrey.shade400,
     'textColor': Colors.white,
   },
+  'peach': {
+    'bgColor': const Color.fromRGBO(255, 231, 217, 100),
+    'textColor': const Color.fromRGBO(255, 170, 84, 100),
+  }
 };
 
 List<FilterClass> openClassList = [
@@ -401,7 +423,8 @@ Map<int, Color> targetColors = {
   6: Colors.purple.shade300,
 };
 
-const iosClientId =
-    '439063728742-rjjrri2ki846u9bmgg49atp5vd8hlb81.apps.googleusercontent.com';
-
 const entitlement_identifier = 'premium';
+
+const appleApiKey = 'appl_vjYFXCKiODqbJjabYlqJnmlIMPj';
+
+const googleApiKey = 'goog_hZufqNCKtbHhktACjnimKTANXzD';

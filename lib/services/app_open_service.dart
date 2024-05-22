@@ -1,4 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'dart:io' show Platform;
@@ -36,6 +42,8 @@ class AppOpenAdManager {
         onAdLoaded: (ad) {
           _appOpenLoadTime = DateTime.now();
           _appOpenAd = ad;
+
+          print('AppOpenAd !!');
         },
         onAdFailedToLoad: (error) {
           print('AppOpenAd failed to load: $error');
@@ -86,19 +94,45 @@ class AppOpenAdManager {
   }
 }
 
-// class AppLifecycleReactor {
-//   AppLifecycleReactor({required this.appOpenAdManager});
-//   final AppOpenAdManager appOpenAdManager;
+class AppLifecycleReactor {
+  AppLifecycleReactor({required this.context, required this.appOpenAdManager});
 
-//   void listenToAppStateChanges() {
-//     AppStateEventNotifier.startListening();
-//     AppStateEventNotifier.appStateStream
-//         .forEach((state) => _onAppStateChanged(state));
-//   }
+  BuildContext context;
+  AppOpenAdManager appOpenAdManager;
 
-//   void _onAppStateChanged(AppState appState) {
-//     if (appState == AppState.foreground) {
-//       appOpenAdManager.showAdIfAvailable();
-//     }
-//   }
-// }
+  void listenToAppStateChanges() {
+    AppStateEventNotifier.startListening();
+    AppStateEventNotifier.appStateStream.forEach((state) {
+      _onAppStateChangedAd(state);
+      _onAppStateChangedPassword(state);
+    });
+  }
+
+  void _onAppStateChangedAd(AppState appState) async {
+    bool isPurchase = await isPurchasePremium();
+
+    if (appState == AppState.foreground && isPurchase == false) {
+      log('들오 오는거 체크용');
+      appOpenAdManager.showAdIfAvailable();
+    }
+  }
+
+  void _onAppStateChangedPassword(AppState appState) async {
+    String? passwords = userRepository.user.screenLockPasswords;
+
+    try {
+      if (passwords != null) {
+        if (appState == AppState.foreground) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => EnterScreenLockPage(),
+              fullscreenDialog: true,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      log('e => $e');
+    }
+  }
+}

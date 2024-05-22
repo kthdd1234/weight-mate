@@ -10,19 +10,20 @@ class CalendarDefaultDialog extends StatefulWidget {
     required this.type,
     required this.titleWidgets,
     required this.initialDateTime,
+    required this.backgroundColor,
+    required this.selectionColor,
     required this.onSubmit,
-    required this.onCancel,
     this.maxDate,
     this.minDate,
   });
 
   String type;
   Widget titleWidgets;
+  MaterialColor backgroundColor, selectionColor;
   DateTime? initialDateTime;
-  Function({String type, Object? object}) onSubmit;
-  Function() onCancel;
   DateTime? maxDate;
   DateTime? minDate;
+  Function(DateTime dateTime, String type) onSubmit;
 
   @override
   State<CalendarDefaultDialog> createState() => _CalendarDefaultDialogState();
@@ -51,24 +52,24 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
       ),
       content: ContentsBox(
         width: MediaQuery.of(context).size.width,
-        height: 450,
+        height: 420,
         contentsWidget: SfDateRangePicker(
           showNavigationArrow: true,
-          selectionColor: widget.type == 'start' ? themeColor : Colors.red,
+          selectionTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+          selectionColor: widget.selectionColor.shade200,
           todayHighlightColor: Colors.transparent,
           controller: _pickerController,
           view: DateRangePickerView.month,
           selectionMode: DateRangePickerSelectionMode.single,
-          showActionButtons: true,
-          confirmText: '확인'.tr(),
-          cancelText: '닫기'.tr(),
           maxDate: widget.maxDate,
           minDate: widget.minDate,
-          onSubmit: (Object? object) => widget.onSubmit(
-            type: widget.type,
-            object: object,
-          ),
-          onCancel: widget.onCancel,
+          onSelectionChanged: (DateRangePickerSelectionChangedArgs? object) =>
+              widget.onSubmit(object!.value, widget.type),
+          // onSubmit: (Object? object) => widget.onSubmit(
+          //   type: widget.type,
+          //   object: object,
+          // ),
+          // onCancel: widget.onCancel,
         ),
       ),
     );

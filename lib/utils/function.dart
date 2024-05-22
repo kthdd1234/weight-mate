@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -335,11 +336,29 @@ m_d({required String locale, required DateTime dateTime}) {
   return DateFormat.Md(locale).format(dateTime);
 }
 
+yyyyUnderMd({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nM.d' : 'M.d\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
+yyyyUnderM({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nMMMM' : 'M\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
 ymdeShort({required String locale, required DateTime dateTime}) {
   return DateFormat.yMEd(locale).format(dateTime);
 }
 
 ymdShort({required String locale, required DateTime dateTime}) {
+  if (locale == 'ko') {
+    return DateFormat('yyyy. M. d', 'ko').format(dateTime);
+  }
+
   return DateFormat.yMd(locale).format(dateTime);
 }
 
@@ -962,19 +981,34 @@ Future<void> restoreHiveBox<T>(String boxName) async {
   }
 }
 
-Future<bool> isPurchasePremium() async {
-  CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+Future<bool> setPurchasePremium(Package package) async {
+  try {
+    CustomerInfo customerInfo = await Purchases.purchasePackage(package);
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
 
-  return false;
-  // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-  //     true;
+Future<bool> isPurchasePremium() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
 }
 
 Future<bool> isPurchaseRestore() async {
   try {
     CustomerInfo customerInfo = await Purchases.restorePurchases();
-    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-        true;
+    bool isActive =
+        customerInfo.entitlements.all[entitlement_identifier]?.isActive == true;
+    return isActive;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -995,4 +1029,65 @@ Future<bool> isHideAd() async {
   }
 
   return false;
+}
+
+Future<void> showDialogDateTimeYear({
+  required BuildContext context,
+  required DateTime initialSelectedDate,
+  required Function(DateTime dateTime) onDateTime,
+}) async {
+  await showDialog(
+    context: context,
+    builder: (context) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: '년도 선택',
+            onTap: () => closeDialog(context),
+          ),
+          content: DatePicker(
+            view: DateRangePickerView.decade,
+            initialSelectedDate: initialSelectedDate,
+            onSelectionChanged: (datTimeArgs) {
+              onDateTime(datTimeArgs.value);
+              closeDialog(context);
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+
+  return;
+}
+
+String getFontFamily(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamily : initFontFamily;
+}
+
+String getFontName(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
+}
+
+navigatorExamplePage({
+  required BuildContext context,
+  required String title,
+  required String assetName,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ExampleImagePage(
+        title: title,
+        assetName: assetName,
+      ),
+    ),
+  );
 }

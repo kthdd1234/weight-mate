@@ -11,7 +11,6 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -19,6 +18,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/contai
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/services/device_info_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -67,10 +67,9 @@ class _SettingBodyState extends State<SettingBody> {
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
     String? language = user.language;
-    String? fontFamily = user.fontFamily;
-    String fontName = fontFamilyList
-            .firstWhere((item) => item['fontFamily'] == fontFamily)['name'] ??
-        '카페24 아네모네 에어';
+    String fontFamily = user.fontFamily ?? initFontFamily;
+    String validFontFamily = getFontFamily(fontFamily);
+    String fontName = getFontName(validFontFamily);
 
     onNavigator({required String type, required String title}) async {
       await Navigator.pushNamed(context, '/body-info-page', arguments: {
@@ -356,9 +355,7 @@ class _SettingBodyState extends State<SettingBody> {
                         Text(
                           item.name,
                           style: TextStyle(
-                            fontFamily: locale == 'ja'
-                                ? 'cafe24SsurroundAir'
-                                : fontFamily,
+                            fontFamily: fontFamily,
                             fontWeight: isLanguage
                                 ? FontWeight.bold
                                 : FontWeight.normal,
@@ -604,7 +601,7 @@ class WeightDialog extends StatelessWidget {
   }
 }
 
-class MoreSeeItemWidget extends StatefulWidget {
+class MoreSeeItemWidget extends StatelessWidget {
   MoreSeeItemWidget({
     super.key,
     required this.id,
@@ -621,28 +618,11 @@ class MoreSeeItemWidget extends StatefulWidget {
   Function(MoreSeeItem id) onTap;
 
   @override
-  State<MoreSeeItemWidget> createState() => _MoreSeeItemWidgetState();
-}
-
-class _MoreSeeItemWidgetState extends State<MoreSeeItemWidget> {
-  String premiumText = '';
-
-  @override
-  void initState() {
-    getPremium() async {
-      premiumText = await isPurchasePremium() ? '구매 완료' : '업그레이드';
-      setState(() {});
-    }
-
-    getPremium();
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
     wValue() {
-      if (widget.value == 'premium') {
+      if (value == 'premium') {
         return Container(
             decoration: BoxDecoration(
               image: const DecorationImage(
@@ -652,7 +632,7 @@ class _MoreSeeItemWidgetState extends State<MoreSeeItemWidget> {
             ),
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
             child: CommonText(
-              text: premiumText,
+              text: isPremium ? '구매 완료' : '업그레이드',
               color: Colors.white,
               size: 11,
               isCenter: true,
@@ -660,13 +640,13 @@ class _MoreSeeItemWidgetState extends State<MoreSeeItemWidget> {
             ));
       }
 
-      return widget.value != ''
+      return value != ''
           ? CommonText(
               isNotTr: true,
-              text: widget.value,
+              text: value,
               size: 13,
-              color: widget.color,
-              rightIcon: MoreSeeItem.appVersion != widget.id
+              color: color,
+              rightIcon: MoreSeeItem.appVersion != id
                   ? Icons.chevron_right_rounded
                   : null,
             )
@@ -674,7 +654,7 @@ class _MoreSeeItemWidgetState extends State<MoreSeeItemWidget> {
     }
 
     return InkWell(
-      onTap: () => widget.onTap(widget.id),
+      onTap: () => onTap(id),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 23, vertical: 15),
         child: Row(
@@ -687,12 +667,10 @@ class _MoreSeeItemWidgetState extends State<MoreSeeItemWidget> {
                 ),
               ),
               padding: const EdgeInsets.all(6),
-              child: SvgPicture.asset('assets/svgs/${widget.icon}.svg',
-                  height: 17),
+              child: SvgPicture.asset('assets/svgs/$icon.svg', height: 17),
             ),
             SpaceWidth(width: regularSapce),
-            Expanded(
-                child: CommonText(text: widget.title, size: 14, isBold: true)),
+            Expanded(child: CommonText(text: title, size: 14, isBold: true)),
             wValue(),
           ],
         ),
