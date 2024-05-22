@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
 
@@ -137,6 +138,24 @@ List<PlanItemClass> initPlanItemList = [
     name: '🥛 배고플 때 우유 한 잔 마시기',
   ),
 ];
+
+Map<String, List<Map<String, dynamic>>> fastingCategory = {
+  PlanTypeEnum.diet.toString(): [
+    {
+      'icon': categoryIcons['아침'],
+      'title': "아침",
+    },
+    {
+      'icon': categoryIcons['점심'],
+      'title': "점심",
+    },
+    {
+      'icon': categoryIcons['저녁'],
+      'title': "저녁",
+      'last': true,
+    },
+  ],
+};
 
 Map<String, List<Map<String, dynamic>>> category = {
   PlanTypeEnum.diet.toString(): [
@@ -381,7 +400,23 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
 ];
 
 String eGraphDefault = graphType.Default.toString();
+
 String eGraphCustom = graphType.Custom.toString();
+
+final goalButtonColors = {
+  eDiet: {
+    'bgColor': dietBgButtonColor,
+    'textColor': dietTextButtonColor,
+  },
+  eExercise: {
+    'bgColor': exerciseBgButtonColor,
+    'textColor': exerciseTextButtonColor,
+  },
+  eLife: {
+    'bgColor': lifeBgButtonColor,
+    'textColor': lifeTextButtonColor,
+  }
+};
 
 // String baseAssetsPath(String path) {
 //   return 'assets/images/$path.png';

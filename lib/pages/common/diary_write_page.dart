@@ -37,12 +37,12 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
   bool isEnabledButton = false;
   String emotion = '';
 
-  @override
-  void initState() {
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
+  // @override
+  // void initState() {
+  //   AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
 
-    super.initState();
-  }
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {

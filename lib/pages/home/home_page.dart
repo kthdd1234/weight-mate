@@ -20,6 +20,7 @@ import 'package:flutter_app_weight_management/provider/title_datetime_provider.d
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
+import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -50,6 +51,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  late AppLifecycleReactor _appLifecycleReactor;
+
   @override
   void initState() {
     super.initState();
@@ -219,6 +222,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+
+    _appLifecycleReactor = AppLifecycleReactor(
+      context: context,
+      appOpenAdManager: appOpenAdManager,
+    );
+
+    _appLifecycleReactor.listenToAppStateChanges();
+
     requestInAppReview() async {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
@@ -232,8 +244,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     requestInAppReview();
-
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();
@@ -258,7 +268,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> items = [
       BottomNavigationBarItem(
-        icon: const Icon(Icons.edit),
+        icon: const Icon(Icons.edit_rounded),
         label: '기록'.tr(),
       ),
       BottomNavigationBarItem(
@@ -365,8 +375,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             elevation: 0,
             currentIndex: bottomNavitionId.index,
             selectedItemColor: themeColor,
-            unselectedItemColor: const Color(0xFF151515),
-            backgroundColor: Colors.red,
+            unselectedItemColor: themeColor,
             onTap: onBottomNavigation,
           ),
         ),

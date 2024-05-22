@@ -22,11 +22,11 @@ class PatialDeletePage extends StatefulWidget {
 }
 
 class _PatialDeletePageState extends State<PatialDeletePage> {
-  @override
-  void initState() {
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

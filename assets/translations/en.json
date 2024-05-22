@@ -368,5 +368,10 @@
   "월간 비교 그래프": "Monthly comparison graph",
   "연간 비교 그래프": "Yearly comparison graph",
   "예시 이미지": "Example image",
-  "예시 이미지 보기": "View Example Images"
+  "예시 이미지 보기": "View Example Images",
+  "+ 기록 추가하기": "+ Add Record",
+  "+ 목표 추가하기": "+ Add Goal",
+  "+ 습관 추가하기": "+ Add Habit",
+  "단식 시작 시간도 기록할까요?": "Shall we record the time?",
+  "단식 했어요": "I fasted"
 }

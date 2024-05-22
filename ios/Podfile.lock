@@ -9,11 +9,26 @@ PODS:
     - AppAuth/Core
   - device_info_plus (0.0.1):
     - Flutter
+  - Firebase/Auth (10.22.0):
+    - Firebase/CoreOnly
+    - FirebaseAuth (~> 10.22.0)
   - Firebase/CoreOnly (10.22.0):
     - FirebaseCore (= 10.22.0)
+  - firebase_auth (4.17.8):
+    - Firebase/Auth (= 10.22.0)
+    - firebase_core
+    - Flutter
   - firebase_core (2.27.0):
     - Firebase/CoreOnly (= 10.22.0)
     - Flutter
+  - FirebaseAppCheckInterop (10.23.0)
+  - FirebaseAuth (10.22.0):
+    - FirebaseAppCheckInterop (~> 10.17)
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GTMSessionFetcher/Core (< 4.0, >= 2.1)
+    - RecaptchaInterop (~> 100.0)
   - FirebaseCore (10.22.0):
     - FirebaseCoreInternal (~> 10.0)
     - GoogleUtilities/Environment (~> 7.12)
@@ -123,6 +138,7 @@ PODS:
     - PurchasesHybridCommon (= 10.4.0)
   - PurchasesHybridCommon (10.4.0):
     - RevenueCat (= 4.40.0)
+  - RecaptchaInterop (100.0.0)
   - restart_app (0.0.1):
     - Flutter
   - RevenueCat (4.40.0)
@@ -142,6 +158,7 @@ PODS:
 DEPENDENCIES:
   - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
   - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
+  - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - flutter_email_sender (from `.symlinks/plugins/flutter_email_sender/ios`)
@@ -170,6 +187,8 @@ SPEC REPOS:
   trunk:
     - AppAuth
     - Firebase
+    - FirebaseAppCheckInterop
+    - FirebaseAuth
     - FirebaseCore
     - FirebaseCoreInternal
     - Google-Mobile-Ads-SDK
@@ -182,6 +201,7 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - PurchasesHybridCommon
+    - RecaptchaInterop
     - RevenueCat
 
 EXTERNAL SOURCES:
@@ -189,6 +209,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/app_tracking_transparency/ios"
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
+  firebase_auth:
+    :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
@@ -241,7 +263,10 @@ SPEC CHECKSUMS:
   AppAuth: a13994980c1ec792f7e2e665acd4d4aa6be43240
   device_info_plus: c6fb39579d0f423935b0c9ce7ee2f44b71b9fce6
   Firebase: 797fd7297b7e1be954432743a0b3f90038e45a71
+  firebase_auth: 4cf9d126dc9629a77dbcbd23723e903d8277ff5a
   firebase_core: 100945864b4aedce3cfef0c62ab864858bf013cf
+  FirebaseAppCheckInterop: a1955ce8c30f38f87e7d091630e871e91154d65d
+  FirebaseAuth: bbe4c68f958504ba9e54aee181adbdf5b664fbc6
   FirebaseCore: 0326ec9b05fbed8f8716cddbf0e36894a13837f7
   FirebaseCoreInternal: 6a292e6f0bece1243a737e81556e56e5e19282e3
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
@@ -270,6 +295,7 @@ SPEC CHECKSUMS:
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   purchases_flutter: 8dae74795cc654391454da4cc99b5f9ca5e53c34
   PurchasesHybridCommon: 70b93acd428e5f67a4d2f13de4c4eb229e4ff39f
+  RecaptchaInterop: 7d1a4a01a6b2cb1610a47ef3f85f0c411434cb21
   restart_app: 806659942bf932f6ce51c5372f91ce5e81c8c14a
   RevenueCat: f33d2bb58e75afc68d3a8cf193971f008f553a2c
   share_plus: c3fef564749587fc939ef86ffb283ceac0baf9f5

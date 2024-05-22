@@ -997,7 +997,6 @@ Future<bool> isPurchasePremium() async {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
     return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
         true;
-    // return true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -1009,8 +1008,6 @@ Future<bool> isPurchaseRestore() async {
     CustomerInfo customerInfo = await Purchases.restorePurchases();
     bool isActive =
         customerInfo.entitlements.all[entitlement_identifier]?.isActive == true;
-
-    log('customerInfo.isActive => $isActive');
     return isActive;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
