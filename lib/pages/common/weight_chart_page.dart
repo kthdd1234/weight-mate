@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -14,7 +13,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class WeightChartPage extends StatefulWidget {
   const WeightChartPage({super.key});
@@ -26,6 +25,18 @@ class WeightChartPage extends StatefulWidget {
 class _WeightChartPageState extends State<WeightChartPage> {
   DateTime selectedYear = DateTime.now();
   bool isRecent = true;
+  bool isPremium = false;
+
+  @override
+  void initState() {
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,29 +45,12 @@ class _WeightChartPageState extends State<WeightChartPage> {
     List<String> columnTitles = ['기록 날짜', '체중()', '이전과 비교'];
 
     onTapYear() {
-      showDialog(
+      showDialogDateTimeYear(
         context: context,
-        builder: (context) => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AlertDialog(
-              backgroundColor: dialogBackgroundColor,
-              shape: containerBorderRadious,
-              title: DialogTitle(
-                text: '년도 선택',
-                onTap: () => closeDialog(context),
-              ),
-              content: DatePicker(
-                view: DateRangePickerView.decade,
-                initialSelectedDate: selectedYear,
-                onSelectionChanged: (datTimeArgs) {
-                  setState(() => selectedYear = datTimeArgs.value);
-                  closeDialog(context);
-                },
-              ),
-            ),
-          ],
-        ),
+        initialSelectedDate: selectedYear,
+        onDateTime: (DateTime dateTime) {
+          setState(() => selectedYear = dateTime);
+        },
       );
     }
 
@@ -68,45 +62,49 @@ class _WeightChartPageState extends State<WeightChartPage> {
       widget: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('체중 통계표'.tr(),
-              style: const TextStyle(fontSize: 20, color: themeColor)),
+          title: Text(
+            '체중 통계표'.tr(),
+            style: const TextStyle(fontSize: 20, color: themeColor),
+          ),
           backgroundColor: Colors.transparent,
           centerTitle: false,
           elevation: 0.0,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15),
-              child: RowTags(
-                selectedYear: selectedYear,
-                isRecent: isRecent,
-                onTapYear: onTapYear,
-                onTapOrder: onTapOrder,
-              ),
+            RowTags(
+              selectedYear: selectedYear,
+              isRecent: isRecent,
+              onTapYear: onTapYear,
+              onTapOrder: onTapOrder,
             ),
           ],
         ),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: ContentsBox(
-              contentsWidget: Column(
-                children: [
-                  Row(
-                    children: columnTitles
-                        .map((title) => RowTitles(
-                            title: title,
-                            nameArgs: title == '체중()'
-                                ? {'unit': '$weightUnit'}
-                                : null))
-                        .toList(),
+            child: Stack(
+              children: [
+                ContentsBox(
+                  contentsWidget: Column(
+                    children: [
+                      Row(
+                        children: columnTitles
+                            .map((title) => RowTitles(
+                                title: title,
+                                nameArgs: title == '체중()'
+                                    ? {'unit': '$weightUnit'}
+                                    : null))
+                            .toList(),
+                      ),
+                      ColumnItemList(
+                        weightUnit: weightUnit,
+                        selectedYear: selectedYear,
+                        isRecent: isRecent,
+                      )
+                    ],
                   ),
-                  ColumnItemList(
-                    weightUnit: weightUnit,
-                    selectedYear: selectedYear,
-                    isRecent: isRecent,
-                  )
-                ],
-              ),
+                ),
+                CommonBlur(),
+              ],
             ),
           ),
         ),
@@ -152,22 +150,25 @@ class RowTags extends StatelessWidget {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        CommonTag(
-          color: 'whiteIndigo',
-          text: y(locale: locale, dateTime: selectedYear),
-          isNotTr: true,
-          onTap: onTapYear,
-        ),
-        SpaceWidth(width: 5),
-        CommonTag(
-          color: isRecent ? 'whiteBlue' : 'whiteRed',
-          text: isRecent ? '최신순' : '과거순',
-          onTap: onTapOrder,
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(right: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          CommonTag(
+            color: 'whiteIndigo',
+            text: y(locale: locale, dateTime: selectedYear),
+            isNotTr: true,
+            onTap: onTapYear,
+          ),
+          SpaceWidth(width: 5),
+          CommonTag(
+            color: isRecent ? 'whiteBlue' : 'whiteRed',
+            text: isRecent ? '최신순' : '과거순',
+            onTap: onTapOrder,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -186,6 +187,8 @@ class ColumnItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
+
     List<RecordBox> recordList = recordRepository.recordBox.values.toList();
     List<RecordBox> weightList =
         recordList.where((item) => item.weight != null).toList();
@@ -195,7 +198,6 @@ class ColumnItemList extends StatelessWidget {
         .toList();
     List<RecordBox> orderList =
         isRecent ? yearList.reversed.toList() : yearList;
-    String locale = context.locale.toString();
 
     onDateTime(RecordBox item, int? bIdx) {
       return CommonText(

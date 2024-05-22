@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -25,7 +28,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        return macos;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for macos - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -43,15 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyAEaKJnbrXyg61O4D9FYygES21Wv6cxwIk',
-    appId: '1:768457556313:web:eb2c5d58a35b4bc885cc48',
-    messagingSenderId: '768457556313',
-    projectId: 'weight-mate-project',
-    authDomain: 'weight-mate-project.firebaseapp.com',
-    storageBucket: 'weight-mate-project.appspot.com',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDXOt99A6Q4Gw1RVgSLWfatRB-k_f2HdKo',
     appId: '1:768457556313:android:e5c0bcd11e7b049485cc48',
@@ -66,15 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '768457556313',
     projectId: 'weight-mate-project',
     storageBucket: 'weight-mate-project.appspot.com',
+    iosClientId: '768457556313-hoqht8792obcrm59720d8m1d8m1dabic.apps.googleusercontent.com',
     iosBundleId: 'com.kthdd.weightMate',
-  );
-
-  static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyBOgAYbM9ubQOCV-9xJe2T0CUNrSDIniAg',
-    appId: '1:768457556313:ios:5b6ce273aeabafff85cc48',
-    messagingSenderId: '768457556313',
-    projectId: 'weight-mate-project',
-    storageBucket: 'weight-mate-project.appspot.com',
-    iosBundleId: 'com.example.flutterAppWeightManagement',
   );
 }

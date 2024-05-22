@@ -4,14 +4,14 @@ import 'package:flutter_app_weight_management/components/info/color_text_info.da
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class TitleBlock extends StatelessWidget {
-  TitleBlock({super.key, required this.type});
+  TitleBlock({super.key, required this.type, required this.color});
 
   String type;
+  MaterialColor color;
 
   @override
   Widget build(BuildContext context) {
     final String text = type == 'start' ? '시작일' : '종료일';
-    final Color color = type == 'start' ? themeColor : Colors.red;
 
     return Expanded(
       child: Row(
@@ -25,7 +25,7 @@ class TitleBlock extends StatelessWidget {
             width: smallSpace,
             height: smallSpace,
             text: text.tr(),
-            color: color,
+            color: color.shade300,
           )
         ],
       ),

@@ -177,6 +177,7 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
           closeDialog(context);
         }
       } catch (e) {
+        closeDialog(context);
         showSnackBar(context: context, text: "에러 발생 ㅠㅠ!", buttonName: "확인");
       }
     }
@@ -243,6 +244,7 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
           ),
         );
       } catch (e) {
+        closeDialog(context);
         showSnackBar(context: context, text: '에러 발생 ㅠㅠ!', buttonName: "확인");
       }
     }

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -93,50 +94,55 @@ class _TodoChartPageState extends State<TodoChartPage> {
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.all(15),
-            child: ContentsBox(
-              contentsWidget: Column(
-                children: [
-                  RowTitle(
-                    type: type,
-                    selectedMonth: selectedMonth,
-                    onTap: onTapMonthTitle,
+            child: Stack(
+              children: [
+                ContentsBox(
+                  contentsWidget: Column(
+                    children: [
+                      RowTitle(
+                        type: type,
+                        selectedMonth: selectedMonth,
+                        onTap: onTapMonthTitle,
+                      ),
+                      Divider(color: Colors.grey.shade200),
+                      displayRecordList.isNotEmpty
+                          ? Expanded(
+                              child: ListView(
+                                children: displayRecordList
+                                    .map((record) => ColumnContainer(
+                                          dateTime: record!.createDateTime,
+                                          type: type,
+                                          actions: record.actions,
+                                        ))
+                                    .toList(),
+                              ),
+                            )
+                          : Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CommonIcon(
+                                    icon: todoData[type]!.icon,
+                                    size: 20,
+                                    color: Colors.grey,
+                                  ),
+                                  SpaceHeight(height: 10),
+                                  CommonText(
+                                    text: '기록이 없어요.',
+                                    size: 15,
+                                    isCenter: true,
+                                    color: Colors.grey,
+                                  ),
+                                  SpaceHeight(height: 20),
+                                ],
+                              ),
+                            ),
+                    ],
                   ),
-                  Divider(color: Colors.grey.shade200),
-                  displayRecordList.isNotEmpty
-                      ? Expanded(
-                          child: ListView(
-                            children: displayRecordList
-                                .map((record) => ColumnContainer(
-                                      dateTime: record!.createDateTime,
-                                      type: type,
-                                      actions: record.actions,
-                                    ))
-                                .toList(),
-                          ),
-                        )
-                      : Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CommonIcon(
-                                icon: todoData[type]!.icon,
-                                size: 20,
-                                color: Colors.grey,
-                              ),
-                              SpaceHeight(height: 10),
-                              CommonText(
-                                text: '기록이 없어요.',
-                                size: 15,
-                                isCenter: true,
-                                color: Colors.grey,
-                              ),
-                              SpaceHeight(height: 20),
-                            ],
-                          ),
-                        ),
-                ],
-              ),
+                ),
+                CommonBlur(),
+              ],
             ),
           ),
         ),
@@ -316,7 +322,7 @@ class RecordLabel extends StatelessWidget {
     MaterialColor color = categoryColors[type]!;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 15),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -330,29 +336,26 @@ class RecordLabel extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(text, style: const TextStyle(fontSize: 11)),
-                  dietExerciseRecordDateTime != null
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: CommonText(
-                            text: hm(
-                              locale: locale,
-                              dateTime: dietExerciseRecordDateTime!,
-                            ),
-                            size: 9,
-                            color: Colors.grey,
-                            isNotTop: true,
-                            isNotTr: true,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(text, style: const TextStyle(fontSize: 13)),
+                dietExerciseRecordDateTime != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 2),
+                        child: CommonText(
+                          text: hm(
+                            locale: locale,
+                            dateTime: dietExerciseRecordDateTime!,
                           ),
-                        )
-                      : const EmptyArea()
-                ],
-              ),
+                          size: 10,
+                          color: Colors.grey,
+                          isNotTop: true,
+                          isNotTr: true,
+                        ),
+                      )
+                    : const EmptyArea()
+              ],
             ),
           ),
         ],

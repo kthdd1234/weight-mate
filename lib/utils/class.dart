@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -266,32 +267,36 @@ class WeightButtonClass {
   Function()? onTap;
 }
 
-class AppLifecycleReactor {
-  AppLifecycleReactor({required this.context});
+// class AppLifecycleLockScreenReactor {
+//   AppLifecycleLockScreenReactor({required this.context});
 
-  BuildContext context;
+//   BuildContext context;
 
-  void listenToAppStateChanges() {
-    AppStateEventNotifier.startListening();
-    AppStateEventNotifier.appStateStream
-        .forEach((state) => _onAppStateChanged(state));
-  }
+//   void listenToAppStateChanges() {
+//     AppStateEventNotifier.startListening();
+//     AppStateEventNotifier.appStateStream
+//         .forEach((state) => _onAppStateChanged(state));
+//   }
 
-  void _onAppStateChanged(AppState appState) async {
-    String? passwords = userRepository.user.screenLockPasswords;
+//   void _onAppStateChanged(AppState appState) async {
+//     String? passwords = userRepository.user.screenLockPasswords;
 
-    if (passwords != null) {
-      if (appState == AppState.foreground) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => EnterScreenLockPage(),
-            fullscreenDialog: true,
-          ),
-        );
-      }
-    }
-  }
-}
+//     try {
+//       if (passwords != null) {
+//         if (appState == AppState.foreground) {
+//           Navigator.of(context).push(
+//             MaterialPageRoute(
+//               builder: (context) => EnterScreenLockPage(),
+//               fullscreenDialog: true,
+//             ),
+//           );
+//         }
+//       }
+//     } catch (e) {
+//       log('e => $e');
+//     }
+//   }
+// }
 
 class TodoDataClass {
   TodoDataClass({
@@ -384,4 +389,30 @@ class PremiumBenefitsClass {
   });
 
   String svgName, title, subTitle;
+}
+
+class GraphData {
+  GraphData(this.x, this.y);
+
+  final String x;
+  final double? y;
+}
+
+class StackGraphData {
+  StackGraphData(this.x, this.y);
+
+  final String x;
+  final double? y;
+}
+
+class DataSourceClass {
+  DataSourceClass({
+    required this.title,
+    required this.max,
+    required this.avg,
+    required this.min,
+  });
+
+  String title;
+  List<StackGraphData> max, avg, min;
 }

@@ -14,6 +14,7 @@ class CommonButton extends StatelessWidget {
     this.isBold,
     this.height,
     this.isNotTr,
+    this.topPadding,
   });
 
   String text;
@@ -21,26 +22,30 @@ class CommonButton extends StatelessWidget {
   Color bgColor, textColor;
   double? height;
   bool? isBold, isNotTr;
+  double? topPadding;
   Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          height: height ?? largeSpace,
-          decoration: BoxDecoration(
-            color: bgColor,
-            borderRadius: BorderRadius.circular(radious),
-          ),
-          child: CommonText(
-            text: text,
-            size: fontSize,
-            color: textColor,
-            isCenter: true,
-            isBold: isBold == true,
-            isNotTr: isNotTr == true,
+      child: Padding(
+        padding: EdgeInsets.only(top: topPadding != null ? topPadding! : 0),
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            height: height ?? largeSpace,
+            decoration: BoxDecoration(
+              color: bgColor,
+              borderRadius: BorderRadius.circular(radious),
+            ),
+            child: CommonText(
+              text: text,
+              size: fontSize,
+              color: textColor,
+              isCenter: true,
+              isBold: isBold == true,
+              isNotTr: isNotTr == true,
+            ),
           ),
         ),
       ),

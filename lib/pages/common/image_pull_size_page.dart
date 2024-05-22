@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 
 class ImagePullSizePage extends StatelessWidget {
-  ImagePullSizePage({
-    super.key,
-    required this.binaryData,
-  });
+  ImagePullSizePage({super.key, required this.binaryData});
 
   Uint8List binaryData;
 
@@ -26,7 +23,3 @@ class ImagePullSizePage extends StatelessWidget {
     );
   }
 }
-
-// AppFramework
-
-    

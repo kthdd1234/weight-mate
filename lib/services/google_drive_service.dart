@@ -1,8 +1,8 @@
 import 'dart:developer';
-
+import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:googleapis/drive/v3.dart';
@@ -16,18 +16,29 @@ class GoogleDriveAppData {
     GoogleSignInAccount? googleUser;
 
     try {
-      GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: iosClientId,
-        scopes: [drive.DriveApi.driveFileScope],
+      GoogleSignIn googleSignIn =
+          GoogleSignIn(scopes: [drive.DriveApi.driveAppdataScope]);
+
+      googleUser =
+          await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
+
+      GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth?.accessToken,
+        idToken: googleAuth?.idToken,
       );
 
-      googleUser = await googleSignIn.signInSilently(reAuthenticate: true) ??
-          await googleSignIn.signIn();
+      await FirebaseAuth.instance.signInWithCredential(credential);
     } catch (e) {
       debugPrint(e.toString());
 
+      log('구글 로그인 에러 발새이용 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ => ${e.toString()}');
+
       return null;
     }
+
+    log('googleUser $googleUser');
 
     return googleUser;
   }

@@ -68,12 +68,12 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
     }
   }
 
-  @override
-  void initState() {
-    onInitList();
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   onInitList();
+  //   AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {

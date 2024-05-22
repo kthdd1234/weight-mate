@@ -17,7 +17,17 @@ enum RecordIconTypes {
 
 enum BottomNavigationEnum { record, history, graph, setting }
 
-enum SegmentedTypes { week, month, threeMonth, sixMonth, custom, goal, record }
+enum SegmentedTypes {
+  week,
+  twoWeek,
+  month,
+  threeMonth,
+  sixMonth,
+  oneYear,
+  custom,
+  goal,
+  record
+}
 
 enum MoreSeeItem {
   premium,
@@ -51,7 +61,17 @@ enum ActionSortEnum { none, recent, past }
 
 enum PlanPriorityEnum { none, high, medium, low }
 
-enum FILITER { weight, emotion, picture, diet, exercise, lifeStyle, diary }
+enum FILITER {
+  weight,
+  emotion,
+  picture,
+  diet,
+  exercise,
+  lifeStyle,
+  diary,
+  diet_2,
+  exercise_2
+}
 
 enum RECORD { edit, history }
 
@@ -62,3 +82,5 @@ enum HistoryFilter { recent, past }
 enum HistoryFormat { list, calendar }
 
 enum WidgetType { weight, password, record, goal }
+
+enum graphType { Default, Custom }

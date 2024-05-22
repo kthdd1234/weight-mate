@@ -52,35 +52,6 @@ class _EditWeightState extends State<EditWeight> {
       );
     }
 
-    // showAdDialog({
-    //   required String title,
-    //   required String loadingText,
-    //   Map<String, String>? nameArgs,
-    // }) async {
-    //   await showDialog(
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (buildContext) {
-    //       onClick(BottomNavigationEnum enumId) async {
-    //         buildContext
-    //             .read<BottomNavigationProvider>()
-    //             .setBottomNavigation(enumId: enumId);
-    //         closeDialog(buildContext);
-    //       }
-
-    //       return NativeAdDialog(
-    //         loadingText: loadingText,
-    //         title: title,
-    //         nameArgs: nameArgs,
-    //         leftText: '히스토리',
-    //         rightText: '그래프',
-    //         onLeftClick: () => onClick(BottomNavigationEnum.history),
-    //         onRightClick: () => onClick(BottomNavigationEnum.graph),
-    //       );
-    //     },
-    //   );
-    // }
-
     onInit() {
       setState(() {
         isShowInput = false;
@@ -128,16 +99,6 @@ class _EditWeightState extends State<EditWeight> {
 
         onInit();
         closeDialog(context);
-
-        // List<RecordBox> recordList = recordRepository.recordBox.values.toList();
-        // List<RecordBox> weightList =
-        //     recordList.where((e) => e.weight != null).toList();
-
-        // showAdDialog(
-        //   title: '👏🏻 일째 기록 했어요!',
-        //   loadingText: '체중 데이터 저장 중...',
-        //   nameArgs: {'days': '${weightList.length}'},
-        // );
       }
     }
 
@@ -148,11 +109,6 @@ class _EditWeightState extends State<EditWeight> {
 
         onInit();
         closeDialog(context);
-
-        // showAdDialog(
-        //   title: '⛳ 목표 체중을 변경 했어요!',
-        //   loadingText: '목표 체중 데이터 저장 중...',
-        // );
       }
     }
 
@@ -469,7 +425,7 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
       WeightButtonClass(),
       WeightButtonClass(
         text: '목표 체중: ',
-        imgNumber: '15',
+        imgNumber: '23',
         nameArgs: {'weight': '${widget.goalWeight}', 'unit': weightUnit},
         onTap: widget.onTapGoalWeight,
       ),

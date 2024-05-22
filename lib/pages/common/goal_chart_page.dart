@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -85,7 +84,7 @@ class _GoalChartPageState extends State<GoalChartPage> {
                 ),
                 selectedSegment == SegmentedTypes.week
                     ? GoalWeeklyContainer(type: type)
-                    : GoalMonthlyContainer(type: type)
+                    : GoalMonthlyContainer(type: type),
               ],
             ),
           ),
@@ -135,19 +134,24 @@ class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
     }
 
     return Expanded(
-      child: ContentsBox(
-        contentsWidget: Column(
-          children: [
-            const RowColors(),
-            DateTimeTag(
-              startDateTime: startDateTime,
-              endDateTime: endDateTime,
-              onTapWeeklyDateTime: onTapWeeklyDateTime,
+      child: Stack(
+        children: [
+          ContentsBox(
+            contentsWidget: Column(
+              children: [
+                const RowColors(),
+                DateTimeTag(
+                  startDateTime: startDateTime,
+                  endDateTime: endDateTime,
+                  onTapWeeklyDateTime: onTapWeeklyDateTime,
+                ),
+                RowTitles(type: widget.type),
+                ColumnItmeList(type: widget.type, startDateTime: startDateTime),
+              ],
             ),
-            RowTitles(type: widget.type),
-            ColumnItmeList(type: widget.type, startDateTime: startDateTime),
-          ],
-        ),
+          ),
+          CommonBlur()
+        ],
       ),
     );
   }
@@ -166,6 +170,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
   DateTime selectedMonth = DateTime.now();
   DateTime seletedDay = DateTime.now();
   int selectedMonthActionCount = 0;
+  bool isPremium = false;
 
   @override
   void initState() {
@@ -177,6 +182,13 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
       month: now.month,
       lastDays: daysInMonth(now.year, now.month),
     );
+
+    initPremium() async {
+      isPremium = await isPurchasePremium();
+      setState(() {});
+    }
+
+    initPremium();
 
     super.initState();
   }
@@ -246,108 +258,115 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
     }
 
     return Expanded(
-      child: ContentsBox(
-        contentsWidget: Column(
-          children: [
-            const RowColors(),
-            TableCalendarHeader(
-              locale: locale,
-              selectedMonth: selectedMonth,
-              text: '총 실천 회'
-                  .tr(namedArgs: {'length': "$selectedMonthActionCount"}),
-            ),
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  TableCalendar(
-                    locale: locale,
-                    headerVisible: false,
-                    focusedDay: selectedMonth,
-                    currentDay: seletedDay,
-                    calendarStyle: CalendarStyle(
-                      cellMargin: const EdgeInsets.all(10.0),
-                      todayDecoration: BoxDecoration(
-                        color: targetColors[seletedDay.weekday]!,
-                        shape: BoxShape.circle,
-                      ),
-                      todayTextStyle: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    firstDay: DateTime(2000, 1, 1),
-                    lastDay: DateTime.now(),
-                    calendarBuilders:
-                        CalendarBuilders(markerBuilder: markerBuilder),
-                    onDaySelected: onDaySelected,
-                    onPageChanged: onPageChanged,
-                  ),
-                  SpaceHeight(height: 5),
-                  Divider(color: Colors.grey.shade300),
-                  SpaceHeight(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+      child: Stack(
+        children: [
+          ContentsBox(
+            contentsWidget: Column(
+              children: [
+                const RowColors(),
+                TableCalendarHeader(
+                  locale: locale,
+                  selectedMonth: selectedMonth,
+                  text: '총 실천 회'
+                      .tr(namedArgs: {'length': "$selectedMonthActionCount"}),
+                ),
+                Expanded(
+                  child: ListView(
+                    shrinkWrap: true,
                     children: [
-                      CommonText(
-                        text: d(locale: locale, dateTime: seletedDay) +
-                            ' (${eShort(locale: locale, dateTime: seletedDay)})',
-                        size: 15,
-                        isNotTr: true,
-                      ),
-                      CommonText(
-                        text: '실천 회',
-                        size: 11,
-                        color: Colors.grey,
-                        nameArgs: {'length': '${filterActions.length}'},
-                      ),
-                    ],
-                  ),
-                  SpaceHeight(height: 10),
-                  filterActions.isNotEmpty
-                      ? Column(
-                          children: filterActions
-                              .map(
-                                (action) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: IntrinsicHeight(
-                                    child: Row(
-                                      children: [
-                                        VerticalBorder(seletedDay: seletedDay),
-                                        SpaceWidth(width: 7),
-                                        Expanded(
-                                          child: Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 2),
-                                            child: Text(
-                                              action['name'],
-                                              style: const TextStyle(
-                                                fontSize: 12,
-                                                color: themeColor,
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(40),
-                          child: EmptyWidget(
-                            icon: todoData[widget.type]!.icon,
-                            text: '실천이 없어요.',
+                      TableCalendar(
+                        locale: locale,
+                        headerVisible: false,
+                        focusedDay: selectedMonth,
+                        currentDay: seletedDay,
+                        calendarStyle: CalendarStyle(
+                          cellMargin: const EdgeInsets.all(10.0),
+                          todayDecoration: BoxDecoration(
+                            color: targetColors[seletedDay.weekday]!,
+                            shape: BoxShape.circle,
+                          ),
+                          todayTextStyle: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                ],
-              ),
+                        firstDay: DateTime(2000, 1, 1),
+                        lastDay: DateTime.now(),
+                        calendarBuilders:
+                            CalendarBuilders(markerBuilder: markerBuilder),
+                        onDaySelected: onDaySelected,
+                        onPageChanged: onPageChanged,
+                      ),
+                      SpaceHeight(height: 5),
+                      Divider(color: Colors.grey.shade300),
+                      SpaceHeight(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          CommonText(
+                            text: d(locale: locale, dateTime: seletedDay) +
+                                ' (${eShort(locale: locale, dateTime: seletedDay)})',
+                            size: 15,
+                            isNotTr: true,
+                          ),
+                          CommonText(
+                            text: '실천 회',
+                            size: 11,
+                            color: Colors.grey,
+                            nameArgs: {'length': '${filterActions.length}'},
+                          ),
+                        ],
+                      ),
+                      SpaceHeight(height: 10),
+                      filterActions.isNotEmpty
+                          ? Column(
+                              children: filterActions
+                                  .map(
+                                    (action) => Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: IntrinsicHeight(
+                                        child: Row(
+                                          children: [
+                                            VerticalBorder(
+                                                seletedDay: seletedDay),
+                                            SpaceWidth(width: 7),
+                                            Expanded(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 2),
+                                                child: Text(
+                                                  action['name'],
+                                                  style: const TextStyle(
+                                                    fontSize: 13,
+                                                    color: themeColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(40),
+                              child: EmptyWidget(
+                                icon: todoData[widget.type]!.icon,
+                                text: '실천이 없어요.',
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          CommonBlur()
+        ],
       ),
     );
   }
@@ -586,7 +605,7 @@ class ColumnItmeList extends StatelessWidget {
                                 child: Text(
                                   plan.name,
                                   style: const TextStyle(
-                                    fontSize: 11,
+                                    fontSize: 12,
                                     color: themeColor,
                                     overflow: TextOverflow.ellipsis,
                                   ),
