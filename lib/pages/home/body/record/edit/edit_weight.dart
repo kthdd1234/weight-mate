@@ -6,14 +6,12 @@ import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -53,35 +51,6 @@ class _EditWeightState extends State<EditWeight> {
         value: double.tryParse(textController.text),
       );
     }
-
-    // showAdDialog({
-    //   required String title,
-    //   required String loadingText,
-    //   Map<String, String>? nameArgs,
-    // }) async {
-    //   await showDialog(
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (buildContext) {
-    //       onClick(BottomNavigationEnum enumId) async {
-    //         buildContext
-    //             .read<BottomNavigationProvider>()
-    //             .setBottomNavigation(enumId: enumId);
-    //         closeDialog(buildContext);
-    //       }
-
-    //       return NativeAdDialog(
-    //         loadingText: loadingText,
-    //         title: title,
-    //         nameArgs: nameArgs,
-    //         leftText: '히스토리',
-    //         rightText: '그래프',
-    //         onLeftClick: () => onClick(BottomNavigationEnum.history),
-    //         onRightClick: () => onClick(BottomNavigationEnum.graph),
-    //       );
-    //     },
-    //   );
-    // }
 
     onInit() {
       setState(() {
@@ -130,16 +99,6 @@ class _EditWeightState extends State<EditWeight> {
 
         onInit();
         closeDialog(context);
-
-        // List<RecordBox> recordList = recordRepository.recordBox.values.toList();
-        // List<RecordBox> weightList =
-        //     recordList.where((e) => e.weight != null).toList();
-
-        // showAdDialog(
-        //   title: '👏🏻 일째 기록 했어요!',
-        //   loadingText: '체중 데이터 저장 중...',
-        //   nameArgs: {'days': '${weightList.length}'},
-        // );
       }
     }
 
@@ -150,11 +109,6 @@ class _EditWeightState extends State<EditWeight> {
 
         onInit();
         closeDialog(context);
-
-        // showAdDialog(
-        //   title: '⛳ 목표 체중을 변경 했어요!',
-        //   loadingText: '목표 체중 데이터 저장 중...',
-        // );
       }
     }
 
@@ -471,7 +425,7 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
       WeightButtonClass(),
       WeightButtonClass(
         text: '목표 체중: ',
-        imgNumber: '15',
+        imgNumber: '23',
         nameArgs: {'weight': '${widget.goalWeight}', 'unit': weightUnit},
         onTap: widget.onTapGoalWeight,
       ),

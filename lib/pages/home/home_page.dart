@@ -15,9 +15,12 @@ import 'package:flutter_app_weight_management/pages/home/body/record/record_body
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
+import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -30,7 +33,6 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:workmanager/workmanager.dart';
 
 List<BottomNavigationEnum> bottomIdList = [
   BottomNavigationEnum.record,
@@ -49,7 +51,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
-  bool isActiveCamera = false;
+  late AppLifecycleReactor _appLifecycleReactor;
 
   @override
   void initState() {
@@ -94,6 +96,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? historyCalendarForamt = user.historyCalendarFormat;
     bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
     String? fontFamily = user.fontFamily;
+    Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
+    bool? isDietExerciseRecordDateTime2 = user.isDietExerciseRecordDateTime2;
+    String? graphType = user.graphType;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -188,9 +193,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       user.isDietExerciseRecordDateTime = false;
     }
 
+    if (isDietExerciseRecordDateTime2 == null) {
+      user.isDietExerciseRecordDateTime2 = false;
+    }
+
     if (fontFamily == null) {
-      user.fontFamily =
-          widget.locale != 'ja' ? 'cafe24Ohsquareair' : 'cafe24SsurroundAir';
+      user.fontFamily = initFontFamily;
+    }
+
+    if (googleDriveInfo == null) {
+      user.googleDriveInfo = {"isLogin": false, "backupDateTime": null};
+    }
+
+    if (graphType == null) {
+      user.graphType = eGraphDefault;
     }
 
     userRepository.user.save();
@@ -206,6 +222,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+
+    _appLifecycleReactor = AppLifecycleReactor(
+      context: context,
+      appOpenAdManager: appOpenAdManager,
+    );
+
+    _appLifecycleReactor.listenToAppStateChanges();
+
     requestInAppReview() async {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
@@ -220,8 +245,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     requestInAppReview();
 
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
-
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();
 
@@ -231,6 +254,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           .read<HistoryImportDateTimeProvider>()
           .setHistoryImportDateTime(now);
       context.read<HistoryTitleDateTimeProvider>().setHistoryTitleDateTime(now);
+
+      pp() async {
+        bool isPremium = await isPurchasePremium();
+        context.read<PremiumProvider>().setPremiumValue(isPremium);
+      }
+
+      pp();
     });
   }
 
@@ -238,7 +268,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> items = [
       BottomNavigationBarItem(
-        icon: const Icon(Icons.edit),
+        icon: const Icon(Icons.edit_rounded),
         label: '기록'.tr(),
       ),
       BottomNavigationBarItem(
@@ -283,15 +313,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           .setBottomNavigation(enumId: indexList[index]);
     }
 
-    setActiveCamera(bool newValue) {
-      setState(() => isActiveCamera = newValue);
-    }
-
-    List<Widget> bodyList = [
-      RecordBody(setActiveCamera: setActiveCamera),
-      const HistoryBody(),
-      const GraphBody(),
-      const SettingBody()
+    List<Widget> bodyList = const [
+      RecordBody(),
+      HistoryBody(),
+      GraphBody(),
+      SettingBody()
     ];
 
     floatingActionButton() {
@@ -349,8 +375,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             elevation: 0,
             currentIndex: bottomNavitionId.index,
             selectedItemColor: themeColor,
-            unselectedItemColor: const Color(0xFF151515),
-            backgroundColor: Colors.red,
+            unselectedItemColor: themeColor,
             onTap: onBottomNavigation,
           ),
         ),

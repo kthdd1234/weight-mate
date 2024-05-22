@@ -67,7 +67,8 @@ class CommonText extends StatelessWidget {
                 style: TextStyle(
                   color: color ?? themeColor,
                   fontSize: size,
-                  fontWeight: isBold == true ? FontWeight.bold : null,
+                  fontWeight:
+                      isBold == true ? FontWeight.w700 : FontWeight.w400,
                   decoration: textDecoration,
                   decorationThickness: 1,
                   decorationColor: decoColor ?? themeColor,

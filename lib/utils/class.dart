@@ -1,12 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:googleapis/drive/v3.dart' as drive;
 
 class UserInfoClass {
   UserInfoClass({
@@ -216,7 +217,7 @@ class ActionItemClass {
       'actionDateTime': actionDateTime,
       'createDateTime': createDateTime,
       'isRecord': isRecord,
-      'dietExerciseRecordDateTime': dietExerciseRecordDateTime
+      'dietExerciseRecordDateTime': dietExerciseRecordDateTime,
     };
   }
 }
@@ -266,32 +267,36 @@ class WeightButtonClass {
   Function()? onTap;
 }
 
-class AppLifecycleReactor {
-  AppLifecycleReactor({required this.context});
+// class AppLifecycleLockScreenReactor {
+//   AppLifecycleLockScreenReactor({required this.context});
 
-  BuildContext context;
+//   BuildContext context;
 
-  void listenToAppStateChanges() {
-    AppStateEventNotifier.startListening();
-    AppStateEventNotifier.appStateStream
-        .forEach((state) => _onAppStateChanged(state));
-  }
+//   void listenToAppStateChanges() {
+//     AppStateEventNotifier.startListening();
+//     AppStateEventNotifier.appStateStream
+//         .forEach((state) => _onAppStateChanged(state));
+//   }
 
-  void _onAppStateChanged(AppState appState) async {
-    String? passwords = userRepository.user.screenLockPasswords;
+//   void _onAppStateChanged(AppState appState) async {
+//     String? passwords = userRepository.user.screenLockPasswords;
 
-    if (passwords != null) {
-      if (appState == AppState.foreground) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => EnterScreenLockPage(),
-            fullscreenDialog: true,
-          ),
-        );
-      }
-    }
-  }
-}
+//     try {
+//       if (passwords != null) {
+//         if (appState == AppState.foreground) {
+//           Navigator.of(context).push(
+//             MaterialPageRoute(
+//               builder: (context) => EnterScreenLockPage(),
+//               fullscreenDialog: true,
+//             ),
+//           );
+//         }
+//       }
+//     } catch (e) {
+//       log('e => $e');
+//     }
+//   }
+// }
 
 class TodoDataClass {
   TodoDataClass({
@@ -347,4 +352,67 @@ class WidgetPlanClass {
 
   Map<String, dynamic> toJson() =>
       {'id': id, 'type': type, 'name': name, 'isChecked': isChecked};
+}
+
+class DriveFileClass {
+  DriveFileClass({this.driveFile, this.errorCode});
+
+  drive.File? driveFile;
+  int? errorCode;
+}
+
+class HiveBoxPathsClass {
+  HiveBoxPathsClass({
+    required this.userBoxPath,
+    required this.recordBoxPath,
+    required this.planBoxPath,
+  });
+
+  String userBoxPath, recordBoxPath, planBoxPath;
+}
+
+class DriveFileIdsClass {
+  DriveFileIdsClass({
+    required this.userFileId,
+    required this.recordFileId,
+    required this.planFileId,
+  });
+
+  String? userFileId, recordFileId, planFileId;
+}
+
+class PremiumBenefitsClass {
+  PremiumBenefitsClass({
+    required this.svgName,
+    required this.title,
+    required this.subTitle,
+  });
+
+  String svgName, title, subTitle;
+}
+
+class GraphData {
+  GraphData(this.x, this.y);
+
+  final String x;
+  final double? y;
+}
+
+class StackGraphData {
+  StackGraphData(this.x, this.y);
+
+  final String x;
+  final double? y;
+}
+
+class DataSourceClass {
+  DataSourceClass({
+    required this.title,
+    required this.max,
+    required this.avg,
+    required this.min,
+  });
+
+  String title;
+  List<StackGraphData> max, avg, min;
 }

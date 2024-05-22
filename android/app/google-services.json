@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "768457556313",
+    "project_id": "weight-mate-project",
+    "storage_bucket": "weight-mate-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:768457556313:android:e5c0bcd11e7b049485cc48",
+        "android_client_info": {
+          "package_name": "com.kthdd.weightMate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "768457556313-4naukqkb5c2p8r3taa2145ejbncphfat.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kthdd.weightMate",
+            "certificate_hash": "d2ea84f3b0f84108166197a8148d2adf9c16a437"
+          }
+        },
+        {
+          "client_id": "768457556313-bkd5tei16e5n2148dor1dn17jno2lde8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kthdd.weightMate",
+            "certificate_hash": "9d978fd8e0a8ffa5e50c41041e79faada85e0315"
+          }
+        },
+        {
+          "client_id": "768457556313-cdv0q415l4uc7h03rp55fnkcvkoabra1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kthdd.weightMate",
+            "certificate_hash": "3c80a8c5484b5b256bb44a50fd636ff5b59bb9f4"
+          }
+        },
+        {
+          "client_id": "768457556313-ungbl5teb8idj579kibjmh64908g23vb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXOt99A6Q4Gw1RVgSLWfatRB-k_f2HdKo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "768457556313-ungbl5teb8idj579kibjmh64908g23vb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "768457556313-7pt1o58vpkhasjfnciuqeesm46d3nn4b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.flutterAppWeightManagement"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -155,6 +155,24 @@ const enableBackgroundColor = Color(0xffEDE8FF);
 /// appTextColor
 const appTextColor = Color(0xffE0B1F6);
 
+/// dietBgButtonColor
+const dietBgButtonColor = Color.fromARGB(255, 233, 247, 247);
+
+/// exerciseBgButtonColor
+const exerciseBgButtonColor = Color.fromARGB(255, 234, 251, 255);
+
+/// lifeBgButtonColor
+const lifeBgButtonColor = Color.fromARGB(255, 242, 239, 237);
+
+/// dietTextButtonColor
+final dietTextButtonColor = Colors.teal.shade300;
+
+/// exerciseTextButtonColor
+final exerciseTextButtonColor = Colors.lightBlue.shade300;
+
+/// lifeTextButtonColor
+final lifeTextButtonColor = Colors.brown.shade300;
+
 /// tagColors
 final tagColors = {
   'default': {
@@ -237,6 +255,10 @@ final tagColors = {
     'bgColor': Colors.blueGrey.shade400,
     'textColor': Colors.white,
   },
+  'peach': {
+    'bgColor': const Color.fromRGBO(255, 231, 217, 100),
+    'textColor': const Color.fromRGBO(255, 170, 84, 100),
+  }
 };
 
 List<FilterClass> openClassList = [
@@ -260,8 +282,10 @@ List<FilterClass> displayClassList = [
 List<FilterClass> historyDisplayClassList = [
   FilterClass(id: FILITER.weight.toString(), name: '체중'),
   FilterClass(id: FILITER.picture.toString(), name: '사진'),
-  FilterClass(id: FILITER.diet.toString(), name: '식단'),
-  FilterClass(id: FILITER.exercise.toString(), name: '운동'),
+  FilterClass(id: FILITER.diet.toString(), name: '식단 (기록)'),
+  FilterClass(id: FILITER.diet_2.toString(), name: '식단 (목표)'),
+  FilterClass(id: FILITER.exercise.toString(), name: '운동 (기록)'),
+  FilterClass(id: FILITER.exercise_2.toString(), name: '운동 (목표)'),
   FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
   FilterClass(id: FILITER.diary.toString(), name: '일기'),
 ];
@@ -398,3 +422,9 @@ Map<int, Color> targetColors = {
   5: Colors.indigo.shade300,
   6: Colors.purple.shade300,
 };
+
+const entitlement_identifier = 'premium';
+
+const appleApiKey = 'appl_vjYFXCKiODqbJjabYlqJnmlIMPj';
+
+const googleApiKey = 'goog_hZufqNCKtbHhktACjnimKTANXzD';

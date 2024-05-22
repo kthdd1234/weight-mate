@@ -2,18 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>768457556313-hoqht8792obcrm59720d8m1d8m1dabic.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.768457556313-hoqht8792obcrm59720d8m1d8m1dabic</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDGq4zIgUPWXASExmbHxhRSP1K6SukBvc8</string>
+	<string>AIzaSyBOgAYbM9ubQOCV-9xJe2T0CUNrSDIniAg</string>
 	<key>GCM_SENDER_ID</key>
-	<string>587095091642</string>
+	<string>768457556313</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.kthdd.weightMate</string>
 	<key>PROJECT_ID</key>
-	<string>weight-mate-d12d5</string>
+	<string>weight-mate-project</string>
 	<key>STORAGE_BUCKET</key>
-	<string>weight-mate-d12d5.appspot.com</string>
+	<string>weight-mate-project.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,8 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:587095091642:ios:12eb6e668ed8d727401583</string>
-	<key>ADMOB_APP_ID</key>
-	<string>ca-app-pub-6804308271128440~3459280855</string>
+	<string>1:768457556313:ios:55097bf7ada231d885cc48</string>
 </dict>
 </plist>

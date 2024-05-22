@@ -644,8 +644,8 @@ class RecordName extends StatefulWidget {
     required this.title,
     required this.topTitle,
     required this.actionDateTime,
-    this.onRecordUpdate,
     required this.dietExerciseRecordDateTime,
+    this.onRecordUpdate,
   });
 
   String type, id, name, title, topTitle;
@@ -922,7 +922,7 @@ class _RecordAddState extends State<RecordAdd> {
       setState(() => isShowInput = true);
     }
 
-    onEditingComplete() async {
+    onEditingComplete(bool? isFasting) async {
       String name = textController.text;
 
       setState(() {
@@ -950,6 +950,10 @@ class _RecordAddState extends State<RecordAdd> {
                 void Function(void Function()) setState,
               ) {
                 UserBox? user = userRepository.user;
+                bool isRecordDateTime = {
+                  eDiet: user.isDietExerciseRecordDateTime == true,
+                  eExercise: user.isDietExerciseRecordDateTime2 == true,
+                }[widget.type]!;
 
                 onAmpm(String ampm) {
                   setState(() => timeStamps[0] = ampm);
@@ -963,15 +967,22 @@ class _RecordAddState extends State<RecordAdd> {
                   setState(() => timeStamps[2] = minute);
                 }
 
-                onChangedSwitch(bool isChecked) {
-                  user.isDietExerciseRecordDateTime = isChecked;
+                onChangedSwitch({
+                  required bool isChecked,
+                  required String type,
+                }) {
+                  if (eDiet == type) {
+                    user.isDietExerciseRecordDateTime = isChecked;
+                  } else if (eExercise == type) {
+                    user.isDietExerciseRecordDateTime2 = isChecked;
+                  }
 
                   user.save();
                   setState(() {});
                 }
 
                 onTapItem(String title) {
-                  DateTime createRecordDateTime = DateTime(
+                  DateTime dateTime = DateTime(
                     importDateTime.year,
                     importDateTime.month,
                     importDateTime.day,
@@ -986,9 +997,7 @@ class _RecordAddState extends State<RecordAdd> {
                     name: name,
                     actionDateTime: importDateTime,
                     dietExerciseRecordDateTime:
-                        (user.isDietExerciseRecordDateTime == true
-                            ? createRecordDateTime
-                            : null),
+                        isRecordDateTime ? dateTime : null,
                   );
                 }
 
@@ -996,6 +1005,7 @@ class _RecordAddState extends State<RecordAdd> {
                   type: widget.type,
                   timeStamps: timeStamps,
                   name: name,
+                  isFasting: isFasting,
                   selectedTitle: '',
                   onAmpm: onAmpm,
                   onHours: onHours,
@@ -1010,24 +1020,56 @@ class _RecordAddState extends State<RecordAdd> {
       }
     }
 
+    onFasting() {
+      textController.text = '단식 했어요'.tr();
+
+      onEditingComplete(true);
+      setState(() {});
+    }
+
     return isShowInput
         ? Row(
             children: [
               TodoInput(
                 controller: textController,
-                onEditingComplete: onEditingComplete,
+                onEditingComplete: () => onEditingComplete(null),
               ),
             ],
           )
-        : InkWell(
-            onTap: onAdd,
-            child: Row(
-              children: [
-                SvgPicture.asset('assets/svgs/pencil-square.svg', height: 18),
-                SpaceWidth(width: 7),
-                CommonText(text: '기록 추가', size: 15, color: Colors.grey),
-              ],
-            ),
+        : Column(
+            children: [
+              Row(
+                children: [
+                  CommonButton(
+                    text: '+ 기록 추가하기',
+                    fontSize: 13,
+                    isBold: true,
+                    height: 50,
+                    bgColor: widget.type == eDiet
+                        ? dietBgButtonColor
+                        : exerciseBgButtonColor,
+                    radious: 7,
+                    textColor: widget.type == eDiet
+                        ? dietTextButtonColor
+                        : exerciseTextButtonColor,
+                    onTap: onAdd,
+                  ),
+                  SpaceWidth(width: widget.type == eDiet ? 5 : 0),
+                  widget.type == eDiet
+                      ? CommonButton(
+                          text: '단식 했어요',
+                          fontSize: 13,
+                          isBold: true,
+                          height: 50,
+                          bgColor: const Color.fromARGB(255, 233, 247, 247),
+                          radious: 7,
+                          textColor: Colors.teal.shade300,
+                          onTap: onFasting,
+                        )
+                      : const EmptyArea()
+                ],
+              )
+            ],
           );
   }
 }
@@ -1044,17 +1086,22 @@ class CategoryBottomSheet extends StatelessWidget {
     required this.onHours,
     required this.onMinutes,
     required this.onChangedSwitch,
+    this.isFasting,
   });
 
   String type, name, selectedTitle;
   List<String> timeStamps;
+  bool? isFasting;
   Function(String) onAmpm, onHours, onMinutes, onTitle;
-  Function(bool) onChangedSwitch;
+  Function({required bool isChecked, required String type}) onChangedSwitch;
 
   @override
   Widget build(BuildContext context) {
     UserBox user = userRepository.user;
-    bool isRecordDateTime = user.isDietExerciseRecordDateTime == true;
+    bool isRecordDateTime = {
+      eDiet: user.isDietExerciseRecordDateTime == true,
+      eExercise: user.isDietExerciseRecordDateTime2 == true,
+    }[type]!;
 
     onHeight() {
       if (isRecordDateTime) {
@@ -1070,8 +1117,10 @@ class CategoryBottomSheet extends StatelessWidget {
       contents: Column(
         children: [
           RecordDateTime(
+            type: type,
             isTitle: true,
-            isShowContents: user.isDietExerciseRecordDateTime == true,
+            isFasting: isFasting,
+            isRecordDateTime: isRecordDateTime,
             timeStamps: timeStamps,
             onAmpm: onAmpm,
             onHours: onHours,
@@ -1081,6 +1130,7 @@ class CategoryBottomSheet extends StatelessWidget {
           SpaceHeight(height: 10),
           CategoryList(
             type: type,
+            isFasting: isFasting,
             selectedTitle: selectedTitle,
             onTitle: onTitle,
           ),
@@ -1096,16 +1146,23 @@ class CategoryList extends StatelessWidget {
     required this.type,
     required this.onTitle,
     required this.selectedTitle,
+    this.isFasting,
   });
 
   String type, selectedTitle;
   DateTime? dietExerciseRecordDateTime;
+  bool? isFasting;
   Function(String title) onTitle;
+
+  // fastingCategory
 
   @override
   Widget build(BuildContext context) {
+    final children =
+        isFasting == true ? fastingCategory[type]! : category[type]!;
+
     return Row(
-        children: category[type]!
+        children: children
             .map(
               (item) => Expanded(
                 child: Row(
@@ -1142,26 +1199,28 @@ class CategoryList extends StatelessWidget {
 class RecordDateTime extends StatelessWidget {
   RecordDateTime({
     super.key,
+    required this.type,
     required this.isTitle,
-    required this.isShowContents,
+    required this.isRecordDateTime,
     required this.timeStamps,
     required this.onAmpm,
     required this.onHours,
     required this.onMinutes,
     required this.onChangedSwitch,
+    this.isFasting,
   });
 
-  bool isTitle, isShowContents;
+  String type;
+  bool isTitle, isRecordDateTime;
+  bool? isFasting;
   List<String> timeStamps;
   Function(String) onAmpm, onHours, onMinutes;
-  Function(bool) onChangedSwitch;
+  Function({required bool isChecked, required String type}) onChangedSwitch;
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-
     onCommButton({
-      required String type,
+      required String category,
       required String state,
       required String text,
       required Function(String) onTap,
@@ -1172,7 +1231,7 @@ class RecordDateTime extends StatelessWidget {
         child: Row(
           children: [
             CommonButton(
-              text: type == 'ampm' ? text.tr() : text,
+              text: category == 'ampm' ? text.tr() : text,
               fontSize: 12,
               textColor: state == text ? Colors.white : Colors.grey,
               bgColor: state == text ? themeColor : Colors.grey.shade50,
@@ -1189,7 +1248,7 @@ class RecordDateTime extends StatelessWidget {
 
     List<Widget> ampmInfo = ['오전', '오후']
         .map((text) => onCommButton(
-              type: 'ampm',
+              category: 'ampm',
               text: text,
               isLast: text == '오후',
               state: timeStamps[0],
@@ -1199,7 +1258,7 @@ class RecordDateTime extends StatelessWidget {
     List<List<Widget>> hoursInfo = [
       ["1", "2", "3", "4", "5", "6"]
           .map((text) => onCommButton(
-                type: 'hour',
+                category: 'hour',
                 text: text,
                 isLast: text == '6',
                 state: timeStamps[1],
@@ -1208,7 +1267,7 @@ class RecordDateTime extends StatelessWidget {
           .toList(),
       ["7", "8", "9", "10", "11", "12"]
           .map((text) => onCommButton(
-                type: 'hour',
+                category: 'hour',
                 text: text,
                 isLast: text == '12',
                 state: timeStamps[1],
@@ -1219,7 +1278,7 @@ class RecordDateTime extends StatelessWidget {
     List<List<Widget>> minutesInfo = [
       ["00", "05", "10", "15", "20", "25"]
           .map((text) => onCommButton(
-                type: 'minute',
+                category: 'minute',
                 text: text,
                 isLast: text == '25',
                 state: timeStamps[2],
@@ -1228,7 +1287,7 @@ class RecordDateTime extends StatelessWidget {
           .toList(),
       ["30", "35", "40", "45", "50", "55"]
           .map((text) => onCommButton(
-                type: 'minute',
+                category: 'minute',
                 text: text,
                 isLast: text == '55',
                 state: timeStamps[2],
@@ -1261,14 +1320,18 @@ class RecordDateTime extends StatelessWidget {
 
     rowTitle() {
       return Padding(
-        padding: EdgeInsets.only(bottom: isShowContents ? 20 : 0),
+        padding: EdgeInsets.only(bottom: isRecordDateTime ? 20 : 0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CommonText(text: '시간도 기록 할까요?', size: 12, isBold: true),
+                CommonText(
+                    text:
+                        isFasting == true ? '단식 시작 시간도 기록할까요?' : '시간도 기록 할까요?',
+                    size: 12,
+                    isBold: true),
                 SpaceHeight(height: 2),
                 CommonText(
                   text: '시간 기록 시, 시간순으로 자동 정렬돼요.',
@@ -1278,9 +1341,10 @@ class RecordDateTime extends StatelessWidget {
               ],
             ),
             CupertinoSwitch(
-              value: user.isDietExerciseRecordDateTime == true,
+              value: isRecordDateTime,
               activeColor: themeColor,
-              onChanged: onChangedSwitch,
+              onChanged: (bool newValue) =>
+                  onChangedSwitch(isChecked: newValue, type: type),
             )
           ],
         ),
@@ -1291,7 +1355,7 @@ class RecordDateTime extends StatelessWidget {
       contentsWidget: Column(
         children: [
           isTitle ? rowTitle() : const EmptyArea(),
-          isShowContents == true
+          isRecordDateTime
               ? Column(
                   children: [
                     rowItem(title: '오전/오후'),
@@ -1487,33 +1551,6 @@ class GoalList extends StatelessWidget {
 
       user.save();
     }
-
-    // action(String planId) {
-    //   if (actions == null) {
-    //     return {'id': null, 'actionDateTime': null};
-    //   }
-
-    //   Map<String, dynamic> action = actions!.firstWhere(
-    //     (element) => element['id'] == planId,
-    //     orElse: () => {'id': null, 'actionDateTime': null},
-    //   );
-
-    //   return action;
-    // }
-
-    // planList.sort((itemA, itemB) {
-    //   int indexA = orderList?.indexOf(itemA.id) ?? 0;
-    //   int indexB = orderList?.indexOf(itemB.id) ?? 0;
-
-    //   return indexA.compareTo(indexB);
-    // });
-
-    // planList.sort((itemA, itemB) {
-    //   bool isCheckedA = action(itemA.id)['id'] != null;
-    //   bool isCheckedB = action(itemB.id)['id'] != null;
-
-    //   return (isCheckedA == isCheckedB ? 0 : (isCheckedB ? 1 : -1));
-    // });
 
     return Column(
       children: onPlanList(
@@ -1840,21 +1877,25 @@ class _GoalAddState extends State<GoalAdd> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          CommonCheckBox(
-            id: isShowInput ? uuid() : 'disabled',
-            isCheck: isChecked,
-            checkColor: isChecked ? widget.mainColor : Colors.grey,
-            isDisabled: !isShowInput,
-            onTap: onCheckBox,
-          ),
+          isShowInput
+              ? CommonCheckBox(
+                  id: uuid(),
+                  isCheck: isChecked,
+                  checkColor: isChecked ? widget.mainColor : Colors.grey,
+                  onTap: onCheckBox,
+                )
+              : const EmptyArea(),
           !isShowInput
-              ? Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: CommonText(
-                    text: '${widget.title} 추가',
-                    size: 15,
-                    color: Colors.grey,
-                  ),
+              ? CommonButton(
+                  topPadding: 5,
+                  text: '+ ${widget.title} 추가하기',
+                  isBold: true,
+                  height: 50,
+                  fontSize: 13,
+                  bgColor: goalButtonColors[widget.type]!['bgColor']!,
+                  radious: 7,
+                  textColor: goalButtonColors[widget.type]!['textColor']!,
+                  onTap: onTap,
                 )
               : TodoInput(
                   controller: textController,
@@ -1919,7 +1960,7 @@ class RecordBottomSheet extends StatefulWidget {
   String type, id, name, topTitle, selectedTitle;
   DateTime? dietExerciseRecordDateTime;
   Function(String title) onEditTitle;
-  Function(DateTime) onEditDietExerciseRecordDateTime;
+  Function(DateTime dateTime) onEditDietExerciseRecordDateTime;
   Function() onTapEdit;
   Function() onTapRemove;
 
@@ -2017,8 +2058,9 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
         'contents': Column(
           children: [
             RecordDateTime(
+              type: widget.type,
               isTitle: false,
-              isShowContents: true,
+              isRecordDateTime: true,
               timeStamps: timeStamps,
               onAmpm: (String ampm) {
                 setState(() => timeStamps[0] = ampm);
@@ -2029,7 +2071,8 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
               onMinutes: (String minute) {
                 setState(() => timeStamps[2] = minute);
               },
-              onChangedSwitch: (_) => null,
+              onChangedSwitch:
+                  ({required bool isChecked, required String type}) => null,
             ),
             SpaceHeight(height: 10),
             Row(

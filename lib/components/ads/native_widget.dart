@@ -34,16 +34,18 @@ class NativeWidget extends StatelessWidget {
   }
 }
 
-class NativeAdLoading extends StatelessWidget {
-  NativeAdLoading({
+class LoadingDialog extends StatelessWidget {
+  LoadingDialog({
     super.key,
     required this.text,
     required this.color,
     this.nameArgs,
+    this.subText,
   });
 
   String text;
   Color color;
+  String? subText;
   Map<String, String>? nameArgs;
 
   @override
@@ -59,7 +61,17 @@ class NativeAdLoading extends StatelessWidget {
           isCenter: true,
           color: color,
           nameArgs: nameArgs,
-        )
+        ),
+        SpaceHeight(height: 3),
+        subText != null
+            ? CommonText(
+                text: subText!,
+                size: 11,
+                isCenter: true,
+                color: color,
+                nameArgs: nameArgs,
+              )
+            : const EmptyArea(),
       ],
     );
   }

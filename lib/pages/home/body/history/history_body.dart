@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/provider/bottom_navigation_provide
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -51,6 +52,7 @@ class HistoryListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
     DateTime historyDateTime =
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
@@ -64,13 +66,15 @@ class HistoryListView extends StatelessWidget {
         ? recordList.reversed.toList()
         : recordList;
 
-    // if (recordList.isNotEmpty) {
-    //   for (var i = 0; i < recordList.length; i++) {
-    //     if (i != 0 && i % 6 == 0) {
-    //       recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
-    //     }
-    //   }
-    // }
+    if (isPremium == false) {
+      if (recordList.isNotEmpty) {
+        for (var i = 0; i < recordList.length; i++) {
+          if (i != 0 && i % 6 == 0) {
+            recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
+          }
+        }
+      }
+    }
 
     return Expanded(
       child: recordList.isEmpty
