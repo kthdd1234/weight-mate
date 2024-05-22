@@ -10,6 +10,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/provider/reload_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +27,8 @@ class _FontChangePageState extends State<FontChangePage> {
     bool isReload = context.watch<ReloadProvider>().isReload;
 
     UserBox? user = userRepository.user;
-    String? fontFamily = user.fontFamily;
-    String fontName = fontFamilyList
-            .firstWhere((item) => item['fontFamily'] == fontFamily)['name'] ??
-        '카페24 아네모네 에어';
+    String? fontFamily = getFontFamily(user.fontFamily ?? initFontFamily);
+    String fontName = getFontName(fontFamily);
 
     List<String> fontPreviewList = [
       "글꼴 미리보기입니다.".tr(namedArgs: {'fontName': fontName.tr()}),
@@ -79,7 +78,7 @@ class _FontChangePageState extends State<FontChangePage> {
                                     text,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      // fontFamily: fontFamily,
+                                      fontFamily: fontFamily,
                                       color: themeColor,
                                     ),
                                   ),

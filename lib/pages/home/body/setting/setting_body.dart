@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -20,6 +18,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/contai
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/services/device_info_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -34,7 +33,6 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:timezone/timezone.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingBody extends StatefulWidget {
@@ -57,6 +55,7 @@ class _SettingBodyState extends State<SettingBody> {
     }
 
     getInfo();
+
     super.initState();
   }
 
@@ -68,10 +67,9 @@ class _SettingBodyState extends State<SettingBody> {
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
     String? language = user.language;
-    String? fontFamily = user.fontFamily;
-    String fontName = fontFamilyList
-            .firstWhere((item) => item['fontFamily'] == fontFamily)['name'] ??
-        '카페24 아네모네 에어';
+    String fontFamily = user.fontFamily ?? initFontFamily;
+    String validFontFamily = getFontFamily(fontFamily);
+    String fontName = getFontName(validFontFamily);
 
     onNavigator({required String type, required String title}) async {
       await Navigator.pushNamed(context, '/body-info-page', arguments: {
@@ -357,9 +355,7 @@ class _SettingBodyState extends State<SettingBody> {
                         Text(
                           item.name,
                           style: TextStyle(
-                            fontFamily: locale == 'ja'
-                                ? 'cafe24SsurroundAir'
-                                : fontFamily,
+                            fontFamily: fontFamily,
                             fontWeight: isLanguage
                                 ? FontWeight.bold
                                 : FontWeight.normal,
@@ -390,11 +386,29 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
+    onTapPremium(id) async {
+      await Navigator.pushNamed(context, '/premium-page');
+      setState(() {});
+    }
+
+    onTapData(id) async {
+      await Navigator.pushNamed(context, '/app-data-page');
+      setState(() {});
+    }
+
     onTapVersion(id) {
       //
     }
 
     List<MoreSeeItemClass> settingItemList = [
+      MoreSeeItemClass(
+        id: MoreSeeItem.premium,
+        icon: 'crown',
+        title: '프리미엄',
+        value: 'premium',
+        color: themeColor,
+        onTap: onTapPremium,
+      ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',
@@ -453,6 +467,14 @@ class _SettingBodyState extends State<SettingBody> {
         value: isLock ? '화면 잠금 중'.tr() : '잠금 없음'.tr(),
         color: isLock ? themeColor : Colors.grey,
         onTap: onTapLock,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appData,
+        icon: 'cloud-data',
+        title: '데이터 백업/복원',
+        value: '',
+        color: Colors.transparent,
+        onTap: onTapData,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appReset,
@@ -524,7 +546,6 @@ class _SettingBodyState extends State<SettingBody> {
 
         return Column(
           children: [
-            SpaceHeight(height: 10),
             CommonAppBar(id: bodyId),
             Expanded(child: ListView(children: children))
           ],
@@ -598,6 +619,40 @@ class MoreSeeItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
+    wValue() {
+      if (value == 'premium') {
+        return Container(
+            decoration: BoxDecoration(
+              image: const DecorationImage(
+                  image: AssetImage("assets/images/t-23.png"),
+                  fit: BoxFit.cover),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 7),
+            child: CommonText(
+              text: isPremium ? '구매 완료' : '업그레이드',
+              color: Colors.white,
+              size: 11,
+              isCenter: true,
+              isBold: true,
+            ));
+      }
+
+      return value != ''
+          ? CommonText(
+              isNotTr: true,
+              text: value,
+              size: 13,
+              color: color,
+              rightIcon: MoreSeeItem.appVersion != id
+                  ? Icons.chevron_right_rounded
+                  : null,
+            )
+          : const EmptyArea();
+    }
+
     return InkWell(
       onTap: () => onTap(id),
       child: Padding(
@@ -616,17 +671,7 @@ class MoreSeeItemWidget extends StatelessWidget {
             ),
             SpaceWidth(width: regularSapce),
             Expanded(child: CommonText(text: title, size: 14, isBold: true)),
-            value != ''
-                ? CommonText(
-                    isNotTr: true,
-                    text: value,
-                    size: 13,
-                    color: color,
-                    rightIcon: MoreSeeItem.appVersion != id
-                        ? Icons.chevron_right_rounded
-                        : null,
-                  )
-                : const EmptyArea(),
+            wValue(),
           ],
         ),
       ),

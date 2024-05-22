@@ -8,15 +8,17 @@ import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -31,7 +33,6 @@ import 'package:multi_value_listenable_builder/multi_value_listenable_builder.da
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
-import 'package:workmanager/workmanager.dart';
 
 String eHistoryList = HistoryFormat.list.toString();
 String eHistoryCalendar = HistoryFormat.calendar.toString();
@@ -99,7 +100,7 @@ class CommonAppBar extends StatelessWidget {
   }
 }
 
-class CommonTitle extends StatelessWidget {
+class CommonTitle extends StatefulWidget {
   CommonTitle({
     super.key,
     required this.index,
@@ -116,21 +117,25 @@ class CommonTitle extends StatelessWidget {
   Function(CalendarMaker) onTapMakerType;
 
   @override
+  State<CommonTitle> createState() => _CommonTitleState();
+}
+
+class _CommonTitleState extends State<CommonTitle> {
+  @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    UserBox user = userRepository.user;
 
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
     DateTime historyDateTime =
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
-
-    UserBox user = userRepository.user;
+    bool isPremium = context.watch<PremiumProvider>().premiumValue();
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
-
     String title = [
       ym(locale: locale, dateTime: titleDateTime),
       historyFormat == eHistoryList
@@ -138,11 +143,12 @@ class CommonTitle extends StatelessWidget {
           : ym(locale: locale, dateTime: historyDateTime),
       '체중 변화',
       '설정'
-    ][index];
+    ][widget.index];
+    String graphType = user.graphType ?? eGraphDefault;
 
-    bool isRecord = index == 0;
-    bool isHistory = index == 1;
-    bool isGraph = index == 2;
+    bool isRecord = widget.index == 0;
+    bool isHistory = widget.index == 1;
+    bool isGraph = widget.index == 2;
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -170,37 +176,9 @@ class CommonTitle extends StatelessWidget {
       closeDialog(context);
     }
 
-    onShowDialog({
-      required String title,
-      required DateRangePickerView view,
-      required DateTime initialSelectedDate,
-      required Function(DateRangePickerSelectionChangedArgs) onSelectionChanged,
-    }) {
-      showDialog(
-        context: context,
-        builder: (context) => Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            AlertDialog(
-              backgroundColor: dialogBackgroundColor,
-              shape: containerBorderRadious,
-              title: DialogTitle(
-                text: title,
-                onTap: () => closeDialog(context),
-              ),
-              content: DatePicker(
-                view: view,
-                initialSelectedDate: initialSelectedDate,
-                onSelectionChanged: onSelectionChanged,
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     onTapRecordTitle() {
       onShowDialog(
+        context: context,
         title: '월 선택',
         view: DateRangePickerView.year,
         initialSelectedDate: titleDateTime,
@@ -210,6 +188,7 @@ class CommonTitle extends StatelessWidget {
 
     onTapHistoryTitle() {
       onShowDialog(
+        context: context,
         title: isHistoryList ? '년도 선택' : '월 선택',
         view: isHistoryList
             ? DateRangePickerView.decade
@@ -244,6 +223,66 @@ class CommonTitle extends StatelessWidget {
       await user.save();
     }
 
+    onShowBannerAd() {
+      return widget.index != 3 && isPremium == false
+          ? BannerWidget()
+          : SpaceHeight(height: 10);
+    }
+
+    onTapGraphMode(String type) async {
+      if (type == eGraphCustom && isPremium == false) {
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+            shape: containerBorderRadious,
+            backgroundColor: dialogBackgroundColor,
+            title: DialogTitle(
+              text: "커스텀 모드 제한",
+              onTap: () => closeDialog(context),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 145,
+              child: Column(
+                children: [
+                  ContentsBox(
+                    contentsWidget: Column(
+                      children: [
+                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                          text: '커스텀 모드를 이용할 수 있어요.',
+                          size: 14,
+                          isCenter: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SpaceHeight(height: 10),
+                  Row(
+                    children: [
+                      ExpandedButtonHori(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        imgUrl: 'assets/images/t-23.png',
+                        text: '프리미엄 구매 페이지로 이동',
+                        onTap: () {
+                          Navigator.pushNamed(context, '/premium-page');
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+
+      user.graphType = type;
+      await user.save();
+    }
+
     List<IconData?> rightIconList = [
       Icons.keyboard_arrow_down_rounded,
       Icons.keyboard_arrow_down_rounded,
@@ -263,7 +302,7 @@ class CommonTitle extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 25),
       child: Column(
         children: [
-          index != 3 ? BannerWidget() : const EmptyArea(),
+          onShowBannerAd(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -271,8 +310,8 @@ class CommonTitle extends StatelessWidget {
                 isNotTr: isRecord || isHistory,
                 text: title,
                 size: 20,
-                rightIcon: rightIconList[index],
-                onTap: onTapList[index],
+                rightIcon: rightIconList[widget.index],
+                onTap: onTapList[widget.index],
               ),
               Row(
                 children: [
@@ -280,18 +319,20 @@ class CommonTitle extends StatelessWidget {
                       ? Row(
                           children: [
                             CommonTag(
-                              text: availableCalendarMaker[calendarMaker],
+                              text:
+                                  availableCalendarMaker[widget.calendarMaker],
                               color: 'whiteIndigo',
-                              onTap: () => onTapMakerType(
-                                nextCalendarMaker[calendarMaker]!,
+                              onTap: () => widget.onTapMakerType(
+                                nextCalendarMaker[widget.calendarMaker]!,
                               ),
                             ),
                             SpaceWidth(width: tinySpace),
                             CommonTag(
-                              text: availableCalendarFormats[calendarFormat],
+                              text: availableCalendarFormats[
+                                  widget.calendarFormat],
                               color: 'whiteIndigo',
-                              onTap: () => onFormatChanged(
-                                nextCalendarFormats[calendarFormat]!,
+                              onTap: () => widget.onFormatChanged(
+                                nextCalendarFormats[widget.calendarFormat]!,
                               ),
                             ),
                             SpaceWidth(width: tinySpace),
@@ -323,10 +364,11 @@ class CommonTitle extends StatelessWidget {
                                   )
                                 : CommonTag(
                                     text: availableCalendarFormats[
-                                        calendarFormat],
+                                        widget.calendarFormat],
                                     color: 'whiteIndigo',
-                                    onTap: () => onFormatChanged(
-                                      nextCalendarFormats[calendarFormat]!,
+                                    onTap: () => widget.onFormatChanged(
+                                      nextCalendarFormats[
+                                          widget.calendarFormat]!,
                                     ),
                                   ),
                             SpaceWidth(width: 5),
@@ -341,6 +383,17 @@ class CommonTitle extends StatelessWidget {
                           ],
                         )
                       : const EmptyArea(),
+                  isGraph
+                      ? CommonTag(
+                          text: graphType == eGraphDefault ? '기본 모드' : '커스텀 모드',
+                          color: 'whiteIndigo',
+                          onTap: () => onTapGraphMode(
+                            graphType == eGraphDefault
+                                ? eGraphCustom
+                                : eGraphDefault,
+                          ),
+                        )
+                      : const EmptyArea(),
                 ],
               )
             ],
@@ -350,10 +403,6 @@ class CommonTitle extends StatelessWidget {
     );
   }
 }
-
-String dietType = PlanTypeEnum.diet.toString();
-String exerciseType = PlanTypeEnum.exercise.toString();
-String lifeType = PlanTypeEnum.lifestyle.toString();
 
 class CalendarBar extends StatelessWidget {
   CalendarBar({
@@ -371,8 +420,8 @@ class CalendarBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     String? weightUnit = userRepository.user.weightUnit ?? 'kg';
-
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     DateTime historyImportDateTime = context
@@ -418,19 +467,20 @@ class CalendarBar extends StatelessWidget {
       String? picture = colorName(
         (recordInfo?.leftFile ??
             recordInfo?.rightFile ??
-            recordInfo?.bottomFile),
+            recordInfo?.bottomFile ??
+            recordInfo?.topFile),
         'purple',
       );
       String? diet = colorName(
-        nullCheckAction(actions, dietType),
+        nullCheckAction(actions, eDiet),
         'teal',
       );
       String? exercise = colorName(
-        nullCheckAction(actions, exerciseType),
+        nullCheckAction(actions, eExercise),
         'lightBlue',
       );
       String? life = colorName(
-        nullCheckAction(actions, lifeType),
+        nullCheckAction(actions, eLife),
         'brown',
       );
       String? diary = colorName(
@@ -456,16 +506,26 @@ class CalendarBar extends StatelessWidget {
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       bool? isWeight = recordInfo?.weight != null;
 
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: CommonText(
-          isNotTr: true,
-          text: isWeight ? '${recordInfo?.weight}$weightUnit' : '',
-          size: 8,
-          color: Colors.black,
-          isCenter: true,
-        ),
-      );
+      return isWeight
+          ? Padding(
+              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 1),
+                decoration: BoxDecoration(
+                  color: Colors.indigo.shade300,
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: CommonText(
+                  text: '${recordInfo?.weight}$weightUnit',
+                  size: 8.5,
+                  color: Colors.white,
+                  isCenter: true,
+                  isNotTr: true,
+                  isBold: true,
+                ),
+              ),
+            )
+          : const EmptyArea();
     }
 
     onPageChanged(DateTime dateTime) {
@@ -486,7 +546,7 @@ class CalendarBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: TableCalendar(
-                locale: context.locale.toString(),
+                locale: locale,
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: calendarMaker == CalendarMaker.sticker
                       ? stickerBuilder
@@ -614,6 +674,7 @@ class _DisplayListState extends State<DisplayList> {
     }
 
     return DisplayListContents(
+      isRequiredWeight: true,
       bottomText: '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
       classList: displayClassList,
       onChecked: onChecked,
@@ -636,10 +697,9 @@ class _HistoryDisplayListState extends State<HistoryDisplayList> {
     List<String>? historyDisplayList = user.historyDisplayList;
 
     onTap({required dynamic id, required bool newValue}) {
-      bool isNotWeight = historyDisplayClassList.first.id != id;
       bool ishistoryDisplayList = user.historyDisplayList != null;
 
-      if (isNotWeight && ishistoryDisplayList) {
+      if (ishistoryDisplayList) {
         newValue
             ? user.historyDisplayList!.add(id)
             : user.historyDisplayList!.remove(id);
@@ -651,16 +711,13 @@ class _HistoryDisplayListState extends State<HistoryDisplayList> {
     }
 
     onChecked(String filterId) {
-      if (historyDisplayClassList.first.id == filterId) {
-        return true;
-      }
-
       return historyDisplayList != null
           ? historyDisplayList.contains(filterId)
           : false;
     }
 
     return DisplayListContents(
+      isRequiredWeight: false,
       bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
       classList: historyDisplayClassList,
       onChecked: onChecked,
@@ -672,12 +729,14 @@ class _HistoryDisplayListState extends State<HistoryDisplayList> {
 class DisplayListContents extends StatelessWidget {
   DisplayListContents({
     super.key,
+    required this.isRequiredWeight,
     required this.bottomText,
     required this.classList,
     required this.onChecked,
     required this.onTap,
   });
 
+  bool isRequiredWeight;
   String bottomText;
   List<FilterClass> classList;
   bool Function(String) onChecked;
@@ -718,9 +777,12 @@ class DisplayListContents extends StatelessWidget {
                                 isNotTop: true,
                               ),
                               SpaceWidth(width: 3),
-                              classList.first.id == data.id
+                              classList.first.id == data.id && isRequiredWeight
                                   ? CommonText(
-                                      text: '(필수)', size: 10, color: Colors.red)
+                                      text: '(필수)',
+                                      size: 10,
+                                      color: Colors.red,
+                                    )
                                   : const EmptyArea()
                             ],
                           ),

@@ -1,15 +1,18 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'dart:developer';
+import 'dart:io';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -17,7 +20,10 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
+import 'package:purchases_flutter/models/customer_info_wrapper.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:quiver/time.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 getDateTimeToStr(DateTime dateTime) {
   DateFormat formatter = DateFormat('yyyy년 MM월 dd일');
@@ -274,6 +280,14 @@ showAlarmBottomSheet({
   );
 }
 
+ymdeHm({required String locale, required DateTime? dateTime}) {
+  if (dateTime == null) {
+    return null;
+  }
+
+  return "${DateFormat.yMMMMEEEEd(locale).format(dateTime)} ${DateFormat.jm(locale).format(dateTime)}";
+}
+
 ymd({required String locale, required DateTime dateTime}) {
   return DateFormat.yMMMd(locale).format(dateTime);
 }
@@ -322,7 +336,29 @@ m_d({required String locale, required DateTime dateTime}) {
   return DateFormat.Md(locale).format(dateTime);
 }
 
+yyyyUnderMd({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nM.d' : 'M.d\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
+yyyyUnderM({required String locale, required DateTime dateTime}) {
+  return DateFormat(
+    locale == 'ko' || locale == 'ja' ? 'yyyy\nMMMM' : 'M\nyyyy',
+    locale,
+  ).format(dateTime);
+}
+
+ymdeShort({required String locale, required DateTime dateTime}) {
+  return DateFormat.yMEd(locale).format(dateTime);
+}
+
 ymdShort({required String locale, required DateTime dateTime}) {
+  if (locale == 'ko') {
+    return DateFormat('yyyy. M. d', 'ko').format(dateTime);
+  }
+
   return DateFormat.yMd(locale).format(dateTime);
 }
 
@@ -395,12 +431,12 @@ const planNotifyTitle = '목표 실천 알림 ⏰';
 
 const planNotifyBody = '지금 바로 실천해보세요!';
 
-calculatedGoalWeight({required double goalWeight, required double weight}) {
-  double value = goalWeight - weight;
+calculatedWeight({required double fWeight, required double lWeight}) {
+  double value = fWeight - lWeight;
   String fixedValue = value.toStringAsFixed(1);
-  String operator = goalWeight == weight
+  String operator = fWeight == lWeight
       ? ''
-      : goalWeight > weight
+      : fWeight > lWeight
           ? '+'
           : '';
 
@@ -882,4 +918,176 @@ onCheckBox({
   }
 
   await recordInfo?.save();
+}
+
+onShowDialog({
+  required BuildContext context,
+  required String title,
+  required DateRangePickerView view,
+  required DateTime initialSelectedDate,
+  required Function(DateRangePickerSelectionChangedArgs) onSelectionChanged,
+}) {
+  showDialog(
+    context: context,
+    builder: (context) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: title,
+            onTap: () => closeDialog(context),
+          ),
+          content: DatePicker(
+            view: view,
+            initialSelectedDate: initialSelectedDate,
+            onSelectionChanged: onSelectionChanged,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+String avgRecordFunc({required List<RecordBox> list}) {
+  double sum = 0;
+  list.forEach((record) => sum += record.weight!);
+
+  return (sum / list.length).toStringAsFixed(1);
+}
+
+RecordBox maxRecordFunc({required List<RecordBox> list}) {
+  return list.reduce((recordA, recordB) =>
+      recordA.weight! > recordB.weight! ? recordA : recordB);
+}
+
+RecordBox minRecordFunc({required List<RecordBox> list}) {
+  return list.reduce((recordA, recordB) =>
+      recordA.weight! < recordB.weight! ? recordA : recordB);
+}
+
+Future<void> restoreHiveBox<T>(String boxName) async {
+  final box = await Hive.openBox<T>(boxName);
+  final boxPath = box.path;
+  await box.close();
+
+  if (boxPath == null) return;
+
+  try {
+    File('$boxPath/db_backup.hive').copy(boxPath);
+  } finally {
+    await Hive.openBox<T>(boxName);
+  }
+}
+
+Future<bool> setPurchasePremium(Package package) async {
+  try {
+    CustomerInfo customerInfo = await Purchases.purchasePackage(package);
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
+
+Future<bool> isPurchasePremium() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
+
+Future<bool> isPurchaseRestore() async {
+  try {
+    CustomerInfo customerInfo = await Purchases.restorePurchases();
+    bool isActive =
+        customerInfo.entitlements.all[entitlement_identifier]?.isActive == true;
+    return isActive;
+  } on PlatformException catch (e) {
+    log('e =>> ${e.toString()}');
+    return false;
+  }
+}
+
+Future<bool> isHideAd() async {
+  TrackingStatus trackingStatus =
+      await AppTrackingTransparency.trackingAuthorizationStatus;
+  String advertisingId =
+      await AppTrackingTransparency.getAdvertisingIdentifier();
+  bool isAuthorized = trackingStatus == TrackingStatus.authorized;
+  bool isMyAdvertisingId =
+      advertisingId == '5E188ADD-3D54-4140-97F7-AA5FAA0AD3B2';
+
+  if (isAuthorized && isMyAdvertisingId) {
+    return false;
+  }
+
+  return false;
+}
+
+Future<void> showDialogDateTimeYear({
+  required BuildContext context,
+  required DateTime initialSelectedDate,
+  required Function(DateTime dateTime) onDateTime,
+}) async {
+  await showDialog(
+    context: context,
+    builder: (context) => Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AlertDialog(
+          backgroundColor: dialogBackgroundColor,
+          shape: containerBorderRadious,
+          title: DialogTitle(
+            text: '년도 선택',
+            onTap: () => closeDialog(context),
+          ),
+          content: DatePicker(
+            view: DateRangePickerView.decade,
+            initialSelectedDate: initialSelectedDate,
+            onSelectionChanged: (datTimeArgs) {
+              onDateTime(datTimeArgs.value);
+              closeDialog(context);
+            },
+          ),
+        ),
+      ],
+    ),
+  );
+
+  return;
+}
+
+String getFontFamily(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamily : initFontFamily;
+}
+
+String getFontName(String fontFamily) {
+  int idx = fontFamilyList
+      .indexWhere((element) => element['fontFamily'] == fontFamily);
+  return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
+}
+
+navigatorExamplePage({
+  required BuildContext context,
+  required String title,
+  required String assetName,
+}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ExampleImagePage(
+        title: title,
+        assetName: assetName,
+      ),
+    ),
+  );
 }

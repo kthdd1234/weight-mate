@@ -60,14 +60,15 @@ class CommonText extends StatelessWidget {
                 ])
               : const EmptyArea(),
           Padding(
-            padding: EdgeInsets.only(top: isNotTop == true ? 0 : 2),
+            padding: EdgeInsets.only(top: leftIcon == null ? 0 : 2),
             child: SizedBox(
               child: Text(
                 isNotTr == true ? text : text.tr(namedArgs: nameArgs),
                 style: TextStyle(
                   color: color ?? themeColor,
                   fontSize: size,
-                  fontWeight: isBold == true ? FontWeight.bold : null,
+                  fontWeight:
+                      isBold == true ? FontWeight.w700 : FontWeight.w400,
                   decoration: textDecoration,
                   decorationThickness: 1,
                   decorationColor: decoColor ?? themeColor,

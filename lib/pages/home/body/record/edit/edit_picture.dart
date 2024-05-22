@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:dotted_border/dotted_border.dart';
@@ -6,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
@@ -21,6 +25,7 @@ import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -29,9 +34,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
 class EditPicture extends StatelessWidget {
-  EditPicture({super.key, required this.setActiveCamera});
-
-  Function(bool newValue) setActiveCamera;
+  const EditPicture({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +50,15 @@ class EditPicture extends StatelessWidget {
       'left': recordInfo?.leftFile,
       'right': recordInfo?.rightFile,
       'bottom': recordInfo?.bottomFile,
+      'top': recordInfo?.topFile,
     };
     int pictureLength = [
       recordInfo?.leftFile,
       recordInfo?.rightFile,
-      recordInfo?.bottomFile
+      recordInfo?.bottomFile,
+      recordInfo?.topFile
     ].whereType<Uint8List>().length;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     setFile({required Uint8List? newValue, required String pos}) {
       switch (pos) {
@@ -65,20 +71,23 @@ class EditPicture extends StatelessWidget {
         case 'bottom':
           recordInfo?.bottomFile = newValue;
           break;
+        case 'top':
+          recordInfo?.topFile = newValue;
+          break;
         default:
       }
 
       recordInfo?.save();
     }
 
-    convertUnit8List(XFile? xFile) async {
-      return await File(xFile!.path).readAsBytes();
-    }
+    // convertUnit8List(XFile? xFile) async {
+    //   return await File(xFile!.path).readAsBytes();
+    // }
 
-    onNavigatorImageCollectionsPage() async {
-      closeDialog(context);
-      await Navigator.pushNamed(context, '/image-collections-page');
-    }
+    // onNavigatorImageCollectionsPage() async {
+    //   closeDialog(context);
+    //   await Navigator.pushNamed(context, '/image-collections-page');
+    // }
 
     onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
       closeDialog(context);
@@ -94,7 +103,6 @@ class EditPicture extends StatelessWidget {
       required String pos,
     }) async {
       XFile? xFileData;
-      setActiveCamera(true);
 
       await ImagePicker().pickImage(source: source).then(
         (xFile) async {
@@ -118,23 +126,30 @@ class EditPicture extends StatelessWidget {
       return xFileData;
     }
 
-    showDialogPopup({required String title, required Uint8List binaryData}) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return NativeAdDialog(
-            title: title,
-            loadingText: '사진 데이터 저장 중...',
-            leftText: '사진 확인',
-            rightText: '사진 앨범',
-            onLeftClick: () =>
-                onNavigatorImagePullSizePage(binaryData: binaryData),
-            onRightClick: onNavigatorImageCollectionsPage,
-          );
-        },
-      );
-    }
+    // showDialogPopup({required String title}) {
+    //   onLeftClick() {
+    //     Navigator.pushNamed(context, '/premium-page');
+    //   }
+
+    //   onRightClick() {
+    //     closeDialog(context);
+    //   }
+
+    //   showDialog(
+    //     barrierDismissible: false,
+    //     context: context,
+    //     builder: (context) {
+    //       return NativeAdDialog(
+    //         title: title,
+    //         loadingText: '광고 불러오는 중...',
+    //         leftText: '광고 제거',
+    //         rightText: '광고 닫기',
+    //         onLeftClick: onLeftClick,
+    //         onRightClick: onRightClick,
+    //       );
+    //     },
+    //   );
+    // }
 
     setPickedImage({required String pos, required XFile? xFile}) async {
       if (xFile == null) return;
@@ -145,10 +160,12 @@ class EditPicture extends StatelessWidget {
         recordRepository.recordBox.put(
           recordKey,
           RecordBox(
-              createDateTime: importDateTime,
-              leftFile: pos == 'left' ? pickedImage : null,
-              rightFile: pos == 'right' ? pickedImage : null,
-              bottomFile: pos == 'bottom' ? pickedImage : null),
+            createDateTime: importDateTime,
+            leftFile: pos == 'left' ? pickedImage : null,
+            rightFile: pos == 'right' ? pickedImage : null,
+            bottomFile: pos == 'bottom' ? pickedImage : null,
+            topFile: pos == 'top' ? pickedImage : null,
+          ),
         );
       } else {
         setFile(pos: pos, newValue: pickedImage);
@@ -160,11 +177,67 @@ class EditPicture extends StatelessWidget {
 
       XFile? xFileData = await setImagePicker(source: source, pos: pos);
 
+      if (isPremium == false && pictureLength > 0) {
+        onPremium() {
+          Navigator.pushNamed(context, '/premium-page');
+        }
+
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+            shape: containerBorderRadious,
+            backgroundColor: dialogBackgroundColor,
+            title: DialogTitle(
+              text: "사진 추가 제한",
+              onTap: () => closeDialog(context),
+            ),
+            content: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: 166,
+              child: Column(
+                children: [
+                  ContentsBox(
+                    contentsWidget: Column(
+                      children: [
+                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                          text: '사진을 4장까지 추가 할 수 있어요.',
+                          size: 14,
+                          isCenter: true,
+                        ),
+                        SpaceHeight(height: 3),
+                        CommonText(
+                            text: '(미구매 시 1장까지만 추가 가능)',
+                            size: 14,
+                            isCenter: true),
+                      ],
+                    ),
+                  ),
+                  SpaceHeight(height: 10),
+                  Row(
+                    children: [
+                      ExpandedButtonHori(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        imgUrl: 'assets/images/t-23.png',
+                        text: '프리미엄 구매 페이지로 이동',
+                        onTap: onPremium,
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+        return;
+      }
+
       if (xFileData != null) {
         setPickedImage(pos: pos, xFile: xFileData);
-
-        Uint8List unit8List = await convertUnit8List(xFileData);
-        showDialogPopup(title: '🖼️ 사진 기록 완료!', binaryData: unit8List);
+        // showDialogPopup(title: '🖼️ 사진 기록 완료!');
+        return;
       }
     }
 
@@ -188,7 +261,9 @@ class EditPicture extends StatelessWidget {
                             binaryData: fileInfo[pos]!,
                           ),
                           child: DefaultImage(
-                              unit8List: fileInfo[pos]!, height: 280),
+                            unit8List: fileInfo[pos]!,
+                            height: 280,
+                          ),
                         ),
                         SpaceHeight(height: smallSpace)
                       ],
@@ -274,7 +349,7 @@ class EditPicture extends StatelessWidget {
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
-                                  SpaceWidth(width: 5),
+                                  SpaceWidth(width: 7),
                                   PictureContainer(
                                     file: fileInfo['right'],
                                     pos: 'right',
@@ -284,9 +359,27 @@ class EditPicture extends StatelessWidget {
                                 ],
                               ),
                               SpaceHeight(height: 7),
+                              Row(
+                                children: [
+                                  PictureContainer(
+                                    file: fileInfo['bottom'],
+                                    pos: 'bottom',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                  SpaceWidth(width: 7),
+                                  PictureContainer(
+                                    file: fileInfo['top'],
+                                    pos: 'top',
+                                    onTapPicture: onTapPicture,
+                                    onTapRemove: onTapRemove,
+                                  ),
+                                ],
+                              ),
+                              SpaceHeight(height: 7),
                               CommonText(
                                 leftIcon: Icons.info_outline,
-                                text: '추가한 사진은 앱 내에 저장돼요.',
+                                text: '사진은 앱 내 저장 공간에 저장돼요.',
                                 size: 10,
                                 color: Colors.grey,
                               )

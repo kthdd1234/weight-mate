@@ -31,6 +31,12 @@ class UserBox extends HiveObject {
     this.historyCalendarFormat,
     this.isDietExerciseRecordDateTime,
     this.fontFamily,
+    this.googleDriveInfo,
+    this.isDietExerciseRecordDateTime2,
+    this.customerInfoJson,
+    this.graphType,
+    this.cutomGraphStartDateTime,
+    this.cutomGraphEndDateTime,
   });
 
   @HiveField(0)
@@ -107,6 +113,24 @@ class UserBox extends HiveObject {
 
   @HiveField(24)
   String? fontFamily;
+
+  @HiveField(25)
+  Map<String, dynamic>? googleDriveInfo;
+
+  @HiveField(26)
+  bool? isDietExerciseRecordDateTime2;
+
+  @HiveField(27)
+  Map<String, dynamic>? customerInfoJson;
+
+  @HiveField(28)
+  String? graphType;
+
+  @HiveField(29)
+  DateTime? cutomGraphStartDateTime;
+
+  @HiveField(30)
+  DateTime? cutomGraphEndDateTime;
 
   @override
   String toString() {

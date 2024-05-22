@@ -9,12 +9,14 @@ import '../space/spaceWidth.dart';
 class ExpandedButtonHori extends StatelessWidget {
   ExpandedButtonHori({
     super.key,
+    required this.text,
+    required this.onTap,
     this.imgUrl,
     this.color,
     this.icon,
     this.padding,
-    required this.text,
-    required this.onTap,
+    this.borderRadius,
+    this.nameArgs,
   });
 
   String? imgUrl;
@@ -22,6 +24,8 @@ class ExpandedButtonHori extends StatelessWidget {
   IconData? icon;
   String text;
   EdgeInsets? padding;
+  double? borderRadius;
+  Map<String, String>? nameArgs;
   Function() onTap;
 
   @override
@@ -30,6 +34,7 @@ class ExpandedButtonHori extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: ContentsBox(
+          borderRadius: borderRadius,
           padding: padding ?? pagePadding,
           imgUrl: imgUrl,
           backgroundColor: color,
@@ -40,6 +45,7 @@ class ExpandedButtonHori extends StatelessWidget {
             isBold: true,
             isCenter: true,
             color: Colors.white,
+            nameArgs: nameArgs,
           ),
         ),
       ),

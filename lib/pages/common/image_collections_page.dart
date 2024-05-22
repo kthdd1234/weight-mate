@@ -50,7 +50,8 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
       List<Map<String, dynamic>> itemList = [
         {'pos': 'left', 'file': record.leftFile},
         {'pos': 'right', 'file': record.rightFile},
-        {'pos': 'bottom', 'file': record.bottomFile}
+        {'pos': 'bottom', 'file': record.bottomFile},
+        {'pos': 'top', 'file': record.topFile}
       ];
 
       itemList.forEach((item) {
@@ -67,12 +68,12 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
     }
   }
 
-  @override
-  void initState() {
-    onInitList();
-    AppLifecycleReactor(context: context).listenToAppStateChanges();
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   onInitList();
+  //   AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -190,6 +191,9 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                           break;
                         case 'bottom':
                           record?.bottomFile = null;
+                          break;
+                        case 'top':
+                          record?.topFile = null;
                           break;
                         default:
                       }

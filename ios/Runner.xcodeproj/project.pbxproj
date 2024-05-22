@@ -138,6 +138,7 @@
 		D31008A72B9E932E00FFE286 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
 		D31008A82B9E932E00FFE286 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
 		D31008A92B9E932E00FFE286 /* IconCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70A02B96CF7300F9C455 /* IconCell.swift */; };
+		D323CDED2BBE2C5A00696C25 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D323CDEC2BBE2C5A00696C25 /* StoreKit.framework */; };
 		D35D704A2B92FD9600F9C455 /* TextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70492B92FD9600F9C455 /* TextCell.swift */; };
 		D35D704E2B92FEC100F9C455 /* SecondaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */; };
 		D35D70522B9306C000F9C455 /* EmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D35D70512B9306C000F9C455 /* EmptyCell.swift */; };
@@ -289,6 +290,7 @@
 		D31008042B9E8E6900FFE286 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D31008062B9E8E6900FFE286 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D31008562B9E8FE600FFE286 /* exerciseRecordWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = exerciseRecordWidgetExtension.entitlements; sourceTree = "<group>"; };
+		D323CDEC2BBE2C5A00696C25 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		D35D70492B92FD9600F9C455 /* TextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextCell.swift; sourceTree = "<group>"; };
 		D35D704D2B92FEC100F9C455 /* SecondaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondaryCell.swift; sourceTree = "<group>"; };
 		D35D70512B9306C000F9C455 /* EmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCell.swift; sourceTree = "<group>"; };
@@ -314,6 +316,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D31BCA8DB48650055C0A136 /* Pods_Runner.framework in Frameworks */,
+				D323CDED2BBE2C5A00696C25 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +381,7 @@
 		526DE376AC297F172D0CB66C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D323CDEC2BBE2C5A00696C25 /* StoreKit.framework */,
 				D3E8A2C62B8D9C44008184DD /* WidgetKit.framework */,
 				D3E8A2C82B8D9C44008184DD /* SwiftUI.framework */,
 				8A624F622408FFC6A246176F /* Pods_Runner.framework */,
@@ -713,7 +717,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1530;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1510;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
 					97C146ED1CF9000F007C117D = {

@@ -16,6 +16,7 @@ class ConfirmDialog extends StatelessWidget {
     required this.contentText2,
     required this.onPressedOk,
     required this.width,
+    this.onPressedCancel,
   });
 
   String titleText;
@@ -24,6 +25,7 @@ class ConfirmDialog extends StatelessWidget {
   String contentText2;
   double width;
   Function() onPressedOk;
+  Function()? onPressedCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +38,12 @@ class ConfirmDialog extends StatelessWidget {
       onPressedOk();
     }
 
-    onPressedCancel() {
+    setOnPressedCancel() {
       closeDialog(context);
+
+      if (onPressedCancel != null) {
+        onPressedCancel!();
+      }
     }
 
     return AlertDialog(
@@ -81,7 +87,7 @@ class ConfirmDialog extends StatelessWidget {
                 okText: '확인',
                 cancelText: '취소',
                 onPressedOk: setOnPressedOk,
-                onPressedCancel: onPressedCancel,
+                onPressedCancel: setOnPressedCancel,
               )
             ],
           )),

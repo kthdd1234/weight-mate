@@ -30,13 +30,14 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       whiteText: fields[8] as String?,
       emotion: fields[9] as String?,
       bottomFile: fields[10] as Uint8List?,
+      topFile: fields[11] as Uint8List?,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordBox obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.createDateTime)
       ..writeByte(1)
@@ -58,7 +59,9 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(9)
       ..write(obj.emotion)
       ..writeByte(10)
-      ..write(obj.bottomFile);
+      ..write(obj.bottomFile)
+      ..writeByte(11)
+      ..write(obj.topFile);
   }
 
   @override
