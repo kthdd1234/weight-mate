@@ -18,6 +18,8 @@ class RecordBox extends HiveObject {
     this.emotion,
     this.bottomFile,
     this.topFile,
+    this.dietRecordOrderList,
+    this.exerciseRecordOrderList,
   });
 
   @HiveField(0)
@@ -55,4 +57,10 @@ class RecordBox extends HiveObject {
 
   @HiveField(11)
   Uint8List? topFile;
+
+  @HiveField(12)
+  List<String>? dietRecordOrderList;
+
+  @HiveField(13)
+  List<String>? exerciseRecordOrderList;
 }

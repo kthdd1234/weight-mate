@@ -71,7 +71,6 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
   @override
   void initState() {
     onInitList();
-    // AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
     super.initState();
   }
 

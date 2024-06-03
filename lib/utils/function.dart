@@ -574,55 +574,38 @@ List<PlanBox> onPlanList({
 List<Map<String, dynamic>>? onOrderList({
   required List<Map<String, dynamic>>? actions,
   required String type,
+  List<String>? dietRecordOrderList,
+  List<String>? exerciseRecordOrderList,
 }) {
   List<Map<String, dynamic>>? actionList = actions
       ?.where((item) => type == item['type'] && item['isRecord'] != null)
       .toList();
 
-  actionList?.sort((itemA, itemB) => categoryOrders[itemA['title']]!
-      .compareTo(categoryOrders[itemB['title']]!));
+  List<String>? targetRecordOrderList =
+      type == eDiet ? dietRecordOrderList : exerciseRecordOrderList;
 
-  actionList?.sort((itemA, itemB) {
-    DateTime dateTime1 =
-        itemA['dietExerciseRecordDateTime'] ?? DateTime(3000, 1, 1);
-    DateTime dateTime2 =
-        itemB['dietExerciseRecordDateTime'] ?? DateTime(3000, 1, 2);
+  if (actionList != null && actionList.isNotEmpty) {
+    if (targetRecordOrderList == null || targetRecordOrderList.isEmpty) {
+      final createDateTime = actionList[0]['createDateTime'];
+      final recordKey = getDateTimeToInt(createDateTime);
+      final recordInfo = recordRepository.recordBox.get(recordKey);
+      final initOrderList =
+          actionList.map((action) => action['id'] as String).toList();
 
-    return dateTime1.compareTo(dateTime2);
-  });
+      type == eDiet
+          ? recordInfo?.dietRecordOrderList = initOrderList
+          : recordInfo?.exerciseRecordOrderList = initOrderList;
+    } else {
+      actionList.sort((actionA, actionB) {
+        int indexA = targetRecordOrderList.indexOf(actionA['id']);
+        int indexB = targetRecordOrderList.indexOf(actionB['id']);
+
+        return indexA.compareTo(indexB);
+      });
+    }
+  }
 
   return actionList;
-}
-
-List<Padding>? onActionList({
-  required List<Map<String, dynamic>>? actions,
-  required String type,
-  required Function({
-    required String completedType,
-    required String id,
-    required String name,
-    required DateTime actionDateTime,
-    required String title,
-    DateTime? dietExerciseRecordDateTime,
-  })? onRecordUpdate,
-}) {
-  List<Padding>? renderList = onOrderList(actions: actions, type: type)
-      ?.map((item) => Padding(
-            padding: const EdgeInsets.only(bottom: 15),
-            child: RecordName(
-              type: type,
-              title: item['title'],
-              topTitle: todoData[type]!.title,
-              id: item['id'],
-              name: item['name'],
-              actionDateTime: item['actionDateTime'],
-              dietExerciseRecordDateTime: item['dietExerciseRecordDateTime'],
-              onRecordUpdate: onRecordUpdate,
-            ),
-          ))
-      .toList();
-
-  return renderList;
 }
 
 onActionCount(List<RecordBox> recordList, String planId) {
