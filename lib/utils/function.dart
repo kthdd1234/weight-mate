@@ -977,9 +977,10 @@ Future<bool> setPurchasePremium(Package package) async {
 
 Future<bool> isPurchasePremium() async {
   try {
-    CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-        true;
+    // CustomerInfo customerInfo = await Purchases.getCustomerInfo();
+    // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+    //     true;
+    return true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;

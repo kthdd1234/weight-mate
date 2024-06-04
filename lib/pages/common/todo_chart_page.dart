@@ -110,6 +110,7 @@ class _TodoChartPageState extends State<TodoChartPage> {
                               child: ListView(
                                 children: displayRecordList
                                     .map((record) => ColumnContainer(
+                                          recordInfo: record,
                                           dateTime: record!.createDateTime,
                                           type: type,
                                           actions: record.actions,
@@ -216,11 +217,13 @@ class RowTitle extends StatelessWidget {
 class ColumnContainer extends StatelessWidget {
   ColumnContainer({
     super.key,
+    required this.recordInfo,
     required this.dateTime,
     required this.type,
     required this.actions,
   });
 
+  RecordBox? recordInfo;
   DateTime dateTime;
   String type;
   List<Map<String, dynamic>>? actions;
@@ -228,31 +231,52 @@ class ColumnContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    List<RecordLabel> recordActionList = actions
-            ?.where(
-                (item1) => item1['isRecord'] == true && item1['type'] == type)
-            .map((item2) => RecordLabel(
-                  type: type,
-                  title: item2['title'],
-                  text: item2['name'],
-                  icon: categoryIcons[item2['title']]!,
-                  dietExerciseRecordDateTime:
-                      item2['dietExerciseRecordDateTime'],
-                ))
-            .toList() ??
-        [];
+    List<Map<String, dynamic>>? actionList = onOrderList(
+      actions: actions,
+      type: type,
+      dietRecordOrderList: recordInfo?.dietRecordOrderList,
+      exerciseRecordOrderList: recordInfo?.exerciseRecordOrderList,
+    );
 
-    recordActionList.sort((itemA, itemB) =>
-        categoryOrders[itemA.title]!.compareTo(categoryOrders[itemB.title]!));
+    List<RecordLabel>? actionLabelList = actionList
+        ?.map((item2) => RecordLabel(
+              type: type,
+              title: item2['title'],
+              text: item2['name'],
+              icon: categoryIcons[item2['title']]!,
+              dietExerciseRecordDateTime: item2['dietExerciseRecordDateTime'],
+            ))
+        .toList();
 
-    recordActionList.sort((act1, act2) {
-      DateTime dateTime1 =
-          act1.dietExerciseRecordDateTime ?? DateTime(3000, 1, 1);
-      DateTime dateTime2 =
-          act2.dietExerciseRecordDateTime ?? DateTime(3000, 1, 2);
+    // List<Map<String, dynamic>>? actionList = actions
+    //     ?.where(
+    //       (item1) => item1['isRecord'] == true && item1['type'] == type,
+    //     )
+    //     .toList();
 
-      return dateTime1.compareTo(dateTime2);
-    });
+    // List<RecordLabel>
+    //     .map((item2) => RecordLabel(
+    //           type: type,
+    //           title: item2['title'],
+    //           text: item2['name'],
+    //           icon: categoryIcons[item2['title']]!,
+    //           dietExerciseRecordDateTime:
+    //               item2['dietExerciseRecordDateTime'],
+    //         ))
+    //     .toList() ??
+    // [];
+
+    // recordActionList.sort((itemA, itemB) =>
+    //     categoryOrders[itemA.title]!.compareTo(categoryOrders[itemB.title]!));
+
+    // recordActionList.sort((act1, act2) {
+    //   DateTime dateTime1 =
+    //       act1.dietExerciseRecordDateTime ?? DateTime(3000, 1, 1);
+    //   DateTime dateTime2 =
+    //       act2.dietExerciseRecordDateTime ?? DateTime(3000, 1, 2);
+
+    //   return dateTime1.compareTo(dateTime2);
+    // });
 
     dateTimeTitle({required String text, required Color color}) {
       return CommonText(
@@ -264,7 +288,7 @@ class ColumnContainer extends StatelessWidget {
       );
     }
 
-    if (recordActionList.isEmpty) {
+    if (actionLabelList?.isEmpty == true) {
       return const EmptyArea();
     }
 
@@ -293,7 +317,7 @@ class ColumnContainer extends StatelessWidget {
               ),
             ),
             SpaceWidth(width: 30),
-            Expanded(child: Column(children: recordActionList))
+            Expanded(child: Column(children: actionLabelList ?? []))
           ],
         ),
         Divider(color: Colors.grey.shade200),

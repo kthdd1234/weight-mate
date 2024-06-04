@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -476,6 +477,9 @@ class HistoryTodo extends StatelessWidget {
     bool isContainExerciseGoal = historyDisplayList.contains(fExercise_2);
     bool isContainLife = historyDisplayList.contains(fLife);
 
+    List<String>? dietRecordOrderList = recordInfo.dietRecordOrderList;
+    List<String>? exerciseRecordOrderList = recordInfo.exerciseRecordOrderList;
+
     onIcon(String type, bool? isRecord, String title) {
       MaterialColor color = categoryColors[type]!;
 
@@ -487,7 +491,28 @@ class HistoryTodo extends StatelessWidget {
       );
     }
 
-    final todoDisplayList = recordInfo.actions?.where((action) {
+    onTapRemoveAction(Map<String, dynamic> selectedAction) async {
+      String actionId = selectedAction['id'];
+      bool isRecord = selectedAction['isRecord'] == true;
+      int? index = recordInfo.actions?.indexWhere(
+        (action) => action['id'] == actionId,
+      );
+
+      if (index != null) {
+        recordInfo.actions?.removeAt(index);
+      }
+
+      if (selectedAction['type'] == eDiet && isRecord) {
+        dietRecordOrderList?.remove(actionId);
+      } else if (selectedAction['type'] == eExercise && isRecord) {
+        exerciseRecordOrderList?.remove(actionId);
+      }
+
+      await recordInfo.save();
+    }
+
+    Iterable<Map<String, dynamic>>? todoDisplayList =
+        recordInfo.actions?.where((action) {
       String planType = action['type'];
 
       bool isTypeDietRecord = planType == eDiet && action['isRecord'] == true;
@@ -513,7 +538,8 @@ class HistoryTodo extends StatelessWidget {
       return false;
     });
 
-    final todoResultList = todoDisplayList
+    // 1
+    List<Map<String, dynamic>>? todoResultList = todoDisplayList
         ?.where(
           (action) =>
               getDateTimeToInt(action['actionDateTime']) ==
@@ -521,80 +547,96 @@ class HistoryTodo extends StatelessWidget {
         )
         .toList();
 
-    todoResultList?.sort((a, b) {
-      DateTime dateTime1 =
-          a['dietExerciseRecordDateTime'] ?? DateTime(3000, 1, 1);
-      DateTime dateTime2 =
-          b['dietExerciseRecordDateTime'] ?? DateTime(3000, 1, 2);
+    // 2
+    List<Map<String, dynamic>> tempDietRecordOrderList = [];
+    List<Map<String, dynamic>> tempExerciseRecordOrderList = [];
 
-      return dateTime1.compareTo(dateTime2);
-    });
+    todoResultList = todoResultList?.where((action) {
+      bool isTypeDietRecord =
+          action['type'] == eDiet && action['isRecord'] == true;
+      bool isTypeExerciseRecord =
+          action['type'] == eExercise && action['isRecord'] == true;
 
-    todoResultList?.sort(
-      (A, B) {
-        int itemA = A['isRecord'] == true ? 0 : 1;
-        int itemB = B['isRecord'] == true ? 0 : 1;
+      if (isTypeDietRecord) {
+        tempDietRecordOrderList.add(action);
+        return false;
+      } else if (isTypeExerciseRecord) {
+        tempExerciseRecordOrderList.add(action);
+        return false;
+      }
 
-        return itemA.compareTo(itemB);
-      },
-    );
+      return true;
+    }).toList();
 
-    todoResultList?.sort((A, B) {
+    tempDietRecordOrderList = onOrderList(
+          actions: tempDietRecordOrderList,
+          type: eDiet,
+          dietRecordOrderList: dietRecordOrderList,
+        ) ??
+        [];
+    tempExerciseRecordOrderList = onOrderList(
+          actions: tempExerciseRecordOrderList,
+          type: eExercise,
+          exerciseRecordOrderList: exerciseRecordOrderList,
+        ) ??
+        [];
+
+    List<Map<String, dynamic>> combineRecordOrderList = [
+      ...tempDietRecordOrderList,
+      ...tempExerciseRecordOrderList
+    ];
+    todoResultList = [...combineRecordOrderList, ...todoResultList ?? []];
+
+    // 3
+    todoResultList.sort((A, B) {
       int order1 = planOrder[A['type']]!;
       int order2 = planOrder[B['type']]!;
 
       return order1.compareTo(order2);
     });
 
-    onTapRemoveAction(String targetId) {
-      int? index = recordInfo.actions?.indexWhere(
-        (action) => action['id'] == targetId,
-      );
-
-      if (index != null) {
-        recordInfo.actions?.removeAt(index);
-        recordInfo.save();
-      }
-    }
-
-    final todoWidgetList = todoResultList
-        ?.map((data) => Column(
-              children: [
-                SpaceHeight(height: 10),
-                Row(
-                  children: [
-                    isRemoveMode
-                        ? Expanded(
-                            flex: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 2, right: 7),
-                              child: RemoveIcon(
-                                  onTap: () => onTapRemoveAction(data['id'])),
-                            ),
-                          )
-                        : const EmptyArea(),
-                    Expanded(
-                      flex: 0,
-                      child:
-                          onIcon(data['type'], data['isRecord'], data['title']),
-                    ),
-                    SpaceWidth(width: smallSpace),
-                    Expanded(
-                      flex: 1,
-                      child: Text(
-                        data['name'],
-                        style: const TextStyle(fontSize: 14, color: themeColor),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ))
-        .toList();
-
     return Padding(
       padding: const EdgeInsets.only(top: 5),
-      child: Column(children: todoWidgetList ?? []),
+      child: Column(
+        children: todoResultList
+            .map(
+              (data) => Column(
+                children: [
+                  SpaceHeight(height: 10),
+                  Row(
+                    children: [
+                      isRemoveMode
+                          ? Expanded(
+                              flex: 0,
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 2, right: 7),
+                                child: RemoveIcon(
+                                    onTap: () => onTapRemoveAction(data)),
+                              ),
+                            )
+                          : const EmptyArea(),
+                      Expanded(
+                        flex: 0,
+                        child: onIcon(
+                            data['type'], data['isRecord'], data['title']),
+                      ),
+                      SpaceWidth(width: smallSpace),
+                      Expanded(
+                        flex: 1,
+                        child: Text(
+                          data['name'],
+                          style:
+                              const TextStyle(fontSize: 14, color: themeColor),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }

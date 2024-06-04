@@ -538,138 +538,6 @@ class RecordNameContainer extends StatelessWidget {
   }
 }
 
-// class ChangeOrderBottomSheet extends StatefulWidget {
-//   ChangeOrderBottomSheet({
-//     super.key,
-//     required this.type,
-//     required this.title,
-//     required this.planList,
-//   });
-
-//   List<PlanBox> planList;
-//   String title, type;
-
-//   @override
-//   State<ChangeOrderBottomSheet> createState() => _ChangeOrderBottomSheetState();
-// }
-
-// class _ChangeOrderBottomSheetState extends State<ChangeOrderBottomSheet> {
-//   @override
-//   Widget build(BuildContext context) {
-//     UserBox user = userRepository.user;
-//     List<String>? orderList = {
-//       eDiet: user.dietOrderList,
-//       eExercise: user.exerciseOrderList,
-//       eLife: user.lifeOrderList,
-//     }[widget.type]!;
-
-//     widget.planList.sort((itemA, itemB) {
-//       int indexA = orderList.indexOf(itemA.id);
-//       int indexB = orderList.indexOf(itemB.id);
-
-//       return indexA.compareTo(indexB);
-//     });
-
-//     Widget planItem(index) {
-//       return Padding(
-//         key: Key(widget.planList[index].id),
-//         padding: const EdgeInsets.only(bottom: 10),
-//         child: Row(
-//           children: [
-//             GoalName(
-//               moreIcon: Icons.drag_indicator_rounded,
-//               planInfo: widget.planList[index],
-//               isChcked: false,
-//               actionCount: onActionCount(
-//                 recordRepository.recordList,
-//                 widget.planList[index].id,
-//               ),
-//               color: themeColor,
-//               onTapMore: () {},
-//             ),
-//           ],
-//         ),
-//       );
-//     }
-
-//     Widget proxyDecorator(
-//       Widget child,
-//       int index,
-//       Animation<double> animation,
-//     ) {
-//       return AnimatedBuilder(
-//         animation: animation,
-//         builder: (BuildContext context, Widget? child) {
-//           final double animValue = Curves.easeInOut.transform(animation.value);
-//           final double scale = lerpDouble(1, 1.02, animValue)!;
-
-//           return Transform.scale(
-//             scale: scale,
-//             child: Card(
-//               margin: const EdgeInsets.all(0),
-//               shape: RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(7),
-//               ),
-//               color: const Color(0xffF9F9FC),
-//               elevation: 0.0,
-//               child: planItem(index),
-//             ),
-//           );
-//         },
-//         child: child,
-//       );
-//     }
-
-//     onReorder(int oldIndex, int newIndex) {
-//       String oldId = widget.planList[oldIndex].id;
-//       String targetId = uuid();
-
-//       orderList[oldIndex] = targetId;
-//       orderList.insert(newIndex, oldId);
-//       orderList.remove(targetId);
-
-//       user.save();
-//       setState(() {});
-//     }
-
-//     return CommonBottomSheet(
-//       title: ' 목표'.tr(namedArgs: {'type': widget.title.tr()}),
-//       height: 530,
-//       contents: Column(
-//         children: [
-//           Row(
-//             mainAxisAlignment: MainAxisAlignment.end,
-//             children: [
-//               CommonIcon(
-//                 icon: Icons.drag_indicator,
-//                 size: 14,
-//                 color: themeColor,
-//               ),
-//               CommonText(
-//                 text: '버튼으로 순서를 변경해보세요',
-//                 size: 12,
-//                 isBold: true,
-//               ),
-//             ],
-//           ),
-//           SpaceHeight(height: 10),
-//           ContentsBox(
-//               height: 390,
-//               contentsWidget: ReorderableListView(
-//                 shrinkWrap: true,
-//                 proxyDecorator: proxyDecorator,
-//                 onReorder: onReorder,
-//                 children: List.generate(
-//                   widget.planList.length,
-//                   (int index) => planItem(index),
-//                 ),
-//               )),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class RecordList extends StatelessWidget {
   RecordList({
     super.key,
@@ -1486,19 +1354,6 @@ class LifeContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // onTapChangeOrder() {
-    //   showModalBottomSheet(
-    //     isScrollControlled: true,
-    //     backgroundColor: Colors.transparent,
-    //     context: context,
-    //     builder: (context) => ChangeOrderBottomSheet(
-    //       type: type,
-    //       title: title,
-    //       planList: planList,
-    //     ),
-    //   );
-    // }
-
     onTapGoalCollection() async {
       await Navigator.pushNamed(
         context,
@@ -1520,12 +1375,6 @@ class LifeContainer extends StatelessWidget {
         color: colorName,
         onTap: onTapGoalCollection,
       ),
-      // TagClass(
-      //   text: '순서 변경',
-      //   isHide: !isOpen,
-      //   color: colorName,
-      //   onTap: onTapChangeOrder,
-      // ),
       TagClass(
         icon: isOpen
             ? Icons.keyboard_arrow_down_rounded
@@ -1606,6 +1455,12 @@ class GoalList extends StatelessWidget {
       eLife: user.lifeOrderList,
     }[type];
 
+    List<PlanBox> renderList = onPlanList(
+      planList: planList,
+      orderList: orderList,
+      actions: actions,
+    );
+
     onTapRemove(PlanBox planInfo) async {
       if (planInfo.alarmId != null) {
         NotificationService().deleteAlarm(planInfo.alarmId!);
@@ -1627,46 +1482,99 @@ class GoalList extends StatelessWidget {
       user.save();
     }
 
-    return Column(
-      children: onPlanList(
-        planList: planList,
-        orderList: orderList,
-        actions: actions,
-      )
-          .map(
-            (item) => Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Dismiss(
-                id: item.id,
-                onDismiss: () => onTapRemove(item),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonCheckBox(
-                      id: item.id,
-                      isCheck:
-                          onAction(actions: actions, planId: item.id)['id'] !=
-                              null,
-                      checkColor: mainColor,
-                      onTap: onCheckBox,
-                    ),
-                    GoalItem(
-                      type: type,
-                      planInfo: item,
-                      color: mainColor,
-                      isChcked:
-                          onAction(actions: actions, planId: item.id)['id'] !=
-                              null,
-                      onGoalUpdate: onGoalUpdate,
-                      onTapRemove: onTapRemove,
-                    ),
-                  ],
+    onReorder(int oldIdx, int newIdx) async {
+      if (oldIdx < newIdx) {
+        newIdx -= 1;
+      }
+
+      if (orderList != null) {
+        String orderId = orderList.removeAt(oldIdx);
+        orderList.insert(newIdx, orderId);
+      }
+
+      await user.save();
+    }
+
+    return ReorderableListView.builder(
+      shrinkWrap: true,
+      physics: const ClampingScrollPhysics(),
+      itemBuilder: (context, index) {
+        PlanBox item = renderList[index];
+
+        return Padding(
+          key: Key(item.id),
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Dismiss(
+            id: item.id,
+            onDismiss: () => onTapRemove(item),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CommonCheckBox(
+                  id: item.id,
+                  isCheck:
+                      onAction(actions: actions, planId: item.id)['id'] != null,
+                  checkColor: mainColor,
+                  onTap: onCheckBox,
                 ),
-              ),
+                GoalItem(
+                  type: type,
+                  planInfo: item,
+                  color: mainColor,
+                  isChcked:
+                      onAction(actions: actions, planId: item.id)['id'] != null,
+                  onGoalUpdate: onGoalUpdate,
+                  onTapRemove: onTapRemove,
+                ),
+              ],
             ),
-          )
-          .toList(),
+          ),
+        );
+      },
+      itemCount: renderList.length,
+      onReorder: onReorder,
     );
+
+    // Column(
+    //   children: onPlanList(
+    //     planList: planList,
+    //     orderList: orderList,
+    //     actions: actions,
+    //   )
+    //       .map(
+    //         (item) => Padding(
+    //           padding: const EdgeInsets.only(bottom: 10),
+    //           child: Dismiss(
+    //             id: item.id,
+    //             onDismiss: () => onTapRemove(item),
+    //             child: Row(
+    //               crossAxisAlignment: CrossAxisAlignment.start,
+    //               children: [
+    //                 CommonCheckBox(
+    //                   id: item.id,
+    //                   isCheck:
+    //                       onAction(actions: actions, planId: item.id)['id'] !=
+    //                           null,
+    //                   checkColor: mainColor,
+    //                   onTap: onCheckBox,
+    //                 ),
+    //                 GoalItem(
+    //                   type: type,
+    //                   planInfo: item,
+    //                   color: mainColor,
+    //                   isChcked:
+    //                       onAction(actions: actions, planId: item.id)['id'] !=
+    //                           null,
+    //                   onGoalUpdate: onGoalUpdate,
+    //                   onTapRemove: onTapRemove,
+    //                 ),
+    //               ],
+    //             ),
+    //           ),
+    //         ),
+    //       )
+    //       .toList(),
+    // );
   }
 }
 
