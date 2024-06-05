@@ -71,8 +71,15 @@ class HomeWidgetService {
     UserBox user = userRepository.user;
     int recordKey = getDateTimeToInt(now);
     RecordBox? record = recordRepository.recordBox.get(recordKey);
-    List<Map<String, dynamic>>? orderList =
-        onOrderList(actions: record?.actions, type: eDiet) ?? [];
+    List<String>? dietRecordOrderList = record?.dietRecordOrderList;
+    List<String>? exerciseRecordOrderList = record?.exerciseRecordOrderList;
+    List<Map<String, dynamic>>? orderList = onOrderList(
+          actions: record?.actions,
+          type: eDiet,
+          dietRecordOrderList: dietRecordOrderList,
+          exerciseRecordOrderList: exerciseRecordOrderList,
+        ) ??
+        [];
     List<WidgetItemClass> widgetItemList = orderList
         .map((action) => WidgetItemClass(
               action['id'],
@@ -105,8 +112,15 @@ class HomeWidgetService {
     UserBox user = userRepository.user;
     int recordKey = getDateTimeToInt(now);
     RecordBox? record = recordRepository.recordBox.get(recordKey);
-    List<Map<String, dynamic>>? orderList =
-        onOrderList(actions: record?.actions, type: eExercise) ?? [];
+    List<String>? dietRecordOrderList = record?.dietRecordOrderList;
+    List<String>? exerciseRecordOrderList = record?.exerciseRecordOrderList;
+    List<Map<String, dynamic>>? orderList = onOrderList(
+          actions: record?.actions,
+          type: eExercise,
+          dietRecordOrderList: dietRecordOrderList,
+          exerciseRecordOrderList: exerciseRecordOrderList,
+        ) ??
+        [];
     List<WidgetItemClass> widgetItemList = orderList
         .map((action) => WidgetItemClass(
               action['id'],
