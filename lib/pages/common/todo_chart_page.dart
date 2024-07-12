@@ -85,10 +85,10 @@ class _TodoChartPageState extends State<TodoChartPage> {
         appBar: AppBar(
           title: Text(
             '$title 기록 모아보기'.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
         ),
         body: SafeArea(
@@ -282,7 +282,7 @@ class ColumnContainer extends StatelessWidget {
       return CommonText(
         text: text,
         isNotTr: true,
-        size: 10,
+        size: 11,
         isCenter: true,
         color: color,
       );
@@ -306,11 +306,11 @@ class ColumnContainer extends StatelessWidget {
                   children: [
                     dateTimeTitle(
                       text: d(locale: locale, dateTime: dateTime),
-                      color: themeColor,
+                      color: textColor,
                     ),
                     dateTimeTitle(
                       text: '(${eShort(locale: locale, dateTime: dateTime)})',
-                      color: Colors.grey,
+                      color: Colors.grey.shade600,
                     )
                   ],
                 ),

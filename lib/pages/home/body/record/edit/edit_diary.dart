@@ -143,7 +143,7 @@ class EditDiary extends StatelessWidget {
             contents: Row(
               children: [
                 ExpandedButtonVerti(
-                  mainColor: themeColor,
+                  mainColor: textColor,
                   icon: Icons.edit,
                   title: '내용 수정',
                   onTap: () {
@@ -246,7 +246,7 @@ class EditDiary extends StatelessWidget {
                                                   recordInfo!.whiteText!,
                                                   style: const TextStyle(
                                                     fontSize: 13,
-                                                    color: themeColor,
+                                                    color: textColor,
                                                   ),
                                                 ),
                                                 SpaceHeight(height: smallSpace),

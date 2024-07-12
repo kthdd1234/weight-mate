@@ -297,7 +297,7 @@ class TextData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text.tr(),
-      style: const TextStyle(fontSize: 13, color: Colors.grey),
+      style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
     );
   }
 }
@@ -399,7 +399,7 @@ class GoogleDriveInfo extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(fontSize: 13, color: themeColor),
+              style: const TextStyle(fontSize: 13, color: textColor),
             ),
           ),
         ],

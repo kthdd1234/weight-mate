@@ -15,7 +15,7 @@ enum RecordIconTypes {
   comonPlan
 }
 
-enum BottomNavigationEnum { record, history, graph, setting }
+enum BottomNavigationEnum { record, history, graph, search, setting }
 
 enum SegmentedTypes {
   week,

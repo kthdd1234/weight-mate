@@ -324,7 +324,7 @@ class WeightButtonBottmSheet extends StatelessWidget {
               fontSize: 18,
               radious: 5,
               bgColor: Colors.white,
-              textColor: themeColor,
+              textColor: textColor,
               onTap: onCancel,
             ),
             SpaceWidth(width: tinySpace),

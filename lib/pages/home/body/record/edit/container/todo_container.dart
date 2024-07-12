@@ -732,7 +732,7 @@ class _RecordNameState extends State<RecordName> {
                         Text(
                           widget.name,
                           style: const TextStyle(
-                            color: themeColor,
+                            color: textColor,
                             fontSize: 15,
                           ),
                         ),
@@ -809,7 +809,7 @@ class Dismiss extends StatelessWidget {
               backgroundColor: dialogBackgroundColor,
               title: Text(
                 '삭제할까요?'.tr(),
-                style: const TextStyle(fontSize: 18, color: themeColor),
+                style: const TextStyle(fontSize: 18, color: textColor),
               ),
               content: Row(
                 children: [
@@ -1126,9 +1126,9 @@ class CategoryList extends StatelessWidget {
                       isBold: item['title'] == selectedTitle,
                       mainColor: item['title'] == selectedTitle
                           ? Colors.white
-                          : themeColor,
+                          : textColor,
                       backgroundColor: item['title'] == selectedTitle
-                          ? themeColor
+                          ? textColor
                           : Colors.white,
                       icon: item['icon'],
                       title: item['title'],
@@ -1183,7 +1183,7 @@ class RecordDateTime extends StatelessWidget {
             CommonButton(
               text: category == 'ampm' ? text.tr() : text,
               fontSize: 12,
-              textColor: state == text ? Colors.white : Colors.grey,
+              textColor: state == text ? Colors.white : Colors.grey.shade600,
               bgColor: state == text ? themeColor : Colors.grey.shade50,
               isBold: state == text,
               radious: 7,
@@ -1277,7 +1277,6 @@ class RecordDateTime extends StatelessWidget {
             CommonText(
               text: isFasting == true ? '단식 시작 시간도 기록할까요?' : '시간도 기록 할까요?',
               size: 14,
-              isBold: true,
             ),
             SizedBox(
               height: 25,
@@ -1534,47 +1533,6 @@ class GoalList extends StatelessWidget {
       itemCount: renderList.length,
       onReorder: onReorder,
     );
-
-    // Column(
-    //   children: onPlanList(
-    //     planList: planList,
-    //     orderList: orderList,
-    //     actions: actions,
-    //   )
-    //       .map(
-    //         (item) => Padding(
-    //           padding: const EdgeInsets.only(bottom: 10),
-    //           child: Dismiss(
-    //             id: item.id,
-    //             onDismiss: () => onTapRemove(item),
-    //             child: Row(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               children: [
-    //                 CommonCheckBox(
-    //                   id: item.id,
-    //                   isCheck:
-    //                       onAction(actions: actions, planId: item.id)['id'] !=
-    //                           null,
-    //                   checkColor: mainColor,
-    //                   onTap: onCheckBox,
-    //                 ),
-    //                 GoalItem(
-    //                   type: type,
-    //                   planInfo: item,
-    //                   color: mainColor,
-    //                   isChcked:
-    //                       onAction(actions: actions, planId: item.id)['id'] !=
-    //                           null,
-    //                   onGoalUpdate: onGoalUpdate,
-    //                   onTapRemove: onTapRemove,
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       )
-    //       .toList(),
-    // );
   }
 }
 
@@ -1726,7 +1684,7 @@ class GoalName extends StatelessWidget {
                       planInfo.name,
                       style: TextStyle(
                         fontSize: 15,
-                        color: themeColor,
+                        color: textColor,
                         decorationColor: color,
                         decorationThickness: 1,
                         decoration:
@@ -1983,7 +1941,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
             Row(
               children: [
                 ExpandedButtonVerti(
-                  mainColor: themeColor,
+                  mainColor: textColor,
                   icon: Icons.edit,
                   title: '${widget.topTitle} 수정',
                   onTap: () {
@@ -1993,7 +1951,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
                 ),
                 SpaceWidth(width: 7),
                 ExpandedButtonVerti(
-                  mainColor: themeColor,
+                  mainColor: textColor,
                   icon: Icons.category,
                   title: '분류 변경',
                   onTap: () {
@@ -2006,7 +1964,7 @@ class _RecordBottomSheetState extends State<RecordBottomSheet> {
             Row(
               children: [
                 ExpandedButtonVerti(
-                  mainColor: themeColor,
+                  mainColor: textColor,
                   icon: Icons.alarm_on_rounded,
                   title: '시간 기록',
                   onTap: () {
@@ -2305,7 +2263,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                 Row(
                   children: [
                     ExpandedButtonVerti(
-                      mainColor: themeColor,
+                      mainColor: textColor,
                       icon: Icons.edit,
                       title: '목표 수정',
                       onTap: () {
@@ -2317,7 +2275,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                     ExpandedButtonVerti(
                       padding: const EdgeInsets.symmetric(
                           vertical: 20, horizontal: 10),
-                      mainColor: themeColor,
+                      mainColor: textColor,
                       icon: Icons.alarm_rounded,
                       title: '시간 알림',
                       onTap: onTapAlarm,
@@ -2374,7 +2332,7 @@ class PermissionPopup extends StatelessWidget {
                   CommonButton(
                     text: '설정으로 이동',
                     fontSize: 15,
-                    bgColor: themeColor,
+                    bgColor: textColor,
                     radious: 10,
                     textColor: Colors.white,
                     onTap: () {

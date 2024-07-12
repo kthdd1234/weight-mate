@@ -670,7 +670,13 @@ class MoreSeeItemWidget extends StatelessWidget {
               child: SvgPicture.asset('assets/svgs/$icon.svg', height: 17),
             ),
             SpaceWidth(width: regularSapce),
-            Expanded(child: CommonText(text: title, size: 14, isBold: true)),
+            Expanded(
+                child: CommonText(
+              text: title,
+              size: 14,
+              isBold: true,
+              color: themeColor,
+            )),
             wValue(),
           ],
         ),

@@ -46,7 +46,7 @@ class MaxMinAvgGraphPage extends StatelessWidget {
           elevation: 0.0,
           title: Text(
             dataSource.title.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
         ),
         body: SafeArea(

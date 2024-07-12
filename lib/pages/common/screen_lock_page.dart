@@ -31,7 +31,6 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
         isConfirmPassword ? confirmPasswords : newPasswords;
 
     onTap(int index) {
-      log('$index');
       switch (index) {
         case 10:
           Navigator.pop(context);
@@ -85,7 +84,7 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
           title: const Text('화면 잠금').tr(),
         ),
@@ -125,7 +124,7 @@ class ScreenLockContents extends StatelessWidget {
 
     passwordWidgets() {
       widget(int index) {
-        final color = passwords[index] == '' ? typeBackgroundColor : themeColor;
+        final color = passwords[index] == '' ? typeBackgroundColor : textColor;
 
         return Row(
           children: [

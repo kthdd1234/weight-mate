@@ -18,6 +18,9 @@ const double regularSapce = 20.0;
 /// 40.0
 const double largeSpace = 40.0;
 
+/// textColor
+const textColor = Colors.black;
+
 /// submitButtonHeight
 const double submitButtonHeight = 48.0;
 

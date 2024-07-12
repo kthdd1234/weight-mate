@@ -64,7 +64,7 @@ class ConfirmDialog extends StatelessWidget {
                       Icon(
                         contentIcon,
                         size: 30,
-                        color: themeColor,
+                        color: textColor,
                       ),
                       SpaceHeight(height: smallSpace),
                       CommonText(

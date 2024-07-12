@@ -220,6 +220,7 @@ class HistoryHeader extends StatelessWidget {
                     size: 11,
                     isBold: true,
                     isNotTr: true,
+                    color: themeColor,
                   ),
                   const Spacer(),
                   isRemoveMode
@@ -302,7 +303,7 @@ class MoreButtonList extends StatelessWidget {
     return Row(
       children: [
         ExpandedButtonVerti(
-          mainColor: themeColor,
+          mainColor: textColor,
           icon: Icons.edit,
           title: '기록 수정',
           onTap: onTapEdit,
@@ -627,7 +628,7 @@ class HistoryTodo extends StatelessWidget {
                         child: Text(
                           data['name'],
                           style:
-                              const TextStyle(fontSize: 14, color: themeColor),
+                              const TextStyle(fontSize: 14, color: textColor),
                         ),
                       ),
                     ],
@@ -672,7 +673,7 @@ class HistoryDiary extends StatelessWidget {
                     child: Text(
                       recordInfo!.whiteText!,
                       style: const TextStyle(
-                        color: themeColor,
+                        color: textColor,
                         fontSize: 13,
                       ),
                     ),

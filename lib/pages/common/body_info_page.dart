@@ -127,7 +127,7 @@ class _BodyInfoPageState extends State<BodyInfoPage> {
         appBar: AppBar(
           title: Text(title.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
         ),
         body: SafeArea(

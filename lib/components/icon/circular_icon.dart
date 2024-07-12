@@ -46,7 +46,7 @@ class CircularIcon extends StatelessWidget {
           child: Icon(
             icon,
             size: size - (adjustSize ?? 20),
-            color: iconColor ?? themeColor,
+            color: iconColor ?? textColor,
           ),
         ),
       ),

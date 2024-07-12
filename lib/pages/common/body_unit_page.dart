@@ -65,7 +65,7 @@ class _BodyUnitPageState extends State<BodyUnitPage> {
         appBar: AppBar(
           title: Text('단위 변경'.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
         ),
         body: Padding(

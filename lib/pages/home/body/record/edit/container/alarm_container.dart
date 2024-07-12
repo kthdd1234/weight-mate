@@ -222,7 +222,7 @@ class TimeChipWidget extends StatelessWidget {
                   child: Text(
                     timeToString(time),
                     style: const TextStyle(
-                      color: themeColor,
+                      color: textColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 12,
                     ),

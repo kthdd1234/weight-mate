@@ -64,7 +64,7 @@ class _GoalChartPageState extends State<GoalChartPage> {
         appBar: AppBar(
           title: Text(
             ' 실천 모아보기'.tr(namedArgs: {'type': title.tr()}),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -74,17 +74,17 @@ class _GoalChartPageState extends State<GoalChartPage> {
             padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
             child: Column(
               children: [
+                selectedSegment == SegmentedTypes.week
+                    ? GoalWeeklyContainer(type: type)
+                    : GoalMonthlyContainer(type: type),
                 Padding(
-                  padding: const EdgeInsets.only(bottom: 7),
+                  padding: const EdgeInsets.only(top: 10),
                   child: DefaultSegmented(
                     selectedSegment: selectedSegment,
                     children: segmentedChildren,
                     onSegmentedChanged: onSegmentedChanged,
                   ),
                 ),
-                selectedSegment == SegmentedTypes.week
-                    ? GoalWeeklyContainer(type: type)
-                    : GoalMonthlyContainer(type: type),
               ],
             ),
           ),
@@ -340,7 +340,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
                                                   action['name'],
                                                   style: const TextStyle(
                                                     fontSize: 13,
-                                                    color: themeColor,
+                                                    color: textColor,
                                                   ),
                                                 ),
                                               ),
@@ -420,7 +420,7 @@ class TableCalendarHeader extends StatelessWidget {
           onText(
             text: ym(locale: locale, dateTime: selectedMonth),
             size: 18,
-            color: themeColor,
+            color: Colors.black,
           ),
           onText(
             text: text,
@@ -606,7 +606,7 @@ class ColumnItmeList extends StatelessWidget {
                                   plan.name,
                                   style: const TextStyle(
                                     fontSize: 12,
-                                    color: themeColor,
+                                    color: textColor,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),

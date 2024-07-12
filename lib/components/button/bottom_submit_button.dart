@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class BottomSubmitButton extends StatelessWidget {
-  const BottomSubmitButton({
+  BottomSubmitButton({
     super.key,
     required this.onPressed,
     required this.text,
@@ -10,14 +10,14 @@ class BottomSubmitButton extends StatelessWidget {
     this.padding,
     this.width,
     this.height,
+    this.borderRadius,
   });
 
   final VoidCallback onPressed;
   final String text;
   final bool isEnabled;
   final EdgeInsetsGeometry? padding;
-  final double? width;
-  final double? height;
+  double? width, height, borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class BottomSubmitButton extends StatelessWidget {
             foregroundColor:
                 isEnabled ? buttonTextColor : disabledButtonTextColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
+              borderRadius: BorderRadius.circular(borderRadius ?? 30.0),
             ),
             textStyle: Theme.of(context).textTheme.labelLarge,
           ),

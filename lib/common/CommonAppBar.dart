@@ -136,12 +136,14 @@ class _CommonTitleState extends State<CommonTitle> {
     List<String>? historyDisplayList = user.historyDisplayList;
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
+
     String title = [
       ym(locale: locale, dateTime: titleDateTime),
       historyFormat == eHistoryList
           ? y(locale: locale, dateTime: historyDateTime)
           : ym(locale: locale, dateTime: historyDateTime),
       '체중 변화',
+      // '검색',
       '설정'
     ][widget.index];
     String graphType = user.graphType ?? eGraphDefault;
@@ -149,6 +151,7 @@ class _CommonTitleState extends State<CommonTitle> {
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
     bool isGraph = widget.index == 2;
+    bool isSearch = widget.index == 3;
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -224,7 +227,7 @@ class _CommonTitleState extends State<CommonTitle> {
     }
 
     onShowBannerAd() {
-      return widget.index != 3 && isPremium == false
+      return widget.index != 4 && isPremium == false
           ? BannerWidget()
           : SpaceHeight(height: 10);
     }
@@ -287,12 +290,14 @@ class _CommonTitleState extends State<CommonTitle> {
       Icons.keyboard_arrow_down_rounded,
       Icons.keyboard_arrow_down_rounded,
       null,
+      // null,
       null
     ];
     List<Null Function()?> onTapList = [
       onTapRecordTitle,
       onTapHistoryTitle,
       null,
+      // null,
       null
     ];
 
@@ -394,6 +399,9 @@ class _CommonTitleState extends State<CommonTitle> {
                           ),
                         )
                       : const EmptyArea(),
+                  // isSearch
+                  //     ? CommonTag(color: 'whiteIndigo', text: '표시 6')
+                  //     : EmptyArea(),
                 ],
               )
             ],
@@ -768,7 +776,7 @@ class DisplayListContents extends StatelessWidget {
                               CommonCheckBox(
                                 id: data.id,
                                 isCheck: onChecked(data.id),
-                                checkColor: themeColor,
+                                checkColor: textColor,
                                 onTap: onTap,
                               ),
                               CommonText(

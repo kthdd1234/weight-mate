@@ -54,8 +54,8 @@ class CommonBottomSheet extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   fontSize: 15,
-                  color: themeColor,
-                  fontWeight: FontWeight.bold,
+                  color: textColor,
+                  // fontWeight: FontWeight.bold,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),

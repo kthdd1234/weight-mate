@@ -49,7 +49,7 @@ class PageTitle extends StatelessWidget {
       children: [
         SimpleStepper(step: step),
         SpaceHeight(height: regularSapce),
-        Text(title, style: const TextStyle(fontSize: 18, color: themeColor))
+        Text(title, style: const TextStyle(fontSize: 18, color: textColor))
             .tr(),
         SpaceHeight(height: smallSpace),
       ],
@@ -93,7 +93,7 @@ class UnitButtons extends StatelessWidget {
       return CommonButton(
         text: unit,
         fontSize: state == unit ? 15 : 14,
-        bgColor: state == unit ? themeColor : Colors.grey.shade100,
+        bgColor: state == unit ? textColor : Colors.grey.shade100,
         radious: 5,
         textColor: state == unit ? Colors.white : Colors.grey,
         isBold: state == unit,

@@ -65,13 +65,13 @@ class CommonText extends StatelessWidget {
               child: Text(
                 isNotTr == true ? text : text.tr(namedArgs: nameArgs),
                 style: TextStyle(
-                  color: color ?? themeColor,
+                  color: color ?? textColor,
                   fontSize: size,
                   fontWeight:
                       isBold == true ? FontWeight.w700 : FontWeight.w400,
                   decoration: textDecoration,
                   decorationThickness: 1,
-                  decorationColor: decoColor ?? themeColor,
+                  decorationColor: decoColor ?? textColor,
                 ),
               ),
             ),

@@ -53,7 +53,7 @@ class _FontChangePageState extends State<FontChangePage> {
         appBar: AppBar(
           title: Text(
             '글꼴 변경'.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
           backgroundColor: Colors.transparent,
           elevation: 0.0,
@@ -79,7 +79,7 @@ class _FontChangePageState extends State<FontChangePage> {
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontFamily: fontFamily,
-                                      color: themeColor,
+                                      color: textColor,
                                     ),
                                   ),
                                 ))
@@ -115,7 +115,7 @@ class _FontChangePageState extends State<FontChangePage> {
                                               fontSize: 14,
                                               color: fontFamily ==
                                                       item['fontFamily']!
-                                                  ? themeColor
+                                                  ? textColor
                                                   : Colors.grey,
                                               fontFamily: item['fontFamily']!,
                                               fontWeight: fontFamily ==

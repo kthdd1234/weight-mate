@@ -48,7 +48,7 @@ onSegmentedWidget({
     text: title,
     size: 12,
     nameArgs: nameArgs,
-    color: selected == type ? themeColor : Colors.grey,
+    color: selected == type ? textColor : Colors.grey,
     isCenter: true,
   );
 }

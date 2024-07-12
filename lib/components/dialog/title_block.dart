@@ -19,7 +19,7 @@ class TitleBlock extends StatelessWidget {
         children: [
           Text(
             '$text 선택'.tr(),
-            style: const TextStyle(color: themeColor, fontSize: 17),
+            style: const TextStyle(color: textColor, fontSize: 17),
           ),
           ColorTextInfo(
             width: smallSpace,

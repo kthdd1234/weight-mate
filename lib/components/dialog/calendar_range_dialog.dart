@@ -75,36 +75,3 @@ class _CalenderRangeDialogState extends State<CalenderRangeDialog> {
     );
   }
 }
-// Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//         children: [
-//           Text(
-//             widget.labelText,
-//             style: const TextStyle(color: themeColor, fontSize: 17),
-//           ),
-//           Row(
-//             children: [
-//               ColorTextInfo(
-//                 width: smallSpace,
-//                 height: smallSpace,
-//                 text: '오늘',
-//                 color: themeColor,
-//                 isOutlined: true,
-//               ),
-//               SpaceWidth(width: 7.5),
-//               ColorTextInfo(
-//                   width: smallSpace,
-//                   height: smallSpace,
-//                   text: '시작일',
-//                   color: themeColor),
-//               SpaceWidth(width: 7.5),
-//               ColorTextInfo(
-//                 width: smallSpace,
-//                 height: smallSpace,
-//                 text: '종료일',
-//                 color: Colors.red,
-//               )
-//             ],
-//           )
-//         ],
-//       )

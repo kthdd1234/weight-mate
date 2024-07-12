@@ -64,7 +64,7 @@ class _AddPlanListState extends State<AddPlanList> {
                                     : Icons.check_box_outline_blank_rounded,
                                 size: 23,
                                 color: checkList.contains(e.name)
-                                    ? themeColor
+                                    ? textColor
                                     : Colors.grey.shade400,
                               ),
                             ),
@@ -74,7 +74,7 @@ class _AddPlanListState extends State<AddPlanList> {
                                 e.name.tr(),
                                 style: const TextStyle(
                                   fontSize: 15,
-                                  color: themeColor,
+                                  color: textColor,
                                 ),
                               ),
                             )

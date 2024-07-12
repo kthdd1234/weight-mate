@@ -26,7 +26,7 @@ class CommonIcon extends StatelessWidget {
           color: bgColor,
           borderRadius: BorderRadius.circular(bgColor != null ? 5 : 0),
         ),
-        child: Icon(icon, size: size, color: color ?? themeColor),
+        child: Icon(icon, size: size, color: color ?? textColor),
       ),
     );
   }

@@ -117,7 +117,7 @@ class _PremiumPageState extends State<PremiumPage> {
         appBar: AppBar(
           title: Text(
             '프리미엄'.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
           backgroundColor: Colors.transparent,
           elevation: 0.0,

@@ -15,19 +15,19 @@ class SimpleStepper extends StatelessWidget {
         const Icon(
           Icons.remove,
           size: 10,
-          color: themeColor,
+          color: textColor,
         ),
         SimpleStep(index: 2, step: step),
         const Icon(
           Icons.remove,
           size: 10,
-          color: themeColor,
+          color: textColor,
         ),
         SimpleStep(index: 3, step: step),
         const Icon(
           Icons.remove,
           size: 10,
-          color: themeColor,
+          color: textColor,
         ),
         SimpleStep(index: 4, step: step),
       ],

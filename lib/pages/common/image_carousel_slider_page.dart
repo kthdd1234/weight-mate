@@ -63,7 +63,7 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
                           padding: const EdgeInsets.all(5),
                           child: TextIcon(
                               padding: 5,
-                              backgroundColor: themeColor,
+                              backgroundColor: textColor,
                               backgroundColorOpacity: 0.5,
                               text: weight,
                               borderRadius: 5,

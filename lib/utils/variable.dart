@@ -403,7 +403,7 @@ String eGraphDefault = graphType.Default.toString();
 
 String eGraphCustom = graphType.Custom.toString();
 
-final goalButtonColors = {
+Map<String, Map<String, Color>> goalButtonColors = {
   eDiet: {
     'bgColor': dietBgButtonColor,
     'textColor': dietTextButtonColor,
@@ -418,16 +418,20 @@ final goalButtonColors = {
   }
 };
 
-// String baseAssetsPath(String path) {
-//   return 'assets/images/$path.png';
-// }
-
-// String exDiary = baseAssetsPath('ex_diary');
-// String exDietCollection = baseAssetsPath('ex_diet_collection');
-// String exDietWeek = baseAssetsPath('ex_diet_week');
-// String exExerciseCollection = baseAssetsPath('ex_exercise_collection');
-// String exExerciseWeek = baseAssetsPath('ex_exercise_week');
-// String exLifeWeek = baseAssetsPath('ex_life_week');
-// String exWeightAnalylize = baseAssetsPath('ex_weight_analylize');
-// String exWeightChart = baseAssetsPath('ex_weight_chart');
-// String exWeightCustom = baseAssetsPath('ex_weight_custom');
+List<String> initHashTagList = [
+  '#살빠짐',
+  '#오운완',
+  '#치팅데이',
+  '#꿀잠',
+  '#홈트',
+  '#산책',
+  '#폭식',
+  '#간헐적단식',
+  '#생리',
+  '#감기',
+  '#스트레스',
+  '#두통',
+  '#증량',
+  '#체함',
+  '#변기',
+];

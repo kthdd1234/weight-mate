@@ -50,7 +50,7 @@ class WeightAnalyzePage extends StatelessWidget {
           elevation: 0.0,
           title: Text(
             '체중 분석표'.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
         ),
         body: SafeArea(

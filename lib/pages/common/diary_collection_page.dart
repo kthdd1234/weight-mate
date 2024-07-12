@@ -97,7 +97,7 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
           centerTitle: false,
           title: Text('일기 모아보기'.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
           actions: [
             RowTags(
@@ -177,7 +177,7 @@ class DiaryItemTitle extends StatelessWidget {
           contents: Row(
             children: [
               ExpandedButtonVerti(
-                mainColor: themeColor,
+                mainColor: textColor,
                 icon: Icons.edit,
                 title: '일기 수정',
                 onTap: () => onEdit(dateTime),
@@ -216,8 +216,8 @@ class DiaryItemTitle extends StatelessWidget {
                 CommonText(
                   text: md(locale: locale, dateTime: dateTime),
                   size: 14,
-                  isBold: true,
                   isNotTr: true,
+                  color: themeColor,
                 ),
                 SpaceHeight(height: 2),
                 CommonText(

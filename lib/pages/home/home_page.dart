@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
@@ -277,6 +278,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
         label: '그래프'.tr(),
       ),
+      // BottomNavigationBarItem(
+      //   icon: const Icon(Icons.search_rounded),
+      //   label: '검색'.tr(),
+      // ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.settings_rounded),
         label: '설정'.tr(),
@@ -312,6 +317,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       RecordBody(),
       HistoryBody(),
       GraphBody(),
+      // SearchBody(),
       SettingBody()
     ];
 
@@ -331,7 +337,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return (isRecord || isHistory) && !isToday
           ? FloatingActionButton.extended(
               extendedPadding: const EdgeInsets.all(10),
-              backgroundColor: themeColor,
+              backgroundColor: textColor,
               onPressed: () {
                 DateTime now = DateTime.now();
 
@@ -369,8 +375,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             items: items,
             elevation: 0,
             currentIndex: bottomNavitionId.index,
-            selectedItemColor: themeColor,
-            unselectedItemColor: themeColor,
+            selectedItemColor: textColor,
+            unselectedItemColor: textColor,
             onTap: onBottomNavigation,
           ),
         ),

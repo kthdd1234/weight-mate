@@ -5,20 +5,19 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
-import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class DiaryWritePage extends StatefulWidget {
   DiaryWritePage({super.key, this.dateTime});
@@ -36,13 +35,6 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
   RecordBox? recordInfo;
   bool isEnabledButton = false;
   String emotion = '';
-
-  // @override
-  // void initState() {
-  //   AppLifecycleLockScreenReactor(context: context).listenToAppStateChanges();
-
-  //   super.initState();
-  // }
 
   @override
   void didChangeDependencies() {
@@ -86,7 +78,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
       });
     }
 
-    onTapCompleted() async {
+    onCompleted() async {
       if (isEnabledButton) {
         DateTime now = DateTime.now();
         DateTime diaryDateTime = DateTime(
@@ -117,8 +109,47 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
 
         await recordInfo?.save();
         Navigator.pop(context, 'save');
-        //
       }
+    }
+
+    hashTagBtn() {
+      return Expanded(
+        flex: 0,
+        child: InkWell(
+          onTap: () {
+            showModalBottomSheet(
+              isScrollControlled: true,
+              context: context,
+              builder: (context) => HashTagBottomSheet(),
+            );
+          },
+          child: ContentsBox(
+            borderRadius: 10,
+            height: submitButtonHeight,
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            imgUrl: 'assets/images/t-23.png',
+            contentsWidget: CommonText(
+              text: '#해시태그',
+              size: 15,
+              color: Colors.white,
+              isBold: true,
+              isCenter: true,
+            ),
+          ),
+        ),
+      );
+    }
+
+    completedBtn() {
+      return Expanded(
+        child: BottomSubmitButton(
+          padding: const EdgeInsets.all(0),
+          isEnabled: isEnabledButton,
+          borderRadius: 10,
+          text: '작성 완료'.tr(),
+          onPressed: onCompleted,
+        ),
+      );
     }
 
     return AppFramework(
@@ -127,7 +158,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
         appBar: AppBar(
           title: Text('일기'.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
         ),
         body: SafeArea(
@@ -139,7 +170,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.only(bottom: 15),
                     child: ContentsBox(
                       contentsWidget: SingleChildScrollView(
                         child: Column(
@@ -220,11 +251,12 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                     ),
                   ),
                 ),
-                BottomSubmitButton(
-                  padding: const EdgeInsets.all(0),
-                  isEnabled: isEnabledButton,
-                  text: '작성 완료'.tr(),
-                  onPressed: onTapCompleted,
+                Row(
+                  children: [
+                    hashTagBtn(),
+                    SpaceWidth(width: 5),
+                    completedBtn(),
+                  ],
                 ),
               ],
             ),

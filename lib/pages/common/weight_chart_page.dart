@@ -64,7 +64,7 @@ class _WeightChartPageState extends State<WeightChartPage> {
         appBar: AppBar(
           title: Text(
             '체중 통계표'.tr(),
-            style: const TextStyle(fontSize: 20, color: themeColor),
+            style: const TextStyle(fontSize: 20, color: textColor),
           ),
           backgroundColor: Colors.transparent,
           centerTitle: false,

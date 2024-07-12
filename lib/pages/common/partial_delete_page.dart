@@ -39,7 +39,7 @@ class _PatialDeletePageState extends State<PatialDeletePage> {
         appBar: AppBar(
           title: Text('부분 삭제'.tr(), style: const TextStyle(fontSize: 20)),
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
         ),
         body: SafeArea(

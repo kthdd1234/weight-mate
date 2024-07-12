@@ -272,14 +272,14 @@ class EditPicture extends StatelessWidget {
               Row(
                 children: [
                   ExpandedButtonVerti(
-                    mainColor: themeColor,
+                    mainColor: textColor,
                     icon: Icons.add_a_photo,
                     title: '사진 촬영하기',
                     onTap: () => onShowImagePicker(ImageSource.camera, pos),
                   ),
                   SpaceWidth(width: tinySpace),
                   ExpandedButtonVerti(
-                    mainColor: themeColor,
+                    mainColor: textColor,
                     icon: Icons.collections,
                     title: '사진 가져오기',
                     onTap: () => onShowImagePicker(ImageSource.gallery, pos),
@@ -486,7 +486,7 @@ class CloseIcon extends StatelessWidget {
               adjustSize: 3,
               size: 20,
               borderRadius: 5,
-              backgroundColor: themeColor,
+              backgroundColor: textColor,
               backgroundColorOpacity: 0.5,
               onTap: (_) => onTapRemove != null ? onTapRemove!(pos) : null,
             )

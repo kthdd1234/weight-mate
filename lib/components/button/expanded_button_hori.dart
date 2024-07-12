@@ -11,6 +11,7 @@ class ExpandedButtonHori extends StatelessWidget {
     super.key,
     required this.text,
     required this.onTap,
+    this.fontSize,
     this.imgUrl,
     this.color,
     this.icon,
@@ -24,7 +25,7 @@ class ExpandedButtonHori extends StatelessWidget {
   IconData? icon;
   String text;
   EdgeInsets? padding;
-  double? borderRadius;
+  double? fontSize, borderRadius;
   Map<String, String>? nameArgs;
   Function() onTap;
 
@@ -40,7 +41,7 @@ class ExpandedButtonHori extends StatelessWidget {
           backgroundColor: color,
           contentsWidget: CommonText(
             text: text,
-            size: 14,
+            size: fontSize ?? 14,
             leftIcon: icon,
             isBold: true,
             isCenter: true,

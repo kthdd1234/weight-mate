@@ -164,7 +164,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
             title: Text(
               '장의 사진을 삭제할까요?'
                   .tr(namedArgs: {'length': '${selectionList.length}'}),
-              style: const TextStyle(fontSize: 15, color: themeColor),
+              style: const TextStyle(fontSize: 15, color: textColor),
             ),
             content: Row(
               children: [
@@ -229,7 +229,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          foregroundColor: themeColor,
+          foregroundColor: textColor,
           elevation: 0.0,
           actions: [
             initClearState.isMode
@@ -383,7 +383,7 @@ class DateTimeLabel extends StatelessWidget {
         padding: const EdgeInsets.all(3.0) / 3,
         child: TextIcon(
           padding: 5,
-          backgroundColor: themeColor,
+          backgroundColor: textColor,
           backgroundColorOpacity: 0.5,
           text: md(
             locale: context.locale.toString(),
