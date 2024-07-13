@@ -175,7 +175,7 @@ class _GraphBodyState extends State<GraphBody> {
                         selectedSegment: selectedDateTimeSegment,
                         children: dateTimeChildren,
                         backgroundColor: typeBackgroundColor,
-                        thumbColor: dialogBackgroundColor,
+                        thumbColor: whiteBgBtnColor,
                         onSegmentedChanged: onSegmentedDateTimeChanged,
                       ),
                     )

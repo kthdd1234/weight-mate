@@ -53,7 +53,7 @@ class _TodoChartPageState extends State<TodoChartPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             AlertDialog(
-              backgroundColor: dialogBackgroundColor,
+              backgroundColor: whiteBgBtnColor,
               shape: containerBorderRadious,
               title: DialogTitle(
                 text: '월 선택',

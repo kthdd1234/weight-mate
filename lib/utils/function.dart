@@ -18,6 +18,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
 import 'package:purchases_flutter/models/customer_info_wrapper.dart';
@@ -916,7 +917,7 @@ onShowDialog({
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AlertDialog(
-          backgroundColor: dialogBackgroundColor,
+          backgroundColor: whiteBgBtnColor,
           shape: containerBorderRadious,
           title: DialogTitle(
             text: title,
@@ -1026,7 +1027,7 @@ Future<void> showDialogDateTimeYear({
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AlertDialog(
-          backgroundColor: dialogBackgroundColor,
+          backgroundColor: whiteBgBtnColor,
           shape: containerBorderRadious,
           title: DialogTitle(
             text: '년도 선택',
@@ -1073,5 +1074,26 @@ navigatorExamplePage({
         assetName: assetName,
       ),
     ),
+  );
+}
+
+ColorClass getColorClass(String? name) {
+  if (name == null) {
+    return indigo;
+  }
+
+  return colorList.firstWhere((info) => info.colorName == name);
+}
+
+SvgPicture getSvg({
+  required String name,
+  required double width,
+  Color? color,
+}) {
+  return SvgPicture.asset(
+    'assets/svgs/$name.svg',
+    width: width,
+    colorFilter:
+        color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
   );
 }

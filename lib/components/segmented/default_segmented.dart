@@ -26,7 +26,7 @@ class DefaultSegmented extends StatelessWidget {
       children: [
         Expanded(
           child: CupertinoSlidingSegmentedControl(
-            backgroundColor: backgroundColor ?? dialogBackgroundColor,
+            backgroundColor: backgroundColor ?? whiteBgBtnColor,
             thumbColor: thumbColor ?? typeBackgroundColor,
             groupValue: selectedSegment,
             children: children,

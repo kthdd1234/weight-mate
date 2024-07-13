@@ -20,6 +20,7 @@ class CommonBottomSheet extends StatelessWidget {
     this.titleLeftWidget,
     this.subContents,
     this.padding,
+    this.isRemoveBottom,
   });
 
   String title;
@@ -31,6 +32,7 @@ class CommonBottomSheet extends StatelessWidget {
   Function()? onSubmit;
   Widget? titleLeftWidget;
   EdgeInsets? padding;
+  bool? isRemoveBottom;
 
   @override
   Widget build(BuildContext context) {

@@ -125,8 +125,8 @@ const inputContentPadding = EdgeInsets.only(top: 10);
 /// inputKeyboardType
 const inputKeyboardType = TextInputType.numberWithOptions(decimal: true);
 
-/// dialogBackgroundColor
-const dialogBackgroundColor = Color(0xffF3F4F9);
+/// whiteBgBtnColor
+const whiteBgBtnColor = Color(0xffF3F4F9);
 
 /// weightColor
 const weightColor = Colors.indigo;

@@ -55,7 +55,7 @@ class _CalendarCellCustomDialogState extends State<CalendarCellCustomDialog> {
 
     return AlertDialog(
       shape: containerBorderRadious,
-      backgroundColor: dialogBackgroundColor,
+      backgroundColor: whiteBgBtnColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

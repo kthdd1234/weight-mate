@@ -27,7 +27,7 @@ class EmptyTextArea extends StatelessWidget {
       onTap: onTap,
       child: ContentsBox(
         width: MediaQuery.of(context).size.width,
-        backgroundColor: backgroundColor ?? dialogBackgroundColor,
+        backgroundColor: backgroundColor ?? whiteBgBtnColor,
         contentsWidget: Column(
           children: [
             SpaceHeight(height: topHeight),

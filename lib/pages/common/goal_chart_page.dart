@@ -584,12 +584,12 @@ class ColumnItmeList extends StatelessWidget {
       RecordBox? record = recordRepository.recordBox.get(recordKey);
 
       if (record?.actions == null) {
-        return dialogBackgroundColor;
+        return whiteBgBtnColor;
       }
 
       return record!.actions!.any((action) => action['id'] == planId)
           ? target.color
-          : dialogBackgroundColor;
+          : whiteBgBtnColor;
     }
 
     return Expanded(

@@ -45,7 +45,7 @@ class _CalendarDefaultDialogState extends State<CalendarDefaultDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: containerBorderRadious,
-      backgroundColor: dialogBackgroundColor,
+      backgroundColor: whiteBgBtnColor,
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [widget.titleWidgets],

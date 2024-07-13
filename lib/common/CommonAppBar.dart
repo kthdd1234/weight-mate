@@ -239,7 +239,7 @@ class _CommonTitleState extends State<CommonTitle> {
           builder: (context) => AlertDialog(
             insetPadding: const EdgeInsets.symmetric(horizontal: 30),
             shape: containerBorderRadious,
-            backgroundColor: dialogBackgroundColor,
+            backgroundColor: whiteBgBtnColor,
             title: DialogTitle(
               text: "커스텀 모드 제한",
               onTap: () => closeDialog(context),
@@ -608,9 +608,8 @@ class DotRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: row.map((name) {
-        Color color = name != null
-            ? tagColors[name]!['textColor']!
-            : dialogBackgroundColor;
+        Color color =
+            name != null ? tagColors[name]!['textColor']! : whiteBgBtnColor;
         return Row(
           children: [Dot(size: 5, color: color), SpaceWidth(width: 3)],
         );
@@ -756,7 +755,7 @@ class DisplayListContents extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AlertDialog(
-          backgroundColor: dialogBackgroundColor,
+          backgroundColor: whiteBgBtnColor,
           shape: containerBorderRadious,
           title: DialogTitle(
             text: '카테고리 표시',

@@ -280,7 +280,7 @@ class _EditWeightState extends State<EditWeight> {
                                   fontSize: 13,
                                   isBold: true,
                                   height: 50,
-                                  bgColor: dialogBackgroundColor,
+                                  bgColor: whiteBgBtnColor,
                                   radious: 7,
                                   textColor: Colors.indigo.shade300,
                                   onTap: onTapWeight,

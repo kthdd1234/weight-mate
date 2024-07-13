@@ -45,7 +45,7 @@ class AlarmContainer extends StatelessWidget {
             icon: icon,
             title: title,
             nameArgs: nameArgs,
-            iconBackgroundColor: dialogBackgroundColor,
+            iconBackgroundColor: whiteBgBtnColor,
             desc: desc,
             isEnabled: isEnabled,
             onChanged: onChanged,

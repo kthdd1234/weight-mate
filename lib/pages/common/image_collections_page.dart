@@ -160,7 +160,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
           context: context,
           builder: (context) => AlertDialog(
             shape: containerBorderRadious,
-            backgroundColor: dialogBackgroundColor,
+            backgroundColor: whiteBgBtnColor,
             title: Text(
               '장의 사진을 삭제할까요?'
                   .tr(namedArgs: {'length': '${selectionList.length}'}),

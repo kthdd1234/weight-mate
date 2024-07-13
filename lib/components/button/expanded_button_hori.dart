@@ -18,12 +18,14 @@ class ExpandedButtonHori extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.nameArgs,
+    this.flex,
   });
 
   String? imgUrl;
   Color? color;
   IconData? icon;
   String text;
+  int? flex;
   EdgeInsets? padding;
   double? fontSize, borderRadius;
   Map<String, String>? nameArgs;
@@ -32,6 +34,7 @@ class ExpandedButtonHori extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
+      flex: flex ?? 1,
       child: InkWell(
         onTap: onTap,
         child: ContentsBox(

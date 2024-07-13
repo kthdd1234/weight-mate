@@ -187,7 +187,7 @@ class EditPicture extends StatelessWidget {
           builder: (context) => AlertDialog(
             insetPadding: const EdgeInsets.symmetric(horizontal: 30),
             shape: containerBorderRadious,
-            backgroundColor: dialogBackgroundColor,
+            backgroundColor: whiteBgBtnColor,
             title: DialogTitle(
               text: "사진 추가 제한",
               onTap: () => closeDialog(context),

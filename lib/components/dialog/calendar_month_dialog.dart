@@ -44,7 +44,7 @@ class _CalendarMonthDialogState extends State<CalendarMonthDialog> {
 
     return AlertDialog(
       shape: containerBorderRadious,
-      backgroundColor: dialogBackgroundColor,
+      backgroundColor: whiteBgBtnColor,
       title: DialogTitle(text: '달력', onTap: () => closeDialog(context)),
       content: Container(
         width: MediaQuery.of(context).size.width,

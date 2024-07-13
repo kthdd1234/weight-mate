@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class DashContainer extends StatelessWidget {
   DashContainer({
@@ -36,7 +37,7 @@ class DashContainer extends StatelessWidget {
               height: height,
               child: CommonText(
                 text: text,
-                color: Colors.grey,
+                color: grey.original,
                 size: 13,
                 isCenter: true,
               ),
@@ -54,7 +55,7 @@ class DashContainer extends StatelessWidget {
 //       child: Container(
 //         height: height - (adjustHeight ?? 0),
 //         decoration: BoxDecoration(
-//           color: dialogBackgroundColor,
+//           color: whiteBgBtnColor,
 //           borderRadius: BorderRadius.all(
 //             Radius.circular(radius),
 //           ),

@@ -17,6 +17,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/contai
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 
 class DiaryWritePage extends StatefulWidget {
@@ -214,7 +215,6 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               size: 12,
                               isNotTr: true,
                               isCenter: true,
-                              isBold: true,
                             ),
                             SpaceHeight(height: 3),
                             CommonText(
@@ -225,7 +225,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               size: 12,
                               isNotTr: true,
                               isCenter: true,
-                              color: Colors.grey,
+                              color: grey.original,
                             ),
                             SpaceHeight(height: 10),
                             TextFormField(

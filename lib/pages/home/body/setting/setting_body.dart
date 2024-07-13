@@ -661,7 +661,7 @@ class MoreSeeItemWidget extends StatelessWidget {
           children: [
             Container(
               decoration: const BoxDecoration(
-                color: dialogBackgroundColor,
+                color: whiteBgBtnColor,
                 borderRadius: BorderRadius.all(
                   Radius.circular(5),
                 ),

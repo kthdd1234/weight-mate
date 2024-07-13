@@ -416,3 +416,24 @@ class DataSourceClass {
   String title;
   List<StackGraphData> max, avg, min;
 }
+
+class ColorClass {
+  ColorClass({
+    required this.s50,
+    required this.s100,
+    required this.s200,
+    required this.s300,
+    required this.s400,
+    required this.original,
+    required this.colorName,
+  });
+
+  String colorName;
+  Color s50, s100, s200, s300, s400, original;
+}
+
+class HashTagClass {
+  HashTagClass({required this.id, required this.text, required this.colorName});
+
+  String id, text, colorName;
+}

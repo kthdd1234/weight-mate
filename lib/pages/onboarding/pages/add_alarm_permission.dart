@@ -146,7 +146,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
               children: [
                 AlarmRow(
                   icon: Icons.alarm_rounded,
-                  iconBackgroundColor: dialogBackgroundColor,
+                  iconBackgroundColor: whiteBgBtnColor,
                   title: '체중 기록 알림',
                   desc: '매일 체중 기록 알림을 드려요',
                   isEnabled: isWeightAlarm,

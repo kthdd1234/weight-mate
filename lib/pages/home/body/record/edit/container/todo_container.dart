@@ -449,7 +449,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                   DefaultSegmented(
                     selectedSegment: selectedSegment,
                     children: children,
-                    backgroundColor: dialogBackgroundColor,
+                    backgroundColor: whiteBgBtnColor,
                     thumbColor: Colors.white,
                     onSegmentedChanged: onSegmentedChanged,
                   ),
@@ -806,7 +806,7 @@ class Dismiss extends StatelessWidget {
           builder: (ctx) {
             return AlertDialog(
               shape: containerBorderRadious,
-              backgroundColor: dialogBackgroundColor,
+              backgroundColor: whiteBgBtnColor,
               title: Text(
                 '삭제할까요?'.tr(),
                 style: const TextStyle(fontSize: 18, color: textColor),
@@ -2307,7 +2307,7 @@ class PermissionPopup extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AlertDialog(
-          backgroundColor: dialogBackgroundColor,
+          backgroundColor: whiteBgBtnColor,
           shape: containerBorderRadious,
           title: DialogTitle(
             text: '알림 허용 요청',

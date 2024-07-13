@@ -47,7 +47,7 @@ class _CalenderRangeDialogState extends State<CalenderRangeDialog> {
     return AlertDialog(
       scrollable: true,
       shape: containerBorderRadious,
-      backgroundColor: dialogBackgroundColor,
+      backgroundColor: whiteBgBtnColor,
       title: DialogTitle(text: widget.title, onTap: () => closeDialog(context)),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.end,

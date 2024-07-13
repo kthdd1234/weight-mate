@@ -80,7 +80,7 @@ class _NativeAdDialogState extends State<NativeAdDialog> {
             insetPadding: const EdgeInsets.symmetric(horizontal: 30),
             scrollable: true,
             shape: containerBorderRadious,
-            backgroundColor: dialogBackgroundColor,
+            backgroundColor: whiteBgBtnColor,
             elevation: 0.0,
             title: DialogTitle(
               text: widget.title,
