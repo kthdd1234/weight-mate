@@ -1,4 +1,6 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, prefer_is_empty
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
@@ -43,6 +46,8 @@ class EditDiary extends StatelessWidget {
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
+    List<Map<String, String>>? recordHashTagList =
+        recordInfo?.recordHashTagList;
 
     onTapWriteDiary() async {
       await Navigator.push(
@@ -52,28 +57,6 @@ class EditDiary extends StatelessWidget {
               DiaryWritePage(dateTime: importDateTime),
         ),
       );
-      // final result = await Navigator.pushNamed(context, '/diary-write-page');
-
-      // if (result == 'save') {
-      //   onClick(BottomNavigationEnum enumId) async {
-      //     context
-      //         .read<BottomNavigationProvider>()
-      //         .setBottomNavigation(enumId: enumId);
-      //     closeDialog(context);
-      //   }
-
-      //   await showDialog(
-      //     context: context,
-      //     builder: (context) => NativeAdDialog(
-      //       loadingText: '일기 데이터 저장 중...',
-      //       title: '📝 일기 작성 완료!',
-      //       leftText: '히스토리',
-      //       rightText: '그래프',
-      //       onLeftClick: () => onClick(BottomNavigationEnum.history),
-      //       onRightClick: () => onClick(BottomNavigationEnum.graph),
-      //     ),
-      //   );
-      // }
     }
 
     onTapEmtion(String selectedEmotion) {
@@ -178,6 +161,10 @@ class EditDiary extends StatelessWidget {
       Navigator.pushNamed(context, '/diary-collection-page');
     }
 
+    onHashTagItem(String id) {
+      onTapWriteDiary();
+    }
+
     List<TagClass> tags = [
       TagClass(
         text: recordInfo?.whiteText != null
@@ -205,6 +192,13 @@ class EditDiary extends StatelessWidget {
       )
     ];
 
+    bool isDateTime = recordInfo?.whiteText == null &&
+        recordInfo?.emotion == null &&
+        recordInfo?.recordHashTagList?.length == 0;
+    bool isWhite = recordInfo?.whiteText == null &&
+        recordInfo?.recordHashTagList?.length == 0;
+    ;
+
     return isDisplay
         ? SizedBox(
             child: Column(
@@ -220,10 +214,10 @@ class EditDiary extends StatelessWidget {
                         onTap: onTapOpen,
                       ),
                       isOpen
-                          ? recordInfo?.whiteText == null &&
-                                  recordInfo?.emotion == null
+                          ? isDateTime
                               ? DiaryWriteButton(onTap: onTapWriteDiary)
                               : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     DiaryTitle(
                                       importDateTime: importDateTime,
@@ -231,25 +225,56 @@ class EditDiary extends StatelessWidget {
                                       onTapMore: onTapMore,
                                       onTapEmotion: onTapOpenEmotion,
                                     ),
-                                    SpaceHeight(height: smallSpace),
-                                    recordInfo?.whiteText == null
-                                        ? DiaryWriteButton(
-                                            onTap: onTapWriteDiary,
+                                    getHashTagClassList(recordHashTagList)
+                                            .isNotEmpty
+                                        ? Padding(
+                                            padding:
+                                                const EdgeInsets.only(top: 10),
+                                            child: Wrap(
+                                                spacing: 5,
+                                                runSpacing: 7,
+                                                children: getHashTagClassList(
+                                                        recordHashTagList)
+                                                    .map((hashTag) => HashTag(
+                                                          id: hashTag.id,
+                                                          text: hashTag.text,
+                                                          colorName:
+                                                              hashTag.colorName,
+                                                          isFilled: true,
+                                                          isEditMode: false,
+                                                          onItem: onHashTagItem,
+                                                          onRemove: (_) {},
+                                                        ))
+                                                    .toList()),
                                           )
+                                        : const EmptyArea(),
+                                    SpaceHeight(height: smallSpace),
+                                    isWhite
+                                        ? DiaryWriteButton(
+                                            onTap: onTapWriteDiary)
                                         : InkWell(
                                             onTap: onTapMore,
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  recordInfo!.whiteText!,
-                                                  style: const TextStyle(
-                                                    fontSize: 13,
-                                                    color: textColor,
-                                                  ),
-                                                ),
-                                                SpaceHeight(height: smallSpace),
+                                                recordInfo!.whiteText != null
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(
+                                                          bottom: 5,
+                                                        ),
+                                                        child: Text(
+                                                          recordInfo.whiteText!,
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 13,
+                                                            color: textColor,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : const EmptyArea(),
                                                 CommonText(
                                                   isNotTr: true,
                                                   size: 12,
@@ -264,7 +289,7 @@ class EditDiary extends StatelessWidget {
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                          )
                                   ],
                                 )
                           : const EmptyArea(),
@@ -346,7 +371,7 @@ class DiaryTitle extends StatelessWidget {
               ),
               isNotTr: true,
               size: 13,
-              isBold: true,
+              color: themeColor,
             ),
             CommonText(
               text: e(

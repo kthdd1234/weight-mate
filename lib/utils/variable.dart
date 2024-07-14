@@ -438,21 +438,21 @@ Map<String, Map<String, Color>> goalButtonColors = {
 // ];
 
 List<HashTagClass> initHashTagList = [
-  HashTagClass(id: uuid(), text: '#살빠짐', colorName: '남색'),
-  HashTagClass(id: uuid(), text: '#오운완', colorName: '남색'),
-  HashTagClass(id: uuid(), text: '#치팅데이', colorName: '남색'),
-  HashTagClass(id: uuid(), text: '#꿀잠', colorName: '청록색'),
-  HashTagClass(id: uuid(), text: '#홈트', colorName: '청록색'),
-  HashTagClass(id: uuid(), text: '#산책', colorName: '청록색'),
-  HashTagClass(id: uuid(), text: '#폭식', colorName: '파란색'),
-  HashTagClass(id: uuid(), text: '#간헐적단식', colorName: '파란색'),
-  HashTagClass(id: uuid(), text: '#생리', colorName: '파란색'),
-  HashTagClass(id: uuid(), text: '#감기', colorName: '빨간색'),
-  HashTagClass(id: uuid(), text: '#스트레스', colorName: '빨간색'),
-  HashTagClass(id: uuid(), text: '#두통', colorName: '빨간색'),
-  HashTagClass(id: uuid(), text: '#증량', colorName: '보라색'),
-  HashTagClass(id: uuid(), text: '#체함', colorName: '보라색'),
-  HashTagClass(id: uuid(), text: '#변비', colorName: '보라색'),
+  HashTagClass(id: uuid(), text: '살빠짐', colorName: '남색'),
+  HashTagClass(id: uuid(), text: '오운완', colorName: '남색'),
+  HashTagClass(id: uuid(), text: '치팅데이', colorName: '남색'),
+  HashTagClass(id: uuid(), text: '꿀잠', colorName: '청록색'),
+  HashTagClass(id: uuid(), text: '홈트', colorName: '청록색'),
+  HashTagClass(id: uuid(), text: '산책', colorName: '청록색'),
+  HashTagClass(id: uuid(), text: '폭식', colorName: '파란색'),
+  HashTagClass(id: uuid(), text: '간헐적단식', colorName: '파란색'),
+  HashTagClass(id: uuid(), text: '생리', colorName: '파란색'),
+  HashTagClass(id: uuid(), text: '감기', colorName: '빨간색'),
+  HashTagClass(id: uuid(), text: '스트레스', colorName: '빨간색'),
+  HashTagClass(id: uuid(), text: '두통', colorName: '빨간색'),
+  HashTagClass(id: uuid(), text: '증량', colorName: '보라색'),
+  HashTagClass(id: uuid(), text: '체함', colorName: '보라색'),
+  HashTagClass(id: uuid(), text: '변비', colorName: '보라색'),
 ];
 
 final indigo = ColorClass(

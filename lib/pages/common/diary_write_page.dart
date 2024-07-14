@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -36,6 +38,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
   RecordBox? recordInfo;
   bool isEnabledButton = false;
   String emotion = '';
+  List<HashTagClass> selectedHashTagList = [];
 
   @override
   void didChangeDependencies() {
@@ -45,8 +48,13 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
           recordRepository.recordBox.get(getDateTimeToInt(targetDateTime));
       controller.text = recordInfo?.whiteText ?? '';
       emotion = recordInfo?.emotion ?? '';
+      selectedHashTagList = getHashTagClassList(recordInfo?.recordHashTagList);
 
-      if (recordInfo?.emotion != null || recordInfo?.whiteText != null) {
+      bool isEmotion = recordInfo?.emotion != null;
+      bool isWhiteText = recordInfo?.whiteText != null;
+      bool isHashTagList = recordInfo?.recordHashTagList != null;
+
+      if (isEmotion || isWhiteText || isHashTagList) {
         isEnabledButton = true;
       }
     });
@@ -75,7 +83,10 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
 
     onChanged(String newValue) {
       setState(() {
-        isEnabledButton = newValue == '' && emotion == '' ? false : true;
+        isEnabledButton =
+            newValue == '' && emotion == '' && selectedHashTagList.isEmpty
+                ? false
+                : true;
       });
     }
 
@@ -91,6 +102,15 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
         );
         String? rEmotion = emotion != '' ? emotion : null;
         String? whiteText = controller.text != '' ? controller.text : null;
+        List<Map<String, String>> hashTagList = selectedHashTagList
+            .map((hashTag) => {
+                  'id': hashTag.id,
+                  'text': hashTag.text,
+                  'colorName': hashTag.colorName,
+                })
+            .toList();
+        List<Map<String, String>>? recordHashTagList =
+            hashTagList.isNotEmpty ? hashTagList : [];
 
         if (recordInfo == null) {
           recordRepository.updateRecord(
@@ -100,12 +120,14 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
               diaryDateTime: diaryDateTime,
               whiteText: whiteText,
               emotion: rEmotion,
+              recordHashTagList: recordHashTagList,
             ),
           );
         } else {
           recordInfo?.emotion = rEmotion;
           recordInfo?.whiteText = whiteText;
           recordInfo?.diaryDateTime = diaryDateTime;
+          recordInfo?.recordHashTagList = recordHashTagList;
         }
 
         await recordInfo?.save();
@@ -121,7 +143,14 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
             showModalBottomSheet(
               isScrollControlled: true,
               context: context,
-              builder: (context) => HashTagBottomSheet(),
+              builder: (context) => HashTagBottomSheet(
+                hashTagIdList:
+                    selectedHashTagList.map((hashTag) => hashTag.id).toList(),
+                onCompleted: (list) => setState(() {
+                  selectedHashTagList = list;
+                  isEnabledButton = true;
+                }),
+              ),
             );
           },
           child: ContentsBox(
@@ -175,6 +204,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                     child: ContentsBox(
                       contentsWidget: SingleChildScrollView(
                         child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -201,9 +231,11 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                   )
                                 : InkWell(
                                     onTap: onTapEmotion,
-                                    child: SvgPicture.asset(
-                                      'assets/svgs/$emotion.svg',
-                                      height: 50,
+                                    child: Center(
+                                      child: SvgPicture.asset(
+                                        'assets/svgs/$emotion.svg',
+                                        height: 50,
+                                      ),
                                     ),
                                   ),
                             SpaceHeight(height: 10),
@@ -227,6 +259,26 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               isCenter: true,
                               color: grey.original,
                             ),
+                            selectedHashTagList.isNotEmpty
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 10),
+                                    child: Wrap(
+                                      spacing: 5,
+                                      runSpacing: 7,
+                                      children: selectedHashTagList
+                                          .map((hashTag) => HashTag(
+                                                id: hashTag.id,
+                                                text: hashTag.text,
+                                                colorName: hashTag.colorName,
+                                                isFilled: true,
+                                                isEditMode: false,
+                                                onItem: (_) {},
+                                                onRemove: (_) {},
+                                              ))
+                                          .toList(),
+                                    ),
+                                  )
+                                : const EmptyArea(),
                             SpaceHeight(height: 10),
                             TextFormField(
                               focusNode: focusNode,
@@ -237,6 +289,8 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                               textInputAction: TextInputAction.newline,
                               style: const TextStyle(fontSize: 13),
                               decoration: InputDecoration(
+                                contentPadding: EdgeInsets.all(0),
+                                isDense: true,
                                 border: InputBorder.none,
                                 hintText: '오늘 다이어트를 하면서 어땠는지 기록해보아요 :D'.tr(),
                                 hintStyle: TextStyle(

@@ -90,6 +90,7 @@ dependencies:
   purchases_flutter: ^6.26.0
   jiffy: ^6.2.1
   firebase_auth: ^4.17.8
+  fluttertoast: ^8.2.5
 
 dev_dependencies:
   flutter_test:

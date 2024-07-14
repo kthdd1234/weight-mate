@@ -20,6 +20,7 @@ class RecordBox extends HiveObject {
     this.topFile,
     this.dietRecordOrderList,
     this.exerciseRecordOrderList,
+    this.recordHashTagList,
   });
 
   @HiveField(0)
@@ -63,4 +64,7 @@ class RecordBox extends HiveObject {
 
   @HiveField(13)
   List<String>? exerciseRecordOrderList;
+
+  @HiveField(14)
+  List<Map<String, String>>? recordHashTagList;
 }

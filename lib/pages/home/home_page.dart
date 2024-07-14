@@ -100,6 +100,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
     bool? isDietExerciseRecordDateTime2 = user.isDietExerciseRecordDateTime2;
     String? graphType = user.graphType;
+    List<Map<String, dynamic>>? hashTagList = user.hashTagList;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -208,6 +209,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (graphType == null) {
       user.graphType = eGraphDefault;
+    }
+
+    if (hashTagList == null) {
+      user.hashTagList = initHashTagList
+          .map((hashTag) => {
+                'id': hashTag.id,
+                'text': hashTag.text,
+                'colorName': hashTag.colorName
+              })
+          .toList();
     }
 
     userRepository.user.save();

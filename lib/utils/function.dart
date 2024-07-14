@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_function_literals_in_foreach_calls
+// ignore_for_file: avoid_function_literals_in_foreach_calls, prefer_is_empty
 import 'dart:developer';
 import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
@@ -1095,5 +1095,39 @@ SvgPicture getSvg({
     width: width,
     colorFilter:
         color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+  );
+}
+
+List<HashTagClass> getHashTagClassList(
+  List<Map<String, dynamic>>? hashTagList,
+) {
+  if (hashTagList == null || hashTagList.length == 0) {
+    return [];
+  }
+
+  return hashTagList
+      .map((hashTag) => HashTagClass(
+          id: hashTag['id'],
+          text: hashTag['text'],
+          colorName: hashTag['colorName']))
+      .toList();
+}
+
+// List<Map<String, dynamic>> getHashTagClassList() {}
+
+int getHashTagIndex(List<Map<String, dynamic>> hashTagList, String id) {
+  return hashTagList.indexWhere((item) => item['id'] == id);
+}
+
+HashTagClass? getHashTag(List<Map<String, dynamic>>? hashTagList, String id) {
+  if (hashTagList == null || hashTagList.length == 0) {
+    return null;
+  }
+
+  int index = getHashTagIndex(hashTagList, id);
+  return HashTagClass(
+    id: id,
+    text: hashTagList[index]['text'],
+    colorName: hashTagList[index]['colorName'],
   );
 }

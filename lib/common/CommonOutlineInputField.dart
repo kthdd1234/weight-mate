@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 class CommonOutlineInputField extends StatelessWidget {
@@ -39,6 +40,8 @@ class CommonOutlineInputField extends StatelessWidget {
           hintStyle: TextStyle(color: grey.s400),
           filled: true,
           fillColor: whiteBgBtnColor,
+          prefixIcon:
+              Icon(FontAwesomeIcons.hashtag, color: selectedColor, size: 18),
           suffixIcon: GestureDetector(
             onTap: onSuffixIcon,
             child: UnconstrainedBox(

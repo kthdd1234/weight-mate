@@ -37,6 +37,7 @@ class UserBox extends HiveObject {
     this.graphType,
     this.cutomGraphStartDateTime,
     this.cutomGraphEndDateTime,
+    this.hashTagList,
   });
 
   @HiveField(0)
@@ -132,8 +133,11 @@ class UserBox extends HiveObject {
   @HiveField(30)
   DateTime? cutomGraphEndDateTime;
 
+  @HiveField(31)
+  List<Map<String, String>>? hashTagList;
+
   @override
   String toString() {
-    return '{userId: $userId, tall: $tall, goalWeight: $goalWeight, createDateTime: $createDateTime, isAlarm: $isAlarm, alarmTime: $alarmTime, alarmId: $alarmId, screenLockPasswords: $screenLockPasswords, planViewType: $planViewType, filterList: $filterList, displayList: $displayList }';
+    return '';
   }
 }

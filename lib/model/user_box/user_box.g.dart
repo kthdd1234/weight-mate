@@ -48,13 +48,16 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       graphType: fields[28] as String?,
       cutomGraphStartDateTime: fields[29] as DateTime?,
       cutomGraphEndDateTime: fields[30] as DateTime?,
+      hashTagList: (fields[31] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, String>())
+          .toList(),
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(31)
+      ..writeByte(32)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -116,7 +119,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(29)
       ..write(obj.cutomGraphStartDateTime)
       ..writeByte(30)
-      ..write(obj.cutomGraphEndDateTime);
+      ..write(obj.cutomGraphEndDateTime)
+      ..writeByte(31)
+      ..write(obj.hashTagList);
   }
 
   @override
