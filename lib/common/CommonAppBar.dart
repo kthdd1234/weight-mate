@@ -467,6 +467,11 @@ class CalendarBar extends StatelessWidget {
       int recordKey = getDateTimeToInt(day);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       List<Map<String, dynamic>>? actions = recordInfo?.actions;
+      List<Map<String, String>>? hashTagList =
+          (recordInfo?.recordHashTagList == null ||
+                  recordInfo?.recordHashTagList?.length == 0)
+              ? null
+              : recordInfo?.recordHashTagList;
 
       String? weight = colorName(
         recordInfo?.weight,
@@ -492,7 +497,7 @@ class CalendarBar extends StatelessWidget {
         'brown',
       );
       String? diary = colorName(
-        (recordInfo?.whiteText ?? recordInfo?.emotion),
+        (recordInfo?.whiteText ?? recordInfo?.emotion ?? hashTagList),
         'orange',
       );
 
@@ -778,17 +783,18 @@ class DisplayListContents extends StatelessWidget {
                                 checkColor: textColor,
                                 onTap: onTap,
                               ),
-                              CommonText(
-                                text: data.name,
-                                size: 14,
-                                isNotTop: true,
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 5),
+                                child: CommonText(text: data.name, size: 14),
                               ),
-                              SpaceWidth(width: 3),
                               classList.first.id == data.id && isRequiredWeight
-                                  ? CommonText(
-                                      text: '(필수)',
-                                      size: 10,
-                                      color: Colors.red,
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(right: 3),
+                                      child: CommonText(
+                                        text: '(필수)',
+                                        size: 10,
+                                        color: Colors.red,
+                                      ),
                                     )
                                   : const EmptyArea()
                             ],

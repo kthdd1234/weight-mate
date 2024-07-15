@@ -5,13 +5,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/EmotionBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -29,7 +27,6 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EditDiary extends StatelessWidget {
   const EditDiary({super.key});
@@ -161,13 +158,49 @@ class EditDiary extends StatelessWidget {
       Navigator.pushNamed(context, '/diary-collection-page');
     }
 
-    onHashTagItem(String id) {
-      onTapWriteDiary();
+    onTapHashTag(String id) {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => HashTagBottomSheet(
+          hashTagIdList: getHashTagClassList(recordInfo?.recordHashTagList)
+              .map((hashTag) => hashTag.id)
+              .toList(),
+          onCompleted: (List<HashTagClass> newHashTagList) async {
+            if (recordInfo == null) {
+              recordRepository.updateRecord(
+                key: recordKey,
+                record: RecordBox(
+                  createDateTime: importDateTime,
+                  recordHashTagList: getHashTagMapList(newHashTagList),
+                ),
+              );
+            } else {
+              log('$newHashTagList');
+              recordInfo.recordHashTagList = getHashTagMapList(newHashTagList);
+            }
+
+            bool? isContain = user.filterList?.contains(fDiary);
+            if (isContain == false || isContain == null) {
+              user.filterList?.add(fDiary);
+            }
+
+            await recordInfo?.save();
+          },
+        ),
+      );
     }
+
+    bool isRecordHashTagList = recordInfo?.recordHashTagList == null ||
+        recordInfo?.recordHashTagList?.length == 0;
+    bool isDateTime = recordInfo?.whiteText == null &&
+        recordInfo?.emotion == null &&
+        isRecordHashTagList;
+    bool isWhite = recordInfo?.whiteText == null && isRecordHashTagList;
 
     List<TagClass> tags = [
       TagClass(
-        text: recordInfo?.whiteText != null
+        text: !isWhite
             ? hm(
                 locale: context.locale.toString(),
                 dateTime: recordInfo?.diaryDateTime ?? DateTime.now(),
@@ -192,13 +225,6 @@ class EditDiary extends StatelessWidget {
       )
     ];
 
-    bool isDateTime = recordInfo?.whiteText == null &&
-        recordInfo?.emotion == null &&
-        recordInfo?.recordHashTagList?.length == 0;
-    bool isWhite = recordInfo?.whiteText == null &&
-        recordInfo?.recordHashTagList?.length == 0;
-    ;
-
     return isDisplay
         ? SizedBox(
             child: Column(
@@ -215,7 +241,10 @@ class EditDiary extends StatelessWidget {
                       ),
                       isOpen
                           ? isDateTime
-                              ? DiaryWriteButton(onTap: onTapWriteDiary)
+                              ? DiaryButton(
+                                  paddingTop: 0,
+                                  onTap: onTapWriteDiary,
+                                )
                               : Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -225,70 +254,30 @@ class EditDiary extends StatelessWidget {
                                       onTapMore: onTapMore,
                                       onTapEmotion: onTapOpenEmotion,
                                     ),
-                                    getHashTagClassList(recordHashTagList)
-                                            .isNotEmpty
-                                        ? Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 10),
-                                            child: Wrap(
-                                                spacing: 5,
-                                                runSpacing: 7,
-                                                children: getHashTagClassList(
-                                                        recordHashTagList)
-                                                    .map((hashTag) => HashTag(
-                                                          id: hashTag.id,
-                                                          text: hashTag.text,
-                                                          colorName:
-                                                              hashTag.colorName,
-                                                          isFilled: true,
-                                                          isEditMode: false,
-                                                          onItem: onHashTagItem,
-                                                          onRemove: (_) {},
-                                                        ))
-                                                    .toList()),
-                                          )
-                                        : const EmptyArea(),
-                                    SpaceHeight(height: smallSpace),
                                     isWhite
-                                        ? DiaryWriteButton(
-                                            onTap: onTapWriteDiary)
-                                        : InkWell(
-                                            onTap: onTapMore,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                recordInfo!.whiteText != null
-                                                    ? Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                          bottom: 5,
-                                                        ),
-                                                        child: Text(
-                                                          recordInfo.whiteText!,
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 13,
-                                                            color: textColor,
-                                                          ),
-                                                        ),
-                                                      )
-                                                    : const EmptyArea(),
-                                                CommonText(
-                                                  isNotTr: true,
-                                                  size: 12,
-                                                  color: Colors.grey,
-                                                  text: hm(
-                                                    locale: context.locale
-                                                        .toString(),
-                                                    dateTime: recordInfo
-                                                            .diaryDateTime ??
-                                                        DateTime.now(),
-                                                  ),
+                                        ? DiaryButton(
+                                            paddingTop: 10,
+                                            onTap: onTapWriteDiary,
+                                          )
+                                        : Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              DiaryWriteText(
+                                                whiteText:
+                                                    recordInfo?.whiteText,
+                                                diaryDateTime:
+                                                    recordInfo?.diaryDateTime,
+                                                onTap: onTapMore,
+                                              ),
+                                              DiaryHashTag(
+                                                hashTagClassList:
+                                                    getHashTagClassList(
+                                                  recordInfo?.recordHashTagList,
                                                 ),
-                                              ],
-                                            ),
+                                                onItem: onTapHashTag,
+                                              ),
+                                            ],
                                           )
                                   ],
                                 )
@@ -300,31 +289,6 @@ class EditDiary extends StatelessWidget {
             ),
           )
         : const EmptyArea();
-  }
-}
-
-class DiaryWriteButton extends StatelessWidget {
-  DiaryWriteButton({super.key, required this.onTap});
-
-  Function() onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: ContentsBox(
-        borderRadius: 7,
-        padding: const EdgeInsets.all(14),
-        imgUrl: 'assets/images/t-16.png',
-        contentsWidget: CommonText(
-          text: '일기 작성하기',
-          size: 14,
-          isCenter: true,
-          isBold: true,
-          color: Colors.white,
-        ),
-      ),
-    );
   }
 }
 
@@ -396,94 +360,114 @@ class DiaryTitle extends StatelessWidget {
   }
 }
 
-class EmotionBottomSheet extends StatelessWidget {
-  EmotionBottomSheet({super.key, required this.emotion, required this.onTap});
+class DiaryButton extends StatelessWidget {
+  DiaryButton({super.key, required this.onTap, required this.paddingTop});
 
-  String emotion;
-  Function(String selectedEmotion) onTap;
+  double paddingTop;
+  Function() onTap;
 
   @override
   Widget build(BuildContext context) {
-    onTapStreamline() async {
-      await launchUrl(Uri(scheme: 'https', host: 'home.streamlinehq.com'));
-    }
-
-    onTapCCBY() async {
-      await launchUrl(
-        Uri(
-          scheme: 'https',
-          host: 'creativecommons.org',
-          path: 'licenses/by/4.0/',
-        ),
-      );
-    }
-
-    return CommonBottomSheet(
-      title: '감정'.tr(),
-      height: 560,
-      contents: Expanded(
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: EdgeInsets.only(top: paddingTop),
         child: ContentsBox(
-          contentsWidget: GridView.builder(
-            itemCount: emotionList.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 5,
-              crossAxisSpacing: 5,
-            ),
-            itemBuilder: (context, index) {
-              SvgClass data = emotionList[index];
-              String svgPath = 'assets/svgs/${data.emotion}.svg';
-
-              return InkWell(
-                onTap: () => onTap(data.emotion),
-                child: Column(
-                  children: [
-                    SvgPicture.asset(svgPath, height: 40),
-                    SpaceHeight(height: tinySpace),
-                    data.emotion == emotion
-                        ? CommonTag(color: 'peach', text: data.name)
-                        : CommonText(text: data.name, size: 12, isCenter: true),
-                  ],
-                ),
-              );
-            },
+          borderRadius: 7,
+          padding: const EdgeInsets.all(14),
+          imgUrl: 'assets/images/t-16.png',
+          contentsWidget: CommonText(
+            text: '일기 작성하기',
+            size: 14,
+            isCenter: true,
+            isBold: true,
+            color: Colors.white,
           ),
         ),
-      ),
-      subContents: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          CommonText(
-            text: '출처: ',
-            size: 11,
-            color: Colors.grey,
-          ),
-          CommonText(
-            isNotTr: true,
-            text: 'streamline',
-            color: Colors.grey,
-            size: 11,
-            decoration: 'underLine',
-            decoColor: Colors.grey,
-            onTap: onTapStreamline,
-          ),
-          CommonText(
-            isNotTr: true,
-            text: ' / ',
-            size: 11,
-            color: Colors.grey,
-          ),
-          CommonText(
-            isNotTr: true,
-            text: 'CC BY',
-            decoration: 'underLine',
-            size: 11,
-            decoColor: Colors.grey,
-            color: Colors.grey,
-            onTap: onTapCCBY,
-          ),
-        ],
       ),
     );
+  }
+}
+
+class DiaryHashTag extends StatelessWidget {
+  DiaryHashTag({
+    super.key,
+    required this.hashTagClassList,
+    this.paddingTop,
+    this.onItem,
+  });
+
+  List<HashTagClass> hashTagClassList;
+  double? paddingTop;
+  Function(String)? onItem;
+
+  @override
+  Widget build(BuildContext context) {
+    return hashTagClassList.isNotEmpty
+        ? Padding(
+            padding: EdgeInsets.only(top: paddingTop ?? 10),
+            child: Wrap(
+                spacing: 5,
+                runSpacing: 7,
+                children: hashTagClassList
+                    .map((hashTag) => HashTag(
+                          id: hashTag.id,
+                          text: hashTag.text,
+                          colorName: hashTag.colorName,
+                          isFilled: true,
+                          isEditMode: false,
+                          onItem: onItem ?? (_) {},
+                          onRemove: (_) {},
+                        ))
+                    .toList()),
+          )
+        : const EmptyArea();
+  }
+}
+
+class DiaryWriteText extends StatelessWidget {
+  DiaryWriteText({
+    super.key,
+    this.whiteText,
+    this.diaryDateTime,
+    required this.onTap,
+  });
+
+  String? whiteText;
+  DateTime? diaryDateTime;
+  Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return whiteText != null
+        ? InkWell(
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    whiteText!,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      color: textColor,
+                    ),
+                  ),
+                  SpaceHeight(height: 5),
+                  CommonText(
+                    isNotTr: true,
+                    size: 12,
+                    color: grey.original,
+                    text: hm(
+                      locale: context.locale.toString(),
+                      dateTime: diaryDateTime ?? DateTime.now(),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
+        : const EmptyArea();
   }
 }

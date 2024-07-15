@@ -1113,7 +1113,17 @@ List<HashTagClass> getHashTagClassList(
       .toList();
 }
 
-// List<Map<String, dynamic>> getHashTagClassList() {}
+List<Map<String, String>> getHashTagMapList(
+  List<HashTagClass> hashTagClassList,
+) {
+  return hashTagClassList
+      .map((hashTag) => {
+            'id': hashTag.id,
+            'text': hashTag.text,
+            'colorName': hashTag.colorName
+          })
+      .toList();
+}
 
 int getHashTagIndex(List<Map<String, dynamic>> hashTagList, String id) {
   return hashTagList.indexWhere((item) => item['id'] == id);

@@ -8,6 +8,7 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -37,6 +39,7 @@ String fLife = FILITER.lifeStyle.toString();
 String fDiary = FILITER.diary.toString();
 String fDiet_2 = FILITER.diet_2.toString();
 String fExercise_2 = FILITER.exercise_2.toString();
+String fDiary_2 = FILITER.diary_2.toString();
 
 class HistoryContainer extends StatelessWidget {
   HistoryContainer({
@@ -60,7 +63,8 @@ class HistoryContainer extends StatelessWidget {
     UserBox user = userRepository.user;
     List<String> historyDisplayList = user.historyDisplayList ?? [];
     bool isPicture = historyDisplayList.contains(fPicture);
-    bool isDiary = historyDisplayList.contains(fDiary);
+    bool isDiaryText = historyDisplayList.contains(fDiary);
+    bool isDiaryHashTag = historyDisplayList.contains(fDiary_2);
 
     onTapEdit() {
       context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
@@ -130,8 +134,14 @@ class HistoryContainer extends StatelessWidget {
                   isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
                 ),
-                isDiary
-                    ? HistoryDiary(
+                isDiaryText
+                    ? HistoryDiaryText(
+                        isRemoveMode: isRemoveMode,
+                        recordInfo: recordInfo,
+                      )
+                    : const EmptyArea(),
+                isDiaryHashTag
+                    ? HistoryHashTag(
                         isRemoveMode: isRemoveMode,
                         recordInfo: recordInfo,
                       )
@@ -261,7 +271,10 @@ class HistoryHeader extends StatelessWidget {
                     ],
                   ),
                   CommonText(
-                      text: isWeight ? bmiValue() : '', size: 9, isNotTr: true),
+                    text: isWeight ? bmiValue() : '',
+                    size: 9,
+                    isNotTr: true,
+                  ),
                 ],
               ),
             ],
@@ -642,8 +655,8 @@ class HistoryTodo extends StatelessWidget {
   }
 }
 
-class HistoryDiary extends StatelessWidget {
-  HistoryDiary({
+class HistoryDiaryText extends StatelessWidget {
+  HistoryDiaryText({
     super.key,
     required this.isRemoveMode,
     required this.recordInfo,
@@ -652,39 +665,40 @@ class HistoryDiary extends StatelessWidget {
   bool isRemoveMode;
   RecordBox? recordInfo;
 
+  onTapRemoveDiary() async {
+    recordInfo?.diaryDateTime = null;
+    recordInfo?.whiteText = null;
+
+    await recordInfo?.save();
+  }
+
   @override
   Widget build(BuildContext context) {
-    onTapRemoveDiary() {
-      recordInfo?.diaryDateTime = null;
-      recordInfo?.whiteText = null;
-
-      recordInfo?.save();
-    }
-
     return recordInfo?.whiteText != null
         ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SpaceHeight(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      recordInfo!.whiteText!,
-                      style: const TextStyle(
-                        color: textColor,
-                        fontSize: 13,
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        recordInfo!.whiteText!,
+                        style: const TextStyle(
+                          color: textColor,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                  ),
-                  isRemoveMode
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 3, left: 3),
-                          child: RemoveIcon(onTap: onTapRemoveDiary),
-                        )
-                      : const EmptyArea(),
-                ],
+                    isRemoveMode
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 3, left: 3),
+                            child: RemoveIcon(onTap: onTapRemoveDiary),
+                          )
+                        : const EmptyArea(),
+                  ],
+                ),
               ),
               SpaceHeight(height: tinySpace),
               Text(
@@ -692,8 +706,46 @@ class HistoryDiary extends StatelessWidget {
                   locale: context.locale.toString(),
                   dateTime: recordInfo?.diaryDateTime ?? DateTime.now(),
                 ),
-                style: const TextStyle(color: Colors.grey, fontSize: 11),
+                style: TextStyle(color: grey.original, fontSize: 11),
               ),
+            ],
+          )
+        : const EmptyArea();
+  }
+}
+
+class HistoryHashTag extends StatelessWidget {
+  HistoryHashTag({
+    super.key,
+    required this.isRemoveMode,
+    required this.recordInfo,
+  });
+
+  bool isRemoveMode;
+  RecordBox? recordInfo;
+
+  onTapRemoveHashTag() async {
+    recordInfo?.recordHashTagList = [];
+    await recordInfo?.save();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<HashTagClass> hashTagClassList =
+        getHashTagClassList(recordInfo?.recordHashTagList);
+    bool isShow = hashTagClassList.isNotEmpty;
+
+    return isShow
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DiaryHashTag(hashTagClassList: hashTagClassList, paddingTop: 10),
+              isRemoveMode
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: RemoveIcon(onTap: onTapRemoveHashTag),
+                    )
+                  : const EmptyArea(),
             ],
           )
         : const EmptyArea();

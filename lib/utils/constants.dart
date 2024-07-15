@@ -290,7 +290,8 @@ List<FilterClass> historyDisplayClassList = [
   FilterClass(id: FILITER.exercise.toString(), name: '운동 (기록)'),
   FilterClass(id: FILITER.exercise_2.toString(), name: '운동 (목표)'),
   FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
-  FilterClass(id: FILITER.diary.toString(), name: '일기'),
+  FilterClass(id: FILITER.diary.toString(), name: '일기 (글, 감정)'),
+  FilterClass(id: FILITER.diary_2.toString(), name: '일기 (해시태그)'),
 ];
 
 List<String> initOpenList = openClassList.map((e) => e.id).toList();

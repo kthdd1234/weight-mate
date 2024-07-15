@@ -70,7 +70,8 @@ enum FILITER {
   lifeStyle,
   diary,
   diet_2,
-  exercise_2
+  exercise_2,
+  diary_2,
 }
 
 enum RECORD { edit, history }

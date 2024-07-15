@@ -136,9 +136,9 @@ class _PremiumPageState extends State<PremiumPage> {
                         children: [
                           CommonText(text: '프리미엄 혜택', size: 14, isBold: true),
                           CommonText(
-                            text: '구매 복원하기',
+                            text: '구매 내역 가져오기',
                             size: 12,
-                            color: Colors.grey.shade400,
+                            color: grey.original,
                             onTap: onRestore,
                           ),
                         ],

@@ -18,6 +18,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -117,21 +118,28 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
                     ? ListView(
                         children: orderList
                             .map(
-                              (item) => Padding(
+                              (record) => Padding(
                                 padding: const EdgeInsets.only(bottom: 10),
                                 child: ContentsBox(
                                   contentsWidget: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       DiaryItemTitle(
-                                        dateTime: item.createDateTime,
-                                        emotion: item.emotion,
+                                        dateTime: record.createDateTime,
+                                        emotion: record.emotion,
                                         onEdit: onEdit,
                                         onRemove: onRemove,
                                       ),
                                       DiaryItemContent(
-                                        whiteText: item.whiteText,
-                                        whiteDateTime: item.diaryDateTime,
+                                        whiteText: record.whiteText,
+                                        whiteDateTime: record.diaryDateTime,
                                       ),
+                                      DiaryHashTag(
+                                        hashTagClassList: getHashTagClassList(
+                                          record.recordHashTagList,
+                                        ),
+                                      )
                                     ],
                                   ),
                                 ),
@@ -223,7 +231,7 @@ class DiaryItemTitle extends StatelessWidget {
                 CommonText(
                   text: e(locale: locale, dateTime: dateTime),
                   size: 14,
-                  color: Colors.grey,
+                  color: grey.original,
                   isNotTr: true,
                 )
               ],
@@ -264,17 +272,28 @@ class DiaryItemContent extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 5),
                 child: Text(whiteText!),
               ),
               CommonText(
                 text: hm(locale: locale, dateTime: whiteDateTime!),
-                size: 14,
-                color: Colors.grey,
+                size: 13,
+                color: grey.original,
                 isNotTr: true,
               )
             ],
           )
         : const EmptyArea();
+  }
+}
+
+class DiaryItemHashTag extends StatelessWidget {
+  const DiaryItemHashTag({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      children: [],
+    );
   }
 }
