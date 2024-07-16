@@ -21,6 +21,7 @@ import 'package:flutter_app_weight_management/services/google_drive_service.dart
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:hive/hive.dart';
@@ -344,11 +345,11 @@ class GoogleDriveService extends StatelessWidget {
           child: Center(
             child: Text(
               '연동 해제'.tr(),
-              style: const TextStyle(
-                color: Colors.grey,
+              style: TextStyle(
+                color: grey.original,
                 fontSize: 13,
                 decoration: TextDecoration.underline,
-                decorationColor: Colors.grey,
+                decorationColor: grey.original,
               ),
             ),
           ),
@@ -394,7 +395,7 @@ class GoogleDriveInfo extends StatelessWidget {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CommonText(text: title, size: 13, color: Colors.grey),
+          CommonText(text: title, size: 13, color: grey.original),
           SpaceWidth(width: 10),
           Expanded(
             child: Text(

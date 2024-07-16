@@ -7,12 +7,10 @@ class SearchItemBar extends StatefulWidget {
     required this.controller,
     required this.onSuffixIcon,
     required this.onEditingComplete,
-    required this.onChanged,
   });
 
   TextEditingController controller;
   Function() onSuffixIcon, onEditingComplete;
-  Function(String)? onChanged;
 
   @override
   State<SearchItemBar> createState() => _SearchItemBarState();
@@ -29,7 +27,6 @@ class _SearchItemBarState extends State<SearchItemBar> {
           controller: widget.controller,
           style: const TextStyle(
             color: textColor,
-            fontWeight: FontWeight.bold,
             fontSize: 13,
           ),
           cursorColor: Colors.indigo.shade200,
@@ -70,7 +67,6 @@ class _SearchItemBarState extends State<SearchItemBar> {
               borderRadius: BorderRadius.circular(100),
             ),
           ),
-          onChanged: widget.onChanged,
           onEditingComplete: widget.onEditingComplete,
         ),
       ),

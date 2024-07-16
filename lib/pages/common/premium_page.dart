@@ -99,10 +99,7 @@ class _PremiumPageState extends State<PremiumPage> {
                     CommonText(text: item.title, size: 14),
                     SpaceHeight(height: 3),
                     CommonText(
-                      text: item.subTitle,
-                      size: 11,
-                      color: Colors.grey,
-                    ),
+                        text: item.subTitle, size: 11, color: grey.original),
                   ],
                 )
               ],

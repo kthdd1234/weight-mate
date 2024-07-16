@@ -609,49 +609,83 @@ class HistoryTodo extends StatelessWidget {
       return order1.compareTo(order2);
     });
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
-      child: Column(
-        children: todoResultList
-            .map(
-              (data) => Column(
-                children: [
-                  SpaceHeight(height: 10),
-                  Row(
-                    children: [
-                      isRemoveMode
-                          ? Expanded(
-                              flex: 0,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 2, right: 7),
-                                child: RemoveIcon(
-                                    onTap: () => onTapRemoveAction(data)),
-                              ),
-                            )
-                          : const EmptyArea(),
-                      Expanded(
-                        flex: 0,
-                        child: onIcon(
-                            data['type'], data['isRecord'], data['title']),
-                      ),
-                      SpaceWidth(width: smallSpace),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          data['name'],
-                          style:
-                              const TextStyle(fontSize: 14, color: textColor),
+    return todoResultList.isNotEmpty
+        ? Column(
+            children: todoResultList
+                .map(
+                  (todo) => Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        isRemoveMode
+                            ? Expanded(
+                                flex: 0,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 2, right: 7),
+                                  child: RemoveIcon(
+                                      onTap: () => onTapRemoveAction(todo)),
+                                ),
+                              )
+                            : const EmptyArea(),
+                        Expanded(
+                          flex: 0,
+                          child: onIcon(
+                              todo['type'], todo['isRecord'], todo['title']),
                         ),
-                      ),
-                    ],
+                        SpaceWidth(width: smallSpace),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            todo['name'],
+                            style:
+                                const TextStyle(fontSize: 14, color: textColor),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            )
-            .toList(),
-      ),
-    );
+                )
+                .toList(),
+          )
+        : const EmptyArea();
+
+    // return todoResultList.isNotEmpty
+    //     ?
+    //     ListView.builder(
+    //         shrinkWrap: true,
+    //         itemBuilder: (context, index) {
+    //           Map<String, dynamic> todo = todoResultList![index];
+    //           return
+    // Row(
+    //             children: [
+    //               isRemoveMode
+    //                   ? Expanded(
+    //                       flex: 0,
+    //                       child: Padding(
+    //                         padding: const EdgeInsets.only(top: 2, right: 7),
+    //                         child: RemoveIcon(
+    //                             onTap: () => onTapRemoveAction(todo)),
+    //                       ),
+    //                     )
+    //                   : const EmptyArea(),
+    //               Expanded(
+    //                 flex: 0,
+    //                 child:
+    //                     onIcon(todo['type'], todo['isRecord'], todo['title']),
+    //               ),
+    //               SpaceWidth(width: smallSpace),
+    //               Expanded(
+    //                 flex: 1,
+    //                 child: Text(
+    //                   todo['name'],
+    //                   style: const TextStyle(fontSize: 14, color: textColor),
+    //                 ),
+    //               ),
+    //             ],
+    //           );
+    //         })
+    //     : const EmptyArea();
   }
 }
 
@@ -739,7 +773,10 @@ class HistoryHashTag extends StatelessWidget {
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              DiaryHashTag(hashTagClassList: hashTagClassList, paddingTop: 10),
+              DiaryHashTag(
+                hashTagClassList: hashTagClassList,
+                paddingTop: 10,
+              ),
               isRemoveMode
                   ? Padding(
                       padding: const EdgeInsets.only(top: 5),

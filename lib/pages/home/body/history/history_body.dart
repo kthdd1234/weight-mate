@@ -58,7 +58,7 @@ class HistoryListView extends StatelessWidget {
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().value();
 
-    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+    List<RecordBox> recordList = recordRepository.recordList;
     recordList = recordList
         .where((e) => e.createDateTime.year == historyDateTime.year)
         .toList();

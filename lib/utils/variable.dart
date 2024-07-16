@@ -419,40 +419,22 @@ Map<String, Map<String, Color>> goalButtonColors = {
   }
 };
 
-// List<String> initHashTagList = [
-//   '#살빠짐',
-//   '#오운완',
-//   '#치팅데이',
-//   '#꿀잠',
-//   '#홈트',
-//   '#산책',
-//   '#폭식',
-//   '#간헐적단식',
-//   '#생리',
-//   '#감기',
-//   '#스트레스',
-//   '#두통',
-//   '#증량',
-//   '#체함',
-//   '#변기',
-// ];
-
 List<HashTagClass> initHashTagList = [
-  HashTagClass(id: uuid(), text: '살빠짐', colorName: '남색'),
-  HashTagClass(id: uuid(), text: '오운완', colorName: '남색'),
-  HashTagClass(id: uuid(), text: '치팅데이', colorName: '남색'),
-  HashTagClass(id: uuid(), text: '꿀잠', colorName: '청록색'),
-  HashTagClass(id: uuid(), text: '홈트', colorName: '청록색'),
-  HashTagClass(id: uuid(), text: '산책', colorName: '청록색'),
-  HashTagClass(id: uuid(), text: '폭식', colorName: '파란색'),
-  HashTagClass(id: uuid(), text: '간헐적단식', colorName: '파란색'),
-  HashTagClass(id: uuid(), text: '생리', colorName: '파란색'),
-  HashTagClass(id: uuid(), text: '감기', colorName: '빨간색'),
-  HashTagClass(id: uuid(), text: '스트레스', colorName: '빨간색'),
-  HashTagClass(id: uuid(), text: '두통', colorName: '빨간색'),
-  HashTagClass(id: uuid(), text: '증량', colorName: '보라색'),
-  HashTagClass(id: uuid(), text: '체함', colorName: '보라색'),
-  HashTagClass(id: uuid(), text: '변비', colorName: '보라색'),
+  HashTagClass(id: '살빠짐', text: '살빠짐', colorName: '청록색'),
+  HashTagClass(id: '오운완', text: '오운완', colorName: '청록색'),
+  HashTagClass(id: '치팅데이', text: '치팅데이', colorName: '청록색'),
+  HashTagClass(id: '꿀잠', text: '꿀잠', colorName: '청록색'),
+  HashTagClass(id: '홈트', text: '홈트', colorName: '청록색'),
+  HashTagClass(id: '산책', text: '산책', colorName: '청록색'),
+  HashTagClass(id: '폭식', text: '폭식', colorName: '파란색'),
+  HashTagClass(id: '간헐적단식', text: '간헐적단식', colorName: '파란색'),
+  HashTagClass(id: '생리', text: '생리', colorName: '파란색'),
+  HashTagClass(id: '감기', text: '감기', colorName: '빨간색'),
+  HashTagClass(id: '스트레스', text: '스트레스', colorName: '빨간색'),
+  HashTagClass(id: '두통', text: '두통', colorName: '빨간색'),
+  HashTagClass(id: '증량', text: '증량', colorName: '보라색'),
+  HashTagClass(id: '체함', text: '체함', colorName: '보라색'),
+  HashTagClass(id: '변비', text: '변비', colorName: '보라색'),
 ];
 
 final indigo = ColorClass(

@@ -126,14 +126,14 @@ class _TodoChartPageState extends State<TodoChartPage> {
                                   CommonIcon(
                                     icon: todoData[type]!.icon,
                                     size: 20,
-                                    color: Colors.grey,
+                                    color: grey.original,
                                   ),
                                   SpaceHeight(height: 10),
                                   CommonText(
                                     text: '기록이 없어요.',
                                     size: 15,
                                     isCenter: true,
-                                    color: Colors.grey,
+                                    color: grey.original,
                                   ),
                                   SpaceHeight(height: 20),
                                 ],
@@ -248,41 +248,11 @@ class ColumnContainer extends StatelessWidget {
             ))
         .toList();
 
-    // List<Map<String, dynamic>>? actionList = actions
-    //     ?.where(
-    //       (item1) => item1['isRecord'] == true && item1['type'] == type,
-    //     )
-    //     .toList();
-
-    // List<RecordLabel>
-    //     .map((item2) => RecordLabel(
-    //           type: type,
-    //           title: item2['title'],
-    //           text: item2['name'],
-    //           icon: categoryIcons[item2['title']]!,
-    //           dietExerciseRecordDateTime:
-    //               item2['dietExerciseRecordDateTime'],
-    //         ))
-    //     .toList() ??
-    // [];
-
-    // recordActionList.sort((itemA, itemB) =>
-    //     categoryOrders[itemA.title]!.compareTo(categoryOrders[itemB.title]!));
-
-    // recordActionList.sort((act1, act2) {
-    //   DateTime dateTime1 =
-    //       act1.dietExerciseRecordDateTime ?? DateTime(3000, 1, 1);
-    //   DateTime dateTime2 =
-    //       act2.dietExerciseRecordDateTime ?? DateTime(3000, 1, 2);
-
-    //   return dateTime1.compareTo(dateTime2);
-    // });
-
     dateTimeTitle({required String text, required Color color}) {
       return CommonText(
         text: text,
         isNotTr: true,
-        size: 11,
+        size: 13,
         isCenter: true,
         color: color,
       );
@@ -310,7 +280,7 @@ class ColumnContainer extends StatelessWidget {
                     ),
                     dateTimeTitle(
                       text: '(${eShort(locale: locale, dateTime: dateTime)})',
-                      color: Colors.grey.shade600,
+                      color: grey.original,
                     )
                   ],
                 ),
@@ -351,7 +321,7 @@ class RecordLabel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 7),
+            padding: const EdgeInsets.only(right: 10, top: 2),
             child: CommonIcon(
               icon: icon,
               size: 11,
@@ -363,7 +333,7 @@ class RecordLabel extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(text, style: const TextStyle(fontSize: 13)),
+                Text(text, style: const TextStyle(fontSize: 14)),
                 dietExerciseRecordDateTime != null
                     ? Padding(
                         padding: const EdgeInsets.only(top: 2),
@@ -372,8 +342,8 @@ class RecordLabel extends StatelessWidget {
                             locale: locale,
                             dateTime: dietExerciseRecordDateTime!,
                           ),
-                          size: 10,
-                          color: Colors.grey,
+                          size: 11,
+                          color: grey.original,
                           isNotTop: true,
                           isNotTr: true,
                         ),

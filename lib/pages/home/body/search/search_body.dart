@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchItemBar.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchItemList.dart';
+import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchHashTag.dart';
+import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchItemContainer.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:provider/provider.dart';
@@ -16,19 +19,19 @@ class SearchBody extends StatefulWidget {
 class _SearchBodyState extends State<SearchBody> {
   TextEditingController searchKeywordController = TextEditingController();
 
-  onChanged(_) {
+  onEditingComplete() {
+    FocusScope.of(context).unfocus();
     setState(() {});
   }
 
-  onEditingComplete() {
-    // context.read<KeywordProvider>().changeKeyword(textEditingController.text);
-    FocusScope.of(context).unfocus();
+  onHashTag(String text) {
+    searchKeywordController.text = text;
+    setState(() {});
   }
 
   onSuffixIcon() {
     if (searchKeywordController.text != '') {
       searchKeywordController.text = '';
-
       setState(() {});
     } else {
       // showDialog(
@@ -55,14 +58,18 @@ class _SearchBodyState extends State<SearchBody> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SearchItemBar(
                 controller: searchKeywordController,
-                onChanged: onChanged,
                 onEditingComplete: onEditingComplete,
                 onSuffixIcon: onSuffixIcon,
               ),
-              SearchItemList(controller: searchKeywordController),
+              SearchHashTag(
+                controller: searchKeywordController,
+                onHashTag: onHashTag,
+              ),
+              SearchItemContainer(controller: searchKeywordController),
             ],
           ),
         ),

@@ -212,13 +212,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (hashTagList == null) {
-      user.hashTagList = initHashTagList
-          .map((hashTag) => {
-                'id': hashTag.id,
-                'text': hashTag.text,
-                'colorName': hashTag.colorName
-              })
-          .toList();
+      user.hashTagList = getHashTagMapList(initHashTagList);
     }
 
     userRepository.user.save();
@@ -289,10 +283,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         ),
         label: '그래프'.tr(),
       ),
-      // BottomNavigationBarItem(
-      //   icon: const Icon(Icons.search_rounded),
-      //   label: '검색'.tr(),
-      // ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.search_rounded),
+        label: '검색'.tr(),
+      ),
       BottomNavigationBarItem(
         icon: const Icon(Icons.settings_rounded),
         label: '설정'.tr(),
@@ -328,7 +322,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       RecordBody(),
       HistoryBody(),
       GraphBody(),
-      // SearchBody(),
+      SearchBody(),
       SettingBody()
     ];
 

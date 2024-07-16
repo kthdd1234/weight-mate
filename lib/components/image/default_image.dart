@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:shimmer/shimmer.dart';
 
 extension ImageExtension on num {
@@ -41,7 +42,7 @@ class DefaultImage extends StatelessWidget {
                     height: height,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
-                      color: Colors.grey,
+                      color: grey.original,
                     ),
                   ),
                 );

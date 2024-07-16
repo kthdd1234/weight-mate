@@ -251,7 +251,7 @@ class HashTagList extends StatelessWidget {
       children: [
         Expanded(
           child: Wrap(
-            spacing: 5,
+            spacing: 7,
             runSpacing: 7,
             children: hashTagClassList
                 .map((hashTag) => HashTag(
@@ -260,6 +260,7 @@ class HashTagList extends StatelessWidget {
                       colorName: hashTag.colorName,
                       isFilled: selectedHashTagList.contains(hashTag.id),
                       isEditMode: isEditMode,
+                      isOutline: true,
                       onItem: onItem,
                       onRemove: onRemove,
                     ))
@@ -282,10 +283,12 @@ class HashTag extends StatelessWidget {
     required this.isEditMode,
     required this.onItem,
     required this.onRemove,
+    this.isOutline,
   });
 
   String id, text, colorName;
   bool isFilled, isEditMode;
+  bool? isOutline;
   Function(String id) onItem, onRemove;
 
   @override
@@ -311,19 +314,23 @@ class HashTag extends StatelessWidget {
         InkWell(
           onTap: () => onItem(id),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-            decoration: BoxDecoration(
-              color: isFilled ? color.s50 : null,
-              border: Border.all(
-                width: 0.5,
-                color: isFilled ? color.s50 : grey.s300,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
+            padding: isOutline == true
+                ? const EdgeInsets.symmetric(vertical: 3, horizontal: 10)
+                : null,
+            decoration: isOutline == true
+                ? BoxDecoration(
+                    color: isFilled ? color.s50 : null,
+                    border: Border.all(
+                      width: 0.5,
+                      color: isFilled ? color.s50 : grey.s300,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  )
+                : null,
             child: Text(
               '#$text',
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 14,
                 color: isFilled ? color.original : grey.original,
               ),
             ),

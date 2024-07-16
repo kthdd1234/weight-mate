@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CommonCheckBox extends StatelessWidget {
@@ -29,7 +30,7 @@ class CommonCheckBox extends StatelessWidget {
         : isOulined == true
             ? Icons.check_box
             : Icons.check_box_outline_blank_rounded;
-    Color color = isCheck ? checkColor : Colors.grey.shade300;
+    Color color = isCheck ? checkColor : grey.s300;
 
     return InkWell(
       onTap: () => onTap(id: id, newValue: !isCheck),

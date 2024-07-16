@@ -359,7 +359,7 @@ class _SettingBodyState extends State<SettingBody> {
                             fontWeight: isLanguage
                                 ? FontWeight.bold
                                 : FontWeight.normal,
-                            color: isLanguage ? themeColor : Colors.grey,
+                            color: isLanguage ? themeColor : grey.original,
                           ),
                         ),
                         isLanguage

@@ -334,9 +334,10 @@ class DiaryTitle extends StatelessWidget {
                 dateTime: importDateTime,
               ),
               isNotTr: true,
-              size: 13,
-              color: themeColor,
+              size: 14,
+              color: textColor,
             ),
+            SpaceHeight(height: 2),
             CommonText(
               text: e(
                 locale: context.locale.toString(),
@@ -344,7 +345,7 @@ class DiaryTitle extends StatelessWidget {
               ),
               isNotTr: true,
               size: 13,
-              color: Colors.grey,
+              color: grey.original,
             )
           ],
         ),
@@ -352,7 +353,7 @@ class DiaryTitle extends StatelessWidget {
         CommonIcon(
           icon: Icons.more_vert_rounded,
           size: 20,
-          color: Colors.grey,
+          color: grey.original,
           onTap: onTapMore,
         )
       ],
@@ -407,7 +408,7 @@ class DiaryHashTag extends StatelessWidget {
         ? Padding(
             padding: EdgeInsets.only(top: paddingTop ?? 10),
             child: Wrap(
-                spacing: 5,
+                spacing: 7,
                 runSpacing: 7,
                 children: hashTagClassList
                     .map((hashTag) => HashTag(

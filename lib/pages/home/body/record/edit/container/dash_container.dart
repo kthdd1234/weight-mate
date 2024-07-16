@@ -79,23 +79,3 @@ class DottedBorderContainer extends StatelessWidget {
     );
   }
 }
-
-
-
-// Expanded(
-//       child: Container(
-//         height: height - (adjustHeight ?? 0),
-//         decoration: BoxDecoration(
-//           color: whiteBgBtnColor,
-//           borderRadius: BorderRadius.all(
-//             Radius.circular(radius),
-//           ),
-//         ),
-//         child: CommonText(
-//           text: text,
-//           color: Colors.grey,
-//           size: 13,
-//           isCenter: true,
-//         ),
-//       ),
-//     );

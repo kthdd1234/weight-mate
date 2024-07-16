@@ -245,7 +245,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                 locale: context.locale.toString(),
                                 dateTime: targetDateTime ?? DateTime.now(),
                               ),
-                              size: 12,
+                              size: 13,
                               isNotTr: true,
                               isCenter: true,
                             ),
@@ -264,7 +264,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                 ? Padding(
                                     padding: const EdgeInsets.only(top: 10),
                                     child: Wrap(
-                                      spacing: 5,
+                                      spacing: 7,
                                       runSpacing: 7,
                                       children: selectedHashTagList
                                           .map((hashTag) => HashTag(
@@ -294,9 +294,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                                 isDense: true,
                                 border: InputBorder.none,
                                 hintText: '오늘 다이어트를 하면서 어땠는지 기록해보아요 :D'.tr(),
-                                hintStyle: TextStyle(
-                                  color: Colors.grey.shade300,
-                                ),
+                                hintStyle: TextStyle(color: grey.original),
                               ),
                               onChanged: onChanged,
                             )

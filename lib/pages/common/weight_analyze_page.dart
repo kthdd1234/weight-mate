@@ -513,12 +513,7 @@ class ContentsTitle extends StatelessWidget {
             children: [
               CommonSvg(width: 15, name: svg),
               SpaceWidth(width: 7),
-              CommonText(
-                text: title,
-                size: 14,
-                isBold: true,
-                nameArgs: nameArgs,
-              ),
+              CommonText(text: title, size: 14, nameArgs: nameArgs),
             ],
           ),
           subTitle != null
@@ -528,13 +523,13 @@ class ContentsTitle extends StatelessWidget {
                     children: [
                       CommonIcon(
                         icon: Icons.keyboard_arrow_down_rounded,
-                        size: 14,
-                        color: Colors.grey,
+                        size: 15,
+                        color: grey.original,
                       ),
                       CommonText(
-                        color: Colors.grey,
+                        color: grey.original,
                         text: subTitle!,
-                        size: 12,
+                        size: 13,
                         isNotTr: true,
                       ),
                     ],
@@ -572,8 +567,8 @@ class CompareItemCell extends StatelessWidget {
                 CommonText(text: title, size: 12),
                 CommonText(
                   text: subTitle ?? '',
-                  size: 10,
-                  color: Colors.grey,
+                  size: 11,
+                  color: grey.original,
                   isNotTr: true,
                 ),
               ],

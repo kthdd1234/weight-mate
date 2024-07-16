@@ -143,7 +143,7 @@ class _CommonTitleState extends State<CommonTitle> {
           ? y(locale: locale, dateTime: historyDateTime)
           : ym(locale: locale, dateTime: historyDateTime),
       '체중 변화',
-      // '검색',
+      '검색',
       '설정'
     ][widget.index];
     String graphType = user.graphType ?? eGraphDefault;
@@ -290,14 +290,14 @@ class _CommonTitleState extends State<CommonTitle> {
       Icons.keyboard_arrow_down_rounded,
       Icons.keyboard_arrow_down_rounded,
       null,
-      // null,
+      null,
       null
     ];
     List<Null Function()?> onTapList = [
       onTapRecordTitle,
       onTapHistoryTitle,
       null,
-      // null,
+      null,
       null
     ];
 
@@ -399,9 +399,9 @@ class _CommonTitleState extends State<CommonTitle> {
                           ),
                         )
                       : const EmptyArea(),
-                  // isSearch
-                  //     ? CommonTag(color: 'whiteIndigo', text: '표시 6')
-                  //     : EmptyArea(),
+                  isSearch
+                      ? CommonTag(color: 'whiteIndigo', text: '표시 9')
+                      : const EmptyArea(),
                 ],
               )
             ],
@@ -578,9 +578,9 @@ class CalendarBar extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-                daysOfWeekStyle: const DaysOfWeekStyle(
-                  weekdayStyle: TextStyle(color: Colors.grey, fontSize: 13),
-                  weekendStyle: TextStyle(color: Colors.grey, fontSize: 13),
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(color: grey.original, fontSize: 13),
+                  weekendStyle: TextStyle(color: grey.original, fontSize: 13),
                 ),
                 firstDay: DateTime.utc(2010, 10, 16),
                 lastDay: DateTime.now(),
@@ -789,7 +789,7 @@ class DisplayListContents extends StatelessWidget {
                               ),
                               classList.first.id == data.id && isRequiredWeight
                                   ? Padding(
-                                      padding: const EdgeInsets.only(right: 3),
+                                      padding: const EdgeInsets.only(left: 5),
                                       child: CommonText(
                                         text: '(필수)',
                                         size: 10,
@@ -810,10 +810,8 @@ class DisplayListContents extends StatelessWidget {
               )),
               Padding(
                 padding: const EdgeInsets.only(top: 10),
-                child: Text(
-                  bottomText,
-                  style: TextStyle(fontSize: 10, color: Colors.grey.shade700),
-                ),
+                child: Text(bottomText,
+                    style: TextStyle(fontSize: 10, color: grey.original)),
               )
             ],
           ),
