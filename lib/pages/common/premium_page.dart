@@ -88,7 +88,9 @@ class _PremiumPageState extends State<PremiumPage> {
     List<Widget> premiumBenefitsWidgetList = premiumBenefitsClassList
         .map(
           (item) => Padding(
-            padding: const EdgeInsets.only(bottom: 25),
+            padding: EdgeInsets.only(
+              top: item.svgName == 'premium-free' ? 15 : 25,
+            ),
             child: Row(
               children: [
                 CommonSvg(name: item.svgName, width: 45),
@@ -99,7 +101,10 @@ class _PremiumPageState extends State<PremiumPage> {
                     CommonText(text: item.title, size: 14),
                     SpaceHeight(height: 3),
                     CommonText(
-                        text: item.subTitle, size: 11, color: grey.original),
+                      text: item.subTitle,
+                      size: 11,
+                      color: grey.original,
+                    ),
                   ],
                 )
               ],
@@ -117,6 +122,7 @@ class _PremiumPageState extends State<PremiumPage> {
             style: const TextStyle(fontSize: 20, color: textColor),
           ),
           backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
           elevation: 0.0,
         ),
         body: SafeArea(
@@ -124,58 +130,82 @@ class _PremiumPageState extends State<PremiumPage> {
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [
-                ContentsBox(
-                  contentsWidget: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          CommonText(text: '프리미엄 혜택', size: 14, isBold: true),
-                          CommonText(
-                            text: '구매 내역 가져오기',
-                            size: 12,
-                            color: grey.original,
-                            onTap: onRestore,
-                          ),
-                        ],
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: ContentsBox(
+                        contentsWidget: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                CommonText(
+                                    text: '프리미엄 혜택', size: 14, isBold: true),
+                                CommonText(
+                                  text: '구매 내역 가져오기',
+                                  size: 12,
+                                  color: grey.original,
+                                  onTap: onRestore,
+                                ),
+                              ],
+                            ),
+                            Column(children: premiumBenefitsWidgetList),
+                          ],
+                        ),
                       ),
-                      SpaceHeight(height: 15),
-                      Column(children: premiumBenefitsWidgetList),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          isPremium
-                              ? Row(
-                                  children: [
-                                    CommonSvg(name: 'premium-badge', width: 16),
-                                    SpaceWidth(width: 5),
-                                    CommonText(text: '구매가 완료되었어요 :D', size: 14),
-                                  ],
-                                )
-                              : ExpandedButtonHori(
-                                  borderRadius: 5,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 15),
-                                  imgUrl: 'assets/images/t-23.png',
-                                  text: '구매하기',
-                                  nameArgs: {
-                                    "price":
-                                        package?.storeProduct.priceString ??
-                                            '없음'
-                                  },
-                                  onTap: onPurchase,
-                                )
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
+                ),
+                PremiumPurchaseButton(
+                  isPremium: isPremium,
+                  package: package,
+                  onPurchase: onPurchase,
                 ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class PremiumPurchaseButton extends StatelessWidget {
+  PremiumPurchaseButton({
+    super.key,
+    required this.isPremium,
+    required this.package,
+    required this.onPurchase,
+  });
+
+  final bool isPremium;
+  final Package? package;
+  final Function() onPurchase;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        isPremium
+            ? Row(
+                children: [
+                  CommonSvg(name: 'premium-badge', width: 16),
+                  SpaceWidth(width: 5),
+                  CommonText(text: '구매가 완료되었어요 :D', size: 14),
+                ],
+              )
+            : ExpandedButtonHori(
+                borderRadius: 5,
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                imgUrl: 'assets/images/t-23.png',
+                text: '구매하기',
+                nameArgs: {"price": package?.storeProduct.priceString ?? '없음'},
+                onTap: onPurchase,
+              )
+      ],
     );
   }
 }

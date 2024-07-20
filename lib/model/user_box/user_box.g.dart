@@ -51,13 +51,15 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       hashTagList: (fields[31] as List?)
           ?.map((dynamic e) => (e as Map).cast<String, String>())
           .toList(),
+      searchDisplayList: (fields[32] as List?)?.cast<String>(),
+      appStartIndex: fields[33] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(32)
+      ..writeByte(34)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -121,7 +123,11 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(30)
       ..write(obj.cutomGraphEndDateTime)
       ..writeByte(31)
-      ..write(obj.hashTagList);
+      ..write(obj.hashTagList)
+      ..writeByte(32)
+      ..write(obj.searchDisplayList)
+      ..writeByte(33)
+      ..write(obj.appStartIndex);
   }
 
   @override

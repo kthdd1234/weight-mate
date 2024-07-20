@@ -38,6 +38,8 @@ class UserBox extends HiveObject {
     this.cutomGraphStartDateTime,
     this.cutomGraphEndDateTime,
     this.hashTagList,
+    this.searchDisplayList,
+    this.appStartIndex,
   });
 
   @HiveField(0)
@@ -135,6 +137,12 @@ class UserBox extends HiveObject {
 
   @HiveField(31)
   List<Map<String, String>>? hashTagList;
+
+  @HiveField(32)
+  List<String>? searchDisplayList;
+
+  @HiveField(33)
+  int? appStartIndex;
 
   @override
   String toString() {

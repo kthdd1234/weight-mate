@@ -33,9 +33,10 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       topFile: fields[11] as Uint8List?,
       dietRecordOrderList: (fields[12] as List?)?.cast<String>(),
       exerciseRecordOrderList: (fields[13] as List?)?.cast<String>(),
-    )..recordHashTagList = (fields[14] as List?)
-        ?.map((dynamic e) => (e as Map).cast<String, String>())
-        .toList();
+      recordHashTagList: (fields[14] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, String>())
+          .toList(),
+    );
   }
 
   @override

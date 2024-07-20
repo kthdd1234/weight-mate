@@ -7,6 +7,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
@@ -176,59 +177,17 @@ class EditPicture extends StatelessWidget {
       closeDialog(context);
 
       XFile? xFileData = await setImagePicker(source: source, pos: pos);
-
       if (isPremium == false && pictureLength > 0) {
-        onPremium() {
-          Navigator.pushNamed(context, '/premium-page');
-        }
-
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            insetPadding: const EdgeInsets.symmetric(horizontal: 30),
-            shape: containerBorderRadious,
-            backgroundColor: whiteBgBtnColor,
-            title: DialogTitle(
-              text: "사진 추가 제한",
-              onTap: () => closeDialog(context),
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 166,
-              child: Column(
-                children: [
-                  ContentsBox(
-                    contentsWidget: Column(
-                      children: [
-                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
-                        SpaceHeight(height: 3),
-                        CommonText(
-                          text: '사진을 4장까지 추가 할 수 있어요.',
-                          size: 14,
-                          isCenter: true,
-                        ),
-                        SpaceHeight(height: 3),
-                        CommonText(
-                            text: '(미구매 시 1장까지만 추가 가능)',
-                            size: 14,
-                            isCenter: true),
-                      ],
-                    ),
-                  ),
-                  SpaceHeight(height: 10),
-                  Row(
-                    children: [
-                      ExpandedButtonHori(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        imgUrl: 'assets/images/t-23.png',
-                        text: '프리미엄 구매 페이지로 이동',
-                        onTap: onPremium,
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
+          builder: (context) => CommonPopup(
+            title: "사진 추가 제한",
+            height: 166,
+            buttonText: '프리미엄 구매 페이지로 이동',
+            text1: '프리미엄 구매 시',
+            text2: '사진을 4장까지 추가 할 수 있어요.',
+            text3: '(미구매 시 1장까지만 추가 가능)',
+            onTap: () => Navigator.pushNamed(context, '/premium-page'),
           ),
         );
         return;
@@ -236,7 +195,6 @@ class EditPicture extends StatelessWidget {
 
       if (xFileData != null) {
         setPickedImage(pos: pos, xFile: xFileData);
-        // showDialogPopup(title: '🖼️ 사진 기록 완료!');
         return;
       }
     }

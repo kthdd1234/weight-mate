@@ -124,7 +124,7 @@ class ScreenLockContents extends StatelessWidget {
 
     passwordWidgets() {
       widget(int index) {
-        final color = passwords[index] == '' ? typeBackgroundColor : textColor;
+        final color = passwords[index] == '' ? typeBackgroundColor : themeColor;
 
         return Row(
           children: [

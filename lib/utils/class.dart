@@ -437,3 +437,23 @@ class HashTagClass {
 
   String id, text, colorName;
 }
+
+class AppBarInfoClass {
+  AppBarInfoClass({
+    required this.title,
+    this.isCenter,
+    this.actions,
+  });
+
+  String title;
+  bool? isCenter;
+  List<Widget>? actions;
+}
+
+class BNClass {
+  BNClass({required this.index, required this.name, required this.icon});
+
+  int index;
+  String name;
+  IconData icon;
+}

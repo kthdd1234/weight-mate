@@ -1,7 +1,14 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
 
@@ -368,9 +375,14 @@ List<Map<String, String>> fontFamilyList = [
 ];
 
 String fWeight = FILITER.weight.toString();
+String fPicture = FILITER.picture.toString();
 String fDiet = FILITER.diet.toString();
 String fExercise = FILITER.exercise.toString();
+String fDiet_2 = FILITER.diet_2.toString();
+String fExercise_2 = FILITER.exercise_2.toString();
 String fLife = FILITER.lifeStyle.toString();
+String fDiary = FILITER.diary.toString();
+String fDiary_2 = FILITER.diary_2.toString();
 
 List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
@@ -386,7 +398,7 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
     svgName: 'premium-category-detail',
     title: '좀 더 자세한 통계 기능을 제공해드려요',
-    subTitle: '체중 통계표, 체중 분석표, 기록 모아보기, 실천 모아보기 등',
+    subTitle: '체중 통계/분석표, 기록 모아보기, 실천 모아보기 등',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-photos-four',
@@ -395,8 +407,18 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   ),
   PremiumBenefitsClass(
     svgName: 'custom-graph',
-    title: '체중 그래프에서 원하는 기간을 설정할 수 있어요',
+    title: '체중 그래프 기간을 설정 할 수 있어요',
     subTitle: '시작일/종료일을 설정해서 원하는 기간을 한눈에 보세요!',
+  ),
+  PremiumBenefitsClass(
+    svgName: 'premium-search',
+    title: '키워드 검색 기능을 제공해드려요',
+    subTitle: '검색을 통해 이전의 기록을 빠르게 확인해보세요!',
+  ),
+  PremiumBenefitsClass(
+    svgName: 'app-start',
+    title: '앱 시작 시 원하는 화면을 바로 볼 수 있어요',
+    subTitle: '기록, 히스토리, 그래프, 검색 화면 중 한 곳 선택!',
   ),
 ];
 
@@ -501,8 +523,8 @@ final brown = ColorClass(
   colorName: '갈색',
   original: Colors.brown,
   s50: Colors.brown.shade50,
-  s100: Colors.brown.shade100,
-  s200: Colors.brown.shade200,
+  s100: Colors.brown.shade100, // 215, 204, 200
+  s200: Colors.brown.shade200, // 188, 170, 164
   s300: Colors.brown.shade300,
   s400: Colors.brown.shade400,
 ); //
@@ -550,10 +572,10 @@ final lime = ColorClass(
 final cyan = ColorClass(
   colorName: '민트색',
   original: Colors.cyan,
-  s50: Colors.cyan.shade50,
-  s100: Colors.cyan.shade100,
+  s50: Colors.cyan.shade50, // 224, 247, 250
+  s100: Colors.cyan.shade100, // 178, 235, 242
   s200: Colors.cyan.shade200, // 128, 222, 234
-  s300: Colors.cyan.shade300,
+  s300: Colors.cyan.shade300, // 77, 208, 225
   s400: Colors.cyan.shade400, // 38, 198, 218
 ); //
 
@@ -570,7 +592,7 @@ final ember = ColorClass(
 final blueGrey = ColorClass(
   colorName: '청회색',
   original: Colors.blueGrey,
-  s50: Colors.blueGrey.shade50,
+  s50: Colors.blueGrey.shade50, // 236, 239, 241
   s100: Colors.blueGrey.shade100, // 207, 216, 200
   s200: Colors.blueGrey.shade200, // 176, 190, 197
   s300: Colors.blueGrey.shade300,
@@ -599,3 +621,40 @@ final colorList = [
   purple,
   blueGrey
 ];
+
+List<Widget> bodyList = const [
+  RecordBody(),
+  HistoryBody(),
+  GraphBody(),
+  SearchBody(),
+  SettingBody()
+];
+
+List<BNClass> bnList = [
+  BNClass(index: 0, name: '기록', icon: Icons.edit_rounded),
+  BNClass(index: 1, name: '히스토리', icon: Icons.view_timeline_outlined),
+  BNClass(index: 2, name: '그래프', icon: FontAwesomeIcons.chartLine),
+  BNClass(index: 3, name: '검색', icon: Icons.search_rounded),
+  BNClass(index: 4, name: '설정', icon: Icons.settings_rounded),
+];
+
+Map<int, BottomNavigationEnum> indexToBn = {
+  0: BottomNavigationEnum.record,
+  1: BottomNavigationEnum.history,
+  2: BottomNavigationEnum.graph,
+  3: BottomNavigationEnum.search,
+  4: BottomNavigationEnum.setting
+};
+
+Map<int, String> indexToName = {0: '기록', 1: '히스토리', 2: '그래프', 3: '검색', 4: '설정'};
+List<BottomNavigationBarItem> items = bnList
+    .map(
+      (bn) => BottomNavigationBarItem(
+        icon: Padding(
+          padding: EdgeInsets.only(bottom: bn.index == 2 ? 3 : 0),
+          child: Icon(bn.icon, size: bn.index == 2 ? 17 : null),
+        ),
+        label: bn.name.tr(),
+      ),
+    )
+    .toList();

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class SearchItemBar extends StatefulWidget {
-  SearchItemBar({
+class SearchInputBar extends StatelessWidget {
+  SearchInputBar({
     super.key,
     required this.controller,
     required this.onSuffixIcon,
@@ -13,18 +15,13 @@ class SearchItemBar extends StatefulWidget {
   Function() onSuffixIcon, onEditingComplete;
 
   @override
-  State<SearchItemBar> createState() => _SearchItemBarState();
-}
-
-class _SearchItemBarState extends State<SearchItemBar> {
-  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 7, right: 7),
+      padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
       child: SizedBox(
         height: 40,
         child: TextFormField(
-          controller: widget.controller,
+          controller: controller,
           style: const TextStyle(
             color: textColor,
             fontSize: 13,
@@ -34,7 +31,7 @@ class _SearchItemBarState extends State<SearchItemBar> {
           decoration: InputDecoration(
             isDense: true,
             contentPadding: const EdgeInsets.only(top: 5),
-            hintText: '키워드 또는 #해시태그 검색',
+            hintText: '키워드 검색',
             hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
             filled: true,
             fillColor: Colors.white,
@@ -43,23 +40,23 @@ class _SearchItemBarState extends State<SearchItemBar> {
                 width: 25,
                 height: 25,
                 decoration: BoxDecoration(
-                  color: Colors.indigo.shade100,
+                  color: controller.text == '' ? indigo.s100 : indigo.s300,
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: const Icon(
                   Icons.search_rounded,
                   color: Colors.white,
-                  size: 14,
+                  size: 13,
                 ),
               ),
             ),
             suffixIcon: GestureDetector(
-              onTap: widget.onSuffixIcon,
+              onTap: onSuffixIcon,
               child: Icon(
-                widget.controller.text != ''
+                controller.text != ''
                     ? Icons.close_rounded
                     : Icons.info_outline_rounded,
-                color: Colors.grey.shade300,
+                color: controller.text == '' ? grey.s300 : grey.s400,
               ),
             ),
             border: OutlineInputBorder(
@@ -67,7 +64,7 @@ class _SearchItemBarState extends State<SearchItemBar> {
               borderRadius: BorderRadius.circular(100),
             ),
           ),
-          onEditingComplete: widget.onEditingComplete,
+          onEditingComplete: onEditingComplete,
         ),
       ),
     );

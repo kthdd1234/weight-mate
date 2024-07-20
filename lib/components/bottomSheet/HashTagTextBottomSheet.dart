@@ -105,7 +105,7 @@ class _HashTagTextBottomSheetState extends State<HashTagTextBottomSheet> {
               SpaceHeight(height: 17.5),
               CommonOutlineInputField(
                 controller: controller,
-                hintText: '단어를 입력해주세요',
+                hintText: '키워드를 입력해주세요',
                 selectedColor: getColorClass(selectedColorName).s200,
                 onSuffixIcon: onEditingComplete,
                 onEditingComplete: onEditingComplete,

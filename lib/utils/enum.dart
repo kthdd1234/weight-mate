@@ -38,6 +38,7 @@ enum MoreSeeItem {
   appLock,
   appReset,
   appLang,
+  appStart,
   appVersion,
   appEval,
   appShare,
@@ -79,6 +80,8 @@ enum RECORD { edit, history }
 enum CalendarMaker { sticker, weight }
 
 enum HistoryFilter { recent, past }
+
+enum SearchFilter { recent, past }
 
 enum HistoryFormat { list, calendar }
 

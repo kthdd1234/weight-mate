@@ -1,30 +1,30 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
-import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
+import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/display/DisplayList.dart';
+import 'package:flutter_app_weight_management/components/display/HistoryDisplayList.dart';
+import 'package:flutter_app_weight_management/components/display/SearchDisplayList.dart';
+import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
+import 'package:flutter_app_weight_management/provider/search_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -130,10 +130,14 @@ class _CommonTitleState extends State<CommonTitle> {
     DateTime historyDateTime =
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
-        context.watch<HistoryFilterProvider>().value();
+        context.watch<HistoryFilterProvider>().historyFilter;
+    SearchFilter searchFilter =
+        context.watch<SearchFilterProvider>().searchFilter;
     bool isPremium = context.watch<PremiumProvider>().premiumValue();
+
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
+    List<String>? searchDisplayList = user.searchDisplayList;
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
 
@@ -201,9 +205,15 @@ class _CommonTitleState extends State<CommonTitle> {
       );
     }
 
-    onTapChangeYear() {
+    onTapHistoryOrder() {
       context.read<HistoryFilterProvider>().setHistoryFilter(
             nextHistoryFilter[historyFilter]!,
+          );
+    }
+
+    onTapSearchOrder() {
+      context.read<SearchFilterProvider>().setSearchFilter(
+            nextSearchFilter[searchFilter]!,
           );
     }
 
@@ -236,54 +246,26 @@ class _CommonTitleState extends State<CommonTitle> {
       if (type == eGraphCustom && isPremium == false) {
         return showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            insetPadding: const EdgeInsets.symmetric(horizontal: 30),
-            shape: containerBorderRadious,
-            backgroundColor: whiteBgBtnColor,
-            title: DialogTitle(
-              text: "커스텀 모드 제한",
-              onTap: () => closeDialog(context),
-            ),
-            content: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              height: 145,
-              child: Column(
-                children: [
-                  ContentsBox(
-                    contentsWidget: Column(
-                      children: [
-                        CommonText(text: '프리미엄 구매 시', size: 14, isCenter: true),
-                        SpaceHeight(height: 3),
-                        CommonText(
-                          text: '커스텀 모드를 이용할 수 있어요.',
-                          size: 14,
-                          isCenter: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                  SpaceHeight(height: 10),
-                  Row(
-                    children: [
-                      ExpandedButtonHori(
-                        padding: const EdgeInsets.symmetric(vertical: 15),
-                        imgUrl: 'assets/images/t-23.png',
-                        text: '프리미엄 구매 페이지로 이동',
-                        onTap: () {
-                          Navigator.pushNamed(context, '/premium-page');
-                        },
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
+          builder: (context) => CommonPopup(
+            title: "커스텀 모드 제한",
+            height: 145,
+            buttonText: '프리미엄 구매 페이지로 이동',
+            text1: '프리미엄 구매 시',
+            text2: '커스텀 모드를 이용할 수 있어요.',
+            onTap: () => Navigator.pushNamed(context, '/premium-page'),
           ),
         );
       }
 
       user.graphType = type;
       await user.save();
+    }
+
+    onTapSearchFilter() async {
+      await showDialog(
+        context: context,
+        builder: (context) => const SearchDisplayList(),
+      );
     }
 
     List<IconData?> rightIconList = [
@@ -365,7 +347,7 @@ class _CommonTitleState extends State<CommonTitle> {
                                 ? CommonTag(
                                     text: historyFilterFormats[historyFilter],
                                     color: "whiteIndigo",
-                                    onTap: onTapChangeYear,
+                                    onTap: onTapHistoryOrder,
                                   )
                                 : CommonTag(
                                     text: availableCalendarFormats[
@@ -400,7 +382,24 @@ class _CommonTitleState extends State<CommonTitle> {
                         )
                       : const EmptyArea(),
                   isSearch
-                      ? CommonTag(color: 'whiteIndigo', text: '표시 9')
+                      ? Row(
+                          children: [
+                            CommonTag(
+                              text: searchFilterFormats[searchFilter],
+                              color: 'whiteIndigo',
+                              onTap: onTapSearchOrder,
+                            ),
+                            SpaceWidth(width: 5),
+                            CommonTag(
+                              text: '표시',
+                              color: 'whiteIndigo',
+                              nameArgs: {
+                                'length': '${searchDisplayList?.length ?? 0}'
+                              },
+                              onTap: onTapSearchFilter,
+                            ),
+                          ],
+                        )
                       : const EmptyArea(),
                 ],
               )
@@ -599,224 +598,6 @@ class CalendarBar extends StatelessWidget {
           ],
         );
       },
-    );
-  }
-}
-
-class DotRow extends StatelessWidget {
-  DotRow({super.key, required this.row});
-
-  List<String?> row;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: row.map((name) {
-        Color color =
-            name != null ? tagColors[name]!['textColor']! : whiteBgBtnColor;
-        return Row(
-          children: [Dot(size: 5, color: color), SpaceWidth(width: 3)],
-        );
-      }).toList(),
-    );
-  }
-}
-
-class DatePicker extends StatelessWidget {
-  DatePicker({
-    super.key,
-    required this.view,
-    required this.initialSelectedDate,
-    required this.onSelectionChanged,
-  });
-
-  DateRangePickerView view;
-  DateTime initialSelectedDate;
-  Function(DateRangePickerSelectionChangedArgs) onSelectionChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return ContentsBox(
-      width: MediaQuery.of(context).size.width,
-      contentsWidget: SfDateRangePicker(
-        showNavigationArrow: true,
-        initialDisplayDate: initialSelectedDate,
-        initialSelectedDate: initialSelectedDate,
-        maxDate: DateTime.now(),
-        view: view,
-        allowViewNavigation: false,
-        onSelectionChanged: onSelectionChanged,
-      ),
-    );
-  }
-}
-
-class DisplayList extends StatefulWidget {
-  const DisplayList({super.key});
-
-  @override
-  State<DisplayList> createState() => _DisplayListState();
-}
-
-class _DisplayListState extends State<DisplayList> {
-  @override
-  Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    List<String>? displayList = user.displayList;
-
-    onTap({required dynamic id, required bool newValue}) {
-      bool isNotWeight = displayClassList.first.id != id;
-      bool isdisplayList = user.displayList != null;
-
-      if (isNotWeight && isdisplayList) {
-        newValue ? user.displayList!.add(id) : user.displayList!.remove(id);
-        user.save();
-
-        setState(() {});
-      }
-    }
-
-    onChecked(String filterId) {
-      if (displayClassList.first.id == filterId) {
-        return true;
-      }
-
-      return displayList != null ? displayList.contains(filterId) : false;
-    }
-
-    return DisplayListContents(
-      isRequiredWeight: true,
-      bottomText: '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
-      classList: displayClassList,
-      onChecked: onChecked,
-      onTap: onTap,
-    );
-  }
-}
-
-class HistoryDisplayList extends StatefulWidget {
-  const HistoryDisplayList({super.key});
-
-  @override
-  State<HistoryDisplayList> createState() => _HistoryDisplayListState();
-}
-
-class _HistoryDisplayListState extends State<HistoryDisplayList> {
-  @override
-  Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    List<String>? historyDisplayList = user.historyDisplayList;
-
-    onTap({required dynamic id, required bool newValue}) {
-      bool ishistoryDisplayList = user.historyDisplayList != null;
-
-      if (ishistoryDisplayList) {
-        newValue
-            ? user.historyDisplayList!.add(id)
-            : user.historyDisplayList!.remove(id);
-
-        user.save();
-
-        setState(() {});
-      }
-    }
-
-    onChecked(String filterId) {
-      return historyDisplayList != null
-          ? historyDisplayList.contains(filterId)
-          : false;
-    }
-
-    return DisplayListContents(
-      isRequiredWeight: false,
-      bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
-      classList: historyDisplayClassList,
-      onChecked: onChecked,
-      onTap: onTap,
-    );
-  }
-}
-
-class DisplayListContents extends StatelessWidget {
-  DisplayListContents({
-    super.key,
-    required this.isRequiredWeight,
-    required this.bottomText,
-    required this.classList,
-    required this.onChecked,
-    required this.onTap,
-  });
-
-  bool isRequiredWeight;
-  String bottomText;
-  List<FilterClass> classList;
-  bool Function(String) onChecked;
-  Function({required dynamic id, required bool newValue}) onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AlertDialog(
-          backgroundColor: whiteBgBtnColor,
-          shape: containerBorderRadious,
-          title: DialogTitle(
-            text: '카테고리 표시',
-            onTap: () => closeDialog(context),
-          ),
-          content: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              ContentsBox(
-                  contentsWidget: Column(
-                children: classList
-                    .map(
-                      (data) => Column(
-                        children: [
-                          Row(
-                            children: [
-                              CommonCheckBox(
-                                id: data.id,
-                                isCheck: onChecked(data.id),
-                                checkColor: textColor,
-                                onTap: onTap,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 5),
-                                child: CommonText(text: data.name, size: 14),
-                              ),
-                              classList.first.id == data.id && isRequiredWeight
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: CommonText(
-                                        text: '(필수)',
-                                        size: 10,
-                                        color: Colors.red,
-                                      ),
-                                    )
-                                  : const EmptyArea()
-                            ],
-                          ),
-                          SpaceHeight(
-                            height:
-                                classList.last.id == data.id ? 0.0 : smallSpace,
-                          ),
-                        ],
-                      ),
-                    )
-                    .toList(),
-              )),
-              Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Text(bottomText,
-                    style: TextStyle(fontSize: 10, color: grey.original)),
-              )
-            ],
-          ),
-        )
-      ],
     );
   }
 }

@@ -91,11 +91,14 @@ dependencies:
   jiffy: ^6.2.1
   firebase_auth: ^4.17.8
   fluttertoast: ^8.2.5
+  scrollable_positioned_list: ^0.3.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
+dependency_overrides:
+  intl: 0.19.0
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
@@ -178,6 +181,7 @@ flutter:
     - assets/svgs/premium-free.svg
     - assets/svgs/premium-category-detail.svg
     - assets/svgs/premium-no-ads.svg
+    - assets/svgs/premium-search.svg
     - assets/svgs/premium-photos-four.svg
     - assets/svgs/premium-badge.svg
     - assets/svgs/Drooling-Face-1--Streamline-Emoji.svg
@@ -192,6 +196,7 @@ flutter:
     - assets/svgs/arrow-end.svg
     - assets/svgs/custom-graph.svg
     - assets/svgs/mark-V.svg
+    - assets/svgs/app-start.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

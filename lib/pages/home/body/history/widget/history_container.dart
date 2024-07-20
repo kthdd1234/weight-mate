@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
@@ -32,15 +30,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
-String fPicture = FILITER.picture.toString();
-String fDiet = FILITER.diet.toString();
-String fExercise = FILITER.exercise.toString();
-String fLife = FILITER.lifeStyle.toString();
-String fDiary = FILITER.diary.toString();
-String fDiet_2 = FILITER.diet_2.toString();
-String fExercise_2 = FILITER.exercise_2.toString();
-String fDiary_2 = FILITER.diary_2.toString();
-
 class HistoryContainer extends StatelessWidget {
   HistoryContainer({
     super.key,
@@ -62,9 +51,15 @@ class HistoryContainer extends StatelessWidget {
     /** 필터 */
     UserBox user = userRepository.user;
     List<String> historyDisplayList = user.historyDisplayList ?? [];
+    bool isWeight = historyDisplayList.contains(fWeight);
     bool isPicture = historyDisplayList.contains(fPicture);
     bool isDiaryText = historyDisplayList.contains(fDiary);
     bool isDiaryHashTag = historyDisplayList.contains(fDiary_2);
+    bool isDietRecord = historyDisplayList.contains(fDiet);
+    bool isExerciseRecord = historyDisplayList.contains(fExercise);
+    bool isDietGoal = historyDisplayList.contains(fDiet_2);
+    bool isExerciseGoal = historyDisplayList.contains(fExercise_2);
+    bool isLife = historyDisplayList.contains(fLife);
 
     onTapEdit() {
       context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
@@ -117,11 +112,10 @@ class HistoryContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HistoryHeader(
-                  locale: locale,
-                  createDateTime: createDateTime,
-                  formatDateTime: formatDateTime,
-                  isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
+                  isRemoveMode: isRemoveMode,
+                  isWeight: isWeight,
+                  isDiary: isDiaryText,
                   onTapMore: onTapMore,
                 ),
                 isPicture
@@ -133,6 +127,11 @@ class HistoryContainer extends StatelessWidget {
                 HistoryTodo(
                   isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
+                  isDietRecord: isDietRecord,
+                  isDietGoal: isDietGoal,
+                  isExerciseRecord: isExerciseRecord,
+                  isExerciseGoal: isExerciseGoal,
+                  isLife: isLife,
                 ),
                 isDiaryText
                     ? HistoryDiaryText(
@@ -155,27 +154,28 @@ class HistoryContainer extends StatelessWidget {
 class HistoryHeader extends StatelessWidget {
   HistoryHeader({
     super.key,
-    required this.locale,
-    required this.createDateTime,
-    required this.formatDateTime,
     required this.recordInfo,
     required this.isRemoveMode,
-    required this.onTapMore,
+    required this.isWeight,
+    required this.isDiary,
+    this.onTapMore,
   });
 
-  String locale;
-  DateTime createDateTime;
-  String formatDateTime;
   RecordBox? recordInfo;
-  bool isRemoveMode;
-  Function() onTapMore;
+  bool isRemoveMode, isWeight, isDiary;
+  Function()? onTapMore;
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     UserBox user = userRepository.user;
-    List<String> historyDisplayList = user.historyDisplayList ?? [];
-    bool isWeight = historyDisplayList.contains(fWeight);
-    bool isDiary = historyDisplayList.contains(fDiary);
+    DateTime createDateTime = recordInfo?.createDateTime ?? DateTime.now();
+    String mdeDt = onTapMore != null
+        ? mde(locale: locale, dateTime: createDateTime)
+        : ymd(locale: locale, dateTime: createDateTime);
+    String mdDt = onTapMore != null
+        ? md(locale: locale, dateTime: createDateTime)
+        : ymd(locale: locale, dateTime: createDateTime);
 
     bmiValue() {
       return 'BMI ${bmi(
@@ -224,9 +224,7 @@ class HistoryHeader extends StatelessWidget {
               Row(
                 children: [
                   CommonText(
-                    text: isWeight
-                        ? formatDateTime
-                        : md(locale: locale, dateTime: createDateTime),
+                    text: isWeight ? mdeDt : mdDt,
                     size: 11,
                     isBold: true,
                     isNotTr: true,
@@ -235,17 +233,19 @@ class HistoryHeader extends StatelessWidget {
                   const Spacer(),
                   isRemoveMode
                       ? const EmptyArea()
-                      : InkWell(
-                          onTap: onTapMore,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: CommonIcon(
-                              icon: Icons.more_vert_rounded,
-                              size: 16,
+                      : onTapMore != null
+                          ? InkWell(
                               onTap: onTapMore,
-                            ),
-                          ),
-                        )
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: CommonIcon(
+                                  icon: Icons.more_vert_rounded,
+                                  size: 16,
+                                  onTap: onTapMore,
+                                ),
+                              ),
+                            )
+                          : const EmptyArea()
                 ],
               ),
               SpaceHeight(height: 2),
@@ -475,22 +475,23 @@ class HistoryTodo extends StatelessWidget {
     super.key,
     required this.isRemoveMode,
     required this.recordInfo,
+    required this.isDietRecord,
+    required this.isExerciseRecord,
+    required this.isDietGoal,
+    required this.isExerciseGoal,
+    required this.isLife,
   });
 
-  bool isRemoveMode;
   RecordBox recordInfo;
+  bool isRemoveMode,
+      isDietRecord,
+      isExerciseRecord,
+      isDietGoal,
+      isExerciseGoal,
+      isLife;
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    List<String> historyDisplayList = user.historyDisplayList ?? [];
-
-    bool isContainDietRecord = historyDisplayList.contains(fDiet);
-    bool isContainExerciseRecord = historyDisplayList.contains(fExercise);
-    bool isContainDietGoal = historyDisplayList.contains(fDiet_2);
-    bool isContainExerciseGoal = historyDisplayList.contains(fExercise_2);
-    bool isContainLife = historyDisplayList.contains(fLife);
-
     List<String>? dietRecordOrderList = recordInfo.dietRecordOrderList;
     List<String>? exerciseRecordOrderList = recordInfo.exerciseRecordOrderList;
 
@@ -537,15 +538,15 @@ class HistoryTodo extends StatelessWidget {
           planType == eExercise && action['isRecord'] == null;
       bool isTypeLife = planType == eLife;
 
-      if (isTypeDietRecord && isContainDietRecord) {
+      if (isTypeDietRecord && isDietRecord) {
         return true;
-      } else if (isTypeExerciseRecord && isContainExerciseRecord) {
+      } else if (isTypeExerciseRecord && isExerciseRecord) {
         return true;
-      } else if (isTypeDietGoal && isContainDietGoal) {
+      } else if (isTypeDietGoal && isDietGoal) {
         return true;
-      } else if (isTypeExerciseGoal && isContainExerciseGoal) {
+      } else if (isTypeExerciseGoal && isExerciseGoal) {
         return true;
-      } else if (isTypeLife && isContainLife) {
+      } else if (isTypeLife && isLife) {
         return true;
       }
 

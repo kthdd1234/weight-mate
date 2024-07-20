@@ -315,7 +315,7 @@ class HashTag extends StatelessWidget {
           onTap: () => onItem(id),
           child: Container(
             padding: isOutline == true
-                ? const EdgeInsets.symmetric(vertical: 3, horizontal: 10)
+                ? const EdgeInsets.symmetric(vertical: 5, horizontal: 15)
                 : null,
             decoration: isOutline == true
                 ? BoxDecoration(

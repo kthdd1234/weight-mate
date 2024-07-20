@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
@@ -923,7 +924,7 @@ onShowDialog({
             text: title,
             onTap: () => closeDialog(context),
           ),
-          content: DatePicker(
+          content: DateTimePicker(
             view: view,
             initialSelectedDate: initialSelectedDate,
             onSelectionChanged: onSelectionChanged,
@@ -979,9 +980,9 @@ Future<bool> setPurchasePremium(Package package) async {
 Future<bool> isPurchasePremium() async {
   try {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    return true;
-    // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-    //     true;
+    // return true;
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -1033,7 +1034,7 @@ Future<void> showDialogDateTimeYear({
             text: '년도 선택',
             onTap: () => closeDialog(context),
           ),
-          content: DatePicker(
+          content: DateTimePicker(
             view: DateRangePickerView.decade,
             initialSelectedDate: initialSelectedDate,
             onSelectionChanged: (datTimeArgs) {
@@ -1140,4 +1141,29 @@ HashTagClass? getHashTag(List<Map<String, dynamic>>? hashTagList, String id) {
     text: hashTagList[index]['text'],
     colorName: hashTagList[index]['colorName'],
   );
+}
+
+List<RecordBox> getSearchList({
+  required List<RecordBox> recordList,
+  required String keyword,
+  required bool isRecent,
+}) {
+  List<RecordBox> searchList = recordList.where((record) {
+    List<Map<String, dynamic>>? actions = record.actions;
+    String? whiteText = record.whiteText;
+    List<Map<String, String>>? hashTagList = record.recordHashTagList;
+    bool isKeywordInAction = actions?.any((action) {
+          String name = action['name'] as String;
+          return name.contains(keyword);
+        }) ==
+        true;
+    bool isKeywordInWhiteText = whiteText?.contains(keyword) == true;
+    bool isKeywordInHashTag =
+        hashTagList?.any((hashTag) => hashTag['text']!.contains(keyword)) ==
+            true;
+
+    return isKeywordInAction || isKeywordInWhiteText || isKeywordInHashTag;
+  }).toList();
+
+  return isRecent ? searchList.reversed.toList() : searchList;
 }

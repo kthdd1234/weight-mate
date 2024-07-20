@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_app_weight_management/pages/common/app_data_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
-import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
 import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/max_min_avg_graph_page.dart';
@@ -37,14 +35,13 @@ import 'package:flutter_app_weight_management/provider/history_filter_provider.d
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/reload_provider.dart';
+import 'package:flutter_app_weight_management/provider/search_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
-import 'package:flutter_app_weight_management/services/app_open_service.dart';
-import 'package:flutter_app_weight_management/services/auth_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
@@ -100,6 +97,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => EnabledProvider()),
         ChangeNotifierProvider(create: (_) => TitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryFilterProvider()),
+        ChangeNotifierProvider(create: (_) => SearchFilterProvider()),
         ChangeNotifierProvider(create: (_) => HistoryTitleDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
@@ -226,33 +224,28 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     context.watch<ReloadProvider>().isReload;
 
-    String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
-
+    int appStartIndex = user?.appStartIndex ?? 0;
+    String locale = context.locale.toString();
     String initialRoute = user?.userId == null
         ? '/add-start-screen'
         : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
-
     String fontFamily = user?.fontFamily == null
         ? initFontFamily
         : getFontFamily(user!.fontFamily!);
 
-    ThemeData theme = ThemeData(
-      primarySwatch: AppColors.primaryMaterialSwatchDark,
-      fontFamily: fontFamily,
-      textTheme: textTheme,
-      splashColor: Colors.white,
-      brightness: Brightness.light,
-    );
-
-    print('locale => $locale');
-
     return MaterialApp(
       title: 'weight-mate',
       debugShowCheckedModeBanner: false,
-      theme: theme,
+      theme: ThemeData(
+        primarySwatch: AppColors.primaryMaterialSwatchDark,
+        fontFamily: fontFamily,
+        textTheme: textTheme,
+        splashColor: Colors.white,
+        brightness: Brightness.light,
+      ),
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
@@ -263,7 +256,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/add-body-tall': (context) => const AddBodyTall(),
         '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
-        '/home-page': (context) => HomePage(locale: locale),
+        '/home-page': (context) => HomePage(
+              locale: locale,
+              appStartIndex: appStartIndex,
+            ),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),
