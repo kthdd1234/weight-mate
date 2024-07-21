@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -17,7 +18,7 @@ class SearchInputBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+      padding: const EdgeInsets.only(bottom: 10, left: 7, right: 7),
       child: SizedBox(
         height: 40,
         child: TextFormField(
@@ -31,7 +32,7 @@ class SearchInputBar extends StatelessWidget {
           decoration: InputDecoration(
             isDense: true,
             contentPadding: const EdgeInsets.only(top: 5),
-            hintText: '키워드 검색',
+            hintText: '키워드 검색'.tr(),
             hintStyle: TextStyle(color: Colors.grey.shade400, fontSize: 13),
             filled: true,
             fillColor: Colors.white,
@@ -65,6 +66,7 @@ class SearchInputBar extends StatelessWidget {
             ),
           ),
           onEditingComplete: onEditingComplete,
+          onTapOutside: (event) => FocusScope.of(context).unfocus(),
         ),
       ),
     );

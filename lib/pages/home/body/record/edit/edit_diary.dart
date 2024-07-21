@@ -206,7 +206,7 @@ class EditDiary extends StatelessWidget {
                 dateTime: recordInfo?.diaryDateTime ?? DateTime.now(),
               )
             : '미작성',
-        isNotTr: recordInfo?.whiteText != null,
+        isNotTr: !isWhite,
         color: 'orange',
         isHide: isOpen,
         onTap: onTapOpen,

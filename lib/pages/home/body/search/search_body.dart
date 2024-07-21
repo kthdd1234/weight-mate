@@ -113,31 +113,28 @@ class _SearchBodyState extends State<SearchBody> {
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
-      builder: (context, values, child) => GestureDetector(
-        onTap: onFocusOut,
-        child: Column(
-          children: [
-            CommonAppBar(id: id),
-            Padding(
-              padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
-              child: SearchInputBar(
+      builder: (context, values, child) => Column(
+        children: [
+          CommonAppBar(id: id),
+          Padding(
+            padding: const EdgeInsets.only(top: 5, left: 10, right: 10),
+            child: SearchInputBar(
+              controller: searchKeywordController,
+              onEditingComplete: () => onEditingComplete(isPremium),
+              onSuffixIcon: onSuffixIcon,
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: SearchItemContainer(
                 controller: searchKeywordController,
-                onEditingComplete: () => onEditingComplete(isPremium),
-                onSuffixIcon: onSuffixIcon,
+                initialScrollIndex: initialScrollIndex,
+                onHashTag: (hashTag) => onHashTag(isPremium, hashTag),
               ),
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: SearchItemContainer(
-                  controller: searchKeywordController,
-                  initialScrollIndex: initialScrollIndex,
-                  onHashTag: (hashTag) => onHashTag(isPremium, hashTag),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

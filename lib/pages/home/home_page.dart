@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
@@ -229,10 +230,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
       bool isAvailable = await inAppReview.isAvailable();
-      bool isNotNewUser = recordList.length > 2;
-      bool isDay27 = DateTime.now().day == 27;
+      bool isOverThreeDays = recordList.length > 2;
+      DateTime now = DateTime.now();
+      bool isTargetDay = now.day == 1 || now.day == 14 || now.day == 28;
 
-      if (isAvailable && isNotNewUser && isDay27) {
+      if (isAvailable && isOverThreeDays && !kDebugMode && isTargetDay) {
         inAppReview.requestReview();
       }
     }

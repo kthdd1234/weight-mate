@@ -52,7 +52,7 @@ class DisplayListContents extends StatelessWidget {
                               CommonCheckBox(
                                 id: data.id,
                                 isCheck: onChecked(data.id),
-                                checkColor: textColor,
+                                checkColor: themeColor,
                                 onTap: onTap,
                               ),
                               Padding(

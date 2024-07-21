@@ -69,6 +69,7 @@ class _SearchHashTagState extends State<SearchHashTag> {
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 7),
               child: ContentsBox(
+                width: widget.keyword == '' ? double.infinity : null,
                 padding: const EdgeInsets.all(15),
                 contentsWidget: widget.keyword == ''
                     ? Wrap(
@@ -156,6 +157,7 @@ class HashTagKeyword extends StatelessWidget {
                 : color!.original,
             fontSize: 13,
             isBold: isImage == true || text == keyword,
+            isNotTr: true,
           ),
         ),
       ),
