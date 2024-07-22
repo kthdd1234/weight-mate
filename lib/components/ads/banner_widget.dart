@@ -3,6 +3,7 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 
@@ -66,12 +67,11 @@ class _BannerWidgetState extends State<BannerWidget> {
         child: SizedBox(
           height: 50,
           child: CommonText(
-            isNotTr: true,
-            text: 'Ads',
-            size: 12,
-            isCenter: true,
-            color: Colors.grey,
-          ),
+              isNotTr: true,
+              text: 'Ads',
+              size: 12,
+              isCenter: true,
+              color: grey.original),
         ),
       );
     }

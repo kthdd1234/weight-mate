@@ -290,13 +290,28 @@ List<FilterClass> historyDisplayClassList = [
   FilterClass(id: FILITER.exercise.toString(), name: '운동 (기록)'),
   FilterClass(id: FILITER.exercise_2.toString(), name: '운동 (목표)'),
   FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
-  FilterClass(id: FILITER.diary.toString(), name: '일기'),
+  FilterClass(id: FILITER.diary.toString(), name: '일기 (글, 감정)'),
+  FilterClass(id: FILITER.diary_2.toString(), name: '일기 (해시태그)'),
+];
+
+List<FilterClass> searchDisplayClassList = [
+  FilterClass(id: FILITER.weight.toString(), name: '체중'),
+  FilterClass(id: FILITER.picture.toString(), name: '사진'),
+  FilterClass(id: FILITER.diet.toString(), name: '식단 (기록)'),
+  FilterClass(id: FILITER.diet_2.toString(), name: '식단 (목표)'),
+  FilterClass(id: FILITER.exercise.toString(), name: '운동 (기록)'),
+  FilterClass(id: FILITER.exercise_2.toString(), name: '운동 (목표)'),
+  FilterClass(id: FILITER.lifeStyle.toString(), name: '습관'),
+  FilterClass(id: FILITER.diary.toString(), name: '일기 (글, 감정)'),
+  FilterClass(id: FILITER.diary_2.toString(), name: '일기 (해시태그)'),
 ];
 
 List<String> initOpenList = openClassList.map((e) => e.id).toList();
 List<String> initDisplayList = displayClassList.map((e) => e.id).toList();
 List<String> initHistoryDisplayList =
     historyDisplayClassList.map((e) => e.id).toList();
+List<String> initSearchDisplayClassList =
+    searchDisplayClassList.map((e) => e.id).toList();
 
 const availableCalendarFormats = {
   CalendarFormat.week: '1주일',
@@ -328,6 +343,16 @@ const historyFilterFormats = {
 const nextHistoryFilter = {
   HistoryFilter.recent: HistoryFilter.past,
   HistoryFilter.past: HistoryFilter.recent
+};
+
+const searchFilterFormats = {
+  SearchFilter.recent: '최신순',
+  SearchFilter.past: '과거순'
+};
+
+const nextSearchFilter = {
+  SearchFilter.recent: SearchFilter.past,
+  SearchFilter.past: SearchFilter.recent
 };
 
 const TextTheme textTheme = TextTheme(

@@ -1,98 +1,93 @@
 import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'dart:io' show Platform;
 
-const Duration maxCacheDuration = Duration(hours: 4);
+// const Duration maxCacheDuration = Duration(hours: 4);
 
-DateTime? _appOpenLoadTime;
+// DateTime? _appOpenLoadTime;
 
-class AppOpenAdManager {
-  AppOpenAd? _appOpenAd;
-  bool _isShowingAd = false;
+// class AppOpenAdManager {
+//   AppOpenAd? _appOpenAd;
+//   bool _isShowingAd = false;
 
-  String get appOpeningUnitId =>
-      Platform.isAndroid ? androidAppOpeningAdUnitId : iosAppOpeningAdUnitId;
-  String get androidAppOpeningAdUnitId {
-    String? testId = dotenv.env['ANDROID_APP_OPENING_TEST_ID'] ?? '';
-    String? realId = dotenv.env['ANDROID_APP_OPENING_REAL_ID'] ?? '';
+//   String get appOpeningUnitId =>
+//       Platform.isAndroid ? androidAppOpeningAdUnitId : iosAppOpeningAdUnitId;
+//   String get androidAppOpeningAdUnitId {
+//     String? testId = dotenv.env['ANDROID_APP_OPENING_TEST_ID'] ?? '';
+//     String? realId = dotenv.env['ANDROID_APP_OPENING_REAL_ID'] ?? '';
 
-    return kDebugMode ? testId : realId;
-  }
+//     return kDebugMode ? testId : realId;
+//   }
 
-  String get iosAppOpeningAdUnitId {
-    String? testId = dotenv.env['IOS_APP_OPENING_TEST_ID'] ?? '';
-    String? realId = dotenv.env['IOS_APP_OPENING_REAL_ID'] ?? '';
+//   String get iosAppOpeningAdUnitId {
+//     String? testId = dotenv.env['IOS_APP_OPENING_TEST_ID'] ?? '';
+//     String? realId = dotenv.env['IOS_APP_OPENING_REAL_ID'] ?? '';
 
-    return kDebugMode ? testId : realId;
-  }
+//     return kDebugMode ? testId : realId;
+//   }
 
-  void loadAd() {
-    AppOpenAd.load(
-      adUnitId: appOpeningUnitId,
-      orientation: AppOpenAd.orientationPortrait,
-      request: const AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (ad) {
-          _appOpenLoadTime = DateTime.now();
-          _appOpenAd = ad;
+//   // void loadAd() {
+//   //   AppOpenAd.load(
+//   //     adUnitId: appOpeningUnitId,
+//   //     orientation: AppOpenAd.orientationPortrait,
+//   //     request: const AdRequest(),
+//   //     adLoadCallback: AppOpenAdLoadCallback(
+//   //       onAdLoaded: (ad) {
+//   //         _appOpenLoadTime = DateTime.now();
+//   //         _appOpenAd = ad;
 
-          print('AppOpenAd !!');
-        },
-        onAdFailedToLoad: (error) {
-          print('AppOpenAd failed to load: $error');
-        },
-      ),
-    );
-  }
+//   //         print('AppOpenAd !!');
+//   //       },
+//   //       onAdFailedToLoad: (error) {
+//   //         print('AppOpenAd failed to load: $error');
+//   //       },
+//   //     ),
+//   //   );
+//   // }
 
-  bool get isAdAvailable {
-    return _appOpenAd != null;
-  }
+//   bool get isAdAvailable {
+//     return _appOpenAd != null;
+//   }
 
-  void showAdIfAvailable() {
-    if (!isAdAvailable) {
-      loadAd();
-      return;
-    }
+//   void showAdIfAvailable() {
+//     if (!isAdAvailable) {
+//       loadAd();
+//       return;
+//     }
 
-    if (_isShowingAd) {
-      return;
-    }
+//     if (_isShowingAd) {
+//       return;
+//     }
 
-    if (DateTime.now().subtract(maxCacheDuration).isAfter(_appOpenLoadTime!)) {
-      _appOpenAd!.dispose();
-      _appOpenAd = null;
-      loadAd();
-      return;
-    }
+//     if (DateTime.now().subtract(maxCacheDuration).isAfter(_appOpenLoadTime!)) {
+//       _appOpenAd!.dispose();
+//       _appOpenAd = null;
+//       loadAd();
+//       return;
+//     }
 
-    _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
-      onAdShowedFullScreenContent: (ad) {
-        _isShowingAd = true;
-      },
-      onAdFailedToShowFullScreenContent: (ad, error) {
-        _isShowingAd = false;
-        ad.dispose();
-        _appOpenAd = null;
-      },
-      onAdDismissedFullScreenContent: (ad) {
-        _isShowingAd = false;
-        ad.dispose();
-        _appOpenAd = null;
-        loadAd();
-      },
-    );
+//     _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
+//       onAdShowedFullScreenContent: (ad) {
+//         _isShowingAd = true;
+//       },
+//       onAdFailedToShowFullScreenContent: (ad, error) {
+//         _isShowingAd = false;
+//         ad.dispose();
+//         _appOpenAd = null;
+//       },
+//       onAdDismissedFullScreenContent: (ad) {
+//         _isShowingAd = false;
+//         ad.dispose();
+//         _appOpenAd = null;
+//         loadAd();
+//       },
+//     );
 
-    _appOpenAd!.show();
-  }
-}
+//     _appOpenAd!.show();
+//   }
+// }
 
 class AppLifecycleReactor {
   AppLifecycleReactor(

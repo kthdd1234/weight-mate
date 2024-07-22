@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class CalenderRangeDialog extends StatefulWidget {
@@ -68,7 +69,7 @@ class _CalenderRangeDialogState extends State<CalenderRangeDialog> {
           SpaceHeight(height: 10),
           Text(
             '요일을 선택하면 선택한 요일의 주가 표시됩니다.'.tr(),
-            style: const TextStyle(fontSize: 10, color: Colors.grey),
+            style: TextStyle(fontSize: 10, color: grey.original),
           )
         ],
       ),

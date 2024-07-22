@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
@@ -17,6 +16,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -29,14 +29,6 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
-
-String fPicture = FILITER.picture.toString();
-String fDiet = FILITER.diet.toString();
-String fExercise = FILITER.exercise.toString();
-String fLife = FILITER.lifeStyle.toString();
-String fDiary = FILITER.diary.toString();
-String fDiet_2 = FILITER.diet_2.toString();
-String fExercise_2 = FILITER.exercise_2.toString();
 
 class HistoryContainer extends StatelessWidget {
   HistoryContainer({
@@ -59,8 +51,15 @@ class HistoryContainer extends StatelessWidget {
     /** 필터 */
     UserBox user = userRepository.user;
     List<String> historyDisplayList = user.historyDisplayList ?? [];
+    bool isWeight = historyDisplayList.contains(fWeight);
     bool isPicture = historyDisplayList.contains(fPicture);
-    bool isDiary = historyDisplayList.contains(fDiary);
+    bool isDiaryText = historyDisplayList.contains(fDiary);
+    bool isDiaryHashTag = historyDisplayList.contains(fDiary_2);
+    bool isDietRecord = historyDisplayList.contains(fDiet);
+    bool isExerciseRecord = historyDisplayList.contains(fExercise);
+    bool isDietGoal = historyDisplayList.contains(fDiet_2);
+    bool isExerciseGoal = historyDisplayList.contains(fExercise_2);
+    bool isLife = historyDisplayList.contains(fLife);
 
     onTapEdit() {
       context.read<ImportDateTimeProvider>().setImportDateTime(createDateTime);
@@ -113,11 +112,10 @@ class HistoryContainer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 HistoryHeader(
-                  locale: locale,
-                  createDateTime: createDateTime,
-                  formatDateTime: formatDateTime,
-                  isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
+                  isRemoveMode: isRemoveMode,
+                  isWeight: isWeight,
+                  isDiary: isDiaryText,
                   onTapMore: onTapMore,
                 ),
                 isPicture
@@ -129,9 +127,20 @@ class HistoryContainer extends StatelessWidget {
                 HistoryTodo(
                   isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
+                  isDietRecord: isDietRecord,
+                  isDietGoal: isDietGoal,
+                  isExerciseRecord: isExerciseRecord,
+                  isExerciseGoal: isExerciseGoal,
+                  isLife: isLife,
                 ),
-                isDiary
-                    ? HistoryDiary(
+                isDiaryText
+                    ? HistoryDiaryText(
+                        isRemoveMode: isRemoveMode,
+                        recordInfo: recordInfo,
+                      )
+                    : const EmptyArea(),
+                isDiaryHashTag
+                    ? HistoryHashTag(
                         isRemoveMode: isRemoveMode,
                         recordInfo: recordInfo,
                       )
@@ -145,27 +154,28 @@ class HistoryContainer extends StatelessWidget {
 class HistoryHeader extends StatelessWidget {
   HistoryHeader({
     super.key,
-    required this.locale,
-    required this.createDateTime,
-    required this.formatDateTime,
     required this.recordInfo,
     required this.isRemoveMode,
-    required this.onTapMore,
+    required this.isWeight,
+    required this.isDiary,
+    this.onTapMore,
   });
 
-  String locale;
-  DateTime createDateTime;
-  String formatDateTime;
   RecordBox? recordInfo;
-  bool isRemoveMode;
-  Function() onTapMore;
+  bool isRemoveMode, isWeight, isDiary;
+  Function()? onTapMore;
 
   @override
   Widget build(BuildContext context) {
+    String locale = context.locale.toString();
     UserBox user = userRepository.user;
-    List<String> historyDisplayList = user.historyDisplayList ?? [];
-    bool isWeight = historyDisplayList.contains(fWeight);
-    bool isDiary = historyDisplayList.contains(fDiary);
+    DateTime createDateTime = recordInfo?.createDateTime ?? DateTime.now();
+    String mdeDt = onTapMore != null
+        ? mde(locale: locale, dateTime: createDateTime)
+        : ymd(locale: locale, dateTime: createDateTime);
+    String mdDt = onTapMore != null
+        ? md(locale: locale, dateTime: createDateTime)
+        : ymd(locale: locale, dateTime: createDateTime);
 
     bmiValue() {
       return 'BMI ${bmi(
@@ -214,9 +224,7 @@ class HistoryHeader extends StatelessWidget {
               Row(
                 children: [
                   CommonText(
-                    text: isWeight
-                        ? formatDateTime
-                        : md(locale: locale, dateTime: createDateTime),
+                    text: isWeight ? mdeDt : mdDt,
                     size: 11,
                     isBold: true,
                     isNotTr: true,
@@ -225,17 +233,19 @@ class HistoryHeader extends StatelessWidget {
                   const Spacer(),
                   isRemoveMode
                       ? const EmptyArea()
-                      : InkWell(
-                          onTap: onTapMore,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: CommonIcon(
-                              icon: Icons.more_vert_rounded,
-                              size: 16,
+                      : onTapMore != null
+                          ? InkWell(
                               onTap: onTapMore,
-                            ),
-                          ),
-                        )
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10),
+                                child: CommonIcon(
+                                  icon: Icons.more_vert_rounded,
+                                  size: 16,
+                                  onTap: onTapMore,
+                                ),
+                              ),
+                            )
+                          : const EmptyArea()
                 ],
               ),
               SpaceHeight(height: 2),
@@ -261,7 +271,10 @@ class HistoryHeader extends StatelessWidget {
                     ],
                   ),
                   CommonText(
-                      text: isWeight ? bmiValue() : '', size: 9, isNotTr: true),
+                    text: isWeight ? bmiValue() : '',
+                    size: 9,
+                    isNotTr: true,
+                  ),
                 ],
               ),
             ],
@@ -462,22 +475,23 @@ class HistoryTodo extends StatelessWidget {
     super.key,
     required this.isRemoveMode,
     required this.recordInfo,
+    required this.isDietRecord,
+    required this.isExerciseRecord,
+    required this.isDietGoal,
+    required this.isExerciseGoal,
+    required this.isLife,
   });
 
-  bool isRemoveMode;
   RecordBox recordInfo;
+  bool isRemoveMode,
+      isDietRecord,
+      isExerciseRecord,
+      isDietGoal,
+      isExerciseGoal,
+      isLife;
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    List<String> historyDisplayList = user.historyDisplayList ?? [];
-
-    bool isContainDietRecord = historyDisplayList.contains(fDiet);
-    bool isContainExerciseRecord = historyDisplayList.contains(fExercise);
-    bool isContainDietGoal = historyDisplayList.contains(fDiet_2);
-    bool isContainExerciseGoal = historyDisplayList.contains(fExercise_2);
-    bool isContainLife = historyDisplayList.contains(fLife);
-
     List<String>? dietRecordOrderList = recordInfo.dietRecordOrderList;
     List<String>? exerciseRecordOrderList = recordInfo.exerciseRecordOrderList;
 
@@ -524,15 +538,15 @@ class HistoryTodo extends StatelessWidget {
           planType == eExercise && action['isRecord'] == null;
       bool isTypeLife = planType == eLife;
 
-      if (isTypeDietRecord && isContainDietRecord) {
+      if (isTypeDietRecord && isDietRecord) {
         return true;
-      } else if (isTypeExerciseRecord && isContainExerciseRecord) {
+      } else if (isTypeExerciseRecord && isExerciseRecord) {
         return true;
-      } else if (isTypeDietGoal && isContainDietGoal) {
+      } else if (isTypeDietGoal && isDietGoal) {
         return true;
-      } else if (isTypeExerciseGoal && isContainExerciseGoal) {
+      } else if (isTypeExerciseGoal && isExerciseGoal) {
         return true;
-      } else if (isTypeLife && isContainLife) {
+      } else if (isTypeLife && isLife) {
         return true;
       }
 
@@ -596,54 +610,88 @@ class HistoryTodo extends StatelessWidget {
       return order1.compareTo(order2);
     });
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 5),
-      child: Column(
-        children: todoResultList
-            .map(
-              (data) => Column(
-                children: [
-                  SpaceHeight(height: 10),
-                  Row(
-                    children: [
-                      isRemoveMode
-                          ? Expanded(
-                              flex: 0,
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 2, right: 7),
-                                child: RemoveIcon(
-                                    onTap: () => onTapRemoveAction(data)),
-                              ),
-                            )
-                          : const EmptyArea(),
-                      Expanded(
-                        flex: 0,
-                        child: onIcon(
-                            data['type'], data['isRecord'], data['title']),
-                      ),
-                      SpaceWidth(width: smallSpace),
-                      Expanded(
-                        flex: 1,
-                        child: Text(
-                          data['name'],
-                          style:
-                              const TextStyle(fontSize: 14, color: textColor),
+    return todoResultList.isNotEmpty
+        ? Column(
+            children: todoResultList
+                .map(
+                  (todo) => Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
+                      children: [
+                        isRemoveMode
+                            ? Expanded(
+                                flex: 0,
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 2, right: 7),
+                                  child: RemoveIcon(
+                                      onTap: () => onTapRemoveAction(todo)),
+                                ),
+                              )
+                            : const EmptyArea(),
+                        Expanded(
+                          flex: 0,
+                          child: onIcon(
+                              todo['type'], todo['isRecord'], todo['title']),
                         ),
-                      ),
-                    ],
+                        SpaceWidth(width: smallSpace),
+                        Expanded(
+                          flex: 1,
+                          child: Text(
+                            todo['name'],
+                            style:
+                                const TextStyle(fontSize: 14, color: textColor),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            )
-            .toList(),
-      ),
-    );
+                )
+                .toList(),
+          )
+        : const EmptyArea();
+
+    // return todoResultList.isNotEmpty
+    //     ?
+    //     ListView.builder(
+    //         shrinkWrap: true,
+    //         itemBuilder: (context, index) {
+    //           Map<String, dynamic> todo = todoResultList![index];
+    //           return
+    // Row(
+    //             children: [
+    //               isRemoveMode
+    //                   ? Expanded(
+    //                       flex: 0,
+    //                       child: Padding(
+    //                         padding: const EdgeInsets.only(top: 2, right: 7),
+    //                         child: RemoveIcon(
+    //                             onTap: () => onTapRemoveAction(todo)),
+    //                       ),
+    //                     )
+    //                   : const EmptyArea(),
+    //               Expanded(
+    //                 flex: 0,
+    //                 child:
+    //                     onIcon(todo['type'], todo['isRecord'], todo['title']),
+    //               ),
+    //               SpaceWidth(width: smallSpace),
+    //               Expanded(
+    //                 flex: 1,
+    //                 child: Text(
+    //                   todo['name'],
+    //                   style: const TextStyle(fontSize: 14, color: textColor),
+    //                 ),
+    //               ),
+    //             ],
+    //           );
+    //         })
+    //     : const EmptyArea();
   }
 }
 
-class HistoryDiary extends StatelessWidget {
-  HistoryDiary({
+class HistoryDiaryText extends StatelessWidget {
+  HistoryDiaryText({
     super.key,
     required this.isRemoveMode,
     required this.recordInfo,
@@ -652,39 +700,40 @@ class HistoryDiary extends StatelessWidget {
   bool isRemoveMode;
   RecordBox? recordInfo;
 
+  onTapRemoveDiary() async {
+    recordInfo?.diaryDateTime = null;
+    recordInfo?.whiteText = null;
+
+    await recordInfo?.save();
+  }
+
   @override
   Widget build(BuildContext context) {
-    onTapRemoveDiary() {
-      recordInfo?.diaryDateTime = null;
-      recordInfo?.whiteText = null;
-
-      recordInfo?.save();
-    }
-
     return recordInfo?.whiteText != null
         ? Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SpaceHeight(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      recordInfo!.whiteText!,
-                      style: const TextStyle(
-                        color: textColor,
-                        fontSize: 13,
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        recordInfo!.whiteText!,
+                        style: const TextStyle(
+                          color: textColor,
+                          fontSize: 13,
+                        ),
                       ),
                     ),
-                  ),
-                  isRemoveMode
-                      ? Padding(
-                          padding: const EdgeInsets.only(top: 3, left: 3),
-                          child: RemoveIcon(onTap: onTapRemoveDiary),
-                        )
-                      : const EmptyArea(),
-                ],
+                    isRemoveMode
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 3, left: 3),
+                            child: RemoveIcon(onTap: onTapRemoveDiary),
+                          )
+                        : const EmptyArea(),
+                  ],
+                ),
               ),
               SpaceHeight(height: tinySpace),
               Text(
@@ -692,8 +741,49 @@ class HistoryDiary extends StatelessWidget {
                   locale: context.locale.toString(),
                   dateTime: recordInfo?.diaryDateTime ?? DateTime.now(),
                 ),
-                style: const TextStyle(color: Colors.grey, fontSize: 11),
+                style: TextStyle(color: grey.original, fontSize: 11),
               ),
+            ],
+          )
+        : const EmptyArea();
+  }
+}
+
+class HistoryHashTag extends StatelessWidget {
+  HistoryHashTag({
+    super.key,
+    required this.isRemoveMode,
+    required this.recordInfo,
+  });
+
+  bool isRemoveMode;
+  RecordBox? recordInfo;
+
+  onTapRemoveHashTag() async {
+    recordInfo?.recordHashTagList = [];
+    await recordInfo?.save();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<HashTagClass> hashTagClassList =
+        getHashTagClassList(recordInfo?.recordHashTagList);
+    bool isShow = hashTagClassList.isNotEmpty;
+
+    return isShow
+        ? Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DiaryHashTag(
+                hashTagClassList: hashTagClassList,
+                paddingTop: 10,
+              ),
+              isRemoveMode
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: RemoveIcon(onTap: onTapRemoveHashTag),
+                    )
+                  : const EmptyArea(),
             ],
           )
         : const EmptyArea();

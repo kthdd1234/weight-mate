@@ -15,6 +15,7 @@ class ExpandedButtonVerti extends StatelessWidget {
     this.iconSize,
     this.height,
     this.padding,
+    this.outterPadding,
   });
 
   IconData icon;
@@ -24,23 +25,26 @@ class ExpandedButtonVerti extends StatelessWidget {
   bool? isBold;
   Function() onTap;
   double? titleSize, iconSize, height;
-  EdgeInsets? padding;
+  EdgeInsets? padding, outterPadding;
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
-        onTap: onTap,
-        child: EmptyTextVerticalArea(
-          icon: icon,
-          title: title,
-          height: height ?? 105,
-          mainColor: mainColor,
-          backgroundColor: backgroundColor,
-          isBold: isBold,
-          iconSize: iconSize,
-          titleSize: titleSize,
-          padding: padding,
+      child: Padding(
+        padding: outterPadding ?? const EdgeInsets.all(0),
+        child: InkWell(
+          onTap: onTap,
+          child: EmptyTextVerticalArea(
+            icon: icon,
+            title: title,
+            height: height ?? 105,
+            mainColor: mainColor,
+            backgroundColor: backgroundColor,
+            isBold: isBold,
+            iconSize: iconSize,
+            titleSize: titleSize,
+            padding: padding,
+          ),
         ),
       ),
     );

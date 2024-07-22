@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/AppStartBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
@@ -70,6 +72,8 @@ class _SettingBodyState extends State<SettingBody> {
     String fontFamily = user.fontFamily ?? initFontFamily;
     String validFontFamily = getFontFamily(fontFamily);
     String fontName = getFontName(validFontFamily);
+    int appStartIndex = user.appStartIndex ?? 0;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onNavigator({required String type, required String title}) async {
       await Navigator.pushNamed(context, '/body-info-page', arguments: {
@@ -359,7 +363,7 @@ class _SettingBodyState extends State<SettingBody> {
                             fontWeight: isLanguage
                                 ? FontWeight.bold
                                 : FontWeight.normal,
-                            color: isLanguage ? themeColor : Colors.grey,
+                            color: isLanguage ? themeColor : grey.original,
                           ),
                         ),
                         isLanguage
@@ -396,8 +400,26 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
-    onTapVersion(id) {
-      //
+    onTapStart(id) async {
+      if (isPremium == false) {
+        return showDialog(
+          context: context,
+          builder: (context) => CommonPopup(
+            title: '기능 제한',
+            height: 145,
+            buttonText: "프리미엄 구매 페이지로 이동",
+            text1: '프리미엄 구매 시',
+            text2: '화면 설정 기능을 이용할 수 있어요',
+            onTap: () => Navigator.pushNamed(context, '/premium-page'),
+          ),
+        );
+      }
+
+      await showModalBottomSheet(
+        context: context,
+        builder: (context) => const AppStartBottomSheet(),
+      );
+      setState(() {});
     }
 
     List<MoreSeeItemClass> settingItemList = [
@@ -469,6 +491,14 @@ class _SettingBodyState extends State<SettingBody> {
         onTap: onTapLock,
       ),
       MoreSeeItemClass(
+        id: MoreSeeItem.appStart,
+        icon: 'app-start',
+        title: '앱 시작 화면',
+        value: '${indexToName[appStartIndex]}'.tr(),
+        color: themeColor,
+        onTap: onTapStart,
+      ),
+      MoreSeeItemClass(
         id: MoreSeeItem.appData,
         icon: 'cloud-data',
         title: '데이터 백업/복원',
@@ -524,7 +554,7 @@ class _SettingBodyState extends State<SettingBody> {
             ? '${appInfo!['앱 버전']} (${appInfo!['앱 빌드 번호']})'
             : '',
         color: themeColor,
-        onTap: onTapVersion,
+        onTap: (_) {},
       ),
     ];
 
@@ -539,6 +569,7 @@ class _SettingBodyState extends State<SettingBody> {
                 title: item.title,
                 value: item.value,
                 color: item.color,
+                isPremium: isPremium,
                 onTap: item.onTap,
               ),
             )
@@ -609,18 +640,18 @@ class MoreSeeItemWidget extends StatelessWidget {
     required this.title,
     required this.value,
     required this.color,
+    required this.isPremium,
     required this.onTap,
   });
 
   MoreSeeItem id;
   String title, value, icon;
   Color color;
+  bool isPremium;
   Function(MoreSeeItem id) onTap;
 
   @override
   Widget build(BuildContext context) {
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
-
     wValue() {
       if (value == 'premium') {
         return Container(

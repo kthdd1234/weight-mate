@@ -527,7 +527,7 @@ class RowTitles extends StatelessWidget {
             CommonText(
                 text: type == eLife ? '습관' : '목표',
                 size: 13,
-                color: Colors.grey),
+                color: grey.original),
             Row(
               children: dayColors
                   .map((day) => Padding(
@@ -535,7 +535,7 @@ class RowTitles extends StatelessWidget {
                         child: CommonText(
                           text: day.type,
                           size: 13,
-                          color: Colors.grey,
+                          color: grey.original,
                         ),
                       ))
                   .toList(),

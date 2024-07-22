@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class BottomSubmitButton extends StatelessWidget {
   BottomSubmitButton({
@@ -32,8 +33,7 @@ class BottomSubmitButton extends StatelessWidget {
             elevation: isEnabled ? 2.0 : 0.0,
             backgroundColor:
                 isEnabled ? themeColor : disabledButtonBackgroundColor,
-            foregroundColor:
-                isEnabled ? buttonTextColor : disabledButtonTextColor,
+            foregroundColor: isEnabled ? buttonTextColor : grey.s400,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius ?? 30.0),
             ),

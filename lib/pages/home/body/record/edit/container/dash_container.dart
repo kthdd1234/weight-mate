@@ -24,23 +24,54 @@ class DashContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 1,
-      child: SizedBox(
-        height: height - (adjustHeight ?? 0),
-        child: GestureDetector(
-          onTap: onTap,
-          child: DottedBorder(
-            color: Colors.grey,
-            dashPattern: const [2, 5],
-            borderType: borderType,
-            radius: Radius.circular(radius),
-            child: SizedBox(
-              height: height,
-              child: CommonText(
-                text: text,
-                color: grey.original,
-                size: 13,
-                isCenter: true,
-              ),
+      child: DottedBorderContainer(
+        height: height,
+        adjustHeight: adjustHeight,
+        onTap: onTap,
+        borderType: borderType,
+        radius: radius,
+        text: text,
+      ),
+    );
+  }
+}
+
+class DottedBorderContainer extends StatelessWidget {
+  const DottedBorderContainer({
+    super.key,
+    required this.height,
+    required this.adjustHeight,
+    required this.onTap,
+    required this.borderType,
+    required this.radius,
+    required this.text,
+  });
+
+  final double height;
+  final double? adjustHeight;
+  final Function() onTap;
+  final BorderType borderType;
+  final double radius;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height - (adjustHeight ?? 0),
+      child: GestureDetector(
+        onTap: onTap,
+        child: DottedBorder(
+          color: Colors.grey,
+          dashPattern: const [2, 5],
+          borderType: borderType,
+          radius: Radius.circular(radius),
+          child: SizedBox(
+            height: height,
+            child: CommonText(
+              text: text,
+              color: grey.original,
+              size: 13,
+              isCenter: true,
             ),
           ),
         ),
@@ -48,23 +79,3 @@ class DashContainer extends StatelessWidget {
     );
   }
 }
-
-
-
-// Expanded(
-//       child: Container(
-//         height: height - (adjustHeight ?? 0),
-//         decoration: BoxDecoration(
-//           color: whiteBgBtnColor,
-//           borderRadius: BorderRadius.all(
-//             Radius.circular(radius),
-//           ),
-//         ),
-//         child: CommonText(
-//           text: text,
-//           color: Colors.grey,
-//           size: 13,
-//           isCenter: true,
-//         ),
-//       ),
-//     );

@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
-import 'dart:developer';
-
-import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
@@ -9,43 +7,29 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
-import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/services/app_open_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
-import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-List<BottomNavigationEnum> bottomIdList = [
-  BottomNavigationEnum.record,
-  BottomNavigationEnum.history,
-  BottomNavigationEnum.graph,
-  BottomNavigationEnum.setting
-];
-
 class HomePage extends StatefulWidget {
-  HomePage({super.key, required this.locale});
+  HomePage({super.key, required this.locale, required this.appStartIndex});
 
   String locale;
+  int appStartIndex;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -94,12 +78,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     bool? isShowPreviousGraph = user.isShowPreviousGraph;
     String? historyForamt = user.historyForamt;
     List<String>? historyDisplayList = user.historyDisplayList;
+    List<String>? searchDisplayList = user.searchDisplayList;
     String? historyCalendarForamt = user.historyCalendarFormat;
     bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
     String? fontFamily = user.fontFamily;
     Map<String, dynamic>? googleDriveInfo = user.googleDriveInfo;
     bool? isDietExerciseRecordDateTime2 = user.isDietExerciseRecordDateTime2;
     String? graphType = user.graphType;
+    List<Map<String, dynamic>>? hashTagList = user.hashTagList;
+    int? appStartIndex = user.appStartIndex;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -186,6 +173,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       user.historyDisplayList = initHistoryDisplayList;
     }
 
+    if (searchDisplayList == null) {
+      user.searchDisplayList = initSearchDisplayClassList;
+    }
+
     if (historyCalendarForamt == null) {
       user.historyCalendarFormat = CalendarFormat.week.toString();
     }
@@ -210,6 +201,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       user.graphType = eGraphDefault;
     }
 
+    if (hashTagList == null) {
+      user.hashTagList = getHashTagMapList(initHashTagList);
+    }
+
+    if (appStartIndex == null) {
+      user.appStartIndex = 0;
+    }
+
     userRepository.user.save();
 
     /** */
@@ -231,10 +230,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
       bool isAvailable = await inAppReview.isAvailable();
-      bool isNotNewUser = recordList.length > 2;
-      bool isDay27 = DateTime.now().day == 27;
+      bool isOverThreeDays = recordList.length > 2;
+      DateTime now = DateTime.now();
+      bool isTargetDay = now.day == 1 || now.day == 14 || now.day == 28;
 
-      if (isAvailable && isNotNewUser && isDay27) {
+      if (isAvailable && isOverThreeDays && !kDebugMode && isTargetDay) {
         inAppReview.requestReview();
       }
     }
@@ -244,6 +244,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();
 
+      context.read<BottomNavigationProvider>().setBottomNavigation(
+            enumId: indexToBn[widget.appStartIndex]!,
+          );
       context.read<ImportDateTimeProvider>().setImportDateTime(now);
       context.read<TitleDateTimeProvider>().setTitleDateTime(now);
       context
@@ -262,32 +265,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    List<BottomNavigationBarItem> items = [
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.edit_rounded),
-        label: '기록'.tr(),
-      ),
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.menu_book_rounded),
-        label: '히스토리'.tr(),
-      ),
-      BottomNavigationBarItem(
-        icon: const Padding(
-          padding: EdgeInsets.only(bottom: 3),
-          child: Icon(FontAwesomeIcons.chartLine, size: 17),
-        ),
-        label: '그래프'.tr(),
-      ),
-      // BottomNavigationBarItem(
-      //   icon: const Icon(Icons.search_rounded),
-      //   label: '검색'.tr(),
-      // ),
-      BottomNavigationBarItem(
-        icon: const Icon(Icons.settings_rounded),
-        label: '설정'.tr(),
-      ),
-    ];
-
     BottomNavigationEnum bottomNavitionId =
         context.watch<BottomNavigationProvider>().selectedEnumId;
 
@@ -312,14 +289,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           .read<BottomNavigationProvider>()
           .setBottomNavigation(enumId: indexList[index]);
     }
-
-    List<Widget> bodyList = const [
-      RecordBody(),
-      HistoryBody(),
-      GraphBody(),
-      // SearchBody(),
-      SettingBody()
-    ];
 
     floatingActionButton() {
       bool isRecord = BottomNavigationEnum.record == bottomNavitionId;
@@ -375,12 +344,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             items: items,
             elevation: 0,
             currentIndex: bottomNavitionId.index,
-            selectedItemColor: textColor,
-            unselectedItemColor: textColor,
+            selectedItemColor: themeColor,
+            unselectedItemColor: themeColor,
             onTap: onBottomNavigation,
           ),
         ),
-        floatingActionButton: floatingActionButton(),
+        // floatingActionButton: floatingActionButton(),
       ),
     );
   }

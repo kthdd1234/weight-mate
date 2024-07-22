@@ -19,10 +19,11 @@ class ExpandedButtonHori extends StatelessWidget {
     this.borderRadius,
     this.nameArgs,
     this.flex,
+    this.textColor,
   });
 
   String? imgUrl;
-  Color? color;
+  Color? color, textColor;
   IconData? icon;
   String text;
   int? flex;
@@ -48,7 +49,7 @@ class ExpandedButtonHori extends StatelessWidget {
             leftIcon: icon,
             isBold: true,
             isCenter: true,
-            color: Colors.white,
+            color: textColor ?? Colors.white,
             nameArgs: nameArgs,
           ),
         ),

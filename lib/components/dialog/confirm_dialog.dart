@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/components/contents_box/contents_b
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 
 class ConfirmDialog extends StatelessWidget {
   ConfirmDialog({
@@ -61,11 +62,7 @@ class ConfirmDialog extends StatelessWidget {
                 contentsWidget: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        contentIcon,
-                        size: 30,
-                        color: textColor,
-                      ),
+                      Icon(contentIcon, size: 30, color: grey.original),
                       SpaceHeight(height: smallSpace),
                       CommonText(
                         text: contentText1,

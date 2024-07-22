@@ -56,9 +56,9 @@ class HistoryListView extends StatelessWidget {
     DateTime historyDateTime =
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
-        context.watch<HistoryFilterProvider>().value();
+        context.watch<HistoryFilterProvider>().historyFilter;
 
-    List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+    List<RecordBox> recordList = recordRepository.recordList;
     recordList = recordList
         .where((e) => e.createDateTime.year == historyDateTime.year)
         .toList();
@@ -134,7 +134,7 @@ class HistoryCalendar extends StatelessWidget {
               ),
             )
           : EmptyTextVerticalArea(
-              icon: Icons.menu_book_rounded,
+              icon: Icons.view_timeline_outlined,
               title: '기록이 없어요.',
               backgroundColor: Colors.transparent,
             ),

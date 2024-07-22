@@ -307,9 +307,9 @@ class EmptyWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        CommonIcon(icon: icon, size: 30, color: Colors.grey),
+        CommonIcon(icon: icon, size: 30, color: grey.original),
         SpaceHeight(height: 10),
-        CommonText(text: text, size: 15, isCenter: true, color: Colors.grey)
+        CommonText(text: text, size: 15, isCenter: true, color: grey.original)
       ],
     );
   }

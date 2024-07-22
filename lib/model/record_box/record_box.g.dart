@@ -17,28 +17,32 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return RecordBox(
-        createDateTime: fields[0] as DateTime,
-        weightDateTime: fields[1] as DateTime?,
-        actionDateTime: fields[2] as DateTime?,
-        diaryDateTime: fields[3] as DateTime?,
-        weight: fields[4] as double?,
-        actions: (fields[5] as List?)
-            ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
-            .toList(),
-        leftFile: fields[6] as Uint8List?,
-        rightFile: fields[7] as Uint8List?,
-        whiteText: fields[8] as String?,
-        emotion: fields[9] as String?,
-        bottomFile: fields[10] as Uint8List?,
-        topFile: fields[11] as Uint8List?,
-        dietRecordOrderList: (fields[12] as List?)?.cast<String>(),
-        exerciseRecordOrderList: (fields[13] as List?)?.cast<String>());
+      createDateTime: fields[0] as DateTime,
+      weightDateTime: fields[1] as DateTime?,
+      actionDateTime: fields[2] as DateTime?,
+      diaryDateTime: fields[3] as DateTime?,
+      weight: fields[4] as double?,
+      actions: (fields[5] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, dynamic>())
+          .toList(),
+      leftFile: fields[6] as Uint8List?,
+      rightFile: fields[7] as Uint8List?,
+      whiteText: fields[8] as String?,
+      emotion: fields[9] as String?,
+      bottomFile: fields[10] as Uint8List?,
+      topFile: fields[11] as Uint8List?,
+      dietRecordOrderList: (fields[12] as List?)?.cast<String>(),
+      exerciseRecordOrderList: (fields[13] as List?)?.cast<String>(),
+      recordHashTagList: (fields[14] as List?)
+          ?.map((dynamic e) => (e as Map).cast<String, String>())
+          .toList(),
+    );
   }
 
   @override
   void write(BinaryWriter writer, RecordBox obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.createDateTime)
       ..writeByte(1)
@@ -66,7 +70,9 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(12)
       ..write(obj.dietRecordOrderList)
       ..writeByte(13)
-      ..write(obj.exerciseRecordOrderList);
+      ..write(obj.exerciseRecordOrderList)
+      ..writeByte(14)
+      ..write(obj.recordHashTagList);
   }
 
   @override

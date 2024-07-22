@@ -743,7 +743,7 @@ class _RecordNameState extends State<RecordName> {
                               text:
                                   '${widget.title.tr()}${widget.dietExerciseRecordDateTime != null ? ', ${hm(locale: context.locale.toString(), dateTime: widget.dietExerciseRecordDateTime!)}' : ''}',
                               size: 11,
-                              color: Colors.grey,
+                              color: grey.original,
                               isNotTr: true,
                             ),
                           ],
@@ -756,7 +756,7 @@ class _RecordNameState extends State<RecordName> {
                 CommonIcon(
                   icon: Icons.more_horiz_rounded,
                   size: 20,
-                  color: Colors.grey,
+                  color: grey.original,
                   onTap: onTapMore,
                 )
               ],
@@ -1183,8 +1183,8 @@ class RecordDateTime extends StatelessWidget {
             CommonButton(
               text: category == 'ampm' ? text.tr() : text,
               fontSize: 12,
-              textColor: state == text ? Colors.white : Colors.grey.shade600,
-              bgColor: state == text ? themeColor : Colors.grey.shade50,
+              textColor: state == text ? Colors.white : grey.original,
+              bgColor: state == text ? themeColor : grey.s50,
               isBold: state == text,
               radious: 7,
               isNotTr: true,
@@ -1705,7 +1705,7 @@ class GoalName extends StatelessWidget {
                                 )
                               },
                               size: 11,
-                              color: Colors.grey,
+                              color: grey.original,
                             )
                           : const EmptyArea(),
                       CommonText(
@@ -1716,7 +1716,7 @@ class GoalName extends StatelessWidget {
                           planId: planInfo.id,
                         ),
                         size: 11,
-                        color: Colors.grey,
+                        color: grey.original,
                         isNotTr: true,
                       ),
                     ],
@@ -1728,7 +1728,7 @@ class GoalName extends StatelessWidget {
             CommonIcon(
               icon: moreIcon,
               size: 22,
-              color: Colors.grey,
+              color: grey.original,
               onTap: onTapMore,
             ),
           ],
@@ -1822,7 +1822,7 @@ class _GoalAddState extends State<GoalAdd> {
               ? CommonCheckBox(
                   id: uuid(),
                   isCheck: isChecked,
-                  checkColor: isChecked ? widget.mainColor : Colors.grey,
+                  checkColor: isChecked ? widget.mainColor : grey.original,
                   onTap: onCheckBox,
                 )
               : const EmptyArea(),
