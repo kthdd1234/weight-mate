@@ -129,7 +129,7 @@ class _HashTagBottomSheetState extends State<HashTagBottomSheet> {
         builder: (context, values, child) {
           List<HashTagClass> hashTagClassList =
               getHashTagClassList(user.hashTagList ?? []);
-          String path = 'assets/images/';
+          String path = 'assets/images';
           List<Widget> children = isEditMode
               ? [
                   btn(
