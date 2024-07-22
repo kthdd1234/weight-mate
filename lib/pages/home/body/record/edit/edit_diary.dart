@@ -181,36 +181,7 @@ class EditDiary extends StatelessWidget {
     }
 
     onTapHashTag(String id) {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (context) => HashTagBottomSheet(
-          hashTagIdList: getHashTagClassList(recordInfo?.recordHashTagList)
-              .map((hashTag) => hashTag.id)
-              .toList(),
-          onCompleted: (List<HashTagClass> newHashTagList) async {
-            if (recordInfo == null) {
-              recordRepository.updateRecord(
-                key: recordKey,
-                record: RecordBox(
-                  createDateTime: importDateTime,
-                  recordHashTagList: getHashTagMapList(newHashTagList),
-                ),
-              );
-            } else {
-              log('$newHashTagList');
-              recordInfo.recordHashTagList = getHashTagMapList(newHashTagList);
-            }
-
-            bool? isContain = user.filterList?.contains(fDiary);
-            if (isContain == false || isContain == null) {
-              user.filterList?.add(fDiary);
-            }
-
-            await recordInfo?.save();
-          },
-        ),
-      );
+      onTapMore();
     }
 
     bool isRecordHashTagList = recordInfo?.recordHashTagList == null ||
