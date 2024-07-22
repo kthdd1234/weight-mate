@@ -86,15 +86,20 @@ class _HashTagBottomSheetState extends State<HashTagBottomSheet> {
   }
 
   onCompleted() {
-    List<HashTagClass> hashTagClassList = selectedHashTagIdList.map((id) {
-      int index =
-          user.hashTagList!.indexWhere((hashTag) => hashTag['id'] == id);
-      return HashTagClass(
-        id: id,
-        text: user.hashTagList![index]['text']!,
-        colorName: user.hashTagList![index]['colorName']!,
-      );
-    }).toList();
+    List<Map<String, String>>? hashTagList = user.hashTagList ?? [];
+    List<HashTagClass> hashTagClassList = [];
+
+    for (var id in selectedHashTagIdList) {
+      int index = hashTagList.indexWhere((hashTag) => hashTag['id'] == id);
+
+      if (index != -1) {
+        hashTagClassList.add(HashTagClass(
+          id: id,
+          text: hashTagList[index]['text']!,
+          colorName: hashTagList[index]['colorName']!,
+        ));
+      }
+    }
 
     widget.onCompleted(hashTagClassList);
     closeDialog(context);
@@ -120,6 +125,10 @@ class _HashTagBottomSheetState extends State<HashTagBottomSheet> {
       textColor: textColor,
       onTap: onTap,
     );
+  }
+
+  onBack() {
+    //
   }
 
   @override

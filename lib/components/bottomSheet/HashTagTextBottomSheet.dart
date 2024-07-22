@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonModalItem.dart';
 import 'package:flutter_app_weight_management/common/CommonModalSheet.dart';
@@ -106,7 +107,7 @@ class _HashTagTextBottomSheetState extends State<HashTagTextBottomSheet> {
               SpaceHeight(height: 17.5),
               CommonOutlineInputField(
                 controller: controller,
-                hintText: '키워드를 입력해주세요',
+                hintText: '키워드를 입력해주세요'.tr(),
                 selectedColor: getColorClass(selectedColorName).s200,
                 onSuffixIcon: onEditingComplete,
                 onEditingComplete: onEditingComplete,

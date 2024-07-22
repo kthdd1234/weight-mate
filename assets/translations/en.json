@@ -146,8 +146,8 @@
   "해탈": "Release",
   "출처: ": "Source: ",
   "일기 설정": "Diary Setting",
-  "내용 수정": "Edit",
-  "내용 삭제": "rm Diary",
+  "일기 수정": "Edit",
+  "글 삭제": "rm Diary",
   "감정 삭제": "rm Emotion",
   "키보드 내리기": "Lower the keyboard",
   "오늘 다이어트를 하면서 어땠는지 기록해보아요 :D": "Let's record how your diet was today :D",
@@ -377,7 +377,8 @@
   "검색": "Search",
   "키워드 검색": "Search Keywords",
   "#해시태그": "#Hashtag",
-  "+ 해시태그 만들기": "Create + hashtags",
+  "+ 해시태그 추가": "Create hashtags",
+  "- 해시태그 삭제": "Delete hashtags",
   "추가": "Add",
   "편집": "Edit",
   "편집 해제": "De-editing",
@@ -417,5 +418,7 @@
   "두통": "Headache",
   "증량": "Increase",
   "체함": "water brash",
-  "변비": "Constipation"
+  "변비": "Constipation",
+  "추가된 해시태그가 없어요.": "No hashtags added.",
+  "해시태그 삭제": "Delete hashtag"
 }

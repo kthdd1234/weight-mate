@@ -1,14 +1,16 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/HashTagRemoveBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/bottomSheet/HashTagTextBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -50,6 +52,14 @@ class _SearchHashTagState extends State<SearchHashTag> {
               );
             }
 
+            onRemoveHashTag(_) {
+              showModalBottomSheet(
+                isScrollControlled: true,
+                context: context,
+                builder: (btx) => HashTagRemoveBottomSheet(),
+              );
+            }
+
             List<Widget> hashTagWidgetList = userHashTagClassList
                 .map((hashTag) => HashTagKeyword(
                       keyword: widget.keyword,
@@ -59,12 +69,20 @@ class _SearchHashTagState extends State<SearchHashTag> {
                     ))
                 .toList();
 
-            hashTagWidgetList.add(HashTagKeyword(
-              keyword: widget.keyword,
-              text: '해시태그 만들기',
-              isImage: true,
-              onHashTag: onAddHashTag,
-            ));
+            hashTagWidgetList.addAll([
+              HashTagKeyword(
+                keyword: widget.keyword,
+                text: '+ 해시태그 추가'.tr(),
+                path: 't-22',
+                onHashTag: onAddHashTag,
+              ),
+              HashTagKeyword(
+                keyword: widget.keyword,
+                text: '- 해시태그 삭제'.tr(),
+                path: 't-23',
+                onHashTag: onRemoveHashTag,
+              )
+            ].toList());
 
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 7),
@@ -120,12 +138,12 @@ class HashTagKeyword extends StatelessWidget {
     required this.keyword,
     required this.onHashTag,
     this.color,
-    this.isImage,
+    this.path,
   });
 
   String text, keyword;
   ColorClass? color;
-  bool? isImage;
+  String? path;
   Function(String) onHashTag;
 
   @override
@@ -137,26 +155,26 @@ class HashTagKeyword extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
-            image: isImage == true
-                ? const DecorationImage(
-                    image: AssetImage('assets/images/t-23.png'),
+            image: path != null
+                ? DecorationImage(
+                    image: AssetImage('assets/images/$path.png'),
                     fit: BoxFit.cover,
                   )
                 : null,
-            color: isImage == true
+            color: path != null
                 ? null
                 : text == keyword
                     ? indigo.s300
                     : color!.s50,
-            borderRadius: BorderRadius.circular(100),
+            borderRadius: BorderRadius.circular(path != null ? 10 : 100),
           ),
           child: CommonName(
-            text: '${isImage == true ? '+ ' : '#'}$text',
-            color: isImage == true || text == keyword
+            text: path != null ? text : '#$text',
+            color: path != null || text == keyword
                 ? Colors.white
                 : color!.original,
             fontSize: 13,
-            isBold: isImage == true || text == keyword,
+            isBold: path != null || text == keyword,
             isNotTr: true,
           ),
         ),

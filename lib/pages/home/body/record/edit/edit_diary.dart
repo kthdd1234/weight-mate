@@ -113,19 +113,30 @@ class EditDiary extends StatelessWidget {
       closeDialog(context);
     }
 
+    onTapRemoveHashTag() {
+      if (recordInfo?.recordHashTagList != null) {
+        recordInfo?.recordHashTagList = null;
+        recordInfo?.save();
+      }
+
+      closeDialog(context);
+    }
+
     onTapMore() {
       showModalBottomSheet(
         context: context,
         builder: (context) {
           return CommonBottomSheet(
             title: '일기 설정'.tr(),
-            height: 220,
+            height: 200,
             contents: Row(
               children: [
                 ExpandedButtonVerti(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   mainColor: textColor,
                   icon: Icons.edit,
-                  title: '내용 수정',
+                  title: '일기 수정',
                   onTap: () {
                     closeDialog(context);
                     onTapWriteDiary();
@@ -133,19 +144,30 @@ class EditDiary extends StatelessWidget {
                 ),
                 SpaceWidth(width: tinySpace),
                 ExpandedButtonVerti(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   mainColor: Colors.red,
                   icon: Icons.delete_forever,
-                  title: '내용 삭제',
+                  title: '글 삭제',
                   onTap: onTapRemoveDiary,
                 ),
                 SpaceWidth(width: tinySpace),
                 ExpandedButtonVerti(
                   padding:
-                      const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                   mainColor: Colors.red,
                   icon: Icons.delete_forever,
                   title: '감정 삭제',
                   onTap: onTapRemoveEmotion,
+                ),
+                SpaceWidth(width: tinySpace),
+                ExpandedButtonVerti(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                  mainColor: Colors.red,
+                  icon: Icons.delete_forever,
+                  title: '태그 삭제',
+                  onTap: onTapRemoveHashTag,
                 ),
               ],
             ),
