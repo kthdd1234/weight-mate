@@ -349,7 +349,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             onTap: onBottomNavigation,
           ),
         ),
-        floatingActionButton: floatingActionButton(),
+        // floatingActionButton: floatingActionButton(),
       ),
     );
   }
