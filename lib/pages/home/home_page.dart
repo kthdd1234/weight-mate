@@ -230,11 +230,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       List<RecordBox> recordList = recordRepository.recordList;
       InAppReview inAppReview = InAppReview.instance;
       bool isAvailable = await inAppReview.isAvailable();
-      bool isOverThreeDays = recordList.length > 2;
-      DateTime now = DateTime.now();
-      bool isTargetDay = now.day == 1 || now.day == 14 || now.day == 28;
+      bool isLength = recordList.length == 3 ||
+          recordList.length == 10 ||
+          recordList.length == 25 ||
+          recordList.length == 50;
 
-      if (isAvailable && isOverThreeDays && !kDebugMode && isTargetDay) {
+      if (isAvailable && isLength && !kDebugMode) {
         inAppReview.requestReview();
       }
     }
