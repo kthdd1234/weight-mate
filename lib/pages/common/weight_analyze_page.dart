@@ -1,17 +1,15 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
-import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -19,7 +17,6 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:jiffy/jiffy.dart';
@@ -42,30 +39,17 @@ class WeightAnalyzePage extends StatelessWidget {
       CompareToGoal(locale: locale, unit: unit, goalWeight: goalWeight),
     ];
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          title: Text(
-            '체중 분석표'.tr(),
-            style: const TextStyle(fontSize: 20, color: textColor),
-          ),
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Stack(
-              children: [
-                ListView.builder(
-                  itemBuilder: ((context, index) => analyzeWidgetList[index]),
-                  itemCount: analyzeWidgetList.length,
-                ),
-                CommonBlur(),
-              ],
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '체중 분석표'),
+        body: Stack(
+          children: [
+            ListView.builder(
+              itemBuilder: ((context, index) => analyzeWidgetList[index]),
+              itemCount: analyzeWidgetList.length,
             ),
-          ),
+            CommonBlur(),
+          ],
         ),
       ),
     );

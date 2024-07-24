@@ -16,13 +16,14 @@ class CommonBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 1, 4, 6, 18
     return Container(
       height: height ?? MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
           borderRadius: borderRadius ??
               BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
           image: const DecorationImage(
-            image: AssetImage('assets/images/Cloudy_Apple.png'),
+            image: AssetImage('assets/images/backDrop/b-1.png'),
             fit: BoxFit.cover,
           )),
       child: child,

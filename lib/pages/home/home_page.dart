@@ -1,8 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -333,22 +334,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
           : null;
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: SafeArea(child: bodyList[bottomNavitionId.index]),
-        bottomNavigationBar: Theme(
-          data: Theme.of(context).copyWith(
-            canvasColor: Colors.transparent,
-          ),
-          child: BottomNavigationBar(
-            items: items,
-            elevation: 0,
-            currentIndex: bottomNavitionId.index,
-            selectedItemColor: themeColor,
-            unselectedItemColor: themeColor,
-            onTap: onBottomNavigation,
-          ),
+    return CommonBackground(
+      child: CommonScaffold(
+        padding: const EdgeInsets.all(0),
+        body: bodyList[bottomNavitionId.index],
+        bottomNavigationBar: BottomNavigationBar(
+          items: items,
+          elevation: 0,
+          currentIndex: bottomNavitionId.index,
+          selectedItemColor: themeColor,
+          unselectedItemColor: themeColor,
+          onTap: onBottomNavigation,
         ),
         floatingActionButton: floatingActionButton(),
       ),

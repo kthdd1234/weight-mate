@@ -1,17 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -79,73 +81,59 @@ class _TodoChartPageState extends State<TodoChartPage> {
         .reversed
         .toList();
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-        appBar: AppBar(
-          title: Text(
-            '$title 기록 모아보기'.tr(),
-            style: const TextStyle(fontSize: 20, color: textColor),
-          ),
-          backgroundColor: Colors.transparent,
-          foregroundColor: textColor,
-          elevation: 0.0,
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Stack(
-              children: [
-                ContentsBox(
-                  contentsWidget: Column(
-                    children: [
-                      RowTitle(
-                        type: type,
-                        selectedMonth: selectedMonth,
-                        onTap: onTapMonthTitle,
-                      ),
-                      Divider(color: Colors.grey.shade200),
-                      displayRecordList.isNotEmpty
-                          ? Expanded(
-                              child: ListView(
-                                children: displayRecordList
-                                    .map((record) => ColumnContainer(
-                                          recordInfo: record,
-                                          dateTime: record!.createDateTime,
-                                          type: type,
-                                          actions: record.actions,
-                                        ))
-                                    .toList(),
-                              ),
-                            )
-                          : Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  CommonIcon(
-                                    icon: todoData[type]!.icon,
-                                    size: 20,
-                                    color: grey.original,
-                                  ),
-                                  SpaceHeight(height: 10),
-                                  CommonText(
-                                    text: '기록이 없어요.',
-                                    size: 15,
-                                    isCenter: true,
-                                    color: grey.original,
-                                  ),
-                                  SpaceHeight(height: 20),
-                                ],
-                              ),
-                            ),
-                    ],
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '$title 기록 모아보기'),
+        body: Stack(
+          children: [
+            ContentsBox(
+              contentsWidget: Column(
+                children: [
+                  RowTitle(
+                    type: type,
+                    selectedMonth: selectedMonth,
+                    onTap: onTapMonthTitle,
                   ),
-                ),
-                CommonBlur(),
-              ],
+                  Divider(color: Colors.grey.shade200),
+                  displayRecordList.isNotEmpty
+                      ? Expanded(
+                          child: ListView(
+                            children: displayRecordList
+                                .map((record) => ColumnContainer(
+                                      recordInfo: record,
+                                      dateTime: record!.createDateTime,
+                                      type: type,
+                                      actions: record.actions,
+                                    ))
+                                .toList(),
+                          ),
+                        )
+                      : Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CommonIcon(
+                                icon: todoData[type]!.icon,
+                                size: 20,
+                                color: grey.original,
+                              ),
+                              SpaceHeight(height: 10),
+                              CommonText(
+                                text: '기록이 없어요.',
+                                size: 15,
+                                isCenter: true,
+                                color: grey.original,
+                              ),
+                              SpaceHeight(height: 20),
+                            ],
+                          ),
+                        ),
+                ],
+              ),
             ),
-          ),
+            CommonBlur(),
+          ],
         ),
       ),
     );

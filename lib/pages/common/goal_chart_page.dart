@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/calendar_range_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -58,36 +60,24 @@ class _GoalChartPageState extends State<GoalChartPage> {
       setState(() => selectedSegment = type!);
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            ' 실천 모아보기'.tr(namedArgs: {'type': title.tr()}),
-            style: const TextStyle(fontSize: 20, color: textColor),
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 10, 15, 15),
-            child: Column(
-              children: [
-                selectedSegment == SegmentedTypes.week
-                    ? GoalWeeklyContainer(type: type)
-                    : GoalMonthlyContainer(type: type),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: DefaultSegmented(
-                    selectedSegment: selectedSegment,
-                    children: segmentedChildren,
-                    onSegmentedChanged: onSegmentedChanged,
-                  ),
-                ),
-              ],
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo:
+            AppBarInfoClass(title: ' 실천 모아보기', nameArgs: {'type': title.tr()}),
+        body: Column(
+          children: [
+            selectedSegment == SegmentedTypes.week
+                ? GoalWeeklyContainer(type: type)
+                : GoalMonthlyContainer(type: type),
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: DefaultSegmented(
+                selectedSegment: selectedSegment,
+                children: segmentedChildren,
+                onSegmentedChanged: onSegmentedChanged,
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

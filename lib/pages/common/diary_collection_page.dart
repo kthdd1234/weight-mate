@@ -1,14 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -16,6 +17,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -90,15 +92,10 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
       closeDialog(context);
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          centerTitle: false,
-          title: Text('일기 모아보기'.tr(), style: const TextStyle(fontSize: 20)),
-          backgroundColor: Colors.transparent,
-          foregroundColor: textColor,
-          elevation: 0.0,
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(
+          title: '일기 모아보기',
           actions: [
             RowTags(
               selectedYear: selectedYear,
@@ -108,49 +105,43 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
             )
           ],
         ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Stack(
-              children: [
-                orderList.isNotEmpty
-                    ? ListView(
-                        children: orderList
-                            .map(
-                              (record) => Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: ContentsBox(
-                                  contentsWidget: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      DiaryItemTitle(
-                                        dateTime: record.createDateTime,
-                                        emotion: record.emotion,
-                                        onEdit: onEdit,
-                                        onRemove: onRemove,
-                                      ),
-                                      DiaryItemContent(
-                                        whiteText: record.whiteText,
-                                        whiteDateTime: record.diaryDateTime,
-                                      ),
-                                      DiaryHashTag(
-                                        hashTagClassList: getHashTagClassList(
-                                          record.recordHashTagList,
-                                        ),
-                                      )
-                                    ],
+        body: Stack(
+          children: [
+            orderList.isNotEmpty
+                ? ListView(
+                    children: orderList
+                        .map(
+                          (record) => Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: ContentsBox(
+                              contentsWidget: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  DiaryItemTitle(
+                                    dateTime: record.createDateTime,
+                                    emotion: record.emotion,
+                                    onEdit: onEdit,
+                                    onRemove: onRemove,
                                   ),
-                                ),
+                                  DiaryItemContent(
+                                    whiteText: record.whiteText,
+                                    whiteDateTime: record.diaryDateTime,
+                                  ),
+                                  DiaryHashTag(
+                                    hashTagClassList: getHashTagClassList(
+                                      record.recordHashTagList,
+                                    ),
+                                  )
+                                ],
                               ),
-                            )
-                            .toList(),
-                      )
-                    : EmptyWidget(icon: Icons.edit, text: "기록이 없어요."),
-                CommonBlur()
-              ],
-            ),
-          ),
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  )
+                : EmptyWidget(icon: Icons.edit, text: "기록이 없어요."),
+            CommonBlur()
+          ],
         ),
       ),
     );

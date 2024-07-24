@@ -1,18 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:developer';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -113,59 +113,44 @@ class _PremiumPageState extends State<PremiumPage> {
         )
         .toList();
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            '프리미엄'.tr(),
-            style: const TextStyle(fontSize: 20, color: textColor),
-          ),
-          backgroundColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
-          elevation: 0.0,
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: ContentsBox(
-                        contentsWidget: Column(
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '프리미엄'),
+        body: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 30),
+                  child: ContentsBox(
+                    contentsWidget: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                CommonText(
-                                    text: '프리미엄 혜택', size: 14, isBold: true),
-                                CommonText(
-                                  text: '구매 내역 가져오기',
-                                  size: 12,
-                                  color: grey.original,
-                                  onTap: onRestore,
-                                ),
-                              ],
+                            CommonText(text: '프리미엄 혜택', size: 14, isBold: true),
+                            CommonText(
+                              text: '구매 내역 가져오기',
+                              size: 12,
+                              color: grey.original,
+                              onTap: onRestore,
                             ),
-                            Column(children: premiumBenefitsWidgetList),
                           ],
                         ),
-                      ),
+                        Column(children: premiumBenefitsWidgetList),
+                      ],
                     ),
                   ),
                 ),
-                PremiumPurchaseButton(
-                  isPremium: isPremium,
-                  package: package,
-                  onPurchase: onPurchase,
-                ),
-              ],
+              ),
             ),
-          ),
+            PremiumPurchaseButton(
+              isPremium: isPremium,
+              package: package,
+              onPurchase: onPurchase,
+            ),
+          ],
         ),
       ),
     );

@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 
 class ImagePullSizePage extends StatelessWidget {
   ImagePullSizePage({super.key, required this.binaryData});
@@ -9,15 +11,11 @@ class ImagePullSizePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppFramework(
-      widget: Scaffold(
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '', leading: const CloseButton()),
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          leading: const CloseButton(),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          foregroundColor: Colors.white,
-        ),
+        foregroundColor: Colors.white,
         body: Center(child: Image.memory(binaryData)),
       ),
     );

@@ -1,13 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
-import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/screen_lock_page.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
 import '../../model/user_box/user_box.dart';
 
@@ -77,13 +74,10 @@ class _EnterScreenLockPageState extends State<EnterScreenLockPage> {
       }
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          foregroundColor: textColor,
-          elevation: 0.0,
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(
+          title: '',
           automaticallyImplyLeading: false,
         ),
         body: ScreenLockContents(

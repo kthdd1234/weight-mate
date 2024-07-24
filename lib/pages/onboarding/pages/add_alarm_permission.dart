@@ -12,7 +12,6 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
-import 'package:flutter_app_weight_management/etc/add_body_info.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
@@ -162,10 +161,10 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
                           onDateTimeChanged: onDateTimeChanged,
                         ),
                       )
-                    : const EmptyArea()
+                    : const EmptyArea(),
               ],
             ),
-          )
+          ),
         ],
       ),
       buttonEnabled: true,

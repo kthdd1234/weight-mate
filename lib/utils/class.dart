@@ -441,17 +441,29 @@ class HashTagClass {
 class AppBarInfoClass {
   AppBarInfoClass({
     required this.title,
+    this.nameArgs,
     this.isCenter,
+    this.isBold,
     this.actions,
+    this.titleColor,
+    this.leading,
+    this.automaticallyImplyLeading,
   });
 
   String title;
-  bool? isCenter;
+  Map<String, String>? nameArgs;
+  bool? isCenter, isBold, automaticallyImplyLeading;
+  Color? titleColor;
+  Widget? leading;
   List<Widget>? actions;
 }
 
 class BNClass {
-  BNClass({required this.index, required this.name, required this.icon});
+  BNClass({
+    required this.index,
+    required this.name,
+    required this.icon,
+  });
 
   int index;
   String name;

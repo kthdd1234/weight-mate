@@ -1,14 +1,13 @@
-import 'dart:developer';
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class ScreenLockPage extends StatefulWidget {
   const ScreenLockPage({super.key});
@@ -79,15 +78,9 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
       }
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          foregroundColor: textColor,
-          elevation: 0.0,
-          title: const Text('화면 잠금').tr(),
-        ),
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '화면 잠금'),
         body: ScreenLockContents(
           passwords: passwords,
           passwordMsg: isConfirmPassword ? confirmPasswordMsg : newPasswordMsg,
@@ -100,13 +93,14 @@ class _ScreenLockPageState extends State<ScreenLockPage> {
 }
 
 class ScreenLockContents extends StatelessWidget {
-  ScreenLockContents(
-      {super.key,
-      required this.passwords,
-      required this.passwordMsg,
-      required this.passwordErrMsg,
-      required this.onTap,
-      this.isExit});
+  ScreenLockContents({
+    super.key,
+    required this.passwords,
+    required this.passwordMsg,
+    required this.passwordErrMsg,
+    required this.onTap,
+    this.isExit,
+  });
 
   List<String> passwords;
   String passwordMsg, passwordErrMsg;

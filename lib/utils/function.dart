@@ -6,15 +6,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/pages/common/example_Image_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -22,7 +19,6 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive/hive.dart';
-import 'package:purchases_flutter/models/customer_info_wrapper.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:quiver/time.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
@@ -980,9 +976,9 @@ Future<bool> setPurchasePremium(Package package) async {
 Future<bool> isPurchasePremium() async {
   try {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    // return true;
-    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-        true;
+    return true;
+    // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+    //     true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -1060,22 +1056,6 @@ String getFontName(String fontFamily) {
   int idx = fontFamilyList
       .indexWhere((element) => element['fontFamily'] == fontFamily);
   return idx != -1 ? fontFamilyList[idx]['name']! : initFontName;
-}
-
-navigatorExamplePage({
-  required BuildContext context,
-  required String title,
-  required String assetName,
-}) {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => ExampleImagePage(
-        title: title,
-        assetName: assetName,
-      ),
-    ),
-  );
 }
 
 ColorClass getColorClass(String? name) {

@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/input/text_input.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -121,45 +123,34 @@ class _BodyInfoPageState extends State<BodyInfoPage> {
       )
     }[type]!;
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: const Color.fromRGBO(0, 0, 0, 0),
-        appBar: AppBar(
-          title: Text(title.tr(), style: const TextStyle(fontSize: 20)),
-          backgroundColor: Colors.transparent,
-          foregroundColor: textColor,
-          elevation: 0.0,
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ContentsBox(
-                  contentsWidget: TextInput(
-                    autofocus: true,
-                    focusNode: FocusNode(),
-                    controller: controller,
-                    maxLength: 5,
-                    prefixIcon: bodyInputObj.prefixIcon,
-                    suffixText: bodyInputObj.suffixText,
-                    hintText: bodyInputObj.hintText,
-                    helperText: bodyInputObj.helperText,
-                    onChanged: onChanged,
-                  ),
-                ),
-                BottomSubmitButton(
-                  padding: const EdgeInsets.all(0),
-                  isEnabled: !isError(),
-                  text: '완료'.tr(),
-                  onPressed:
-                      type == 'tall' ? onCompletedTall : onCompletedGoalWeight,
-                ),
-              ],
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: title),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ContentsBox(
+              contentsWidget: TextInput(
+                autofocus: true,
+                focusNode: FocusNode(),
+                controller: controller,
+                maxLength: 5,
+                prefixIcon: bodyInputObj.prefixIcon,
+                suffixText: bodyInputObj.suffixText,
+                hintText: bodyInputObj.hintText,
+                helperText: bodyInputObj.helperText,
+                onChanged: onChanged,
+              ),
             ),
-          ),
+            BottomSubmitButton(
+              padding: const EdgeInsets.all(0),
+              isEnabled: !isError(),
+              text: '완료'.tr(),
+              onPressed:
+                  type == 'tall' ? onCompletedTall : onCompletedGoalWeight,
+            ),
+          ],
         ),
       ),
     );

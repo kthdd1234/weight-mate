@@ -128,6 +128,10 @@ flutter:
     - assets/images/t-22.png
     - assets/images/t-23.png
     - assets/images/t-24.png
+    - assets/images/backDrop/b-1.png
+    - assets/images/backDrop/b-4.png
+    - assets/images/backDrop/b-6.png
+    - assets/images/backDrop/b-18.png
     - assets/svgs/amazed-face.svg
     - assets/svgs/anxious-face.svg
     - assets/svgs/crying-face.svg

@@ -66,7 +66,7 @@ class ContentsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
-      child: CommonText(text: text, size: 15, isBold: true),
+      child: CommonText(text: text, size: 15),
     );
   }
 }

@@ -15,7 +15,6 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
-import 'package:flutter_app_weight_management/provider/reload_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/services/google_drive_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -25,7 +24,6 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
 import 'package:restart_app/restart_app.dart';
 
 class GoogleDriveContainer extends StatefulWidget {

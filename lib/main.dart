@@ -249,7 +249,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
-      initialRoute: initialRoute, // initialRoute
+      initialRoute: initialRoute,
       routes: {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-weight': (context) => const AddBodyWeight(),

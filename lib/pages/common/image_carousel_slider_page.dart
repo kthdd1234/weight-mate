@@ -2,13 +2,15 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -95,16 +97,15 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
       setState(() => isAutoPlay = newValue);
     }
 
-    return AppFramework(
-      widget: Scaffold(
+    return CommonBackground(
+      child: CommonScaffold(
         backgroundColor: Colors.black,
-        appBar: AppBar(
-          centerTitle: false,
-          title: Text(setAppBarTitle()),
-          leading: const CloseButton(),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          foregroundColor: Colors.white,
+        foregroundColor: Colors.white,
+        appBarInfo: AppBarInfoClass(
+          title: setAppBarTitle(),
+          titleColor: Colors.white,
+          isBold: true,
+          isCenter: false,
           actions: [
             Column(
               children: [

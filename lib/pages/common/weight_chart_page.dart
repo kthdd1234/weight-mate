@@ -1,17 +1,18 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/framework/app_framework.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 
@@ -58,55 +59,40 @@ class _WeightChartPageState extends State<WeightChartPage> {
       setState(() => isRecent = !isRecent);
     }
 
-    return AppFramework(
-      widget: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: Text(
-            '체중 통계표'.tr(),
-            style: const TextStyle(fontSize: 20, color: textColor),
-          ),
-          backgroundColor: Colors.transparent,
-          centerTitle: false,
-          elevation: 0.0,
-          actions: [
-            RowTags(
-              selectedYear: selectedYear,
-              isRecent: isRecent,
-              onTapYear: onTapYear,
-              onTapOrder: onTapOrder,
-            ),
-          ],
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Stack(
-              children: [
-                ContentsBox(
-                  contentsWidget: Column(
-                    children: [
-                      Row(
-                        children: columnTitles
-                            .map((title) => RowTitles(
-                                title: title,
-                                nameArgs: title == '체중()'
-                                    ? {'unit': '$weightUnit'}
-                                    : null))
-                            .toList(),
-                      ),
-                      ColumnItemList(
-                        weightUnit: weightUnit,
-                        selectedYear: selectedYear,
-                        isRecent: isRecent,
-                      )
-                    ],
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '체중 통계표', actions: [
+          RowTags(
+            selectedYear: selectedYear,
+            isRecent: isRecent,
+            onTapYear: onTapYear,
+            onTapOrder: onTapOrder,
+          )
+        ]),
+        body: Stack(
+          children: [
+            ContentsBox(
+              contentsWidget: Column(
+                children: [
+                  Row(
+                    children: columnTitles
+                        .map((title) => RowTitles(
+                            title: title,
+                            nameArgs: title == '체중()'
+                                ? {'unit': '$weightUnit'}
+                                : null))
+                        .toList(),
                   ),
-                ),
-                CommonBlur(),
-              ],
+                  ColumnItemList(
+                    weightUnit: weightUnit,
+                    selectedYear: selectedYear,
+                    isRecent: isRecent,
+                  )
+                ],
+              ),
             ),
-          ),
+            CommonBlur(),
+          ],
         ),
       ),
     );

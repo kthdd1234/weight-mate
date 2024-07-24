@@ -72,31 +72,3 @@ class TextInput extends StatelessWidget {
     );
   }
 }
-
-// showModalBottomSheet(
-      //   barrierColor: Colors.transparent,
-      //   context: context,
-      //   builder: (context) {
-      //     return PopScope(
-      //       onPopInvoked: (didPop) {
-      //         log('123213');
-      //         FocusScope.of(context).unfocus();
-      //       },
-      //       child: Padding(
-      //         padding: EdgeInsets.only(
-      //           bottom: MediaQuery.of(context).viewInsets.bottom,
-      //         ),
-      //         child: AppFramework(
-      //           widget: Container(
-      //             child: Row(
-      //               children: [
-      //                 Text('취소'),
-      //                 Text('완료'),
-      //               ],
-      //             ),
-      //           ),
-      //         ),
-      //       ),
-      //     );
-      //   },
-      // );
