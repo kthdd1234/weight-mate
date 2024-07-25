@@ -9,7 +9,7 @@ import 'package:flutter_app_weight_management/components/ads/native_widget.dart'
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
-import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
+import 'package:flutter_app_weight_management/components/popup/LoadingPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -650,43 +650,6 @@ class HistoryTodo extends StatelessWidget {
                 .toList(),
           )
         : const EmptyArea();
-
-    // return todoResultList.isNotEmpty
-    //     ?
-    //     ListView.builder(
-    //         shrinkWrap: true,
-    //         itemBuilder: (context, index) {
-    //           Map<String, dynamic> todo = todoResultList![index];
-    //           return
-    // Row(
-    //             children: [
-    //               isRemoveMode
-    //                   ? Expanded(
-    //                       flex: 0,
-    //                       child: Padding(
-    //                         padding: const EdgeInsets.only(top: 2, right: 7),
-    //                         child: RemoveIcon(
-    //                             onTap: () => onTapRemoveAction(todo)),
-    //                       ),
-    //                     )
-    //                   : const EmptyArea(),
-    //               Expanded(
-    //                 flex: 0,
-    //                 child:
-    //                     onIcon(todo['type'], todo['isRecord'], todo['title']),
-    //               ),
-    //               SpaceWidth(width: smallSpace),
-    //               Expanded(
-    //                 flex: 1,
-    //                 child: Text(
-    //                   todo['name'],
-    //                   style: const TextStyle(fontSize: 14, color: textColor),
-    //                 ),
-    //               ),
-    //             ],
-    //           );
-    //         })
-    //     : const EmptyArea();
   }
 }
 
@@ -846,7 +809,7 @@ class _NativeAdContainerState extends State<NativeAdContainer> {
             ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd)
             : SizedBox(
                 height: 340,
-                child: LoadingDialog(text: '', color: Colors.transparent),
+                child: LoadingPopup(text: '', color: Colors.transparent),
               )
       ],
     );

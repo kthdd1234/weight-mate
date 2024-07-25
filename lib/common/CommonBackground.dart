@@ -7,25 +7,29 @@ class CommonBackground extends StatelessWidget {
     this.isRadius,
     this.height,
     this.borderRadius,
+    this.padding,
   });
 
   bool? isRadius;
   double? height;
   BorderRadius? borderRadius;
+  EdgeInsets? padding;
   Widget child;
 
   @override
   Widget build(BuildContext context) {
     // 1, 4, 6, 18
     return Container(
+      padding: padding ?? const EdgeInsets.all(0),
       height: height ?? MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
-          borderRadius: borderRadius ??
-              BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
-          image: const DecorationImage(
-            image: AssetImage('assets/images/backDrop/b-1.png'),
-            fit: BoxFit.cover,
-          )),
+        borderRadius: borderRadius ??
+            BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
+        image: const DecorationImage(
+          image: AssetImage('assets/images/backDrop/b-1.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: child,
     );
   }

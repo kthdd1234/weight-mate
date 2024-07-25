@@ -7,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
+import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -901,32 +902,21 @@ onCheckBox({
   await recordInfo?.save();
 }
 
-onShowDialog({
+onShowDateTimeDialog({
   required BuildContext context,
-  required String title,
   required DateRangePickerView view,
   required DateTime initialSelectedDate,
   required Function(DateRangePickerSelectionChangedArgs) onSelectionChanged,
 }) {
   showDialog(
     context: context,
-    builder: (context) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AlertDialog(
-          backgroundColor: whiteBgBtnColor,
-          shape: containerBorderRadious,
-          title: DialogTitle(
-            text: title,
-            onTap: () => closeDialog(context),
-          ),
-          content: DateTimePicker(
-            view: view,
-            initialSelectedDate: initialSelectedDate,
-            onSelectionChanged: onSelectionChanged,
-          ),
-        ),
-      ],
+    builder: (context) => CommonPopup(
+      height: 400,
+      child: DateTimePicker(
+        view: view,
+        initialSelectedDate: initialSelectedDate,
+        onSelectionChanged: onSelectionChanged,
+      ),
     ),
   );
 }
@@ -1011,39 +1001,6 @@ Future<bool> isHideAd() async {
   }
 
   return false;
-}
-
-Future<void> showDialogDateTimeYear({
-  required BuildContext context,
-  required DateTime initialSelectedDate,
-  required Function(DateTime dateTime) onDateTime,
-}) async {
-  await showDialog(
-    context: context,
-    builder: (context) => Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AlertDialog(
-          backgroundColor: whiteBgBtnColor,
-          shape: containerBorderRadious,
-          title: DialogTitle(
-            text: '년도 선택',
-            onTap: () => closeDialog(context),
-          ),
-          content: DateTimePicker(
-            view: DateRangePickerView.decade,
-            initialSelectedDate: initialSelectedDate,
-            onSelectionChanged: (datTimeArgs) {
-              onDateTime(datTimeArgs.value);
-              closeDialog(context);
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-
-  return;
 }
 
 String getFontFamily(String fontFamily) {

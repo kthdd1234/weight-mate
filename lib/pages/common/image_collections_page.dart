@@ -4,15 +4,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonName.dart';
+import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
-import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -158,70 +160,76 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 
       if (selectionList.isNotEmpty) {
         showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            shape: containerBorderRadious,
-            backgroundColor: whiteBgBtnColor,
-            title: Text(
-              '장의 사진을 삭제할까요?'
-                  .tr(namedArgs: {'length': '${selectionList.length}'}),
-              style: const TextStyle(fontSize: 15, color: textColor),
-            ),
-            content: Row(
-              children: [
-                ExpandedButtonHori(
-                  padding: const EdgeInsets.all(12),
-                  imgUrl: 'assets/images/t-23.png',
-                  text: '삭제',
-                  onTap: () {
-                    selectionList.forEach((idx) async {
-                      Map<String, dynamic> item = fileItemList[idx];
-                      String pos = item['pos'];
-                      DateTime dateTime = item['dateTime'];
-                      int recordKey = getDateTimeToInt(dateTime);
-                      RecordBox? record =
-                          recordRepository.recordBox.get(recordKey);
+            context: context,
+            builder: (context) => CommonPopup(
+                  height: 155,
+                  child: ContentsBox(
+                    contentsWidget: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonName(
+                          text: '장의 사진을 삭제할까요?',
+                          nameArgs: {'length': '${selectionList.length}'},
+                          fontSize: 15,
+                        ),
+                        SpaceHeight(height: 10),
+                        Row(
+                          children: [
+                            ExpandedButtonHori(
+                              padding: const EdgeInsets.all(12),
+                              imgUrl: 'assets/images/t-23.png',
+                              text: '삭제',
+                              onTap: () {
+                                selectionList.forEach((idx) async {
+                                  Map<String, dynamic> item = fileItemList[idx];
+                                  String pos = item['pos'];
+                                  DateTime dateTime = item['dateTime'];
+                                  int recordKey = getDateTimeToInt(dateTime);
+                                  RecordBox? record =
+                                      recordRepository.recordBox.get(recordKey);
 
-                      switch (pos) {
-                        case 'left':
-                          record?.leftFile = null;
-                          break;
-                        case 'right':
-                          record?.rightFile = null;
-                          break;
-                        case 'bottom':
-                          record?.bottomFile = null;
-                          break;
-                        case 'top':
-                          record?.topFile = null;
-                          break;
-                        default:
-                      }
+                                  switch (pos) {
+                                    case 'left':
+                                      record?.leftFile = null;
+                                      break;
+                                    case 'right':
+                                      record?.rightFile = null;
+                                      break;
+                                    case 'bottom':
+                                      record?.bottomFile = null;
+                                      break;
+                                    case 'top':
+                                      record?.topFile = null;
+                                      break;
+                                    default:
+                                  }
 
-                      await record?.save();
-                    });
+                                  await record?.save();
+                                });
 
-                    setState(() {
-                      initClearState.isMode = false;
-                      initClearState.selectionList = [];
-                      isRecent = true;
+                                setState(() {
+                                  initClearState.isMode = false;
+                                  initClearState.selectionList = [];
+                                  isRecent = true;
 
-                      onInitList();
-                    });
-                    closeDialog(context);
-                  },
-                ),
-                SpaceWidth(width: tinySpace),
-                ExpandedButtonHori(
-                  padding: const EdgeInsets.all(12),
-                  imgUrl: 'assets/images/t-11.png',
-                  text: '취소',
-                  onTap: () => Navigator.of(context).pop(false),
-                ),
-              ],
-            ),
-          ),
-        );
+                                  onInitList();
+                                });
+                                closeDialog(context);
+                              },
+                            ),
+                            SpaceWidth(width: tinySpace),
+                            ExpandedButtonHori(
+                              padding: const EdgeInsets.all(12),
+                              imgUrl: 'assets/images/t-11.png',
+                              text: '취소',
+                              onTap: () => Navigator.of(context).pop(false),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ));
       }
     }
 

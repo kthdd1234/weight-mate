@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/common/CommonPopup.dart';
+import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -33,9 +33,8 @@ class _SearchBodyState extends State<SearchBody> {
   onShowPurchasePremium() {
     showDialog(
       context: context,
-      builder: (context) => CommonPopup(
-        title: '검색 기능 제한',
-        height: 145,
+      builder: (context) => AlertPopup(
+        height: 185,
         buttonText: "프리미엄 구매 페이지로 이동",
         text1: '프리미엄 구매 시',
         text2: '검색 기능을 이용할 수 있어요',
@@ -88,12 +87,11 @@ class _SearchBodyState extends State<SearchBody> {
     } else {
       showDialog(
         context: context,
-        builder: (context) => CommonPopup(
-          title: '검색 기준',
+        builder: (context) => AlertPopup(
           text1: '식단(기록/목표), 운동(기록/목표),',
           text2: '습관, 일기(글, 해시태그)',
           text3: '기준으로 검색돼요.',
-          height: 166,
+          height: 206,
           buttonText: '확인',
           onTap: () => closeDialog(context),
         ),

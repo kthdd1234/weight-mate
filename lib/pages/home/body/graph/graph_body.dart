@@ -5,8 +5,7 @@ import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/calendar_default_dialog.dart';
-import 'package:flutter_app_weight_management/components/dialog/title_block.dart';
+import 'package:flutter_app_weight_management/components/popup/CalendarSelectionPopup.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
@@ -222,7 +221,7 @@ class GraphDateTimeCustom extends StatelessWidget {
     }) {
       showDialog(
         context: context,
-        builder: (BuildContext context) => CalendarDefaultDialog(
+        builder: (BuildContext context) => CalendarSelectionPopup(
           selectionColor: selectionColor,
           backgroundColor: backgroundColor,
           type: type,
@@ -317,6 +316,69 @@ class GraphDateTimeCustom extends StatelessWidget {
           SpaceHeight(height: smallSpace),
         ],
       ),
+    );
+  }
+}
+
+class TitleBlock extends StatelessWidget {
+  TitleBlock({super.key, required this.type, required this.color});
+
+  String type;
+  MaterialColor color;
+
+  @override
+  Widget build(BuildContext context) {
+    final String text = type == 'start' ? '시작일' : '종료일';
+
+    return Expanded(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            '$text 선택'.tr(),
+            style: const TextStyle(color: textColor, fontSize: 17),
+          ),
+          ColorTextInfo(
+            width: smallSpace,
+            height: smallSpace,
+            text: text.tr(),
+            color: color.shade300,
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ColorTextInfo extends StatelessWidget {
+  ColorTextInfo({
+    super.key,
+    required this.width,
+    required this.height,
+    required this.text,
+    required this.color,
+    this.isOutlined,
+  });
+
+  double width;
+  double height;
+  String text;
+  Color color;
+  bool? isOutlined;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SpaceWidth(width: smallSpace),
+        Dot(
+          size: width,
+          color: color,
+          isOutlined: isOutlined,
+        ),
+        SpaceWidth(width: tinySpace),
+        Text(text, style: Theme.of(context).textTheme.bodySmall),
+      ],
     );
   }
 }

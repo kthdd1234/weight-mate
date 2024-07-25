@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonModalItem.dart';
 import 'package:flutter_app_weight_management/common/CommonModalSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonOutlineInputField.dart';
-import 'package:flutter_app_weight_management/common/CommonPopup.dart';
+import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/listView/ColorListView.dart';
@@ -67,9 +67,8 @@ class _HashTagTextBottomSheetState extends State<HashTagTextBottomSheet> {
     } else {
       showDialog(
         context: context,
-        builder: (context) => CommonPopup(
-          title: '글자 수 제한',
-          height: 145,
+        builder: (context) => AlertPopup(
+          height: 185,
           text1: '입력된 키워드가 없어요',
           text2: '한 글자 이상 입력해주세요',
           buttonText: '확인',

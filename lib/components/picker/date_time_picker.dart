@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class DateTimePicker extends StatelessWidget {
@@ -19,6 +20,12 @@ class DateTimePicker extends StatelessWidget {
     return ContentsBox(
       width: MediaQuery.of(context).size.width,
       contentsWidget: SfDateRangePicker(
+        todayHighlightColor: indigo.s300,
+        selectionColor: indigo.s300,
+        selectionTextStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
         showNavigationArrow: true,
         initialDisplayDate: initialSelectedDate,
         initialSelectedDate: initialSelectedDate,

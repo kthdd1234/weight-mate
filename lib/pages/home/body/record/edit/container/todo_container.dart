@@ -9,12 +9,15 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonCheckBox.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/common/CommonName.dart';
+import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -32,9 +35,7 @@ import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -804,34 +805,67 @@ class Dismiss extends StatelessWidget {
         return showDialog(
           context: context,
           builder: (ctx) {
-            return AlertDialog(
-              shape: containerBorderRadious,
-              backgroundColor: whiteBgBtnColor,
-              title: Text(
-                '삭제할까요?'.tr(),
-                style: const TextStyle(fontSize: 18, color: textColor),
-              ),
-              content: Row(
-                children: [
-                  ExpandedButtonHori(
-                    padding: const EdgeInsets.all(12),
-                    imgUrl: 'assets/images/t-11.png',
-                    text: '닫기',
-                    onTap: () => Navigator.of(context).pop(false),
-                  ),
-                  SpaceWidth(width: tinySpace),
-                  ExpandedButtonHori(
-                    padding: const EdgeInsets.all(12),
-                    imgUrl: 'assets/images/t-23.png',
-                    text: '삭제',
-                    onTap: () {
-                      onDismiss();
-                      return Navigator.of(context).pop(true);
-                    },
-                  ),
-                ],
+            return CommonPopup(
+              height: 155,
+              child: ContentsBox(
+                contentsWidget: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CommonName(text: '삭제할까요?'.tr(), fontSize: 16),
+                    SpaceHeight(height: 7),
+                    Row(
+                      children: [
+                        ExpandedButtonHori(
+                          padding: const EdgeInsets.all(12),
+                          imgUrl: 'assets/images/t-11.png',
+                          text: '닫기',
+                          onTap: () => Navigator.of(context).pop(false),
+                        ),
+                        SpaceWidth(width: tinySpace),
+                        ExpandedButtonHori(
+                          padding: const EdgeInsets.all(12),
+                          imgUrl: 'assets/images/t-23.png',
+                          text: '삭제',
+                          onTap: () {
+                            onDismiss();
+                            return Navigator.of(context).pop(true);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             );
+            // AlertDialog(
+            //   shape: containerBorderRadious,
+            //   backgroundColor: whiteBgBtnColor,
+            //   title: Text(
+            //     '삭제할까요?'.tr(),
+            //     style: const TextStyle(fontSize: 18, color: textColor),
+            //   ),
+            //   content:
+            // Row(
+            //     children: [
+            //       ExpandedButtonHori(
+            //         padding: const EdgeInsets.all(12),
+            //         imgUrl: 'assets/images/t-11.png',
+            //         text: '닫기',
+            //         onTap: () => Navigator.of(context).pop(false),
+            //       ),
+            //       SpaceWidth(width: tinySpace),
+            //       ExpandedButtonHori(
+            //         padding: const EdgeInsets.all(12),
+            //         imgUrl: 'assets/images/t-23.png',
+            //         text: '삭제',
+            //         onTap: () {
+            //           onDismiss();
+            //           return Navigator.of(context).pop(true);
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            // );
           },
         );
       },
@@ -2294,58 +2328,6 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
                 ),
               ],
             ),
-    );
-  }
-}
-
-class PermissionPopup extends StatelessWidget {
-  const PermissionPopup({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        AlertDialog(
-          backgroundColor: whiteBgBtnColor,
-          shape: containerBorderRadious,
-          title: DialogTitle(
-            text: '알림 허용 요청',
-            onTap: () => closeDialog(context),
-          ),
-          content: Column(
-            children: [
-              ContentsBox(
-                contentsWidget: Column(
-                  children: ['설정으로 이동하여', '알림을 허용 해주세요.']
-                      .map((text) => CommonText(
-                            text: text,
-                            size: 15,
-                            isCenter: true,
-                          ))
-                      .toList(),
-                ),
-              ),
-              SpaceHeight(height: smallSpace),
-              Row(
-                children: [
-                  CommonButton(
-                    text: '설정으로 이동',
-                    fontSize: 15,
-                    bgColor: textColor,
-                    radious: 10,
-                    textColor: Colors.white,
-                    onTap: () {
-                      openAppSettings();
-                      closeDialog(context);
-                    },
-                  )
-                ],
-              )
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

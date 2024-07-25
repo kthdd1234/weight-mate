@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/popup/LoadingPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
@@ -59,7 +60,7 @@ class _PremiumPageState extends State<PremiumPage> {
         try {
           showDialog(
             context: context,
-            builder: (context) => LoadingDialog(
+            builder: (context) => LoadingPopup(
               text: '데이터 불러오는 중...',
               color: Colors.white,
             ),

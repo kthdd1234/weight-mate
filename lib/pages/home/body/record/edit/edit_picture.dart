@@ -7,16 +7,13 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
-import 'package:flutter_app_weight_management/common/CommonPopup.dart';
+import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/native_ad_dialog.dart';
 import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
-import 'package:flutter_app_weight_management/components/route/fade_page_route.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -27,6 +24,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/contai
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
+import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -127,31 +125,6 @@ class EditPicture extends StatelessWidget {
       return xFileData;
     }
 
-    // showDialogPopup({required String title}) {
-    //   onLeftClick() {
-    //     Navigator.pushNamed(context, '/premium-page');
-    //   }
-
-    //   onRightClick() {
-    //     closeDialog(context);
-    //   }
-
-    //   showDialog(
-    //     barrierDismissible: false,
-    //     context: context,
-    //     builder: (context) {
-    //       return NativeAdDialog(
-    //         title: title,
-    //         loadingText: '광고 불러오는 중...',
-    //         leftText: '광고 제거',
-    //         rightText: '광고 닫기',
-    //         onLeftClick: onLeftClick,
-    //         onRightClick: onRightClick,
-    //       );
-    //     },
-    //   );
-    // }
-
     setPickedImage({required String pos, required XFile? xFile}) async {
       if (xFile == null) return;
 
@@ -180,9 +153,8 @@ class EditPicture extends StatelessWidget {
       if (isPremium == false && pictureLength > 0) {
         showDialog(
           context: context,
-          builder: (context) => CommonPopup(
-            title: "사진 추가 제한",
-            height: 166,
+          builder: (context) => AlertPopup(
+            height: 206,
             buttonText: '프리미엄 구매 페이지로 이동',
             text1: '프리미엄 구매 시',
             text2: '사진을 4장까지 추가 할 수 있어요.',

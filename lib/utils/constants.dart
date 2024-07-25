@@ -176,6 +176,10 @@ final exerciseTextButtonColor = Colors.lightBlue.shade300;
 /// lifeTextButtonColor
 final lifeTextButtonColor = Colors.brown.shade300;
 
+/// roundedRectangleBorder
+final roundedRectangleBorder =
+    RoundedRectangleBorder(borderRadius: BorderRadius.circular(10));
+
 /// tagColors
 final tagColors = {
   'default': {

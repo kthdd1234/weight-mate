@@ -180,9 +180,8 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
     }).toList();
 
     onShowCalendar() {
-      onShowDialog(
+      onShowDateTimeDialog(
         context: context,
-        title: '월 선택',
         view: DateRangePickerView.year,
         initialSelectedDate: seletedDateTime,
         onSelectionChanged: (args) {
@@ -354,9 +353,8 @@ class _YearAnalysisState extends State<YearAnalysis> {
     }).toList();
 
     onShowCalendar() {
-      onShowDialog(
+      onShowDateTimeDialog(
         context: context,
-        title: '년도 선택',
         view: DateRangePickerView.decade,
         initialSelectedDate: seletedDateTime,
         onSelectionChanged: (args) {

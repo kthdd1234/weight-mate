@@ -219,10 +219,10 @@ class _GraphChartState extends State<GraphChart> {
                   alignment: ChartAlignment.center,
                 ),
                 tooltipBehavior: TooltipBehavior(
-                  header: '',
-                  enable: true,
-                  format: 'point.x: point.y${user.weightUnit}',
-                ),
+                    header: '',
+                    enable: true,
+                    format: 'point.x: point.y${user.weightUnit}',
+                    textStyle: const TextStyle(fontWeight: FontWeight.bold)),
                 primaryXAxis: CategoryAxis(),
                 primaryYAxis: NumericAxis(
                   minimum: weightMinimum,

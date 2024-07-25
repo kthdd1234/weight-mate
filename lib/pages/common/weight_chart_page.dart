@@ -15,6 +15,7 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class WeightChartPage extends StatefulWidget {
   const WeightChartPage({super.key});
@@ -46,11 +47,13 @@ class _WeightChartPageState extends State<WeightChartPage> {
     List<String> columnTitles = ['기록 날짜', '체중()', '이전과 비교'];
 
     onTapYear() {
-      showDialogDateTimeYear(
+      onShowDateTimeDialog(
         context: context,
+        view: DateRangePickerView.decade,
         initialSelectedDate: selectedYear,
-        onDateTime: (DateTime dateTime) {
-          setState(() => selectedYear = dateTime);
+        onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+          setState(() => selectedYear = args.value);
+          closeDialog(context);
         },
       );
     }

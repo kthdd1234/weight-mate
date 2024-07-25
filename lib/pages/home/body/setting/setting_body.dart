@@ -7,17 +7,17 @@ import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonPopup.dart';
+import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/bottomSheet/AppStartBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
-import 'package:flutter_app_weight_management/components/dialog/input_dialog.dart';
+import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
@@ -176,58 +176,42 @@ class _SettingBodyState extends State<SettingBody> {
     }
 
     onTapLock(id) {
-      if (isLock == false) {
-        showDialog(
-          context: context,
-          builder: (context) => ConfirmDialog(
-            width: 300,
-            titleText: '화면 잠금 경고',
-            contentIcon: Icons.lock,
-            contentText1: '암호를 분실했을 경우',
-            contentText2: '앱 삭제 후 재설치 해야 합니다.',
-            onPressedOk: () async {
-              await Navigator.pushNamed(context, '/screen-lock');
-
-              setState(() {});
-            },
-          ),
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) => ConfirmDialog(
-            width: 400,
-            titleText: '화면 잠금 해제',
-            contentIcon: Icons.lock_open_rounded,
-            contentText1: '화면 잠금을 해제할까요?',
-            contentText2: '확인 버튼을 누르면 바로 해제 됩니다.',
-            onPressedOk: () async {
+      showDialog(
+        context: context,
+        builder: (context) => AlertPopup(
+          height: 185,
+          text1: isLock ? '화면 잠금을 해제할까요?' : '암호를 분실했을 경우',
+          text2: isLock ? '확인 버튼을 누르면 바로 해제 됩니다.' : '앱 삭제 후 재설치 해야 합니다.',
+          buttonText: '확인',
+          onTap: () async {
+            if (isLock) {
               user.screenLockPasswords = null;
-              user.save();
+              await user.save();
+            } else {
+              await Navigator.pushNamed(context, '/screen-lock');
+            }
 
-              setState(() {});
-            },
-          ),
-        );
-      }
+            closeDialog(context);
+            setState(() {});
+          },
+        ),
+      );
     }
 
     onTapReset(id) {
       showDialog(
         context: context,
-        builder: (context) => ConfirmDialog(
-          width: 300,
-          titleText: '데이터 초기화',
-          contentIcon: Icons.restore_page_outlined,
-          contentText1: '앱 내의 모든 데이터를',
-          contentText2: '처음 상태로 되돌릴까요?',
-          onPressedOk: () async {
-            userRepository.userBox.clear();
-            recordRepository.recordBox.clear();
-            planRepository.planBox.clear();
-
-            NotificationService().deleteAllAlarm();
-
+        builder: (context) => AlertPopup(
+          text1: '앱 내의 모든 데이터를',
+          text2: '처음 상태로 되돌릴까요?',
+          height: 185,
+          buttonText: '확인',
+          isCancel: true,
+          onTap: () async {
+            await userRepository.userBox.clear();
+            await recordRepository.recordBox.clear();
+            await planRepository.planBox.clear();
+            await NotificationService().deleteAllAlarm();
             await Navigator.pushNamedAndRemoveUntil(
               context,
               '/add-start-screen',
@@ -404,9 +388,8 @@ class _SettingBodyState extends State<SettingBody> {
       if (isPremium == false) {
         return showDialog(
           context: context,
-          builder: (context) => CommonPopup(
-            title: '기능 제한',
-            height: 145,
+          builder: (context) => AlertPopup(
+            height: 185,
             buttonText: "프리미엄 구매 페이지로 이동",
             text1: '프리미엄 구매 시',
             text2: '화면 설정 기능을 이용할 수 있어요',
@@ -581,52 +564,6 @@ class _SettingBodyState extends State<SettingBody> {
             Expanded(child: ListView(children: children))
           ],
         );
-      },
-    );
-  }
-}
-
-class WeightDialog extends StatelessWidget {
-  WeightDialog({super.key, required this.itemId});
-
-  MoreSeeItem itemId;
-
-  @override
-  Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-
-    Map<MoreSeeItem, String> titleData = {
-      MoreSeeItem.tall: '키',
-      MoreSeeItem.goalWeight: '목표 체중',
-    };
-
-    Map<MoreSeeItem, double?> textData = {
-      MoreSeeItem.tall: user.tall,
-      MoreSeeItem.goalWeight: user.goalWeight,
-    };
-
-    return InputDialog(
-      id: itemId,
-      title: titleData[itemId]!,
-      selectedText: textData[itemId] != null ? textData[itemId].toString() : '',
-      onPressedOk: (MoreSeeItem id, String text) {
-        double value = double.parse(text);
-
-        switch (id) {
-          case MoreSeeItem.tall:
-            user.tall = value;
-            user.save();
-
-            break;
-          case MoreSeeItem.goalWeight:
-            user.goalWeight = value;
-            user.save();
-
-            break;
-          default:
-        }
-
-        closeDialog(context);
       },
     );
   }

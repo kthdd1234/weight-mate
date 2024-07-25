@@ -1,17 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
-import 'package:flutter_app_weight_management/common/CommonPopup.dart';
+import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/display/DisplayList.dart';
-import 'package:flutter_app_weight_management/components/display/HistoryDisplayList.dart';
-import 'package:flutter_app_weight_management/components/display/SearchDisplayList.dart';
 import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
+import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
@@ -184,9 +179,8 @@ class _CommonTitleState extends State<CommonTitle> {
     }
 
     onTapRecordTitle() {
-      onShowDialog(
+      onShowDateTimeDialog(
         context: context,
-        title: '월 선택',
         view: DateRangePickerView.year,
         initialSelectedDate: titleDateTime,
         onSelectionChanged: onTapRecordDateTime,
@@ -194,9 +188,8 @@ class _CommonTitleState extends State<CommonTitle> {
     }
 
     onTapHistoryTitle() {
-      onShowDialog(
+      onShowDateTimeDialog(
         context: context,
-        title: isHistoryList ? '년도 선택' : '월 선택',
         view: isHistoryList
             ? DateRangePickerView.decade
             : DateRangePickerView.year,
@@ -220,14 +213,60 @@ class _CommonTitleState extends State<CommonTitle> {
     onTapRecordFilter() async {
       await showDialog(
         context: context,
-        builder: (context) => const DisplayList(),
+        builder: (context) => DisplayPopup(
+          height: 360,
+          isRequiredWeight: true,
+          bottomText: '사용하지 않는 카테고리는 체크 해제 하세요 :D'.tr(),
+          classList: displayClassList,
+          onChecked: (String filterId) {
+            if (displayClassList.first.id == filterId) {
+              return true;
+            }
+
+            return displayList != null ? displayList.contains(filterId) : false;
+          },
+          onTap: ({required dynamic id, required bool newValue}) {
+            bool isNotWeight = displayClassList.first.id != id;
+            bool isdisplayList = user.displayList != null;
+
+            if (isNotWeight && isdisplayList) {
+              newValue
+                  ? user.displayList!.add(id)
+                  : user.displayList!.remove(id);
+              user.save();
+              setState(() {});
+            }
+          },
+        ),
       );
     }
 
     onTapHistoryFilter() async {
       await showDialog(
         context: context,
-        builder: (context) => const HistoryDisplayList(),
+        builder: (context) => DisplayPopup(
+          height: 475,
+          isRequiredWeight: false,
+          bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
+          classList: historyDisplayClassList,
+          onChecked: (String filterId) {
+            return historyDisplayList != null
+                ? historyDisplayList.contains(filterId)
+                : false;
+          },
+          onTap: ({required dynamic id, required bool newValue}) {
+            bool ishistoryDisplayList = user.historyDisplayList != null;
+
+            if (ishistoryDisplayList) {
+              newValue
+                  ? user.historyDisplayList!.add(id)
+                  : user.historyDisplayList!.remove(id);
+
+              user.save();
+              setState(() {});
+            }
+          },
+        ),
       );
     }
 
@@ -246,9 +285,8 @@ class _CommonTitleState extends State<CommonTitle> {
       if (type == eGraphCustom && isPremium == false) {
         return showDialog(
           context: context,
-          builder: (context) => CommonPopup(
-            title: "커스텀 모드 제한",
-            height: 145,
+          builder: (context) => AlertPopup(
+            height: 185,
             buttonText: '프리미엄 구매 페이지로 이동',
             text1: '프리미엄 구매 시',
             text2: '커스텀 모드를 이용할 수 있어요.',
@@ -264,7 +302,29 @@ class _CommonTitleState extends State<CommonTitle> {
     onTapSearchFilter() async {
       await showDialog(
         context: context,
-        builder: (context) => const SearchDisplayList(),
+        builder: (context) => DisplayPopup(
+          height: 475,
+          isRequiredWeight: false,
+          bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
+          classList: searchDisplayClassList,
+          onChecked: (String filterId) {
+            return user.searchDisplayList != null
+                ? user.searchDisplayList!.contains(filterId)
+                : false;
+          },
+          onTap: ({required dynamic id, required bool newValue}) {
+            bool isSearchDisplayList = user.searchDisplayList != null;
+
+            if (isSearchDisplayList) {
+              newValue
+                  ? user.searchDisplayList!.add(id)
+                  : user.searchDisplayList!.remove(id);
+
+              user.save();
+              setState(() {});
+            }
+          },
+        ),
       );
     }
 

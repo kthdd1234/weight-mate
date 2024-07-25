@@ -7,8 +7,8 @@ import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/calendar_range_dialog.dart';
 import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
+import 'package:flutter_app_weight_management/components/popup/CalendarRangePopup.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -115,8 +115,7 @@ class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
     onTapWeeklyDateTime() {
       showDialog(
         context: context,
-        builder: (context) => CalenderRangeDialog(
-          title: '주 선택',
+        builder: (context) => CalendarRangePopup(
           startAndEndDateTime: [startDateTime, endDateTime],
           onSelectionChanged: onSelectionChanged,
         ),

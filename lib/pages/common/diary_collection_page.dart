@@ -21,6 +21,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class DiaryCollectionPage extends StatefulWidget {
   const DiaryCollectionPage({super.key});
@@ -50,11 +51,13 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
         isRecent ? selectedRecordList.reversed.toList() : selectedRecordList;
 
     onTapYear() {
-      showDialogDateTimeYear(
+      onShowDateTimeDialog(
         context: context,
+        view: DateRangePickerView.decade,
         initialSelectedDate: selectedYear,
-        onDateTime: (DateTime dateTime) {
-          setState(() => selectedYear = dateTime);
+        onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+          setState(() => selectedYear = args.value);
+          closeDialog(context);
         },
       );
     }
@@ -96,6 +99,7 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
       child: CommonScaffold(
         appBarInfo: AppBarInfoClass(
           title: '일기 모아보기',
+          isCenter: false,
           actions: [
             RowTags(
               selectedYear: selectedYear,
@@ -274,16 +278,5 @@ class DiaryItemContent extends StatelessWidget {
             ],
           )
         : const EmptyArea();
-  }
-}
-
-class DiaryItemHashTag extends StatelessWidget {
-  const DiaryItemHashTag({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      children: [],
-    );
   }
 }
