@@ -172,26 +172,31 @@ class PremiumPurchaseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        isPremium
-            ? Row(
-                children: [
-                  CommonSvg(name: 'premium-badge', width: 16),
-                  SpaceWidth(width: 5),
-                  CommonText(text: '구매가 완료되었어요 :D', size: 14),
-                ],
-              )
-            : ExpandedButtonHori(
-                borderRadius: 5,
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                imgUrl: 'assets/images/t-23.png',
-                text: '구매하기',
-                nameArgs: {"price": package?.storeProduct.priceString ?? '없음'},
-                onTap: onPurchase,
-              )
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          isPremium
+              ? Row(
+                  children: [
+                    CommonSvg(name: 'premium-badge', width: 16),
+                    SpaceWidth(width: 5),
+                    CommonText(text: '구매가 완료되었어요 :D', size: 14),
+                  ],
+                )
+              : ExpandedButtonHori(
+                  borderRadius: 5,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  imgUrl: 'assets/images/t-4.png',
+                  text: '구매하기',
+                  nameArgs: {
+                    "price": package?.storeProduct.priceString ?? '없음'
+                  },
+                  onTap: onPurchase,
+                )
+        ],
+      ),
     );
   }
 }

@@ -55,7 +55,7 @@ class AlertPopup extends StatelessWidget {
             children: [
               ExpandedButtonHori(
                 padding: const EdgeInsets.symmetric(vertical: 15),
-                imgUrl: 'assets/images/t-23.png',
+                imgUrl: 'assets/images/t-4.png',
                 text: buttonText,
                 onTap: onTap,
               ),
@@ -63,7 +63,7 @@ class AlertPopup extends StatelessWidget {
               isCancel == true
                   ? ExpandedButtonHori(
                       padding: const EdgeInsets.symmetric(vertical: 15),
-                      imgUrl: 'assets/images/t-22.png',
+                      imgUrl: 'assets/images/t-3.png',
                       text: '취소',
                       onTap: () => closeDialog(context),
                     )

@@ -5,14 +5,12 @@ import 'package:flutter_app_weight_management/common/CommonModalSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonOutlineInputField.dart';
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/listView/ColorListView.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class HashTagTextBottomSheet extends StatefulWidget {
   HashTagTextBottomSheet({super.key, this.hashTag});

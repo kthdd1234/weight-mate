@@ -329,7 +329,7 @@ class GoogleDriveLogin extends StatelessWidget {
         ExpandedButtonHori(
           borderRadius: 7,
           padding: const EdgeInsets.symmetric(vertical: 15),
-          imgUrl: 'assets/images/t-23.png',
+          imgUrl: 'assets/images/t-4.png',
           text: 'Google 로그인',
           onTap: onLogin,
         )
@@ -374,7 +374,7 @@ class GoogleDriveService extends StatelessWidget {
             ExpandedButtonHori(
               borderRadius: 7,
               padding: const EdgeInsets.symmetric(vertical: 15),
-              imgUrl: 'assets/images/t-22.png',
+              imgUrl: 'assets/images/t-3.png',
               text: '데이터 백업',
               onTap: onBackup,
             ),
@@ -382,7 +382,7 @@ class GoogleDriveService extends StatelessWidget {
             ExpandedButtonHori(
               borderRadius: 7,
               padding: const EdgeInsets.symmetric(vertical: 15),
-              imgUrl: 'assets/images/t-23.png',
+              imgUrl: 'assets/images/t-4.png',
               text: '데이터 복원',
               onTap: onRestore,
             ),

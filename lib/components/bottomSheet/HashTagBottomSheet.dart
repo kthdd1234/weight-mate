@@ -142,7 +142,7 @@ class _HashTagBottomSheetState extends State<HashTagBottomSheet> {
                   btn(
                     text: '편집 해제',
                     flex: 1,
-                    imgUrl: '$path/t-23.png',
+                    imgUrl: '$path/t-4.png',
                     onTap: () => onEdit(false),
                   )
                 ]
@@ -150,14 +150,14 @@ class _HashTagBottomSheetState extends State<HashTagBottomSheet> {
                   btn(
                     text: '추가',
                     flex: 0,
-                    imgUrl: '$path/t-22.png',
+                    imgUrl: '$path/t-3.png',
                     onTap: onAdd,
                   ),
                   SpaceWidth(width: 5),
                   btn(
                     text: '편집',
                     flex: 0,
-                    imgUrl: '$path/t-23.png',
+                    imgUrl: '$path/t-4.png',
                     onTap: () => onEdit(true),
                   ),
                   SpaceWidth(width: 5),

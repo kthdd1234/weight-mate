@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/provider/reload_provider.dart';
+import 'package:provider/provider.dart';
 
 class CommonBackground extends StatelessWidget {
   CommonBackground({
@@ -18,15 +21,17 @@ class CommonBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 1, 4, 6, 18
+    context.watch<ReloadProvider>().isReload;
+    String theme = userRepository.user.theme ?? '1';
+
     return Container(
       padding: padding ?? const EdgeInsets.all(0),
       height: height ?? MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         borderRadius: borderRadius ??
             BorderRadius.circular(isRadius == true ? 10.0 : 0.0),
-        image: const DecorationImage(
-          image: AssetImage('assets/images/backDrop/b-1.png'),
+        image: DecorationImage(
+          image: AssetImage('assets/images/b-$theme.png'),
           fit: BoxFit.cover,
         ),
       ),

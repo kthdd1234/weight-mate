@@ -33,6 +33,7 @@ enum MoreSeeItem {
   premium,
   tall,
   goalWeight,
+  appTheme,
   appUnit,
   appAlarm,
   appLock,

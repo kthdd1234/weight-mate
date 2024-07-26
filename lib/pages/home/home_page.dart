@@ -88,6 +88,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? graphType = user.graphType;
     List<Map<String, dynamic>>? hashTagList = user.hashTagList;
     int? appStartIndex = user.appStartIndex;
+    String? theme = user.theme;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -208,6 +209,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (appStartIndex == null) {
       user.appStartIndex = 0;
+    }
+
+    if (theme == null) {
+      user.theme = '1';
     }
 
     userRepository.user.save();

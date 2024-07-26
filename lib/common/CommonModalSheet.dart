@@ -1,12 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:provider/provider.dart';
 
 class CommonModalSheet extends StatelessWidget {
   CommonModalSheet({
@@ -25,12 +22,12 @@ class CommonModalSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
+      height: height,
+      isRadius: true,
       borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(10),
         topRight: Radius.circular(10),
       ),
-      height: height,
-      isRadius: true,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(15),

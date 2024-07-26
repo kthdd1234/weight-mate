@@ -158,7 +158,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
             borderRadius: 10,
             height: submitButtonHeight,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            imgUrl: 'assets/images/t-23.png',
+            imgUrl: 'assets/images/t-4.png',
             contentsWidget: CommonText(
               text: '#해시태그',
               size: 15,

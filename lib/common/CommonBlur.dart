@@ -52,7 +52,7 @@ class CommonBlur extends StatelessWidget {
                     children: [
                       ExpandedButtonHori(
                         borderRadius: 30,
-                        imgUrl: 'assets/images/t-23.png',
+                        imgUrl: 'assets/images/t-4.png',
                         text: '프리미엄 구매 페이지로 이동',
                         onTap: onPremium,
                       )

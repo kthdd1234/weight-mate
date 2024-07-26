@@ -418,14 +418,14 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
     List<WeightButtonClass> weightButtonList = [
       WeightButtonClass(
         text: '현재 체중: ',
-        imgNumber: '22',
+        imgNumber: '3',
         nameArgs: {'weight': '${widget.weight}', 'unit': weightUnit},
         onTap: widget.onTapWeight,
       ),
       WeightButtonClass(),
       WeightButtonClass(
         text: '목표 체중: ',
-        imgNumber: '23',
+        imgNumber: '4',
         nameArgs: {'weight': '${widget.goalWeight}', 'unit': weightUnit},
         onTap: widget.onTapGoalWeight,
       ),

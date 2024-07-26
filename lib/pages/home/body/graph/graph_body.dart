@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
 import 'package:flutter_app_weight_management/components/popup/CalendarSelectionPopup.dart';
-import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -67,6 +69,7 @@ class _GraphBodyState extends State<GraphBody> {
     Box<RecordBox> recordBox = recordRepository.recordBox;
     BottomNavigationEnum id =
         context.watch<BottomNavigationProvider>().selectedEnumId;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     Map<SegmentedTypes, Widget> dateTimeChildren = {
       SegmentedTypes.week: onSegmentedWidget(
@@ -132,11 +135,32 @@ class _GraphBodyState extends State<GraphBody> {
       });
     }
 
-    onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
+    onChanged(SegmentedTypes? segmented) {
       setState(() {
         selectedDateTimeSegment = segmented!;
         setTitleDateTime();
       });
+    }
+
+    onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
+      UserBox user = userRepository.user;
+      DateTime? watchingAdDatetTime =
+          user.watchingAdDatetTime ?? DateTime(2000, 1, 1);
+      DateTime dateTime24 = watchingAdDatetTime.add(
+        const Duration(hours: 24),
+      );
+      bool isIn24Hours = dateTime24.isAfter(DateTime.now());
+
+      if (isPremium || isIn24Hours) {
+        onChanged(segmented);
+      } else {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => AdBottomSheet(onChanged: () {
+            onChanged(segmented);
+          }),
+        );
+      }
     }
 
     return MultiValueListenableBuilder(

@@ -280,7 +280,7 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
                       ),
                       GraphCompareButton(
                         text: '월간 비교 그래프',
-                        imgNumber: 11,
+                        imgNumber: 1,
                         onTap: onTapSixMonthGraphButton,
                       )
                     ],
@@ -450,7 +450,7 @@ class _YearAnalysisState extends State<YearAnalysis> {
                       ),
                       GraphCompareButton(
                         text: '연간 비교 그래프',
-                        imgNumber: 24,
+                        imgNumber: 5,
                         onTap: onTapOneYearGraphButton,
                       )
                     ],

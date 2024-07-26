@@ -73,13 +73,13 @@ class _SearchHashTagState extends State<SearchHashTag> {
               HashTagKeyword(
                 keyword: widget.keyword,
                 text: '+ 해시태그 추가'.tr(),
-                path: 't-22',
+                path: 't-3',
                 onHashTag: onAddHashTag,
               ),
               HashTagKeyword(
                 keyword: widget.keyword,
                 text: '- 해시태그 삭제'.tr(),
-                path: 't-23',
+                path: 't-4',
                 onHashTag: onRemoveHashTag,
               )
             ].toList());

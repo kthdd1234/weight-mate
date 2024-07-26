@@ -40,6 +40,8 @@ class UserBox extends HiveObject {
     this.hashTagList,
     this.searchDisplayList,
     this.appStartIndex,
+    this.theme,
+    this.watchingAdDatetTime,
   });
 
   @HiveField(0)
@@ -143,6 +145,12 @@ class UserBox extends HiveObject {
 
   @HiveField(33)
   int? appStartIndex;
+
+  @HiveField(34)
+  String? theme;
+
+  @HiveField(35)
+  DateTime? watchingAdDatetTime;
 
   @override
   String toString() {

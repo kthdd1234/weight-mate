@@ -1,12 +1,7 @@
-import 'dart:developer';
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 
 class UserInfoClass {
@@ -125,20 +120,6 @@ class PlanTypeClass {
   IconData icon;
 }
 
-// class PlanItemClass {
-//   PlanItemClass({
-//     required this.id,
-//     required this.name,
-//     required this.desc,
-//     required this.icon,
-//   });
-
-//   dynamic id;
-//   String name;
-//   String desc;
-//   IconData icon;
-// }
-
 class WeightInfoClass {
   WeightInfoClass({
     required this.id,
@@ -157,18 +138,6 @@ class WeightInfoClass {
   Color iconColor;
   Function() onTap;
 }
-
-// class GridIconClass {
-//   GridIconClass({
-//     required this.id,
-//     required this.icon,
-//     required this.isEnabled,
-//   });
-
-//   String id;
-//   IconData icon;
-//   bool isEnabled;
-// }
 
 class PlanTypeDetailClass {
   PlanTypeDetailClass({
@@ -266,37 +235,6 @@ class WeightButtonClass {
   Map<String, String>? nameArgs;
   Function()? onTap;
 }
-
-// class AppLifecycleLockScreenReactor {
-//   AppLifecycleLockScreenReactor({required this.context});
-
-//   BuildContext context;
-
-//   void listenToAppStateChanges() {
-//     AppStateEventNotifier.startListening();
-//     AppStateEventNotifier.appStateStream
-//         .forEach((state) => _onAppStateChanged(state));
-//   }
-
-//   void _onAppStateChanged(AppState appState) async {
-//     String? passwords = userRepository.user.screenLockPasswords;
-
-//     try {
-//       if (passwords != null) {
-//         if (appState == AppState.foreground) {
-//           Navigator.of(context).push(
-//             MaterialPageRoute(
-//               builder: (context) => EnterScreenLockPage(),
-//               fullscreenDialog: true,
-//             ),
-//           );
-//         }
-//       }
-//     } catch (e) {
-//       log('e => $e');
-//     }
-//   }
-// }
 
 class TodoDataClass {
   TodoDataClass({
@@ -479,4 +417,9 @@ class FadePageRoute extends PageRouteBuilder {
           transitionsBuilder: (context, animation, secondaryAnimation, child) =>
               FadeTransition(opacity: animation, child: child),
         );
+}
+
+class ThemeClass {
+  ThemeClass({required this.path, required this.name});
+  String path, name;
 }

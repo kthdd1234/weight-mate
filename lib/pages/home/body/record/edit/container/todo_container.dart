@@ -817,14 +817,14 @@ class Dismiss extends StatelessWidget {
                       children: [
                         ExpandedButtonHori(
                           padding: const EdgeInsets.all(12),
-                          imgUrl: 'assets/images/t-11.png',
+                          imgUrl: 'assets/images/t-1.png',
                           text: '닫기',
                           onTap: () => Navigator.of(context).pop(false),
                         ),
                         SpaceWidth(width: tinySpace),
                         ExpandedButtonHori(
                           padding: const EdgeInsets.all(12),
-                          imgUrl: 'assets/images/t-23.png',
+                          imgUrl: 'assets/images/t-4.png',
                           text: '삭제',
                           onTap: () {
                             onDismiss();
@@ -837,35 +837,6 @@ class Dismiss extends StatelessWidget {
                 ),
               ),
             );
-            // AlertDialog(
-            //   shape: containerBorderRadious,
-            //   backgroundColor: whiteBgBtnColor,
-            //   title: Text(
-            //     '삭제할까요?'.tr(),
-            //     style: const TextStyle(fontSize: 18, color: textColor),
-            //   ),
-            //   content:
-            // Row(
-            //     children: [
-            //       ExpandedButtonHori(
-            //         padding: const EdgeInsets.all(12),
-            //         imgUrl: 'assets/images/t-11.png',
-            //         text: '닫기',
-            //         onTap: () => Navigator.of(context).pop(false),
-            //       ),
-            //       SpaceWidth(width: tinySpace),
-            //       ExpandedButtonHori(
-            //         padding: const EdgeInsets.all(12),
-            //         imgUrl: 'assets/images/t-23.png',
-            //         text: '삭제',
-            //         onTap: () {
-            //           onDismiss();
-            //           return Navigator.of(context).pop(true);
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // );
           },
         );
       },

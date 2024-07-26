@@ -177,7 +177,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                           children: [
                             ExpandedButtonHori(
                               padding: const EdgeInsets.all(12),
-                              imgUrl: 'assets/images/t-23.png',
+                              imgUrl: 'assets/images/t-4.png',
                               text: '삭제',
                               onTap: () {
                                 selectionList.forEach((idx) async {
@@ -220,7 +220,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                             SpaceWidth(width: tinySpace),
                             ExpandedButtonHori(
                               padding: const EdgeInsets.all(12),
-                              imgUrl: 'assets/images/t-11.png',
+                              imgUrl: 'assets/images/t-1.png',
                               text: '취소',
                               onTap: () => Navigator.of(context).pop(false),
                             ),
@@ -363,13 +363,16 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 }
 
 class MaskLabel extends StatelessWidget {
-  MaskLabel({super.key});
+  MaskLabel({super.key, this.height, this.opacity});
+
+  double? height, opacity;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: height,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.5),
+        color: Colors.black.withOpacity(opacity ?? 0.5),
         borderRadius: BorderRadius.circular(5),
       ),
     );

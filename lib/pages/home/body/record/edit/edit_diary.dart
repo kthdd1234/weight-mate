@@ -369,7 +369,7 @@ class DiaryButton extends StatelessWidget {
         child: ContentsBox(
           borderRadius: 7,
           padding: const EdgeInsets.all(14),
-          imgUrl: 'assets/images/t-16.png',
+          imgUrl: 'assets/images/t-2.png',
           contentsWidget: CommonText(
             text: '일기 작성하기',
             size: 14,

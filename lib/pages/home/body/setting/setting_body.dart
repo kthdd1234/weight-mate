@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/bottomSheet/AppStartBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dialog/confirm_dialog.dart';
 import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -64,16 +62,18 @@ class _SettingBodyState extends State<SettingBody> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
     BottomNavigationEnum bodyId =
         context.watch<BottomNavigationProvider>().selectedEnumId;
+
     UserBox user = userRepository.user;
     bool isLock = user.screenLockPasswords != null;
     String? language = user.language;
     String fontFamily = user.fontFamily ?? initFontFamily;
     String validFontFamily = getFontFamily(fontFamily);
     String fontName = getFontName(validFontFamily);
+    String theme = user.theme ?? '1';
     int appStartIndex = user.appStartIndex ?? 0;
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onNavigator({required String type, required String title}) async {
       await Navigator.pushNamed(context, '/body-info-page', arguments: {
@@ -405,6 +405,11 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
+    onTapTheme(id) async {
+      await Navigator.pushNamed(context, '/theme-change-page');
+      setState(() {});
+    }
+
     List<MoreSeeItemClass> settingItemList = [
       MoreSeeItemClass(
         id: MoreSeeItem.premium,
@@ -431,12 +436,16 @@ class _SettingBodyState extends State<SettingBody> {
         onTap: onTapGoalWeight,
       ),
       MoreSeeItemClass(
-        id: MoreSeeItem.appUnit,
-        icon: 'ruler',
-        title: '단위 변경',
-        value: '${user.tallUnit}/${user.weightUnit}',
+        id: MoreSeeItem.appTheme,
+        icon: 'theme',
+        title: '테마 변경',
+        value: themeClassList
+            .expand((list) => list)
+            .toList()
+            .firstWhere((item) => item.path == theme)
+            .name,
         color: themeColor,
-        onTap: onTapUnit,
+        onTap: onTapTheme,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appFont,
@@ -453,6 +462,14 @@ class _SettingBodyState extends State<SettingBody> {
         value: localeDisplayNames[user.language] ?? 'English',
         color: themeColor,
         onTap: onTapLanguage,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.appUnit,
+        icon: 'ruler',
+        title: '단위 변경',
+        value: '${user.tallUnit}/${user.weightUnit}',
+        color: themeColor,
+        onTap: onTapUnit,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.appAlarm,
@@ -594,7 +611,7 @@ class MoreSeeItemWidget extends StatelessWidget {
         return Container(
             decoration: BoxDecoration(
               image: const DecorationImage(
-                  image: AssetImage("assets/images/t-23.png"),
+                  image: AssetImage("assets/images/t-4.png"),
                   fit: BoxFit.cover),
               borderRadius: BorderRadius.circular(5),
             ),

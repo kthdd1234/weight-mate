@@ -396,6 +396,11 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
   PremiumBenefitsClass(
+    svgName: 'theme',
+    title: '다양한 테마들을 제공해드려요',
+    subTitle: '총 6종의 다채로운 배경 테마들을 이용해보세요!',
+  ),
+  PremiumBenefitsClass(
     svgName: 'premium-category-detail',
     title: '좀 더 자세한 통계 기능을 제공해드려요',
     subTitle: '체중 통계/분석표, 기록 모아보기, 실천 모아보기 등',
@@ -658,3 +663,18 @@ List<BottomNavigationBarItem> items = bnList
       ),
     )
     .toList();
+
+final themeClassList = [
+  [
+    ThemeClass(path: '1', name: 'Cloudy Apple'),
+    ThemeClass(path: '2', name: 'Snow Again'),
+  ],
+  [
+    ThemeClass(path: '3', name: 'Pastel Sky'),
+    ThemeClass(path: '4', name: 'Winter Sky'),
+  ],
+  [
+    ThemeClass(path: '5', name: 'Perfect White'),
+    ThemeClass(path: '6', name: 'Kind Steel'),
+  ],
+];

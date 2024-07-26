@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/dot/color_dot.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
@@ -19,6 +18,36 @@ class DotRow extends StatelessWidget {
           children: [Dot(size: 5, color: color), SpaceWidth(width: 3)],
         );
       }).toList(),
+    );
+  }
+}
+
+class Dot extends StatelessWidget {
+  Dot({
+    super.key,
+    required this.size,
+    required this.color,
+    this.isOutlined,
+  });
+
+  double size;
+  bool? isOutlined;
+  Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: isOutlined == true
+          ? BoxDecoration(
+              border: Border.all(width: 1, color: color),
+              borderRadius: BorderRadius.circular(30),
+            )
+          : BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(30),
+            ),
     );
   }
 }
