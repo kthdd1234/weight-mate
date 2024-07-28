@@ -38,6 +38,7 @@ class _AddContainerState extends State<AddContainer> {
   @override
   Widget build(BuildContext context) {
     return CommonBackground(
+      path: '1',
       child: CommonScaffold(
         appBarInfo: widget.isNotBack == true
             ? null

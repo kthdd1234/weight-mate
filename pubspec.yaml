@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.0.24+54
+version: 2.0.24+56
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -218,42 +218,42 @@ flutter:
   fonts:
     - family: IM_Hyemin
       fonts:
-        - asset: assets/fonts/IM_Hyemin.woff
+        - asset: assets/fonts/IM_Hyemin.ttf
           weight: 400
 
     - family: KyoboHandwriting2022khn
       fonts:
-        - asset: assets/fonts/KyoboHandwriting2019.woff
+        - asset: assets/fonts/KyoboHandwriting2019.ttf
           weight: 400
 
     - family: Cafe24Dongdong
       fonts:
-        - asset: assets/fonts/Cafe24Dongdong.woff
+        - asset: assets/fonts/Cafe24Dongdong.ttf
           weight: 400
 
     - family: cafe24Ohsquareair
       fonts:
-        - asset: assets/fonts/cafe24Ohsquareair.woff
+        - asset: assets/fonts/cafe24Ohsquareair.ttf
           weight: 400
 
     - family: Cafe24Syongsyong
       fonts:
-        - asset: assets/fonts/Cafe24Syongsyong.woff
+        - asset: assets/fonts/Cafe24Syongsyong.ttf
           weight: 400
 
     - family: Cafe24Ssukssuk
       fonts:
-        - asset: assets/fonts/Cafe24Ssukssuk.woff
+        - asset: assets/fonts/Cafe24Ssukssuk.ttf
           weight: 400
 
     - family: TDTDTadakTadak
       fonts:
-        - asset: assets/fonts/TDTDTadakTadak.woff
+        - asset: assets/fonts/TDTDTadakTadak.ttf
           weight: 400
 
     - family: SingleDay
       fonts:
-        - asset: assets/fonts/SingleDay.woff
+        - asset: assets/fonts/SingleDay.ttf
           weight: 400
   #
   # For details regarding fonts from package dependencies,
