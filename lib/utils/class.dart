@@ -241,12 +241,10 @@ class TodoDataClass {
     required this.filterId,
     required this.color,
     required this.title,
-    required this.icon,
+    required this.svg,
   });
 
-  String filterId;
-  String color, title;
-  IconData icon;
+  String filterId, color, title, svg;
 }
 
 class DayColorClass {
@@ -422,4 +420,16 @@ class FadePageRoute extends PageRouteBuilder {
 class ThemeClass {
   ThemeClass({required this.path, required this.name});
   String path, name;
+}
+
+class CalendarMakerClass {
+  CalendarMakerClass({
+    required this.id,
+    required this.title,
+    required this.desc,
+    required this.widget,
+  });
+
+  String id, title, desc;
+  Widget widget;
 }

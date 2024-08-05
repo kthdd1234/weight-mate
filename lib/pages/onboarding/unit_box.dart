@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class UnitBox extends StatelessWidget {
@@ -48,7 +48,7 @@ class UnitBox extends StatelessWidget {
     }
 
     return ContentsBox(
-      contentsWidget: Column(
+      child: Column(
         children: [
           unitTitle(text: '키 단위'),
           Row(

@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
@@ -50,7 +50,7 @@ class _ThemeChangePageState extends State<ThemeChangePage> {
               appBarInfo: AppBarInfoClass(title: '테마 변경'),
               body: ContentsBox(
                 width: double.infinity,
-                contentsWidget: SingleChildScrollView(
+                child: SingleChildScrollView(
                   child: Column(
                     children: themeClassList
                         .map(

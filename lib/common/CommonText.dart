@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class CommonText extends StatelessWidget {

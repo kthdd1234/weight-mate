@@ -1,16 +1,11 @@
-import 'dart:developer';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchInputBar.dart';
+import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchItemContainer.dart';
+import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchInputBar.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchItemContainer.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';

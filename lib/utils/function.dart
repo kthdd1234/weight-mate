@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonPopup.dart';
-import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
-import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/widgets/picker/date_time_picker.dart';
+import 'package:flutter_app_weight_management/widgets/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -966,9 +966,9 @@ Future<bool> setPurchasePremium(Package package) async {
 Future<bool> isPurchasePremium() async {
   try {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    // return true;
-    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-        true;
+    return true;
+    // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+    //     true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -1103,4 +1103,17 @@ List<RecordBox> getSearchList({
   }).toList();
 
   return isRecent ? searchList.reversed.toList() : searchList;
+}
+
+SvgPicture svgWidget({
+  required String name,
+  required double width,
+  Color? color,
+}) {
+  return SvgPicture.asset(
+    'assets/svgs/$name.svg',
+    width: width,
+    colorFilter:
+        color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+  );
 }

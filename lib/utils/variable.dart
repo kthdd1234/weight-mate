@@ -1,5 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/widgets/maker/BarMaker.dart';
+import 'package:flutter_app_weight_management/widgets/maker/DotMaker.dart';
+import 'package:flutter_app_weight_management/widgets/maker/ImageMaker.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
@@ -224,7 +227,7 @@ Map<String, IconData> categoryIcons = {
 
 final categoryColors = {
   PlanTypeEnum.diet.toString(): Colors.teal,
-  PlanTypeEnum.exercise.toString(): Colors.lightBlue,
+  PlanTypeEnum.exercise.toString(): Colors.blueGrey,
   PlanTypeEnum.lifestyle.toString(): Colors.brown,
 };
 
@@ -236,25 +239,20 @@ final formatInfo = {
 
 final makerInfo = {
   CalendarMaker.sticker.toString(): CalendarMaker.sticker,
-  CalendarMaker.weight.toString(): CalendarMaker.weight
+  CalendarMaker.weight.toString(): CalendarMaker.weight,
+  CalendarMaker.picture.toString(): CalendarMaker.picture,
 };
 
 final localeNames = [
   'ko',
   'en',
   'ja',
-  // 'fr_FR',
-  // 'es_ES',
-  // 'de_DE',
 ];
 
 final localeDisplayNames = {
   'ko': '한국어',
   'en': 'English',
   'ja': '日本語',
-  // 'fr_FR': 'français',
-  // 'es_ES': 'espagnol',
-  // 'de_DE': 'Deutsch',
 };
 
 final languageItemList = [
@@ -270,18 +268,6 @@ final languageItemList = [
     name: '日本語',
     languageCode: 'ja',
   ),
-  // LanguageItemClass(
-  //   name: 'Deutsch',
-  //   languageCode: 'de',
-  // ),
-  // LanguageItemClass(
-  //   name: 'français',
-  //   languageCode: 'fr',
-  // ),
-  // LanguageItemClass(
-  //   name: 'espagnol',
-  //   languageCode: 'es',
-  // ),
 ];
 
 Map<String, TodoDataClass> todoData = {
@@ -289,19 +275,19 @@ Map<String, TodoDataClass> todoData = {
     filterId: FILITER.diet.toString(),
     color: 'teal',
     title: '식단',
-    icon: Icons.local_dining,
+    svg: 't-diet',
   ),
   PlanTypeEnum.exercise.toString(): TodoDataClass(
     filterId: FILITER.exercise.toString(),
-    color: 'lightBlue',
+    color: 'blueGrey',
     title: '운동',
-    icon: Icons.fitness_center,
+    svg: 't-exercise',
   ),
   PlanTypeEnum.lifestyle.toString(): TodoDataClass(
     filterId: FILITER.lifeStyle.toString(),
     color: 'brown',
     title: '습관',
-    icon: Icons.self_improvement,
+    svg: 't-life',
   )
 };
 
@@ -678,3 +664,38 @@ final themeClassList = [
     ThemeClass(path: '6', name: 'Kind Steel'),
   ],
 ];
+
+List<CalendarMakerClass> calendarMakerList = [
+  CalendarMakerClass(
+    id: CalendarMaker.sticker.toString(),
+    title: '스티커',
+    desc: '카테고리 별 스티커',
+    widget: Padding(
+      padding: const EdgeInsets.only(left: 3, top: 2),
+      child: DotMaker(
+        mainAxisAlignment: MainAxisAlignment.center,
+        row1: const ['indigo', 'purple', 'teal'],
+        row2: const ['lightBlue', 'brown', 'orange'],
+      ),
+    ),
+  ),
+  CalendarMakerClass(
+    id: CalendarMaker.weight.toString(),
+    title: '체중',
+    desc: '날짜 별 체중',
+    widget: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 7),
+      child: BarMaker(weight: 0.0, weightUnit: 'kg'),
+    ),
+  ),
+  CalendarMakerClass(
+    id: CalendarMaker.picture.toString(),
+    title: '사진',
+    desc: '날짜 별 사진 한장',
+    widget: const ImageMaker(),
+  ),
+];
+
+String eWeightMorning = WeightType.morning.toString();
+
+String eWeightNight = WeightType.night.toString();

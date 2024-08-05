@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
+import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/AppStartBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/AppStartBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/popup/PermissionPopup.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
@@ -328,7 +328,7 @@ class _SettingBodyState extends State<SettingBody> {
           title: '언어 변경'.tr(),
           height: 300,
           contents: ContentsBox(
-            contentsWidget: ListView(
+            child: ListView(
               shrinkWrap: true,
               children: languageItemList.map((item) {
                 bool isLanguage = language == item.languageCode;
@@ -419,6 +419,14 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapPremium,
       ),
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.appHealth,
+      //   icon: 'health',
+      //   title: '건강 앱 연동',
+      //   value: '${user.tall}${user.tallUnit}',
+      //   color: themeColor,
+      //   onTap: onTapTall,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',

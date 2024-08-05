@@ -9,14 +9,14 @@ import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/text_icon.dart';
-import 'package:flutter_app_weight_management/components/image/default_image.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_text_vertical_area.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/icon/text_icon.dart';
+import 'package:flutter_app_weight_management/widgets/image/default_image.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_carousel_slider_page.dart';
@@ -164,7 +164,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
             builder: (context) => CommonPopup(
                   height: 155,
                   child: ContentsBox(
-                    contentsWidget: Column(
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CommonName(
@@ -363,13 +363,14 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 }
 
 class MaskLabel extends StatelessWidget {
-  MaskLabel({super.key, this.height, this.opacity});
+  MaskLabel({super.key, this.width, this.height, this.opacity});
 
-  double? height, opacity;
+  double? width, height, opacity;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       height: height,
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(opacity ?? 0.5),

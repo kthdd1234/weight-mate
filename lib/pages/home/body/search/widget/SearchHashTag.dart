@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/HashTagRemoveBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/HashTagTextBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/HashTagBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/HashTagRemoveBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/HashTagTextBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
@@ -89,7 +89,7 @@ class _SearchHashTagState extends State<SearchHashTag> {
               child: ContentsBox(
                 width: widget.keyword == '' ? double.infinity : null,
                 padding: const EdgeInsets.all(15),
-                contentsWidget: widget.keyword == ''
+                child: widget.keyword == ''
                     ? Wrap(
                         spacing: 7, runSpacing: 7, children: hashTagWidgetList)
                     : HorizontalHashTagList(

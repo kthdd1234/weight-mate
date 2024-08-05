@@ -1,14 +1,23 @@
+// ignore_for_file: prefer_is_empty
+
+import 'dart:typed_data';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
+import 'package:flutter_app_weight_management/common/CommonName.dart';
+import 'package:flutter_app_weight_management/widgets/image/default_image.dart';
+import 'package:flutter_app_weight_management/widgets/maker/BarMaker.dart';
+import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
-import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/ads/banner_widget.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/maker/DotMaker.dart';
+import 'package:flutter_app_weight_management/widgets/popup/CalendarMakerPopup.dart';
+import 'package:flutter_app_weight_management/widgets/popup/DisplayPopup.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
@@ -20,7 +29,7 @@ import 'package:flutter_app_weight_management/provider/title_datetime_provider.d
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
@@ -47,6 +56,8 @@ class CommonAppBar extends StatelessWidget {
     bool isRecord = id == BottomNavigationEnum.record;
     bool isHistory = id == BottomNavigationEnum.history;
 
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
+
     onFormatChanged(CalendarFormat format) {
       if (isRecord) {
         user.calendarFormat = format.toString();
@@ -57,9 +68,11 @@ class CommonAppBar extends StatelessWidget {
       user.save();
     }
 
-    onTapMakerType(CalendarMaker maker) {
-      user.calendarMaker = maker.toString();
-      user.save();
+    onTapMakerType(CalendarMaker maker) async {
+      showDialog(
+        context: context,
+        builder: (context) => CalendarMakerPopup(),
+      );
     }
 
     return Column(
@@ -86,7 +99,7 @@ class CommonAppBar extends StatelessWidget {
             ? CalendarBar(
                 bottomIndex: id.index,
                 calendarFormat: formatInfo[historyCalendarFormat]!,
-                calendarMaker: CalendarMaker.sticker,
+                calendarMaker: makerInfo[calendarMaker]!,
                 onFormatChanged: onFormatChanged,
               )
             : const EmptyArea(),
@@ -522,8 +535,8 @@ class CalendarBar extends StatelessWidget {
       return target != null ? name : null;
     }
 
-    stickerBuilder(context, day, events) {
-      int recordKey = getDateTimeToInt(day);
+    stickerBuilder(context, dateTime, events) {
+      int recordKey = getDateTimeToInt(dateTime);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       List<Map<String, dynamic>>? actions = recordInfo?.actions;
       List<Map<String, String>>? hashTagList =
@@ -549,7 +562,7 @@ class CalendarBar extends StatelessWidget {
       );
       String? exercise = colorName(
         nullCheckAction(actions, eExercise),
-        'lightBlue',
+        'blueGrey',
       );
       String? life = colorName(
         nullCheckAction(actions, eLife),
@@ -563,41 +576,67 @@ class CalendarBar extends StatelessWidget {
       List<String?> row1 = [weight, picture, diet];
       List<String?> row2 = [exercise, life, diary];
 
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          DotRow(row: row1),
-          SpaceHeight(height: 3),
-          DotRow(row: row2),
-        ],
-      );
+      return DotMaker(row1: row1, row2: row2);
     }
 
-    weightBuilder(context, day, events) {
-      int recordKey = getDateTimeToInt(day);
+    weightBuilder(context, dateTime, events) {
+      int recordKey = getDateTimeToInt(dateTime);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
       bool? isWeight = recordInfo?.weight != null;
 
       return isWeight
           ? Padding(
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 1),
-                decoration: BoxDecoration(
-                  color: Colors.indigo.shade300,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-                child: CommonText(
-                  text: '${recordInfo?.weight}$weightUnit',
-                  size: 8.5,
-                  color: Colors.white,
-                  isCenter: true,
-                  isNotTr: true,
-                  isBold: true,
-                ),
+              child: BarMaker(
+                weight: recordInfo?.weight ?? 0.0,
+                weightUnit: weightUnit,
               ),
             )
           : const EmptyArea();
+    }
+
+    pictureBuildler(context, DateTime dateTime, events) {
+      int recordKey = getDateTimeToInt(dateTime);
+      RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
+      Uint8List? unit8List = recordInfo?.leftFile ??
+          recordInfo?.rightFile ??
+          recordInfo?.bottomFile ??
+          recordInfo?.topFile;
+
+      bool isToday = getDateTimeToInt(importDateTime) == recordKey;
+
+      if (unit8List == null) {
+        return const EmptyArea();
+      }
+
+      return Stack(
+        children: [
+          Center(
+            child: DefaultImage(
+              unit8List: unit8List,
+              widget: 38,
+              height: 38,
+              borderRadius: 7,
+            ),
+          ),
+          Center(child: MaskLabel(width: 38, height: 38, opacity: 0.2)),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(
+                color: isToday ? indigo.s300 : null,
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: CommonName(
+                text: '${dateTime.day}',
+                isNotTr: true,
+                color: Colors.white,
+                isBold: true,
+              ),
+            ),
+          ),
+        ],
+      );
     }
 
     onPageChanged(DateTime dateTime) {
@@ -610,6 +649,12 @@ class CalendarBar extends StatelessWidget {
       }
     }
 
+    final builderInfo = {
+      CalendarMaker.sticker: stickerBuilder,
+      CalendarMaker.weight: weightBuilder,
+      CalendarMaker.picture: pictureBuildler,
+    };
+
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
@@ -620,9 +665,7 @@ class CalendarBar extends StatelessWidget {
               child: TableCalendar(
                 locale: locale,
                 calendarBuilders: CalendarBuilders(
-                  markerBuilder: calendarMaker == CalendarMaker.sticker
-                      ? stickerBuilder
-                      : weightBuilder,
+                  markerBuilder: builderInfo[calendarMaker],
                 ),
                 headerVisible: false,
                 calendarStyle: CalendarStyle(

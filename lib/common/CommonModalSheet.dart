@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 

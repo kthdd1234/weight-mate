@@ -3,12 +3,12 @@ import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/pages/home/body/history/widget/History_container.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history/widget/history_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -52,7 +52,7 @@ class _PatialDeletePageState extends State<PatialDeletePage> {
                   ),
                   SpaceHeight(height: 10),
                   ContentsBox(
-                    contentsWidget: HistoryContainer(
+                    child: HistoryContainer(
                       isRemoveMode: true,
                       recordInfo: recordInfo,
                     ),

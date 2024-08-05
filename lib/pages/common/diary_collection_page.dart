@@ -7,11 +7,11 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_verti.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
@@ -118,7 +118,7 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
                           (record) => Padding(
                             padding: const EdgeInsets.only(bottom: 10),
                             child: ContentsBox(
-                              contentsWidget: Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   DiaryItemTitle(

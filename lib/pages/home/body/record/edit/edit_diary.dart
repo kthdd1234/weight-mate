@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/EmotionBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/EmotionBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/HashTagBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_verti.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -43,8 +43,6 @@ class EditDiary extends StatelessWidget {
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
-    List<Map<String, String>>? recordHashTagList =
-        recordInfo?.recordHashTagList;
 
     onTapWriteDiary() async {
       await Navigator.push(
@@ -219,65 +217,57 @@ class EditDiary extends StatelessWidget {
     ];
 
     return isDisplay
-        ? SizedBox(
+        ? ContentsBox(
             child: Column(
               children: [
-                ContentsBox(
-                  contentsWidget: Column(
-                    children: [
-                      TitleContainer(
-                        isDivider: isOpen,
-                        title: '일기',
-                        icon: Icons.auto_fix_high,
-                        tags: tags,
-                        onTap: onTapOpen,
-                      ),
-                      isOpen
-                          ? isDateTime
-                              ? DiaryButton(
-                                  paddingTop: 0,
-                                  onTap: onTapWriteDiary,
-                                )
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    DiaryTitle(
-                                      importDateTime: importDateTime,
-                                      emotion: emotion,
-                                      onTapMore: onTapMore,
-                                      onTapEmotion: onTapOpenEmotion,
-                                    ),
-                                    isWhite
-                                        ? DiaryButton(
-                                            paddingTop: 10,
-                                            onTap: onTapWriteDiary,
-                                          )
-                                        : Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              DiaryWriteText(
-                                                whiteText:
-                                                    recordInfo?.whiteText,
-                                                diaryDateTime:
-                                                    recordInfo?.diaryDateTime,
-                                                onTap: onTapMore,
-                                              ),
-                                              DiaryHashTag(
-                                                hashTagClassList:
-                                                    getHashTagClassList(
-                                                  recordInfo?.recordHashTagList,
-                                                ),
-                                                onItem: onTapHashTag,
-                                              ),
-                                            ],
-                                          )
-                                  ],
-                                )
-                          : const EmptyArea(),
-                    ],
-                  ),
+                TitleContainer(
+                  isDivider: isOpen,
+                  title: '일기',
+                  svg: 't-diary',
+                  tags: tags,
+                  onTap: onTapOpen,
                 ),
+                isOpen
+                    ? isDateTime
+                        ? DiaryButton(
+                            paddingTop: 0,
+                            onTap: onTapWriteDiary,
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              DiaryTitle(
+                                importDateTime: importDateTime,
+                                emotion: emotion,
+                                onTapMore: onTapMore,
+                                onTapEmotion: onTapOpenEmotion,
+                              ),
+                              isWhite
+                                  ? DiaryButton(
+                                      paddingTop: 10,
+                                      onTap: onTapWriteDiary,
+                                    )
+                                  : Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        DiaryWriteText(
+                                          whiteText: recordInfo?.whiteText,
+                                          diaryDateTime:
+                                              recordInfo?.diaryDateTime,
+                                          onTap: onTapMore,
+                                        ),
+                                        DiaryHashTag(
+                                          hashTagClassList: getHashTagClassList(
+                                            recordInfo?.recordHashTagList,
+                                          ),
+                                          onItem: onTapHashTag,
+                                        ),
+                                      ],
+                                    )
+                            ],
+                          )
+                    : const EmptyArea(),
               ],
             ),
           )
@@ -370,7 +360,7 @@ class DiaryButton extends StatelessWidget {
           borderRadius: 7,
           padding: const EdgeInsets.all(14),
           imgUrl: 'assets/images/t-2.png',
-          contentsWidget: CommonText(
+          child: CommonText(
             text: '일기 작성하기',
             size: 14,
             isCenter: true,

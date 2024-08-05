@@ -12,15 +12,15 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
 import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
-import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/button/bottom_submit_button.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_verti.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/popup/PermissionPopup.dart';
+import 'package:flutter_app_weight_management/widgets/segmented/default_segmented.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -46,11 +46,10 @@ class TodoContainer extends StatefulWidget {
     required this.type,
     required this.color,
     required this.title,
-    required this.icon,
+    required this.svg,
   });
 
-  String filterId, color, title, type;
-  IconData icon;
+  String filterId, color, title, type, svg;
 
   @override
   State<TodoContainer> createState() => _TodoContainerState();
@@ -216,11 +215,11 @@ class _TodoContainerState extends State<TodoContainer> {
         ? Column(
             children: [
               ContentsBox(
-                contentsWidget: Column(
+                child: Column(
                   children: [
                     isLife
                         ? LifeContainer(
-                            icon: widget.icon,
+                            svg: widget.svg,
                             colorName: widget.color,
                             actionPercent: actionPercent(),
                             type: widget.type,
@@ -242,10 +241,10 @@ class _TodoContainerState extends State<TodoContainer> {
                             onTapOpen: onTapOpen,
                           )
                         : DietExerciseContainer(
+                            svg: widget.svg,
                             recordInfo: recordInfo,
                             title: widget.title,
                             colorName: widget.color,
-                            icon: widget.icon,
                             type: widget.type,
                             isOpen: isOpen,
                             bgColor: bgColor,
@@ -278,24 +277,25 @@ class _TodoContainerState extends State<TodoContainer> {
 }
 
 class DietExerciseContainer extends StatefulWidget {
-  DietExerciseContainer(
-      {super.key,
-      required this.title,
-      required this.colorName,
-      required this.icon,
-      required this.type,
-      required this.isOpen,
-      required this.bgColor,
-      required this.actions,
-      required this.mainColor,
-      required this.planList,
-      required this.onCheckBox,
-      required this.onGoalComplete,
-      required this.onRecordComplete,
-      required this.onTapOpen,
-      this.recordInfo,
-      this.dietRecordOrderList,
-      this.exerciseRecordOrderList});
+  DietExerciseContainer({
+    super.key,
+    required this.title,
+    required this.colorName,
+    required this.svg,
+    required this.type,
+    required this.isOpen,
+    required this.bgColor,
+    required this.actions,
+    required this.mainColor,
+    required this.planList,
+    required this.onCheckBox,
+    required this.onGoalComplete,
+    required this.onRecordComplete,
+    required this.onTapOpen,
+    this.recordInfo,
+    this.dietRecordOrderList,
+    this.exerciseRecordOrderList,
+  });
 
   RecordBox? recordInfo;
   String title, type, colorName;
@@ -304,7 +304,7 @@ class DietExerciseContainer extends StatefulWidget {
   List<Map<String, dynamic>>? actions;
   Color mainColor;
   List<PlanBox> planList;
-  IconData icon;
+  String svg;
   List<String>? dietRecordOrderList, exerciseRecordOrderList;
 
   Function({required dynamic id, required bool newValue}) onCheckBox;
@@ -379,33 +379,45 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
           .toList();
     }
 
+    onSegmentedChanged(SegmentedTypes? segmented) {
+      setState(() => selectedSegment = segmented!);
+    }
+
     List<TagClass> tags = [
       TagClass(
-        text: '기록 모아보기',
-        color: widget.colorName,
-        isHide: onHide(SegmentedTypes.goal),
-        onTap: onTapRecordCollection,
-      ),
-      TagClass(
-        text: '실천 모아보기',
-        color: widget.colorName,
-        isHide: onHide(SegmentedTypes.record),
-        onTap: onTapGoalCollection,
-      ),
-      TagClass(
-        text: '기록 개',
+        text: '기록 2, 목표 2',
         nameArgs: {"length": "${actionList()?.length ?? 0}"},
         color: widget.colorName,
         isHide: widget.isOpen,
         onTap: widget.onTapOpen,
       ),
+
       TagClass(
-        text: '목표 개',
-        nameArgs: {"length": "${widget.planList.length}"},
+        text: '${widget.title} 모아보기',
         color: widget.colorName,
-        isHide: widget.isOpen,
-        onTap: widget.onTapOpen,
+        isHide: false,
+        onTap: onTapRecordCollection,
       ),
+      // TagClass(
+      //   text: '실천 모아보기',
+      //   color: widget.colorName,
+      //   isHide: onHide(SegmentedTypes.record),
+      //   onTap: onTapGoalCollection,
+      // ),
+      // TagClass(
+      //   text: '기록 개',
+      //   nameArgs: {"length": "${actionList()?.length ?? 0}"},
+      //   color: widget.colorName,
+      //   isHide: widget.isOpen,
+      //   onTap: widget.onTapOpen,
+      // ),
+      // TagClass(
+      //   text: '목표 개',
+      //   nameArgs: {"length": "${widget.planList.length}"},
+      //   color: widget.colorName,
+      //   isHide: widget.isOpen,
+      //   onTap: widget.onTapOpen,
+      // ),
       TagClass(
         icon: widget.isOpen
             ? Icons.keyboard_arrow_down_rounded
@@ -415,11 +427,6 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
       )
     ];
 
-    onSegmentedChanged(SegmentedTypes? segmented) {
-      setState(() => selectedSegment = segmented!);
-    }
-
-    bool isRecord = selectedSegment == SegmentedTypes.record;
     Map<SegmentedTypes, Widget> children = {
       SegmentedTypes.record: onSegmentedWidget(
         title: '기록 ',
@@ -440,7 +447,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         TitleContainer(
           isDivider: widget.isOpen,
           title: widget.title,
-          icon: widget.icon,
+          svg: widget.svg,
           tags: tags,
           onTap: widget.onTapOpen,
         ),
@@ -455,7 +462,7 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
                     onSegmentedChanged: onSegmentedChanged,
                   ),
                   SpaceHeight(height: smallSpace),
-                  isRecord
+                  selectedSegment == SegmentedTypes.record
                       ? Column(
                           children: [
                             RecordList(
@@ -808,7 +815,7 @@ class Dismiss extends StatelessWidget {
             return CommonPopup(
               height: 155,
               child: ContentsBox(
-                contentsWidget: Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CommonName(text: '삭제할까요?'.tr(), fontSize: 16),
@@ -1299,7 +1306,7 @@ class RecordDateTime extends StatelessWidget {
     }
 
     return ContentsBox(
-      contentsWidget: Column(
+      child: Column(
         children: [
           isTitle ? rowTitle() : const EmptyArea(),
           isRecordDateTime
@@ -1323,7 +1330,7 @@ class LifeContainer extends StatelessWidget {
   LifeContainer({
     super.key,
     required this.colorName,
-    required this.icon,
+    required this.svg,
     required this.actionPercent,
     required this.type,
     required this.isOpen,
@@ -1341,7 +1348,7 @@ class LifeContainer extends StatelessWidget {
   List<Map<String, dynamic>>? actions;
   Color mainColor;
   List<PlanBox> planList;
-  IconData icon;
+  String svg;
   Function({required dynamic id, required bool newValue}) onCheckBox;
   Function({
     required String completedType,
@@ -1368,14 +1375,14 @@ class LifeContainer extends StatelessWidget {
 
     List<TagClass> lifeTags = [
       TagClass(
-        text: '습관 개',
+        text: '습관 2',
         nameArgs: {'length': '${planList.length}'},
         color: colorName,
         isHide: isOpen,
         onTap: onTapOpen,
       ),
       TagClass(
-        text: '실천 모아보기',
+        text: '습관 모아보기',
         color: colorName,
         onTap: onTapGoalCollection,
       ),
@@ -1393,7 +1400,7 @@ class LifeContainer extends StatelessWidget {
         TitleContainer(
           isDivider: isOpen,
           title: title,
-          icon: icon,
+          svg: svg,
           tags: lifeTags,
           onTap: onTapOpen,
         ),
@@ -1622,7 +1629,7 @@ class _GoalItemState extends State<GoalItem> {
           type: widget.type,
           id: widget.planInfo.id,
           name: widget.planInfo.name,
-          icon: todoData[widget.planInfo.type]!.icon,
+          svg: todoData[widget.planInfo.type]!.svg,
           title: todoData[widget.planInfo.type]!.title,
           planInfo: widget.planInfo,
           onTapEdit: onTapEdit,
@@ -2063,7 +2070,7 @@ class GoalBottomSheet extends StatefulWidget {
     super.key,
     required this.type,
     required this.name,
-    required this.icon,
+    required this.svg,
     required this.id,
     required this.title,
     required this.planInfo,
@@ -2071,7 +2078,7 @@ class GoalBottomSheet extends StatefulWidget {
     required this.onTapRemove,
   });
 
-  IconData icon;
+  String svg;
   String id, title, name, type;
   PlanBox? planInfo;
   Function() onTapEdit;
@@ -2222,7 +2229,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
       height: isShowAlarm ? 430 : 630,
       contents: isShowAlarm
           ? AlarmContainer(
-              icon: widget.icon,
+              icon: Icons.notifications_active,
               title: '실천 알림',
               nameArgs: {'type': widget.title.tr()},
               desc: '매일 실천 알림을 드려요.',
@@ -2235,7 +2242,7 @@ class _GoalBottomSheetState extends State<GoalBottomSheet> {
           : Column(
               children: [
                 ContentsBox(
-                  contentsWidget: Column(
+                  child: Column(
                     children: [
                       TableCalendarHeader(
                         locale: locale,

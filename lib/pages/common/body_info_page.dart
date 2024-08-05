@@ -2,9 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
-import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/input/text_input.dart';
+import 'package:flutter_app_weight_management/widgets/button/bottom_submit_button.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/input/text_input.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -131,7 +131,7 @@ class _BodyInfoPageState extends State<BodyInfoPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ContentsBox(
-              contentsWidget: TextInput(
+              child: TextInput(
                 autofocus: true,
                 focusNode: FocusNode(),
                 controller: controller,

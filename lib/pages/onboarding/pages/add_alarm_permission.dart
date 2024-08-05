@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
-import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/widgets/popup/PermissionPopup.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -142,7 +142,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
             title: '꾸준한 체중 기록을 위해 알림을 받아 보는 건 어떠세요?',
           ),
           ContentsBox(
-            contentsWidget: Column(
+            child: Column(
               children: [
                 AlarmRow(
                   icon: Icons.alarm_rounded,

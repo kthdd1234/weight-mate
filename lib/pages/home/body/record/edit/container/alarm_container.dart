@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
-import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/widgets/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -39,7 +39,7 @@ class AlarmContainer extends StatelessWidget {
     return ContentsBox(
       // height: 200,
       backgroundColor: Colors.white,
-      contentsWidget: Column(
+      child: Column(
         children: [
           AlarmRow(
             icon: icon,

@@ -6,12 +6,12 @@ import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/popup/LoadingPopup.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/ads/native_widget.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/popup/LoadingPopup.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -124,7 +124,7 @@ class _PremiumPageState extends State<PremiumPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 30),
                   child: ContentsBox(
-                    contentsWidget: Column(
+                    child: Column(
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

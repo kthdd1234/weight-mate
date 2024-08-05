@@ -2,11 +2,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_picture.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_water.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -36,16 +37,18 @@ class RecordBody extends StatelessWidget {
           children: [
             CommonAppBar(id: id),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ListView(
-                  children: [
-                    SpaceHeight(height: smallSpace),
-                    EditWeight(),
-                    EditPicture(),
-                    EditTodo(),
-                    EditDiary(),
-                  ],
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
+                  child: Column(
+                    children: [
+                      EditWeight(),
+                      EditPicture(),
+                      EditTodo(),
+                      EditWater(),
+                      EditDiary(),
+                    ],
+                  ),
                 ),
               ),
             ),

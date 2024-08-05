@@ -66,7 +66,7 @@ const List<Locale> supportedLocales = [
   Locale('ja')
 ];
 
-final _configuration =
+PurchasesConfiguration _configuration =
     PurchasesConfiguration(Platform.isIOS ? appleApiKey : googleApiKey);
 
 UserRepository userRepository = UserRepository();

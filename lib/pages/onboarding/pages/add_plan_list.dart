@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
@@ -45,7 +45,7 @@ class _AddPlanListState extends State<AddPlanList> {
           PageTitle(step: 3, title: '꾸준히 달성 할 목표를 모두 골라보세요 :)'),
           ContentsBox(
             height: 430,
-            contentsWidget: ListView(
+            child: ListView(
               shrinkWrap: true,
               children: initPlanItemList
                   .map(

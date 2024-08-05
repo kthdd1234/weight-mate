@@ -7,13 +7,13 @@ import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/EmotionBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/HashTagBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/button/bottom_submit_button.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/EmotionBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/HashTagBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/button/bottom_submit_button.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
@@ -159,7 +159,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
             height: submitButtonHeight,
             padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             imgUrl: 'assets/images/t-4.png',
-            contentsWidget: CommonText(
+            child: CommonText(
               text: '#해시태그',
               size: 15,
               color: Colors.white,
@@ -194,7 +194,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 15),
                 child: ContentsBox(
-                  contentsWidget: SingleChildScrollView(
+                  child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

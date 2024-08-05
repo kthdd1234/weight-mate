@@ -7,15 +7,15 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
+import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
-import 'package:flutter_app_weight_management/components/image/default_image.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_verti.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/icon/circular_icon.dart';
+import 'package:flutter_app_weight_management/widgets/image/default_image.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -238,22 +238,22 @@ class EditPicture extends StatelessWidget {
             children: [
               ContentsBox(
                 padding: EdgeInsets.fromLTRB(20, 20, 20, isOpen ? 10 : 20),
-                contentsWidget: Column(
+                child: Column(
                   children: [
                     TitleContainer(
                       isDivider: isOpen,
                       title: '사진',
-                      icon: Icons.auto_awesome,
+                      svg: 't-picture',
                       tags: [
                         TagClass(
-                          text: '사진 장',
+                          text: '0장',
                           nameArgs: {'length': '$pictureLength'},
                           color: 'purple',
                           isHide: isOpen,
                           onTap: onTapOpen,
                         ),
                         TagClass(
-                          text: '사진 앨범',
+                          text: '사진 모아보기',
                           color: 'purple',
                           onTap: () => Navigator.pushNamed(
                               context, '/image-collections-page'),

@@ -15,7 +15,7 @@ class EditTodo extends StatelessWidget {
           filterId: data.filterId,
           color: data.color,
           title: data.title,
-          icon: data.icon,
+          svg: data.svg,
           type: type,
         ),
       ),

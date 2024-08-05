@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/components/area/empty_text_vertical_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/pages/home/body/history/widget/History_container.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_text_vertical_area.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history/widget/History_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -93,7 +93,7 @@ class HistoryListView extends StatelessWidget {
                             horizontal: 20,
                           ),
                           child: ContentsBox(
-                            contentsWidget: HistoryContainer(
+                            child: HistoryContainer(
                               recordInfo: recordInfo,
                               isRemoveMode: false,
                             ),
@@ -126,7 +126,7 @@ class HistoryCalendar extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
                 child: ContentsBox(
-                  contentsWidget: HistoryContainer(
+                  child: HistoryContainer(
                     recordInfo: recordInfo,
                     isRemoveMode: false,
                   ),

@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
-import 'package:flutter_app_weight_management/components/popup/LoadingPopup.dart';
+import 'package:flutter_app_weight_management/widgets/popup/LoadingPopup.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
+import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/ads/native_widget.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -265,7 +265,7 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
     }
 
     return ContentsBox(
-      contentsWidget: Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ContentsTitle(title: 'Google Drive 백업/복원', svg: "google-drive"),

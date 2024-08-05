@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
-import 'package:flutter_app_weight_management/components/popup/CalendarSelectionPopup.dart';
-import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
+import 'package:flutter_app_weight_management/widgets/bottomSheet/AdBottomSheet.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/maker/DotMaker.dart';
+import 'package:flutter_app_weight_management/widgets/popup/CalendarSelectionPopup.dart';
+import 'package:flutter_app_weight_management/widgets/segmented/default_segmented.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -20,7 +21,6 @@ import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:hive/hive.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
@@ -274,7 +274,7 @@ class GraphDateTimeCustom extends StatelessWidget {
             backgroundColor: color),
         child: ContentsBox(
           backgroundColor: typeBackgroundColor,
-          contentsWidget: Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(

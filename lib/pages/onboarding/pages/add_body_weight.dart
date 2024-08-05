@@ -1,8 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/input/text_input.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/input/text_input.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/action_bar.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
@@ -189,7 +189,7 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
             children: [
               PageTitle(step: 2, title: '현재 체중과 단위를 입력해주세요.'),
               ContentsBox(
-                contentsWidget: Column(
+                child: Column(
                   children: [
                     ContentsTitle(text: '체중 단위'),
                     UnitButtons(

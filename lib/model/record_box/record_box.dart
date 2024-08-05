@@ -8,9 +8,11 @@ class RecordBox extends HiveObject {
   RecordBox({
     required this.createDateTime,
     this.weightDateTime,
+    this.weightNightDateTime,
     this.actionDateTime,
     this.diaryDateTime,
     this.weight,
+    this.weightNight,
     this.actions,
     this.leftFile,
     this.rightFile,
@@ -67,4 +69,10 @@ class RecordBox extends HiveObject {
 
   @HiveField(14)
   List<Map<String, String>>? recordHashTagList;
+
+  @HiveField(15)
+  double? weightNight;
+
+  @HiveField(16)
+  DateTime? weightNightDateTime;
 }

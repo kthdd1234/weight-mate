@@ -5,10 +5,10 @@ import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -70,7 +70,7 @@ class _TodoChartPageState extends State<TodoChartPage> {
         body: Stack(
           children: [
             ContentsBox(
-              contentsWidget: Column(
+              child: Column(
                 children: [
                   RowTitle(
                     type: type,
@@ -97,7 +97,7 @@ class _TodoChartPageState extends State<TodoChartPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               CommonIcon(
-                                icon: todoData[type]!.icon,
+                                icon: Icons.view_timeline_outlined,
                                 size: 20,
                                 color: grey.original,
                               ),

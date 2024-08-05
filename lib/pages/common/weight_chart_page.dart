@@ -6,9 +6,11 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/segmented/default_segmented.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -25,27 +27,64 @@ class WeightChartPage extends StatefulWidget {
 }
 
 class _WeightChartPageState extends State<WeightChartPage> {
-  DateTime selectedYear = DateTime.now();
-  bool isRecent = true;
-  bool isPremium = false;
+  SegmentedTypes selectedSegment = SegmentedTypes.chart;
 
-  @override
-  void initState() {
-    initPremium() async {
-      isPremium = await isPurchasePremium();
-      setState(() {});
-    }
-
-    initPremium();
-    super.initState();
+  onSegmentedChanged(SegmentedTypes? segmentedType) {
+    //
   }
 
   @override
   Widget build(BuildContext context) {
-    UserBox user = userRepository.user;
-    String? weightUnit = user.weightUnit;
-    List<String> columnTitles = ['기록 날짜', '체중()', '이전과 비교'];
+    return CommonBackground(
+      child: CommonScaffold(
+        appBarInfo: AppBarInfoClass(title: '체중 모아보기'),
+        body: Stack(
+          children: [
+            Column(
+              children: [
+                Expanded(child: ChartConatainer()),
+                SpaceHeight(height: 10),
+                DefaultSegmented(
+                  selectedSegment: selectedSegment,
+                  children: {
+                    SegmentedTypes.chart: onSegmentedWidget(
+                      type: SegmentedTypes.chart,
+                      title: '차트',
+                      selected: selectedSegment,
+                    ),
+                    SegmentedTypes.analyze: onSegmentedWidget(
+                      type: SegmentedTypes.analyze,
+                      title: '분석',
+                      selected: selectedSegment,
+                    ),
+                  },
+                  onSegmentedChanged: onSegmentedChanged,
+                ),
+              ],
+            ),
+            CommonBlur(),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
+class ChartConatainer extends StatefulWidget {
+  const ChartConatainer({super.key});
+
+  @override
+  State<ChartConatainer> createState() => _ChartConatainerState();
+}
+
+class _ChartConatainerState extends State<ChartConatainer> {
+  bool isRecent = true;
+  DateTime selectedYear = DateTime.now();
+  String? weightUnit = userRepository.user.weightUnit;
+  List<String> columnTitles = ['기록 날짜', '체중()', '이전과 비교'];
+
+  @override
+  Widget build(BuildContext context) {
     onTapYear() {
       onShowDateTimeDialog(
         context: context,
@@ -62,41 +101,33 @@ class _WeightChartPageState extends State<WeightChartPage> {
       setState(() => isRecent = !isRecent);
     }
 
-    return CommonBackground(
-      child: CommonScaffold(
-        appBarInfo: AppBarInfoClass(title: '체중 통계표', actions: [
+    return ContentsBox(
+      child: Column(
+        children: [
           RowTags(
             selectedYear: selectedYear,
             isRecent: isRecent,
             onTapYear: onTapYear,
             onTapOrder: onTapOrder,
-          )
-        ]),
-        body: Stack(
-          children: [
-            ContentsBox(
-              contentsWidget: Column(
-                children: [
-                  Row(
-                    children: columnTitles
-                        .map((title) => RowTitles(
-                            title: title,
-                            nameArgs: title == '체중()'
-                                ? {'unit': '$weightUnit'}
-                                : null))
-                        .toList(),
-                  ),
-                  ColumnItemList(
-                    weightUnit: weightUnit,
-                    selectedYear: selectedYear,
-                    isRecent: isRecent,
-                  )
-                ],
-              ),
+          ),
+          Row(
+            children: columnTitles
+                .map(
+                  (title) => RowTitles(
+                      title: title,
+                      nameArgs:
+                          title == '체중()' ? {'unit': '$weightUnit'} : null),
+                )
+                .toList(),
+          ),
+          Expanded(
+            child: ColumnItemList(
+              weightUnit: weightUnit,
+              selectedYear: selectedYear,
+              isRecent: isRecent,
             ),
-            CommonBlur(),
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -140,19 +171,19 @@ class RowTags extends StatelessWidget {
     String locale = context.locale.toString();
 
     return Padding(
-      padding: const EdgeInsets.only(right: 15),
+      padding: const EdgeInsets.only(left: 15, bottom: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           CommonTag(
-            color: 'whiteIndigo',
+            color: 'indigo',
             text: y(locale: locale, dateTime: selectedYear),
             isNotTr: true,
             onTap: onTapYear,
           ),
           SpaceWidth(width: 5),
           CommonTag(
-            color: isRecent ? 'whiteBlue' : 'whiteRed',
+            color: isRecent ? 'blue' : 'red',
             text: isRecent ? '최신순' : '과거순',
             onTap: onTapOrder,
           ),
@@ -247,40 +278,38 @@ class ColumnItemList extends StatelessWidget {
       );
     }
 
-    return Expanded(
-        child: orderList.isNotEmpty
-            ? ListView.builder(
-                shrinkWrap: true,
-                itemCount: orderList.length,
-                itemBuilder: (ctx, idx) {
-                  RecordBox item = orderList[idx];
-                  int orderId = (idx + (isRecent ? 1 : -1));
+    return orderList.isNotEmpty
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: orderList.length,
+            itemBuilder: (ctx, idx) {
+              RecordBox item = orderList[idx];
+              int orderId = (idx + (isRecent ? 1 : -1));
 
-                  return Column(
+              return Column(
+                children: [
+                  Row(
                     children: [
-                      Row(
-                        children: [
-                          onDateTime(item, null),
-                          onWeight(item, null),
-                          onAmountOfChange(item, orderId)
-                        ]
-                            .map(
-                              (child) => Expanded(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 10),
-                                  child: child,
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                      Divider(color: Colors.grey.shade200),
-                    ],
-                  );
-                },
-              )
-            : EmptyWidget(icon: Icons.monitor_weight, text: '기록이 없어요.'));
+                      onDateTime(item, null),
+                      onWeight(item, null),
+                      onAmountOfChange(item, orderId)
+                    ]
+                        .map(
+                          (child) => Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: child,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  Divider(color: Colors.grey.shade200),
+                ],
+              );
+            },
+          )
+        : EmptyWidget(icon: Icons.monitor_weight, text: '기록이 없어요.');
   }
 }
 

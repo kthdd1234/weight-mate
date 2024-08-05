@@ -7,11 +7,11 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/button/expanded_button_hori.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -79,7 +79,7 @@ class CompareToFirst extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ContentsBox(
-        contentsWidget: Column(
+        child: Column(
           children: [
             ContentsTitle(title: '처음과 비교', svg: "start-icon"),
             CompareItemCell(
@@ -129,7 +129,7 @@ class CompareToGoal extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ContentsBox(
-        contentsWidget: Column(
+        child: Column(
           children: [
             ContentsTitle(title: '목표와 비교', svg: "flag-icon"),
             CompareItemCell(
@@ -240,7 +240,7 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ContentsBox(
-        contentsWidget: Column(
+        child: Column(
           children: [
             ContentsTitle(
               title: ' 분석',
@@ -410,7 +410,7 @@ class _YearAnalysisState extends State<YearAnalysis> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: ContentsBox(
-        contentsWidget: Column(
+        child: Column(
           children: [
             ContentsTitle(
               title: ' 분석',
@@ -566,47 +566,3 @@ class CompareItemCell extends StatelessWidget {
     );
   }
 }
-
-/** 처음과 비교
- * 처음 기록한 체중                         2023.7.15 (수)
- * 61.8kg
- * ---------------------------------------------------
- * 가장 최근에 기록한 체중                    2024.3.16 (토)
- * 59.1kg
- * ---------------------------------------------------
- * (가장 최근에 기록한 체중) - (처음 기록한 체중)
- * -2.7kg
- * */
-
-/** 목표와 비교                              
- * 목표 체중                               2023.7.15 (수)
- * 55.2kg                                
- * ---------------------------------------------------
- * 가장 최근에 기록한 체중                    2024.3.16 (토)
- * 59.1kg
- * ---------------------------------------------------
- * (목표 체중) - (가장 최근에 기록한 체중)
- * -4.1kg
- * */
-
-/** 3월 분석                                       3월 ▿
- * 평균 체중                                    
- * 58.2kg
- * ---------------------------------------------------
- * 최고 체중
- * 57.2kg
- * ---------------------------------------------------
- * 최저 체중
- * 62.1kg
- * */
-
-/** 2024년 분석                                 2024년 ▿
- * 평균 체중                                    
- * 58.2kg
- * ---------------------------------------------------
- * 최고 체중
- * 57.2kg
- * ---------------------------------------------------
- * 최저 체중
- * 62.1kg
- * */

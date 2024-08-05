@@ -6,12 +6,12 @@ import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
-import 'package:flutter_app_weight_management/components/popup/CalendarRangePopup.dart';
-import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/maker/DotMaker.dart';
+import 'package:flutter_app_weight_management/widgets/popup/CalendarRangePopup.dart';
+import 'package:flutter_app_weight_management/widgets/segmented/default_segmented.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -126,7 +126,7 @@ class _GoalWeeklyContainerState extends State<GoalWeeklyContainer> {
       child: Stack(
         children: [
           ContentsBox(
-            contentsWidget: Column(
+            child: Column(
               children: [
                 const RowColors(),
                 DateTimeTag(
@@ -250,7 +250,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
       child: Stack(
         children: [
           ContentsBox(
-            contentsWidget: Column(
+            child: Column(
               children: [
                 const RowColors(),
                 TableCalendarHeader(
@@ -344,7 +344,7 @@ class _GoalMonthlyContainerState extends State<GoalMonthlyContainer> {
                           : Padding(
                               padding: const EdgeInsets.all(40),
                               child: EmptyWidget(
-                                icon: todoData[widget.type]!.icon,
+                                icon: Icons.view_timeline_outlined,
                                 text: '실천이 없어요.',
                               ),
                             ),
@@ -626,7 +626,7 @@ class ColumnItmeList extends StatelessWidget {
                   .toList(),
             )
           : EmptyWidget(
-              icon: todoData[type]!.icon,
+              icon: Icons.view_timeline_outlined,
               text:
                   '${type == eLife ? '습관' : '목표'}${type == eLife ? '이' : '가'} 없어요.',
             ),

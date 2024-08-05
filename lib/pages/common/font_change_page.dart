@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
-import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
+import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
+import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/provider/reload_provider.dart';
@@ -55,7 +55,7 @@ class _FontChangePageState extends State<FontChangePage> {
           children: [
             ContentsBox(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              contentsWidget: Row(
+              child: Row(
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,7 +83,7 @@ class _FontChangePageState extends State<FontChangePage> {
                   vertical: 10,
                   horizontal: 20,
                 ),
-                contentsWidget: ListView(
+                child: ListView(
                   children: fontFamilyList
                       .map((item) => InkWell(
                             onTap: () => onTap(item['fontFamily']!),

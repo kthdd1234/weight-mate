@@ -133,6 +133,7 @@ flutter:
     - assets/images/t-3.png
     - assets/images/t-4.png
     - assets/images/t-5.png
+    - assets/images/saled.png
     - assets/svgs/amazed-face.svg
     - assets/svgs/anxious-face.svg
     - assets/svgs/crying-face.svg
@@ -203,6 +204,14 @@ flutter:
     - assets/svgs/mark-V.svg
     - assets/svgs/app-start.svg
     - assets/svgs/theme.svg
+    - assets/svgs/health.svg
+    - assets/svgs/t-weight.svg
+    - assets/svgs/t-picture.svg
+    - assets/svgs/t-diet.svg
+    - assets/svgs/t-exercise.svg
+    - assets/svgs/t-life.svg
+    - assets/svgs/t-water.svg
+    - assets/svgs/t-diary.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
