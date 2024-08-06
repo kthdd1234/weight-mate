@@ -148,7 +148,7 @@ class HistoryDateTime extends StatelessWidget {
     return Row(
       children: [
         CommonText(
-          text: !isWeightMorning && !isWeightNight ? mdeDt : mdDt,
+          text: isWeightMorning || isWeightNight ? mdeDt : mdDt,
           size: 12,
           isNotTr: true,
           color: textColor,
@@ -196,18 +196,10 @@ class HistoryTitle extends StatelessWidget {
   bool isRemoveMode, isWeightMorning, isWeightNight;
   Function() onTapRemoveWegiht;
 
-  bmiValue() {
-    return 'BMI ${bmi(
-      tall: tall,
-      weight: weight,
-      tallUnit: tallUnit,
-      weightUnit: weightUnit,
-    )}';
-  }
-
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+    bool isDateTime = !isWeightMorning & !isWeightNight;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -216,29 +208,49 @@ class HistoryTitle extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            CommonText(
-              text: e(locale: locale, dateTime: createDateTime),
-              size: 12,
-              color: grey.original,
-              isNotTr: true,
-            ),
-            CommonTag(
-              text: '아침 ${weight ?? '-'}$weightUnit',
-              color: 'indigo',
-              size: 10,
-            ),
-            SpaceWidth(width: 5),
-            CommonTag(
-              text: '저녁 ${weightNight ?? '-'}$weightUnit',
-              color: 'pink',
-              size: 10,
-            ),
-            isRemoveMode && weight != null
-                ? Padding(
-                    padding: const EdgeInsets.only(left: 3),
-                    child: HistoryRemove(onTap: onTapRemoveWegiht),
+            isDateTime
+                ? CommonText(
+                    text: e(locale: locale, dateTime: createDateTime),
+                    size: 12,
+                    color: grey.original,
+                    isNotTr: true,
                   )
-                : const EmptyArea()
+                : const EmptyArea(),
+            isWeightMorning
+                ? Row(
+                    children: [
+                      isRemoveMode && weight != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 3),
+                              child: HistoryRemove(onTap: onTapRemoveWegiht),
+                            )
+                          : const EmptyArea(),
+                      CommonTag(
+                        text: '아침 ${weight ?? '-'}$weightUnit',
+                        color: 'indigo',
+                        size: 10,
+                      ),
+                    ],
+                  )
+                : const EmptyArea(),
+            SpaceWidth(width: 5),
+            isWeightNight
+                ? Row(
+                    children: [
+                      isRemoveMode && weight != null
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 3),
+                              child: HistoryRemove(onTap: onTapRemoveWegiht),
+                            )
+                          : const EmptyArea(),
+                      CommonTag(
+                        text: '저녁 ${weightNight ?? '-'}$weightUnit',
+                        color: 'pink',
+                        size: 10,
+                      ),
+                    ],
+                  )
+                : const EmptyArea(),
           ],
         ),
       ],
