@@ -21,38 +21,18 @@ class AddBodyWeight extends StatefulWidget {
 
 class _AddBodyWeightState extends State<AddBodyWeight> {
   String sWeightUnit = 'kg';
-  TextEditingController weightContoller = TextEditingController();
   TextEditingController goalWeightContoller = TextEditingController();
-  FocusNode weightNode = FocusNode();
   FocusNode goalWeightNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
     DietInfoProvider readProvider = context.read<DietInfoProvider>();
 
-    isErrorWeight() {
-      return isShowErorr(
-        unit: sWeightUnit,
-        value: double.tryParse(weightContoller.text),
-      );
-    }
-
     isErrorGoalWeight() {
       return isShowErorr(
         unit: sWeightUnit,
         value: double.tryParse(goalWeightContoller.text),
       );
-    }
-
-    onChangedWeight(_) {
-      bool isInitText = isDoubleTryParse(text: weightContoller.text) == false ||
-          isErrorWeight();
-
-      if (isInitText) {
-        weightContoller.text = '';
-      }
-
-      setState(() {});
     }
 
     onChangedGoalWeight(_) {
@@ -69,18 +49,10 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
 
     onTapUnitButton({required String sUnit}) {
       if (sUnit != sWeightUnit) {
-        String? weight = convertWeight(
-          unit: sUnit,
-          wegiht: weightContoller.text,
-        );
         String? goalWeight = convertWeight(
           unit: sUnit,
           wegiht: goalWeightContoller.text,
         );
-
-        if (weight != null) {
-          setState(() => weightContoller.text = weight);
-        }
 
         if (goalWeight != null) {
           setState(() => goalWeightContoller.text = goalWeight);
@@ -101,25 +73,17 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
     }
 
     isOnButton() {
-      String? weight = convertWeight(
-        unit: sWeightUnit,
-        wegiht: weightContoller.text,
-      );
       String? goalWeight = convertWeight(
         unit: sWeightUnit,
         wegiht: goalWeightContoller.text,
       );
-
-      bool isWeightDone = isDoubleTryParse(text: weightContoller.text) &&
-          weight != null &&
-          isErrorWeight() == false;
 
       bool isGoalWeightDone =
           isDoubleTryParse(text: goalWeightContoller.text) &&
               goalWeight != null &&
               isErrorGoalWeight() == false;
 
-      return isWeightDone && isGoalWeightDone;
+      return isGoalWeightDone;
     }
 
     weightInput({
@@ -154,21 +118,16 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
 
     onPressDone() async {
       if (isOnButton()) {
-        readProvider.changeWeightText(weightContoller.text);
         readProvider.changeGoalWeightText(goalWeightContoller.text);
         readProvider.changeWeightUnit(sWeightUnit);
 
-        await Navigator.pushNamed(context, '/add-plan-list');
+        await Navigator.pushNamed(context, '/add-alarm-permission');
       }
     }
 
     helperMsg() {
       int max = sWeightUnit == 'kg' ? kgMax.toInt() : lbMax.toInt();
       return '1 ~ max 의 값을 입력해주세요.'.tr(namedArgs: {'max': '$max'});
-    }
-
-    helperWeightText() {
-      return weightContoller.text == '' ? helperMsg() : null;
     }
 
     helperGoalWeightText() {
@@ -183,11 +142,11 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
             keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
             keyboardBarColor: const Color(0xffCCCDD3),
             nextFocus: true,
-            actions: [actionItem(weightNode), actionItem(goalWeightNode)],
+            actions: [actionItem(goalWeightNode)],
           ),
           child: Column(
             children: [
-              PageTitle(step: 2, title: '현재 체중과 단위를 입력해주세요.'),
+              PageTitle(step: 2, title: '목표 체중과 단위를 입력해주세요.'),
               ContentsBox(
                 contentsWidget: Column(
                   children: [
@@ -196,17 +155,6 @@ class _AddBodyWeightState extends State<AddBodyWeight> {
                       type: 'weight',
                       state: sWeightUnit,
                       onTap: onTapUnitButton,
-                    ),
-                    weightInput(
-                      title: '현재 체중',
-                      autofocus: true,
-                      focusNode: weightNode,
-                      controller: weightContoller,
-                      prefixIcon: weightPrefixIcon,
-                      suffixText: sWeightUnit,
-                      hintText: '현재 체중',
-                      helperText: helperWeightText(),
-                      onChanged: onChangedWeight,
                     ),
                     weightInput(
                       title: '목표 체중',

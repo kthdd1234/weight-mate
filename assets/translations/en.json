@@ -214,7 +214,7 @@
   "단위 변경": "Unit",
   "키 단위": "Height unit",
   "현재 키": "Current height",
-  "현재 체중과 단위를 입력해주세요.": "Please enter your current weight and unit.",
+  "목표 체중과 단위를 입력해주세요.": "Please enter your goal weight and unit.",
   "체중 단위": "Weight unit",
   "현재 체중": "Current weight",
   "1 ~ max 의 값을 입력해주세요.": "Please enter a value between 1 and {max}.",

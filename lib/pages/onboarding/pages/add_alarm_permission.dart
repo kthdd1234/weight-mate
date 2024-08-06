@@ -75,14 +75,14 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
         );
       }
 
-      await recordRepository.recordBox.put(
-        getDateTimeToInt(now),
-        RecordBox(
-          weight: user.weight,
-          createDateTime: now,
-          weightDateTime: now,
-        ),
-      );
+      // await recordRepository.recordBox.put(
+      //   getDateTimeToInt(now),
+      //   RecordBox(
+      //     weight: user.weight,
+      //     createDateTime: now,
+      //     weightDateTime: now,
+      //   ),
+      // );
 
       planItemList.forEach(
         (name) {
@@ -138,7 +138,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
       body: Column(
         children: [
           PageTitle(
-            step: 4,
+            step: 3,
             title: '꾸준한 체중 기록을 위해 알림을 받아 보는 건 어떠세요?',
           ),
           ContentsBox(

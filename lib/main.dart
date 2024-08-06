@@ -19,7 +19,6 @@ import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dar
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_weight.dart';
-import 'package:flutter_app_weight_management/pages/onboarding/pages/add_plan_list.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
@@ -255,7 +254,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-weight': (context) => const AddBodyWeight(),
         '/add-body-tall': (context) => const AddBodyTall(),
-        '/add-plan-list': (context) => const AddPlanList(),
+        // '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
         '/home-page': (context) => HomePage(
               locale: locale,
