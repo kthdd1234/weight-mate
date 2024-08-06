@@ -1,17 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/pages/home/graph/graph_body.dart';
+import 'package:flutter_app_weight_management/pages/home/history/history_body.dart';
+import 'package:flutter_app_weight_management/pages/home/record/record_body.dart';
+import 'package:flutter_app_weight_management/pages/home/search/search_body.dart';
+import 'package:flutter_app_weight_management/pages/home/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/widgets/maker/BarMaker.dart';
 import 'package:flutter_app_weight_management/widgets/maker/DotMaker.dart';
 import 'package:flutter_app_weight_management/widgets/maker/ImageMaker.dart';
-import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
 
@@ -361,6 +363,7 @@ List<Map<String, String>> fontFamilyList = [
 ];
 
 String fWeight = FILITER.weight.toString();
+String fWeightNight = FILITER.weight_2.toString();
 String fPicture = FILITER.picture.toString();
 String fDiet = FILITER.diet.toString();
 String fExercise = FILITER.exercise.toString();
@@ -685,7 +688,7 @@ List<CalendarMakerClass> calendarMakerList = [
     desc: '날짜 별 체중',
     widget: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 7),
-      child: BarMaker(weight: 0.0, weightUnit: 'kg'),
+      child: BarMaker(weight: 0.0, weightUnit: 'kg', color: indigo.s200),
     ),
   ),
   CalendarMakerClass(
@@ -699,3 +702,9 @@ List<CalendarMakerClass> calendarMakerList = [
 String eWeightMorning = WeightType.morning.toString();
 
 String eWeightNight = WeightType.night.toString();
+
+List<ValueListenable<Box<HiveObject>>> valueListenables = [
+  userRepository.userBox.listenable(),
+  recordRepository.recordBox.listenable(),
+  planRepository.planBox.listenable()
+];

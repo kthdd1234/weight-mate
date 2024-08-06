@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
+import 'package:flutter_app_weight_management/pages/home/record/record_body.dart';
 import 'package:flutter_app_weight_management/widgets/image/default_image.dart';
 import 'package:flutter_app_weight_management/widgets/maker/BarMaker.dart';
 import 'package:flutter_app_weight_management/widgets/popup/AlertPopup.dart';
@@ -18,7 +19,6 @@ import 'package:flutter_app_weight_management/widgets/popup/DisplayPopup.dart';
 import 'package:flutter_app_weight_management/widgets/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_collections_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -258,7 +258,7 @@ class _CommonTitleState extends State<CommonTitle> {
       await showDialog(
         context: context,
         builder: (context) => DisplayPopup(
-          height: 475,
+          height: 514,
           isRequiredWeight: false,
           bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
           classList: historyDisplayClassList,
@@ -582,14 +582,33 @@ class CalendarBar extends StatelessWidget {
     weightBuilder(context, dateTime, events) {
       int recordKey = getDateTimeToInt(dateTime);
       RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      bool? isWeight = recordInfo?.weight != null;
+      bool? isWeight =
+          recordInfo?.weight != null || recordInfo?.weightNight != null;
+
+      bar({
+        required Color color,
+        double? weight,
+      }) {
+        if (weight == null) return const EmptyArea();
+
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 2),
+          child: BarMaker(
+            color: color,
+            weight: weight,
+            weightUnit: weightUnit,
+          ),
+        );
+      }
 
       return isWeight
           ? Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: BarMaker(
-                weight: recordInfo?.weight ?? 0.0,
-                weightUnit: weightUnit,
+              padding: const EdgeInsets.only(top: 40),
+              child: Column(
+                children: [
+                  bar(weight: recordInfo?.weight, color: indigo.s200),
+                  bar(weight: recordInfo?.weightNight, color: pink.s200),
+                ],
               ),
             )
           : const EmptyArea();
@@ -639,6 +658,33 @@ class CalendarBar extends StatelessWidget {
       );
     }
 
+    Widget? todayBuilder(context, DateTime dateTime, events) {
+      return Column(
+        children: [
+          SpaceHeight(height: 10),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: 27.5,
+                height: 27.5,
+                decoration: BoxDecoration(
+                  color: indigo.s300,
+                  borderRadius: BorderRadius.circular(100),
+                ),
+              ),
+              CommonName(
+                text: '${dateTime.day}',
+                color: Colors.white,
+                isBold: true,
+                isNotTr: true,
+              )
+            ],
+          ),
+        ],
+      );
+    }
+
     onPageChanged(DateTime dateTime) {
       if (bottomIndex == 0) {
         context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
@@ -658,18 +704,24 @@ class CalendarBar extends StatelessWidget {
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
+        bool isMakerWeight = calendarMaker == CalendarMaker.weight;
+
         return Column(
           children: [
             Container(
               padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
               child: TableCalendar(
+                rowHeight: isMakerWeight ? 72 : 52,
                 locale: locale,
                 calendarBuilders: CalendarBuilders(
                   markerBuilder: builderInfo[calendarMaker],
+                  todayBuilder: isMakerWeight ? todayBuilder : null,
                 ),
                 headerVisible: false,
                 calendarStyle: CalendarStyle(
                   cellMargin: const EdgeInsets.all(15.0),
+                  cellAlignment:
+                      isMakerWeight ? Alignment.topCenter : Alignment.center,
                   todayDecoration: BoxDecoration(
                     color: Colors.indigo.shade300,
                     shape: BoxShape.circle,
@@ -693,8 +745,8 @@ class CalendarBar extends StatelessWidget {
                 calendarFormat: calendarFormat,
                 availableCalendarFormats: availableCalendarFormats,
                 onDaySelected: onDaySelected,
-                onFormatChanged: onFormatChanged,
                 onPageChanged: onPageChanged,
+                onFormatChanged: onFormatChanged,
               ),
             ),
             SpaceHeight(height: smallSpace),

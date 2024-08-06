@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_app_weight_management/common/CommonModalSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_app_weight_management/widgets/bottomSheet/HashTagBottomS
 import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';

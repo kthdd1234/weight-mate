@@ -78,7 +78,6 @@ dependencies:
   easy_localization: ^3.0.3
   privacy_screen: ^0.0.6
   quiver: ^3.2.1
-  home_widget: ^0.4.1
   googleapis: ^13.1.0
   googleapis_auth: ^1.5.1
   google_sign_in: ^6.2.1
@@ -92,6 +91,7 @@ dependencies:
   firebase_auth: ^4.17.8
   fluttertoast: ^8.2.5
   scrollable_positioned_list: ^0.3.8
+  home_widget: ^0.5.0
 
 dev_dependencies:
   flutter_test:

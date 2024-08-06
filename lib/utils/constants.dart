@@ -194,6 +194,10 @@ final tagColors = {
     'bgColor': Colors.red.shade50,
     'textColor': Colors.red.shade300,
   },
+  'pink': {
+    'bgColor': Colors.pink.shade50,
+    'textColor': Colors.pink.shade300,
+  },
   'blue': {
     'bgColor': Colors.blue.shade50,
     'textColor': Colors.blue.shade300,
@@ -287,7 +291,8 @@ List<FilterClass> displayClassList = [
 ];
 
 List<FilterClass> historyDisplayClassList = [
-  FilterClass(id: FILITER.weight.toString(), name: '체중'),
+  FilterClass(id: FILITER.weight.toString(), name: '체중 (아침)'),
+  FilterClass(id: FILITER.weight_2.toString(), name: '체중 (저녁)'),
   FilterClass(id: FILITER.picture.toString(), name: '사진'),
   FilterClass(id: FILITER.diet.toString(), name: '식단 (기록)'),
   FilterClass(id: FILITER.diet_2.toString(), name: '식단 (목표)'),

@@ -77,6 +77,7 @@ enum FILITER {
   diet_2,
   exercise_2,
   diary_2,
+  weight_2,
 }
 
 enum RECORD { edit, history }

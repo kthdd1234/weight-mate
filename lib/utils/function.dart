@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls, prefer_is_empty
 import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -507,11 +508,11 @@ NativeAd loadNativeAd({
     adUnitId: adUnitId,
     listener: NativeAdListener(
       onAdLoaded: (adLoaded) {
-        log('$adLoaded loaded~~~!!');
+        print('$adLoaded loaded~~~!!');
         onAdLoaded();
       },
       onAdFailedToLoad: (ad, error) {
-        log('$NativeAd failed to load: $error');
+        print('$NativeAd failed to load: $error');
         onAdFailedToLoad();
         ad.dispose();
       },
@@ -958,7 +959,7 @@ Future<bool> setPurchasePremium(Package package) async {
     return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
         true;
   } on PlatformException catch (e) {
-    log('e =>> ${e.toString()}');
+    print('e =>> ${e.toString()}');
     return false;
   }
 }
@@ -970,7 +971,7 @@ Future<bool> isPurchasePremium() async {
     // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
     //     true;
   } on PlatformException catch (e) {
-    log('e =>> ${e.toString()}');
+    print('e =>> ${e.toString()}');
     return false;
   }
 }
@@ -982,7 +983,7 @@ Future<bool> isPurchaseRestore() async {
         customerInfo.entitlements.all[entitlement_identifier]?.isActive == true;
     return isActive;
   } on PlatformException catch (e) {
-    log('e =>> ${e.toString()}');
+    print('e =>> ${e.toString()}');
     return false;
   }
 }
@@ -1116,4 +1117,18 @@ SvgPicture svgWidget({
     colorFilter:
         color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
   );
+}
+
+getMaxGraph({
+  required List<double> morningList,
+  required List<double> nightList,
+}) {
+  return ([...morningList, ...nightList].reduce(max) + 1).floorToDouble();
+}
+
+getMinGraph({
+  required List<double> morningList,
+  required List<double> nightList,
+}) {
+  return ([...morningList, ...nightList].reduce(max) - 1).floorToDouble();
 }

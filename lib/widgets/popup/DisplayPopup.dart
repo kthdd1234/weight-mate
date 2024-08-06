@@ -6,7 +6,6 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
 import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/widgets/space/spaceHeight.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';

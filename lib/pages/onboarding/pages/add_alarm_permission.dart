@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/pages/home/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/widgets/area/empty_area.dart';
 import 'package:flutter_app_weight_management/widgets/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/widgets/picker/default_date_time_picker.dart';
@@ -13,8 +14,6 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -22,7 +21,6 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class AddAlarmPermission extends StatefulWidget {

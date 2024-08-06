@@ -433,3 +433,23 @@ class CalendarMakerClass {
   String id, title, desc;
   Widget widget;
 }
+
+class TagClass {
+  TagClass({
+    required this.color,
+    required this.onTap,
+    this.isHide,
+    this.icon,
+    this.text,
+    this.leftIcon,
+    this.nameArgs,
+    this.isNotTr,
+  });
+
+  String color;
+  String? text;
+  IconData? icon, leftIcon;
+  bool? isHide, isNotTr;
+  Map<String, String>? nameArgs;
+  Function() onTap;
+}

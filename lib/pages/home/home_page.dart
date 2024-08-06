@@ -313,7 +313,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       return (isRecord || isHistory) && !isToday
           ? FloatingActionButton.extended(
               extendedPadding: const EdgeInsets.all(10),
-              backgroundColor: textColor,
+              backgroundColor: themeColor,
               onPressed: () {
                 DateTime now = DateTime.now();
 

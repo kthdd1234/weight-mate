@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 
 class BarMaker extends StatelessWidget {
-  BarMaker({super.key, required this.weight, required this.weightUnit});
+  BarMaker({
+    super.key,
+    required this.weight,
+    required this.weightUnit,
+    required this.color,
+  });
 
   double weight;
   String weightUnit;
+  Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 1),
       decoration: BoxDecoration(
-        color: Colors.indigo.shade300,
+        color: color,
         borderRadius: BorderRadius.circular(3),
       ),
       child: CommonText(
