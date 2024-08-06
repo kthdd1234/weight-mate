@@ -107,7 +107,8 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
               isRecent: isRecent,
               onTapYear: onTapYear,
               onTapOrder: onTapOrder,
-            )
+            ),
+            SpaceWidth(width: 15),
           ],
         ),
         body: Stack(

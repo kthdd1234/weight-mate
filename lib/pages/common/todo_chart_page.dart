@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/todo/GoalMonthlyContainer.dart';
@@ -86,19 +87,22 @@ class _TodoChartPageState extends State<TodoChartPage> {
           title: ' 모아보기',
           nameArgs: {'type': title.tr()},
         ),
-        body: Column(
-          children: [
-            child,
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: DefaultSegmented(
-                selectedSegment: selectedSegment,
-                children: type != eLife ? children1 : children2,
-                onSegmentedChanged: onSegmentedChanged,
+        body: Stack(children: [
+          Column(
+            children: [
+              child,
+              Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: DefaultSegmented(
+                  selectedSegment: selectedSegment,
+                  children: type != eLife ? children1 : children2,
+                  onSegmentedChanged: onSegmentedChanged,
+                ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          CommonBlur()
+        ]),
       ),
     );
   }

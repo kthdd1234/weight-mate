@@ -9,11 +9,9 @@ import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
-import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/max_min_avg_graph_page.dart';
 import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
 import 'package:flutter_app_weight_management/pages/common/theme_change_page.dart';
-import 'package:flutter_app_weight_management/etc/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
@@ -51,6 +49,7 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:health/health.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
@@ -129,7 +128,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
 
     userBox = Hive.box('userBox');
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         TrackingStatus status =

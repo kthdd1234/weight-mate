@@ -38,7 +38,7 @@ class CommonBlur extends StatelessWidget {
                 ),
                 SpaceHeight(height: 5),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: const Text(
                     '프리미엄을 구매한 분들에게만 제공되는 기능이에요.',
                     style: TextStyle(fontSize: 14),

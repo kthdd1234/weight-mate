@@ -92,6 +92,7 @@ dependencies:
   firebase_auth: ^4.17.8
   fluttertoast: ^8.2.5
   scrollable_positioned_list: ^0.3.8
+  health: ^10.2.0
 
 dev_dependencies:
   flutter_test:
@@ -203,6 +204,7 @@ flutter:
     - assets/svgs/mark-V.svg
     - assets/svgs/app-start.svg
     - assets/svgs/theme.svg
+    - assets/svgs/health.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
