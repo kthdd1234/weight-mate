@@ -1104,3 +1104,10 @@ List<RecordBox> getSearchList({
 
   return isRecent ? searchList.reversed.toList() : searchList;
 }
+
+navigator({required BuildContext context, required Widget page}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute<void>(builder: (BuildContext context) => page),
+  );
+}

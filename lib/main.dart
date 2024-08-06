@@ -9,11 +9,11 @@ import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
-import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/max_min_avg_graph_page.dart';
 import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
 import 'package:flutter_app_weight_management/pages/common/theme_change_page.dart';
-import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
+import 'package:flutter_app_weight_management/etc/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
@@ -254,7 +254,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-weight': (context) => const AddBodyWeight(),
         '/add-body-tall': (context) => const AddBodyTall(),
-        // '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
         '/home-page': (context) => HomePage(
               locale: locale,
@@ -267,9 +266,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/diary-write-page': (context) => DiaryWritePage(),
         '/body-unit-page': (context) => const BodyUnitPage(),
         '/body-info-page': (context) => const BodyInfoPage(),
-        '/todo-chart-page': (context) => const TodoChartPage(),
         '/weight-chart-page': (context) => const WeightChartPage(),
-        '/goal-chart-page': (context) => const GoalChartPage(),
         '/font-change-page': (context) => const FontChangePage(),
         '/weight-analyze-page': (context) => const WeightAnalyzePage(),
         '/premium-page': (context) => const PremiumPage(),

@@ -423,3 +423,10 @@ class ThemeClass {
   ThemeClass({required this.path, required this.name});
   String path, name;
 }
+
+class TargetDayClass {
+  TargetDayClass({required this.color, required this.dateTime});
+
+  Color color;
+  DateTime dateTime;
+}

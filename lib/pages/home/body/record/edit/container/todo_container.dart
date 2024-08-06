@@ -21,11 +21,12 @@ import 'package:flutter_app_weight_management/components/popup/PermissionPopup.d
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/components/todo/GoalWidgets.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
+import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -343,18 +344,12 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
     }
 
     onTapRecordCollection() async {
-      await Navigator.pushNamed(
-        context,
-        '/todo-chart-page',
-        arguments: {'type': widget.type, 'title': widget.title},
-      );
-    }
-
-    onTapGoalCollection() async {
-      await Navigator.pushNamed(
-        context,
-        '/goal-chart-page',
-        arguments: {'type': widget.type, 'title': widget.title},
+      navigator(
+        context: context,
+        page: TodoChartPage(
+          type: widget.type,
+          title: widget.title,
+        ),
       );
     }
 
@@ -381,18 +376,6 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
 
     List<TagClass> tags = [
       TagClass(
-        text: '기록 모아보기',
-        color: widget.colorName,
-        isHide: onHide(SegmentedTypes.goal),
-        onTap: onTapRecordCollection,
-      ),
-      TagClass(
-        text: '실천 모아보기',
-        color: widget.colorName,
-        isHide: onHide(SegmentedTypes.record),
-        onTap: onTapGoalCollection,
-      ),
-      TagClass(
         text: '기록 개',
         nameArgs: {"length": "${actionList()?.length ?? 0}"},
         color: widget.colorName,
@@ -400,12 +383,31 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         onTap: widget.onTapOpen,
       ),
       TagClass(
-        text: '목표 개',
-        nameArgs: {"length": "${widget.planList.length}"},
+        text: '${widget.title} 모아보기',
         color: widget.colorName,
-        isHide: widget.isOpen,
-        onTap: widget.onTapOpen,
+        isHide: false,
+        onTap: onTapRecordCollection,
       ),
+      // TagClass(
+      //   text: '실천 모아보기',
+      //   color: widget.colorName,
+      //   isHide: onHide(SegmentedTypes.record),
+      //   onTap: onTapGoalCollection,
+      // ),
+      // TagClass(
+      //   text: '기록 개',
+      //   nameArgs: {"length": "${actionList()?.length ?? 0}"},
+      //   color: widget.colorName,
+      //   isHide: widget.isOpen,
+      //   onTap: widget.onTapOpen,
+      // ),
+      // TagClass(
+      //   text: '목표 개',
+      //   nameArgs: {"length": "${widget.planList.length}"},
+      //   color: widget.colorName,
+      //   isHide: widget.isOpen,
+      //   onTap: widget.onTapOpen,
+      // ),
       TagClass(
         icon: widget.isOpen
             ? Icons.keyboard_arrow_down_rounded
@@ -1359,10 +1361,9 @@ class LifeContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onTapGoalCollection() async {
-      await Navigator.pushNamed(
-        context,
-        '/goal-chart-page',
-        arguments: {'type': type, 'title': title},
+      navigator(
+        context: context,
+        page: TodoChartPage(type: type, title: title),
       );
     }
 
@@ -1375,7 +1376,7 @@ class LifeContainer extends StatelessWidget {
         onTap: onTapOpen,
       ),
       TagClass(
-        text: '실천 모아보기',
+        text: '습관 모아보기',
         color: colorName,
         onTap: onTapGoalCollection,
       ),

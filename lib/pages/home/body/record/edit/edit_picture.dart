@@ -246,7 +246,7 @@ class EditPicture extends StatelessWidget {
                       icon: Icons.auto_awesome,
                       tags: [
                         TagClass(
-                          text: '사진 장',
+                          text: '장',
                           nameArgs: {'length': '$pictureLength'},
                           color: 'purple',
                           isHide: isOpen,
