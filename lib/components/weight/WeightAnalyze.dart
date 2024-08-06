@@ -1,10 +1,7 @@
 // ignore_for_file: avoid_function_literals_in_foreach_calls
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/common/CommonBackground.dart';
-import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
-import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -16,15 +13,14 @@ import 'package:flutter_app_weight_management/components/weight/WeightChart.dart
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
-class WeightAnalyzePage extends StatelessWidget {
-  const WeightAnalyzePage({super.key});
+class WeightAnalyze extends StatelessWidget {
+  const WeightAnalyze({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,19 +36,9 @@ class WeightAnalyzePage extends StatelessWidget {
       CompareToGoal(locale: locale, unit: unit, goalWeight: goalWeight),
     ];
 
-    return CommonBackground(
-      child: CommonScaffold(
-        appBarInfo: AppBarInfoClass(title: '체중 분석표'),
-        body: Stack(
-          children: [
-            ListView.builder(
-              itemBuilder: ((context, index) => analyzeWidgetList[index]),
-              itemCount: analyzeWidgetList.length,
-            ),
-            CommonBlur(),
-          ],
-        ),
-      ),
+    return ListView.builder(
+      itemBuilder: ((context, index) => analyzeWidgetList[index]),
+      itemCount: analyzeWidgetList.length,
     );
   }
 }
@@ -569,47 +555,3 @@ class CompareItemCell extends StatelessWidget {
     );
   }
 }
-
-/** 처음과 비교
- * 처음 기록한 체중                         2023.7.15 (수)
- * 61.8kg
- * ---------------------------------------------------
- * 가장 최근에 기록한 체중                    2024.3.16 (토)
- * 59.1kg
- * ---------------------------------------------------
- * (가장 최근에 기록한 체중) - (처음 기록한 체중)
- * -2.7kg
- * */
-
-/** 목표와 비교                              
- * 목표 체중                               2023.7.15 (수)
- * 55.2kg                                
- * ---------------------------------------------------
- * 가장 최근에 기록한 체중                    2024.3.16 (토)
- * 59.1kg
- * ---------------------------------------------------
- * (목표 체중) - (가장 최근에 기록한 체중)
- * -4.1kg
- * */
-
-/** 3월 분석                                       3월 ▿
- * 평균 체중                                    
- * 58.2kg
- * ---------------------------------------------------
- * 최고 체중
- * 57.2kg
- * ---------------------------------------------------
- * 최저 체중
- * 62.1kg
- * */
-
-/** 2024년 분석                                 2024년 ▿
- * 평균 체중                                    
- * 58.2kg
- * ---------------------------------------------------
- * 최고 체중
- * 57.2kg
- * ---------------------------------------------------
- * 최저 체중
- * 62.1kg
- * */

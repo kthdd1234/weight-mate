@@ -69,7 +69,7 @@
   "그래프": "Graph",
   "창 닫기": "Close",
   "사진 장": "Photos {length}",
-  "사진 앨범": "Album",
+  "사진 모아보기": "Album",
   "🖼️ 사진 기록 완료!": "🖼 recording completed!",
   "사진은 앱 내 저장 공간에 저장돼요.": "The photos you added will be saved in the app.",
   "사진 데이터 저장 중...": "Save photo data...",
@@ -433,5 +433,8 @@
   "이점 이해해주시면 감사하겠습니다.": "I'd appreciate it if you could understand the benefits.",
   "(광고 시청 시 24시간 동안 광고 노출x)": "(Expose advertisements for 24 hours when watching commercials x)",
   "짧은 광고 보기": "Watch Ads",
-  "광고 불러오기를 실패했어요": "Failed to get ads"
+  "광고 불러오기를 실패했어요": "Failed to get ads",
+  "체중 모아보기": "Weight collection",
+  "통계": "Statistics",
+  "분석": "Analysis"
 }

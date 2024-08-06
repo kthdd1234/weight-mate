@@ -188,10 +188,6 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
-    onTapWeightAnalyze() {
-      Navigator.pushNamed(context, '/weight-analyze-page');
-    }
-
     return Column(
       children: [
         ContentsBox(
@@ -203,40 +199,18 @@ class _EditWeightState extends State<EditWeight> {
                 icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
                 tags: [
                   TagClass(
-                    text: '체중 ',
-                    nameArgs: {
-                      'weight': '${recordInfo?.weight ?? '- '}',
-                      'unit': user.weightUnit ?? 'kg'
-                    },
+                    text:
+                        '${recordInfo?.weight ?? '- '}${user.weightUnit ?? 'kg'}',
+                    isNotTr: true,
                     color: 'indigo',
                     isHide: isOpen,
                     onTap: onTapOpen,
                   ),
                   TagClass(
-                    text: 'BMI',
-                    nameArgs: {
-                      'bmi': bmi(
-                        tall: user.tall,
-                        weight: recordInfo?.weight,
-                        tallUnit: user.tallUnit,
-                        weightUnit: user.weightUnit,
-                      )
-                    },
-                    isHide: isOpen,
+                    text: '체중 모아보기',
                     color: 'indigo',
-                    onTap: onTapBMI,
-                  ),
-                  TagClass(
-                    text: '통계표 보기',
-                    color: 'indigo',
-                    isHide: !isOpen,
+                    isHide: false,
                     onTap: onTapWeightChart,
-                  ),
-                  TagClass(
-                    text: '분석표 보기',
-                    color: 'indigo',
-                    isHide: !isOpen,
-                    onTap: onTapWeightAnalyze,
                   ),
                   TagClass(
                     icon: isOpen

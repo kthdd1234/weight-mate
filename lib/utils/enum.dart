@@ -26,7 +26,9 @@ enum SegmentedTypes {
   oneYear,
   custom,
   goal,
-  record
+  record,
+  chart,
+  analyze
 }
 
 enum MoreSeeItem {

@@ -253,7 +253,7 @@ class EditPicture extends StatelessWidget {
                           onTap: onTapOpen,
                         ),
                         TagClass(
-                          text: '사진 앨범',
+                          text: '사진 모아보기',
                           color: 'purple',
                           onTap: () => Navigator.pushNamed(
                               context, '/image-collections-page'),
