@@ -137,7 +137,7 @@ class HealthService {
       child: Column(
         children: [
           CommonName(
-            text: '데이터가 있는 경우',
+            text: '건강 앱에 데이터가 있을 경우',
             nameArgs: {'type': name},
             color: grey.original,
             fontSize: 12,
