@@ -31,15 +31,6 @@ class ThemeChangePage extends StatefulWidget {
 class _ThemeChangePageState extends State<ThemeChangePage> {
   UserBox user = userRepository.user;
 
-  // themes({
-  //   required String path,
-  //   required String name,
-  //   required String theme,
-  // }) {
-  //   return
-
-  // }
-
   @override
   Widget build(BuildContext context) {
     return MultiValueListenableBuilder(

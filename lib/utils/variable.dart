@@ -1,7 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/maker/PictureMaker.dart';
+import 'package:flutter_app_weight_management/components/maker/StickerMaker.dart';
+import 'package:flutter_app_weight_management/components/maker/WeightMaker.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_picture.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
@@ -236,7 +240,8 @@ final formatInfo = {
 
 final makerInfo = {
   CalendarMaker.sticker.toString(): CalendarMaker.sticker,
-  CalendarMaker.weight.toString(): CalendarMaker.weight
+  CalendarMaker.weight.toString(): CalendarMaker.weight,
+  CalendarMaker.picture.toString(): CalendarMaker.picture,
 };
 
 final localeNames = [
@@ -396,19 +401,19 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
   PremiumBenefitsClass(
-    svgName: 'theme',
-    title: '다양한 테마들을 제공해드려요',
-    subTitle: '총 6종의 다채로운 배경 테마들을 이용해보세요!',
-  ),
-  PremiumBenefitsClass(
     svgName: 'premium-category-detail',
-    title: '좀 더 자세한 통계 기능을 제공해드려요',
-    subTitle: '체중 통계/분석표, 기록 모아보기, 실천 모아보기 등',
+    title: '모아보기 기능을 이용할 수 있어요',
+    subTitle: '체중, 식단, 운동, 습관, 일기 모아보기 등',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-photos-four',
     title: '사진을 최대 4장까지 추가 할 수 있어요',
     subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
+  ),
+  PremiumBenefitsClass(
+    svgName: 'theme',
+    title: '다양한 테마들을 제공해드려요',
+    subTitle: '총 6종의 다채로운 배경 테마들을 이용해보세요!',
   ),
   PremiumBenefitsClass(
     svgName: 'custom-graph',
@@ -681,4 +686,35 @@ final themeClassList = [
     ThemeClass(path: '5', name: 'Perfect White'),
     ThemeClass(path: '6', name: 'Kind Steel'),
   ],
+];
+
+List<CalendarMakerClass> calendarMakerList = [
+  CalendarMakerClass(
+    id: CalendarMaker.sticker.toString(),
+    title: '스티커',
+    desc: '카테고리별 스티커',
+    widget: Padding(
+      padding: const EdgeInsets.only(left: 3, top: 2),
+      child: StickerMaker(
+        mainAxisAlignment: MainAxisAlignment.center,
+        row1: const ['indigo', 'purple', 'teal'],
+        row2: const ['lightBlue', 'brown', 'orange'],
+      ),
+    ),
+  ),
+  CalendarMakerClass(
+    id: CalendarMaker.weight.toString(),
+    title: '체중',
+    desc: '날짜별 체중',
+    widget: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 7),
+      child: WeightMaker(weight: 0.0, weightUnit: 'kg'),
+    ),
+  ),
+  CalendarMakerClass(
+    id: CalendarMaker.picture.toString(),
+    title: '사진',
+    desc: '날짜별 사진 한장',
+    widget: const PictureMaker(),
+  ),
 ];

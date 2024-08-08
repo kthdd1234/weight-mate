@@ -1,17 +1,15 @@
-import 'dart:developer';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/calendar/CalendarBar.dart';
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/dot/dot_row.dart';
+import 'package:flutter_app_weight_management/components/popup/CalendarMakerPopup.dart';
 import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
@@ -25,9 +23,7 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
@@ -60,23 +56,26 @@ class CommonAppBar extends StatelessWidget {
       user.save();
     }
 
-    onTapMakerType(CalendarMaker maker) {
-      user.calendarMaker = maker.toString();
-      user.save();
+    onTapMakerType() async {
+      showDialog(
+        context: context,
+        builder: (context) => CalendarMakerPopup(),
+      );
     }
 
     return Column(
       children: [
-        CommonTitle(
-          index: id.index,
-          calendarFormat:
-              formatInfo[isRecord ? calendarFormat : historyCalendarFormat]!,
-          calendarMaker: makerInfo[
-              isRecord ? calendarMaker : CalendarMaker.sticker.toString()]!,
-          onFormatChanged: onFormatChanged,
-          onTapMakerType: onTapMakerType,
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: CommonAppBarTitle(
+            index: id.index,
+            calendarFormat:
+                formatInfo[isRecord ? calendarFormat : historyCalendarFormat]!,
+            calendarMaker: makerInfo[calendarMaker]!,
+            onFormatChanged: onFormatChanged,
+            onTapMakerType: onTapMakerType,
+          ),
         ),
-        SpaceHeight(height: tinySpace),
         isRecord
             ? CalendarBar(
                 bottomIndex: id.index,
@@ -98,8 +97,8 @@ class CommonAppBar extends StatelessWidget {
   }
 }
 
-class CommonTitle extends StatefulWidget {
-  CommonTitle({
+class CommonAppBarTitle extends StatefulWidget {
+  CommonAppBarTitle({
     super.key,
     required this.index,
     required this.calendarFormat,
@@ -112,13 +111,13 @@ class CommonTitle extends StatefulWidget {
   CalendarFormat calendarFormat;
   CalendarMaker calendarMaker;
   Function(CalendarFormat) onFormatChanged;
-  Function(CalendarMaker) onTapMakerType;
+  Function() onTapMakerType;
 
   @override
-  State<CommonTitle> createState() => _CommonTitleState();
+  State<CommonAppBarTitle> createState() => _CommonAppBarTitleState();
 }
 
-class _CommonTitleState extends State<CommonTitle> {
+class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
@@ -377,9 +376,7 @@ class _CommonTitleState extends State<CommonTitle> {
                               text:
                                   availableCalendarMaker[widget.calendarMaker],
                               color: 'whiteIndigo',
-                              onTap: () => widget.onTapMakerType(
-                                nextCalendarMaker[widget.calendarMaker]!,
-                              ),
+                              onTap: widget.onTapMakerType,
                             ),
                             SpaceWidth(width: tinySpace),
                             CommonTag(
@@ -494,197 +491,6 @@ class _CommonTitleState extends State<CommonTitle> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class CalendarBar extends StatelessWidget {
-  CalendarBar({
-    super.key,
-    required this.bottomIndex,
-    required this.calendarFormat,
-    required this.calendarMaker,
-    required this.onFormatChanged,
-  });
-
-  int bottomIndex;
-  CalendarFormat calendarFormat;
-  CalendarMaker calendarMaker;
-  Function(CalendarFormat) onFormatChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    String locale = context.locale.toString();
-    String? weightUnit = userRepository.user.weightUnit ?? 'kg';
-    DateTime importDateTime =
-        context.watch<ImportDateTimeProvider>().getImportDateTime();
-    DateTime historyImportDateTime = context
-        .watch<HistoryImportDateTimeProvider>()
-        .getHistoryImportDateTime();
-
-    onDaySelected(selectedDay, _) {
-      if (bottomIndex == 0) {
-        context.read<ImportDateTimeProvider>().setImportDateTime(selectedDay);
-        context.read<TitleDateTimeProvider>().setTitleDateTime(selectedDay);
-      } else if (bottomIndex == 1) {
-        context
-            .read<HistoryImportDateTimeProvider>()
-            .setHistoryImportDateTime(selectedDay);
-        context
-            .read<HistoryTitleDateTimeProvider>()
-            .setHistoryTitleDateTime(selectedDay);
-      }
-    }
-
-    nullCheckAction(List<Map<String, dynamic>>? actions, String type) {
-      if (actions == null) return null;
-
-      return actions.firstWhere(
-        (action) => action['type'] == type,
-        orElse: () => {'type': null},
-      )['type'];
-    }
-
-    colorName(dynamic target, String name) {
-      return target != null ? name : null;
-    }
-
-    stickerBuilder(context, day, events) {
-      int recordKey = getDateTimeToInt(day);
-      RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      List<Map<String, dynamic>>? actions = recordInfo?.actions;
-      List<Map<String, String>>? hashTagList =
-          (recordInfo?.recordHashTagList == null ||
-                  recordInfo?.recordHashTagList?.length == 0)
-              ? null
-              : recordInfo?.recordHashTagList;
-
-      String? weight = colorName(
-        recordInfo?.weight,
-        'indigo',
-      );
-      String? picture = colorName(
-        (recordInfo?.leftFile ??
-            recordInfo?.rightFile ??
-            recordInfo?.bottomFile ??
-            recordInfo?.topFile),
-        'purple',
-      );
-      String? diet = colorName(
-        nullCheckAction(actions, eDiet),
-        'teal',
-      );
-      String? exercise = colorName(
-        nullCheckAction(actions, eExercise),
-        'lightBlue',
-      );
-      String? life = colorName(
-        nullCheckAction(actions, eLife),
-        'brown',
-      );
-      String? diary = colorName(
-        (recordInfo?.whiteText ?? recordInfo?.emotion ?? hashTagList),
-        'orange',
-      );
-
-      List<String?> row1 = [weight, picture, diet];
-      List<String?> row2 = [exercise, life, diary];
-
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          DotRow(row: row1),
-          SpaceHeight(height: 3),
-          DotRow(row: row2),
-        ],
-      );
-    }
-
-    weightBuilder(context, day, events) {
-      int recordKey = getDateTimeToInt(day);
-      RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      bool? isWeight = recordInfo?.weight != null;
-
-      return isWeight
-          ? Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 1),
-                decoration: BoxDecoration(
-                  color: Colors.indigo.shade300,
-                  borderRadius: BorderRadius.circular(3),
-                ),
-                child: CommonText(
-                  text: '${recordInfo?.weight}$weightUnit',
-                  size: 8.5,
-                  color: Colors.white,
-                  isCenter: true,
-                  isNotTr: true,
-                  isBold: true,
-                ),
-              ),
-            )
-          : const EmptyArea();
-    }
-
-    onPageChanged(DateTime dateTime) {
-      if (bottomIndex == 0) {
-        context.read<TitleDateTimeProvider>().setTitleDateTime(dateTime);
-      } else if (bottomIndex == 1) {
-        context
-            .read<HistoryTitleDateTimeProvider>()
-            .setHistoryTitleDateTime(dateTime);
-      }
-    }
-
-    return MultiValueListenableBuilder(
-      valueListenables: valueListenables,
-      builder: (context, values, child) {
-        return Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
-              child: TableCalendar(
-                locale: locale,
-                calendarBuilders: CalendarBuilders(
-                  markerBuilder: calendarMaker == CalendarMaker.sticker
-                      ? stickerBuilder
-                      : weightBuilder,
-                ),
-                headerVisible: false,
-                calendarStyle: CalendarStyle(
-                  cellMargin: const EdgeInsets.all(15.0),
-                  todayDecoration: BoxDecoration(
-                    color: Colors.indigo.shade300,
-                    shape: BoxShape.circle,
-                  ),
-                  todayTextStyle: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
-                daysOfWeekStyle: DaysOfWeekStyle(
-                  weekdayStyle: TextStyle(color: grey.original, fontSize: 13),
-                  weekendStyle: TextStyle(color: grey.original, fontSize: 13),
-                ),
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.now(),
-                focusedDay:
-                    bottomIndex == 0 ? importDateTime : historyImportDateTime,
-                currentDay:
-                    bottomIndex == 0 ? importDateTime : historyImportDateTime,
-                calendarFormat: calendarFormat,
-                availableCalendarFormats: availableCalendarFormats,
-                onDaySelected: onDaySelected,
-                onFormatChanged: onFormatChanged,
-                onPageChanged: onPageChanged,
-              ),
-            ),
-            SpaceHeight(height: smallSpace),
-          ],
-        );
-      },
     );
   }
 }

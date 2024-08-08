@@ -35,6 +35,7 @@ enum MoreSeeItem {
   premium,
   tall,
   goalWeight,
+  appMode,
   appTheme,
   appUnit,
   appAlarm,
@@ -80,7 +81,7 @@ enum FILITER {
 
 enum RECORD { edit, history }
 
-enum CalendarMaker { sticker, weight }
+enum CalendarMaker { sticker, weight, picture }
 
 enum HistoryFilter { recent, past }
 

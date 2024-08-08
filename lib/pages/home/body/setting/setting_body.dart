@@ -414,6 +414,10 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
+    onTapMode(id) async {
+      //
+    }
+
     List<MoreSeeItemClass> settingItemList = [
       MoreSeeItemClass(
         id: MoreSeeItem.premium,
@@ -423,14 +427,6 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapPremium,
       ),
-      // MoreSeeItemClass(
-      //   id: MoreSeeItem.tall,
-      //   icon: 'health',
-      //   title: '건강 앱 연동',
-      //   value: '미연동',
-      //   color: themeColor,
-      //   onTap: onTapHealth,
-      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',
@@ -447,6 +443,14 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapGoalWeight,
       ),
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.appMode,
+      //   icon: 'mode',
+      //   title: '화면 모드',
+      //   value: '시스템 설정',
+      //   color: themeColor,
+      //   onTap: onTapMode,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.appTheme,
         icon: 'theme',

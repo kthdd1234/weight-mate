@@ -332,12 +332,13 @@ const nextCalendarFormats = {
 const availableCalendarMaker = {
   CalendarMaker.sticker: '스티커',
   CalendarMaker.weight: '체중',
+  CalendarMaker.picture: '사진'
 };
 
-const nextCalendarMaker = {
-  CalendarMaker.sticker: CalendarMaker.weight,
-  CalendarMaker.weight: CalendarMaker.sticker,
-};
+// const nextCalendarMaker = {
+//   CalendarMaker.sticker: CalendarMaker.weight,
+//   CalendarMaker.weight: CalendarMaker.sticker,
+// };
 
 const historyFilterFormats = {
   HistoryFilter.recent: '최신순',

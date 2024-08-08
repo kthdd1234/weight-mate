@@ -333,8 +333,8 @@
   "커피 한잔의 가격으로 단 한번 결제!": "Pay only once for the price of a cup of coffee!",
   "모든 화면에서 광고가 나오지 않아요": "No ads on all screens",
   "광고없이 쾌적하게 앱을 사용해보세요!": "Use the app comfortably without ads!",
-  "좀 더 자세한 통계 기능을 제공해드려요": "Give you more detailed statistical features",
-  "체중 통계/분석표, 기록 모아보기, 실천 모아보기 등": "weight statistics, record/practice collection",
+  "모아보기 기능을 이용할 수 있어요": "Give you more detailed statistical features",
+  "체중, 식단, 운동, 습관, 일기 모아보기 등": "weight statistics, record/practice collection",
   "사진을 최대 4장까지 추가 할 수 있어요": "Up to 4 photos can be added",
   "보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!": "Add more diet, exercise, and eye body photos!",
   "구매가 완료되었어요 :D": "Purchase completed :D",
@@ -453,5 +453,9 @@
   "체중 메이트 > 모두 켜기": "Weight Mate > Turn All On",
   "걸음 수": "steps",
   "걸음 수 데이터 가져오는 중...": "Retrieving step count data...",
-  "건강 앱에서 가져올 수 있는": "No steps data available"
+  "건강 앱에서 가져올 수 있는": "No steps data available",
+  "캘린더 표시 유형": "Calendar Display Type",
+  "카테고리별 스티커": "Category Stickers",
+  "날짜별 체중": "Weight record",
+  "날짜별 사진 한장": "One picture"
 }

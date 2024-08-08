@@ -437,3 +437,15 @@ class StepsGraphDataClass {
   String x;
   double? y;
 }
+
+class CalendarMakerClass {
+  CalendarMakerClass({
+    required this.id,
+    required this.title,
+    required this.desc,
+    required this.widget,
+  });
+
+  String id, title, desc;
+  Widget widget;
+}
