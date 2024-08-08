@@ -431,6 +431,10 @@ String eGraphDefault = graphType.Default.toString();
 
 String eGraphCustom = graphType.Custom.toString();
 
+String cGraphWeight = GraphCategory.weight.toString();
+
+String cGraphWork = GraphCategory.work.toString();
+
 Map<String, Map<String, Color>> goalButtonColors = {
   eDiet: {
     'bgColor': dietBgButtonColor,

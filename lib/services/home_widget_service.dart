@@ -47,8 +47,6 @@ class HomeWidgetService {
     String emptyWeightTitle = "체중 기록하기".tr();
     String fontFamily = '${user.fontFamily}';
 
-    log('fontFamily => $fontFamily');
-
     Map<String, String> weightObj = {
       "headerTitle": headerTitle,
       "today": today,

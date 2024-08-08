@@ -1,4 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
@@ -413,40 +414,6 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
-    onTapHealth(id) async {
-      DateTime now = DateTime.now();
-      Health health = Health();
-
-      Health().configure(useHealthConnectIfAvailable: true);
-
-      List<HealthDataType> types = [
-        HealthDataType.STEPS,
-        HealthDataType.WEIGHT,
-      ];
-
-      List<HealthDataAccess> permissions = [
-        HealthDataAccess.READ_WRITE,
-        HealthDataAccess.READ_WRITE
-      ];
-
-      await health.requestAuthorization(
-        types,
-        permissions: permissions,
-      );
-
-      // log('requested => $requested');
-
-      List<HealthDataPoint> healthData = await health.getHealthDataFromTypes(
-        types: types,
-        startTime: now.subtract(
-          const Duration(days: 1),
-        ),
-        endTime: now,
-      );
-
-      log('healthData => $healthData');
-    }
-
     List<MoreSeeItemClass> settingItemList = [
       MoreSeeItemClass(
         id: MoreSeeItem.premium,
@@ -456,14 +423,14 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapPremium,
       ),
-      MoreSeeItemClass(
-        id: MoreSeeItem.tall,
-        icon: 'health',
-        title: '건강 앱 연동',
-        value: '미연동',
-        color: themeColor,
-        onTap: onTapHealth,
-      ),
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.tall,
+      //   icon: 'health',
+      //   title: '건강 앱 연동',
+      //   value: '미연동',
+      //   color: themeColor,
+      //   onTap: onTapHealth,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.tall,
         icon: 'tall',

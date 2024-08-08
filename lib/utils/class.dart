@@ -430,3 +430,10 @@ class TargetDayClass {
   Color color;
   DateTime dateTime;
 }
+
+class StepsGraphDataClass {
+  StepsGraphDataClass({required this.x, this.y});
+
+  String x;
+  double? y;
+}

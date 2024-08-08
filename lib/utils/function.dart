@@ -19,6 +19,7 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:health/health.dart';
 import 'package:hive/hive.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:quiver/time.dart';
@@ -1110,4 +1111,17 @@ navigator({required BuildContext context, required Widget page}) {
     context,
     MaterialPageRoute<void>(builder: (BuildContext context) => page),
   );
+}
+
+getGraphX({
+  required String locale,
+  required bool isWeek,
+  required String graphType,
+  required DateTime dateTime,
+}) {
+  return isWeek && (graphType == eGraphDefault)
+      ? d(locale: locale, dateTime: dateTime)
+      : (graphType == eGraphCustom)
+          ? yyyyUnderMd(locale: locale, dateTime: dateTime)
+          : m_d(locale: locale, dateTime: dateTime);
 }

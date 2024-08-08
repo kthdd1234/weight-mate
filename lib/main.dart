@@ -27,6 +27,7 @@ import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
+import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -40,6 +41,7 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/services/health_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
@@ -85,6 +87,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
+  HealthService().initConfiguration();
 
   runApp(
     MultiProvider(
@@ -101,6 +104,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
+        ChangeNotifierProvider(create: (_) => GraphCategoryProvider())
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,

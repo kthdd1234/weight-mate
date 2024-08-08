@@ -3,16 +3,24 @@ import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class CommonPopup extends StatelessWidget {
-  CommonPopup({super.key, required this.height, required this.child});
+  CommonPopup({
+    super.key,
+    required this.height,
+    required this.child,
+    this.insetPaddingHorizontal,
+  });
 
   double height;
   Widget child;
+  double? insetPaddingHorizontal;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       contentPadding: const EdgeInsets.all(0),
-      insetPadding: const EdgeInsets.symmetric(horizontal: 30),
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: insetPaddingHorizontal ?? 30,
+      ),
       shape: roundedRectangleBorder,
       content: CommonBackground(
         isRadius: true,

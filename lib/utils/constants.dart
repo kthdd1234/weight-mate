@@ -235,7 +235,7 @@ final tagColors = {
     'textColor': Colors.grey,
   },
   'whiteBlue': {
-    'bgColor': Colors.blue.shade200,
+    'bgColor': Colors.blue.shade300,
     'textColor': Colors.white,
   },
   'whiteIndigo': {

@@ -91,3 +91,5 @@ enum HistoryFormat { list, calendar }
 enum WidgetType { weight, password, record, goal }
 
 enum graphType { Default, Custom }
+
+enum GraphCategory { weight, work }

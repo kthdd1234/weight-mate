@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -119,7 +122,6 @@ class _CommonTitleState extends State<CommonTitle> {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
-    UserBox user = userRepository.user;
 
     DateTime titleDateTime = context.watch<TitleDateTimeProvider>().dateTime();
     DateTime historyDateTime =
@@ -129,23 +131,25 @@ class _CommonTitleState extends State<CommonTitle> {
     SearchFilter searchFilter =
         context.watch<SearchFilterProvider>().searchFilter;
     bool isPremium = context.watch<PremiumProvider>().premiumValue();
+    String graphCategory = context.watch<GraphCategoryProvider>().graphCategory;
 
+    UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
     List<String>? searchDisplayList = user.searchDisplayList;
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
+    String graphType = user.graphType ?? eGraphDefault;
 
     String title = [
       ym(locale: locale, dateTime: titleDateTime),
       historyFormat == eHistoryList
           ? y(locale: locale, dateTime: historyDateTime)
           : ym(locale: locale, dateTime: historyDateTime),
-      '체중 변화',
+      '그래프',
       '검색',
       '설정'
     ][widget.index];
-    String graphType = user.graphType ?? eGraphDefault;
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
@@ -281,6 +285,10 @@ class _CommonTitleState extends State<CommonTitle> {
           : SpaceHeight(height: 10);
     }
 
+    onTapGraphCategory(String category) {
+      context.read<GraphCategoryProvider>().setGraphCategory(category);
+    }
+
     onTapGraphMode(String type) async {
       if (type == eGraphCustom && isPremium == false) {
         return showDialog(
@@ -289,7 +297,7 @@ class _CommonTitleState extends State<CommonTitle> {
             height: 185,
             buttonText: '프리미엄 구매 페이지로 이동',
             text1: '프리미엄 구매 시',
-            text2: '커스텀 모드를 이용할 수 있어요.',
+            text2: '설정 그래프를 이용할 수 있어요.',
             onTap: () => Navigator.pushNamed(context, '/premium-page'),
           ),
         );
@@ -431,14 +439,33 @@ class _CommonTitleState extends State<CommonTitle> {
                         )
                       : const EmptyArea(),
                   isGraph
-                      ? CommonTag(
-                          text: graphType == eGraphDefault ? '기본 모드' : '커스텀 모드',
-                          color: 'whiteIndigo',
-                          onTap: () => onTapGraphMode(
-                            graphType == eGraphDefault
-                                ? eGraphCustom
-                                : eGraphDefault,
-                          ),
+                      ? Row(
+                          children: [
+                            CommonTag(
+                              text:
+                                  graphCategory == cGraphWeight ? '체중' : '걸음 수',
+                              color: graphCategory == cGraphWeight
+                                  ? 'whiteIndigo'
+                                  : 'whiteBlue',
+                              onTap: () => onTapGraphCategory(
+                                graphCategory == cGraphWeight
+                                    ? cGraphWork
+                                    : cGraphWeight,
+                              ),
+                            ),
+                            SpaceWidth(width: 5),
+                            CommonTag(
+                              text: graphType == eGraphDefault
+                                  ? '기본 그래프'
+                                  : '설정 그래프',
+                              color: 'whiteIndigo',
+                              onTap: () => onTapGraphMode(
+                                graphType == eGraphDefault
+                                    ? eGraphCustom
+                                    : eGraphDefault,
+                              ),
+                            ),
+                          ],
                         )
                       : const EmptyArea(),
                   isSearch
