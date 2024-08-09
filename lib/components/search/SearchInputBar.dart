@@ -18,10 +18,11 @@ class SearchInputBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10, left: 7, right: 7),
+      padding: const EdgeInsets.only(bottom: 10),
       child: SizedBox(
         height: 40,
         child: TextFormField(
+          autofocus: true,
           controller: controller,
           style: const TextStyle(
             color: textColor,

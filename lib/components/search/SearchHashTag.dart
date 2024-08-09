@@ -84,19 +84,15 @@ class _SearchHashTagState extends State<SearchHashTag> {
               )
             ].toList());
 
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 7),
-              child: ContentsBox(
-                width: widget.keyword == '' ? double.infinity : null,
-                padding: const EdgeInsets.all(15),
-                contentsWidget: widget.keyword == ''
-                    ? Wrap(
-                        spacing: 7, runSpacing: 7, children: hashTagWidgetList)
-                    : HorizontalHashTagList(
-                        initialScrollIndex: widget.initialScrollIndex,
-                        hashTagWidgetList: hashTagWidgetList,
-                      ),
-              ),
+            return ContentsBox(
+              width: widget.keyword == '' ? double.infinity : null,
+              padding: const EdgeInsets.all(15),
+              contentsWidget: widget.keyword == ''
+                  ? Wrap(spacing: 7, runSpacing: 7, children: hashTagWidgetList)
+                  : HorizontalHashTagList(
+                      initialScrollIndex: widget.initialScrollIndex,
+                      hashTagWidgetList: hashTagWidgetList,
+                    ),
             );
           }),
     );

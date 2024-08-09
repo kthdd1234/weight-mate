@@ -10,6 +10,7 @@ import 'package:flutter_app_weight_management/components/popup/CalendarMakerPopu
 import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/common/history_search_page.dart';
 import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
@@ -76,19 +77,11 @@ class CommonAppBar extends StatelessWidget {
             onTapMakerType: onTapMakerType,
           ),
         ),
-        isRecord
+        (isRecord || (isHistory && user.historyForamt == eHistoryCalendar))
             ? CalendarBar(
                 bottomIndex: id.index,
                 calendarFormat: formatInfo[calendarFormat]!,
                 calendarMaker: makerInfo[calendarMaker]!,
-                onFormatChanged: onFormatChanged,
-              )
-            : const EmptyArea(),
-        (isHistory && user.historyForamt == eHistoryCalendar)
-            ? CalendarBar(
-                bottomIndex: id.index,
-                calendarFormat: formatInfo[historyCalendarFormat]!,
-                calendarMaker: CalendarMaker.sticker,
                 onFormatChanged: onFormatChanged,
               )
             : const EmptyArea(),
@@ -127,15 +120,14 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().historyFilter;
-    SearchFilter searchFilter =
-        context.watch<SearchFilterProvider>().searchFilter;
+
     bool isPremium = context.watch<PremiumProvider>().premiumValue();
     String graphCategory = context.watch<GraphCategoryProvider>().graphCategory;
 
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
-    List<String>? searchDisplayList = user.searchDisplayList;
+
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
     String graphType = user.graphType ?? eGraphDefault;
@@ -204,12 +196,6 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
     onTapHistoryOrder() {
       context.read<HistoryFilterProvider>().setHistoryFilter(
             nextHistoryFilter[historyFilter]!,
-          );
-    }
-
-    onTapSearchOrder() {
-      context.read<SearchFilterProvider>().setSearchFilter(
-            nextSearchFilter[searchFilter]!,
           );
     }
 
@@ -306,33 +292,8 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
       await user.save();
     }
 
-    onTapSearchFilter() async {
-      await showDialog(
-        context: context,
-        builder: (context) => DisplayPopup(
-          height: 475,
-          isRequiredWeight: false,
-          bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
-          classList: searchDisplayClassList,
-          onChecked: (String filterId) {
-            return user.searchDisplayList != null
-                ? user.searchDisplayList!.contains(filterId)
-                : false;
-          },
-          onTap: ({required dynamic id, required bool newValue}) {
-            bool isSearchDisplayList = user.searchDisplayList != null;
-
-            if (isSearchDisplayList) {
-              newValue
-                  ? user.searchDisplayList!.add(id)
-                  : user.searchDisplayList!.remove(id);
-
-              user.save();
-              setState(() {});
-            }
-          },
-        ),
-      );
+    onTapHistorySearch() {
+      navigator(context: context, page: HistorySearchPage());
     }
 
     List<IconData?> rightIconList = [
@@ -409,20 +370,20 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
                             ),
                             SpaceWidth(width: 5),
                             isHistoryList
-                                ? CommonTag(
-                                    text: historyFilterFormats[historyFilter],
-                                    color: "whiteIndigo",
-                                    onTap: onTapHistoryOrder,
-                                  )
-                                : CommonTag(
-                                    text: availableCalendarFormats[
-                                        widget.calendarFormat],
-                                    color: 'whiteIndigo',
-                                    onTap: () => widget.onFormatChanged(
-                                      nextCalendarFormats[
-                                          widget.calendarFormat]!,
+                                ? Padding(
+                                    padding: const EdgeInsets.only(right: 5),
+                                    child: CommonTag(
+                                      text: historyFilterFormats[historyFilter],
+                                      color: "whiteIndigo",
+                                      onTap: onTapHistoryOrder,
                                     ),
-                                  ),
+                                  )
+                                : EmptyArea(),
+                            CommonTag(
+                              text: '검색',
+                              color: 'whiteIndigo',
+                              onTap: onTapHistorySearch,
+                            ),
                             SpaceWidth(width: 5),
                             CommonTag(
                               text: '표시',
@@ -465,26 +426,26 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
                           ],
                         )
                       : const EmptyArea(),
-                  isSearch
-                      ? Row(
-                          children: [
-                            CommonTag(
-                              text: searchFilterFormats[searchFilter],
-                              color: 'whiteIndigo',
-                              onTap: onTapSearchOrder,
-                            ),
-                            SpaceWidth(width: 5),
-                            CommonTag(
-                              text: '표시',
-                              color: 'whiteIndigo',
-                              nameArgs: {
-                                'length': '${searchDisplayList?.length ?? 0}'
-                              },
-                              onTap: onTapSearchFilter,
-                            ),
-                          ],
-                        )
-                      : const EmptyArea(),
+                  // isSearch
+                  //     ? Row(
+                  //         children: [
+                  //           CommonTag(
+                  //             text: searchFilterFormats[searchFilter],
+                  //             color: 'whiteIndigo',
+                  //             onTap: onTapSearchOrder,
+                  //           ),
+                  //           SpaceWidth(width: 5),
+                  //           CommonTag(
+                  //             text: '표시',
+                  //             color: 'whiteIndigo',
+                  //             nameArgs: {
+                  //               'length': '${searchDisplayList?.length ?? 0}'
+                  //             },
+                  //             onTap: onTapSearchFilter,
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : const EmptyArea(),
                 ],
               )
             ],
