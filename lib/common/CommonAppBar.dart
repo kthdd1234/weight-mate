@@ -11,13 +11,13 @@ import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/history_search_page.dart';
+import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
-import 'package:flutter_app_weight_management/provider/search_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -33,12 +33,13 @@ String eHistoryList = HistoryFormat.list.toString();
 String eHistoryCalendar = HistoryFormat.calendar.toString();
 
 class CommonAppBar extends StatelessWidget {
-  CommonAppBar({super.key, required this.id});
-
-  BottomNavigationEnum id;
+  CommonAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    BottomNavigationEnum id =
+        context.watch<BottomNavigationProvider>().selectedEnumId;
+
     UserBox user = userRepository.user;
     String? calendarFormat = user.calendarFormat;
     String? calendarMaker = user.calendarMaker;
@@ -138,14 +139,14 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
           ? y(locale: locale, dateTime: historyDateTime)
           : ym(locale: locale, dateTime: historyDateTime),
       '그래프',
-      '검색',
+      '트래커',
       '설정'
     ][widget.index];
 
     bool isRecord = widget.index == 0;
     bool isHistory = widget.index == 1;
     bool isGraph = widget.index == 2;
-    bool isSearch = widget.index == 3;
+    bool isTracker = widget.index == 3;
 
     onTapRecordDateTime(args) {
       context.read<TitleDateTimeProvider>().setTitleDateTime(args.value);
@@ -314,7 +315,7 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
     return Padding(
       padding: isGraph
           ? const EdgeInsets.fromLTRB(25, 0, 20, 0)
-          : const EdgeInsets.symmetric(horizontal: 25),
+          : EdgeInsets.symmetric(horizontal: isTracker ? 20 : 25),
       child: Column(
         children: [
           onShowBannerAd(),
@@ -423,6 +424,15 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
                                     : eGraphDefault,
                               ),
                             ),
+                          ],
+                        )
+                      : const EmptyArea(),
+                  isTracker
+                      ? Row(
+                          children: [
+                            CommonTag(text: '최신순', color: 'whiteIndigo'),
+                            SpaceWidth(width: 5),
+                            CommonTag(text: '표시 5', color: 'whiteIndigo'),
                           ],
                         )
                       : const EmptyArea(),

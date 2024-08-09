@@ -34,7 +34,7 @@ class RecordBody extends StatelessWidget {
       builder: (context, values, child) {
         return Column(
           children: [
-            CommonAppBar(id: id),
+            CommonAppBar(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),

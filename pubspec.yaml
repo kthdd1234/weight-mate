@@ -93,6 +93,7 @@ dependencies:
   fluttertoast: ^8.2.5
   scrollable_positioned_list: ^0.3.8
   health: ^10.2.0
+  syncfusion_flutter_datagrid: ^23.2.7
 
 dev_dependencies:
   flutter_test:
@@ -207,6 +208,7 @@ flutter:
     - assets/svgs/theme.svg
     - assets/svgs/health.svg
     - assets/svgs/mode.svg
+    - assets/svgs/check.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -3,11 +3,9 @@ import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_datetime_custom.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -15,18 +13,8 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:hive/hive.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
-
-Map<SegmentedTypes, int> countInfo = {
-  SegmentedTypes.week: 6,
-  SegmentedTypes.twoWeek: 13,
-  SegmentedTypes.month: 29,
-  SegmentedTypes.threeMonth: 89,
-  SegmentedTypes.sixMonth: 179,
-  SegmentedTypes.oneYear: 364,
-};
 
 class GraphBody extends StatefulWidget {
   const GraphBody({super.key});
@@ -45,7 +33,7 @@ class _GraphBodyState extends State<GraphBody> {
     startDateTime = jumpDayDateTime(
       type: jumpDayTypeEnum.subtract,
       dateTime: now,
-      days: countInfo[selectedDateTimeSegment]!,
+      days: rangeInfo[selectedDateTimeSegment]!,
     );
     endDateTime = now;
   }
@@ -58,43 +46,8 @@ class _GraphBodyState extends State<GraphBody> {
 
   @override
   Widget build(BuildContext context) {
-    BottomNavigationEnum id =
-        context.watch<BottomNavigationProvider>().selectedEnumId;
     bool isPremium = context.watch<PremiumProvider>().isPremium;
     String graphCategory = context.watch<GraphCategoryProvider>().graphCategory;
-
-    Map<SegmentedTypes, Widget> dateTimeChildren = {
-      SegmentedTypes.week: onSegmentedWidget(
-        title: '일주일',
-        type: SegmentedTypes.week,
-        selected: selectedDateTimeSegment,
-      ),
-      SegmentedTypes.twoWeek: onSegmentedWidget(
-        title: '2주',
-        type: SegmentedTypes.twoWeek,
-        selected: selectedDateTimeSegment,
-      ),
-      SegmentedTypes.month: onSegmentedWidget(
-        title: '1개월',
-        type: SegmentedTypes.month,
-        selected: selectedDateTimeSegment,
-      ),
-      SegmentedTypes.threeMonth: onSegmentedWidget(
-        title: '3개월',
-        type: SegmentedTypes.threeMonth,
-        selected: selectedDateTimeSegment,
-      ),
-      SegmentedTypes.sixMonth: onSegmentedWidget(
-        title: '6개월',
-        type: SegmentedTypes.sixMonth,
-        selected: selectedDateTimeSegment,
-      ),
-      SegmentedTypes.oneYear: onSegmentedWidget(
-        title: '1년',
-        type: SegmentedTypes.oneYear,
-        selected: selectedDateTimeSegment,
-      ),
-    };
 
     setChartSwipeDirectionStart() {
       setState(() {
@@ -102,7 +55,7 @@ class _GraphBodyState extends State<GraphBody> {
         startDateTime = jumpDayDateTime(
           type: jumpDayTypeEnum.subtract,
           dateTime: endDateTime,
-          days: countInfo[selectedDateTimeSegment]!,
+          days: rangeInfo[selectedDateTimeSegment]!,
         );
       });
     }
@@ -122,7 +75,7 @@ class _GraphBodyState extends State<GraphBody> {
         endDateTime = jumpDayDateTime(
           type: jumpDayTypeEnum.add,
           dateTime: startDateTime,
-          days: countInfo[selectedDateTimeSegment]!,
+          days: rangeInfo[selectedDateTimeSegment]!,
         );
       });
     }
@@ -168,7 +121,7 @@ class _GraphBodyState extends State<GraphBody> {
           padding: const EdgeInsets.only(bottom: tinySpace),
           child: Column(
             children: [
-              CommonAppBar(id: id),
+              CommonAppBar(),
               GraphChart(
                 graphCategory: graphCategory,
                 graphType: graphType,
@@ -187,7 +140,7 @@ class _GraphBodyState extends State<GraphBody> {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: DefaultSegmented(
                         selectedSegment: selectedDateTimeSegment,
-                        children: dateTimeChildren,
+                        children: rangeSegmented(selectedDateTimeSegment),
                         backgroundColor: typeBackgroundColor,
                         thumbColor: whiteBgBtnColor,
                         onSegmentedChanged: onSegmentedDateTimeChanged,

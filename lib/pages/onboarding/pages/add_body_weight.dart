@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/input/text_input.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/text_input.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/action_bar.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';

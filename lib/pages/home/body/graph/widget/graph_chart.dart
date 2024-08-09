@@ -35,7 +35,7 @@ class GraphChart extends StatelessWidget {
       return days;
     }
 
-    return countInfo[selectedDateTimeSegment]!;
+    return rangeInfo[selectedDateTimeSegment]!;
   }
 
   @override

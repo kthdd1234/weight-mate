@@ -10,6 +10,7 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
@@ -1124,4 +1125,50 @@ getGraphX({
       : (graphType == eGraphCustom)
           ? yyyyUnderMd(locale: locale, dateTime: dateTime)
           : m_d(locale: locale, dateTime: dateTime);
+}
+
+rangeSegmented(SegmentedTypes segmented) {
+  Map<SegmentedTypes, Widget> segmentedData = {
+    SegmentedTypes.week: onSegmentedWidget(
+      title: '일주일',
+      type: SegmentedTypes.week,
+      selected: segmented,
+    ),
+    SegmentedTypes.twoWeek: onSegmentedWidget(
+      title: '2주',
+      type: SegmentedTypes.twoWeek,
+      selected: segmented,
+    ),
+    SegmentedTypes.month: onSegmentedWidget(
+      title: '1개월',
+      type: SegmentedTypes.month,
+      selected: segmented,
+    ),
+    SegmentedTypes.threeMonth: onSegmentedWidget(
+      title: '3개월',
+      type: SegmentedTypes.threeMonth,
+      selected: segmented,
+    ),
+    SegmentedTypes.sixMonth: onSegmentedWidget(
+      title: '6개월',
+      type: SegmentedTypes.sixMonth,
+      selected: segmented,
+    ),
+    SegmentedTypes.oneYear: onSegmentedWidget(
+      title: '1년',
+      type: SegmentedTypes.oneYear,
+      selected: segmented,
+    ),
+  };
+
+  return segmentedData;
+}
+
+nullCheckAction(List<Map<String, dynamic>>? actions, String type) {
+  if (actions == null) return null;
+
+  return actions.firstWhere(
+    (action) => action['type'] == type,
+    orElse: () => {'type': null},
+  )['type'];
 }

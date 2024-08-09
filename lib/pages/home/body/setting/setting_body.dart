@@ -593,7 +593,7 @@ class _SettingBodyState extends State<SettingBody> {
 
         return Column(
           children: [
-            CommonAppBar(id: bodyId),
+            CommonAppBar(),
             Expanded(child: ListView(children: children))
           ],
         );

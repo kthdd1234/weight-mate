@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 
 class PictureMaker extends StatelessWidget {
-  const PictureMaker({super.key});
+  PictureMaker({super.key, required this.path, required this.size});
+
+  String path;
+  double size;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(5),
       child: Image.asset(
-        'assets/images/saled.png',
-        width: 22.5,
-        height: 22.5,
+        'assets/images/$path.png',
+        width: size,
+        height: size,
         fit: BoxFit.cover,
       ),
     );

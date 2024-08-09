@@ -5,13 +5,11 @@ import 'package:flutter_app_weight_management/components/maker/StickerMaker.dart
 import 'package:flutter_app_weight_management/components/maker/WeightMaker.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_picture.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/tracker/tracker_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
@@ -640,7 +638,7 @@ List<Widget> bodyList = const [
   RecordBody(),
   HistoryBody(),
   GraphBody(),
-  SearchBody(),
+  TrackerBody(),
   SettingBody()
 ];
 
@@ -648,7 +646,7 @@ List<BNClass> bnList = [
   BNClass(index: 0, name: '기록', icon: Icons.edit_rounded),
   BNClass(index: 1, name: '히스토리', icon: Icons.view_timeline_outlined),
   BNClass(index: 2, name: '그래프', icon: FontAwesomeIcons.chartLine),
-  BNClass(index: 3, name: '검색', icon: Icons.search_rounded),
+  BNClass(index: 3, name: '트래커', icon: Icons.view_agenda_outlined),
   BNClass(index: 4, name: '설정', icon: Icons.settings_rounded),
 ];
 
@@ -715,6 +713,24 @@ List<CalendarMakerClass> calendarMakerList = [
     id: CalendarMaker.picture.toString(),
     title: '사진',
     desc: '날짜별 사진 한장',
-    widget: const PictureMaker(),
+    widget: PictureMaker(path: 'saled', size: 22.5),
   ),
+];
+
+Map<SegmentedTypes, int> rangeInfo = {
+  SegmentedTypes.week: 6,
+  SegmentedTypes.twoWeek: 13,
+  SegmentedTypes.month: 29,
+  SegmentedTypes.threeMonth: 89,
+  SegmentedTypes.sixMonth: 179,
+  SegmentedTypes.oneYear: 364,
+};
+
+List<TableTitleClass> tableTitleClassList = [
+  TableTitleClass(id: 'dateTime', title: '날짜', width: 90),
+  TableTitleClass(id: 'weight', title: '체중', width: 52),
+  TableTitleClass(id: 'picture', title: '사진'),
+  TableTitleClass(id: 'diet', title: '식단'),
+  TableTitleClass(id: 'exercise', title: '운동'),
+  TableTitleClass(id: 'diary', title: '일기 (글)', width: 110),
 ];

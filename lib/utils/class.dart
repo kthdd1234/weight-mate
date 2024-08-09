@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -448,4 +449,18 @@ class CalendarMakerClass {
 
   String id, title, desc;
   Widget widget;
+}
+
+class TableTitleClass {
+  TableTitleClass({required this.id, required this.title, this.width});
+
+  String id, title;
+  double? width;
+}
+
+class TrackerItemClass {
+  TrackerItemClass({required this.dateTime, this.record});
+
+  DateTime dateTime;
+  RecordBox? record;
 }

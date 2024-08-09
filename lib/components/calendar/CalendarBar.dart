@@ -63,15 +63,6 @@ class CalendarBar extends StatelessWidget {
       }
     }
 
-    nullCheckAction(List<Map<String, dynamic>>? actions, String type) {
-      if (actions == null) return null;
-
-      return actions.firstWhere(
-        (action) => action['type'] == type,
-        orElse: () => {'type': null},
-      )['type'];
-    }
-
     colorName(dynamic target, String name) {
       return target != null ? name : null;
     }

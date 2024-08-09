@@ -35,7 +35,7 @@ class HistoryBody extends StatelessWidget {
 
         return Column(
           children: [
-            CommonAppBar(id: id),
+            CommonAppBar(),
             SpaceHeight(height: smallSpace),
             historyForamt == HistoryFormat.list.toString()
                 ? HistoryListView()
