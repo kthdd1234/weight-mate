@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
+import 'package:flutter_app_weight_management/components/search/SearchHashTag.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/widget/history_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/widget/SearchHashTag.dart';
 import 'package:flutter_app_weight_management/provider/search_filter_provider.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -97,7 +97,7 @@ class SearchItem extends StatelessWidget {
     bool isLife = searchDisplayList.contains(fLife);
 
     return Padding(
-      padding: const EdgeInsets.only(left: 7, right: 7, bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: ContentsBox(
         contentsWidget: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

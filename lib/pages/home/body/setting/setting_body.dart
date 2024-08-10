@@ -1,6 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
+// import 'package:fitness/fitness.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
@@ -29,6 +32,7 @@ import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:health/health.dart';
 import 'package:in_app_review/in_app_review.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
@@ -410,6 +414,10 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
+    onTapMode(id) async {
+      //
+    }
+
     List<MoreSeeItemClass> settingItemList = [
       MoreSeeItemClass(
         id: MoreSeeItem.premium,
@@ -435,6 +443,14 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapGoalWeight,
       ),
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.appMode,
+      //   icon: 'mode',
+      //   title: '화면 모드',
+      //   value: '시스템 설정',
+      //   color: themeColor,
+      //   onTap: onTapMode,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.appTheme,
         icon: 'theme',
@@ -577,7 +593,7 @@ class _SettingBodyState extends State<SettingBody> {
 
         return Column(
           children: [
-            CommonAppBar(id: bodyId),
+            CommonAppBar(),
             Expanded(child: ListView(children: children))
           ],
         );

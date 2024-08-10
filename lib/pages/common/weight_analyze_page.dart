@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/components/button/expanded_button_
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/components/weight/WeightChart.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -288,7 +289,9 @@ class _MonthAnalysisState extends State<MonthAnalysis> {
                 : Padding(
                     padding: const EdgeInsets.symmetric(vertical: 50),
                     child: EmptyWidget(
-                        icon: Icons.monitor_weight, text: "기록이 없어요."),
+                      icon: Icons.monitor_weight,
+                      text: "기록이 없어요.",
+                    ),
                   )
           ],
         ),

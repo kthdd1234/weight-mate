@@ -1,6 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+
+class StickerMaker extends StatelessWidget {
+  StickerMaker({
+    super.key,
+    required this.row1,
+    required this.row2,
+    this.mainAxisAlignment,
+  });
+
+  List<String?> row1, row2;
+  MainAxisAlignment? mainAxisAlignment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.end,
+      children: [
+        DotRow(row: row1),
+        SpaceHeight(height: 3),
+        DotRow(row: row2),
+      ],
+    );
+  }
+}
 
 class DotRow extends StatelessWidget {
   DotRow({super.key, required this.row});

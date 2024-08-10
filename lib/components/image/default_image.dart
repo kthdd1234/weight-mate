@@ -14,10 +14,13 @@ class DefaultImage extends StatelessWidget {
     super.key,
     required this.unit8List,
     required this.height,
+    this.width,
+    this.borderRadius,
   });
 
   Uint8List unit8List;
   double height;
+  double? width, borderRadius;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class DefaultImage extends StatelessWidget {
       child: Image.memory(
         unit8List,
         fit: BoxFit.cover,
-        width: double.maxFinite,
+        width: width ?? double.maxFinite,
         height: height,
         cacheHeight: height.cacheSize(context),
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
@@ -41,7 +44,7 @@ class DefaultImage extends StatelessWidget {
                     width: double.infinity,
                     height: height,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(borderRadius ?? 5),
                       color: grey.original,
                     ),
                   ),

@@ -1,4 +1,3 @@
-import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:hive/hive.dart';
 
 part 'user_box.g.dart';
@@ -42,6 +41,7 @@ class UserBox extends HiveObject {
     this.appStartIndex,
     this.theme,
     this.watchingAdDatetTime,
+    this.trackerDisplayList,
   });
 
   @HiveField(0)
@@ -151,6 +151,9 @@ class UserBox extends HiveObject {
 
   @HiveField(35)
   DateTime? watchingAdDatetTime;
+
+  @HiveField(36)
+  List<String>? trackerDisplayList;
 
   @override
   String toString() {

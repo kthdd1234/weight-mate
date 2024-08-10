@@ -12,6 +12,7 @@ import 'package:flutter_app_weight_management/components/button/expanded_button_
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/components/weight/WeightChart.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
@@ -106,7 +107,8 @@ class _DiaryCollectionPageState extends State<DiaryCollectionPage> {
               isRecent: isRecent,
               onTapYear: onTapYear,
               onTapOrder: onTapOrder,
-            )
+            ),
+            SpaceWidth(width: 15),
           ],
         ),
         body: Stack(

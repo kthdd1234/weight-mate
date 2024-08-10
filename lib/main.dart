@@ -9,17 +9,14 @@ import 'package:flutter_app_weight_management/pages/common/body_info_page.dart';
 import 'package:flutter_app_weight_management/pages/common/body_unit_page.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_collection_page.dart';
 import 'package:flutter_app_weight_management/pages/common/font_change_page.dart';
-import 'package:flutter_app_weight_management/pages/common/goal_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/max_min_avg_graph_page.dart';
 import 'package:flutter_app_weight_management/pages/common/premium_page.dart';
 import 'package:flutter_app_weight_management/pages/common/theme_change_page.dart';
-import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_analyze_page.dart';
 import 'package:flutter_app_weight_management/pages/common/weight_chart_page.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_alarm_permission.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_tall.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_body_weight.dart';
-import 'package:flutter_app_weight_management/pages/onboarding/pages/add_plan_list.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
@@ -30,6 +27,7 @@ import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
+import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_filter_provider.dart';
@@ -38,11 +36,13 @@ import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/reload_provider.dart';
 import 'package:flutter_app_weight_management/provider/search_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/provider/tracker_filter_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
+import 'package:flutter_app_weight_management/services/health_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
@@ -87,6 +87,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
+  HealthService().initConfiguration();
 
   runApp(
     MultiProvider(
@@ -103,6 +104,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
+        ChangeNotifierProvider(create: (_) => GraphCategoryProvider()),
+        ChangeNotifierProvider(create: (_) => TrackerFilterProvider())
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,
@@ -130,7 +133,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
 
     userBox = Hive.box('userBox');
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         TrackingStatus status =
@@ -255,7 +257,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/add-start-screen': (context) => const AddStartScreen(),
         '/add-body-weight': (context) => const AddBodyWeight(),
         '/add-body-tall': (context) => const AddBodyTall(),
-        '/add-plan-list': (context) => const AddPlanList(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
         '/home-page': (context) => HomePage(
               locale: locale,
@@ -268,9 +269,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/diary-write-page': (context) => DiaryWritePage(),
         '/body-unit-page': (context) => const BodyUnitPage(),
         '/body-info-page': (context) => const BodyInfoPage(),
-        '/todo-chart-page': (context) => const TodoChartPage(),
         '/weight-chart-page': (context) => const WeightChartPage(),
-        '/goal-chart-page': (context) => const GoalChartPage(),
         '/font-change-page': (context) => const FontChangePage(),
         '/weight-analyze-page': (context) => const WeightAnalyzePage(),
         '/premium-page': (context) => const PremiumPage(),

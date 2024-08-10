@@ -246,14 +246,14 @@ class EditPicture extends StatelessWidget {
                       icon: Icons.auto_awesome,
                       tags: [
                         TagClass(
-                          text: '사진 장',
+                          text: '장',
                           nameArgs: {'length': '$pictureLength'},
                           color: 'purple',
                           isHide: isOpen,
                           onTap: onTapOpen,
                         ),
                         TagClass(
-                          text: '사진 앨범',
+                          text: '사진 모아보기',
                           color: 'purple',
                           onTap: () => Navigator.pushNamed(
                               context, '/image-collections-page'),

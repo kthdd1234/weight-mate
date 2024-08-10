@@ -80,6 +80,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     String? historyForamt = user.historyForamt;
     List<String>? historyDisplayList = user.historyDisplayList;
     List<String>? searchDisplayList = user.searchDisplayList;
+    List<String>? trackerDisplayList = user.trackerDisplayList;
     String? historyCalendarForamt = user.historyCalendarFormat;
     bool? isDietExerciseRecordDateTime = user.isDietExerciseRecordDateTime;
     String? fontFamily = user.fontFamily;
@@ -177,6 +178,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (searchDisplayList == null) {
       user.searchDisplayList = initSearchDisplayClassList;
+    }
+
+    if (trackerDisplayList == null) {
+      user.trackerDisplayList = initTrackerDisplayClassList;
     }
 
     if (historyCalendarForamt == null) {

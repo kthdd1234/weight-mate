@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables
+// ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables, use_build_context_synchronously
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +14,14 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/services/health_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:flutter_app_weight_management/pages/home/body/graph/widget/graph_chart.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class EditWeight extends StatefulWidget {
   EditWeight({super.key});
@@ -75,30 +74,35 @@ class _EditWeightState extends State<EditWeight> {
       context.read<EnabledProvider>().setEnabled(!isInitText);
     }
 
-    onSaveWeight() {
-      if (isDoubleTryParse(text: textController.text)) {
+    onSaveWeight(String value) async {
+      if (isDoubleTryParse(text: value)) {
+        double weight = stringToDouble(value);
         DateTime now = DateTime.now();
-        double weight = stringToDouble(textController.text);
+        DateTime weightDateTime = DateTime(
+          importDateTime.year,
+          importDateTime.month,
+          importDateTime.day,
+          now.hour,
+          now.minute,
+        );
 
         if (recordInfo == null) {
-          recordRepository.recordBox.put(
+          await recordRepository.recordBox.put(
             recordKey,
             RecordBox(
               createDateTime: importDateTime,
-              weightDateTime: now,
-              weight: stringToDouble(textController.text),
+              weightDateTime: weightDateTime,
+              weight: stringToDouble(value),
             ),
           );
         } else {
-          recordInfo.weightDateTime = DateTime.now();
+          recordInfo.weightDateTime = weightDateTime;
           recordInfo.weight = weight;
-          recordRepository.recordBox.put(recordKey, recordInfo);
         }
 
-        recordInfo?.save();
+        await recordInfo?.save();
 
         onInit();
-        closeDialog(context);
       }
     }
 
@@ -132,7 +136,10 @@ class _EditWeightState extends State<EditWeight> {
         context: context,
         builder: (context) {
           return WeightButtonBottmSheet(
-            onCompleted: onSaveWeight,
+            onCompleted: () {
+              onSaveWeight(textController.text);
+              closeDialog(context);
+            },
             onCancel: onCancel,
           );
         },
@@ -164,18 +171,6 @@ class _EditWeightState extends State<EditWeight> {
       user.save();
     }
 
-    onTapBMI() async {
-      Uri url = Uri(
-        scheme: 'https',
-        host: 'ko.wikipedia.org',
-        path: 'wiki/%EC%B2%B4%EC%A7%88%EB%9F%89_%EC%A7%80%EC%88%98',
-      );
-
-      await canLaunchUrl(url)
-          ? await launchUrl(url)
-          : throw 'Could not launch $url';
-    }
-
     helperText() {
       int max = user.weightUnit == 'kg' ? kgMax.toInt() : lbMax.toInt();
 
@@ -188,111 +183,130 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
-    onTapWeightAnalyze() {
-      Navigator.pushNamed(context, '/weight-analyze-page');
+    onSaveHealthWeight() async {
+      HealthService healthService = HealthService();
+      double? weight = await healthService.getHealthWeight(
+        ctx: context,
+        dateTime: importDateTime,
+      );
+
+      if (weight != null) await onSaveWeight('$weight');
     }
 
-    return Column(
-      children: [
-        ContentsBox(
-          contentsWidget: Column(
-            children: [
-              TitleContainer(
-                isDivider: isOpen,
-                title: isGoalWeight ? '목표 체중' : '체중',
-                icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
-                tags: [
-                  TagClass(
-                    text: '체중 ',
-                    nameArgs: {
-                      'weight': '${recordInfo?.weight ?? '- '}',
-                      'unit': user.weightUnit ?? 'kg'
-                    },
-                    color: 'indigo',
-                    isHide: isOpen,
-                    onTap: onTapOpen,
-                  ),
-                  TagClass(
-                    text: 'BMI',
-                    nameArgs: {
-                      'bmi': bmi(
-                        tall: user.tall,
-                        weight: recordInfo?.weight,
-                        tallUnit: user.tallUnit,
-                        weightUnit: user.weightUnit,
+    onTapHealth() async {
+      HealthService healthService = HealthService();
+      bool isPermission = await healthService.isPermission;
+
+      if (isPermission == false) {
+        await healthService.requestAuthorization();
+        onSaveHealthWeight();
+      } else {
+        onSaveHealthWeight();
+      }
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: ContentsBox(
+        contentsWidget: Column(
+          children: [
+            TitleContainer(
+              isDivider: isOpen,
+              title: isGoalWeight ? '목표 체중' : '체중',
+              icon: isGoalWeight ? Icons.flag : Icons.monitor_weight_rounded,
+              tags: [
+                TagClass(
+                  text:
+                      '${recordInfo?.weight ?? '- '}${user.weightUnit ?? 'kg'}',
+                  isNotTr: true,
+                  color: 'indigo',
+                  isHide: isOpen,
+                  onTap: onTapOpen,
+                ),
+                TagClass(
+                  text: '체중 모아보기',
+                  color: 'indigo',
+                  isHide: false,
+                  onTap: onTapWeightChart,
+                ),
+                TagClass(
+                  icon: isOpen
+                      ? Icons.keyboard_arrow_down_rounded
+                      : Icons.keyboard_arrow_right_rounded,
+                  color: 'indigo',
+                  onTap: onTapOpen,
+                ),
+              ],
+              onTap: onTapOpen,
+            ),
+            isOpen
+                ? isShowInput
+                    ? TextFormField(
+                        controller: textController,
+                        keyboardType: inputKeyboardType,
+                        autofocus: true,
+                        maxLength: 5,
+                        decoration: InputDecoration(
+                          suffixText: user.weightUnit,
+                          hintText: weightHintText.tr(),
+                          helperText: helperText(),
+                        ),
+                        onChanged: onChangedText,
+                        onEditingComplete: isGoalWeight
+                            ? onSaveGoalWeight
+                            : () {
+                                onSaveWeight(textController.text);
+                                closeDialog(context);
+                              },
                       )
-                    },
-                    isHide: isOpen,
-                    color: 'indigo',
-                    onTap: onTapBMI,
-                  ),
-                  TagClass(
-                    text: '통계표 보기',
-                    color: 'indigo',
-                    isHide: !isOpen,
-                    onTap: onTapWeightChart,
-                  ),
-                  TagClass(
-                    text: '분석표 보기',
-                    color: 'indigo',
-                    isHide: !isOpen,
-                    onTap: onTapWeightAnalyze,
-                  ),
-                  TagClass(
-                    icon: isOpen
-                        ? Icons.keyboard_arrow_down_rounded
-                        : Icons.keyboard_arrow_right_rounded,
-                    color: 'indigo',
-                    onTap: onTapOpen,
-                  ),
-                ],
-                onTap: onTapOpen,
-              ),
-              isOpen
-                  ? isShowInput
-                      ? TextFormField(
-                          controller: textController,
-                          keyboardType: inputKeyboardType,
-                          autofocus: true,
-                          maxLength: 5,
-                          decoration: InputDecoration(
-                            suffixText: user.weightUnit,
-                            hintText: weightHintText.tr(),
-                            helperText: helperText(),
-                          ),
-                          onChanged: onChangedText,
-                          onEditingComplete:
-                              isGoalWeight ? onSaveGoalWeight : onSaveWeight,
-                        )
-                      : recordInfo?.weight != null
-                          ? WeeklyWeightGraph(
-                              weight: recordInfo?.weight,
-                              goalWeight: user.goalWeight,
-                              importDateTime: importDateTime,
-                              locale: context.locale.toString(),
-                              onTapWeight: onTapWeight,
-                              onTapGoalWeight: onTapGoalWeight,
-                            )
-                          : Row(
-                              children: [
-                                CommonButton(
-                                  text: '체중 기록하기',
-                                  fontSize: 13,
-                                  isBold: true,
-                                  height: 50,
-                                  bgColor: whiteBgBtnColor,
-                                  radious: 7,
-                                  textColor: Colors.indigo.shade300,
-                                  onTap: onTapWeight,
-                                ),
-                              ],
-                            )
-                  : const EmptyArea()
-            ],
-          ),
+                    : recordInfo?.weight != null
+                        ? WeeklyWeightGraph(
+                            weight: recordInfo?.weight,
+                            goalWeight: user.goalWeight,
+                            importDateTime: importDateTime,
+                            locale: context.locale.toString(),
+                            onTapWeight: onTapWeight,
+                            onTapGoalWeight: onTapGoalWeight,
+                          )
+                        : Column(
+                            children: [
+                              Row(
+                                children: [
+                                  CommonButton(
+                                    text: '체중 기록하기',
+                                    fontSize: 13,
+                                    isBold: true,
+                                    height: 50,
+                                    bgColor: whiteBgBtnColor,
+                                    radious: 7,
+                                    textColor: indigo.s300,
+                                    onTap: onTapWeight,
+                                  ),
+                                  SpaceWidth(width: 5),
+                                  InkWell(
+                                    onTap: onTapHealth,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 20,
+                                      ),
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: whiteBgBtnColor,
+                                        borderRadius: BorderRadius.circular(
+                                          7,
+                                        ),
+                                      ),
+                                      child: getSvg(name: 'health', width: 18),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          )
+                : const EmptyArea()
+          ],
         ),
-        SpaceHeight(height: smallSpace)
-      ],
+      ),
     );
   }
 }
@@ -473,9 +487,13 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
                 dataLabelSettings: DataLabelSettings(
                   isVisible: true,
                   useSeriesColor: true,
-                  textStyle: TextStyle(color: weightColor.shade300),
+                  textStyle: TextStyle(
+                    color: indigo.s300,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 10,
+                  ),
                 ),
-                color: weightColor.shade50,
+                color: indigo.s50,
                 dataSource: dataSource,
                 xValueMapper: (data, _) => data.x,
                 yValueMapper: (data, _) => data.y,

@@ -26,13 +26,16 @@ enum SegmentedTypes {
   oneYear,
   custom,
   goal,
-  record
+  record,
+  chart,
+  analyze
 }
 
 enum MoreSeeItem {
   premium,
   tall,
   goalWeight,
+  appMode,
   appTheme,
   appUnit,
   appAlarm,
@@ -78,14 +81,18 @@ enum FILITER {
 
 enum RECORD { edit, history }
 
-enum CalendarMaker { sticker, weight }
+enum CalendarMaker { sticker, weight, picture }
 
 enum HistoryFilter { recent, past }
 
 enum SearchFilter { recent, past }
+
+enum TrackerFilter { recent, past }
 
 enum HistoryFormat { list, calendar }
 
 enum WidgetType { weight, password, record, goal }
 
 enum graphType { Default, Custom }
+
+enum GraphCategory { weight, work }

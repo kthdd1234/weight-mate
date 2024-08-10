@@ -1,13 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/components/maker/PictureMaker.dart';
+import 'package:flutter_app_weight_management/components/maker/StickerMaker.dart';
+import 'package:flutter_app_weight_management/components/maker/WeightMaker.dart';
 import 'package:flutter_app_weight_management/pages/home/body/graph/graph_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/history/history_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
-import 'package:flutter_app_weight_management/pages/home/body/search/search_body.dart';
 import 'package:flutter_app_weight_management/pages/home/body/setting/setting_body.dart';
+import 'package:flutter_app_weight_management/pages/home/body/tracker/tracker_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
@@ -236,7 +238,8 @@ final formatInfo = {
 
 final makerInfo = {
   CalendarMaker.sticker.toString(): CalendarMaker.sticker,
-  CalendarMaker.weight.toString(): CalendarMaker.weight
+  CalendarMaker.weight.toString(): CalendarMaker.weight,
+  CalendarMaker.picture.toString(): CalendarMaker.picture,
 };
 
 final localeNames = [
@@ -388,7 +391,7 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
     svgName: 'premium-free',
     title: '평생 무료로 이용 할 수 있어요',
-    subTitle: '커피 한잔의 가격으로 단 한번 결제!',
+    subTitle: '깔끔하게 단 한번 결제! ',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-no-ads',
@@ -396,19 +399,19 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
   PremiumBenefitsClass(
-    svgName: 'theme',
-    title: '다양한 테마들을 제공해드려요',
-    subTitle: '총 6종의 다채로운 배경 테마들을 이용해보세요!',
-  ),
-  PremiumBenefitsClass(
     svgName: 'premium-category-detail',
-    title: '좀 더 자세한 통계 기능을 제공해드려요',
-    subTitle: '체중 통계/분석표, 기록 모아보기, 실천 모아보기 등',
+    title: '모아보기 기능을 이용할 수 있어요',
+    subTitle: '체중, 식단, 운동, 습관, 일기 모아보기 등',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-photos-four',
     title: '사진을 최대 4장까지 추가 할 수 있어요',
     subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
+  ),
+  PremiumBenefitsClass(
+    svgName: 'theme',
+    title: '다양한 테마들을 제공해드려요',
+    subTitle: '총 6종의 다채로운 배경 테마들을 이용해보세요!',
   ),
   PremiumBenefitsClass(
     svgName: 'custom-graph',
@@ -430,6 +433,10 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
 String eGraphDefault = graphType.Default.toString();
 
 String eGraphCustom = graphType.Custom.toString();
+
+String cGraphWeight = GraphCategory.weight.toString();
+
+String cGraphWork = GraphCategory.work.toString();
 
 Map<String, Map<String, Color>> goalButtonColors = {
   eDiet: {
@@ -631,7 +638,7 @@ List<Widget> bodyList = const [
   RecordBody(),
   HistoryBody(),
   GraphBody(),
-  SearchBody(),
+  TrackerBody(),
   SettingBody()
 ];
 
@@ -639,7 +646,7 @@ List<BNClass> bnList = [
   BNClass(index: 0, name: '기록', icon: Icons.edit_rounded),
   BNClass(index: 1, name: '히스토리', icon: Icons.view_timeline_outlined),
   BNClass(index: 2, name: '그래프', icon: FontAwesomeIcons.chartLine),
-  BNClass(index: 3, name: '검색', icon: Icons.search_rounded),
+  BNClass(index: 3, name: '트래커', icon: Icons.view_agenda_outlined),
   BNClass(index: 4, name: '설정', icon: Icons.settings_rounded),
 ];
 
@@ -651,7 +658,13 @@ Map<int, BottomNavigationEnum> indexToBn = {
   4: BottomNavigationEnum.setting
 };
 
-Map<int, String> indexToName = {0: '기록', 1: '히스토리', 2: '그래프', 3: '검색', 4: '설정'};
+Map<int, String> indexToName = {
+  0: '기록',
+  1: '히스토리',
+  2: '그래프',
+  3: '트래커',
+  4: '설정'
+};
 List<BottomNavigationBarItem> items = bnList
     .map(
       (bn) => BottomNavigationBarItem(
@@ -678,3 +691,60 @@ final themeClassList = [
     ThemeClass(path: '6', name: 'Kind Steel'),
   ],
 ];
+
+List<CalendarMakerClass> calendarMakerList = [
+  CalendarMakerClass(
+    id: CalendarMaker.sticker.toString(),
+    title: '스티커',
+    desc: '카테고리별 스티커',
+    widget: Padding(
+      padding: const EdgeInsets.only(left: 3, top: 2),
+      child: StickerMaker(
+        mainAxisAlignment: MainAxisAlignment.center,
+        row1: const ['indigo', 'purple', 'teal'],
+        row2: const ['lightBlue', 'brown', 'orange'],
+      ),
+    ),
+  ),
+  CalendarMakerClass(
+    id: CalendarMaker.weight.toString(),
+    title: '체중',
+    desc: '날짜별 체중',
+    widget: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 7),
+      child: WeightMaker(weight: 0.0, weightUnit: 'kg'),
+    ),
+  ),
+  CalendarMakerClass(
+    id: CalendarMaker.picture.toString(),
+    title: '사진',
+    desc: '날짜별 사진 한장',
+    widget: PictureMaker(path: 'saled', size: 22.5),
+  ),
+];
+
+Map<SegmentedTypes, int> rangeInfo = {
+  SegmentedTypes.week: 6,
+  SegmentedTypes.twoWeek: 13,
+  SegmentedTypes.month: 29,
+  SegmentedTypes.threeMonth: 89,
+  SegmentedTypes.sixMonth: 179,
+  SegmentedTypes.oneYear: 364,
+};
+
+List<TableTitleClass> trackerTitleClassList = [
+  TableTitleClass(id: 'dateTime', title: '날짜', width: 90),
+  TableTitleClass(id: FILITER.weight.toString(), title: '체중', width: 52),
+  TableTitleClass(id: FILITER.picture.toString(), title: '사진'),
+  TableTitleClass(id: FILITER.diet.toString(), title: '식단'),
+  TableTitleClass(id: FILITER.exercise.toString(), title: '운동'),
+  TableTitleClass(id: FILITER.diary.toString(), title: '일기', width: 100),
+];
+
+Map<String, int> filterIndex = {
+  fWeight: 1,
+  fPicture: 2,
+  fDiet: 3,
+  fExercise: 4,
+  fDiary: 5
+};

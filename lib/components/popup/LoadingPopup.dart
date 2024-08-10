@@ -9,6 +9,7 @@ class LoadingPopup extends StatelessWidget {
     super.key,
     required this.text,
     required this.color,
+    this.isLoadingIcon,
     this.nameArgs,
     this.subText,
   });
@@ -16,6 +17,7 @@ class LoadingPopup extends StatelessWidget {
   String text;
   Color color;
   String? subText;
+  bool? isLoadingIcon;
   Map<String, String>? nameArgs;
 
   @override
@@ -23,12 +25,17 @@ class LoadingPopup extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const CircularProgressIndicator(strokeWidth: 3),
-        SpaceHeight(height: smallSpace),
+        isLoadingIcon == false
+            ? const EmptyArea()
+            : const Padding(
+                padding: EdgeInsets.only(bottom: 10),
+                child: CircularProgressIndicator(strokeWidth: 3),
+              ),
         CommonText(
           text: text,
           size: 11,
           isCenter: true,
+          isBold: true,
           color: color,
           nameArgs: nameArgs,
         ),
@@ -38,6 +45,7 @@ class LoadingPopup extends StatelessWidget {
                 text: subText!,
                 size: 11,
                 isCenter: true,
+                isBold: true,
                 color: color,
                 nameArgs: nameArgs,
               )

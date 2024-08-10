@@ -363,13 +363,14 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 }
 
 class MaskLabel extends StatelessWidget {
-  MaskLabel({super.key, this.height, this.opacity});
+  MaskLabel({super.key, this.width, this.height, this.opacity});
 
-  double? height, opacity;
+  double? width, height, opacity;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: width,
       height: height,
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(opacity ?? 0.5),

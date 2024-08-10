@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app_weight_management/components/simple_stepper/simple_step.dart';
+import 'package:flutter_app_weight_management/pages/onboarding/simple_stepper/simple_step.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 
 class SimpleStepper extends StatelessWidget {
@@ -24,12 +24,6 @@ class SimpleStepper extends StatelessWidget {
           color: textColor,
         ),
         SimpleStep(index: 3, step: step),
-        const Icon(
-          Icons.remove,
-          size: 10,
-          color: textColor,
-        ),
-        SimpleStep(index: 4, step: step),
       ],
     );
   }

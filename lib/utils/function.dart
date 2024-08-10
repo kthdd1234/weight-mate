@@ -10,15 +10,18 @@ import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonPopup.dart';
 import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
+import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:health/health.dart';
 import 'package:hive/hive.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:quiver/time.dart';
@@ -1103,4 +1106,81 @@ List<RecordBox> getSearchList({
   }).toList();
 
   return isRecent ? searchList.reversed.toList() : searchList;
+}
+
+navigator({required BuildContext context, required Widget page}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute<void>(builder: (BuildContext context) => page),
+  );
+}
+
+getGraphX({
+  required String locale,
+  required bool isWeek,
+  required String graphType,
+  required DateTime dateTime,
+}) {
+  return isWeek && (graphType == eGraphDefault)
+      ? d(locale: locale, dateTime: dateTime)
+      : (graphType == eGraphCustom)
+          ? yyyyUnderMd(locale: locale, dateTime: dateTime)
+          : m_d(locale: locale, dateTime: dateTime);
+}
+
+rangeSegmented(SegmentedTypes segmented) {
+  Map<SegmentedTypes, Widget> segmentedData = {
+    SegmentedTypes.week: onSegmentedWidget(
+      title: '일주일',
+      type: SegmentedTypes.week,
+      selected: segmented,
+    ),
+    SegmentedTypes.twoWeek: onSegmentedWidget(
+      title: '2주',
+      type: SegmentedTypes.twoWeek,
+      selected: segmented,
+    ),
+    SegmentedTypes.month: onSegmentedWidget(
+      title: '1개월',
+      type: SegmentedTypes.month,
+      selected: segmented,
+    ),
+    SegmentedTypes.threeMonth: onSegmentedWidget(
+      title: '3개월',
+      type: SegmentedTypes.threeMonth,
+      selected: segmented,
+    ),
+    SegmentedTypes.sixMonth: onSegmentedWidget(
+      title: '6개월',
+      type: SegmentedTypes.sixMonth,
+      selected: segmented,
+    ),
+    SegmentedTypes.oneYear: onSegmentedWidget(
+      title: '1년',
+      type: SegmentedTypes.oneYear,
+      selected: segmented,
+    ),
+  };
+
+  return segmentedData;
+}
+
+nullCheckAction(List<Map<String, dynamic>>? actions, String type) {
+  if (actions == null) return null;
+
+  return actions.firstWhere(
+    (action) => action['type'] == type,
+    orElse: () => {'type': null},
+  )['type'];
+}
+
+bool get isAfterAd {
+  UserBox user = userRepository.user;
+  DateTime? watchingAdDatetTime =
+      user.watchingAdDatetTime ?? DateTime(2000, 1, 1);
+  DateTime dateTime24 = watchingAdDatetTime.add(
+    const Duration(hours: 24),
+  );
+
+  return dateTime24.isAfter(DateTime.now());
 }

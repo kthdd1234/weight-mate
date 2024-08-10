@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
@@ -422,4 +423,44 @@ class FadePageRoute extends PageRouteBuilder {
 class ThemeClass {
   ThemeClass({required this.path, required this.name});
   String path, name;
+}
+
+class TargetDayClass {
+  TargetDayClass({required this.color, required this.dateTime});
+
+  Color color;
+  DateTime dateTime;
+}
+
+class StepsGraphDataClass {
+  StepsGraphDataClass({required this.x, this.y});
+
+  String x;
+  double? y;
+}
+
+class CalendarMakerClass {
+  CalendarMakerClass({
+    required this.id,
+    required this.title,
+    required this.desc,
+    required this.widget,
+  });
+
+  String id, title, desc;
+  Widget widget;
+}
+
+class TableTitleClass {
+  TableTitleClass({required this.id, required this.title, this.width});
+
+  String id, title;
+  double? width;
+}
+
+class TrackerItemClass {
+  TrackerItemClass({required this.dateTime, this.record});
+
+  DateTime dateTime;
+  RecordBox? record;
 }
