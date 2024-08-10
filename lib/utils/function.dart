@@ -14,6 +14,7 @@ import 'package:flutter_app_weight_management/components/segmented/default_segme
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -968,9 +969,9 @@ Future<bool> setPurchasePremium(Package package) async {
 Future<bool> isPurchasePremium() async {
   try {
     CustomerInfo customerInfo = await Purchases.getCustomerInfo();
-    return true;
-    // return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
-    //     true;
+    // return true;
+    return customerInfo.entitlements.all[entitlement_identifier]?.isActive ==
+        true;
   } on PlatformException catch (e) {
     log('e =>> ${e.toString()}');
     return false;
@@ -1171,4 +1172,15 @@ nullCheckAction(List<Map<String, dynamic>>? actions, String type) {
     (action) => action['type'] == type,
     orElse: () => {'type': null},
   )['type'];
+}
+
+bool get isAfterAd {
+  UserBox user = userRepository.user;
+  DateTime? watchingAdDatetTime =
+      user.watchingAdDatetTime ?? DateTime(2000, 1, 1);
+  DateTime dateTime24 = watchingAdDatetTime.add(
+    const Duration(hours: 24),
+  );
+
+  return dateTime24.isAfter(DateTime.now());
 }

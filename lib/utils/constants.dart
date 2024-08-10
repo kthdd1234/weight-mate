@@ -310,12 +310,22 @@ List<FilterClass> searchDisplayClassList = [
   FilterClass(id: FILITER.diary_2.toString(), name: '일기 (해시태그)'),
 ];
 
+List<FilterClass> trackerDisplayClassList = [
+  FilterClass(id: FILITER.weight.toString(), name: '체중'),
+  FilterClass(id: FILITER.picture.toString(), name: '사진'),
+  FilterClass(id: FILITER.diet.toString(), name: '식단 (기록, 목표)'),
+  FilterClass(id: FILITER.exercise.toString(), name: '운동 (기록, 목표)'),
+  FilterClass(id: FILITER.diary.toString(), name: '일기 (글)'),
+];
+
 List<String> initOpenList = openClassList.map((e) => e.id).toList();
 List<String> initDisplayList = displayClassList.map((e) => e.id).toList();
 List<String> initHistoryDisplayList =
     historyDisplayClassList.map((e) => e.id).toList();
 List<String> initSearchDisplayClassList =
     searchDisplayClassList.map((e) => e.id).toList();
+List<String> initTrackerDisplayClassList =
+    trackerDisplayClassList.map((e) => e.id).toList();
 
 const availableCalendarFormats = {
   CalendarFormat.week: '1주일',
@@ -343,6 +353,16 @@ const historyFilterFormats = {
 const nextHistoryFilter = {
   HistoryFilter.recent: HistoryFilter.past,
   HistoryFilter.past: HistoryFilter.recent
+};
+
+const trackerFilterFormats = {
+  TrackerFilter.recent: '최신순',
+  TrackerFilter.past: '과거순'
+};
+
+const nextTrackerFilter = {
+  TrackerFilter.recent: TrackerFilter.past,
+  TrackerFilter.past: TrackerFilter.recent
 };
 
 const searchFilterFormats = {

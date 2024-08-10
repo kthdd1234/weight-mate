@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -5,14 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
-import 'package:flutter_app_weight_management/components/maker/PictureMaker.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
+import 'package:flutter_app_weight_management/provider/tracker_filter_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -44,20 +47,26 @@ class _TrackerBodyState extends State<TrackerBody> {
     );
 
     endDateTime = now;
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
+    bool isRecent = context.watch<TrackerFilterProvider>().trackerFilter ==
+        TrackerFilter.recent;
 
     onSegmentedDateTimeChanged(SegmentedTypes? type) {
-      if (isPremium == false) {
-        return;
+      if (isPremium || isAfterAd) {
+        setState(() => selectedDateTimeSegment = type!);
+      } else {
+        showModalBottomSheet(
+          context: context,
+          builder: (context) => AdBottomSheet(
+            onChanged: () => setState(() => selectedDateTimeSegment = type!),
+          ),
+        );
       }
-
-      setState(() => selectedDateTimeSegment = type!);
     }
 
     return MultiValueListenableBuilder(
@@ -66,13 +75,13 @@ class _TrackerBodyState extends State<TrackerBody> {
         children: [
           CommonAppBar(),
           TrackerContainer(
+            isRecent: isRecent,
             range: rangeInfo[selectedDateTimeSegment]!,
             startDateTime: startDateTime,
             endDateTime: endDateTime,
           ),
-          // const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
             child: DefaultSegmented(
               selectedSegment: selectedDateTimeSegment,
               children: rangeSegmented(selectedDateTimeSegment),
@@ -90,11 +99,13 @@ class _TrackerBodyState extends State<TrackerBody> {
 class TrackerContainer extends StatefulWidget {
   TrackerContainer({
     super.key,
+    required this.isRecent,
     required this.range,
     required this.startDateTime,
     required this.endDateTime,
   });
 
+  bool isRecent;
   int range;
   DateTime startDateTime, endDateTime;
 
@@ -103,6 +114,7 @@ class TrackerContainer extends StatefulWidget {
 }
 
 class _TrackerContainerState extends State<TrackerContainer> {
+  UserBox user = userRepository.user;
   List<TrackerItemClass> trackerItemList = [];
 
   getTrackerItemList() {
@@ -124,7 +136,10 @@ class _TrackerContainerState extends State<TrackerContainer> {
       result.add(trackerItem);
     }
 
-    setState(() => trackerItemList = result);
+    setState(
+      () =>
+          trackerItemList = widget.isRecent ? result : result.reversed.toList(),
+    );
   }
 
   @override
@@ -141,6 +156,33 @@ class _TrackerContainerState extends State<TrackerContainer> {
 
   @override
   Widget build(BuildContext context) {
+    Map<int, TableColumnWidth> columnWidths = const {0: IntrinsicColumnWidth()};
+    List<String> trackerDisplayList = user.trackerDisplayList ?? [];
+    trackerDisplayList
+        .sort((a, b) => filterIndex[a]!.compareTo(filterIndex[b]!));
+
+    bool isWeight = trackerDisplayList.contains(fWeight);
+    bool isDiary = trackerDisplayList.contains(fDiary);
+    int index = trackerDisplayList.indexOf(fDiary) + 1;
+
+    if (isWeight && !isDiary) {
+      columnWidths = const {
+        0: FlexColumnWidth(2.7),
+        1: FlexColumnWidth(1.5),
+      };
+    } else if (!isWeight && isDiary) {
+      columnWidths = {
+        0: const FlexColumnWidth(2.7),
+        index: const FlexColumnWidth(6),
+      };
+    } else if (isWeight && isDiary) {
+      columnWidths = {
+        0: const FlexColumnWidth(2.7),
+        1: const FlexColumnWidth(1.5),
+        index: const FlexColumnWidth(4),
+      };
+    }
+
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
@@ -152,11 +194,7 @@ class _TrackerContainerState extends State<TrackerContainer> {
               border: TableBorder.symmetric(
                 inside: BorderSide(width: 0.0, color: grey.s300),
               ),
-              columnWidths: const <int, TableColumnWidth>{
-                0: IntrinsicColumnWidth(),
-                1: IntrinsicColumnWidth(),
-                5: IntrinsicColumnWidth(),
-              },
+              columnWidths: columnWidths,
               defaultVerticalAlignment: TableCellVerticalAlignment.middle,
               children: <TableRow>[
                 trackerTitle(),
@@ -170,17 +208,25 @@ class _TrackerContainerState extends State<TrackerContainer> {
   }
 
   trackerTitle() {
+    List<String>? trackerDisplayList = user.trackerDisplayList ?? [];
+    List<TableTitleClass> trackerTitleList = trackerTitleClassList.where(
+      (trackerTitle) {
+        if (trackerTitle.id == 'dateTime') return true;
+        return trackerDisplayList.contains(trackerTitle.id);
+      },
+    ).toList();
+
     return TableRow(
-      children: tableTitleClassList
+      children: trackerTitleList
           .map(
-            (tableTitle) => SizedBox(
-              width: tableTitle.width,
+            (trackerTitle) => SizedBox(
               height: 32,
               child: Center(
                 child: CommonName(
-                  text: tableTitle.title,
+                  text: trackerTitle.title,
                   color: grey.original,
                   fontSize: 13,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ),
@@ -198,65 +244,98 @@ class _TrackerContainerState extends State<TrackerContainer> {
         record?.bottomFile;
     bool isDiet = nullCheckAction(record?.actions, eDiet) != null;
     bool isExercise = nullCheckAction(record?.actions, eExercise) != null;
+    List<String>? trackerDisplayList = user.trackerDisplayList ?? [];
 
-    return TableRow(
-      children: <Widget>[
-        SizedBox(
-          width: 80,
-          height: 32,
-          child: Center(
-            child: CommonName(
-              text: mde(locale: locale, dateTime: item.dateTime),
-              overflow: TextOverflow.ellipsis,
-              fontSize: 12,
-              isNotTr: true,
-            ),
+    dateTime() {
+      return SizedBox(
+        height: 35,
+        child: Center(
+          child: CommonName(
+            text: mde(locale: locale, dateTime: item.dateTime),
+            overflow: TextOverflow.ellipsis,
+            fontSize: 12,
+            isNotTr: true,
+            color: textColor,
           ),
         ),
-        SizedBox(
-          width: 50,
-          child: Center(
-            child: CommonName(
-              text: '${record?.weight ?? ''}',
-              fontSize: 13,
-              isNotTr: true,
-            ),
+      );
+    }
+
+    weight() {
+      return SizedBox(
+        width: 50,
+        child: Center(
+          child: CommonName(
+            text: '${record?.weight ?? ''}',
+            fontSize: 13,
+            isNotTr: true,
           ),
         ),
-        Center(
-          child: unit8List != null
-              ? DefaultImage(
-                  unit8List: unit8List,
-                  width: 23,
-                  height: 23,
-                  borderRadius: 5,
-                )
-              : const EmptyArea(),
+      );
+    }
+
+    picture() {
+      return Center(
+        child: unit8List != null
+            ? DefaultImage(
+                unit8List: unit8List,
+                width: 23,
+                height: 23,
+                borderRadius: 5,
+              )
+            : const EmptyArea(),
+      );
+    }
+
+    diet() {
+      return Center(
+        child: isDiet
+            ? getSvg(name: 'check', width: 17, color: teal.s200)
+            : const EmptyArea(),
+      );
+    }
+
+    exercise() {
+      return Center(
+        child: isExercise
+            ? getSvg(name: 'check', width: 17, color: lightBlue.s200)
+            : const EmptyArea(),
+      );
+    }
+
+    diary() {
+      return Padding(
+        padding: const EdgeInsets.only(left: 8),
+        child: CommonName(
+          text: record?.whiteText ?? '',
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.start,
+          isNotTr: true,
+          fontSize: 13,
         ),
-        Center(
-          child: isDiet
-              ? getSvg(name: 'check', width: 17, color: teal.s200)
-              : const EmptyArea(),
-        ),
-        Center(
-          child: isExercise
-              ? getSvg(name: 'check', width: 17, color: lightBlue.s200)
-              : const EmptyArea(),
-        ),
-        SizedBox(
-          width: 120,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: CommonName(
-              text: record?.whiteText ?? '',
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.start,
-              isNotTr: true,
-              fontSize: 13,
-            ),
-          ),
-        )
-      ],
-    );
+      );
+    }
+
+    List<Widget> children = [dateTime()];
+    trackerDisplayList
+        .sort((a, b) => filterIndex[a]!.compareTo(filterIndex[b]!));
+
+    for (var i = 0; i < trackerDisplayList.length; i++) {
+      String target = trackerDisplayList[i];
+
+      if (target == fWeight) {
+        children.add(weight());
+      } else if (target == fPicture) {
+        children.add(picture());
+      } else if (target == fDiet) {
+        children.add(diet());
+      } else if (target == fExercise) {
+        children.add(exercise());
+      } else if (target == fDiary) {
+        children.add(diary());
+      }
+    }
+
+    return TableRow(children: children);
   }
 }

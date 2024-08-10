@@ -87,6 +87,8 @@ enum HistoryFilter { recent, past }
 
 enum SearchFilter { recent, past }
 
+enum TrackerFilter { recent, past }
+
 enum HistoryFormat { list, calendar }
 
 enum WidgetType { weight, password, record, goal }

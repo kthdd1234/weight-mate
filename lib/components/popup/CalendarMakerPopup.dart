@@ -29,7 +29,7 @@ class _CalendarMakerPopupState extends State<CalendarMakerPopup> {
         context: context,
         builder: (context) => AlertPopup(
           height: 185,
-          text1: '프리미엄을 구매한 분들이게만',
+          text1: '프리미엄을 구매한 분들에게만',
           text2: '제공되는 기능이에요',
           buttonText: '프리미엄 구매 페이지로 이동',
           onTap: () => Navigator.pushNamed(context, '/premium-page'),

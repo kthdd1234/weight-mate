@@ -120,7 +120,7 @@ class _GraphWeightViewState extends State<GraphWeightView> {
       return FastLineSeries(
         emptyPointSettings: EmptyPointSettings(mode: EmptyPointMode.drop),
         dataSource: fastLineSeries(),
-        color: indigo.s300,
+        color: indigo.s200,
         xValueMapper: (data, _) => data.x,
         yValueMapper: (data, _) => data.y,
         markerSettings: MarkerSettings(isVisible: widget.isVisible),

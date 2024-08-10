@@ -19,6 +19,7 @@ import 'package:flutter_app_weight_management/provider/history_filter_provider.d
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/provider/tracker_filter_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -121,6 +122,8 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =
         context.watch<HistoryFilterProvider>().historyFilter;
+    TrackerFilter trackerFilter =
+        context.watch<TrackerFilterProvider>().trackerFilter;
 
     bool isPremium = context.watch<PremiumProvider>().premiumValue();
     String graphCategory = context.watch<GraphCategoryProvider>().graphCategory;
@@ -128,6 +131,7 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
     UserBox user = userRepository.user;
     List<String>? displayList = user.displayList;
     List<String>? historyDisplayList = user.historyDisplayList;
+    List<String>? trackerDisplayList = user.trackerDisplayList;
 
     String historyFormat = user.historyForamt ?? eHistoryList;
     bool isHistoryList = historyFormat == eHistoryList;
@@ -260,6 +264,35 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
       );
     }
 
+    onTapTrackerFilter() async {
+      await showDialog(
+        context: context,
+        builder: (context) => DisplayPopup(
+          isRequiredWeight: false,
+          bottomText: '표시하고 싶지 않은 카테고리는 체크 해제 하세요 :D'.tr(),
+          classList: trackerDisplayClassList,
+          height: 320,
+          onChecked: (String filterId) {
+            return trackerDisplayList != null
+                ? trackerDisplayList.contains(filterId)
+                : false;
+          },
+          onTap: ({required dynamic id, required bool newValue}) {
+            bool isTrackerDisplayList = user.trackerDisplayList != null;
+
+            if (isTrackerDisplayList) {
+              newValue
+                  ? user.trackerDisplayList!.add(id)
+                  : user.trackerDisplayList!.remove(id);
+
+              user.save();
+              setState(() {});
+            }
+          },
+        ),
+      );
+    }
+
     onTapHistoryFormat() async {
       user.historyForamt = isHistoryList ? eHistoryCalendar : eHistoryList;
       await user.save();
@@ -295,6 +328,12 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
 
     onTapHistorySearch() {
       navigator(context: context, page: HistorySearchPage());
+    }
+
+    onTapTrackerOrder() {
+      context
+          .read<TrackerFilterProvider>()
+          .setTrackerFilter(nextTrackerFilter[trackerFilter]!);
     }
 
     List<IconData?> rightIconList = [
@@ -430,9 +469,20 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
                   isTracker
                       ? Row(
                           children: [
-                            CommonTag(text: '최신순', color: 'whiteIndigo'),
+                            CommonTag(
+                              text: trackerFilterFormats[trackerFilter],
+                              color: 'whiteIndigo',
+                              onTap: onTapTrackerOrder,
+                            ),
                             SpaceWidth(width: 5),
-                            CommonTag(text: '표시 5', color: 'whiteIndigo'),
+                            CommonTag(
+                              text: '표시',
+                              nameArgs: {
+                                'length': '${trackerDisplayList?.length ?? 0}'
+                              },
+                              color: 'whiteIndigo',
+                              onTap: onTapTrackerFilter,
+                            ),
                           ],
                         )
                       : const EmptyArea(),

@@ -36,6 +36,7 @@ import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/reload_provider.dart';
 import 'package:flutter_app_weight_management/provider/search_filter_provider.dart';
 import 'package:flutter_app_weight_management/provider/title_datetime_provider.dart';
+import 'package:flutter_app_weight_management/provider/tracker_filter_provider.dart';
 import 'package:flutter_app_weight_management/repositories/mate_hive.dart';
 import 'package:flutter_app_weight_management/repositories/plan_repository.dart';
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
@@ -103,7 +104,8 @@ void main() async {
         ChangeNotifierProvider(create: (_) => HistoryImportDateTimeProvider()),
         ChangeNotifierProvider(create: (_) => ReloadProvider()),
         ChangeNotifierProvider(create: (_) => PremiumProvider()),
-        ChangeNotifierProvider(create: (_) => GraphCategoryProvider())
+        ChangeNotifierProvider(create: (_) => GraphCategoryProvider()),
+        ChangeNotifierProvider(create: (_) => TrackerFilterProvider())
       ],
       child: EasyLocalization(
         supportedLocales: supportedLocales,

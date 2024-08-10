@@ -487,9 +487,13 @@ class _WeeklyWeightGraphState extends State<WeeklyWeightGraph> {
                 dataLabelSettings: DataLabelSettings(
                   isVisible: true,
                   useSeriesColor: true,
-                  textStyle: TextStyle(color: weightColor.shade300),
+                  textStyle: TextStyle(
+                    color: indigo.s300,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 10,
+                  ),
                 ),
-                color: weightColor.shade50,
+                color: indigo.s50,
                 dataSource: dataSource,
                 xValueMapper: (data, _) => data.x,
                 yValueMapper: (data, _) => data.y,

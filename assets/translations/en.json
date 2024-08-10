@@ -330,7 +330,7 @@
   "프리미엄 혜택": "Premium Benefits",
   "구매 내역 가져오기": "Restoring purchases",
   "평생 무료로 이용 할 수 있어요": "Free to use for life",
-  "커피 한잔의 가격으로 단 한번 결제!": "Pay only once for the price of a cup of coffee!",
+  "깔끔하게 단 한번 결제! ": "Pay just once!",
   "모든 화면에서 광고가 나오지 않아요": "No ads on all screens",
   "광고없이 쾌적하게 앱을 사용해보세요!": "Use the app comfortably without ads!",
   "모아보기 기능을 이용할 수 있어요": "Give you more detailed statistical features",
@@ -457,5 +457,11 @@
   "캘린더 표시 유형": "Calendar Display Type",
   "카테고리별 스티커": "Category Stickers",
   "날짜별 체중": "Weight record",
-  "날짜별 사진 한장": "One picture"
+  "날짜별 사진 한장": "One picture",
+  "히스토리 검색": "History Search",
+  "트래커": "Tracker",
+  "날짜": "Date",
+  "식단 (기록, 목표)": "Diet (Record, Goals)",
+  "운동 (기록, 목표)": "Exercise (Record, Goals)",
+  "일기 (글)": "Diary"
 }

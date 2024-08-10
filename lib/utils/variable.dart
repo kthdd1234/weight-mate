@@ -391,7 +391,7 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
     svgName: 'premium-free',
     title: '평생 무료로 이용 할 수 있어요',
-    subTitle: '커피 한잔의 가격으로 단 한번 결제!',
+    subTitle: '깔끔하게 단 한번 결제! ',
   ),
   PremiumBenefitsClass(
     svgName: 'premium-no-ads',
@@ -658,7 +658,13 @@ Map<int, BottomNavigationEnum> indexToBn = {
   4: BottomNavigationEnum.setting
 };
 
-Map<int, String> indexToName = {0: '기록', 1: '히스토리', 2: '그래프', 3: '검색', 4: '설정'};
+Map<int, String> indexToName = {
+  0: '기록',
+  1: '히스토리',
+  2: '그래프',
+  3: '트래커',
+  4: '설정'
+};
 List<BottomNavigationBarItem> items = bnList
     .map(
       (bn) => BottomNavigationBarItem(
@@ -726,11 +732,19 @@ Map<SegmentedTypes, int> rangeInfo = {
   SegmentedTypes.oneYear: 364,
 };
 
-List<TableTitleClass> tableTitleClassList = [
+List<TableTitleClass> trackerTitleClassList = [
   TableTitleClass(id: 'dateTime', title: '날짜', width: 90),
-  TableTitleClass(id: 'weight', title: '체중', width: 52),
-  TableTitleClass(id: 'picture', title: '사진'),
-  TableTitleClass(id: 'diet', title: '식단'),
-  TableTitleClass(id: 'exercise', title: '운동'),
-  TableTitleClass(id: 'diary', title: '일기 (글)', width: 110),
+  TableTitleClass(id: FILITER.weight.toString(), title: '체중', width: 52),
+  TableTitleClass(id: FILITER.picture.toString(), title: '사진'),
+  TableTitleClass(id: FILITER.diet.toString(), title: '식단'),
+  TableTitleClass(id: FILITER.exercise.toString(), title: '운동'),
+  TableTitleClass(id: FILITER.diary.toString(), title: '일기', width: 100),
 ];
+
+Map<String, int> filterIndex = {
+  fWeight: 1,
+  fPicture: 2,
+  fDiet: 3,
+  fExercise: 4,
+  fDiary: 5
+};

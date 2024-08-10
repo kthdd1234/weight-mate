@@ -88,22 +88,14 @@ class _GraphBodyState extends State<GraphBody> {
     }
 
     onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
-      UserBox user = userRepository.user;
-      DateTime? watchingAdDatetTime =
-          user.watchingAdDatetTime ?? DateTime(2000, 1, 1);
-      DateTime dateTime24 = watchingAdDatetTime.add(
-        const Duration(hours: 24),
-      );
-      bool isIn24Hours = dateTime24.isAfter(DateTime.now());
-
-      if (isPremium || isIn24Hours) {
+      if (isPremium || isAfterAd) {
         onChanged(segmented);
       } else {
         showModalBottomSheet(
           context: context,
-          builder: (context) => AdBottomSheet(onChanged: () {
-            onChanged(segmented);
-          }),
+          builder: (context) => AdBottomSheet(
+            onChanged: () => onChanged(segmented),
+          ),
         );
       }
     }
