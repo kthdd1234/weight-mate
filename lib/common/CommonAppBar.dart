@@ -486,26 +486,6 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
                           ],
                         )
                       : const EmptyArea(),
-                  // isSearch
-                  //     ? Row(
-                  //         children: [
-                  //           CommonTag(
-                  //             text: searchFilterFormats[searchFilter],
-                  //             color: 'whiteIndigo',
-                  //             onTap: onTapSearchOrder,
-                  //           ),
-                  //           SpaceWidth(width: 5),
-                  //           CommonTag(
-                  //             text: '표시',
-                  //             color: 'whiteIndigo',
-                  //             nameArgs: {
-                  //               'length': '${searchDisplayList?.length ?? 0}'
-                  //             },
-                  //             onTap: onTapSearchFilter,
-                  //           ),
-                  //         ],
-                  //       )
-                  //     : const EmptyArea(),
                 ],
               )
             ],

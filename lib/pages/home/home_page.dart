@@ -8,6 +8,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
 import 'package:flutter_app_weight_management/provider/history_title_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
@@ -295,6 +296,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         context
             .read<HistoryTitleDateTimeProvider>()
             .setHistoryTitleDateTime(now);
+      }
+
+      if (index != 2) {
+        context.read<GraphCategoryProvider>().setGraphCategory(cGraphWeight);
       }
 
       context
