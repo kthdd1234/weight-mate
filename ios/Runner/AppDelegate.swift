@@ -3,7 +3,7 @@ import Flutter
 import flutter_local_notifications
 import home_widget
 
-@UIApplicationMain
+@main
 @objc class AppDelegate: FlutterAppDelegate {
   let taskId = "com.kthdd.weightMate.backgroundTask"
     
