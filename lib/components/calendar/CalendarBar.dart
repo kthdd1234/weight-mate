@@ -192,7 +192,7 @@ class CalendarBar extends StatelessWidget {
         return Column(
           children: [
             Container(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 5),
+              padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: TableCalendar(
                 locale: locale,
                 calendarBuilders: CalendarBuilders(

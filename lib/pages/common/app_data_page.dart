@@ -8,7 +8,6 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';

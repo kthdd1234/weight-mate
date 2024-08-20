@@ -24,9 +24,6 @@ class HistoryBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BottomNavigationEnum id =
-        context.watch<BottomNavigationProvider>().selectedEnumId;
-
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
@@ -65,16 +62,6 @@ class HistoryListView extends StatelessWidget {
     recordList = HistoryFilter.recent == historyFilter
         ? recordList.reversed.toList()
         : recordList;
-
-    if (isPremium == false) {
-      if (recordList.isNotEmpty) {
-        for (var i = 0; i < recordList.length; i++) {
-          if (i != 0 && i % 6 == 0) {
-            recordList.insert(i, RecordBox(createDateTime: DateTime(1000)));
-          }
-        }
-      }
-    }
 
     return Expanded(
       child: recordList.isEmpty

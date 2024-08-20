@@ -4,7 +4,7 @@ import 'package:flutter_app_weight_management/components/calendar/CalendarBar.da
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
+import 'package:flutter_app_weight_management/etc/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/popup/CalendarMakerPopup.dart';
 import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart';
@@ -355,142 +355,136 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
       padding: isGraph
           ? const EdgeInsets.fromLTRB(25, 0, 20, 0)
           : EdgeInsets.symmetric(horizontal: isTracker ? 20 : 25),
-      child: Column(
-        children: [
-          onShowBannerAd(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CommonText(
-                isNotTr: isRecord || isHistory,
-                text: title,
-                size: 20,
-                rightIcon: rightIconList[widget.index],
-                onTap: onTapList[widget.index],
-              ),
-              Row(
-                children: [
-                  isRecord
-                      ? Row(
-                          children: [
-                            CommonTag(
-                              text:
-                                  availableCalendarMaker[widget.calendarMaker],
-                              color: 'whiteIndigo',
-                              onTap: widget.onTapMakerType,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CommonText(
+              isNotTr: isRecord || isHistory,
+              text: title,
+              size: 20,
+              rightIcon: rightIconList[widget.index],
+              onTap: onTapList[widget.index],
+            ),
+            Row(
+              children: [
+                isRecord
+                    ? Row(
+                        children: [
+                          CommonTag(
+                            text: availableCalendarMaker[widget.calendarMaker],
+                            color: 'whiteIndigo',
+                            onTap: widget.onTapMakerType,
+                          ),
+                          SpaceWidth(width: tinySpace),
+                          CommonTag(
+                            text:
+                                availableCalendarFormats[widget.calendarFormat],
+                            color: 'whiteIndigo',
+                            onTap: () => widget.onFormatChanged(
+                              nextCalendarFormats[widget.calendarFormat]!,
                             ),
-                            SpaceWidth(width: tinySpace),
-                            CommonTag(
-                              text: availableCalendarFormats[
-                                  widget.calendarFormat],
-                              color: 'whiteIndigo',
-                              onTap: () => widget.onFormatChanged(
-                                nextCalendarFormats[widget.calendarFormat]!,
-                              ),
+                          ),
+                          SpaceWidth(width: tinySpace),
+                          CommonTag(
+                            text: '표시',
+                            nameArgs: {'length': '${displayList?.length ?? 0}'},
+                            color: 'whiteIndigo',
+                            onTap: onTapRecordFilter,
+                          ),
+                        ],
+                      )
+                    : const EmptyArea(),
+                isHistory
+                    ? Row(
+                        children: [
+                          CommonTag(
+                            text: isHistoryList ? '리스트' : '달력',
+                            color: 'whiteIndigo',
+                            onTap: onTapHistoryFormat,
+                          ),
+                          SpaceWidth(width: 5),
+                          isHistoryList
+                              ? Padding(
+                                  padding: const EdgeInsets.only(right: 5),
+                                  child: CommonTag(
+                                    text: historyFilterFormats[historyFilter],
+                                    color: "whiteIndigo",
+                                    onTap: onTapHistoryOrder,
+                                  ),
+                                )
+                              : EmptyArea(),
+                          CommonTag(
+                            text: '검색',
+                            color: 'whiteIndigo',
+                            onTap: onTapHistorySearch,
+                          ),
+                          SpaceWidth(width: 5),
+                          CommonTag(
+                            text: '표시',
+                            color: 'whiteIndigo',
+                            nameArgs: {
+                              'length': '${historyDisplayList?.length ?? 0}'
+                            },
+                            onTap: onTapHistoryFilter,
+                          ),
+                        ],
+                      )
+                    : const EmptyArea(),
+                isGraph
+                    ? Row(
+                        children: [
+                          CommonTag(
+                            text: graphCategory == cGraphWeight ? '체중' : '걸음 수',
+                            color: graphCategory == cGraphWeight
+                                ? 'whiteIndigo'
+                                : 'whiteBlue',
+                            onTap: () => onTapGraphCategory(
+                              graphCategory == cGraphWeight
+                                  ? cGraphWork
+                                  : cGraphWeight,
                             ),
-                            SpaceWidth(width: tinySpace),
-                            CommonTag(
-                              text: '표시',
-                              nameArgs: {
-                                'length': '${displayList?.length ?? 0}'
-                              },
-                              color: 'whiteIndigo',
-                              onTap: onTapRecordFilter,
+                          ),
+                          SpaceWidth(width: 5),
+                          CommonTag(
+                            text: graphType == eGraphDefault
+                                ? '기본 그래프'
+                                : '설정 그래프',
+                            color: 'whiteIndigo',
+                            onTap: () => onTapGraphMode(
+                              graphType == eGraphDefault
+                                  ? eGraphCustom
+                                  : eGraphDefault,
                             ),
-                          ],
-                        )
-                      : const EmptyArea(),
-                  isHistory
-                      ? Row(
-                          children: [
-                            CommonTag(
-                              text: isHistoryList ? '리스트' : '달력',
-                              color: 'whiteIndigo',
-                              onTap: onTapHistoryFormat,
-                            ),
-                            SpaceWidth(width: 5),
-                            isHistoryList
-                                ? Padding(
-                                    padding: const EdgeInsets.only(right: 5),
-                                    child: CommonTag(
-                                      text: historyFilterFormats[historyFilter],
-                                      color: "whiteIndigo",
-                                      onTap: onTapHistoryOrder,
-                                    ),
-                                  )
-                                : EmptyArea(),
-                            CommonTag(
-                              text: '검색',
-                              color: 'whiteIndigo',
-                              onTap: onTapHistorySearch,
-                            ),
-                            SpaceWidth(width: 5),
-                            CommonTag(
-                              text: '표시',
-                              color: 'whiteIndigo',
-                              nameArgs: {
-                                'length': '${historyDisplayList?.length ?? 0}'
-                              },
-                              onTap: onTapHistoryFilter,
-                            ),
-                          ],
-                        )
-                      : const EmptyArea(),
-                  isGraph
-                      ? Row(
-                          children: [
-                            CommonTag(
-                              text:
-                                  graphCategory == cGraphWeight ? '체중' : '걸음 수',
-                              color: graphCategory == cGraphWeight
-                                  ? 'whiteIndigo'
-                                  : 'whiteBlue',
-                              onTap: () => onTapGraphCategory(
-                                graphCategory == cGraphWeight
-                                    ? cGraphWork
-                                    : cGraphWeight,
-                              ),
-                            ),
-                            SpaceWidth(width: 5),
-                            CommonTag(
-                              text: graphType == eGraphDefault
-                                  ? '기본 그래프'
-                                  : '설정 그래프',
-                              color: 'whiteIndigo',
-                              onTap: () => onTapGraphMode(
-                                graphType == eGraphDefault
-                                    ? eGraphCustom
-                                    : eGraphDefault,
-                              ),
-                            ),
-                          ],
-                        )
-                      : const EmptyArea(),
-                  isTracker
-                      ? Row(
-                          children: [
-                            CommonTag(
-                              text: trackerFilterFormats[trackerFilter],
-                              color: 'whiteIndigo',
-                              onTap: onTapTrackerOrder,
-                            ),
-                            SpaceWidth(width: 5),
-                            CommonTag(
-                              text: '표시',
-                              nameArgs: {
-                                'length': '${trackerDisplayList?.length ?? 0}'
-                              },
-                              color: 'whiteIndigo',
-                              onTap: onTapTrackerFilter,
-                            ),
-                          ],
-                        )
-                      : const EmptyArea(),
-                ],
-              )
-            ],
-          ),
-        ],
+                          ),
+                        ],
+                      )
+                    : const EmptyArea(),
+                isTracker
+                    ? Row(
+                        children: [
+                          CommonTag(
+                            text: trackerFilterFormats[trackerFilter],
+                            color: 'whiteIndigo',
+                            onTap: onTapTrackerOrder,
+                          ),
+                          SpaceWidth(width: 5),
+                          CommonTag(
+                            text: '표시',
+                            nameArgs: {
+                              'length': '${trackerDisplayList?.length ?? 0}'
+                            },
+                            color: 'whiteIndigo',
+                            onTap: onTapTrackerFilter,
+                          ),
+                        ],
+                      )
+                    : const EmptyArea(),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

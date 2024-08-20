@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
+import 'package:flutter_app_weight_management/etc/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -88,16 +88,7 @@ class _GraphBodyState extends State<GraphBody> {
     }
 
     onSegmentedDateTimeChanged(SegmentedTypes? segmented) {
-      if (isPremium || isAfterAd) {
-        onChanged(segmented);
-      } else {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) => AdBottomSheet(
-            onChanged: () => onChanged(segmented),
-          ),
-        );
-      }
+      onChanged(segmented);
     }
 
     return MultiValueListenableBuilder(

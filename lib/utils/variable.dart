@@ -348,6 +348,10 @@ List<Map<String, String>> fontFamilyList = [
     "name": "IM 혜민",
   },
   {
+    "fontFamily": "OpenSans",
+    "name": "OpenSans",
+  },
+  {
     "fontFamily": "KyoboHandwriting2022khn",
     "name": "교보 손글씨",
   },
@@ -394,11 +398,6 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     subTitle: '깔끔하게 단 한번 결제! ',
   ),
   PremiumBenefitsClass(
-    svgName: 'premium-no-ads',
-    title: '모든 화면에서 광고가 나오지 않아요',
-    subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
-  ),
-  PremiumBenefitsClass(
     svgName: 'premium-category-detail',
     title: '모아보기 기능을 이용할 수 있어요',
     subTitle: '체중, 식단, 운동, 습관, 일기 모아보기 등',
@@ -407,6 +406,11 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     svgName: 'premium-photos-four',
     title: '사진을 최대 4장까지 추가 할 수 있어요',
     subTitle: '보다 많은 식단, 운동, 눈바디 사진을 추가해보세요!',
+  ),
+  PremiumBenefitsClass(
+    svgName: 'calendar-image',
+    title: '캘린더에 사진을 표시할 수 있어요',
+    subTitle: '날짜별로 사진의 변화를 한눈에 확인!',
   ),
   PremiumBenefitsClass(
     svgName: 'theme',

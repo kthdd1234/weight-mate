@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/components/ads/native_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
@@ -44,7 +43,6 @@ class HistoryContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
     DateTime createDateTime = recordInfo.createDateTime;
-    bool isAd = createDateTime.year == 1000;
     int recordKey = getDateTimeToInt(createDateTime);
     String formatDateTime = mde(locale: locale, dateTime: createDateTime);
 
@@ -104,50 +102,48 @@ class HistoryContainer extends StatelessWidget {
       }
     }
 
-    return isAd
-        ? NativeAdContainer()
-        : GestureDetector(
-            onTap: onTapMore,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                HistoryHeader(
-                  recordInfo: recordInfo,
-                  isRemoveMode: isRemoveMode,
-                  isWeight: isWeight,
-                  isDiary: isDiaryText,
-                  onTapMore: onTapMore,
-                ),
-                isPicture
-                    ? HistoryPicture(
-                        isRemoveMode: isRemoveMode,
-                        recordInfo: recordInfo,
-                      )
-                    : const EmptyArea(),
-                HistoryTodo(
+    return GestureDetector(
+      onTap: onTapMore,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          HistoryHeader(
+            recordInfo: recordInfo,
+            isRemoveMode: isRemoveMode,
+            isWeight: isWeight,
+            isDiary: isDiaryText,
+            onTapMore: onTapMore,
+          ),
+          isPicture
+              ? HistoryPicture(
                   isRemoveMode: isRemoveMode,
                   recordInfo: recordInfo,
-                  isDietRecord: isDietRecord,
-                  isDietGoal: isDietGoal,
-                  isExerciseRecord: isExerciseRecord,
-                  isExerciseGoal: isExerciseGoal,
-                  isLife: isLife,
-                ),
-                isDiaryText
-                    ? HistoryDiaryText(
-                        isRemoveMode: isRemoveMode,
-                        recordInfo: recordInfo,
-                      )
-                    : const EmptyArea(),
-                isDiaryHashTag
-                    ? HistoryHashTag(
-                        isRemoveMode: isRemoveMode,
-                        recordInfo: recordInfo,
-                      )
-                    : const EmptyArea(),
-              ],
-            ),
-          );
+                )
+              : const EmptyArea(),
+          HistoryTodo(
+            isRemoveMode: isRemoveMode,
+            recordInfo: recordInfo,
+            isDietRecord: isDietRecord,
+            isDietGoal: isDietGoal,
+            isExerciseRecord: isExerciseRecord,
+            isExerciseGoal: isExerciseGoal,
+            isLife: isLife,
+          ),
+          isDiaryText
+              ? HistoryDiaryText(
+                  isRemoveMode: isRemoveMode,
+                  recordInfo: recordInfo,
+                )
+              : const EmptyArea(),
+          isDiaryHashTag
+              ? HistoryHashTag(
+                  isRemoveMode: isRemoveMode,
+                  recordInfo: recordInfo,
+                )
+              : const EmptyArea(),
+        ],
+      ),
+    );
   }
 }
 
@@ -753,65 +749,65 @@ class HistoryHashTag extends StatelessWidget {
   }
 }
 
-class NativeAdContainer extends StatefulWidget {
-  NativeAdContainer({super.key});
+// class NativeAdContainer extends StatefulWidget {
+//   NativeAdContainer({super.key});
 
-  @override
-  State<NativeAdContainer> createState() => _NativeAdContainerState();
-}
+//   @override
+//   State<NativeAdContainer> createState() => _NativeAdContainerState();
+// }
 
-class _NativeAdContainerState extends State<NativeAdContainer> {
-  NativeAd? nativeAd;
-  bool isLoaded = false;
-  bool isNotAdShow = false;
+// class _NativeAdContainerState extends State<NativeAdContainer> {
+//   NativeAd? nativeAd;
+//   bool isLoaded = false;
+//   bool isNotAdShow = false;
 
-  @override
-  void didChangeDependencies() {
-    final adsState = Provider.of<AdsProvider>(context).adsState;
+//   @override
+//   void didChangeDependencies() {
+//     final adsState = Provider.of<AdsProvider>(context).adsState;
 
-    checkHideAd() async {
-      bool isHide = await isHideAd();
+//     checkHideAd() async {
+//       bool isHide = await isHideAd();
 
-      if (isHide == true) {
-        setState(() => isNotAdShow = isHide);
-      } else if (isHide == false) {
-        nativeAd = loadNativeAd(
-          adUnitId: adsState.nativeAdUnitId,
-          onAdLoaded: () {
-            setState(() => isLoaded = true);
-          },
-          onAdFailedToLoad: () {
-            setState(() {
-              isLoaded = false;
-              nativeAd = null;
-            });
-          },
-        );
-      }
-    }
+//       if (isHide == true) {
+//         setState(() => isNotAdShow = isHide);
+//       } else if (isHide == false) {
+//         nativeAd = loadNativeAd(
+//           adUnitId: adsState.nativeAdUnitId,
+//           onAdLoaded: () {
+//             setState(() => isLoaded = true);
+//           },
+//           onAdFailedToLoad: () {
+//             setState(() {
+//               isLoaded = false;
+//               nativeAd = null;
+//             });
+//           },
+//         );
+//       }
+//     }
 
-    checkHideAd();
+//     checkHideAd();
 
-    super.didChangeDependencies();
-  }
+//     super.didChangeDependencies();
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (isNotAdShow) {
-      return const Row(children: []);
-    }
+//   @override
+//   Widget build(BuildContext context) {
+//     if (isNotAdShow) {
+//       return const Row(children: []);
+//     }
 
-    return Column(
-      children: [
-        CommonText(text: '광고', size: 12, isBold: true),
-        SpaceHeight(height: smallSpace),
-        isLoaded
-            ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd)
-            : SizedBox(
-                height: 340,
-                child: LoadingPopup(text: '', color: Colors.transparent),
-              )
-      ],
-    );
-  }
-}
+//     return Column(
+//       children: [
+//         CommonText(text: '광고', size: 12, isBold: true),
+//         SpaceHeight(height: smallSpace),
+//         isLoaded
+//             ? NativeWidget(padding: 0, height: 340, nativeAd: nativeAd)
+//             : SizedBox(
+//                 height: 340,
+//                 child: LoadingPopup(text: '', color: Colors.transparent),
+//               )
+//       ],
+//     );
+//   }
+// }
