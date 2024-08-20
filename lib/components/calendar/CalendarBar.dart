@@ -134,7 +134,9 @@ class CalendarBar extends StatelessWidget {
           recordInfo?.bottomFile ??
           recordInfo?.topFile;
 
-      bool isToday = getDateTimeToInt(importDateTime) == recordKey;
+      DateTime selectedDateTime =
+          bottomIndex == 0 ? importDateTime : historyImportDateTime;
+      bool isToday = getDateTimeToInt(selectedDateTime) == recordKey;
 
       if (unit8List == null) {
         return const EmptyArea();
@@ -153,7 +155,7 @@ class CalendarBar extends StatelessWidget {
           Center(child: MaskLabel(width: 38, height: 38, opacity: 0.2)),
           Center(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
+              padding: const EdgeInsets.all(3),
               decoration: BoxDecoration(
                 color: isToday ? indigo.s300 : null,
                 borderRadius: BorderRadius.circular(100),
@@ -215,8 +217,8 @@ class CalendarBar extends StatelessWidget {
                   weekdayStyle: TextStyle(color: grey.original, fontSize: 13),
                   weekendStyle: TextStyle(color: grey.original, fontSize: 13),
                 ),
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.now(),
+                firstDay: DateTime(2000, 1, 1),
+                lastDay: DateTime(3000, 1, 1),
                 focusedDay:
                     bottomIndex == 0 ? importDateTime : historyImportDateTime,
                 currentDay:

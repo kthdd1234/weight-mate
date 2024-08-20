@@ -9,6 +9,7 @@ import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_p
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
+import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,8 +27,23 @@ class RecordBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BottomNavigationEnum id =
-        context.watch<BottomNavigationProvider>().selectedEnumId;
+    DateTime importDateTime =
+        context.watch<ImportDateTimeProvider>().getImportDateTime();
+
+    onHorizontalDragEnd(DragEndDetails dragEndDetails) {
+      double? primaryVelocity = dragEndDetails.primaryVelocity;
+      DateTime dateTime = importDateTime;
+
+      if (primaryVelocity == null) {
+        return;
+      } else if (primaryVelocity > 0) {
+        dateTime = importDateTime.subtract(Duration(days: 1));
+      } else if (primaryVelocity < 0) {
+        dateTime = importDateTime.add(Duration(days: 1));
+      }
+
+      context.read<ImportDateTimeProvider>().setImportDateTime(dateTime);
+    }
 
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
@@ -38,14 +54,17 @@ class RecordBody extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      EditWeight(),
-                      EditPicture(),
-                      EditTodo(),
-                      EditDiary(),
-                    ],
+                child: GestureDetector(
+                  onHorizontalDragEnd: onHorizontalDragEnd,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        EditWeight(),
+                        EditPicture(),
+                        EditTodo(),
+                        EditDiary(),
+                      ],
+                    ),
                   ),
                 ),
               ),

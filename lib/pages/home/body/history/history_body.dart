@@ -107,24 +107,44 @@ class HistoryCalendar extends StatelessWidget {
     int recordKey = getDateTimeToInt(historyImportDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
 
+    onHorizontalDragEnd(DragEndDetails dragEndDetails) {
+      double? primaryVelocity = dragEndDetails.primaryVelocity;
+      DateTime dateTime = historyImportDateTime;
+
+      if (primaryVelocity == null) {
+        return;
+      } else if (primaryVelocity > 0) {
+        dateTime = historyImportDateTime.subtract(Duration(days: 1));
+      } else if (primaryVelocity < 0) {
+        dateTime = historyImportDateTime.add(Duration(days: 1));
+      }
+
+      context
+          .read<HistoryImportDateTimeProvider>()
+          .setHistoryImportDateTime(dateTime);
+    }
+
     return Expanded(
-      child: recordInfo != null
-          ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: ContentsBox(
-                  contentsWidget: HistoryContainer(
-                    recordInfo: recordInfo,
-                    isRemoveMode: false,
+      child: GestureDetector(
+        onHorizontalDragEnd: onHorizontalDragEnd,
+        child: recordInfo != null
+            ? Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: SingleChildScrollView(
+                  child: ContentsBox(
+                    contentsWidget: HistoryContainer(
+                      recordInfo: recordInfo,
+                      isRemoveMode: false,
+                    ),
                   ),
                 ),
+              )
+            : EmptyTextVerticalArea(
+                icon: Icons.view_timeline_outlined,
+                title: '기록이 없어요.',
+                backgroundColor: Colors.transparent,
               ),
-            )
-          : EmptyTextVerticalArea(
-              icon: Icons.view_timeline_outlined,
-              title: '기록이 없어요.',
-              backgroundColor: Colors.transparent,
-            ),
+      ),
     );
   }
 }

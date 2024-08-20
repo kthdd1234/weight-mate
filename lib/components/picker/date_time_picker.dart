@@ -29,7 +29,7 @@ class DateTimePicker extends StatelessWidget {
         showNavigationArrow: true,
         initialDisplayDate: initialSelectedDate,
         initialSelectedDate: initialSelectedDate,
-        maxDate: DateTime.now(),
+        // maxDate: DateTime.now(),
         view: view,
         allowViewNavigation: false,
         onSelectionChanged: onSelectionChanged,
