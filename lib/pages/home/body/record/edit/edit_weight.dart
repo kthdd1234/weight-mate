@@ -1,4 +1,5 @@
 // ignore_for_file: unnecessary_brace_in_string_interps, prefer_function_declarations_over_variables, use_build_context_synchronously
+import 'dart:io';
 import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -282,23 +283,31 @@ class _EditWeightState extends State<EditWeight> {
                                     textColor: indigo.s300,
                                     onTap: onTapWeight,
                                   ),
-                                  SpaceWidth(width: 5),
-                                  InkWell(
-                                    onTap: onTapHealth,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 20,
-                                      ),
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: whiteBgBtnColor,
-                                        borderRadius: BorderRadius.circular(
-                                          7,
-                                        ),
-                                      ),
-                                      child: getSvg(name: 'health', width: 18),
-                                    ),
-                                  )
+                                  Platform.isIOS
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: InkWell(
+                                            onTap: onTapHealth,
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 20,
+                                              ),
+                                              height: 50,
+                                              decoration: BoxDecoration(
+                                                color: whiteBgBtnColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  7,
+                                                ),
+                                              ),
+                                              child: getSvg(
+                                                  name: 'health', width: 18),
+                                            ),
+                                          ),
+                                        )
+                                      : const EmptyArea()
                                 ],
                               ),
                             ],

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/components/calendar/CalendarBar.dart';
@@ -305,7 +307,9 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
     }
 
     onTapGraphCategory(String category) {
-      context.read<GraphCategoryProvider>().setGraphCategory(category);
+      if (Platform.isIOS) {
+        context.read<GraphCategoryProvider>().setGraphCategory(category);
+      }
     }
 
     onTapGraphMode(String type) async {
