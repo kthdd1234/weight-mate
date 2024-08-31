@@ -6,15 +6,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
+import 'package:flutter_app_weight_management/etc/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/enabled_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/services/health_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -38,12 +41,13 @@ class _EditWeightState extends State<EditWeight> {
 
   @override
   Widget build(BuildContext context) {
+    UserBox user = userRepository.user;
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-    UserBox user = userRepository.user;
-    bool? isOpen = user.filterList?.contains(fWeight) == true;
+    bool isOpen = user.filterList?.contains(fWeight) == true;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     isError() {
       return isShowErorr(
@@ -96,12 +100,20 @@ class _EditWeightState extends State<EditWeight> {
               weight: stringToDouble(value),
             ),
           );
+
+          onShowAd(context: context, category: '체중', isPremium: isPremium);
+        } else if (recordInfo.weight == null) {
+          recordInfo.weightDateTime = weightDateTime;
+          recordInfo.weight = weight;
+
+          await recordInfo.save();
+          onShowAd(context: context, category: '체중', isPremium: isPremium);
         } else {
           recordInfo.weightDateTime = weightDateTime;
           recordInfo.weight = weight;
-        }
 
-        await recordInfo?.save();
+          await recordInfo.save();
+        }
 
         onInit();
       }
@@ -344,7 +356,7 @@ class WeightButtonBottmSheet extends StatelessWidget {
           children: [
             CommonButton(
               text: '취소',
-              fontSize: 18,
+              fontSize: 17,
               radious: 5,
               bgColor: Colors.white,
               textColor: textColor,
@@ -353,8 +365,9 @@ class WeightButtonBottmSheet extends StatelessWidget {
             SpaceWidth(width: tinySpace),
             CommonButton(
               text: '완료',
-              fontSize: 18,
+              fontSize: 17,
               radious: 5,
+              isBold: true,
               bgColor: isEnabled ? themeColor : Colors.grey.shade400,
               textColor: isEnabled ? Colors.white : Colors.grey.shade300,
               onTap: onCompleted,

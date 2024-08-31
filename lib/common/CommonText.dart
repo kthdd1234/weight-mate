@@ -41,6 +41,7 @@ class CommonText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextDecoration? textDecoration = {
+      'none': TextDecoration.none,
       'lineThrough': TextDecoration.lineThrough,
       'underLine': TextDecoration.underline
     }[decoration];

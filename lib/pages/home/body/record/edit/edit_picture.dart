@@ -28,6 +28,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
+import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -37,12 +38,14 @@ class EditPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String fPicture = FILITER.picture.toString();
     UserBox user = userRepository.user;
     bool? isDisplay = user.displayList?.contains(fPicture) == true;
     bool isOpen = user.filterList?.contains(fPicture) == true;
+
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
+
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
     Map<String, Uint8List?> fileInfo = {
@@ -51,15 +54,8 @@ class EditPicture extends StatelessWidget {
       'bottom': recordInfo?.bottomFile,
       'top': recordInfo?.topFile,
     };
-    int pictureLength = [
-      recordInfo?.leftFile,
-      recordInfo?.rightFile,
-      recordInfo?.bottomFile,
-      recordInfo?.topFile
-    ].whereType<Uint8List>().length;
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
-    setFile({required Uint8List? newValue, required String pos}) {
+    setFile({required Uint8List? newValue, required String pos}) async {
       switch (pos) {
         case 'left':
           recordInfo?.leftFile = newValue;
@@ -76,17 +72,8 @@ class EditPicture extends StatelessWidget {
         default:
       }
 
-      recordInfo?.save();
+      await recordInfo?.save();
     }
-
-    // convertUnit8List(XFile? xFile) async {
-    //   return await File(xFile!.path).readAsBytes();
-    // }
-
-    // onNavigatorImageCollectionsPage() async {
-    //   closeDialog(context);
-    //   await Navigator.pushNamed(context, '/image-collections-page');
-    // }
 
     onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
       closeDialog(context);
@@ -129,6 +116,11 @@ class EditPicture extends StatelessWidget {
       if (xFile == null) return;
 
       Uint8List pickedImage = await File(xFile.path).readAsBytes();
+      bool isPicture = (recordInfo?.leftFile ??
+              recordInfo?.rightFile ??
+              recordInfo?.bottomFile ??
+              recordInfo?.topFile) ==
+          null;
 
       if (recordInfo == null) {
         recordRepository.recordBox.put(
@@ -141,16 +133,24 @@ class EditPicture extends StatelessWidget {
             topFile: pos == 'top' ? pickedImage : null,
           ),
         );
+
+        onShowAd(context: context, category: '사진', isPremium: isPremium);
+      } else if (isPicture) {
+        setFile(pos: pos, newValue: pickedImage);
+        onShowAd(context: context, category: '사진', isPremium: isPremium);
       } else {
         setFile(pos: pos, newValue: pickedImage);
       }
     }
 
     onShowImagePicker(ImageSource source, String pos) async {
+      bool isFilePath = fileInfo[pos] != null;
       closeDialog(context);
 
       XFile? xFileData = await setImagePicker(source: source, pos: pos);
-      if (isPremium == false && pictureLength > 0) {
+      int len = getPictureLength(importDateTime);
+
+      if (isPremium == false && len > 0 && isFilePath == false) {
         showDialog(
           context: context,
           builder: (context) => AlertPopup(
@@ -184,19 +184,17 @@ class EditPicture extends StatelessWidget {
           contents: Column(
             children: [
               isFilePath
-                  ? Column(
-                      children: [
-                        InkWell(
-                          onTap: () => onNavigatorImagePullSizePage(
-                            binaryData: fileInfo[pos]!,
-                          ),
-                          child: DefaultImage(
-                            unit8List: fileInfo[pos]!,
-                            height: 280,
-                          ),
+                  ? Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: InkWell(
+                        onTap: () => onNavigatorImagePullSizePage(
+                          binaryData: fileInfo[pos]!,
                         ),
-                        SpaceHeight(height: smallSpace)
-                      ],
+                        child: DefaultImage(
+                          unit8List: fileInfo[pos]!,
+                          height: 280,
+                        ),
+                      ),
                     )
                   : const EmptyArea(),
               Row(
@@ -247,7 +245,9 @@ class EditPicture extends StatelessWidget {
                       tags: [
                         TagClass(
                           text: '장',
-                          nameArgs: {'length': '$pictureLength'},
+                          nameArgs: {
+                            'length': '${getPictureLength(importDateTime)}'
+                          },
                           color: 'purple',
                           isHide: isOpen,
                           onTap: onTapOpen,

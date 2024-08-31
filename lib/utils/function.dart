@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonPopup.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/picker/date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/picker/default_date_time_picker.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
@@ -524,9 +525,18 @@ NativeAd loadNativeAd({
       templateType: TemplateType.medium,
       mainBackgroundColor: typeBackgroundColor,
       cornerRadius: 5.0,
+      tertiaryTextStyle: NativeTemplateTextStyle(
+        textColor: Colors.black,
+      ),
+      primaryTextStyle: NativeTemplateTextStyle(
+        textColor: Colors.black,
+      ),
+      secondaryTextStyle: NativeTemplateTextStyle(
+        textColor: Colors.black,
+      ),
       callToActionTextStyle: NativeTemplateTextStyle(
         textColor: Colors.white,
-        backgroundColor: textColor,
+        backgroundColor: themeColor,
         size: 16.0,
       ),
     ),
@@ -1182,4 +1192,31 @@ bool get isAfterAd {
   );
 
   return dateTime24.isAfter(DateTime.now());
+}
+
+onShowAd({
+  required BuildContext context,
+  required String category,
+  required bool isPremium,
+}) {
+  if (isPremium == false) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => AdBottomSheet(category: category),
+    );
+  }
+}
+
+int getPictureLength(DateTime importDateTime) {
+  int recordKey = getDateTimeToInt(importDateTime);
+  RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
+  int pictureLength = [
+    recordInfo?.leftFile,
+    recordInfo?.rightFile,
+    recordInfo?.bottomFile,
+    recordInfo?.topFile
+  ].whereType<Uint8List>().length;
+
+  return pictureLength;
 }

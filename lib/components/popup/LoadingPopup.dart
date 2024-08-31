@@ -33,9 +33,10 @@ class LoadingPopup extends StatelessWidget {
               ),
         CommonText(
           text: text,
-          size: 11,
+          size: 14,
           isCenter: true,
           isBold: true,
+          decoration: 'none',
           color: color,
           nameArgs: nameArgs,
         ),
@@ -43,9 +44,10 @@ class LoadingPopup extends StatelessWidget {
         subText != null
             ? CommonText(
                 text: subText!,
-                size: 11,
+                size: 14,
                 isCenter: true,
                 isBold: true,
+                decoration: 'none',
                 color: color,
                 nameArgs: nameArgs,
               )

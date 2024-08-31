@@ -19,6 +19,7 @@ import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -28,9 +29,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 
-class EditDiary extends StatelessWidget {
+class EditDiary extends StatefulWidget {
   const EditDiary({super.key});
 
+  @override
+  State<EditDiary> createState() => _EditDiaryState();
+}
+
+class _EditDiaryState extends State<EditDiary> {
   @override
   Widget build(BuildContext context) {
     DateTime importDateTime =
@@ -43,17 +49,24 @@ class EditDiary extends StatelessWidget {
     int recordKey = getDateTimeToInt(importDateTime);
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
-    List<Map<String, String>>? recordHashTagList =
-        recordInfo?.recordHashTagList;
+
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onTapWriteDiary() async {
-      await Navigator.push(
+      final result = await Navigator.push(
         context,
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) =>
-              DiaryWritePage(dateTime: importDateTime),
+        MaterialPageRoute(
+          builder: (BuildContext context) => DiaryWritePage(
+            dateTime: importDateTime,
+          ),
         ),
       );
+
+      if (!context.mounted) return;
+
+      if (result == 'showAd') {
+        onShowAd(context: context, category: '일기', isPremium: isPremium);
+      }
     }
 
     onTapEmtion(String selectedEmotion) {

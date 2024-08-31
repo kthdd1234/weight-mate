@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
+import 'package:flutter_app_weight_management/common/CommonName.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonSvg.dart';
+import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_hori.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
@@ -88,26 +90,31 @@ class _PremiumPageState extends State<PremiumPage> {
     List<Widget> premiumBenefitsWidgetList = premiumBenefitsClassList
         .map(
           (item) => Padding(
-            padding: EdgeInsets.only(
-              top: item.svgName == 'premium-free' ? 15 : 25,
-            ),
-            child: Row(
-              children: [
-                CommonSvg(name: item.svgName, width: 45),
-                SpaceWidth(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CommonText(text: item.title, size: 14),
-                    SpaceHeight(height: 3),
-                    CommonText(
-                      text: item.subTitle,
-                      size: 11,
-                      color: grey.original,
+            padding: const EdgeInsets.only(bottom: 10),
+            child: ContentsBox(
+              contentsWidget: Row(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CommonText(text: item.title, size: 14),
+                          SpaceHeight(height: 5),
+                          CommonText(
+                            text: item.subTitle,
+                            size: 11.5,
+                            color: grey.original,
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                )
-              ],
+                  ),
+                  SpaceWidth(width: 20),
+                  CommonSvg(name: item.svgName, width: 45),
+                ],
+              ),
             ),
           ),
         )
@@ -115,34 +122,16 @@ class _PremiumPageState extends State<PremiumPage> {
 
     return CommonBackground(
       child: CommonScaffold(
-        appBarInfo: AppBarInfoClass(title: '프리미엄'),
+        appBarInfo: AppBarInfoClass(
+          title: '프리미엄 혜택',
+          isCenter: false,
+          actions: [PremiumRestoreButton(onRestore: onRestore)],
+        ),
         body: Column(
           children: [
             Expanded(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: 30),
-                  child: ContentsBox(
-                    contentsWidget: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            CommonText(text: '프리미엄 혜택', size: 14, isBold: true),
-                            CommonText(
-                              text: '구매 내역 가져오기',
-                              size: 12,
-                              color: grey.original,
-                              onTap: onRestore,
-                            ),
-                          ],
-                        ),
-                        Column(children: premiumBenefitsWidgetList),
-                      ],
-                    ),
-                  ),
-                ),
+                child: Column(children: premiumBenefitsWidgetList),
               ),
             ),
             PremiumPurchaseButton(
@@ -195,6 +184,24 @@ class PremiumPurchaseButton extends StatelessWidget {
                   onTap: onPurchase,
                 )
         ],
+      ),
+    );
+  }
+}
+
+class PremiumRestoreButton extends StatelessWidget {
+  PremiumRestoreButton({super.key, required this.onRestore});
+
+  Function() onRestore;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 15),
+      child: CommonTag(
+        text: '구매 항목 복원',
+        color: 'whiteIndigo',
+        onTap: onRestore,
       ),
     );
   }

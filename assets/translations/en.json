@@ -328,10 +328,10 @@
   "일기 삭제": "Delete diary",
   "구매 완료": "Purchase completed",
   "프리미엄 혜택": "Premium Benefits",
-  "구매 내역 가져오기": "Restoring purchases",
+  "구매 항목 복원": "Restoring purchases",
   "평생 무료로 이용 할 수 있어요": "Free to use for life",
   "깔끔하게 단 한번 결제! ": "Pay just once!",
-  "모든 화면에서 광고가 나오지 않아요": "No ads on all screens",
+  "모든 화면에서 광고가 제거돼요": "No ads on all screens",
   "광고없이 쾌적하게 앱을 사용해보세요!": "Use the app comfortably without ads!",
   "모아보기 기능을 이용할 수 있어요": "Give you more detailed statistical features",
   "체중, 식단, 운동, 습관, 일기 모아보기 등": "weight statistics, record/practice collection",
@@ -402,7 +402,7 @@
   "키워드 검색 기능을 제공해드려요": "We provide a keyword search function",
   "검색을 통해 이전의 기록을 빠르게 확인해보세요!": "Quickly Check Your Previous Records Through Search!",
   "앱 시작 시 원하는 화면을 바로 볼 수 있어요": "You can see the screen you want right away when you start the app",
-  "기록, 히스토리, 그래프, 검색 화면 중 한 곳 선택!": "Choose one of history, history, graph, search screen!",
+  "기록, 히스토리, 그래프, 트래커 화면 중 한 곳 선택!": "Choose one of history, history, graph, search screen!",
   "살빠짐": "Losing weight",
   "오운완": "Completed Workout",
   "치팅데이": "Cheating Day",
@@ -465,5 +465,6 @@
   "운동 (기록, 목표)": "Exercise (Record, Goals)",
   "일기 (글)": "Diary",
   "캘린더에 사진을 표시할 수 있어요": "Show pictures on the calendar",
-  "날짜별로 사진의 변화를 한눈에 확인!": "See changes in photos by date at a glance"
+  "날짜별로 사진의 변화를 한눈에 확인!": "See changes in photos by date at a glance",
+  "👏🏻기록을 완료했어요!": "👏🏻Complete the {category} Record!"
 }

@@ -3,17 +3,13 @@ import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonBlur.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
-import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/weight/WeightAnalyze.dart';
 import 'package:flutter_app_weight_management/components/weight/WeightChart.dart';
-import 'package:flutter_app_weight_management/main.dart';
-import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class WeightChartPage extends StatefulWidget {
   const WeightChartPage({super.key});

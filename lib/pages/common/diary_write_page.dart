@@ -113,6 +113,8 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
         List<Map<String, String>>? recordHashTagList =
             hashTagList.isNotEmpty ? hashTagList : [];
 
+        final hList = recordInfo?.recordHashTagList ?? [];
+
         if (recordInfo == null) {
           recordRepository.updateRecord(
             key: getDateTimeToInt(targetDateTime),
@@ -124,15 +126,27 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
               recordHashTagList: recordHashTagList,
             ),
           );
+
+          Navigator.pop(context, 'showAd');
+        } else if (recordInfo?.emotion == null &&
+            recordInfo?.whiteText == null &&
+            hList.isEmpty) {
+          recordInfo?.emotion = rEmotion;
+          recordInfo?.whiteText = whiteText;
+          recordInfo?.diaryDateTime = diaryDateTime;
+          recordInfo?.recordHashTagList = recordHashTagList;
+
+          await recordInfo?.save();
+          Navigator.pop(context, 'showAd');
         } else {
           recordInfo?.emotion = rEmotion;
           recordInfo?.whiteText = whiteText;
           recordInfo?.diaryDateTime = diaryDateTime;
           recordInfo?.recordHashTagList = recordHashTagList;
-        }
 
-        await recordInfo?.save();
-        Navigator.pop(context, 'save');
+          await recordInfo?.save();
+          Navigator.pop(context);
+        }
       }
     }
 
@@ -279,7 +293,7 @@ class _DiaryWritePageState extends State<DiaryWritePage> {
                           maxLines: null,
                           minLines: null,
                           textInputAction: TextInputAction.newline,
-                          style: const TextStyle(fontSize: 13),
+                          style: const TextStyle(fontSize: 14),
                           decoration: InputDecoration(
                             contentPadding: const EdgeInsets.all(0),
                             isDense: true,

@@ -398,6 +398,11 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
     subTitle: '깔끔하게 단 한번 결제! ',
   ),
   PremiumBenefitsClass(
+    svgName: 'premium-no-ads',
+    title: '모든 화면에서 광고가 제거돼요',
+    subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
+  ),
+  PremiumBenefitsClass(
     svgName: 'premium-category-detail',
     title: '모아보기 기능을 이용할 수 있어요',
     subTitle: '체중, 식단, 운동, 습관, 일기 모아보기 등',
@@ -430,7 +435,7 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   PremiumBenefitsClass(
     svgName: 'app-start',
     title: '앱 시작 시 원하는 화면을 바로 볼 수 있어요',
-    subTitle: '기록, 히스토리, 그래프, 검색 화면 중 한 곳 선택!',
+    subTitle: '기록, 히스토리, 그래프, 트래커 화면 중 한 곳 선택!',
   ),
 ];
 

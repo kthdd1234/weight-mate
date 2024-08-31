@@ -30,6 +30,7 @@ import 'package:flutter_app_weight_management/pages/common/todo_chart_page.dart'
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -61,11 +62,6 @@ class _TodoContainerState extends State<TodoContainer> {
   bool isShowInput = false;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
@@ -87,6 +83,8 @@ class _TodoContainerState extends State<TodoContainer> {
     Color mainColor = tagColor['textColor']!;
     Color bgColor = tagColor['bgColor']!;
     bool isLife = widget.filterId == FILITER.lifeStyle.toString();
+
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onGoalComplete({
       required String completedType,
@@ -159,6 +157,12 @@ class _TodoContainerState extends State<TodoContainer> {
               exerciseRecordOrderList: widget.type == eExercise ? [id] : null,
             ),
           );
+
+          onShowAd(
+            context: context,
+            category: widget.title,
+            isPremium: isPremium,
+          );
         } else {
           if (recordInfo.actions == null) {
             recordInfo.actions = [actionItem.setObject()];
@@ -166,6 +170,14 @@ class _TodoContainerState extends State<TodoContainer> {
             widget.type == eExercise
                 ? recordInfo.exerciseRecordOrderList = [id]
                 : null;
+
+            await recordInfo.save();
+
+            onShowAd(
+              context: context,
+              category: widget.title,
+              isPremium: isPremium,
+            );
           } else {
             recordInfo.actions!.add(actionItem.setObject());
             widget.type == eDiet
@@ -174,6 +186,8 @@ class _TodoContainerState extends State<TodoContainer> {
             widget.type == eExercise
                 ? recordInfo.exerciseRecordOrderList?.add(id)
                 : null;
+
+            await recordInfo.save();
           }
         }
       } else {
@@ -181,9 +195,9 @@ class _TodoContainerState extends State<TodoContainer> {
         if (idx != null && idx != -1) {
           recordInfo?.actions![idx] = actionItem.setObject();
         }
-      }
 
-      await recordInfo?.save();
+        await recordInfo?.save();
+      }
     }
 
     actionPercent() {
@@ -339,10 +353,6 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
 
   @override
   Widget build(BuildContext context) {
-    onHide(SegmentedTypes hideType) {
-      return widget.isOpen == false ? true : selectedSegment == hideType;
-    }
-
     onTapRecordCollection() async {
       navigator(
         context: context,
@@ -388,26 +398,6 @@ class _DietExerciseContainerState extends State<DietExerciseContainer> {
         isHide: false,
         onTap: onTapRecordCollection,
       ),
-      // TagClass(
-      //   text: '실천 모아보기',
-      //   color: widget.colorName,
-      //   isHide: onHide(SegmentedTypes.record),
-      //   onTap: onTapGoalCollection,
-      // ),
-      // TagClass(
-      //   text: '기록 개',
-      //   nameArgs: {"length": "${actionList()?.length ?? 0}"},
-      //   color: widget.colorName,
-      //   isHide: widget.isOpen,
-      //   onTap: widget.onTapOpen,
-      // ),
-      // TagClass(
-      //   text: '목표 개',
-      //   nameArgs: {"length": "${widget.planList.length}"},
-      //   color: widget.colorName,
-      //   isHide: widget.isOpen,
-      //   onTap: widget.onTapOpen,
-      // ),
       TagClass(
         icon: widget.isOpen
             ? Icons.keyboard_arrow_down_rounded
