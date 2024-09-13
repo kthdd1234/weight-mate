@@ -42,7 +42,7 @@ import 'package:flutter_app_weight_management/repositories/plan_repository.dart'
 import 'package:flutter_app_weight_management/repositories/record_repository.dart';
 import 'package:flutter_app_weight_management/repositories/user_repository.dart';
 import 'package:flutter_app_weight_management/services/ads_service.dart';
-import 'package:flutter_app_weight_management/services/health_service.dart';
+// import 'package:flutter_app_weight_management/services/health_service.dart';
 import 'package:flutter_app_weight_management/services/home_widget_service.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
 import 'package:flutter_app_weight_management/utils/colors.dart';
@@ -87,7 +87,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  HealthService().initConfiguration();
+  // HealthService().initConfiguration();
 
   runApp(
     MultiProvider(
