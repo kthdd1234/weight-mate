@@ -50,10 +50,10 @@ class _EditDiaryState extends State<EditDiary> {
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
 
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
+    // bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onTapWriteDiary() async {
-      final result = await Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => DiaryWritePage(
@@ -62,11 +62,10 @@ class _EditDiaryState extends State<EditDiary> {
         ),
       );
 
-      if (!context.mounted) return;
-
-      if (result == 'showAd') {
-        onShowAd(context: context, category: '일기', isPremium: isPremium);
-      }
+      // if (!context.mounted) return;
+      // if (result == 'showAd') {
+      //   onShowAd(context: context, category: '일기', isPremium: isPremium);
+      // }
     }
 
     onTapEmtion(String selectedEmotion) {

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/components/button/ModalButton.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -34,21 +35,19 @@ class _AppStartBottomSheetState extends State<AppStartBottomSheet> {
       title: '앱 시작 화면',
       height: 200,
       contents: Row(
-        children: bnList
+        children: getBnClassList(appStartIndex)
             .map(
               (bn) => bn.index != 4
-                  ? ExpandedButtonVerti(
-                      outterPadding: const EdgeInsets.only(right: 5),
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      height: 90,
-                      icon: bn.icon,
-                      title: bn.name,
-                      isBold: appStartIndex == bn.index,
-                      mainColor: appStartIndex == bn.index
+                  ? ModalButton(
+                      innerPadding: const EdgeInsets.only(right: 5),
+                      svgName: bn.svgName,
+                      actionText: bn.name,
+                      isBold: bn.index == appStartIndex,
+                      color: bn.index == appStartIndex
                           ? Colors.white
                           : grey.original,
-                      backgroundColor:
-                          appStartIndex == bn.index ? themeColor : Colors.white,
+                      bgColor:
+                          bn.index == appStartIndex ? themeColor : Colors.white,
                       onTap: () => onTap(bn.index),
                     )
                   : const EmptyArea(),

@@ -300,12 +300,6 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
       await user.save();
     }
 
-    Widget onShowBannerAd() {
-      return widget.index != 4 && isPremium == false
-          ? BannerWidget()
-          : SpaceHeight(height: 10);
-    }
-
     onTapGraphCategory(String category) {
       if (Platform.isIOS) {
         context.read<GraphCategoryProvider>().setGraphCategory(category);

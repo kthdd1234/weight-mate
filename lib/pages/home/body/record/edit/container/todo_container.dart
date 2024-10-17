@@ -158,11 +158,11 @@ class _TodoContainerState extends State<TodoContainer> {
             ),
           );
 
-          onShowAd(
-            context: context,
-            category: widget.title,
-            isPremium: isPremium,
-          );
+          // onShowAd(
+          //   context: context,
+          //   category: widget.title,
+          //   isPremium: isPremium,
+          // );
         } else {
           if (recordInfo.actions == null) {
             recordInfo.actions = [actionItem.setObject()];
@@ -173,11 +173,11 @@ class _TodoContainerState extends State<TodoContainer> {
 
             await recordInfo.save();
 
-            onShowAd(
-              context: context,
-              category: widget.title,
-              isPremium: isPremium,
-            );
+            // onShowAd(
+            //   context: context,
+            //   category: widget.title,
+            //   isPremium: isPremium,
+            // );
           } else {
             recordInfo.actions!.add(actionItem.setObject());
             widget.type == eDiet

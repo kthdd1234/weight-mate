@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.0.27+60
+version: 2.0.29+62
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
@@ -66,9 +66,12 @@ dependencies:
   google_mobile_ads: ^4.0.0
   flutter_dotenv: ^5.1.0
   flutter_native_splash: ^2.3.1
-  url_launcher: ^6.1.12
+  url_launcher: ^6.3.0
   in_app_review: ^2.0.6
-  carousel_slider: ^4.2.1
+  carousel_slider:
+    git:
+      url: https://github.com/sampaio96/flutter_carousel_slider.git
+      ref: master
   gdpr_dialog: ^2.1.1
   app_tracking_transparency: ^2.0.4
   flutter_svg: ^2.0.9
@@ -78,7 +81,7 @@ dependencies:
   easy_localization: ^3.0.3
   privacy_screen: ^0.0.6
   quiver: ^3.2.1
-  home_widget: ^0.4.1
+  home_widget: ^0.6.0
   googleapis: ^13.1.0
   googleapis_auth: ^1.5.1
   google_sign_in: ^6.2.1
@@ -210,6 +213,16 @@ flutter:
     - assets/svgs/mode.svg
     - assets/svgs/check.svg
     - assets/svgs/calendar-image.svg
+    - assets/svgs/bnb-record.svg
+    - assets/svgs/bnb-record-fill.svg
+    - assets/svgs/bnb-history.svg
+    - assets/svgs/bnb-history-fill.svg
+    - assets/svgs/bnb-graph.svg
+    - assets/svgs/bnb-graph-fill.svg
+    - assets/svgs/bnb-tracker.svg
+    - assets/svgs/bnb-tracker-fill.svg
+    - assets/svgs/bnb-setting.svg
+    - assets/svgs/bnb-setting-fill.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

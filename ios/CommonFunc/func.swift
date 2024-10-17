@@ -51,7 +51,7 @@ func loadJson <T: Decodable>(json: String) -> T {
         let data = json.data(using: .utf8)!
         return try JSONDecoder().decode(T.self, from: Data(data))
       } catch {
-          fatalError("Unable to parse json: (error)")
+         fatalError("Unable to parse json: (error)")
     }
 }
 

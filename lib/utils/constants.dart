@@ -265,6 +265,10 @@ final tagColors = {
   'peach': {
     'bgColor': const Color.fromRGBO(255, 231, 217, 100),
     'textColor': const Color.fromRGBO(255, 170, 84, 100),
+  },
+  'whiteBlack': {
+    'bgColor': Colors.white,
+    'textColor': textColor,
   }
 };
 

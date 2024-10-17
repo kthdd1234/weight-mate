@@ -401,12 +401,13 @@ class BNClass {
   BNClass({
     required this.index,
     required this.name,
+    required this.svgName,
     required this.icon,
   });
 
   int index;
-  String name;
-  IconData icon;
+  String name, svgName;
+  Widget icon;
 }
 
 class FadePageRoute extends PageRouteBuilder {

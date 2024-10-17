@@ -1194,19 +1194,19 @@ bool get isAfterAd {
   return dateTime24.isAfter(DateTime.now());
 }
 
-onShowAd({
-  required BuildContext context,
-  required String category,
-  required bool isPremium,
-}) {
-  if (isPremium == false) {
-    showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) => AdBottomSheet(category: category),
-    );
-  }
-}
+// onShowAd({
+//   required BuildContext context,
+//   required String category,
+//   required bool isPremium,
+// }) {
+//   if (isPremium == false) {
+//     showModalBottomSheet(
+//       isScrollControlled: true,
+//       context: context,
+//       builder: (context) => AdBottomSheet(category: category),
+//     );
+//   }
+// }
 
 int getPictureLength(DateTime importDateTime) {
   int recordKey = getDateTimeToInt(importDateTime);

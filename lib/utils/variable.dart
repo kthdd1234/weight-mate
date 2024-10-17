@@ -10,6 +10,7 @@ import 'package:flutter_app_weight_management/pages/home/body/setting/setting_bo
 import 'package:flutter_app_weight_management/pages/home/body/tracker/tracker_body.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'enum.dart';
@@ -651,13 +652,81 @@ List<Widget> bodyList = const [
   SettingBody()
 ];
 
-List<BNClass> bnList = [
-  BNClass(index: 0, name: '기록', icon: Icons.edit_rounded),
-  BNClass(index: 1, name: '히스토리', icon: Icons.view_timeline_outlined),
-  BNClass(index: 2, name: '그래프', icon: FontAwesomeIcons.chartLine),
-  BNClass(index: 3, name: '트래커', icon: Icons.view_agenda_outlined),
-  BNClass(index: 4, name: '설정', icon: Icons.settings_rounded),
-];
+// List<BNClass> bnList = [
+//   BNClass(index: 0, name: '기록', icon: Icons.edit_rounded),
+//   BNClass(index: 1, name: '히스토리', icon: Icons.view_timeline_outlined),
+//   BNClass(index: 2, name: '그래프', icon: FontAwesomeIcons.chartLine),
+//   BNClass(index: 3, name: '트래커', icon: Icons.view_agenda_outlined),
+//   BNClass(index: 4, name: '설정', icon: Icons.settings_rounded),
+// ];
+
+// Map<int, BottomNavigationEnum> indexToBn = {
+//   0: BottomNavigationEnum.record,
+//   1: BottomNavigationEnum.history,
+//   2: BottomNavigationEnum.graph,
+//   3: BottomNavigationEnum.search,
+//   4: BottomNavigationEnum.setting
+// };
+
+SvgPicture svgAsset({
+  required String name,
+  required double width,
+  Color? color,
+}) {
+  return SvgPicture.asset(
+    'assets/svgs/$name.svg',
+    width: width,
+    colorFilter:
+        color != null ? ColorFilter.mode(color, BlendMode.srcIn) : null,
+  );
+}
+
+List<BNClass> getBnClassList(int seletedIdx) {
+  svg(int idx, String svgName) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: svgAsset(
+          name: svgName,
+          width: idx == 1 ? 22 : 20,
+          color: idx == seletedIdx ? themeColor : grey.original),
+    );
+  }
+
+  List<BNClass> bnClassList = [
+    BNClass(
+      index: 0,
+      name: '기록',
+      icon: svg(0, seletedIdx == 0 ? 'bnb-record-fill' : 'bnb-record'),
+      svgName: seletedIdx == 0 ? 'bnb-record-fill' : 'bnb-record',
+    ),
+    BNClass(
+      index: 1,
+      name: '히스토리',
+      icon: svg(1, seletedIdx == 1 ? 'bnb-history-fill' : 'bnb-history'),
+      svgName: seletedIdx == 1 ? 'bnb-history-fill' : 'bnb-history',
+    ),
+    BNClass(
+      index: 2,
+      name: '그래프',
+      icon: svg(2, seletedIdx == 2 ? 'bnb-graph-fill' : 'bnb-graph'),
+      svgName: seletedIdx == 2 ? 'bnb-graph-fill' : 'bnb-graph',
+    ),
+    BNClass(
+      index: 3,
+      name: '트래커',
+      icon: svg(3, seletedIdx == 3 ? 'bnb-tracker-fill' : 'bnb-tracker'),
+      svgName: seletedIdx == 3 ? 'bnb-tracker-fill' : 'bnb-tracker',
+    ),
+    BNClass(
+      index: 4,
+      name: '설정',
+      icon: svg(4, seletedIdx == 4 ? 'bnb-setting-fill' : 'bnb-setting'),
+      svgName: seletedIdx == 4 ? 'bnb-setting-fill' : 'bnb-setting',
+    ),
+  ];
+
+  return bnClassList;
+}
 
 Map<int, BottomNavigationEnum> indexToBn = {
   0: BottomNavigationEnum.record,
@@ -667,6 +736,16 @@ Map<int, BottomNavigationEnum> indexToBn = {
   4: BottomNavigationEnum.setting
 };
 
+List<BottomNavigationBarItem> getBnbList(int seletedIdx) {
+  List<BottomNavigationBarItem> bnbList = getBnClassList(seletedIdx)
+      .map(
+        (bn) => BottomNavigationBarItem(label: bn.name.tr(), icon: bn.icon),
+      )
+      .toList();
+
+  return bnbList;
+}
+
 Map<int, String> indexToName = {
   0: '기록',
   1: '히스토리',
@@ -674,17 +753,6 @@ Map<int, String> indexToName = {
   3: '트래커',
   4: '설정'
 };
-List<BottomNavigationBarItem> items = bnList
-    .map(
-      (bn) => BottomNavigationBarItem(
-        icon: Padding(
-          padding: EdgeInsets.only(bottom: bn.index == 2 ? 3 : 0),
-          child: Icon(bn.icon, size: bn.index == 2 ? 17 : null),
-        ),
-        label: bn.name.tr(),
-      ),
-    )
-    .toList();
 
 final themeClassList = [
   [

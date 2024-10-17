@@ -234,8 +234,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
-    // AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor = AppLifecycleReactor(context: context);
+    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    _appLifecycleReactor = AppLifecycleReactor(
+      context: context,
+      appOpenAdManager: appOpenAdManager,
+    );
     _appLifecycleReactor.listenToAppStateChanges();
 
     requestInAppReview() async {
@@ -354,7 +357,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         padding: const EdgeInsets.all(0),
         body: bodyList[bottomNavitionId.index],
         bottomNavigationBar: BottomNavigationBar(
-          items: items,
+          items: getBnbList(bottomNavitionId.index),
           elevation: 0,
           currentIndex: bottomNavitionId.index,
           selectedItemColor: themeColor,

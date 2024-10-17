@@ -101,13 +101,13 @@ class _EditWeightState extends State<EditWeight> {
             ),
           );
 
-          onShowAd(context: context, category: '체중', isPremium: isPremium);
+          // onShowAd(context: context, category: '체중', isPremium: isPremium);
         } else if (recordInfo.weight == null) {
           recordInfo.weightDateTime = weightDateTime;
           recordInfo.weight = weight;
 
           await recordInfo.save();
-          onShowAd(context: context, category: '체중', isPremium: isPremium);
+          // onShowAd(context: context, category: '체중', isPremium: isPremium);
         } else {
           recordInfo.weightDateTime = weightDateTime;
           recordInfo.weight = weight;
