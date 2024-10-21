@@ -400,7 +400,7 @@ List<PremiumBenefitsClass> premiumBenefitsClassList = [
   ),
   PremiumBenefitsClass(
     svgName: 'premium-no-ads',
-    title: '모든 화면에서 광고가 제거돼요',
+    title: '배너 광고가 제거돼요',
     subTitle: '광고없이 쾌적하게 앱을 사용해보세요!',
   ),
   PremiumBenefitsClass(

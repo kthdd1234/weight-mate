@@ -1,12 +1,10 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
 import 'package:flutter_app_weight_management/common/CommonScaffold.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/provider/graph_category_provider.dart';
 import 'package:flutter_app_weight_management/provider/history_import_date_time.dart';
@@ -22,7 +20,6 @@ import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:gdpr_dialog/gdpr_dialog.dart';
-import 'package:in_app_review/in_app_review.dart';
 import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -234,28 +231,28 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
       ),
     );
 
-    AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    _appLifecycleReactor = AppLifecycleReactor(
-      context: context,
-      appOpenAdManager: appOpenAdManager,
-    );
-    _appLifecycleReactor.listenToAppStateChanges();
+    // AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
+    // _appLifecycleReactor = AppLifecycleReactor(
+    //   context: context,
+    //   appOpenAdManager: appOpenAdManager,
+    // );
+    // _appLifecycleReactor.listenToAppStateChanges();
 
-    requestInAppReview() async {
-      List<RecordBox> recordList = recordRepository.recordList;
-      InAppReview inAppReview = InAppReview.instance;
-      bool isAvailable = await inAppReview.isAvailable();
-      bool isLength = recordList.length == 3 ||
-          recordList.length == 10 ||
-          recordList.length == 25 ||
-          recordList.length == 50;
+    // requestInAppReview() async {
+    //   List<RecordBox> recordList = recordRepository.recordList;
+    //   InAppReview inAppReview = InAppReview.instance;
+    //   bool isAvailable = await inAppReview.isAvailable();
+    //   bool isLength = recordList.length == 3 ||
+    //       recordList.length == 10 ||
+    //       recordList.length == 25 ||
+    //       recordList.length == 50;
 
-      if (isAvailable && isLength && !kDebugMode) {
-        inAppReview.requestReview();
-      }
-    }
+    //   if (isAvailable && isLength && !kDebugMode) {
+    //     inAppReview.requestReview();
+    //   }
+    // }
 
-    requestInAppReview();
+    // requestInAppReview();
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       DateTime now = DateTime.now();

@@ -6,7 +6,6 @@ import 'package:flutter_app_weight_management/components/calendar/CalendarBar.da
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonTag.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
-import 'package:flutter_app_weight_management/etc/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/popup/CalendarMakerPopup.dart';
 import 'package:flutter_app_weight_management/components/popup/DisplayPopup.dart';

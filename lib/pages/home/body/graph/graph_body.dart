@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/etc/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/segmented/default_segmented.dart';
 import 'package:flutter_app_weight_management/main.dart';
@@ -118,6 +120,12 @@ class _GraphBodyState extends State<GraphBody> {
                 setChartSwipeDirectionStart: setChartSwipeDirectionStart,
                 setChartSwipeDirectionEnd: setChartSwipeDirectionEnd,
               ),
+              !isPremium
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: BannerWidget(),
+                    )
+                  : const EmptyArea(),
               graphType == eGraphDefault
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),

@@ -2,12 +2,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
+import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_picture.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_todo.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_weight.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
+import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +29,7 @@ class RecordBody extends StatelessWidget {
   Widget build(BuildContext context) {
     DateTime importDateTime =
         context.watch<ImportDateTimeProvider>().getImportDateTime();
+    bool isPremium = context.watch<PremiumProvider>().premiumValue();
 
     onHorizontalDragEnd(DragEndDetails dragEndDetails) {
       double? primaryVelocity = dragEndDetails.primaryVelocity;
@@ -65,6 +70,12 @@ class RecordBody extends StatelessWidget {
                 ),
               ),
             ),
+            !isPremium
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: BannerWidget(),
+                  )
+                : const EmptyArea(),
           ],
         );
       },

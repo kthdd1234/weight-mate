@@ -63,7 +63,7 @@ class _BannerWidgetState extends State<BannerWidget> {
   Widget build(BuildContext context) {
     if (bannerAdIsLoaded == false) {
       return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 5, 0, 7),
+        padding: const EdgeInsets.symmetric(vertical: 5),
         child: SizedBox(
           height: 50,
           child: CommonText(
@@ -77,7 +77,7 @@ class _BannerWidgetState extends State<BannerWidget> {
     }
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 7),
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: SizedBox(height: 50, child: AdWidget(ad: bannerAd!)),
     );
   }

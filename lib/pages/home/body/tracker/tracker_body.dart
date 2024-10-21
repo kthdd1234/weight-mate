@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonName.dart';
+import 'package:flutter_app_weight_management/components/ads/banner_widget.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/record_body.dart';
+import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/provider/tracker_filter_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
@@ -49,6 +51,7 @@ class _TrackerBodyState extends State<TrackerBody> {
 
   @override
   Widget build(BuildContext context) {
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
     bool isRecent = context.watch<TrackerFilterProvider>().trackerFilter ==
         TrackerFilter.recent;
 
@@ -67,8 +70,15 @@ class _TrackerBodyState extends State<TrackerBody> {
             startDateTime: startDateTime,
             endDateTime: endDateTime,
           ),
+          !isPremium
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: BannerWidget(),
+                )
+              : const EmptyArea(),
           Padding(
-            padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+            padding:
+                EdgeInsets.only(top: !isPremium ? 0 : 10, left: 15, right: 15),
             child: DefaultSegmented(
               selectedSegment: selectedDateTimeSegment,
               children: rangeSegmented(selectedDateTimeSegment),
@@ -76,7 +86,7 @@ class _TrackerBodyState extends State<TrackerBody> {
               thumbColor: whiteBgBtnColor,
               onSegmentedChanged: onSegmentedDateTimeChanged,
             ),
-          )
+          ),
         ],
       ),
     );
