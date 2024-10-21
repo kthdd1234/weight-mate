@@ -94,30 +94,28 @@ class AppOpenAdManager {
 }
 
 class AppLifecycleReactor {
-  AppLifecycleReactor({
-    required this.context,
-    required this.appOpenAdManager,
-  });
+  AppLifecycleReactor(
+      {required this.context}); // required this.appOpenAdManager,
 
   BuildContext context;
-  AppOpenAdManager appOpenAdManager;
+  // AppOpenAdManager appOpenAdManager;
 
   void listenToAppStateChanges() {
     AppStateEventNotifier.startListening();
     AppStateEventNotifier.appStateStream.forEach((state) {
-      _onAppStateChangedAd(state);
+      // _onAppStateChangedAd(state);
       _onAppStateChangedPassword(state);
     });
   }
 
-  void _onAppStateChangedAd(AppState appState) async {
-    bool isPurchase = await isPurchasePremium();
+  // void _onAppStateChangedAd(AppState appState) async {
+  //   bool isPurchase = await isPurchasePremium();
 
-    if (appState == AppState.foreground && isPurchase == false) {
-      log('들오 오는거 체크용');
-      appOpenAdManager.showAdIfAvailable();
-    }
-  }
+  //   if (appState == AppState.foreground && isPurchase == false) {
+  //     log('들오 오는거 체크용');
+  //     appOpenAdManager.showAdIfAvailable();
+  //   }
+  // }
 
   void _onAppStateChangedPassword(AppState appState) async {
     String? passwords = userRepository.user.screenLockPasswords;

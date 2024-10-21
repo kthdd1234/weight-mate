@@ -232,11 +232,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     );
 
     // AppOpenAdManager appOpenAdManager = AppOpenAdManager()..loadAd();
-    // _appLifecycleReactor = AppLifecycleReactor(
-    //   context: context,
-    //   appOpenAdManager: appOpenAdManager,
-    // );
-    // _appLifecycleReactor.listenToAppStateChanges();
+    _appLifecycleReactor = AppLifecycleReactor(context: context);
+    _appLifecycleReactor.listenToAppStateChanges();
 
     // requestInAppReview() async {
     //   List<RecordBox> recordList = recordRepository.recordList;
