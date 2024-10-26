@@ -331,7 +331,7 @@
   "구매 항목 복원": "Restoring purchases",
   "평생 무료로 이용 할 수 있어요": "Free to use for life",
   "깔끔하게 단 한번 결제! ": "Pay just once!",
-  "배너 광고가 제거돼요": "Banner ads are removed",
+  "광고가 제거돼요": "Ads are removed",
   "광고없이 쾌적하게 앱을 사용해보세요!": "Use the app comfortably without ads!",
   "모아보기 기능을 이용할 수 있어요": "Give you more detailed statistical features",
   "체중, 식단, 운동, 습관, 일기 모아보기 등": "weight statistics, record/practice collection",
@@ -466,5 +466,7 @@
   "일기 (글)": "Diary",
   "캘린더에 사진을 표시할 수 있어요": "Show pictures on the calendar",
   "날짜별로 사진의 변화를 한눈에 확인!": "See changes in photos by date at a glance",
-  "👏🏻기록을 완료했어요!": "👏🏻Complete the {category} Record!"
+  "👏🏻기록을 완료했어요!": "👏🏻Complete the {category} Record!",
+  "몸무게 달력": "Weight Calendar",
+  "개발자 추천 앱": "Apps recommended by developers"
 }

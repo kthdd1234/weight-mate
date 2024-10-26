@@ -2,10 +2,11 @@ import SwiftUI
 
 struct BackgroundCell: View {
     var body: some View {
-        Image("CloudyApple")
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .edgesIgnoringSafeArea(.all)
+//        Image("CloudyApple")
+//            .resizable()
+//            .aspectRatio(contentMode: .fill)
+//            .frame(width: 500, height: 500)
+//            .edgesIgnoringSafeArea(.all)
+        Color.white
     }
 }

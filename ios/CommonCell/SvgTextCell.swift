@@ -30,9 +30,12 @@ struct SvgCell: View {
             Image(name)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .frame(width: 10, height: 10)
-                .padding(3)
-                .background(.white)
-                .cornerRadius(3)
+                .frame(width: 11.5, height: 11.5)
+//                .padding(3)
+//                .background(Color(red: 243/255, green: 247/255, blue: 254/255))
+//                .cornerRadius(3)
     }
 }
+
+
+//  Color(red: 79/255, green: 195/255, blue: 247/255)

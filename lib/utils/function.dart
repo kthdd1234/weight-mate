@@ -16,6 +16,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
+import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
@@ -1194,19 +1195,11 @@ bool get isAfterAd {
   return dateTime24.isAfter(DateTime.now());
 }
 
-// onShowAd({
-//   required BuildContext context,
-//   required String category,
-//   required bool isPremium,
-// }) {
-//   if (isPremium == false) {
-//     showModalBottomSheet(
-//       isScrollControlled: true,
-//       context: context,
-//       builder: (context) => AdBottomSheet(category: category),
-//     );
-//   }
-// }
+onShowInterstitialAd(bool isPremium) {
+  if (isPremium == false) {
+    interstitialAdService.showAd();
+  }
+}
 
 int getPictureLength(DateTime importDateTime) {
   int recordKey = getDateTimeToInt(importDateTime);

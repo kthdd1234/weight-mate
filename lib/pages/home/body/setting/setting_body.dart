@@ -414,8 +414,14 @@ class _SettingBodyState extends State<SettingBody> {
       setState(() {});
     }
 
-    onTapMode(id) async {
-      //
+    onTapRecommend(id) async {
+      Uri url = Uri(
+        scheme: 'https',
+        host: 'apps.apple.com',
+        path: 'app/weight-calendar-diet-health/id6670779581',
+      );
+
+      await canLaunchUrl(url) ? await launchUrl(url) : throw 'launchUrl error';
     }
 
     List<MoreSeeItemClass> settingItemList = [
@@ -443,14 +449,6 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapGoalWeight,
       ),
-      // MoreSeeItemClass(
-      //   id: MoreSeeItem.appMode,
-      //   icon: 'mode',
-      //   title: '화면 모드',
-      //   value: '시스템 설정',
-      //   color: themeColor,
-      //   onTap: onTapMode,
-      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.appTheme,
         icon: 'theme',
@@ -553,6 +551,14 @@ class _SettingBodyState extends State<SettingBody> {
         value: '',
         color: Colors.transparent,
         onTap: onTapDeveloper,
+      ),
+      MoreSeeItemClass(
+        id: MoreSeeItem.developerInp,
+        icon: 'recommend',
+        title: '개발자 추천 앱',
+        value: '몸무게 달력'.tr(),
+        color: themeColor,
+        onTap: onTapRecommend,
       ),
       MoreSeeItemClass(
         id: MoreSeeItem.privacyPolicy,

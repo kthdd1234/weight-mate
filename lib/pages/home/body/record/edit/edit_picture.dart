@@ -134,10 +134,9 @@ class EditPicture extends StatelessWidget {
           ),
         );
 
-        // onShowAd(context: context, category: '사진', isPremium: isPremium);
+        onShowInterstitialAd(isPremium);
       } else if (isPicture) {
         setFile(pos: pos, newValue: pickedImage);
-        // onShowAd(context: context, category: '사진', isPremium: isPremium);
       } else {
         setFile(pos: pos, newValue: pickedImage);
       }

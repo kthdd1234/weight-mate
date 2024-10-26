@@ -18,6 +18,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/diary_write_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
@@ -50,10 +51,10 @@ class _EditDiaryState extends State<EditDiary> {
     RecordBox? recordInfo = recordBox.get(recordKey);
     String? emotion = recordInfo?.emotion;
 
-    // bool isPremium = context.watch<PremiumProvider>().isPremium;
+    bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onTapWriteDiary() async {
-      await Navigator.push(
+      String result = await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => DiaryWritePage(
@@ -62,10 +63,11 @@ class _EditDiaryState extends State<EditDiary> {
         ),
       );
 
-      // if (!context.mounted) return;
-      // if (result == 'showAd') {
-      //   onShowAd(context: context, category: '일기', isPremium: isPremium);
-      // }
+      if (!context.mounted) return;
+
+      if (result == 'showAd') {
+        onShowInterstitialAd(isPremium);
+      }
     }
 
     onTapEmtion(String selectedEmotion) {
@@ -77,6 +79,8 @@ class _EditDiaryState extends State<EditDiary> {
             emotion: selectedEmotion,
           ),
         );
+
+        onShowInterstitialAd(isPremium);
       } else {
         recordInfo.emotion = selectedEmotion;
       }
