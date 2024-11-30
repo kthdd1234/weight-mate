@@ -124,6 +124,8 @@ class _TodoContainerState extends State<TodoContainer> {
           payload: 'plan',
         );
       }
+
+      onShowInterstitialAd(isPremium);
     }
 
     onRecordComplete({
@@ -157,8 +159,6 @@ class _TodoContainerState extends State<TodoContainer> {
               exerciseRecordOrderList: widget.type == eExercise ? [id] : null,
             ),
           );
-
-          onShowInterstitialAd(isPremium);
         } else {
           if (recordInfo.actions == null) {
             recordInfo.actions = [actionItem.setObject()];
@@ -188,6 +188,8 @@ class _TodoContainerState extends State<TodoContainer> {
 
         await recordInfo?.save();
       }
+
+      onShowInterstitialAd(isPremium);
     }
 
     actionPercent() {

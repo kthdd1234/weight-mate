@@ -653,9 +653,6 @@ class MoreSeeItemWidget extends StatelessWidget {
               text: value,
               size: 13,
               color: color,
-              rightIcon: MoreSeeItem.appVersion != id
-                  ? Icons.chevron_right_rounded
-                  : null,
             )
           : const EmptyArea();
     }

@@ -100,8 +100,6 @@ class _EditWeightState extends State<EditWeight> {
               weight: stringToDouble(value),
             ),
           );
-
-          onShowInterstitialAd(isPremium);
         } else if (recordInfo.weight == null) {
           recordInfo.weightDateTime = weightDateTime;
           recordInfo.weight = weight;
@@ -114,6 +112,7 @@ class _EditWeightState extends State<EditWeight> {
           await recordInfo.save();
         }
 
+        onShowInterstitialAd(isPremium);
         onInit();
       }
     }

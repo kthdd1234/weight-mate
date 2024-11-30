@@ -308,6 +308,10 @@ mde({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
 
+mdeS({required String locale, required DateTime dateTime}) {
+  return DateFormat.MMMMd(locale).format(dateTime);
+}
+
 m({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMM(locale).format(dateTime);
 }

@@ -120,12 +120,12 @@ class _GraphBodyState extends State<GraphBody> {
                 setChartSwipeDirectionStart: setChartSwipeDirectionStart,
                 setChartSwipeDirectionEnd: setChartSwipeDirectionEnd,
               ),
-              !isPremium
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: BannerWidget(),
-                    )
-                  : const EmptyArea(),
+              // !isPremium
+              //     ? Padding(
+              //         padding: const EdgeInsets.symmetric(horizontal: 20),
+              //         child: BannerWidget(),
+              //       )
+              //     : const EmptyArea(),
               graphType == eGraphDefault
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),

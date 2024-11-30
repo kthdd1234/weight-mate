@@ -41,12 +41,12 @@ class HistoryBody extends StatelessWidget {
             historyForamt == HistoryFormat.list.toString()
                 ? HistoryListView()
                 : HistoryCalendar(),
-            !isPremium
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: BannerWidget(),
-                  )
-                : const EmptyArea(),
+            // !isPremium
+            //     ? Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 20),
+            //         child: BannerWidget(),
+            //       )
+            //     : const EmptyArea(),
           ],
         );
       },

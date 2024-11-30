@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -21,6 +22,7 @@ import 'package:flutter_app_weight_management/components/space/spaceHeight.dart'
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
+import 'package:hive/hive.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:provider/provider.dart';
@@ -111,18 +113,57 @@ class CalendarBar extends StatelessWidget {
       return StickerMaker(row1: row1, row2: row2);
     }
 
-    weightBuilder(context, day, events) {
-      int recordKey = getDateTimeToInt(day);
-      RecordBox? recordInfo = recordRepository.recordBox.get(recordKey);
-      bool? isWeight = recordInfo?.weight != null;
+    weightBuilder(context, dateTime, events) {
+      Box<RecordBox> recordBox = recordRepository.recordBox;
+      List<RecordBox> recordList = recordBox.values.toList();
+      int recordKey = getDateTimeToInt(dateTime);
+      RecordBox? recordInfo = recordBox.get(recordKey);
+      double? weight = recordInfo?.weight;
+      double? beforeWeight;
 
-      return isWeight
-          ? Padding(
-              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              child: WeightMaker(
-                weight: recordInfo?.weight ?? 0.0,
-                weightUnit: weightUnit,
-              ))
+      for (final record in recordList) {
+        bool isTarget = getDateTimeToInt(record.createDateTime) ==
+            getDateTimeToInt(dateTime);
+
+        if (isTarget) {
+          break;
+        } else {
+          if (record.weight != null) beforeWeight = record.weight;
+        }
+      }
+
+      onBgColor(double currentWeight) {
+        return beforeWeight == null || (currentWeight == beforeWeight)
+            ? null
+            : beforeWeight < currentWeight
+                ? pink.s300
+                : blue.s300;
+      }
+
+      onIcon(double currentWeight) {
+        if (beforeWeight == null) return null;
+        return currentWeight == beforeWeight
+            ? Icons.drag_handle_rounded
+            : beforeWeight < currentWeight
+                ? Icons.arrow_upward_rounded
+                : Icons.arrow_downward_rounded;
+      }
+
+      return weight != null
+          ? Column(
+              children: [
+                SpaceHeight(height: 43),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 7),
+                  child: WeightMaker(
+                    weight: recordInfo?.weight ?? 0.0,
+                    weightUnit: weightUnit,
+                    icon: onIcon(weight),
+                    bgColor: onBgColor(weight),
+                  ),
+                ),
+              ],
+            )
           : const EmptyArea();
     }
 
@@ -196,17 +237,15 @@ class CalendarBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: TableCalendar(
+                rowHeight: 58,
                 locale: locale,
-                calendarBuilders: CalendarBuilders(
-                  markerBuilder: builderInfo[calendarMaker],
-                ),
+                calendarBuilders:
+                    CalendarBuilders(markerBuilder: builderInfo[calendarMaker]),
                 headerVisible: false,
                 calendarStyle: CalendarStyle(
                   cellMargin: const EdgeInsets.all(15.0),
-                  todayDecoration: BoxDecoration(
-                    color: Colors.indigo.shade300,
-                    shape: BoxShape.circle,
-                  ),
+                  todayDecoration:
+                      BoxDecoration(color: indigo.s300, shape: BoxShape.circle),
                   todayTextStyle: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

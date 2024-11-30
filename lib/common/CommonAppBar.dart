@@ -333,13 +333,6 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
           .setTrackerFilter(nextTrackerFilter[trackerFilter]!);
     }
 
-    List<IconData?> rightIconList = [
-      Icons.keyboard_arrow_down_rounded,
-      Icons.keyboard_arrow_down_rounded,
-      null,
-      null,
-      null
-    ];
     List<Null Function()?> onTapList = [
       onTapRecordTitle,
       onTapHistoryTitle,
@@ -357,12 +350,13 @@ class _CommonAppBarTitleState extends State<CommonAppBarTitle> {
           SpaceHeight(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               CommonText(
                 isNotTr: isRecord || isHistory,
                 text: title,
-                size: 20,
-                rightIcon: rightIconList[widget.index],
+                size: 15,
+                isBold: true,
                 onTap: onTapList[widget.index],
               ),
               Row(

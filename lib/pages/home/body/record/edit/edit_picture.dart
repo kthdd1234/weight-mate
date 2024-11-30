@@ -133,13 +133,13 @@ class EditPicture extends StatelessWidget {
             topFile: pos == 'top' ? pickedImage : null,
           ),
         );
-
-        onShowInterstitialAd(isPremium);
       } else if (isPicture) {
         setFile(pos: pos, newValue: pickedImage);
       } else {
         setFile(pos: pos, newValue: pickedImage);
       }
+
+      onShowInterstitialAd(isPremium);
     }
 
     onShowImagePicker(ImageSource source, String pos) async {

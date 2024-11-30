@@ -70,12 +70,12 @@ class _TrackerBodyState extends State<TrackerBody> {
             startDateTime: startDateTime,
             endDateTime: endDateTime,
           ),
-          !isPremium
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: BannerWidget(),
-                )
-              : const EmptyArea(),
+          // !isPremium
+          //     ? Padding(
+          //         padding: const EdgeInsets.symmetric(horizontal: 20),
+          //         child: BannerWidget(),
+          //       )
+          //     : const EmptyArea(),
           Padding(
             padding:
                 EdgeInsets.only(top: !isPremium ? 0 : 10, left: 15, right: 15),
@@ -164,17 +164,17 @@ class _TrackerContainerState extends State<TrackerContainer> {
 
     if (isWeight && !isDiary) {
       columnWidths = const {
-        0: FlexColumnWidth(2.7),
+        0: FlexColumnWidth(2.5),
         1: FlexColumnWidth(1.5),
       };
     } else if (!isWeight && isDiary) {
       columnWidths = {
-        0: const FlexColumnWidth(2.7),
+        0: const FlexColumnWidth(2.5),
         index: const FlexColumnWidth(6),
       };
     } else if (isWeight && isDiary) {
       columnWidths = {
-        0: const FlexColumnWidth(2.7),
+        0: const FlexColumnWidth(2.5),
         1: const FlexColumnWidth(1.5),
         index: const FlexColumnWidth(4),
       };
@@ -183,7 +183,7 @@ class _TrackerContainerState extends State<TrackerContainer> {
     return Expanded(
       child: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 10, left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
           child: ContentsBox(
             width: double.infinity,
             padding: const EdgeInsets.all(5),
@@ -248,7 +248,7 @@ class _TrackerContainerState extends State<TrackerContainer> {
         height: 35,
         child: Center(
           child: CommonName(
-            text: mde(locale: locale, dateTime: item.dateTime),
+            text: mdeS(locale: locale, dateTime: item.dateTime),
             overflow: TextOverflow.ellipsis,
             fontSize: 12,
             isNotTr: true,

@@ -71,12 +71,12 @@ class RecordBody extends StatelessWidget {
                 ),
               ),
             ),
-            !isPremium
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: BannerWidget(),
-                  )
-                : const EmptyArea(),
+            // !isPremium
+            //     ? Padding(
+            //         padding: const EdgeInsets.symmetric(horizontal: 20),
+            //         child: BannerWidget(),
+            //       )
+            //     : const EmptyArea(),
           ],
         );
       },
