@@ -139,7 +139,7 @@ class EditPicture extends StatelessWidget {
         setFile(pos: pos, newValue: pickedImage);
       }
 
-      onShowInterstitialAd(isPremium);
+      onShowInterstitialAd(isPremium: isPremium, user: user);
     }
 
     onShowImagePicker(ImageSource source, String pos) async {

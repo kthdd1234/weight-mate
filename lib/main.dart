@@ -153,7 +153,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
     });
 
-    interstitialAdService.loadAd();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -169,8 +168,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    bool isForeground = state == AppLifecycleState.resumed;
-
     if (isBackground && user != null) {
       await HomeWidgetService().updateWeight();
       await HomeWidgetService().updateDietRecord();
@@ -178,10 +175,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       await HomeWidgetService().updateDietGoal();
       await HomeWidgetService().updateExerciseGoal();
       await HomeWidgetService().updateLifeGoal();
-    }
-
-    if (isForeground) {
-      interstitialAdService.loadAd();
     }
   }
 

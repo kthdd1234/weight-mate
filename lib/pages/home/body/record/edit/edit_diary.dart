@@ -65,7 +65,7 @@ class _EditDiaryState extends State<EditDiary> {
 
       if (!context.mounted) return;
 
-      onShowInterstitialAd(isPremium);
+      onShowInterstitialAd(isPremium: isPremium, user: user);
     }
 
     onTapEmtion(String selectedEmotion) {
@@ -81,7 +81,7 @@ class _EditDiaryState extends State<EditDiary> {
         recordInfo.emotion = selectedEmotion;
       }
 
-      onShowInterstitialAd(isPremium);
+      onShowInterstitialAd(isPremium: isPremium, user: user);
 
       bool? isContain = user.filterList?.contains(fDiary);
       if (isContain == false || isContain == null) {

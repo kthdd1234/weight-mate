@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/enter_screen_lock_page.dart';
+import 'package:flutter_app_weight_management/pages/home/home_page.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -94,30 +96,27 @@ class AppOpenAdManager {
 }
 
 class AppLifecycleReactor {
-  AppLifecycleReactor(
-      {required this.context}); // required this.appOpenAdManager,
+  AppLifecycleReactor({
+    required this.context,
+  });
 
   BuildContext context;
-  // AppOpenAdManager appOpenAdManager;
 
-  void listenToAppStateChanges() {
+  void listenToAppStateChanges({required UserBox user}) {
     AppStateEventNotifier.startListening();
     AppStateEventNotifier.appStateStream.forEach((state) {
-      // _onAppStateChangedAd(state);
-      _onAppStateChangedPassword(state);
+      _onAppLoadAd(state: state, user: user);
+      _onAppPassword(state);
     });
   }
 
-  // void _onAppStateChangedAd(AppState appState) async {
-  //   bool isPurchase = await isPurchasePremium();
+  void _onAppLoadAd({required AppState state, required UserBox user}) async {
+    if (state == AppState.foreground) {
+      interstitialAdService.loadAd(user: user);
+    }
+  }
 
-  //   if (appState == AppState.foreground && isPurchase == false) {
-  //     log('들오 오는거 체크용');
-  //     appOpenAdManager.showAdIfAvailable();
-  //   }
-  // }
-
-  void _onAppStateChangedPassword(AppState appState) async {
+  void _onAppPassword(AppState appState) async {
     String? passwords = userRepository.user.screenLockPasswords;
 
     try {

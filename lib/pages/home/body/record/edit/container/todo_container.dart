@@ -125,7 +125,7 @@ class _TodoContainerState extends State<TodoContainer> {
         );
       }
 
-      onShowInterstitialAd(isPremium);
+      onShowInterstitialAd(isPremium: isPremium, user: user);
     }
 
     onRecordComplete({
@@ -189,7 +189,7 @@ class _TodoContainerState extends State<TodoContainer> {
         await recordInfo?.save();
       }
 
-      onShowInterstitialAd(isPremium);
+      onShowInterstitialAd(isPremium: isPremium, user: user);
     }
 
     actionPercent() {

@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -25,10 +26,18 @@ class InterstitialAdService {
     return kDebugMode ? testId : realId;
   }
 
-  void loadAd() async {
+  void loadAd({required UserBox user}) async {
     bool isPremium = await isPurchasePremium();
 
-    if (isPremium == false) {
+    int nowKey = getDateTimeToInt(DateTime.now());
+    int? adDateTimeKey = user.adDateTimeKey;
+
+    bool isNotPremium = isPremium == false;
+    bool isDateTimeKey = (adDateTimeKey == null) || (nowKey != adDateTimeKey);
+
+    log('loadAd: $nowKey, $adDateTimeKey');
+
+    if (isNotPremium && isDateTimeKey) {
       InterstitialAd.load(
         adUnitId: appInterstitialUnitId,
         request: const AdRequest(),
@@ -42,12 +51,11 @@ class InterstitialAdService {
               onAdDismissedFullScreenContent: (ad) {
                 ad.dispose();
                 _interstitialAd = null;
-                loadAd();
+                loadAd(user: user);
               },
             );
 
             _interstitialAd = ad;
-            showLog();
           },
           onAdFailedToLoad: (LoadAdError error) {
             debugPrint('InterstitialAd failed to load: $error');
@@ -57,13 +65,21 @@ class InterstitialAdService {
     }
   }
 
-  void showAd() async {
-    if (_interstitialAd != null) {
-      await _interstitialAd!.show();
-    }
-  }
+  void showAd({required bool isPremium, required UserBox user}) async {
+    int nowKey = getDateTimeToInt(DateTime.now());
+    int? adDateTimeKey = user.adDateTimeKey;
 
-  void showLog() {
-    log('전면 광고 로드 체크 => $_interstitialAd');
+    bool isLoadAd = _interstitialAd != null;
+    bool isNotPremium = isPremium == false;
+    bool isDateTimeKey = (adDateTimeKey == null) || (nowKey != adDateTimeKey);
+
+    log('showAd: $nowKey, $adDateTimeKey');
+
+    if (isLoadAd && isNotPremium && isDateTimeKey) {
+      await _interstitialAd!.show();
+
+      user.adDateTimeKey = nowKey;
+      await user.save();
+    }
   }
 }

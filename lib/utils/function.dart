@@ -1199,10 +1199,11 @@ bool get isAfterAd {
   return dateTime24.isAfter(DateTime.now());
 }
 
-onShowInterstitialAd(bool isPremium) {
-  if (isPremium == false) {
-    interstitialAdService.showAd();
-  }
+onShowInterstitialAd({
+  required bool isPremium,
+  required UserBox user,
+}) {
+  interstitialAdService.showAd(isPremium: isPremium, user: user);
 }
 
 int getPictureLength(DateTime importDateTime) {

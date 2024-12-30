@@ -112,7 +112,7 @@ class _EditWeightState extends State<EditWeight> {
           await recordInfo.save();
         }
 
-        onShowInterstitialAd(isPremium);
+        onShowInterstitialAd(isPremium: isPremium, user: user);
         onInit();
       }
     }

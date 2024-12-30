@@ -42,6 +42,7 @@ class UserBox extends HiveObject {
     this.theme,
     this.watchingAdDatetTime,
     this.trackerDisplayList,
+    this.adDateTimeKey,
   });
 
   @HiveField(0)
@@ -155,8 +156,6 @@ class UserBox extends HiveObject {
   @HiveField(36)
   List<String>? trackerDisplayList;
 
-  @override
-  String toString() {
-    return '';
-  }
+  @HiveField(37)
+  int? adDateTimeKey;
 }
