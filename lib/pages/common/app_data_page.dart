@@ -104,6 +104,7 @@ class _GoogleDriveContainerState extends State<GoogleDriveContainer> {
 
       user.googleDriveInfo!['isLogin'] = true;
       user.googleDriveInfo!['backupDateTime'] = await backupDateTime();
+      user.googleDriveInfo!['email'] = _googleUser?.email;
     }
 
     await user.save();

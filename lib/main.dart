@@ -60,6 +60,7 @@ import 'pages/common/screen_lock_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 const List<Locale> supportedLocales = [
   Locale('ko'),
@@ -129,6 +130,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _authStatus = 'Unknown';
   Box<UserBox>? userBox;
 
+  onWindowManager() async {
+    if (Platform.isAndroid) {
+      await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -153,6 +160,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
     });
 
+    onWindowManager();
     WidgetsBinding.instance.addObserver(this);
   }
 

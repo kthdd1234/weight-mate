@@ -1,4 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, avoid_function_literals_in_foreach_calls
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBackground.dart';
@@ -28,6 +31,7 @@ import 'package:in_app_review/in_app_review.dart';
 import 'package:privacy_screen/privacy_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 InterstitialAdService interstitialAdService = InterstitialAdService();
 
@@ -57,9 +61,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
+  onWindowManager() async {
+    if (Platform.isAndroid) {
+      await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+
+    onWindowManager();
     WidgetsBinding.instance.addObserver(this);
 
     GdprDialog.instance
@@ -219,7 +231,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
 
     if (googleDriveInfo == null) {
-      user.googleDriveInfo = {"isLogin": false, "backupDateTime": null};
+      user.googleDriveInfo = {
+        "isLogin": false,
+        "backupDateTime": null,
+        "email": null
+      };
     }
 
     if (graphType == null) {
@@ -273,6 +289,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       pp() async {
         bool isPremium = await isPurchasePremium();
+        List<String> premiumEmailList = [
+          'kthdd1234@gmail.com',
+          'moonjh818@gmail.com'
+        ];
+
+        if (googleDriveInfo != null) {
+          String? email = googleDriveInfo['email'];
+
+          int index = premiumEmailList
+              .indexWhere((premiumEmail) => premiumEmail == email);
+
+          if (index != -1) isPremium = true;
+        }
+
         context.read<PremiumProvider>().setPremiumValue(isPremium);
       }
 
