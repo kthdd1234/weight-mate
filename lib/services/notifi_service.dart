@@ -88,6 +88,7 @@ class NotificationService {
           UILocalNotificationDateInterpretation.absoluteTime,
       payload: payload,
       matchDateTimeComponents: DateTimeComponents.time,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
     );
 
     return true;

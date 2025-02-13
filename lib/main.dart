@@ -89,7 +89,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  HealthService().initConfiguration();
+  // HealthService().initConfiguration();
 
   runApp(
     MultiProvider(
