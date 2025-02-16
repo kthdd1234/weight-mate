@@ -23,8 +23,19 @@ List<ValueListenable<Box<HiveObject>>> valueListenables = [
   planRepository.planBox.listenable()
 ];
 
-class RecordBody extends StatelessWidget {
+class RecordBody extends StatefulWidget {
   const RecordBody({super.key});
+
+  @override
+  State<RecordBody> createState() => _RecordBodyState();
+}
+
+class _RecordBodyState extends State<RecordBody> {
+  @override
+  void initState() {
+    onWindowManager();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

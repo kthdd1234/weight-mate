@@ -61,18 +61,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     }
   }
 
-  onWindowManager() async {
-    if (Platform.isAndroid) {
-      await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-    }
-  }
-
   @override
   void initState() {
-    super.initState();
-
     onWindowManager();
-    WidgetsBinding.instance.addObserver(this);
 
     GdprDialog.instance
         .showDialog(isForTest: false, testDeviceId: '')
@@ -308,6 +299,9 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
       pp();
     });
+
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
   @override

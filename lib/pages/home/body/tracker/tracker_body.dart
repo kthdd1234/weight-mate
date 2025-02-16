@@ -142,6 +142,8 @@ class _TrackerContainerState extends State<TrackerContainer> {
   @override
   void initState() {
     getTrackerItemList();
+    onWindowManager();
+
     super.initState();
   }
 

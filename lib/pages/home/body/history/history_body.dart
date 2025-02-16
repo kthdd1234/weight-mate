@@ -21,8 +21,19 @@ import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:multi_value_listenable_builder/multi_value_listenable_builder.dart';
 import 'package:provider/provider.dart';
 
-class HistoryBody extends StatelessWidget {
+class HistoryBody extends StatefulWidget {
   const HistoryBody({super.key});
+
+  @override
+  State<HistoryBody> createState() => _HistoryBodyState();
+}
+
+class _HistoryBodyState extends State<HistoryBody> {
+  @override
+  void initState() {
+    onWindowManager();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,12 +52,6 @@ class HistoryBody extends StatelessWidget {
             historyForamt == HistoryFormat.list.toString()
                 ? HistoryListView()
                 : HistoryCalendar(),
-            // !isPremium
-            //     ? Padding(
-            //         padding: const EdgeInsets.symmetric(horizontal: 20),
-            //         child: BannerWidget(),
-            //       )
-            //     : const EmptyArea(),
           ],
         );
       },

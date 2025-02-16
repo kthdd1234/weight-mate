@@ -43,6 +43,8 @@ class _GraphBodyState extends State<GraphBody> {
   @override
   void initState() {
     setTitleDateTime();
+    onWindowManager();
+
     super.initState();
   }
 

@@ -1,17 +1,15 @@
 buildscript {
-    ext.kotlin_version = '1.8.22'
     repositories {
-        google()
-        jcenter()
         mavenCentral()
+        google()
+        gradlePluginPortal()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.1.2'
-        // START: FlutterFire Configuration
-        classpath 'com.google.gms:google-services:4.3.10'
-        // END: FlutterFire Configuration
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.android.tools.build:gradle:7.2.2"
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22'
+        classpath "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3"
+        classpath 'org.jetbrains.kotlin:kotlin-stdlib:1.9.22'
     }
 }
 
@@ -19,6 +17,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+        mavenLocal() 
     }
 }
 

@@ -130,17 +130,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   String _authStatus = 'Unknown';
   Box<UserBox>? userBox;
 
-  onWindowManager() async {
-    if (Platform.isAndroid) {
-      await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
-    }
-  }
-
   @override
   void initState() {
-    super.initState();
-
+    onWindowManager();
     userBox = Hive.box('userBox');
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         TrackingStatus status =
@@ -160,12 +154,14 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       }
     });
 
-    onWindowManager();
     WidgetsBinding.instance.addObserver(this);
+    super.initState();
   }
 
   @override
   void dispose() {
+    super.initState();
+
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -176,7 +172,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    if (isBackground && user != null) {
+    if (isBackground && user != null && Platform.isIOS) {
       await HomeWidgetService().updateWeight();
       await HomeWidgetService().updateDietRecord();
       await HomeWidgetService().updateExerciseRecord();
