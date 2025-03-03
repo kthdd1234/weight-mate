@@ -47,6 +47,7 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
   @override
   Widget build(BuildContext context) {
     DateTime dateTime = widget.fileItemList[currentPageIndex]['dateTime'];
+    DateTime? time = widget.fileItemList[currentPageIndex]['time'];
     int recordKey = getDateTimeToInt(dateTime);
     RecordBox? record = recordRepository.recordBox.get(recordKey);
     UserBox? user = userRepository.user;
@@ -86,7 +87,12 @@ class _ImageCarouselSliderPageState extends State<ImageCarouselSliderPage> {
     }
 
     setAppBarTitle() {
-      return md(locale: context.locale.toString(), dateTime: dateTime);
+      String locale = context.locale.toString();
+
+      String md_ = md(locale: locale, dateTime: dateTime);
+      String hm_ = time != null ? hm(locale: locale, dateTime: time) : '';
+
+      return '$md_ $hm_';
     }
 
     onChangedWeight(bool newValue) {

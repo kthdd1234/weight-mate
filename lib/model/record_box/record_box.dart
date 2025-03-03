@@ -21,6 +21,10 @@ class RecordBox extends HiveObject {
     this.dietRecordOrderList,
     this.exerciseRecordOrderList,
     this.recordHashTagList,
+    this.leftFileTime,
+    this.rightFileTime,
+    this.bottomFileTime,
+    this.topFileTime,
   });
 
   @HiveField(0)
@@ -67,4 +71,16 @@ class RecordBox extends HiveObject {
 
   @HiveField(14)
   List<Map<String, String>>? recordHashTagList;
+
+  @HiveField(15)
+  DateTime? leftFileTime;
+
+  @HiveField(16)
+  DateTime? rightFileTime;
+
+  @HiveField(17)
+  DateTime? bottomFileTime;
+
+  @HiveField(18)
+  DateTime? topFileTime;
 }

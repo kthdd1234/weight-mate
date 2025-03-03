@@ -16,6 +16,7 @@ import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/edit_diary.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/picture/TimeLabel.dart';
 import 'package:flutter_app_weight_management/provider/ads_provider.dart';
 import 'package:flutter_app_weight_management/provider/bottom_navigation_provider.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
@@ -349,10 +350,26 @@ class HistoryPicture extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<historyImageClass> uint8List = [
-      historyImageClass(pos: 'left', unit8List: recordInfo?.leftFile),
-      historyImageClass(pos: 'right', unit8List: recordInfo?.rightFile),
-      historyImageClass(pos: 'bottom', unit8List: recordInfo?.bottomFile),
-      historyImageClass(pos: 'top', unit8List: recordInfo?.topFile),
+      historyImageClass(
+        pos: 'left',
+        unit8List: recordInfo?.leftFile,
+        time: recordInfo?.leftFileTime,
+      ),
+      historyImageClass(
+        pos: 'right',
+        unit8List: recordInfo?.rightFile,
+        time: recordInfo?.rightFileTime,
+      ),
+      historyImageClass(
+        pos: 'bottom',
+        unit8List: recordInfo?.bottomFile,
+        time: recordInfo?.bottomFileTime,
+      ),
+      historyImageClass(
+        pos: 'top',
+        unit8List: recordInfo?.topFile,
+        time: recordInfo?.topFileTime,
+      ),
     ];
     List<historyImageClass> fileList = [];
 
@@ -383,6 +400,7 @@ class HistoryPicture extends StatelessWidget {
                 unit8List: data.unit8List!,
                 height: height,
               ),
+              TimeLabel(time: data.time),
               isRemoveMode
                   ? Positioned(
                       right: 0,
@@ -392,12 +410,16 @@ class HistoryPicture extends StatelessWidget {
                           onTap: () {
                             if (data.pos == 'left') {
                               recordInfo?.leftFile = null;
+                              recordInfo?.leftFileTime = null;
                             } else if (data.pos == 'right') {
                               recordInfo?.rightFile = null;
+                              recordInfo?.rightFileTime = null;
                             } else if (data.pos == 'bottom') {
                               recordInfo?.bottomFile = null;
+                              recordInfo?.bottomFileTime = null;
                             } else if (data.pos == 'top') {
                               recordInfo?.topFile = null;
+                              recordInfo?.topFileTime = null;
                             }
 
                             recordInfo?.save();

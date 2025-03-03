@@ -37,8 +37,6 @@ class _HistoryBodyState extends State<HistoryBody> {
 
   @override
   Widget build(BuildContext context) {
-    bool isPremium = context.watch<PremiumProvider>().premiumValue();
-
     return MultiValueListenableBuilder(
       valueListenables: valueListenables,
       builder: (context, values, child) {
@@ -64,7 +62,6 @@ class HistoryListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isPremium = context.watch<PremiumProvider>().isPremium;
     DateTime historyDateTime =
         context.watch<HistoryTitleDateTimeProvider>().dateTime();
     HistoryFilter historyFilter =

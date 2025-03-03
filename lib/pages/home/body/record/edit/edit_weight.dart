@@ -194,26 +194,26 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
-    // onSaveHealthWeight() async {
-    //   HealthService healthService = HealthService();
-    //   double? weight = await healthService.getHealthWeight(
-    //     ctx: context,
-    //     dateTime: importDateTime,
-    //   );
+    onSaveHealthWeight() async {
+      HealthService healthService = HealthService();
+      double? weight = await healthService.getHealthWeight(
+        ctx: context,
+        dateTime: importDateTime,
+      );
 
-    //   if (weight != null) await onSaveWeight('$weight');
-    // }
+      if (weight != null) await onSaveWeight('$weight');
+    }
 
     onTapHealth() async {
-      // HealthService healthService = HealthService();
-      // bool isPermission = await healthService.isPermission;
+      HealthService healthService = HealthService();
+      bool isPermission = await healthService.isPermission;
 
-      // if (isPermission == false) {
-      //   await healthService.requestAuthorization();
-      //   onSaveHealthWeight();
-      // } else {
-      //   onSaveHealthWeight();
-      // }
+      if (isPermission == false) {
+        await healthService.requestAuthorization();
+        onSaveHealthWeight();
+      } else {
+        onSaveHealthWeight();
+      }
     }
 
     return Padding(

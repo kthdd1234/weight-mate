@@ -212,10 +212,11 @@ class PlanItemClass {
 }
 
 class historyImageClass {
-  historyImageClass({required this.pos, this.unit8List});
+  historyImageClass({required this.pos, this.unit8List, this.time});
 
   String pos;
   Uint8List? unit8List;
+  DateTime? time;
 }
 
 class LanguageItemClass {

@@ -3,7 +3,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
 import 'package:flutter_app_weight_management/components/button/expanded_button_verti.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
-import 'package:flutter_app_weight_management/components/icon/circular_icon.dart';
 import 'package:flutter_app_weight_management/components/image/default_image.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
@@ -20,13 +18,13 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_pull_size_page.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/dash_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/title_container.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/picture/PictureContainer.dart';
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/picture/PictureModalBottomSheet.dart';
 import 'package:flutter_app_weight_management/provider/import_date_time_provider.dart';
 import 'package:flutter_app_weight_management/provider/premium_provider.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
-import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:image_picker/image_picker.dart';
@@ -55,19 +53,34 @@ class EditPicture extends StatelessWidget {
       'top': recordInfo?.topFile,
     };
 
-    setFile({required Uint8List? newValue, required String pos}) async {
+    Map<String, DateTime?> timeInfo = {
+      'left': recordInfo?.leftFileTime,
+      'right': recordInfo?.rightFileTime,
+      'bottom': recordInfo?.bottomFileTime,
+      'top': recordInfo?.topFileTime,
+    };
+
+    setFile({
+      required Uint8List? file,
+      required String pos,
+      required DateTime? time,
+    }) async {
       switch (pos) {
         case 'left':
-          recordInfo?.leftFile = newValue;
+          recordInfo?.leftFile = file;
+          recordInfo?.leftFileTime = time;
           break;
         case 'right':
-          recordInfo?.rightFile = newValue;
+          recordInfo?.rightFile = file;
+          recordInfo?.rightFileTime = time;
           break;
         case 'bottom':
-          recordInfo?.bottomFile = newValue;
+          recordInfo?.bottomFile = file;
+          recordInfo?.bottomFileTime = time;
           break;
         case 'top':
-          recordInfo?.topFile = newValue;
+          recordInfo?.topFile = file;
+          recordInfo?.topFileTime = time;
           break;
         default:
       }
@@ -75,7 +88,7 @@ class EditPicture extends StatelessWidget {
       await recordInfo?.save();
     }
 
-    onNavigatorImagePullSizePage({required Uint8List binaryData}) async {
+    onTapImage(Uint8List binaryData) async {
       closeDialog(context);
 
       Navigator.push(
@@ -116,11 +129,14 @@ class EditPicture extends StatelessWidget {
       if (xFile == null) return;
 
       Uint8List pickedImage = await File(xFile.path).readAsBytes();
+      DateTime time = await xFile.lastModified();
       bool isPicture = (recordInfo?.leftFile ??
               recordInfo?.rightFile ??
               recordInfo?.bottomFile ??
               recordInfo?.topFile) ==
           null;
+
+      log('lastModified: ${time.toString()}');
 
       if (recordInfo == null) {
         recordRepository.recordBox.put(
@@ -131,18 +147,22 @@ class EditPicture extends StatelessWidget {
             rightFile: pos == 'right' ? pickedImage : null,
             bottomFile: pos == 'bottom' ? pickedImage : null,
             topFile: pos == 'top' ? pickedImage : null,
+            leftFileTime: pos == 'left' ? time : null,
+            rightFileTime: pos == 'right' ? time : null,
+            bottomFileTime: pos == 'bottom' ? time : null,
+            topFileTime: pos == 'top' ? time : null,
           ),
         );
       } else if (isPicture) {
-        setFile(pos: pos, newValue: pickedImage);
+        setFile(pos: pos, file: pickedImage, time: time);
       } else {
-        setFile(pos: pos, newValue: pickedImage);
+        setFile(pos: pos, file: pickedImage, time: time);
       }
 
       onShowInterstitialAd(isPremium: isPremium, user: user);
     }
 
-    onShowImagePicker(ImageSource source, String pos) async {
+    onImagePicker(ImageSource source, String pos) async {
       bool isFilePath = fileInfo[pos] != null;
       closeDialog(context);
 
@@ -177,50 +197,19 @@ class EditPicture extends StatelessWidget {
         isScrollControlled: true,
         backgroundColor: Colors.transparent,
         context: context,
-        builder: (context) => CommonBottomSheet(
-          title: '사진 ${isFilePath ? '편집' : '추가'}'.tr(),
-          height: isFilePath ? 500 : 220,
-          contents: Column(
-            children: [
-              isFilePath
-                  ? Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: InkWell(
-                        onTap: () => onNavigatorImagePullSizePage(
-                          binaryData: fileInfo[pos]!,
-                        ),
-                        child: DefaultImage(
-                          unit8List: fileInfo[pos]!,
-                          height: 280,
-                        ),
-                      ),
-                    )
-                  : const EmptyArea(),
-              Row(
-                children: [
-                  ExpandedButtonVerti(
-                    mainColor: textColor,
-                    icon: Icons.add_a_photo,
-                    title: '사진 촬영하기',
-                    onTap: () => onShowImagePicker(ImageSource.camera, pos),
-                  ),
-                  SpaceWidth(width: tinySpace),
-                  ExpandedButtonVerti(
-                    mainColor: textColor,
-                    icon: Icons.collections,
-                    title: '사진 가져오기',
-                    onTap: () => onShowImagePicker(ImageSource.gallery, pos),
-                  ),
-                ],
-              ),
-            ],
-          ),
+        builder: (context) => PictureModalBottomSheet(
+          isFilePath: isFilePath,
+          pos: pos,
+          fileInfo: fileInfo,
+          timeInfo: timeInfo,
+          onTapImage: onTapImage,
+          onImagePicker: onImagePicker,
         ),
       );
     }
 
     onTapRemove(String pos) {
-      setFile(pos: pos, newValue: null);
+      setFile(pos: pos, file: null, time: null);
     }
 
     onTapOpen() {
@@ -273,15 +262,17 @@ class EditPicture extends StatelessWidget {
                               Row(
                                 children: [
                                   PictureContainer(
-                                    file: fileInfo['left'],
                                     pos: 'left',
+                                    file: fileInfo['left'],
+                                    time: timeInfo['left'],
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
                                   SpaceWidth(width: 7),
                                   PictureContainer(
-                                    file: fileInfo['right'],
                                     pos: 'right',
+                                    file: fileInfo['right'],
+                                    time: timeInfo['right'],
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
@@ -291,15 +282,17 @@ class EditPicture extends StatelessWidget {
                               Row(
                                 children: [
                                   PictureContainer(
-                                    file: fileInfo['bottom'],
                                     pos: 'bottom',
+                                    file: fileInfo['bottom'],
+                                    time: timeInfo['bottom'],
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
                                   SpaceWidth(width: 7),
                                   PictureContainer(
-                                    file: fileInfo['top'],
                                     pos: 'top',
+                                    file: fileInfo['top'],
+                                    time: timeInfo['top'],
                                     onTapPicture: onTapPicture,
                                     onTapRemove: onTapRemove,
                                   ),
@@ -322,104 +315,5 @@ class EditPicture extends StatelessWidget {
             ],
           )
         : const EmptyArea();
-  }
-}
-
-class PictureContainer extends StatelessWidget {
-  PictureContainer({
-    super.key,
-    required this.file,
-    required this.pos,
-    required this.onTapPicture,
-    required this.onTapRemove,
-  });
-
-  Uint8List? file;
-  String pos;
-  Function(String pos) onTapPicture, onTapRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return file != null
-        ? Picture(
-            pos: pos,
-            isEdit: true,
-            uint8List: file,
-            onTapPicture: onTapPicture,
-            onTapRemove: onTapRemove,
-          )
-        : DashContainer(
-            height: 150,
-            text: '사진',
-            borderType: BorderType.RRect,
-            radius: 10,
-            onTap: () => onTapPicture(pos),
-          );
-  }
-}
-
-class Picture extends StatelessWidget {
-  Picture({
-    super.key,
-    required this.pos,
-    required this.isEdit,
-    this.uint8List,
-    this.onTapRemove,
-    this.onTapPicture,
-  });
-
-  String pos;
-  bool isEdit;
-  Uint8List? uint8List;
-  Function(String pos)? onTapPicture, onTapRemove;
-
-  @override
-  Widget build(BuildContext context) {
-    return uint8List != null
-        ? Expanded(
-            child: Stack(
-              children: [
-                InkWell(
-                  onTap: () => onTapPicture != null ? onTapPicture!(pos) : null,
-                  child: DefaultImage(unit8List: uint8List!, height: 150),
-                ),
-                CloseIcon(isEdit: isEdit, onTapRemove: onTapRemove, pos: pos)
-              ],
-            ),
-          )
-        : const EmptyArea();
-  }
-}
-
-class CloseIcon extends StatelessWidget {
-  const CloseIcon({
-    super.key,
-    required this.isEdit,
-    required this.onTapRemove,
-    required this.pos,
-  });
-
-  final bool isEdit;
-  final Function(String pos)? onTapRemove;
-  final String pos;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-      right: 0,
-      child: isEdit == true
-          ? CircularIcon(
-              padding: 5,
-              icon: Icons.close,
-              iconColor: typeBackgroundColor,
-              adjustSize: 3,
-              size: 20,
-              borderRadius: 5,
-              backgroundColor: textColor,
-              backgroundColorOpacity: 0.5,
-              onTap: (_) => onTapRemove != null ? onTapRemove!(pos) : null,
-            )
-          : const EmptyArea(),
-    );
   }
 }

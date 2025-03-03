@@ -1221,5 +1221,7 @@ int getPictureLength(DateTime importDateTime) {
 }
 
 onWindowManager() async {
-  await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+  if (Platform.isAndroid) {
+    await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
+  }
 }

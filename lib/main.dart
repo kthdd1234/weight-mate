@@ -60,7 +60,6 @@ import 'pages/common/screen_lock_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
-import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 
 const List<Locale> supportedLocales = [
   Locale('ko'),
@@ -89,7 +88,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  // HealthService().initConfiguration();
+  HealthService().initConfiguration();
 
   runApp(
     MultiProvider(

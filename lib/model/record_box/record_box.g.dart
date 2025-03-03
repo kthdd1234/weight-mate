@@ -36,13 +36,17 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       recordHashTagList: (fields[14] as List?)
           ?.map((dynamic e) => (e as Map).cast<String, String>())
           .toList(),
+      leftFileTime: fields[15] as DateTime?,
+      rightFileTime: fields[16] as DateTime?,
+      bottomFileTime: fields[17] as DateTime?,
+      topFileTime: fields[18] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, RecordBox obj) {
     writer
-      ..writeByte(15)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.createDateTime)
       ..writeByte(1)
@@ -72,7 +76,15 @@ class RecordBoxAdapter extends TypeAdapter<RecordBox> {
       ..writeByte(13)
       ..write(obj.exerciseRecordOrderList)
       ..writeByte(14)
-      ..write(obj.recordHashTagList);
+      ..write(obj.recordHashTagList)
+      ..writeByte(15)
+      ..write(obj.leftFileTime)
+      ..writeByte(16)
+      ..write(obj.rightFileTime)
+      ..writeByte(17)
+      ..write(obj.bottomFileTime)
+      ..writeByte(18)
+      ..write(obj.topFileTime);
   }
 
   @override

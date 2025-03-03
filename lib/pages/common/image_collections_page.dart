@@ -20,6 +20,7 @@ import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/pages/common/image_carousel_slider_page.dart';
 import 'package:flutter/material.dart' hide CarouselController;
+import 'package:flutter_app_weight_management/pages/home/body/record/edit/picture/TimeLabel.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
@@ -50,11 +51,20 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
 
     for (var i = 0; i < recordList.length; i++) {
       RecordBox record = recordList[i];
+
       List<Map<String, dynamic>> itemList = [
-        {'pos': 'left', 'file': record.leftFile},
-        {'pos': 'right', 'file': record.rightFile},
-        {'pos': 'bottom', 'file': record.bottomFile},
-        {'pos': 'top', 'file': record.topFile}
+        {'pos': 'left', 'file': record.leftFile, 'time': record.leftFileTime},
+        {
+          'pos': 'right',
+          'file': record.rightFile,
+          'time': record.rightFileTime
+        },
+        {
+          'pos': 'bottom',
+          'file': record.bottomFile,
+          'time': record.bottomFileTime
+        },
+        {'pos': 'top', 'file': record.topFile, 'time': record.topFileTime}
       ];
 
       itemList.forEach((item) {
@@ -63,6 +73,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
             'dateTime': record.createDateTime,
             'file': item['file'],
             'pos': item['pos'],
+            'time': item['time'],
           });
         }
       });
@@ -313,6 +324,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                         Map<String, dynamic> item = fileItemList[index];
                         Uint8List file = item['file'];
                         DateTime dateTime = item['dateTime'];
+                        DateTime? time = item['time'];
 
                         return InkWell(
                           onTap: () => initClearState.isMode
@@ -334,6 +346,7 @@ class _ImageCollectionsPageState extends State<ImageCollectionsPage> {
                                   isAutoPlay: false,
                                 ),
                               ),
+                              TimeLabel(time: time, size: 10),
                               initClearState.isMode &&
                                       initClearState.selectionList
                                           .contains(index)
@@ -389,9 +402,10 @@ class DateTimeLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 0,
+      top: 0,
+      right: 0,
       child: Padding(
-        padding: const EdgeInsets.all(3.0) / 3,
+        padding: const EdgeInsets.all(5),
         child: TextIcon(
           padding: 5,
           backgroundColor: textColor,
