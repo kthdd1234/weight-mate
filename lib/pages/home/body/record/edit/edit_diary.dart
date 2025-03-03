@@ -54,7 +54,7 @@ class _EditDiaryState extends State<EditDiary> {
     bool isPremium = context.watch<PremiumProvider>().isPremium;
 
     onTapWriteDiary() async {
-      String result = await Navigator.push(
+      await Navigator.push(
         context,
         MaterialPageRoute(
           builder: (BuildContext context) => DiaryWritePage(

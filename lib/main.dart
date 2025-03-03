@@ -239,9 +239,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         : user?.screenLockPasswords == null
             ? '/home-page'
             : '/enter-screen-lock';
-    String fontFamily = user?.fontFamily == null
+    String? fontFamily = user?.fontFamily == null
         ? initFontFamily
-        : getFontFamily(user!.fontFamily!);
+        : user!.fontFamily! == 'System'
+            ? null
+            : getFontFamily(user.fontFamily!);
 
     return MaterialApp(
       title: 'weight-mate',

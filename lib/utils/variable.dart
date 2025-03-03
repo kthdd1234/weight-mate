@@ -345,6 +345,10 @@ String initFontName = 'IM 혜민';
 
 List<Map<String, String>> fontFamilyList = [
   {
+    "fontFamily": "System",
+    "name": "시스템 폰트",
+  },
+  {
     "fontFamily": "IM_Hyemin",
     "name": "IM 혜민",
   },
@@ -377,8 +381,12 @@ List<Map<String, String>> fontFamilyList = [
     "name": "카페24 쑥쑥",
   },
   {
-    "fontFamily": "cafe24Ohsquareair",
-    "name": "카페24 아네모네 에어",
+    "fontFamily": "Concon",
+    "name": "온글잎 콘콘체",
+  },
+  {
+    "fontFamily": "Mapo",
+    "name": "마포한아름",
   },
 ];
 

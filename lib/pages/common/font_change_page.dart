@@ -40,9 +40,10 @@ class _FontChangePageState extends State<FontChangePage> {
       "0123456789!@#%^&*()",
     ];
 
-    onTap(String selectedFontFamily) {
+    onTap(String selectedFontFamily) async {
       user.fontFamily = selectedFontFamily;
-      user.save();
+
+      await user.save();
 
       setState(() {});
       context.read<ReloadProvider>().setReload(!isReload);
