@@ -12,7 +12,7 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-// import 'package:health/health.dart';
+import 'package:health/health.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GraphStepsView extends StatefulWidget {
@@ -46,79 +46,79 @@ class _GraphStepsViewState extends State<GraphStepsView> {
   double? stepsMaximum, stepsMinimum;
   List<GraphData> dataSource = [];
 
-  // getSteps() async {
-  //   dataSource = [];
+  getSteps() async {
+    dataSource = [];
 
-  //   HealthService health = HealthService();
-  //   bool isPermission = await health.isPermission;
-  //   DateTime startDateTime = DateTime(
-  //     widget.startDateTime.year,
-  //     widget.startDateTime.month,
-  //     widget.startDateTime.day,
-  //     0,
-  //     0,
-  //   );
-  //   DateTime endDateTime = DateTime(
-  //     widget.endDateTime.year,
-  //     widget.endDateTime.month,
-  //     widget.endDateTime.day,
-  //     23,
-  //     59,
-  //   );
+    HealthService health = HealthService();
+    bool isPermission = await health.isPermission;
+    DateTime startDateTime = DateTime(
+      widget.startDateTime.year,
+      widget.startDateTime.month,
+      widget.startDateTime.day,
+      0,
+      0,
+    );
+    DateTime endDateTime = DateTime(
+      widget.endDateTime.year,
+      widget.endDateTime.month,
+      widget.endDateTime.day,
+      23,
+      59,
+    );
 
-  //   if (isPermission == false) {
-  //     await health.requestAuthorization();
-  //   }
+    if (isPermission == false) {
+      await health.requestAuthorization();
+    }
 
-  //   List<HealthDataPoint> healthSteps = await health.getHealthSteps(
-  //     ctx: context,
-  //     startDateTime: startDateTime,
-  //     endDateTime: endDateTime,
-  //   );
-  //   List<GraphData> graphDataList = [];
-  //   List<double> stepList = [];
+    List<HealthDataPoint> healthSteps = await health.getHealthSteps(
+      ctx: context,
+      startDateTime: startDateTime,
+      endDateTime: endDateTime,
+    );
+    List<GraphData> graphDataList = [];
+    List<double> stepList = [];
 
-  //   for (var i = 0; i < widget.range; i++) {
-  //     DateTime subtractDateTime = jumpDayDateTime(
-  //       type: jumpDayTypeEnum.subtract,
-  //       dateTime: endDateTime,
-  //       days: i,
-  //     );
-  //     String x = getGraphX(
-  //       locale: widget.locale,
-  //       isWeek: widget.isWeek,
-  //       graphType: widget.graphType,
-  //       dateTime: subtractDateTime,
-  //     );
-  //     double y = 0;
-  //     healthSteps.forEach((data) {
-  //       bool isEqual =
-  //           getDateTimeToInt(data.dateTo) == getDateTimeToInt(subtractDateTime);
+    for (var i = 0; i < widget.range; i++) {
+      DateTime subtractDateTime = jumpDayDateTime(
+        type: jumpDayTypeEnum.subtract,
+        dateTime: endDateTime,
+        days: i,
+      );
+      String x = getGraphX(
+        locale: widget.locale,
+        isWeek: widget.isWeek,
+        graphType: widget.graphType,
+        dateTime: subtractDateTime,
+      );
+      double y = 0;
+      healthSteps.forEach((data) {
+        bool isEqual =
+            getDateTimeToInt(data.dateTo) == getDateTimeToInt(subtractDateTime);
 
-  //       if (isEqual) {
-  //         Map<String, dynamic> json = data.value.toJson();
-  //         double steps = json['numeric_value'];
+        if (isEqual) {
+          Map<String, dynamic> json = data.value.toJson();
+          double steps = json['numeric_value'];
 
-  //         y += steps;
-  //       }
-  //     });
+          y += steps;
+        }
+      });
 
-  //     graphDataList.add(GraphData(x, y));
-  //     stepList.add(y);
-  //   }
+      graphDataList.add(GraphData(x, y));
+      stepList.add(y);
+    }
 
-  //   dataSource = graphDataList.reversed.toList();
-  //   stepsMaximum =
-  //       stepList.isEmpty ? 100.0 : (stepList.reduce(max) + 100).floorToDouble();
-  //   stepsMinimum =
-  //       stepList.isEmpty ? 0.0 : stepList.reduce(min).floorToDouble();
+    dataSource = graphDataList.reversed.toList();
+    stepsMaximum =
+        stepList.isEmpty ? 100.0 : (stepList.reduce(max) + 100).floorToDouble();
+    stepsMinimum =
+        stepList.isEmpty ? 0.0 : stepList.reduce(min).floorToDouble();
 
-  //   setState(() {});
-  // }
+    setState(() {});
+  }
 
   @override
   void initState() {
-    // getSteps();
+    getSteps();
     super.initState();
   }
 

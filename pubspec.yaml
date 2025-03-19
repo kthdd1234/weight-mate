@@ -93,7 +93,7 @@ dependencies:
   firebase_auth: ^4.17.8
   fluttertoast: ^8.2.5
   scrollable_positioned_list: ^0.3.8
-  # health: ^10.2.0
+  health: ^10.2.0
   syncfusion_flutter_datagrid: ^23.2.7
   home_widget: ^0.7.0
   flutter_windowmanager: ^0.2.0
