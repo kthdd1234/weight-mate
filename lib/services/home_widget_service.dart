@@ -6,6 +6,7 @@ import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/class.dart';
+import 'package:flutter_app_weight_management/utils/enum.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
 import 'package:home_widget/home_widget.dart';
@@ -15,15 +16,16 @@ class HomeWidgetService {
 
   Future<bool?> updateWidget({
     required Map<String, String> data,
-    required String widgetName,
+    required String iosWidgetName,
   }) async {
     data.forEach((key, value) async {
       await HomeWidget.saveWidgetData<String>(key, value);
     });
 
-    // log('data => $data');
-
-    return await HomeWidget.updateWidget(iOSName: widgetName);
+    return await HomeWidget.updateWidget(
+      iOSName: iosWidgetName,
+      androidName: 'WeightTableWidget',
+    );
   }
 
   Future<bool?> updateWeight() {
@@ -61,7 +63,7 @@ class HomeWidgetService {
       "isEmpty": record?.weight == null ? "empty" : "show",
     };
 
-    return updateWidget(data: weightObj, widgetName: 'weightWidget');
+    return updateWidget(data: weightObj, iosWidgetName: 'weightWidget');
   }
 
   Future<bool?> updateDietRecord() {
@@ -102,7 +104,7 @@ class HomeWidgetService {
       "drRenderCellList": renderCellList,
     };
 
-    return updateWidget(data: dietRecordObj, widgetName: "dietRecordWidget");
+    return updateWidget(data: dietRecordObj, iosWidgetName: "dietRecordWidget");
   }
 
   Future<bool?> updateExerciseRecord() {
@@ -145,7 +147,7 @@ class HomeWidgetService {
 
     return updateWidget(
       data: exerciseRecordObj,
-      widgetName: "exerciseRecordWidget",
+      iosWidgetName: "exerciseRecordWidget",
     );
   }
 
@@ -184,7 +186,7 @@ class HomeWidgetService {
       "dgRenderCellList": dgRenderCellList,
     };
 
-    return updateWidget(data: dietGoalObj, widgetName: "dietGoalWidget");
+    return updateWidget(data: dietGoalObj, iosWidgetName: "dietGoalWidget");
   }
 
   Future<bool?> updateExerciseGoal() async {
@@ -224,7 +226,7 @@ class HomeWidgetService {
 
     return updateWidget(
       data: exerciseGoalObj,
-      widgetName: "exerciseGoalWidget",
+      iosWidgetName: "exerciseGoalWidget",
     );
   }
 
@@ -263,8 +265,61 @@ class HomeWidgetService {
       "lgRenderCellList": lgRenderCellList,
     };
 
-    return updateWidget(data: lifeGoalObj, widgetName: "lifeGoalWidget");
+    return updateWidget(data: lifeGoalObj, iosWidgetName: "lifeGoalWidget");
+  }
+
+  updateAndroidWidget(String locale) {
+    List<WidgetTableItemClass> widgetTableItemList = [];
+
+    for (var day = 0; day <= 30; day++) {
+      DateTime dateTime = jumpDayDateTime(
+        type: jumpDayTypeEnum.subtract,
+        dateTime: DateTime.now(),
+        days: day,
+      );
+      int recordKey = getDateTimeToInt(dateTime);
+      RecordBox? record = recordRepository.recordBox.get(recordKey);
+      double? weight = record?.weight;
+      double? beforeWeight = getBeforeWeight(dateTime);
+      double? startWeight = getStartWeight();
+
+      String date = mdeShortFormatter(locale: locale, dateTime: dateTime);
+      String current = '${weight ?? '-'}';
+      String before = weight != null && beforeWeight != null
+          ? calculatedWeight(fWeight: weight, lWeight: beforeWeight)
+          : '-';
+      String start = weight != null && startWeight != null
+          ? calculatedWeight(fWeight: weight, lWeight: startWeight)
+          : '-';
+      String beforeColorName = weight != null && beforeWeight != null
+          ? getWeightColorName(fWeight: weight, lWeight: beforeWeight)
+          : '검정색';
+      String startColorName = weight != null && startWeight != null
+          ? getWeightColorName(fWeight: weight, lWeight: startWeight)
+          : '검정색';
+
+      WidgetTableItemClass widgetTableItem = WidgetTableItemClass(
+        id: '$day',
+        date: date,
+        current: current,
+        before: before,
+        start: start,
+        beforeColorName: beforeColorName,
+        startColorName: startColorName,
+      );
+
+      widgetTableItemList.add(widgetTableItem);
+    }
+
+    Map<String, String> entry = {
+      "emptyText": "기록된 몸무게가 없어요".tr(),
+      "dateTitleName": "날짜".tr(),
+      "currentTitleName": "체중".tr(),
+      "beforeTitleName": "이전과 비교".tr(),
+      "startTitleName": "처음과 비교".tr(),
+      "tableItemList": jsonEncode(widgetTableItemList),
+    };
+
+    updateWidget(data: entry, iosWidgetName: '');
   }
 }
-
-//  onPlanList

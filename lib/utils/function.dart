@@ -305,6 +305,10 @@ md({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMd(locale).format(dateTime);
 }
 
+String mdeShortFormatter({required String locale, required DateTime dateTime}) {
+  return DateFormat.MEd(locale).format(dateTime);
+}
+
 mde({required String locale, required DateTime dateTime}) {
   return DateFormat.MMMEd(locale).format(dateTime);
 }
@@ -1224,4 +1228,44 @@ onWindowManager() async {
   if (Platform.isAndroid) {
     await FlutterWindowManager.clearFlags(FlutterWindowManager.FLAG_SECURE);
   }
+}
+
+double? getBeforeWeight(DateTime dateTime) {
+  List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+  double? beforeWeight;
+
+  for (final record in recordList) {
+    bool isTarget =
+        getDateTimeToInt(record.createDateTime) == getDateTimeToInt(dateTime);
+
+    if (isTarget) {
+      break;
+    } else {
+      if (record.weight != null) beforeWeight = record.weight;
+    }
+  }
+
+  return beforeWeight;
+}
+
+double? getStartWeight() {
+  List<RecordBox> recordList = recordRepository.recordBox.values.toList();
+  double? startWeight;
+
+  for (var record in recordList) {
+    if (record.weight != null) {
+      startWeight = record.weight;
+      break;
+    }
+  }
+
+  return startWeight;
+}
+
+String getWeightColorName({required double fWeight, required double lWeight}) {
+  return fWeight == lWeight
+      ? '남색'
+      : lWeight < fWeight
+          ? '빨간색'
+          : '파란색';
 }

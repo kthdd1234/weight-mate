@@ -35,22 +35,22 @@ class AppOpenAdManager {
   }
 
   void loadAd() {
-    AppOpenAd.load(
-      adUnitId: appOpeningUnitId,
-      orientation: AppOpenAd.orientationPortrait,
-      request: const AdRequest(),
-      adLoadCallback: AppOpenAdLoadCallback(
-        onAdLoaded: (ad) {
-          _appOpenLoadTime = DateTime.now();
-          _appOpenAd = ad;
+    // AppOpenAd.load(
+    //   adUnitId: appOpeningUnitId,
+    //   orientation: AppOpenAd.orientationPortrait,
+    //   request: const AdRequest(),
+    //   adLoadCallback: AppOpenAdLoadCallback(
+    //     onAdLoaded: (ad) {
+    //       _appOpenLoadTime = DateTime.now();
+    //       _appOpenAd = ad;
 
-          print('AppOpenAd !!');
-        },
-        onAdFailedToLoad: (error) {
-          print('AppOpenAd failed to load: $error');
-        },
-      ),
-    );
+    //       print('AppOpenAd !!');
+    //     },
+    //     onAdFailedToLoad: (error) {
+    //       print('AppOpenAd failed to load: $error');
+    //     },
+    //   ),
+    // );
   }
 
   bool get isAdAvailable {

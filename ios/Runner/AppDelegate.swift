@@ -2,6 +2,7 @@ import UIKit
 import Flutter
 import flutter_local_notifications
 import home_widget
+import FBAudienceNetwork
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
@@ -19,21 +20,15 @@ import home_widget
       UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
     }
 
-    // WorkmanagerPlugin.registerTask(withIdentifier: "com.kthdd.weightMate.backgroundTask")
+    FBAdSettings.setAdvertiserTrackingEnabled(true)
 
-    // UIApplication.shared.setMinimumBackgroundFetchInterval(TimeInterval(60*15))
-    
-    // WorkmanagerPlugin.setPluginRegistrantCallback { registry in
-    //   GeneratedPluginRegistrant.register(with: registry)
-    // }
-
-      if #available(iOS 17, *) {
+    if #available(iOS 17, *) {
         HomeWidgetBackgroundWorker.setPluginRegistrantCallback { registry in
             GeneratedPluginRegistrant.register(with: registry)
           }
-        }
+    }
 
-        GeneratedPluginRegistrant.register(with: self)
+     GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }

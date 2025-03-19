@@ -88,7 +88,7 @@ void main() async {
   await NotificationService().initializeTimeZone();
   await EasyLocalization.ensureInitialized();
   await HomeWidget.setAppGroupId('group.weight-mate-widget');
-  HealthService().initConfiguration();
+  // HealthService().initConfiguration();
 
   runApp(
     MultiProvider(
@@ -167,17 +167,22 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
+    String locale = context.locale.toString();
     UserBox? user = userBox?.get('userProfile');
     bool isBackground = state == AppLifecycleState.paused ||
         state == AppLifecycleState.detached;
 
-    if (isBackground && user != null && Platform.isIOS) {
-      await HomeWidgetService().updateWeight();
-      await HomeWidgetService().updateDietRecord();
-      await HomeWidgetService().updateExerciseRecord();
-      await HomeWidgetService().updateDietGoal();
-      await HomeWidgetService().updateExerciseGoal();
-      await HomeWidgetService().updateLifeGoal();
+    if (isBackground && user != null) {
+      if (Platform.isIOS) {
+        await HomeWidgetService().updateWeight();
+        await HomeWidgetService().updateDietRecord();
+        await HomeWidgetService().updateExerciseRecord();
+        await HomeWidgetService().updateDietGoal();
+        await HomeWidgetService().updateExerciseGoal();
+        await HomeWidgetService().updateLifeGoal();
+      } else if (Platform.isAndroid) {
+        await HomeWidgetService().updateAndroidWidget(locale);
+      }
     }
   }
 
@@ -264,10 +269,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         '/add-body-weight': (context) => const AddBodyWeight(),
         '/add-body-tall': (context) => const AddBodyTall(),
         '/add-alarm-permission': (context) => const AddAlarmPermission(),
-        '/home-page': (context) => HomePage(
-              locale: locale,
-              appStartIndex: appStartIndex,
-            ),
+        '/home-page': (context) =>
+            HomePage(locale: locale, appStartIndex: appStartIndex),
         '/screen-lock': (context) => const ScreenLockPage(),
         '/enter-screen-lock': (context) => EnterScreenLockPage(),
         '/image-collections-page': (context) => const ImageCollectionsPage(),

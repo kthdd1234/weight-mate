@@ -466,3 +466,36 @@ class TrackerItemClass {
   DateTime dateTime;
   RecordBox? record;
 }
+
+class WidgetTableItemClass {
+  WidgetTableItemClass({
+    required this.id,
+    required this.date,
+    required this.current,
+    required this.before,
+    required this.start,
+    required this.beforeColorName,
+    required this.startColorName,
+  });
+
+  String id, date, current, before, start, beforeColorName, startColorName;
+
+  WidgetTableItemClass.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as String,
+        date = json['date'] as String,
+        current = json['current'] as String,
+        before = json['before'] as String,
+        start = json['start'] as String,
+        beforeColorName = json['beforeColorName'] as String,
+        startColorName = json['startColorName'] as String;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'date': date,
+        'current': current,
+        'before': before,
+        'start': start,
+        'beforeColorName': beforeColorName,
+        'startColorName': startColorName,
+      };
+}

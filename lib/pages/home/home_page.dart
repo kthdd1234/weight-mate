@@ -282,7 +282,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         bool isPremium = await isPurchasePremium();
         List<String> premiumEmailList = [
           'kthdd1234@gmail.com',
-          'moonjh818@gmail.com'
+          'moonjh818@gmail.com',
+          //
         ];
 
         if (googleDriveInfo != null) {
