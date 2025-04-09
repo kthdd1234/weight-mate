@@ -283,7 +283,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
         List<String> premiumEmailList = [
           'kthdd1234@gmail.com',
           'moonjh818@gmail.com',
-          //
+          'ji8274143@gmail.com'
         ];
 
         if (googleDriveInfo != null) {
