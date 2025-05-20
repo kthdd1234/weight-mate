@@ -6,11 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonButton.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
-import 'package:flutter_app_weight_management/components/bottomSheet/AdBottomSheet.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/WeightEditBottmSheet.dart';
 import 'package:flutter_app_weight_management/components/contents_box/contents_box.dart';
 import 'package:flutter_app_weight_management/components/space/spaceHeight.dart';
 import 'package:flutter_app_weight_management/components/space/spaceWidth.dart';
-import 'package:flutter_app_weight_management/etc/AdBottomSheet.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
@@ -132,16 +131,27 @@ class _EditWeightState extends State<EditWeight> {
       closeDialog(context);
     }
 
-    onTapWeight() {
+    onShowWeight() {
       setState(() {
-        if (recordInfo?.weight != null) {
-          textController.text = '${recordInfo!.weight}';
-          context.read<EnabledProvider>().setEnabled(true);
-        }
+        textController.text = '${recordInfo?.weight ?? ''}';
+        context.read<EnabledProvider>().setEnabled(true);
 
         isShowInput = true;
       });
+    }
 
+    onRemoveWeight() async {
+      textController.text = '';
+      recordInfo?.weight = null;
+
+      await recordInfo?.save();
+      context.read<EnabledProvider>().setEnabled(false);
+      isShowInput = false;
+
+      setState(() {});
+    }
+
+    onShowBottomSheet() {
       showModalBottomSheet(
         barrierColor: Colors.transparent,
         context: context,
@@ -155,6 +165,34 @@ class _EditWeightState extends State<EditWeight> {
           );
         },
       ).whenComplete(() => onInit());
+    }
+
+    onEditWeght() {
+      showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) => WeightEditBottomSheet(
+          onEdit: () {
+            closeDialog(context);
+
+            onShowWeight();
+            onShowBottomSheet();
+          },
+          onRemove: () {
+            onRemoveWeight();
+            closeDialog(context);
+          },
+        ),
+      );
+    }
+
+    onTapWeight() {
+      if (recordInfo?.weight != null) {
+        onEditWeght();
+      } else {
+        onShowWeight();
+        onShowBottomSheet();
+      }
     }
 
     onTapGoalWeight() {

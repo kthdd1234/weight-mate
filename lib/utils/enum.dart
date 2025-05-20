@@ -49,7 +49,8 @@ enum MoreSeeItem {
   appData,
   developerInp,
   privacyPolicy,
-  appFont
+  appFont,
+  imageTime,
 }
 
 enum MoreSeeWidgetTypes { none, arrow, switching }

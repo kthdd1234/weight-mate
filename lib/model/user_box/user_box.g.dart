@@ -57,13 +57,14 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       watchingAdDatetTime: fields[35] as DateTime?,
       trackerDisplayList: (fields[36] as List?)?.cast<String>(),
       adDateTimeKey: fields[37] as int?,
+      isImageTime: fields[38] as bool?,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserBox obj) {
     writer
-      ..writeByte(38)
+      ..writeByte(39)
       ..writeByte(0)
       ..write(obj.userId)
       ..writeByte(1)
@@ -139,7 +140,9 @@ class UserBoxAdapter extends TypeAdapter<UserBox> {
       ..writeByte(36)
       ..write(obj.trackerDisplayList)
       ..writeByte(37)
-      ..write(obj.adDateTimeKey);
+      ..write(obj.adDateTimeKey)
+      ..writeByte(38)
+      ..write(obj.isImageTime);
   }
 
   @override

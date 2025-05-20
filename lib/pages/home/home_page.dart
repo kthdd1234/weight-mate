@@ -111,6 +111,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     List<Map<String, dynamic>>? hashTagList = user.hashTagList;
     int? appStartIndex = user.appStartIndex;
     String? theme = user.theme;
+    bool? isImageTime = user.isImageTime;
 
     if (filterList == null) {
       userRepository.user.filterList = initOpenList;
@@ -243,6 +244,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
     if (theme == null) {
       user.theme = '1';
+    }
+
+    if (isImageTime == null) {
+      user.isImageTime = true;
     }
 
     userRepository.user.save();

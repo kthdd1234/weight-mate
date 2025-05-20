@@ -2,6 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
+import 'package:flutter_app_weight_management/main.dart';
+import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 
@@ -14,6 +16,11 @@ class TimeLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String locale = context.locale.toString();
+
+    UserBox user = userRepository.user;
+    bool isImageTime = user.isImageTime ?? true;
+
+    if (isImageTime == false) return EmptyArea();
 
     return time != null
         ? Positioned(

@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_weight_management/common/CommonAppBar.dart';
 import 'package:flutter_app_weight_management/common/CommonBottomSheet.dart';
 import 'package:flutter_app_weight_management/common/CommonIcon.dart';
+import 'package:flutter_app_weight_management/components/bottomSheet/ImageTimeBottomSheet.dart';
 import 'package:flutter_app_weight_management/components/popup/AlertPopup.dart';
 import 'package:flutter_app_weight_management/common/CommonText.dart';
 import 'package:flutter_app_weight_management/components/area/empty_area.dart';
@@ -511,6 +512,14 @@ class _SettingBodyState extends State<SettingBody> {
         color: themeColor,
         onTap: onTapStart,
       ),
+      // MoreSeeItemClass(
+      //   id: MoreSeeItem.imageTime,
+      //   icon: 'imageTime',
+      //   title: '사진 시간 표시',
+      //   value: '표시',
+      //   color: themeColor,
+      //   onTap: onImageTime,
+      // ),
       MoreSeeItemClass(
         id: MoreSeeItem.appData,
         icon: 'cloud-data',

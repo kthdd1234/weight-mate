@@ -10,11 +10,9 @@ import 'package:flutter_app_weight_management/components/picker/default_date_tim
 import 'package:flutter_app_weight_management/components/popup/PermissionPopup.dart';
 import 'package:flutter_app_weight_management/main.dart';
 import 'package:flutter_app_weight_management/model/plan_box/plan_box.dart';
-import 'package:flutter_app_weight_management/model/record_box/record_box.dart';
 import 'package:flutter_app_weight_management/model/user_box/user_box.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/add_container.dart';
 import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/alarm_container.dart';
-import 'package:flutter_app_weight_management/pages/home/body/record/edit/container/todo_container.dart';
 import 'package:flutter_app_weight_management/pages/onboarding/pages/add_start_screen.dart';
 import 'package:flutter_app_weight_management/provider/diet_Info_provider.dart';
 import 'package:flutter_app_weight_management/services/notifi_service.dart';
@@ -22,7 +20,6 @@ import 'package:flutter_app_weight_management/utils/class.dart';
 import 'package:flutter_app_weight_management/utils/constants.dart';
 import 'package:flutter_app_weight_management/utils/function.dart';
 import 'package:flutter_app_weight_management/utils/variable.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 
 class AddAlarmPermission extends StatefulWidget {
@@ -61,6 +58,7 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           weightUnit: user.weightUnit,
           tallUnit: user.tallUnit,
           language: context.locale.toString(),
+          isImageTime: true,
         ),
       );
 
@@ -74,15 +72,6 @@ class _AddAlarmPermissionState extends State<AddAlarmPermission> {
           payload: 'weight',
         );
       }
-
-      // await recordRepository.recordBox.put(
-      //   getDateTimeToInt(now),
-      //   RecordBox(
-      //     weight: user.weight,
-      //     createDateTime: now,
-      //     weightDateTime: now,
-      //   ),
-      // );
 
       planItemList.forEach(
         (name) {

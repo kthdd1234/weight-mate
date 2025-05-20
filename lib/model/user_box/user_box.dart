@@ -43,6 +43,7 @@ class UserBox extends HiveObject {
     this.watchingAdDatetTime,
     this.trackerDisplayList,
     this.adDateTimeKey,
+    this.isImageTime,
   });
 
   @HiveField(0)
@@ -158,4 +159,7 @@ class UserBox extends HiveObject {
 
   @HiveField(37)
   int? adDateTimeKey;
+
+  @HiveField(38)
+  bool? isImageTime;
 }
