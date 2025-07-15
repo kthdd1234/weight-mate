@@ -232,27 +232,27 @@ class _EditWeightState extends State<EditWeight> {
       Navigator.pushNamed(context, '/weight-chart-page');
     }
 
-    onSaveHealthWeight() async {
-      HealthService healthService = HealthService();
-      double? weight = await healthService.getHealthWeight(
-        ctx: context,
-        dateTime: importDateTime,
-      );
+    // onSaveHealthWeight() async {
+    //   HealthService healthService = HealthService();
+    //   double? weight = await healthService.getHealthWeight(
+    //     ctx: context,
+    //     dateTime: importDateTime,
+    //   );
 
-      if (weight != null) await onSaveWeight('$weight');
-    }
+    //   if (weight != null) await onSaveWeight('$weight');
+    // }
 
-    onTapHealth() async {
-      HealthService healthService = HealthService();
-      bool isPermission = await healthService.isPermission;
+    // onTapHealth() async {
+    //   HealthService healthService = HealthService();
+    //   bool isPermission = await healthService.isPermission;
 
-      if (isPermission == false) {
-        await healthService.requestAuthorization();
-        onSaveHealthWeight();
-      } else {
-        onSaveHealthWeight();
-      }
-    }
+    //   if (isPermission == false) {
+    //     await healthService.requestAuthorization();
+    //     onSaveHealthWeight();
+    //   } else {
+    //     onSaveHealthWeight();
+    //   }
+    // }
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
@@ -331,31 +331,31 @@ class _EditWeightState extends State<EditWeight> {
                                     textColor: indigo.s300,
                                     onTap: onTapWeight,
                                   ),
-                                  Platform.isIOS
-                                      ? Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: InkWell(
-                                            onTap: onTapHealth,
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 20,
-                                              ),
-                                              height: 50,
-                                              decoration: BoxDecoration(
-                                                color: whiteBgBtnColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  7,
-                                                ),
-                                              ),
-                                              child: getSvg(
-                                                  name: 'health', width: 18),
-                                            ),
-                                          ),
-                                        )
-                                      : const EmptyArea()
+                                  // Platform.isIOS
+                                  //     ? Padding(
+                                  //         padding:
+                                  //             const EdgeInsets.only(left: 5),
+                                  //         child: InkWell(
+                                  //           onTap: onTapHealth,
+                                  //           child: Container(
+                                  //             padding:
+                                  //                 const EdgeInsets.symmetric(
+                                  //               horizontal: 20,
+                                  //             ),
+                                  //             height: 50,
+                                  //             decoration: BoxDecoration(
+                                  //               color: whiteBgBtnColor,
+                                  //               borderRadius:
+                                  //                   BorderRadius.circular(
+                                  //                 7,
+                                  //               ),
+                                  //             ),
+                                  //             child: getSvg(
+                                  //                 name: 'health', width: 18),
+                                  //           ),
+                                  //         ),
+                                  //       )
+                                  //     : const EmptyArea()
                                 ],
                               ),
                             ],

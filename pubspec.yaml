@@ -17,10 +17,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 2.0.43+77
+version: 2.0.44+78
 
 environment:
-  sdk: '>=2.18.2 <3.0.0'
+  sdk: '>=3.3.3 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -37,16 +37,16 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   font_awesome_flutter: ^10.4.0
-  syncfusion_flutter_datepicker: ^23.2.7
+  syncfusion_flutter_datepicker: ^28.1.38
   uuid: ^3.0.7
-  syncfusion_flutter_charts: ^23.2.7
+  syncfusion_flutter_charts: ^28.1.38
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   hive_generator: ^2.0.0
   build_runner: ^2.3.3
   flutter_localizations:
     sdk: flutter
-  intl: ^0.18.0
+  intl: ^0.20.2
   path_provider_foundation: ^2.2.3
   multi_value_listenable_builder: ^0.0.2
   flutter_local_notifications: ^18.0.1
@@ -60,7 +60,7 @@ dependencies:
   flutter_email_sender: ^6.0.0
   device_info_plus: ^9.0.2
   ios_utsname_ext: ^2.2.0
-  package_info_plus: ^5.0.1
+  package_info_plus: ^8.3.0
   rxdart: ^0.27.7
   google_mobile_ads: ^5.3.1
   flutter_dotenv: ^5.1.0
@@ -71,33 +71,37 @@ dependencies:
     git:
       url: https://github.com/sampaio96/flutter_carousel_slider.git
       ref: master
-  gdpr_dialog: ^2.1.1
+  gdpr_dialog:
+    git:
+      url: https://github.com/kthdd1234/gdpr_dialog_flutter.git
+      ref: master
   app_tracking_transparency: ^2.0.4
   flutter_svg: ^2.0.9
   keyboard_actions: ^4.2.0
   shimmer: ^3.0.0
   cached_memory_image: ^1.5.0
   easy_localization: ^3.0.3
-  privacy_screen: ^0.0.6
+  privacy_screen: ^0.0.8
   quiver: ^3.2.1
   googleapis: ^13.1.0
   googleapis_auth: ^1.5.1
   google_sign_in: ^6.2.1
   extension_google_sign_in_as_googleapis_auth: ^2.0.12
   path: ^1.8.3
-  restart_app: ^1.2.1
-  firebase_core: ^2.27.0
+  restart_app: ^1.3.2
+  firebase_core: ^3.4.0
   http: ^1.2.0
-  purchases_flutter: ^6.26.0
+  purchases_flutter: ^8.2.1
   jiffy: ^6.2.1
-  firebase_auth: ^4.17.8
-  fluttertoast: ^8.2.5
+  firebase_auth: ^5.2.0
   scrollable_positioned_list: ^0.3.8
-  health: ^10.2.0
-  syncfusion_flutter_datagrid: ^23.2.7
+  # health: ^10.2.0
   home_widget: ^0.7.0
-  flutter_windowmanager: ^0.2.0
-  flutter_timezone: ^2.0.0
+  flutter_windowmanager:
+    git:
+      url: https://github.com/kthdd1234/flutter_windowmanager.git
+      ref: master
+  flutter_timezone: ^4.1.1
   gma_mediation_meta: ^1.1.0
 
 dev_dependencies:
